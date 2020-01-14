@@ -1,6 +1,6 @@
 # MessageFormat Working Group
 
-Welcome to the home page for the MessageFormat Working Group.
+Welcome to the home page for the MessageFormat Working Group, a subgroup of the [Unicode CLDR-TC](https://unicode.org/cldr).
 
 ## Charter
 
