@@ -1,5 +1,5 @@
 ---
-name: Feature request Message Format WG
+name: Feature request
 about: Suggest an idea or feature for Message Format
 title: ''
 labels: ''
@@ -8,12 +8,12 @@ assignees: ''
 ---
 
 **Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+A clear and concise description of what the problem is.
 
 **Describe the solution you'd like**
 A clear and concise description of what you want to happen.
 
-**Describe why does your solution should become a standard**
+**Describe why your solution should shape the standard**
 A clear and concise description of why this feature belongs in the standard instead of in user land
 
 **Additional context or examples**
