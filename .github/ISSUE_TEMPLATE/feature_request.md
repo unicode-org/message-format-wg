@@ -1,6 +1,6 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: Feature request Message Format WG
+about: Suggest an idea or feature for Message Format
 title: ''
 labels: ''
 assignees: ''
@@ -13,8 +13,8 @@ A clear and concise description of what the problem is. Ex. I'm always frustrate
 **Describe the solution you'd like**
 A clear and concise description of what you want to happen.
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+**Describe why does your solution should become a standard**
+A clear and concise description of why this feature belongs in the standard instead of in user land
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+**Additional context or examples**
+Add any other context, prior art, code, documentation about the feature request here.
