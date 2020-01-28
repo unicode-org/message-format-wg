@@ -23,21 +23,29 @@ Please include your primary affiliation (e.g., the company you represent or wher
 ### Current
 
 - Addison Phillips - Amazon.com (APS)
+- Dan Chiba - Oracle (DCA)
 - Eemeli Aro - OpenJSF & Vincit (EAO)
 - Elango Cheran - Google (ECH)
+- George Rhoten - Apple (GWR)
+- Jan Mühlemann  - Locize (JMU)
+- Janne Tynkkynen - PayPal (JMT)
+- Jeff Genovy - Microsoft (JMG)
 - John Watson - Facebook (JRW)
 - Long Ho - Dropbox (LHO)
+- Mick Monaghan - Guidewire - (MMN)
 - Mihai Nita - Google (MIH)
 - Mike McKenna - PayPal (MGM)
+- Nick Felker - Google (NFR)
 - Nicolas Bouvrette - Expedia (NIC)
-- Rafael Xavier - PayPal (RX)
+- Pu Chen - Netflix (PUC)
+- Rafael Xavier - PayPal (RXR)
 - Richard Gibson - OpenJSF & Oracle (RGN)
 - Robert Chu - Amazon.com (RCU)
 - Romulo Cintra - CaixaBank (RCA)
 - Shane Carr - Google (SFC)
 - Staś Małolepszy - Mozilla (SMY)
 - Steven R. Loomis - IBM (SRL)
-- Zibi Braniecki - Mozilla (ZB)
+- Zibi Braniecki - Mozilla (ZBI)
 
 ### Former
 
