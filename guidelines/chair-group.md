@@ -24,7 +24,7 @@ The Chair Group is a representative body of the Message Format WG that consists 
 
 - Take care of the minutes of the meetings, including recording of all decisions. The minutes and presentations given in WG should be available in the WG Drive
 
-- Participate and on the preparation of technical drafts or documentation.
+- Prepare technical drafts and documentation.
 
 
 #### Participate
