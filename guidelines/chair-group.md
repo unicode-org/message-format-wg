@@ -2,13 +2,13 @@
 
 #### Definition and Motivation
 
-The Chair Group is a representative body of the Message Format WG that consists in spreading of the WG responsibilities among WG members that volunteered to get involved in the group chairing activities. Being part of a chair group requires an additional commitment that comes with a set of duties/responsibilities.
+The Chair Group is a representative body of the Message Format WG that collectively shares WG responsibilities among WG members that volunteered to get involved in the group chairing activities. Being part of a chair group requires an additional commitment that comes with a set of duties/responsibilities.
 
 #### Responsibilities
 
 - Ensure that the composition of the WG is well balanced in order that a high number of representatives are involved in the work of WG.
 
-- Encourage the participants, attending the meeting and to collaborate actively.
+- Encourage the participants, attending the meeting to collaborate actively.
 
 - Manage and accept WG applications.
 
@@ -25,11 +25,12 @@ The Chair Group is a representative body of the Message Format WG that consists 
 - Take care of the minutes of the meetings, including recording of all decisions. The minutes and presentations given in WG should be available in the WG Drive
 
 - Prepare technical drafts and documentation.
-
+  
+- Formulate concrete questions that the WG can answer in their monthly meetings
 
 #### Participate
 
-Share your disposal to participate using one of the following using one of the following channels:
+Share your interest to participate using one following channels:
 
 - Send an email [email](mailto:message-format-wg@chromium.org)
 - Contact the [Mail Group](https://groups.google.com/a/chromium.org/forum/#!forum/message-format-wg)
