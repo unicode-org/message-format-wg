@@ -30,7 +30,7 @@ The Chair Group is a representative body of the Message Format WG that collectiv
 
 #### Participate
 
-Share your interest to participate using one following channels:
+Share your interest to participate using one of the following channels:
 
 - Send an email [email](mailto:message-format-chairs@chromium.org)
 - Contact the [Mail Group](https://groups.google.com/a/chromium.org/forum/#!forum/message-format-chairs)
