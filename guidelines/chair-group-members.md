@@ -3,3 +3,5 @@
 - Romulo Cintra
 - Elango Cheran
 - Mihai Nita
+- David Filip
+- Nicolas Bouvrette
