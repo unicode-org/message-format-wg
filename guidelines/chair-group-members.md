@@ -5,3 +5,4 @@
 - Mihai Nita
 - David Filip
 - Nicolas Bouvrette
+- Staś Małolepszy
