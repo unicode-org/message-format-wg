@@ -3,3 +3,8 @@
 - Romulo Cintra
 - Elango Cheran
 - Mihai Nita
+- David Filip
+- Nicolas Bouvrette
+- Staś Małolepszy
+- Rafael Xavier de Souza
+- Addison Phillips
