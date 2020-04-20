@@ -1,7 +1,5 @@
 # Decision making process
 
-## Preamble
-The Chair Group discussion led to a consensus to start with a light weight consensus-based process that would eventually use voting as a last resort method in case of impasse.. The group could eventually be in need to defend its decision making process against trolls, yet at the moment all group members are considered in good faith, so the working group reserves the option to specify disciplinary actions against trolls as part of its guidelines at a later stage..
 
 ## Definitions
 1. *Consensus* is defined as lack of sustained opposition.
