@@ -6,7 +6,7 @@ The Chair Group discussion led to a consensus to start with a light weight conse
 ## Definitions
 1. *Consensus* is defined as lack of sustained opposition.
 2. *Good standing* is a characteristic of group members who fullfill their implicit and explicit obligations and hence are allowed to excercise all of their rights within the group without restriction.
-3. *Blacklist* (*blacklisted*, *blacklisting*) is a taxative enumeration of group mebers who are temporarily excluded from excercising their rights within the group.
+3. *Blacklist* (*blacklisted*, *blacklisting*) is a taxative enumeration of group members who are temporarily excluded from exercising their rights within the group.
 4. *Normative keywords* as defined in [BCP 14](https://tools.ietf.org/html/bcp14)
 
 ## Rules
