@@ -36,7 +36,7 @@ Here it is:
 2. Not a formal standard with an “acceptance test suite”
 3. Can't remove anything, even if we know know better
 4. Hard to map to the existing localization core structures
-5. Designed to work on plain text, UI, “imperative style”
+5. Designed to be API only, plain text, UI, “imperative style”
 
 ### 1. Does not have any “extension points”
 
@@ -90,46 +90,24 @@ in 2/3 different ways)
 * word count and payment
 * alignment (the process of creating a TM from source + translated documents)
 
-### 5. Designed to work on plain text, UI, “imperative style”
+### 5. Designed to be API only, plain text, UI, “imperative style”
 
 The main (only?) use case was: load the string from resources,
-replace placeholders, and return the string result.
+replace placeholders, and return the string result.  
+An i18n-aware `printf`, basically.
 
-It does not play well with binding, use formatting tags (thing `html`),
-or  “document-like” content, like templating
+It does not play well with binding, formatting tags (thing `html`),
+protecting content from translation, or  “document-like” content, like templates
 (think [freemarker](https://freemarker.apache.org/),
-[mustache](https://mustache.github.io/), etc.)
+[mustache](https://mustache.github.io/), even JSP, PHP, etc.)
+
+And it was API only. \
+No standard way to store the stings in a serialized format and to carry
+info or directives for translators or localization tools.
+No comments, length limits, protecting non-translatable sections of text, etc.
 
 ---
 
-**If we agree on the above section, we can drop this.**  
-**Or we “map” these bullets to the root causes above.**
+**Mandatory xkcd:**
 
-## Problems with the current `MessageFormat`
-
-* No support for advanced features (for example inflections)
-* Not standard. There are implementations for JavaScript, Closure, Dart, Go, others, but because there is no standard they are all slightly different (and incompatible). Would be nice to have at least a data-driven test suite.
-* Not well supported by localization tools
-* No standard way to extend it (would need to fork + change the ICU code)
-* Moving too slowly. The arguments supported by `MessageFormat` right now are `number` (`integer`, `currency`, `percent`), `date`, `time`, `spellout`, `ordinal`, `duration`, and the selectors are `choice`, `plural`, `select`, and `selectordinal`. But ICU itself already supports a lot more: intervals, relative dates and times, lists, measurements, compact decimals. And we would like even more, both formatters and selectors (think gender, inflections, formality level) 
-* Carrying with it legacy baggage that we know now better: date/time patterns, `ChoiceFormat`, clunky syntax (especially for nested plural/select), problematic escaping, selectors on part of the message
-* It is hard to add new functionality while keeping backward compatibility
-* We would like: inflections, protecting message ranges, `formatToValue`, formatting (think `html` tags)
-* High “impedance” when converting to / from localization tools
-
----
-
-Mandatory xkcd: \
 [<img src='https://imgs.xkcd.com/comics/standards.png'>](https://xkcd.com/927/)
-
----
-
-_The Message Format Working Group (MFWG) is tasked with developing an industry
-standard for the representation of localizable message strings to be a
-successor to ICU MessageFormat. MFWG will recommend how to remove
-redundancies, make the syntax more usable, and support more complex features,
-such as gender, inflections, and speech. MFWG will also consider the
-integration of the new standard with programming environments, including, but
-not limited to, ICU, DOM, and ECMAScript, and with localization platform
-interchange. The output of MFWG will be a specification for the new syntax,
-which is expected to be on track to become a Unicode Technical Standard._
