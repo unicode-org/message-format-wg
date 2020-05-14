@@ -1,58 +1,48 @@
 # Goals and Non-Goals
 
+This document defines the purpose of the Message Format Working Group (MFWG)
+and informs the decisions about the scope and the priorities of its efforts.
+
 ## Goals
 
-The goals define the purpose of the Message Format Working Group (MFWG) and
-inform the decisions about the scope and the priorities of its efforts.
+The primary task of the MFWG is to develop an industry standard for the
+representation of localizable message strings. The design goals are listed
+below.
 
-### Data model for defining translations
+ 1. Express complex grammatical features, such as plurals, genders, and
+    inflections, catalogued in the CLDR.
 
-  - Create a description of a data model representing translation units
-    (_messages_). The data model will be agnostic with respect to the file
-    format and the programming environment.
+ 2. Express other variance in translation, due to other linguistic and regional
+    features not listed in the CLDR, as well as due to the presentation media,
+    context, circumstance, and other factors.
 
-  - Design the data model for representing collections of translation
-    units (_resources_).
+ 3. Represent structured data alongside translations, like markup, comments,
+    and metadata.
 
-  - Make it possible to express complex grammatical features, such as plurals,
-    genders, and inflections, catalogued in the CLDR.
+ 4. Ensure interoperability with existing interchange formats, in particular
+    with XLIFF.
 
-  - Make it possible to express other variance in translation, due to
-    other linguistic and regional features not listed in the CLDR, as well as
-    due to the presentation media, context, circumstance, and other factors.
+ 5. Ensure that machine translation and translation memory solutions can be
+    used for authoring translations.
 
-### Canonical syntax representing the data model
+ 6. Enable a wide range of user space solutions building on top of the
+    standard, manifesting different ideas and programming paradigms, and
+    optimized for different uses and audiences.
 
-  - Design the canonical text representation of the data model, with well
-    defined rules for handling text, special characters, escape sequences,
-    whitespace, and markup.
 
-  - Define parsing errors and the requirements for how to handle them.
+## Deliverables
 
-  - Allow other representations of the data model, optimized for other uses and
-    audiences, to coexist with the canonical syntax.
+ 1. A formal definition of the canonical data model for representing
+    translations.
 
-### Compatibility with the localization industry practices
+ 2. A formal definition of the canonical syntax for representing the data
+    model, with well defined rules for handling text, special characters,
+    escape sequences, whitespace, markup, as well as parsing errors.
 
-  - Ensure that the data model is interoperable with existing interchange
-    formats. In particular, specify how to losslessly convert translations to
-    and from XLIFF.
+ 3. A specification for lossless conversion between the data model and XLIFF.
 
-  - Ensure that the data model allows the use of machine translation and
-    translation memory solutions for authoring translations.
-
-### Runtime interpolation and formatting
-
-  - Specify the steps involved in resolving translations at runtime to allow
-    their use in building localized experiences for users.
-
-  - Define the data types which can be interpolated in translations, and
-    specify how they're interpolated. Define the error scenarios and error
-    handling.
-
-  - Enable a wide range of user space solutions building on top of the data
-    model and the runtime specification, manifesting different ideas and
-    programming paradigms.
+ 4. A specification for resolving translations at runtime, including
+    interpolated data types and runtime errors.
 
 
 ## Non-Goals
@@ -60,14 +50,22 @@ inform the decisions about the scope and the priorities of its efforts.
 The following is a list of potential goals which are explicitly excluded from
 the scope of the MFWG.
 
-  - Design a __general interchange format__ for storing and transferring
-    translations. 
+ 1. Design a _general interchange format_ for storing and transferring
+    translations. Instead, ensure compatibility with the existing interchange
+    formats.
 
-  - Support __all grammatical features of all languages__.
+ 2. Support _all grammatical features of all languages_. Instead, focus on
+    features most commonly encountered in user interfaces, textual, graphical
+    and spoken ones alike.
 
-  - Create an __automated engine__ capable of transforming parts of speech in
-    a grammatically-correct fashion.
+ 3. Create an _automated engine_ capable of transforming parts of speech in
+    a grammatically-correct fashion. Instead, allow interfacing with such
+    automatic and non-automatic engines from within the data model.
 
-  - Create optimized and efficient __implementations of the standard__.
+ 4. Create optimized and efficient _implementations of the standard_.  Instead,
+    create specifications, compliance test suites, recommendations and good
+    practices to support implementors.
 
-  - Build a __framework for localizing software__.
+ 5. Build a _framework for localizing software_. Instead, design the standard
+    as a building block to be used by third parties to create localization
+    frameworks.
