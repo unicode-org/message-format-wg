@@ -31,7 +31,7 @@ below.
 ## Deliverables
 
  1. A formal definition of the canonical data model for representing
-    translations.
+    localizable message strings.
 
  2. A formal definition of the canonical syntax for representing the data
     model, with well defined rules for handling text, special characters,
