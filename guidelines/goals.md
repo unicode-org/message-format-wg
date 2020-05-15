@@ -9,14 +9,12 @@ The primary task of the MFWG is to develop an industry standard for the
 representation of localizable message strings. The design goals are listed
 below.
 
- 1. Express complex grammatical features, such as plurals, genders, and
-    inflections, catalogued in the CLDR.
+ 1. Express grammatical features, such as plurals, genders, and inflections.
 
- 2. Express other variance in translation, due to other linguistic and regional
-    features not listed in the CLDR, as well as due to the presentation media,
-    context, circumstance, and other factors.
+ 2. Express other variance in translation, due to linguistic and regional
+    features, the presentation media, context, circumstance, and other factors.
 
- 3. Represent structured data alongside translations, like markup, comments,
+ 3. Represent structured data alongside translations, such as markup, comments,
     and metadata.
 
  4. Ensure interoperability with existing interchange formats, in particular
