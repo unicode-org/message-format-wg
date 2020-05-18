@@ -20,8 +20,8 @@ below.
  4. Ensure interoperability with existing interchange formats, in particular
     with XLIFF.
 
- 5. Ensure that machine translation and translation memory solutions can be
-    used for authoring translations.
+ 5. Ensure that the standard can integrate with existing TMS and CAT
+    toolchains.
 
  6. Enable a wide range of user space solutions building on top of the
     standard, manifesting different ideas and programming paradigms, and
