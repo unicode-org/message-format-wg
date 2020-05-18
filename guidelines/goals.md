@@ -23,9 +23,9 @@ below.
  5. Ensure that the standard can integrate with existing TMS and CAT
     toolchains.
 
- 6. Enable a wide range of user space solutions building on top of the
-    standard, manifesting different ideas and programming paradigms, and
-    optimized for different uses and audiences.
+ 6. Enable the creation of implementations, frameworks and tools building on
+    top of the standard, manifesting different ideas and programming paradigms,
+    and optimized for different uses and audiences.
 
 
 ## Deliverables
