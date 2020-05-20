@@ -14,14 +14,12 @@ below.
  2. Express other variance in translation, due to linguistic and regional
     features, the presentation media, context, circumstance, and other factors.
 
- 3. Represent structured data alongside translations, such as markup, comments,
+ 3. Express formattable data, such as numbers, dates, currencies, and units.
+
+ 4. Represent structured data alongside translations, such as markup, comments,
     and metadata.
 
- 4. Ensure interoperability with existing interchange formats, in particular
-    with XLIFF.
-
- 5. Ensure that the standard can integrate with existing TMS and CAT
-    toolchains.
+ 5. Ensure compatibility with the localization roundtrip workflows.
 
  6. Enable the creation of implementations, frameworks and tools building on
     top of the standard, manifesting different ideas and programming paradigms,
@@ -37,10 +35,12 @@ below.
     model, with well defined rules for handling text, special characters,
     escape sequences, whitespace, markup, as well as parsing errors.
 
- 3. A specification for lossless conversion between the data model and XLIFF.
+ 3. A specification for a one-to-one mapping between the data model and XLIFF.
 
  4. A specification for resolving translations at runtime, including
     interpolated data types and runtime errors.
+
+ 5. A conformance test suite for parsing and formatting messages.
 
 
 ## Non-Goals
