@@ -19,7 +19,7 @@ below.
  4. Represent structured data alongside translations, such as markup, comments,
     and metadata.
 
- 5. Ensure compatibility with the localization roundtrip workflows.
+ 5. Be capable of localization roundtrip.
 
  6. Enable the creation of implementations, frameworks and tools building on
     top of the standard, manifesting different ideas and programming paradigms,
