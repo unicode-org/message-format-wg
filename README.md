@@ -8,6 +8,8 @@ The Message Format Working Group (MFWG) is tasked with developing an industry st
 
 ## Guidelines
 
+- [Goals and Non-Goals](guidelines/goals.md)
+- [Decision Making Process](guidelines/decision-process.md)
 - [Chair Group](guidelines/chair-group.md)
 
 ## Joining
