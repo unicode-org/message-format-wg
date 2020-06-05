@@ -8,9 +8,11 @@ A managed instance runs at https://tcq.app/ .  You login via OAuth using your Gi
 
 ## For meeting participants
 
-Join a meeting by clicking a meeting link (ex: https://tcq.app/meeting/kouy) or entering the 4-character meeting code in the [app's homepage](https://tcq.app/).
+Join a meeting by entering the 4-character meeting code in the [app's homepage](https://tcq.app/).
 
 ![Join a TCQ meeting](./img/tcq-01-new-meeting.png)
+
+Known issue: the above login method (typing in the meeting code in the home page) is currently preferred since there is a known issue in the redirect that occurs when trying to enter directly from clicking a meeting link (ex: https://tcq.app/meeting/kouy).
 
 ### Agenda view
 
@@ -92,3 +94,5 @@ The most important button is "Next Speaker".  Once a talking point is done (poin
 Occasionally, talking points can get out of order.  Ex: a reply to a topic that is already over, or a glitch causing duplicate topics.  You can use the "Delete", "Move Up", and "Move Down" buttons to rearrange accordingly.
 
 ![Queue view - meeting hosts](./img/tcq-13-meeting-host-view.png)
+
+Known issue: currently, it is better to empty the queue of items before proceeding to the next top-level agenda item.
