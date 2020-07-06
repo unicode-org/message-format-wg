@@ -22,8 +22,8 @@
 Concrete message format use case #93 
 - Selectors and Placeholders(Number Format) using the [example](https://github.com/unicode-org/message-format-wg/blob/c23e1bcba06b2a34d6f077d93d3dab213bc76d33/exploration/variants.md)
     - How to serialize data model ? 
-    - Use cases of data model used by different implementations(examples)? 
-
+    - Use cases of data model used by different implementations([Slides with examples](https://docs.google.com/presentation/d/1RujNFCq3gH9TUEKDB_uFdKWNG1A1j2_NBCdnTmnEqv0/edit?usp=sharing))? 
+   
 
 ## Decisions 
 - More sync channel for message format (Y) - Unicode Slack(Shane)
