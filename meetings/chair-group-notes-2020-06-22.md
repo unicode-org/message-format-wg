@@ -42,3 +42,7 @@ Concrete message format use case #93
  - [i18n Namespace](https://w3c.github.io/json-ld-syntax/#the-i18n-namespace)
       
 ### Next Meeting Agenda 2020-07-20: 
+- Chair Group Status
+- POC's progress overview
+- Zibi's Experimental AST Overview 
+
