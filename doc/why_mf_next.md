@@ -22,20 +22,33 @@ Other efforts: [Fluent](https://projectfluent.org/),
 
 ## Core problems with the current `MessageFormat`
 
-1. Does not have any “extension points”
-2. Can't remove anything, even if now we know better
+1. The design is not modular enough
+    * Does not have any “extension points”
+    * Can't deprecate anything, even if now we know better
+2. Some existing problems
 3. Hard to map to the existing localization core structures
 4. Designed to be API only, plain text, UI, “imperative style”
 
-### 1. Does not have any “extension points”
+### 1. The design is not modular enough
+
+The "data model" is hard-coded in the standard and in the syntax.
+This makes it very rigid.
+
+#### 1.1 Does not have any “extension points”
 
 No extension points means that it is hard to add new functionality unless you
 are doing it in ICU itself.
+
 It also means most tools used to process these messages are built rigidly,
 and are unprepared to handle changes
-(think localization tools, liners, friendly UIs, etc.).
+(think localization tools, linters, friendly UIs, etc.).
 
-### 2. Can't remove anything, even if now we know better
+The most basic functionality would be adding a new formatter. Meantime ICU
+added other formatters: time intervals, measurement, lists. But MessageFormat
+did not keep up. And adding support for any of these new formats risks to break
+existing tools.
+
+### 1.2. Can't deprecate anything, even if now we know better
 
 ICU is old, but also very popular (right now it is the core i18n library
 for all major operating systems, and many products).
@@ -50,6 +63,23 @@ teaching us what works (for instance skeletons did not exist when the
 date/time parameters were added).
 
 But the stability requirements prevent any major cleanup.
+
+### 2. Some existing problems
+* ICU added new formatters, but MessageFormat does not support them
+* Combined selectors (select + plural) results in unreadable and error
+prone nesting
+* Select and plurals inside the message are difficult to translate because of 
+grammatical agreement requires words outside select / plural to change.
+See https://en.wikipedia.org/wiki/Agreement_(linguistics)
+* Patterns in the date / time / number placeholders are bad i18n, should use skeletons
+* No official support for gender. It can be done with `select`, but it
+is not the same thing (same as the difference between an `enum` and integer/strings). Developers can use masculine/feminine, masc/fem, male/female, etc.
+* Formatting for “parameters” known at compile time
+* Escaping with apostrophe is error prone. There is no reliable way to tell if
+it has to be doubled or not.
+* The # is used in plural format instead of {...}, but does not work for nesting unless the plural is the innermost selector. But named placeholders don't work
+properly for plurals with offset. So there are 2 ways to do the same thing that work in 98% of cases, but in special situations only one of the ways works. 
+* Does not support inflections, and it would be hard to add without breaking existing tools.
 
 ### 3. Hard to map to the existing localization core structures
 
