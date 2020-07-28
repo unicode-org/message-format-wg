@@ -19,6 +19,12 @@ handle grammatical variations of the copy.
     2 zaznaczone elementy.
     5 zaznaczonych elementów.
 
+### Czech
+
+    Žádné vybrané předměty.
+    1 vybraný předmět.
+    2 vybrané předměty.
+    5 vybraných předmětů.
 
 ## Plurals optional in English
 
@@ -61,3 +67,31 @@ _item_ is skipped for brevity but can be assumed to be the subject.
     Anne i John opublikowali post w grupie Birthday Party
     Anne i Mary opublikowały post w grupie Birthday Party
     John i Mark opublikowali post w grupie Birthday Party
+    
+ ## Vocative form
+ 
+ ### English
+
+     Hello [user], ---> wrong Czech: Pavel
+     Hello [first_name], ---> wrong Czech: Petra
+     Hello [full_name], ---> wrong Czech: David Filip
+    
+
+### wrong Czech
+
+     Ahoj [user], ---> wrong Czech: Pavel
+     Ahoj [first_name], ---> wrong Czech: Petra
+     Ahoj [full_name], ---> wrong Czech: David Filip
+   
+
+### Czech (with canDelete="yes" on the placeholders)
+
+     Dobrý den,
+     Dobrý den,
+     Dobrý den,
+   
+### Czech with a vocative aware formatter   
+
+     Ahoj [user-vocative], ---> correct Czech: Pavle
+     Ahoj [first_name-vocative], ---> correct Czech: Petro
+     Ahoj [full_name-vocative], ---> correct Czech: Davide Filipe
