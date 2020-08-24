@@ -20,9 +20,9 @@
 ### Actions
 - Agenda : 
      Moderator must create the next TCQ meeting
-- Prepare a proposal for labelling issues and use projects in Github
+- Prepare a proposal for labelling issues and use projects in Github [#111](https://github.com/unicode-org/message-format-wg/issues/111)
 - Add Chair Group members as Git members
-- Actions for Pending Issues 
+- Actions for Pending Issues [#110](https://github.com/unicode-org/message-format-wg/issues/110)
      * Create task forces (Small Groups) to do the work to be presented at MFWG Meetings their responsibilities are:    
       
       - Is the owner of the Task(Issue/Project)
