@@ -79,3 +79,4 @@
 
 ## Resources
 * [Localization Essentials (Udacity)](https://www.udacity.com/course/localization-essentials--ud610) - free
+* [Localization standards reader 4.0](https://magazine.multilingual.com/issue/jan-feb-2019dm/localization-standards-reader-4-0/)
