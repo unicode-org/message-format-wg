@@ -80,3 +80,4 @@
 ## Resources
 * [Localization Essentials (Udacity)](https://www.udacity.com/course/localization-essentials--ud610) - free
 * [Localization standards reader 4.0](https://magazine.multilingual.com/issue/jan-feb-2019dm/localization-standards-reader-4-0/)
+* [Localization standards reader 4.0 - teaching copy](http://www.tara.tcd.ie/bitstream/handle/2262/90713/L10n%20Standards%20Reader%20v4.0.1.pdf?sequence=1&isAllowed=y)
