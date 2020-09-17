@@ -43,7 +43,7 @@ Please include your primary affiliation (e.g., the company you represent or wher
 - Robert Chu - Amazon.com (RCU)
 - Romulo Cintra - CaixaBank (RCA)
 - Shane Carr - Google (SFC)
-- Staś Małolepszy - Mozilla (SMY)
+- Staś Małolepszy - Mozilla (STA)
 - Steven R. Loomis - IBM (SRL)
 - Zibi Braniecki - Mozilla (ZBI)
 
