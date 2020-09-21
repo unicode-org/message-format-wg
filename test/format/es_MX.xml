@@ -56,4 +56,11 @@
         <print>Hay 3 niños en el video</print>
         <speak>Hay tres niños en el video</speak>
     </test>
+    <test>
+        <params>
+            <param name="word" type="String"><value>gato</value></param>
+        </params>
+        <source>Me gustan <var name="word" inflect="definite plural"/></source>
+        <print>Me gustan los gatos</print>
+    </test>
 </formattest>
