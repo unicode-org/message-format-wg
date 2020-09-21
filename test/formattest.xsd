@@ -34,7 +34,11 @@
             <xs:attribute name="type" use="required" type="xs:NCName"/>
         </xs:complexType>
     </xs:element>
-    <xs:element name="value" type="xs:string"/>
+    <xs:element name="value">
+        <xs:complexType>
+            <xs:attribute name="constraint" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
     <xs:complexType name="message" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element ref="number"/>
@@ -61,6 +65,7 @@
     </xs:element>
     <xs:element name="quantity">
         <xs:complexType>
+            <xs:attribute name="inflect" type="xs:NCName"/>
             <xs:attribute name="unit" use="required" type="xs:NCName"/>
             <xs:attribute name="value" use="required" type="xs:NCName"/>
         </xs:complexType>
