@@ -1,0 +1,10 @@
+[package]
+name = "message_format"
+version = "0.1.0"
+authors = ["Unicode MessageFormat 2.0 Work Group"]
+edition = "2018"
+repository = "https://github.com/zbraniecki/message-format-2.0-rs"
+license-file = "./LICENSE"
+categories = ["internationalization"]
+
+[dependencies]
