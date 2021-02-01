@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"module": "commonjs",
+		"outDir": "out",
+		"alwaysStrict": true,
+		"strict": true,
+		"listEmittedFiles": true,
+		"noImplicitAny": true,
+	},
+	"compileOnSave": true,
+}
