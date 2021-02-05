@@ -60,14 +60,19 @@ export interface IPlaceholder {
 	flags: Map<string, string>;
 }
 
-//==============
+// === Not really part of the data model.
 
+// Formats a message
 export interface IMessageFormatFunction {
 	format(message: IMessage, parameters: Map<string, unknown>): string;
 }
-export interface ISwitchSelectorFunction {
-	(value1: unknown, value2: unknown, locale: string): number;
-}
+
+// Formats a message
 export interface IPlaceholderFormatterFunction {
 	(ph: IPlaceholder, locale: string, parameters: Map<string, unknown>): string;
+}
+
+// Functions used for selection
+export interface ISwitchSelectorFunction {
+	(value1: unknown, value2: unknown, locale: string): number;
 }

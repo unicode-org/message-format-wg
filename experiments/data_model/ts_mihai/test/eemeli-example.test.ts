@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import 'mocha';
-import { PlainText, SimpleMessage, SelectorMessage, Switch } from '../src/messageformat';
+import { Message, SimpleMessage, SelectorMessage, PlainText, Switch } from '../src/messageformat';
 import { IMessage } from '../src/imessageformat';
 
 describe('Tests for MessageFormat, examples from Eemeli:', () => {
@@ -36,7 +36,7 @@ describe('Tests for MessageFormat, examples from Eemeli:', () => {
 			])
 		);
 	}
-	function MonsterMessage() : IMessage {
+	function monsterMessage() : IMessage {
 		const mfEq1 = new SimpleMessage('', locale, [new PlainText('a Monster')]);
 		const mfOther = new SimpleMessage('', locale, [new PlainText('Monsters')]);
 		return new SelectorMessage('monster', locale,
@@ -47,12 +47,13 @@ describe('Tests for MessageFormat, examples from Eemeli:', () => {
 		);
 	}
 
-	it('Message XRef with extra info', () => {
+	it('Message XRef with extra info', () => { // not yet ready
 		const mf = dinosaurMessage();
-		const msgArgs = new Map<string, unknown>();
-		// msgArgs.set('count', 1);
-		// expect('a Dinosaur').to.equal(mf.format(msgArgs));
-		// msgArgs.set('count', 23);
-		// expect('Dinosaurs').to.equal(mf.format(msgArgs));
+		expect('a Dinosaur').to.equal(Message.format(mf, {'count': 1}));
+		expect('Dinosaurs').to.equal(Message.format(mf, {'count': 23}));
+
+		expect('an Ogre').to.equal(Message.format(ogreMessage(), {'count': 1}));
+		expect('Elephants').to.equal(Message.format(elephantMessage(), {'count': 42}));
+		expect('a Monster').to.equal(Message.format(monsterMessage(), {'count': 1}));
 	});
 });

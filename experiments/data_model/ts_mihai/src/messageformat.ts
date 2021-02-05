@@ -18,6 +18,13 @@ function mapToObject<T>(obj?: Map<string, T>) : {[k: string]: T} {
 	}
 	return result;
 }
+function objectToMap<T>(obj?: {[k: string]: T}) : Map<string, T> {
+	const result = new Map<string, T>();
+	for (const key in obj) {
+		result.set(key, obj[key]);
+	}
+	return result;
+}
 
 const formatDateTime: IPlaceholderFormatterFunction = (
 		ph: IPlaceholder,
@@ -34,7 +41,7 @@ const formatDateTime: IPlaceholderFormatterFunction = (
 			return Intl.DateTimeFormat(locale, options).format(value.valueOf());
 		}
 	}
-	return '<undefined ' + name + '>';
+	return '<undefined ' + ph.name + '>';
 };
 
 const formatNumber: IPlaceholderFormatterFunction = (
@@ -49,7 +56,7 @@ const formatNumber: IPlaceholderFormatterFunction = (
 			return Intl.NumberFormat(locale, options).format(value.valueOf());
 		}
 	}
-	return '<undefined ' + name + '>';
+	return '<undefined ' + ph.name + '>';
 };
 
 const _defaultFormatterFunctions = new Map<string, IPlaceholderFormatterFunction>([
@@ -60,19 +67,21 @@ const _defaultFormatterFunctions = new Map<string, IPlaceholderFormatterFunction
 
 const pluralSwitchSelector: ISwitchSelectorFunction = (
 		value1: unknown, value2: unknown, locale: string) => {
-	let value1Str = '' + value1;
-	let value2Str = '' + value2;
-	if (value1Str == value2Str) {
+	if (value1 == value2) {
+		return 15;
+	}
+	const value2Str = String(value2);
+	if (String(value1) == value2Str) {
 		return 10;
 	}
 	if (value1 instanceof Number || typeof value1 === 'number') {
-		let sel = new Intl.PluralRules(locale).select(value1.valueOf());
-		if (sel == value2Str) {
+		if (value2Str == new Intl.PluralRules(locale).select(value1.valueOf())) {
 			return 5;
 		}
 	}
-	if (value2Str == 'other')
+	if (value2Str == 'other') {
 		return 2;
+	}
 	return -100000;
 };
 
@@ -87,9 +96,8 @@ const selectSwitchSelector: ISwitchSelectorFunction = (
 	if (value1 == value2) {
 		return 10;
 	}
-	let value1Str = '' + value1;
-	let value2Str = '' + value2;
-	if (value1Str == value2Str) {
+	const value2Str = String(value2);
+	if (String(value1) == value2Str) {
 		return 5;
 	}
 	if (value2Str == 'other') {
@@ -111,6 +119,16 @@ export abstract class Message implements IMessage {
 		this.id = id;
 		this.locale = locale;
 	}
+	static format(msg: IMessage, parameters: {[k: string]: unknown}): string {
+		if (msg instanceof SimpleMessage) {
+			return SimpleMessage.formatMap(msg, objectToMap(parameters));
+		} else if (msg instanceof SelectorMessage) {
+			return SelectorMessage.formatMap(msg, objectToMap(parameters));
+		} else {
+			console.log(msg);
+			throw new Error('I don\'t know how to format ' + typeof (msg));
+		}
+	}
 }
 
 export class SimpleMessage extends Message implements ISimpleMessage {
@@ -119,14 +137,17 @@ export class SimpleMessage extends Message implements ISimpleMessage {
 		super(id, locale);
 		this.parts = parts;
 	}
-	static format(msg: SimpleMessage, parameters: Map<string, unknown>): string {
+	static format(msg: SimpleMessage, parameters: {[k: string]: unknown}): string {
+		return SimpleMessage.formatMap(msg, objectToMap(parameters));
+	}
+	static formatMap(msg: SimpleMessage, parameters: Map<string, unknown>): string {
 		let result = '';
 		for (const idx in msg.parts) {
 			const part = msg.parts[idx];
 			if (part instanceof PlainText) {
 				result = result.concat(part.value);
 			} else if (part instanceof Placeholder) {
-				result = result.concat(Placeholder.format(part, msg.locale, parameters));
+				result = result.concat(Placeholder.formatMap(part, msg.locale, parameters));
 			}
 		}
 		return result;
@@ -152,12 +173,15 @@ export class SelectorMessage extends Message implements ISelectorMessage {
 		this.switches = switches;
 		this.messages = messages;
 	}
-	static format(msg: SelectorMessage, parameters: Map<string, unknown>): string {
+	static format(msg: SelectorMessage, parameters: {[k: string]: unknown}): string {
+		return SelectorMessage.formatMap(msg, objectToMap(parameters));
+	}
+	static formatMap(msg: SelectorMessage, parameters: Map<string, unknown>): string {
 		let bestScore = -1;
-		var bestMessage = new SimpleMessage(msg.id, msg.locale, []);
+		let bestMessage = new SimpleMessage(msg.id, msg.locale, []);
 		msg.messages.forEach((msgVal: ISimpleMessage, caseElement: ICase[]) => {
 			let currentScore = -1;
-			for (var i = 0; i < msg.switches.length; i++) {
+			for (let i = 0; i < msg.switches.length; i++) {
 				const switchElement = msg.switches[i];
 				const value = parameters.get(switchElement.name);
 				const switchFunction = _defaultSwitchSelectorFunctions.get(switchElement.type);
@@ -172,7 +196,7 @@ export class SelectorMessage extends Message implements ISelectorMessage {
 			}
 		});
 		if (bestScore >= 1) {
-			return SimpleMessage.format(bestMessage, parameters);
+			return SimpleMessage.formatMap(bestMessage, parameters);
 		}
 		console.log("=== ERROR ===");
 		console.log(this);
@@ -205,12 +229,13 @@ export class Placeholder implements IPlaceholder {
 	type: string;
 	flags: Map<string, string>;
 
-	constructor(name: string, type: string, flags: Map<string, string>) {
+	constructor(name: string, type: string, flags: {[k: string]: string}) {
 		this.name = name;
 		this.type = type;
-		this.flags = flags;
+		this.flags = objectToMap<string>(flags);
 	}
-	static format(ph: IPlaceholder, locale: string, parameters: Map<string, unknown>): string {
+
+	static formatMap(ph: IPlaceholder, locale: string, parameters: Map<string, unknown>): string {
 		const value = parameters.get(ph.name); // the runtime value of the placeholder
 		const formatterFunction = _defaultFormatterFunctions.get(ph.type);
 		if (formatterFunction) {
