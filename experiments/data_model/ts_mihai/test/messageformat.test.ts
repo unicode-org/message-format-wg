@@ -13,9 +13,9 @@ describe('Tests for MessageFormat:', () => {
 		const expectedMsg = 'Hello John!\n';
 		// TODO: some helper functions to make things less verbose
 		const parts = [
-			new PlainText('Hello '),
-			new Placeholder('user', '', {}),
-			new PlainText('!\n')
+			'Hello ',
+			new Placeholder('user'),
+			'!\n'
 		];
 
 		const mf = new SimpleMessage('id', locale, parts);
@@ -27,11 +27,11 @@ describe('Tests for MessageFormat:', () => {
 	it('Date formatting test', () => {
 		const expectedMsg = 'Using locale en-IN the date is 29 Dec 2019.\n';
 		const parts = [
-			new PlainText('Using locale '),
-			new Placeholder('locale', '', {}),
-			new PlainText(' the date is '),
+			'Using locale ',
+			new Placeholder('locale'),
+			' the date is ',
 			new Placeholder('theDay', 'date', { year: 'numeric', month: 'short', day: 'numeric' }),
-			new PlainText('.\n')
+			'.\n'
 		];
 
 		const mf = new SimpleMessage('id', locale, parts);
@@ -44,9 +44,9 @@ describe('Tests for MessageFormat:', () => {
 	it('Currency formatting test', () => {
 		const expectedMsg = 'A large currency amount is €1,23,45,67,890.98\n';
 		const parts = [
-			new PlainText('A large currency amount is '),
+			'A large currency amount is ',
 			new Placeholder('bigCount', 'number', { style: 'currency', currency: 'EUR' }),
-			new PlainText('\n')
+			'\n'
 		];
 
 		const mf = new SimpleMessage('id', locale, parts);
@@ -59,9 +59,9 @@ describe('Tests for MessageFormat:', () => {
 	it('Percentage formatting test', () => {
 		const expectedMsg = 'A percentage is 1,420%.\n';
 		const parts = [
-			new PlainText('A percentage is '),
+			'A percentage is ',
 			new Placeholder('count', 'number', { style: 'percent' }),
-			new PlainText('.\n')
+			'.\n'
 		];
 
 		const mf = new SimpleMessage('id', locale, parts);
@@ -75,18 +75,16 @@ describe('Tests for MessageFormat:', () => {
 		const expectedMsgFew = 'Ai sters 3 fisiere.\n';
 		const expectedMsgOther = 'Ai sters 23 de fisiere.\n';
 
-		const partsEq1 = [
-			new PlainText('Ai sters un fisier.\n'),
-		];
+		const partsEq1 = ['Ai sters un fisier.\n'];
 		const partsFew = [
-			new PlainText('Ai sters '),
-			new Placeholder('count', 'number', {}),
-			new PlainText(' fisiere.\n')
+			new PlainText('Ai sters '), // more verbose but the type is clear
+			new Placeholder('count', 'number'),
+			' fisiere.\n' // same effect as PlainText
 		];
 		const partsOther = [
-			new PlainText('Ai sters '),
-			new Placeholder('count', 'number', {}),
-			new PlainText(' de fisiere.\n')
+			'Ai sters ',
+			new Placeholder('count', 'number'),
+			' de fisiere.\n'
 		];
 
 		const localeRo = 'ro';
@@ -97,11 +95,11 @@ describe('Tests for MessageFormat:', () => {
 		const switches = [
 			new Switch('count', 'plural')
 		];
-		const messages = new Map<ICase[], ISimpleMessage>();
-		messages.set([1], mfEq1);
-		messages.set(['few'], mfEqFew);
-		messages.set(['other'], mfOther);
-
+		const messages = new Map<ICase[], ISimpleMessage>([
+			[      [1], mfEq1],
+			[  ['few'], mfEqFew],
+			[['other'], mfOther]
+		]);
 		const mf = new SelectorMessage('id', localeRo, switches, messages);
 
 		expect(expectedMsgEq1).to.equal(SelectorMessage.format(mf, { count: 1 }));
@@ -114,18 +112,14 @@ describe('Tests for MessageFormat:', () => {
 		const expectedMsgM = 'You\'ve been invited to his party.\n';
 		const expectedMsgO = 'You\'ve been invited to their party.\n';
 
-		const mfEqF = new SimpleMessage('', locale, [new PlainText(expectedMsgF)]);
-		const mfEqM = new SimpleMessage('', locale, [new PlainText(expectedMsgM)]);
-		const mfEqO = new SimpleMessage('', locale, [new PlainText(expectedMsgO)]);
-
 		const switches = [
 			new Switch('host_gender', 'gender')
 		];
-		const messages = new Map<ICase[], ISimpleMessage>();
-		messages.set(['female'], mfEqF);
-		messages.set(['male'], mfEqM);
-		messages.set(['other'], mfEqO);
-
+		const messages = new Map<ICase[], ISimpleMessage>([
+			[['female'], new SimpleMessage('', locale, [expectedMsgF])],
+			[  ['male'], new SimpleMessage('', locale, [expectedMsgM])],
+			[ ['other'], new SimpleMessage('', locale, [expectedMsgO])]
+		]);
 		const mf = new SelectorMessage('id', locale, switches, messages);
 
 		expect(expectedMsgF).to.equal(SelectorMessage.format(mf, { host_gender: 'female' }));
@@ -134,33 +128,31 @@ describe('Tests for MessageFormat:', () => {
 	});
 
 	it('Double plural test', () => {
+		const m0 = new SimpleMessage('', locale, ['You have killed no monsters.']);
+		const m1 = new SimpleMessage('', locale, ['You have killed one monster in one dungeon.']);
+		const m2 = new SimpleMessage('', locale, [
+			'You have killed ',
+			new Placeholder('monster-count', 'number'),
+			' monsters in one dungeon.'
+		]);
+		const m3 = new SimpleMessage('', locale, [
+			'You have killed ',
+			new Placeholder('monster-count', 'number'),
+			' monsters in ',
+			new Placeholder('dungeon-count', 'number'),
+			' dungeons.',
+		]);
+
+		const messages = new Map<ICase[], ISimpleMessage>([
+			[[      0, 'other'], m0],
+			[[      1, 'other'], m1],
+			[['other',       1], m2],
+			[['other', 'other'], m3]
+		]);
 		const switches = [
 			new Switch('monster-count', 'plural'),
 			new Switch('dungeon-count', 'plural'),
 		];
-		const s0 = new SimpleMessage('', locale, [
-			new PlainText('You have killed no monsters.')]);
-		const s1 = new SimpleMessage('', locale, [
-			new PlainText('You have killed one monster in one dungeon.')]);
-		const s2 = new SimpleMessage('', locale, [
-			new PlainText('You have killed '),
-			new Placeholder('monster-count', 'number', {}),
-			new PlainText(' monsters in one dungeon.')
-		]);
-		const s3 = new SimpleMessage('', locale, [
-			new PlainText('You have killed '),
-			new Placeholder('monster-count', 'number', {}),
-			new PlainText(' monsters in '),
-			new Placeholder('dungeon-count', 'number', {}),
-			new PlainText(' dungeons.'),
-		]);
-
-		const messages = new Map<ICase[], ISimpleMessage>([
-			[[      0, 'other'], s0],
-			[[      1, 'other'], s1],
-			[['other',       1], s2],
-			[['other', 'other'], s3]
-		]);
 		const mf = new SelectorMessage('id', locale, switches, messages);
 
 		expect('You have killed no monsters.').to.equal(

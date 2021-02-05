@@ -92,7 +92,8 @@ const genderSwitchSelector: ISwitchSelectorFunction = (
 };
 
 const selectSwitchSelector: ISwitchSelectorFunction = (
-		value1: unknown, value2: unknown, locale: string) => {
+		value1: unknown, value2: unknown,
+		locale: string) => { // eslint-disable-line @typescript-eslint/no-unused-vars
 	if (value1 == value2) {
 		return 10;
 	}
@@ -146,6 +147,8 @@ export class SimpleMessage extends Message implements ISimpleMessage {
 			const part = msg.parts[idx];
 			if (part instanceof PlainText) {
 				result = result.concat(part.value);
+			} else if (typeof part === 'string') {
+				result = result.concat(part);
 			} else if (part instanceof Placeholder) {
 				result = result.concat(Placeholder.formatMap(part, msg.locale, parameters));
 			}
@@ -229,9 +232,9 @@ export class Placeholder implements IPlaceholder {
 	type: string;
 	flags: Map<string, string>;
 
-	constructor(name: string, type: string, flags: {[k: string]: string}) {
+	constructor(name: string, type?: string, flags?: {[k: string]: string}) {
 		this.name = name;
-		this.type = type;
+		this.type = type ? type : '';
 		this.flags = objectToMap<string>(flags);
 	}
 

@@ -47,9 +47,9 @@ export interface ISwitch {
 
 export type ICase = string | number;
 
-export type IPart = IPlainText | IPlaceholder;
+export type IPart = string | IPlainText | IPlaceholder;
 
-export interface IPlainText {
+export interface IPlainText { // we can attach some "meta" to it, if we want
 	value: string;
 }
 
