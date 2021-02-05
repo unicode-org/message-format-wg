@@ -1,4 +1,6 @@
-import {IPlaceholder, IPlaceholderFormatterFunction, ISwitchSelectorFunction} from './imessageformat';
+import {IPlaceholder} from './imessageformat';
+import {IPlaceholderFormatterFunction, ISwitchSelectorFunction} from './imessageformat';
+import {mapToObject} from './util_functions';
 
 export const formatDateTime: IPlaceholderFormatterFunction = (
 		ph: IPlaceholder,
