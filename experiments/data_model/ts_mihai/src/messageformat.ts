@@ -6,6 +6,8 @@ import {IMessage, } from './imessageformat';
 import {ISelectorMessage, } from './imessageformat';
 import {ISimpleMessage} from './imessageformat';
 import {ISwitch} from './imessageformat';
+import {IPlaceholderFormatterFunction} from './imessageformat';
+import {ISwitchSelectorFunction} from './imessageformat';
 
 function mapToObject<T>(obj?: Map<string, T>) : {[k: string]: T} {
 	const result: {[k: string]: T} = {};
@@ -17,26 +19,14 @@ function mapToObject<T>(obj?: Map<string, T>) : {[k: string]: T} {
 	return result;
 }
 
-interface ISwitchSelectorFunction {
-	// (name: string, type: string, flags: Map<string, string>,
-	// 	locale: string, parameters: Map<string, unknown>): ICase;
-	(value1: unknown, value2: unknown, locale: string): number;
-}
-interface IFormatterFunction {
-	(name: string, type: string, flags: Map<string, string>,
-		locale: string, parameters: Map<string, unknown>): string;
-}
-
-const formatDateTime: IFormatterFunction = (
-		name: string,
-		type: string,
-		flags: Map<string, string>,
+const formatDateTime: IPlaceholderFormatterFunction = (
+		ph: IPlaceholder,
 		locale: string,
 		parameters: Map<string, unknown>) => {
 
-	const options = mapToObject<string>(flags);
-	if (type == 'date' || type == 'time') {
-		const value = parameters.get(name);
+	const options = mapToObject<string>(ph.flags);
+	if (ph.type == 'date' || ph.type == 'time') {
+		const value = parameters.get(ph.name);
 		if (value instanceof Date) {
 			return Intl.DateTimeFormat(locale, options).format(value);
 		}
@@ -47,16 +37,14 @@ const formatDateTime: IFormatterFunction = (
 	return '<undefined ' + name + '>';
 };
 
-const formatNumber: IFormatterFunction = (
-		name: string,
-		type: string,
-		flags: Map<string, string>,
+const formatNumber: IPlaceholderFormatterFunction = (
+		ph: IPlaceholder,
 		locale: string,
 		parameters: Map<string, unknown>) => {
 
-	const options = mapToObject<string>(flags);
-	if (type == 'number') {
-		const value = parameters.get(name);
+	const options = mapToObject<string>(ph.flags);
+	if (ph.type == 'number') {
+		const value = parameters.get(ph.name);
 		if (value instanceof Number || typeof value === 'number') {
 			return Intl.NumberFormat(locale, options).format(value.valueOf());
 		}
@@ -64,7 +52,7 @@ const formatNumber: IFormatterFunction = (
 	return '<undefined ' + name + '>';
 };
 
-const _defaultFormatterFunctions = new Map<string, IFormatterFunction>([
+const _defaultFormatterFunctions = new Map<string, IPlaceholderFormatterFunction>([
 	['date', formatDateTime],
 	['time', formatDateTime],
 	['number', formatNumber]
@@ -123,7 +111,6 @@ export abstract class Message implements IMessage {
 		this.id = id;
 		this.locale = locale;
 	}
-	abstract format(parameters: Map<string, unknown>): string;
 }
 
 export class SimpleMessage extends Message implements ISimpleMessage {
@@ -132,14 +119,14 @@ export class SimpleMessage extends Message implements ISimpleMessage {
 		super(id, locale);
 		this.parts = parts;
 	}
-	format(parameters: Map<string, unknown>): string {
+	static format(msg: SimpleMessage, parameters: Map<string, unknown>): string {
 		let result = '';
-		for (const idx in this.parts) {
-			const part = this.parts[idx];
+		for (const idx in msg.parts) {
+			const part = msg.parts[idx];
 			if (part instanceof PlainText) {
-				result = result.concat(part.format());
+				result = result.concat(part.value);
 			} else if (part instanceof Placeholder) {
-				result = result.concat(part.format(this.locale, parameters));
+				result = result.concat(Placeholder.format(part, msg.locale, parameters));
 			}
 		}
 		return result;
@@ -165,17 +152,17 @@ export class SelectorMessage extends Message implements ISelectorMessage {
 		this.switches = switches;
 		this.messages = messages;
 	}
-	format(parameters: Map<string, unknown>): string {
+	static format(msg: SelectorMessage, parameters: Map<string, unknown>): string {
 		let bestScore = -1;
-		var bestMessage = new SimpleMessage(this.id, this.locale, []);
-		this.messages.forEach((msgVal: SimpleMessage, caseElement: ICase[]) => {
+		var bestMessage = new SimpleMessage(msg.id, msg.locale, []);
+		msg.messages.forEach((msgVal: ISimpleMessage, caseElement: ICase[]) => {
 			let currentScore = -1;
-			for (var i = 0; i < this.switches.length; i++) {
-				const switchElement = this.switches[i];
+			for (var i = 0; i < msg.switches.length; i++) {
+				const switchElement = msg.switches[i];
 				const value = parameters.get(switchElement.name);
 				const switchFunction = _defaultSwitchSelectorFunctions.get(switchElement.type);
 				if (switchFunction) {
-					const score = switchFunction(value, caseElement[i], this.locale);
+					const score = switchFunction(value, caseElement[i], msg.locale);
 					currentScore += score;
 				}
 			}
@@ -185,7 +172,7 @@ export class SelectorMessage extends Message implements ISelectorMessage {
 			}
 		});
 		if (bestScore >= 1) {
-			return bestMessage.format(parameters);
+			return SimpleMessage.format(bestMessage, parameters);
 		}
 		console.log("=== ERROR ===");
 		console.log(this);
@@ -223,14 +210,14 @@ export class Placeholder implements IPlaceholder {
 		this.type = type;
 		this.flags = flags;
 	}
-	format(locale: string, parameters: Map<string, unknown>): string {
-		const value = parameters.get(this.name); // the runtime value of the placeholder
-		const formatterFunction = _defaultFormatterFunctions.get(this.type);
+	static format(ph: IPlaceholder, locale: string, parameters: Map<string, unknown>): string {
+		const value = parameters.get(ph.name); // the runtime value of the placeholder
+		const formatterFunction = _defaultFormatterFunctions.get(ph.type);
 		if (formatterFunction) {
-			return formatterFunction(this.name, this.type, this.flags, locale, parameters);
+			return formatterFunction(ph, locale, parameters);
 		} else if (value) {
 			return String(value);
 		}
-		return '<undefined ' + this.name + '>';
+		return '<undefined ' + ph.name + '>';
 	}
 }

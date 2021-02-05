@@ -31,7 +31,7 @@ describe('Tests for MessageFormat:', () => {
 		const mf = new SimpleMessage('id', locale, parts);
 		const msgArgs = objectToMap<unknown>({ user: 'John' });
 		// Also a friendliner method, something that takes a JS `unknown`, not a Map
-		const actual = mf.format(msgArgs);
+		const actual = SimpleMessage.format(mf, msgArgs);
 
 		expect(expectedMsg).to.equal(actual);
 	});
@@ -48,7 +48,7 @@ describe('Tests for MessageFormat:', () => {
 
 		const mf = new SimpleMessage('id', locale, parts);
 		const msgArgs = objectToMap<unknown>({ locale: locale, theDay: new Date(2019, 11, 29) });
-		const actual = mf.format(msgArgs);
+		const actual = SimpleMessage.format(mf, msgArgs);
 
 		expect(expectedMsg).to.equal(actual);
 	});
@@ -63,7 +63,7 @@ describe('Tests for MessageFormat:', () => {
 
 		const mf = new SimpleMessage('id', locale, parts);
 		const msgArgs = objectToMap<unknown>({ bigCount: 1234567890.97531 });
-		const actual = mf.format(msgArgs);
+		const actual = SimpleMessage.format(mf, msgArgs);
 
 		expect(expectedMsg).to.equal(actual);
 	});
@@ -78,7 +78,7 @@ describe('Tests for MessageFormat:', () => {
 
 		const mf = new SimpleMessage('id', locale, parts);
 		const msgArgs = objectToMap<unknown>({ count: 14.2 });
-		const actual = mf.format(msgArgs);
+		const actual = SimpleMessage.format(mf, msgArgs);
 
 		expect(expectedMsg).to.equal(actual);
 	});
@@ -118,11 +118,11 @@ describe('Tests for MessageFormat:', () => {
 		const mf = new SelectorMessage('id', localeRo, switches, messages);
 
 		const msgArgs = objectToMap<unknown>({ count: 1 });
-		expect(expectedMsgEq1).to.equal(mf.format(msgArgs));
+		expect(expectedMsgEq1).to.equal(SelectorMessage.format(mf, msgArgs));
 		msgArgs.set('count', 3);
-		expect(expectedMsgFew).to.equal(mf.format(msgArgs));
+		expect(expectedMsgFew).to.equal(SelectorMessage.format(mf, msgArgs));
 		msgArgs.set('count', 23);
-		expect(expectedMsgOther).to.equal(mf.format(msgArgs));
+		expect(expectedMsgOther).to.equal(SelectorMessage.format(mf, msgArgs));
 	});
 
 	it('Simple gender test', () => {
@@ -148,9 +148,9 @@ describe('Tests for MessageFormat:', () => {
 		const msgArgsEqM = objectToMap<unknown>({ host_gender: 'male' });
 		const msgArgsEqO = objectToMap<unknown>({ host_gender: 'we_do_not_know' });
 
-		expect(expectedMsgF).to.equal(mf.format(msgArgsEqF));
-		expect(expectedMsgM).to.equal(mf.format(msgArgsEqM));
-		expect(expectedMsgO).to.equal(mf.format(msgArgsEqO));
+		expect(expectedMsgF).to.equal(SelectorMessage.format(mf, msgArgsEqF));
+		expect(expectedMsgM).to.equal(SelectorMessage.format(mf, msgArgsEqM));
+		expect(expectedMsgO).to.equal(SelectorMessage.format(mf, msgArgsEqO));
 	});
 
 	it('Double plural test', () => {
@@ -187,15 +187,15 @@ describe('Tests for MessageFormat:', () => {
 
 		args.set('monster-count', 0);
 		args.set('dungeon-count', 0);
-		expect('You have killed no monsters.').to.equal(mf.format(args));
+		expect('You have killed no monsters.').to.equal(SelectorMessage.format(mf, args));
 		args.set('monster-count', 1);
 		args.set('dungeon-count', 0);
-		expect('You have killed one monster in one dungeon.').to.equal(mf.format(args));
+		expect('You have killed one monster in one dungeon.').to.equal(SelectorMessage.format(mf, args));
 		args.set('monster-count', 5);
 		args.set('dungeon-count', 1);
-		expect('You have killed 5 monsters in one dungeon.').to.equal(mf.format(args));
+		expect('You have killed 5 monsters in one dungeon.').to.equal(SelectorMessage.format(mf, args));
 		args.set('monster-count', 8);
 		args.set('dungeon-count', 2);
-		expect('You have killed 8 monsters in 2 dungeons.').to.equal(mf.format(args));
+		expect('You have killed 8 monsters in 2 dungeons.').to.equal(SelectorMessage.format(mf, args));
 	});
 });

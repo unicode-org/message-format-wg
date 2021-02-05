@@ -1,7 +1,6 @@
 export interface IMessage {
 	id: string;
 	locale: string;
-	format(parameters: Map<string, unknown>): string;
 }
 
 export interface ISimpleMessage extends IMessage {
@@ -59,6 +58,16 @@ export interface IPlaceholder {
 	name: string;
 	type: string;
 	flags: Map<string, string>;
-	// I don't think we want this in the data model, but keeping it for now
-	format(locale: string, parameters: Map<string, unknown>): string;
+}
+
+//==============
+
+export interface IMessageFormatFunction {
+	format(message: IMessage, parameters: Map<string, unknown>): string;
+}
+export interface ISwitchSelectorFunction {
+	(value1: unknown, value2: unknown, locale: string): number;
+}
+export interface IPlaceholderFormatterFunction {
+	(ph: IPlaceholder, locale: string, parameters: Map<string, unknown>): string;
 }
