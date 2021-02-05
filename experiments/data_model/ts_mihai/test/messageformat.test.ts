@@ -11,7 +11,6 @@ describe('Tests for MessageFormat:', () => {
 	// The tests
 	it('Simple placeholder test', () => {
 		const expectedMsg = 'Hello John!\n';
-		// TODO: some helper functions to make things less verbose
 		const parts = [
 			'Hello ',
 			new Placeholder('user'),
