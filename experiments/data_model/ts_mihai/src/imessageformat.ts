@@ -1,13 +1,35 @@
-export interface IMessage {
+export interface IMeta { // xliff:notes
+	comment: string;
+	// Should be able to attach it to the main types (group of messages, message, placeholder, maybe plain_text?)
+	// TBD what exactly we put here
+	// But we would probably have things like
+	//   - comments (with at lease category)
+	//   - examples
+	//   - restrictions (width, storage size, charset, see https://www.w3.org/TR/its20/)
+	//   - links to screenshots, demos, help, etc (or even "embedded" screenshots?)
+
+	// Beneficiaries of the meta:
+	//   - translators & translation tools (think validation)
+	//   - developers, dev tools (think lint)
+	//   - in general dropped from runtime (at compile time, or ignored when doing the format)
+}
+
+export interface IMessageGroup { // xliff:group
+	id: string;
+	locale: string;
+	messages: IMessage[];
+}
+
+export interface IMessage { // xliff:unit
 	id: string;
 	locale: string;
 }
 
-export interface ISimpleMessage extends IMessage {
+export interface ISimpleMessage extends IMessage { // xliff:unit
 	parts: IPart[];
 }
 
-export interface ISelectorMessage extends IMessage {
+export interface ISelectorMessage extends IMessage { // Xliff spec need extesion. Proposal in the works.
 	switches: ISwitch[];
 	// The order matters. So we need a "special map" that keeps the order
 	messages: Map<ICase[], ISimpleMessage>;
@@ -40,12 +62,12 @@ The above would be the short version, but the {user.title} would in fact also be
 Not sure how to represent this idea in TS (yet).
 */
 
-export interface ISwitch {
+export interface ISwitch { // Xliff spec need extesion. Proposal in the works.
 	name: string; // the variable to switch on
 	type: string; // plural, ordinal, gender, select, ..
 }
 
-export type ICase = string | number;
+export type ICase = string | number; // Xliff spec need extesion. Proposal in the works.
 
 export type IPart = string | IPlainText | IPlaceholder;
 
@@ -54,25 +76,28 @@ export interface IPlainText { // we can attach some "meta" to it, if we want
 }
 
 /** This also has a function associated with it. */
-export interface IPlaceholder {
-	name: string;
-	type: string;
-	flags: Map<string, string>;
+export interface IPlaceholder { // xliff: ph, pc, sc, ec. No cp, mrk, sm, em
+	// Think `{expDate, date, ::dMMMy}` in ICU MessageFormat
+	name: string; // icu:`expDate` ::: The name of the thing I format. "The thing": in param, evn, xref
+	type: string; // (function_name? formatter_name?) icu:`date` ::: What name of the formatter to use. Registry.
+	flags: Map<string, string>; //  icu:`::dMMMy` ::: How to format
 }
 
-// === Not really part of the data model.
+// === Some function signatures. Not really part of the data model.
+// Also, need updating to return something other than `string`
+// (think format-to-parts, or tts info)
 
 // Formats a message
 export interface IMessageFormatFunction {
 	format(message: IMessage, parameters: Map<string, unknown>): string;
 }
 
-// Formats a message
+// Formats a placeholder
 export interface IPlaceholderFormatterFunction {
 	(ph: IPlaceholder, locale: string, parameters: Map<string, unknown>): string;
 }
 
-// Functions used for selection
+// Functions used for selection & switch
 export interface ISwitchSelectorFunction {
 	(value1: unknown, value2: unknown, locale: string): number;
 }
