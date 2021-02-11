@@ -1,18 +1,18 @@
 import {IMessage, ISimpleMessage, ISelectorMessage} from './imessageformat';
 import {IPart, IPlaceholder, IPlainText} from './imessageformat';
 import {ISelector, ISelectVal} from './imessageformat';
-import {IPlaceholderFormatterFunction, ISelectorFunction} from './imessageformat';
+import {IPlaceholderFormatter, ISelectorFn} from './imessageformat';
 import {formatDateTime, formatNumber} from './some_format_functions';
 import {pluralSelector, genderSelector, genericSelector} from './some_format_functions';
 import {objectToMap} from './util_functions';
 
-const _defaultFormatterFunctions = new Map<string, IPlaceholderFormatterFunction>([
+const _defaultFormatterFunctions = new Map<string, IPlaceholderFormatter>([
 	['date', formatDateTime],
 	['time', formatDateTime],
 	['number', formatNumber]
 ]);
 
-const _defaultSelectorFunctions = new Map<string, ISelectorFunction>([
+const _defaultSelectorFunctions = new Map<string, ISelectorFn>([
 	['plural', pluralSelector],
 	['gender', genderSelector],
 	['select', genericSelector]
@@ -68,7 +68,7 @@ export class SelectorMessage extends Message implements ISelectorMessage {
 		// Need way better validation that this for prod (types, null, etc.)
 		messages.forEach((value: ISimpleMessage, key: ISelectVal[]) => {
 			if (selectors.length != key.length) {
-				throw new Error('Selector elem count different than select val elem count:\n'
+				throw new Error('Switch count different than case count:\n'
 					+ selectors.length
 					+ ' != '
 					+ key.length
