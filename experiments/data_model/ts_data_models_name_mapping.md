@@ -1,9 +1,14 @@
 # Comparing MF2 Data Models
 
-Eemeli : https://github.com/unicode-org/message-format-wg/tree/experiments/experiments/data_model/ts_eemeli
-Elango : https://github.com/unicode-org/message-format-wg/tree/experiments/experiments/data_model/ts_elango
-Mihai  : https://github.com/unicode-org/message-format-wg/tree/experiments/experiments/data_model/ts_mihai
-Zibi   : https://github.com/unicode-org/message-format-wg/tree/experiments/experiments/data_model/ts_zibi
+* Elango
+  - branch of Mihai : https://github.com/unicode-org/message-format-wg/blob/experiments/experiments/data_model/ts_elango/branch_from_mihai/src/imessageformat.ts
+  - Rust : https://github.com/unicode-org/message-format-wg/blob/experiments/experiments/data_model/ts_elango/ts_from_rust/src/imessageformat_v3.ts
+* Eemeli
+  - MFWG repo : https://github.com/unicode-org/message-format-wg/tree/experiments/experiments/data_model/ts_eemeli
+  - eemeli@ fork : https://github.com/eemeli/message-format-wg/blob/data-model/docs/data-model.d.ts
+* Mihai  : https://github.com/unicode-org/message-format-wg/blob/experiments/experiments/data_model/ts_mihai/src/imessageformat.ts
+* Zibi
+  - MFWG repo : https://github.com/unicode-org/message-format-wg/tree/experiments/experiments/data_model/ts_zibi
 
 ## Work in progress
 

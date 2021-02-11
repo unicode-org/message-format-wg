@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"target": "es2018",
+		"module": "commonjs",
+		"outDir": "out",
+		"alwaysStrict": true,
+		// "checkJs": true,
+		"strict": true,
+		"listEmittedFiles": true,
+		"noImplicitAny": true,
+		// "rootDir": "src",
+		// "extendedDiagnostics": true,
+		// "listFiles": true,
+		// "declaration": true,
+        // "sourceMap": true,
+	},
+	"compileOnSave": true,
+}
