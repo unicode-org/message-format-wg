@@ -79,8 +79,8 @@ export interface IPlainText { // we can attach some "meta" to it, if we want
 export interface IPlaceholder { // xliff: ph, pc, sc, ec. No cp, mrk, sm, em
 	// Think `{expDate, date, ::dMMMy}` in ICU MessageFormat
 	name: string; // icu:`expDate` ::: The name of the thing I format. "The thing": in param, evn, xref
-	type: string; // (function_name? formatter_name?) icu:`date` ::: What name of the formatter to use. Registry.
-	flags: Map<string, string>; //  icu:`::dMMMy` ::: How to format
+	formatter_name: string; // (function_name? formatter_name?) icu:`date` ::: What name of the formatter to use. Registry.
+	options: Map<string, string>; //  icu:`::dMMMy` ::: How to format
 }
 
 // === Some function signatures. Not really part of the data model.
@@ -99,5 +99,5 @@ export interface IPlaceholderFormatter {
 
 // Functions used for selection & switch
 export interface ISelectorFn {
-	(value1: unknown, value2: unknown, locale: string): number;
+	(value1: unknown, value2: unknown, locale: string): number; // This should be a return type of SelectorVal, or maybe a map {"val": SelectorVal, "score": number}
 }
