@@ -1,7 +1,6 @@
 export interface IMessage {
 	id: string;
 	locale: string;
-	format(parameters: Map<string, unknown>): string;
 }
 
 export interface ISimpleMessage extends IMessage {
@@ -48,9 +47,9 @@ export interface ISwitch {
 
 export type ICase = string | number;
 
-export type IPart = IPlainText | IPlaceholder;
+export type IPart = string | IPlainText | IPlaceholder;
 
-export interface IPlainText {
+export interface IPlainText { // we can attach some "meta" to it, if we want
 	value: string;
 }
 
@@ -59,6 +58,21 @@ export interface IPlaceholder {
 	name: string;
 	type: string;
 	flags: Map<string, string>;
-	// I don't think we want this in the data model, but keeping it for now
-	format(locale: string, parameters: Map<string, unknown>): string;
+}
+
+// === Not really part of the data model.
+
+// Formats a message
+export interface IMessageFormatFunction {
+	format(message: IMessage, parameters: Map<string, unknown>): string;
+}
+
+// Formats a message
+export interface IPlaceholderFormatterFunction {
+	(ph: IPlaceholder, locale: string, parameters: Map<string, unknown>): string;
+}
+
+// Functions used for selection
+export interface ISwitchSelectorFunction {
+	(value1: unknown, value2: unknown, locale: string): number;
 }

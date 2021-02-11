@@ -1,8 +1,8 @@
 {
-  "name": "ts.mihnita.messageformat",
+  "name": "ts.echeran-branch-from-mihnita.messageformat",
   "version": "1.0.0",
-  "description": "Experimenting with data-model MessageFormat",
-  "homepage": "https://github.com/mihnita/msgfmt_experiments",
+  "description": "Experimenting with data-model MessageFormat - echeran branch of mihnita",
+  "homepage": "https://github.com/unicode-org/message-format-wg/tree/experiments/experiments/data_model/ts_elango/branch_from_mihai",
   "devDependencies": {
     "@types/chai": "^4.2.14",
     "@types/mocha": "^8.2.0",
@@ -22,6 +22,6 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mihnita/msgfmt_experiments.git"
+    "url": "git@github.com:unicode-org/message-format-wg.git"
   }
 }
