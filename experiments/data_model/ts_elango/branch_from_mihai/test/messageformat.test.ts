@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
-import { PlainText, Placeholder, SimpleMessage, SelectorMessage, Switch } from '../src/messageformat';
-import { ICase, ISimpleMessage } from '../src/imessageformat';
+import { PlainText, Placeholder, SimpleMessage, SelectorMessage, Selector } from '../src/messageformat';
+import { ISelectVal, ISimpleMessage } from '../src/imessageformat';
 
 describe('Tests for MessageFormat:', () => {
 
@@ -91,15 +91,15 @@ describe('Tests for MessageFormat:', () => {
 		const mfEqFew = new SimpleMessage('', localeRo, partsFew);
 		const mfOther = new SimpleMessage('', localeRo, partsOther);
 
-		const switches = [
-			new Switch('count', 'plural')
+		const selector = [
+			new Selector('count', 'plural')
 		];
-		const messages = new Map<ICase[], ISimpleMessage>([
+		const messages = new Map<ISelectVal[], ISimpleMessage>([
 			[      [1], mfEq1],
 			[  ['few'], mfEqFew],
 			[['other'], mfOther]
 		]);
-		const mf = new SelectorMessage('id', localeRo, switches, messages);
+		const mf = new SelectorMessage('id', localeRo, selector, messages);
 
 		expect(expectedMsgEq1).to.equal(SelectorMessage.format(mf, { count: 1 }));
 		expect(expectedMsgFew).to.equal(SelectorMessage.format(mf, { count: 3 }));
@@ -111,15 +111,15 @@ describe('Tests for MessageFormat:', () => {
 		const expectedMsgM = 'You\'ve been invited to his party.\n';
 		const expectedMsgO = 'You\'ve been invited to their party.\n';
 
-		const switches = [
-			new Switch('host_gender', 'gender')
+		const selectors = [
+			new Selector('host_gender', 'gender')
 		];
-		const messages = new Map<ICase[], ISimpleMessage>([
+		const messages = new Map<ISelectVal[], ISimpleMessage>([
 			[['female'], new SimpleMessage('', locale, [expectedMsgF])],
 			[  ['male'], new SimpleMessage('', locale, [expectedMsgM])],
 			[ ['other'], new SimpleMessage('', locale, [expectedMsgO])]
 		]);
-		const mf = new SelectorMessage('id', locale, switches, messages);
+		const mf = new SelectorMessage('id', locale, selectors, messages);
 
 		expect(expectedMsgF).to.equal(SelectorMessage.format(mf, { host_gender: 'female' }));
 		expect(expectedMsgM).to.equal(SelectorMessage.format(mf, { host_gender: 'male' }));
@@ -142,17 +142,17 @@ describe('Tests for MessageFormat:', () => {
 			' dungeons.',
 		]);
 
-		const messages = new Map<ICase[], ISimpleMessage>([
+		const messages = new Map<ISelectVal[], ISimpleMessage>([
 			[[      0, 'other'], m0],
 			[[      1, 'other'], m1],
 			[['other',       1], m2],
 			[['other', 'other'], m3]
 		]);
-		const switches = [
-			new Switch('monster-count', 'plural'),
-			new Switch('dungeon-count', 'plural'),
+		const selectors = [
+			new Selector('monster-count', 'plural'),
+			new Selector('dungeon-count', 'plural'),
 		];
-		const mf = new SelectorMessage('id', locale, switches, messages);
+		const mf = new SelectorMessage('id', locale, selectors, messages);
 
 		expect('You have killed no monsters.').to.equal(
 			SelectorMessage.format(mf, {'monster-count': 0, 'dungeon-count': 0}));

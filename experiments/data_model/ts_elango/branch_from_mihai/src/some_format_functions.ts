@@ -1,5 +1,5 @@
 import {IPlaceholder} from './imessageformat';
-import {IPlaceholderFormatterFunction, ISwitchSelectorFunction} from './imessageformat';
+import {IPlaceholderFormatterFunction, ISelectorFunction} from './imessageformat';
 import {mapToObject} from './util_functions';
 
 export const formatDateTime: IPlaceholderFormatterFunction = (
@@ -35,7 +35,7 @@ export const formatNumber: IPlaceholderFormatterFunction = (
 	return '<undefined ' + ph.name + '>';
 };
 
-export const pluralSwitchSelector: ISwitchSelectorFunction = (
+export const pluralSelector: ISelectorFunction = (
 		value1: unknown, value2: unknown, locale: string) => {
 	if (value1 == value2) {
 		return 15;
@@ -55,13 +55,13 @@ export const pluralSwitchSelector: ISwitchSelectorFunction = (
 	return -100000;
 };
 
-export const genderSwitchSelector: ISwitchSelectorFunction = (
+export const genderSelector: ISelectorFunction = (
 		value1: unknown, value2: unknown, locale: string) => {
 	// the gender selector is just syntactic sugar, for now
-	return selectSwitchSelector(value1, value2, locale);
+	return genericSelector(value1, value2, locale);
 };
 
-export const selectSwitchSelector: ISwitchSelectorFunction = (
+export const genericSelector: ISelectorFunction = (
 		value1: unknown, value2: unknown,
 		locale: string) => { // eslint-disable-line @typescript-eslint/no-unused-vars
 	if (value1 == value2) {

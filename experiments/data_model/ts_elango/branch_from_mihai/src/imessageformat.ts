@@ -8,20 +8,20 @@ export interface ISimpleMessage extends IMessage {
 }
 
 export interface ISelectorMessage extends IMessage {
-	switches: ISwitch[];
+	selectors: ISelector[];
 	// The order matters. So we need a "special map" that keeps the order
-	messages: Map<ICase[], ISimpleMessage>;
+	messages: Map<ISelectVal[], ISimpleMessage>;
 }
 
 /*
-A "Switch" is a kind of function (like plural, gender, select, politeName, gramar, ...)
+A "Selector" is a kind of function (like plural, gender, select, politeName, gramar, ...)
 "function name" => used to get the function from a map of registered functions (used extensible)
 then take that function and call it
 in: locale, parameter value, other (for example offset for plurals)
 returns: "something" that has a toString, fromString, equals (what else?)
 
 Example:
-switches [polite(user), greaterThan(count, 100)]
+selectors [polite(user), greaterThan(count, 100)]
 {
   [ true,  true] : 'Hello {user.title} {user.last}, you have a lot of followers'
   [ true, false] : 'Hello {user.title} {user.last}, you have a few followers'
@@ -40,12 +40,12 @@ The above would be the short version, but the {user.title} would in fact also be
 Not sure how to represent this idea in TS (yet).
 */
 
-export interface ISwitch {
-	name: string; // the variable to switch on
+export interface ISelector {
+	name: string; // the variable to select on
 	type: string; // plural, ordinal, gender, select, ..
 }
 
-export type ICase = string | number;
+export type ISelectVal = string | number;
 
 export type IPart = string | IPlainText | IPlaceholder;
 
@@ -73,6 +73,6 @@ export interface IPlaceholderFormatterFunction {
 }
 
 // Functions used for selection
-export interface ISwitchSelectorFunction {
+export interface ISelectorFunction {
 	(value1: unknown, value2: unknown, locale: string): number;
 }

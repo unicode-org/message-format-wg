@@ -12,17 +12,17 @@
 
 ## Work in progress
 
-| Elango                         | Mihai            | Zibi                          | Eemeli            |
-| ------------------------------ | ---------------- | ----------------------------- | ----------------- |
-|                                |                  |                               | Bundle            |
-|                                | MessageGroup     |                               | MessageSet        |
-|                                | Message          | Message / MessageValue        |                   |
-| SingleMessage / MessagePattern | SimpleMessage    | Single / Pattern              | Message           |
-| MessageGroup                   | SelectorMessage  | Multi                         | Select            |
-| PatternPart                    | Part             | PatternElement                | Value             |
-| Selector                       | Switch           | InlineExpression              |                   |
-| SelectVal                      | Case             | Variant.VariantKey            |                   |
-| TextPart                       | PlainText        | NumberLiteral / StringLiteral | Literal           |
-| Placeholder                    | Placeholder+type | VariableReference             | VariableReference |
-| Placeholder                    | Placeholder+type | FunctionReference             | FunctionReference |
-| Placeholder                    | Placeholder+type |                               | MessageReference  |
+| Elango           | Mihai            | Zibi                          | Eemeli            | Elango - Rust                  |
+| ---------------- | ---------------- | ----------------------------- | ----------------- | ------------------------------ |
+|                  |                  |                               | Bundle            |                                |
+|                  | MessageGroup     |                               | MessageSet        |                                |
+| Message          | Message          | Message / MessageValue        |                   |                                |
+| SimpleMessage    | SimpleMessage    | Single / Pattern              | Message           | SingleMessage / MessagePattern |
+| SelectorMessage  | SelectorMessage  | Multi                         | Select            | MessageGroup                   |
+| Part             | Part             | PatternElement                | Value             | PatternPart                    |
+| Selector         | Switch           | InlineExpression              |                   | Selector                       |
+| SelectVal        | Case             | Variant.VariantKey            |                   | SelectVal                      |
+| PlainText        | PlainText        | NumberLiteral / StringLiteral | Literal           | TextPart                       |
+| Placeholder      | Placeholder+type | VariableReference             | VariableReference | Placeholder                    |
+| Placeholder      | Placeholder+type | FunctionReference             | FunctionReference | Placeholder                    |
+| Placeholder      | Placeholder+type |                               | MessageReference  | Placeholder                    |
