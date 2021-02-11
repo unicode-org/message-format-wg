@@ -26,12 +26,3 @@
 | Placeholder                    | Placeholder+type | VariableReference             | VariableReference |
 | Placeholder                    | Placeholder+type | FunctionReference             | FunctionReference |
 | Placeholder                    | Placeholder+type |                               | MessageReference  |
-
-## Note
-
-In some cases I've added enough "scafolding" to build, lint, or even test:
-```
-npm install
-npm run lint
-npm test
-```
