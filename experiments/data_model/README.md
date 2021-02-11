@@ -5,7 +5,7 @@
 ### One time setup
 
 * Install NPM (Node Package Manager)
-* Then run `npm install`
+* Then run `npm install` in the directory of code for Node + JS/TypeScript
 
 ### Run tests
 
