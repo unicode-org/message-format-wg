@@ -1,6 +1,6 @@
 import {IMessage, ISimpleMessage, ISelectorMessage} from './imessageformat';
 import {IPart, IPlaceholder, IPlainText} from './imessageformat';
-import {ISelector, ISelectVal} from './imessageformat';
+import {ISelectorArg, ISelectorVal} from './imessageformat';
 import {IPlaceholderFormatter, ISelectorFn} from './imessageformat';
 import {formatDateTime, formatNumber} from './some_format_functions';
 import {pluralSelector, genderSelector, genericSelector} from './some_format_functions';
@@ -60,31 +60,31 @@ export class SimpleMessage extends Message implements ISimpleMessage {
 }
 
 export class SelectorMessage extends Message implements ISelectorMessage {
-	selectors: ISelector[];
+	selectorArgs: ISelectorArg[];
 	// The order matters. So we need a "special map" that keeps the order
-	messages: Map<ISelectVal[], ISimpleMessage>;
-	constructor(id: string, locale: string, selectors: Selector[], messages: Map<ISelectVal[], ISimpleMessage>) {
+	messages: Map<ISelectorVal[], ISimpleMessage>;
+	constructor(id: string, locale: string, selectorArgs: SelectorArg[], messages: Map<ISelectorVal[], ISimpleMessage>) {
 		super(id, locale);
 		// Need way better validation that this for prod (types, null, etc.)
-		messages.forEach((value: ISimpleMessage, key: ISelectVal[]) => {
-			if (selectors.length != key.length) {
+		messages.forEach((value: ISimpleMessage, key: ISelectorVal[]) => {
+			if (selectorArgs.length != key.length) {
 				throw new Error('Switch count different than case count:\n'
-					+ selectors.length
+					+ selectorArgs.length
 					+ ' != '
 					+ key.length
 				);
 			}
 		});
-		this.selectors = selectors;
+		this.selectorArgs = selectorArgs;
 		this.messages = messages;
 	}
 	static _format(msg: SelectorMessage, parameters: {[k: string]: unknown}): string {
 		let bestScore = -1;
 		let bestMessage = new SimpleMessage(msg.id, msg.locale, []);
-		msg.messages.forEach((msgVal: ISimpleMessage, selectVals: ISelectVal[]) => {
+		msg.messages.forEach((msgVal: ISimpleMessage, selectVals: ISelectorVal[]) => {
 			let currentScore = -1;
-			for (let i = 0; i < msg.selectors.length; i++) {
-				const selector = msg.selectors[i];
+			for (let i = 0; i < msg.selectorArgs.length; i++) {
+				const selector = msg.selectorArgs[i];
 				const value = parameters[selector.name];
 				const selectorFunction = _defaultSelectorFunctions.get(selector.type);
 				if (selectorFunction) {
@@ -107,7 +107,7 @@ export class SelectorMessage extends Message implements ISelectorMessage {
 	}
 }
 
-export class Selector implements ISelector {
+export class SelectorArg implements ISelectorArg {
 	name: string; // the variable to select on
 	type: string; // plural, ordinal, gender, select, ...
 	constructor(name: string, type: string) {

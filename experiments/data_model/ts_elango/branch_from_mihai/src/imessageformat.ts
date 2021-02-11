@@ -30,9 +30,9 @@ export interface ISimpleMessage extends IMessage { // xliff:unit
 }
 
 export interface ISelectorMessage extends IMessage { // Xliff spec need extesion. Proposal in the works.
-	selectors: ISelector[];
+	selectorArgs: ISelectorArg[];
 	// The order matters. So we need a "special map" that keeps the order
-	messages: Map<ISelectVal[], ISimpleMessage>;
+	messages: Map<ISelectorVal[], ISimpleMessage>;
 }
 
 /*
@@ -62,12 +62,12 @@ The above would be the short version, but the {user.title} would in fact also be
 Not sure how to represent this idea in TS (yet).
 */
 
-export interface ISelector { // Xliff spec need extesion. Proposal in the works.
+export interface ISelectorArg { // Xliff spec need extesion. Proposal in the works.
 	name: string; // the variable to select on
 	type: string; // plural, ordinal, gender, select, ..
 }
 
-export type ISelectVal = string | number; // Xliff spec need extesion. Proposal in the works.
+export type ISelectorVal = string | number; // Xliff spec need extesion. Proposal in the works.
 
 export type IPart = string | IPlainText | IPlaceholder;
 

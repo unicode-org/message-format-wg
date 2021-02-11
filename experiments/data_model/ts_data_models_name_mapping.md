@@ -20,8 +20,8 @@
 | SimpleMessage    | SimpleMessage    | Single / Pattern              | Message           | SingleMessage / MessagePattern |
 | SelectorMessage  | SelectorMessage  | Multi                         | Select            | MessageGroup                   |
 | Part             | Part             | PatternElement                | Value             | PatternPart                    |
-| Selector         | Switch           | InlineExpression              |                   | Selector                       |
-| SelectVal        | Case             | Variant.VariantKey            |                   | SelectVal                      |
+| SelectorArg      | Switch           | InlineExpression              |                   | Selector                       |
+| SelectorVal      | Case             | Variant.VariantKey            |                   | SelectVal                      |
 | PlainText        | PlainText        | NumberLiteral / StringLiteral | Literal           | TextPart                       |
 | Placeholder      | Placeholder+type | VariableReference             | VariableReference | Placeholder                    |
 | Placeholder      | Placeholder+type | FunctionReference             | FunctionReference | Placeholder                    |

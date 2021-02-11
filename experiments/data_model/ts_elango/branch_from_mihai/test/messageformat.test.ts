@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
-import { PlainText, Placeholder, SimpleMessage, SelectorMessage, Selector } from '../src/messageformat';
-import { ISelectVal, ISimpleMessage } from '../src/imessageformat';
+import { PlainText, Placeholder, SimpleMessage, SelectorMessage, SelectorArg } from '../src/messageformat';
+import { ISelectorVal, ISimpleMessage } from '../src/imessageformat';
 
 describe('Tests for MessageFormat:', () => {
 
@@ -92,9 +92,9 @@ describe('Tests for MessageFormat:', () => {
 		const mfOther = new SimpleMessage('', localeRo, partsOther);
 
 		const selector = [
-			new Selector('count', 'plural')
+			new SelectorArg('count', 'plural')
 		];
-		const messages = new Map<ISelectVal[], ISimpleMessage>([
+		const messages = new Map<ISelectorVal[], ISimpleMessage>([
 			[      [1], mfEq1],
 			[  ['few'], mfEqFew],
 			[['other'], mfOther]
@@ -111,15 +111,15 @@ describe('Tests for MessageFormat:', () => {
 		const expectedMsgM = 'You\'ve been invited to his party.\n';
 		const expectedMsgO = 'You\'ve been invited to their party.\n';
 
-		const selectors = [
-			new Selector('host_gender', 'gender')
+		const selectorArgs = [
+			new SelectorArg('host_gender', 'gender')
 		];
-		const messages = new Map<ISelectVal[], ISimpleMessage>([
+		const messages = new Map<ISelectorVal[], ISimpleMessage>([
 			[['female'], new SimpleMessage('', locale, [expectedMsgF])],
 			[  ['male'], new SimpleMessage('', locale, [expectedMsgM])],
 			[ ['other'], new SimpleMessage('', locale, [expectedMsgO])]
 		]);
-		const mf = new SelectorMessage('id', locale, selectors, messages);
+		const mf = new SelectorMessage('id', locale, selectorArgs, messages);
 
 		expect(expectedMsgF).to.equal(SelectorMessage.format(mf, { host_gender: 'female' }));
 		expect(expectedMsgM).to.equal(SelectorMessage.format(mf, { host_gender: 'male' }));
@@ -142,17 +142,17 @@ describe('Tests for MessageFormat:', () => {
 			' dungeons.',
 		]);
 
-		const messages = new Map<ISelectVal[], ISimpleMessage>([
+		const messages = new Map<ISelectorVal[], ISimpleMessage>([
 			[[      0, 'other'], m0],
 			[[      1, 'other'], m1],
 			[['other',       1], m2],
 			[['other', 'other'], m3]
 		]);
-		const selectors = [
-			new Selector('monster-count', 'plural'),
-			new Selector('dungeon-count', 'plural'),
+		const selectorArgss = [
+			new SelectorArg('monster-count', 'plural'),
+			new SelectorArg('dungeon-count', 'plural'),
 		];
-		const mf = new SelectorMessage('id', locale, selectors, messages);
+		const mf = new SelectorMessage('id', locale, selectorArgss, messages);
 
 		expect('You have killed no monsters.').to.equal(
 			SelectorMessage.format(mf, {'monster-count': 0, 'dungeon-count': 0}));
