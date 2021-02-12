@@ -1,14 +1,14 @@
 import {IPlaceholder} from './imessageformat';
-import {IPlaceholderFormatterFunction, ISwitchSelectorFunction} from './imessageformat';
+import {IPlaceholderFormatter, ISelectorFn} from './imessageformat';
 import {mapToObject} from './util_functions';
 
-export const formatDateTime: IPlaceholderFormatterFunction = (
+export const formatDateTime: IPlaceholderFormatter = (
 		ph: IPlaceholder,
 		locale: string,
 		parameters: Map<string, unknown>) => {
 
-	const options = mapToObject<string>(ph.flags);
-	if (ph.type == 'date' || ph.type == 'time') {
+	const options = mapToObject<string>(ph.options);
+	if (ph.formatter_name == 'date' || ph.formatter_name == 'time') {
 		const value = parameters.get(ph.name);
 		if (value instanceof Date) {
 			return Intl.DateTimeFormat(locale, options).format(value);
@@ -20,13 +20,13 @@ export const formatDateTime: IPlaceholderFormatterFunction = (
 	return '<undefined ' + ph.name + '>';
 };
 
-export const formatNumber: IPlaceholderFormatterFunction = (
+export const formatNumber: IPlaceholderFormatter = (
 		ph: IPlaceholder,
 		locale: string,
 		parameters: Map<string, unknown>) => {
 
-	const options = mapToObject<string>(ph.flags);
-	if (ph.type == 'number') {
+	const options = mapToObject<string>(ph.options);
+	if (ph.formatter_name == 'number') {
 		const value = parameters.get(ph.name);
 		if (value instanceof Number || typeof value === 'number') {
 			return Intl.NumberFormat(locale, options).format(value.valueOf());
@@ -35,7 +35,7 @@ export const formatNumber: IPlaceholderFormatterFunction = (
 	return '<undefined ' + ph.name + '>';
 };
 
-export const pluralSwitchSelector: ISwitchSelectorFunction = (
+export const pluralSelector: ISelectorFn = (
 		value1: unknown, value2: unknown, locale: string) => {
 	if (value1 == value2) {
 		return 15;
@@ -55,13 +55,13 @@ export const pluralSwitchSelector: ISwitchSelectorFunction = (
 	return -100000;
 };
 
-export const genderSwitchSelector: ISwitchSelectorFunction = (
+export const genderSelector: ISelectorFn = (
 		value1: unknown, value2: unknown, locale: string) => {
 	// the gender selector is just syntactic sugar, for now
-	return selectSwitchSelector(value1, value2, locale);
+	return genericSelector(value1, value2, locale);
 };
 
-export const selectSwitchSelector: ISwitchSelectorFunction = (
+export const genericSelector: ISelectorFn = (
 		value1: unknown, value2: unknown,
 		locale: string) => { // eslint-disable-line @typescript-eslint/no-unused-vars
 	if (value1 == value2) {
