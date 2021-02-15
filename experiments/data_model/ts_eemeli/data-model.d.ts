@@ -6,12 +6,15 @@
 interface Resource {
   id: string
   locale: string
-  messages: Record<string, Formattable | MessageSet>
+  entries: Entry[]
   meta?: Meta
 }
 
+type Entry = Message | MessageSet
+
 interface MessageSet {
-  messages: Record<string, Formattable | MessageSet>
+  id: string
+  entries: Entry[]
   meta?: Meta
 }
 
@@ -24,14 +27,13 @@ interface Meta {
   [key: string]: unknown
 }
 
-type Formattable = Message | Select
-
 /**
  * The string parts of a message represent fixed values, while placeholder
  * values are variable.
  */
 interface Message {
-  value: Value[]
+  id: string
+  value: Value[] | Select
   meta?: Meta
 }
 
@@ -46,8 +48,7 @@ interface Message {
  */
 interface Select {
   select: Value[]
-  cases: Array<{ key: string[]; value: Value[]; meta?: Meta }>
-  meta?: Meta
+  cases: Array<{ key: Literal[]; value: Value[]; meta?: Meta }>
 }
 
 /**
@@ -77,7 +78,7 @@ type Literal = string | number
  * `{ name: 'Kat' }` as the value of the `'user'` scope variable.
  */
 interface VariableReference {
-  path: Value[]
+  var_path: Path
   meta?: Meta
 }
 
@@ -97,14 +98,14 @@ interface VariableReference {
 interface FunctionReference {
   func: string
   args: Value[]
-  options?: Record<string, string | number | boolean>
+  options?: Array<{ key: string; value: string | number | boolean }>
   meta?: Meta
 }
 
 /**
  * A MessageReference is a pointer to a Message or a Select.
  *
- * If `id` is undefined, the message is sought in the current Resource.
+ * If `resource` is undefined, the message is sought in the current Resource.
  * If it is set, it identifies the resource for the sought message.
  *
  * While `msg` has superficially the same type as a Message, all but the last
@@ -115,8 +116,15 @@ interface FunctionReference {
  * `scope` overrides values in the current scope when resolving the message.
  */
 interface MessageReference {
-  id?: string
-  msg: Value[]
-  scope?: Record<string, Value>
+  res_id?: string
+  msg_path: Path
+  scope?: Scope[]
   meta?: Meta
 }
+
+interface Scope {
+  name: string
+  value: Value | boolean | Scope
+}
+
+type Path = Value[]
