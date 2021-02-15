@@ -1,6 +1,6 @@
 // MF1: { gender, select, male{he} female{she} other{they} }
 const genderSelect: Select = {
-  select: [['gender']],
+  select: [{ path: ['gender'] }],
   cases: [
     { key: ['male'], value: ['he'] },
     { key: ['female'], value: ['she'] },
@@ -10,12 +10,12 @@ const genderSelect: Select = {
 
 // MF1: { count, plural, one{a message} other{# messages} }
 const countPlural: Select = {
-  select: [{ func: 'plural', args: [['count']] }],
+  select: [{ func: 'plural', args: [{ path: ['count'] }] }],
   cases: [
     { key: ['one'], value: ['a message'] },
     {
       key: ['other'],
-      value: [{ func: 'number', args: [['count']] }, ' messages']
+      value: [{ func: 'number', args: [{ path: ['count'] }] }, ' messages']
     }
   ]
 }
@@ -25,26 +25,50 @@ const gameMessages: Resource = {
   locale: 'en',
   messages: {
     monsters: {
-      dinosaur: { indefinite: ['a Dinosaur'], plural: ['Dinosaurs'] },
-      elephant: { indefinite: ['an Elephant'], plural: ['Elephants'] },
-      ogre: { indefinite: ['an Ogre'], plural: ['Ogres'] },
-      other: { indefinite: ['a Monster'], plural: ['Monsters'] }
+      messages: {
+        dinosaur: {
+          messages: {
+            indefinite: { value: ['a Dinosaur'] },
+            plural: { value: ['Dinosaurs'] }
+          }
+        },
+        elephant: {
+          messages: {
+            indefinite: { value: ['an Elephant'] },
+            plural: { value: ['Elephants'] }
+          }
+        },
+        ogre: {
+          messages: {
+            indefinite: { value: ['an Ogre'] },
+            plural: { value: ['Ogres'] }
+          }
+        },
+        other: {
+          messages: {
+            indefinite: { value: ['a Monster'] },
+            plural: { value: ['Monsters'] }
+          }
+        }
+      }
     },
-    'killed-by': [
-      'You have been killed by ',
-      { msg: ['monsters', ['monster'], 'indefinite'] }
-    ],
+    'killed-by': {
+      value: [
+        'You have been killed by ',
+        { msg: ['monsters', { path: ['monster'] }, 'indefinite'] }
+      ]
+    },
     'kill-count': {
       select: [
-        { func: 'plural', args: [['monster-count']] },
-        { func: 'plural', args: [['dungeon-count']] }
+        { func: 'plural', args: [{ path: ['monster-count'] }] },
+        { func: 'plural', args: [{ path: ['dungeon-count'] }] }
       ],
       cases: [
         {
           key: ['one'],
           value: [
             'You have killed ',
-            { msg: ['monsters', ['monster'], 'indefinite'] },
+            { msg: ['monsters', { path: ['monster'] }, 'indefinite'] },
             '.'
           ]
         },
@@ -52,9 +76,9 @@ const gameMessages: Resource = {
           key: ['other', 'one'],
           value: [
             'You have killed ',
-            { func: 'number', args: [['monster-count']] },
+            { func: 'number', args: [{ path: ['monster-count'] }] },
             ' ',
-            { msg: ['monsters', ['monster'], 'plural'] },
+            { msg: ['monsters', { path: ['monster'] }, 'plural'] },
             ' in one dungeon.'
           ]
         },
@@ -62,11 +86,11 @@ const gameMessages: Resource = {
           key: ['other', 'other'],
           value: [
             'You have killed ',
-            { func: 'number', args: [['monster-count']] },
+            { func: 'number', args: [{ path: ['monster-count'] }] },
             ' ',
-            { msg: ['monsters', ['monster'], 'plural'] },
+            { msg: ['monsters', { path: ['monster'] }, 'plural'] },
             ' in ',
-            { func: 'number', args: [['dungeon-count']] },
+            { func: 'number', args: [{ path: ['dungeon-count'] }] },
             ' dungeons.'
           ]
         }
@@ -79,14 +103,19 @@ const extMessages: Resource = {
   id: 'remote-ref',
   locale: 'en',
   messages: {
-    friend: [
-      'Your friend has become ',
-      {
-        func: 'sparkle',
-        args: [
-          { id: 'game-messages', msg: ['monsters', ['monster'], 'indefinite'] }
-        ]
-      }
-    ]
+    friend: {
+      value: [
+        'Your friend has become ',
+        {
+          func: 'sparkle',
+          args: [
+            {
+              id: 'game-messages',
+              msg: ['monsters', { path: ['monster'] }, 'indefinite']
+            }
+          ]
+        }
+      ]
+    }
   }
 }

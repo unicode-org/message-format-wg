@@ -6,20 +6,34 @@
 interface Resource {
   id: string
   locale: string
-  messages: MessageSet
+  messages: Record<string, Formattable | MessageSet>
+  meta?: Meta
+}
+
+interface MessageSet {
+  messages: Record<string, Formattable | MessageSet>
+  meta?: Meta
 }
 
 /**
- * Really this ought to be a Record, but TS only allows circular references for
- * a limited set of types.
+ * Additional meta information amy be attached to most nodes. In common use,
+ * this information is not required when formatting a message.
  */
-type MessageSet = { [key in string]: Message | Select | MessageSet }
+interface Meta {
+  comment?: string
+  [key: string]: unknown
+}
+
+type Formattable = Message | Select
 
 /**
  * The string parts of a message represent fixed values, while placeholder
  * values are variable.
  */
-type Message = Value[]
+interface Message {
+  value: Value[]
+  meta?: Meta
+}
 
 /**
  * Select generalises the plural, selectordinal and select argument types of
@@ -32,7 +46,8 @@ type Message = Value[]
  */
 interface Select {
   select: Value[]
-  cases: Array<{ key: string[]; value: Message }>
+  cases: Array<{ key: string[]; value: Value[]; meta?: Meta }>
+  meta?: Meta
 }
 
 /**
@@ -61,7 +76,10 @@ type Literal = string | number
  * object value, so e.g. `['user', 'name']` would require something like
  * `{ name: 'Kat' }` as the value of the `'user'` scope variable.
  */
-type VariableReference = string[]
+interface VariableReference {
+  path: Value[]
+  meta?: Meta
+}
 
 /**
  * To resolve a FunctionReference, an externally defined function is called.
@@ -80,6 +98,7 @@ interface FunctionReference {
   func: string
   args: Value[]
   options?: Record<string, string | number | boolean>
+  meta?: Meta
 }
 
 /**
@@ -99,4 +118,5 @@ interface MessageReference {
   id?: string
   msg: Value[]
   scope?: Record<string, Value>
+  meta?: Meta
 }
