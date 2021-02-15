@@ -12,17 +12,27 @@
 
 ## Work in progress
 
-| Elango / Mihai             | Zibi                          | Eemeli            | Elango - Rust                  |
-| -------------------------- | ----------------------------- | ----------------- | ------------------------------ |
-|                            |                               | Bundle            |                                |
-| MessageGroup               |                               | MessageSet        |                                |
-| Message                    | Message / MessageValue        |                   |                                |
-| SimpleMessage              | Single / Pattern              | Message           | SingleMessage / MessagePattern |
-| SelectorMessage            | Multi                         | Select            | MessageGroup                   |
-| Part                       | PatternElement                | Value             | PatternPart                    |
-| SelectorArg                | InlineExpression              |                   | Selector                       |
-| SelectorVal                | Variant.VariantKey            |                   | SelectVal                      |
-| PlainText                  | NumberLiteral / StringLiteral | Literal           | TextPart                       |
-| Placeholder+formatter_name | VariableReference             | VariableReference | Placeholder                    |
-| Placeholder+formatter_name | FunctionReference             | FunctionReference | Placeholder                    |
-| Placeholder+formatter_name |                               | MessageReference  | Placeholder                    |
+| Elango / Mihai             | Eemeli + Zibi     |
+| -------------------------- | ----------------- |
+|                            | Resource          |
+|                            | Resource ID       |
+|                            | Locale            |
+| MessageGroup | Message     | Entry             |
+| MessageGroup               | MessageSet        |
+| Message                    | Message           |
+| SimpleMessage              | Pattern           |
+| SelectorMessage            | Select            |
+| Part                       | Value             |
+| SelectorArg                | Key               |
+| SelectorVal                | Pattern           |
+| PlainText                  | string            |
+|                            | number            |
+|                            | boolean           |
+| Placeholder+formatter_name | VariableReference |
+| Placeholder+formatter_name | FunctionReference |
+| Placeholder+formatter_name | MessageReference  |
+|                            | Literal           |
+|                            | Path              |
+|                            | Meta              |
+|                            | Comment           |
+|                            | Scope             |
