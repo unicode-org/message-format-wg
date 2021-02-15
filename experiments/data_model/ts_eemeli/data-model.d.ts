@@ -6,20 +6,36 @@
 interface Resource {
   id: string
   locale: string
-  messages: MessageSet
+  entries: Entry[]
+  meta?: Meta
+}
+
+type Entry = Message | MessageSet
+
+interface MessageSet {
+  id: string
+  entries: Entry[]
+  meta?: Meta
 }
 
 /**
- * Really this ought to be a Record, but TS only allows circular references for
- * a limited set of types.
+ * Additional meta information amy be attached to most nodes. In common use,
+ * this information is not required when formatting a message.
  */
-type MessageSet = { [key in string]: Message | Select | MessageSet }
+interface Meta {
+  comment?: string
+  [key: string]: unknown
+}
 
 /**
  * The string parts of a message represent fixed values, while placeholder
  * values are variable.
  */
-type Message = Value[]
+interface Message {
+  id: string
+  value: Value[] | Select
+  meta?: Meta
+}
 
 /**
  * Select generalises the plural, selectordinal and select argument types of
@@ -32,7 +48,7 @@ type Message = Value[]
  */
 interface Select {
   select: Value[]
-  cases: Array<{ key: string[]; value: Message }>
+  cases: Array<{ key: Literal[]; value: Value[]; meta?: Meta }>
 }
 
 /**
@@ -61,7 +77,10 @@ type Literal = string | number
  * object value, so e.g. `['user', 'name']` would require something like
  * `{ name: 'Kat' }` as the value of the `'user'` scope variable.
  */
-type VariableReference = string[]
+interface VariableReference {
+  var_path: Path
+  meta?: Meta
+}
 
 /**
  * To resolve a FunctionReference, an externally defined function is called.
@@ -79,13 +98,14 @@ type VariableReference = string[]
 interface FunctionReference {
   func: string
   args: Value[]
-  options?: Record<string, string | number | boolean>
+  options?: Array<{ key: string; value: string | number | boolean }>
+  meta?: Meta
 }
 
 /**
  * A MessageReference is a pointer to a Message or a Select.
  *
- * If `id` is undefined, the message is sought in the current Resource.
+ * If `resource` is undefined, the message is sought in the current Resource.
  * If it is set, it identifies the resource for the sought message.
  *
  * While `msg` has superficially the same type as a Message, all but the last
@@ -96,7 +116,15 @@ interface FunctionReference {
  * `scope` overrides values in the current scope when resolving the message.
  */
 interface MessageReference {
-  id?: string
-  msg: Value[]
-  scope?: Record<string, Value>
+  res_id?: string
+  msg_path: Path
+  scope?: Scope[]
+  meta?: Meta
 }
+
+interface Scope {
+  name: string
+  value: Value | boolean | Scope
+}
+
+type Path = Value[]
