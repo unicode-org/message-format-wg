@@ -15,23 +15,22 @@
 | Elango / Mihai             | Eemeli + Zibi     |
 | -------------------------- | ----------------- |
 |                            | Resource          |
-|                            | Resource ID       |
-|                            | Locale            |
 | MessageGroup | Message     | Entry             |
-| MessageGroup               | MessageSet        |
+| MessageGroup               | MessageGroup      |
 | Message                    | Message           |
-| SimpleMessage              | Pattern           |
-| SelectorMessage            | Select            |
-| Part                       | Value             |
+| SimpleMessage              |                   |
+| Pattern (Part[])           | Pattern (Value[]) |
+| SelectorMessage            |                   |
+|                            | Select            |
+| Part                       | Part              |
 | SelectorArg                | Key               |
-| SelectorVal                | Pattern           |
+| SelectorVal                | Literal           |
 | PlainText                  | string            |
-|                            | number            |
+| Placeholder                | number            |
 |                            | boolean           |
 | Placeholder+formatter_name | VariableReference |
 | Placeholder+formatter_name | FunctionReference |
 | Placeholder+formatter_name | MessageReference  |
-|                            | Literal           |
 |                            | Path              |
 |                            | Meta              |
 |                            | Comment           |
