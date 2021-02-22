@@ -1,7 +1,8 @@
 /**
- * The root of a message structure is a Resource.
+ * The root of a message structure is a Resource. It is somewhat (but not
+ * necessarily entirely) analogous to a single file in a file system.
  *
- * The `[id, locale]` tuple must be unique for each resource
+ * The `[id, locale]` tuple should probably be unique for each resource.
  */
 interface Resource {
   id: string
@@ -10,9 +11,9 @@ interface Resource {
   meta?: Meta
 }
 
-type Entry = Message | MessageSet
+type Entry = Message | MessageGroup
 
-interface MessageSet {
+interface MessageGroup {
   id: string
   entries: Entry[]
   meta?: Meta
@@ -28,27 +29,36 @@ interface Meta {
 }
 
 /**
- * The string parts of a message represent fixed values, while placeholder
- * values are variable.
+ * The core of the spec, each message carries its own identifier and value.
+ * The shape of the value is an implementation detail, and may vary for the
+ * same message in different languages.
  */
 interface Message {
   id: string
-  value: Value[] | Select
+  value: Pattern | Select
   meta?: Meta
 }
+
+/**
+ * The body of each message is composed of a sequence of parts, some of them
+ * fixed (Literal), others placeholders for values depending on additional
+ * data.
+ */
+type Pattern = Part[]
 
 /**
  * Select generalises the plural, selectordinal and select argument types of
  * MessageFormat 1. Each case is defined by a key of one or more string
  * identifiers, and selection between them is made according to the values of
- * a corresponding number of placeholders.
+ * a corresponding number of placeholders. The result of the selection is
+ * always a single Pattern.
  *
  * It is likely that in nearly all cases the source of the placeholder's value
  * will be a variable in the local scope.
  */
 interface Select {
-  select: Value[]
-  cases: Array<{ key: Literal[]; value: Value[]; meta?: Meta }>
+  select: Part[]
+  cases: Array<{ key: Literal[]; value: Pattern; meta?: Meta }>
 }
 
 /**
@@ -59,7 +69,7 @@ interface Select {
  * Each of the types that may be used as a Value must be (and are) immediately
  * distinguishable from each other.
  */
-type Value = Literal | VariableReference | FunctionReference | MessageReference
+type Part = Literal | VariableReference | FunctionReference | MessageReference
 
 /**
  * An immediately defined value.
@@ -71,7 +81,7 @@ type Value = Literal | VariableReference | FunctionReference | MessageReference
 type Literal = string | number
 
 /**
- * Variables are defined by the current scope.
+ * Variables are defined by the current Scope.
  *
  * Using an array with more than one value refers to an inner property of an
  * object value, so e.g. `['user', 'name']` would require something like
@@ -97,7 +107,7 @@ interface VariableReference {
  */
 interface FunctionReference {
   func: string
-  args: Value[]
+  args: Part[]
   options?: Array<{ key: string; value: string | number | boolean }>
   meta?: Meta
 }
@@ -105,13 +115,11 @@ interface FunctionReference {
 /**
  * A MessageReference is a pointer to a Message or a Select.
  *
- * If `resource` is undefined, the message is sought in the current Resource.
- * If it is set, it identifies the resource for the sought message.
- *
- * While `msg` has superficially the same type as a Message, all but the last
- * of its parts are used to identify a parent MessageSet for the Message or
- * Select that's being sought. Allowing for reference values here enables
- * dynamic references to be used.
+ * If `res_id` is undefined, the message is sought in the current Resource.
+ * If it is set, it identifies the resource for the sought message. It is
+ * entirely intentional that this value may not be defined at runtime.
+ * `msg_path` is used to locate the Message within the Resource, and it may
+ * include placeholder values.
  *
  * `scope` overrides values in the current scope when resolving the message.
  */
@@ -122,9 +130,19 @@ interface MessageReference {
   meta?: Meta
 }
 
+/**
+ * Variables and messages may each be located within their surrounding
+ * structures, and require a path to address them. Note that Path allows for
+ * its parts to be defined by placeholders as well as literals.
+ */
+type Path = Part[]
+
+/**
+ * At its simplest, a representation of the parameters/arguments passed to a
+ * message formatter. Used by the VariableReference resolver, and may be
+ * extended in a MessageReference.
+ */
 interface Scope {
   name: string
-  value: Value | boolean | Scope
+  value: Part | boolean | Scope
 }
-
-type Path = Value[]
