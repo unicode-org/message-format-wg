@@ -165,6 +165,61 @@ const extMessages: Resource = {
           options: [{ key: 'type', value: 'and' }]
         }
       ]
+    },
+
+    {
+      id: 'gift-recipients-with-meta',
+      meta: {
+        comment:
+          'Requested by Mihai, ' +
+          'as a PoC for function composition within the data model'
+      },
+      value: [
+        'I gave gifts to ',
+        {
+          func: 'list',
+          args: [
+            {
+              func: 'map',
+              args: [
+                {
+                  func: 'grammatical_case',
+                  args: [],
+                  options: [{ key: 'case', value: 'genitive' }],
+                  meta: {
+                    comment:
+                      'Applies the desired grammatical case on the input value',
+                    arg_types: ['string'],
+                    opt_types: { case: '"genitive" | ...' },
+                    ret_type: 'string'
+                  }
+                },
+                { var_path: ['people'] }
+              ],
+              meta: {
+                comment:
+                  'Applies a function to each of value of `iter`. ' +
+                  'If `func` defines some of its own args or options, ' +
+                  'those are effectively curried into each invokation.',
+                generics: ['T', 'U'],
+                arg_types: [
+                  '(...args: any[], input: T, options?: any) => U',
+                  'Iterable<T>'
+                ],
+                ret_type: 'U'
+              }
+            }
+          ],
+          options: [{ key: 'type', value: 'and' }],
+          meta: {
+            comment:
+              'Apply a list formatter on the input arguments, ' +
+              'which may be a mix of strings and string sequences',
+            arg_rest_type: 'Array<string | Iterable<string>>',
+            opt_types: { type: '"and" | "or"' }
+          }
+        }
+      ]
     }
   ]
 }
