@@ -8,13 +8,16 @@ This document enumerates those, and provides a reference for later actions.
 For more details on the process that lead to these decisions, please refer to the following:
 
 - **Consensus 1 & 2:**
-  Reached during the first three meetings of the "Issue #103 task-force", and codified during its [October 2020 meeting](https://github.com/unicode-org/message-format-wg/blob/HEAD/meetings/task-force/%23103-2020-10-26.md).
+  Identified as prerequisites for maintaining backwards-compatibility with MessageFormat 1 once Consensus 3 & 4 are agreed upon.
+  Reached during the meetings of the [issue #103](https://github.com/unicode-org/message-format-wg/issues/103) task-force, and codified during the [October 2020 task-force meeting](https://github.com/unicode-org/message-format-wg/blob/HEAD/meetings/task-force/%23103-2020-10-26.md).
   Accepted at the [November 2020 meeting](https://github.com/unicode-org/message-format-wg/blob/HEAD/meetings/2020/notes-2020-11-16.md) of the working group.
 - **Consensus 3 & 4:**
+  The core result of the [issue #103](https://github.com/unicode-org/message-format-wg/issues/103) task-force ([minutes](https://github.com/unicode-org/message-format-wg/tree/master/meetings/task-force)).
   Reached in principle during the [December 2020 meeting](https://github.com/unicode-org/message-format-wg/blob/HEAD/meetings/2020/notes-2020-12-14.md) of the working group.
   Codified in [issue #137](https://github.com/unicode-org/message-format-wg/issues/137).
   Discussed and accepted at the [January 2021](https://github.com/unicode-org/message-format-wg/issues/146) and [February 2021](https://github.com/unicode-org/message-format-wg/blob/HEAD/meetings/2021/notes-2021-02-15.md) meetings of the working group.
 - **Consensus 5 & 6:**
+  The solution for [issue #127](https://github.com/unicode-org/message-format-wg/issues/127).
   Codified in [issue #137](https://github.com/unicode-org/message-format-wg/issues/137) during the [January 2021 meeting](https://github.com/unicode-org/message-format-wg/issues/146) of the working group.
   Discussed and accepted at the  [February 2021 meeting](https://github.com/unicode-org/message-format-wg/blob/HEAD/meetings/2021/notes-2021-02-15.md) of the working group.
 
