@@ -128,6 +128,43 @@ const extMessages: Resource = {
           ]
         }
       ]
+    },
+
+    /**
+     * Requested by Mihai, as a PoC for function composition within the data model
+     *
+     * grammatical_case(input: string, options: { case: 'genitive' | ... }): string
+     * // Applies the desired grammatical case on the input value
+     *
+     * map<T, U>(func: (...args: any[], input: T, options?: any) => U, iter: Iterable<T>): Iterable<U>
+     * // Applies a function to each of value of `iter`. If `func` defines some of
+     * // its own args or options, those are effectively curried into each invokation.
+     *
+     * list(...args: Array<string | Iterable<string>>, options: { type: 'and' | 'or' }): string
+     * // Apply a list formatter on the input arguments, which may be a mix of strings and string sequences
+     */
+    {
+      id: 'gift-recipients',
+      value: [
+        'I gave gifts to ',
+        {
+          func: 'list',
+          args: [
+            {
+              func: 'map',
+              args: [
+                {
+                  func: 'grammatical_case',
+                  args: [],
+                  options: [{ key: 'case', value: 'genitive' }]
+                },
+                { var_path: ['people'] }
+              ]
+            }
+          ],
+          options: [{ key: 'type', value: 'and' }]
+        }
+      ]
     }
   ]
 }
