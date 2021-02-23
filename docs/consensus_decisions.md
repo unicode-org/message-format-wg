@@ -3,6 +3,21 @@
 During its proceedings, the working group has reached internal consensus on a number of issues.
 This document enumerates those, and provides a reference for later actions.
 
+### Sources
+
+For more details on the process that lead to these decisions, please refer to the following:
+
+- **Consensus 1 & 2:**
+  Reached during the first three meetings of the "Issue #103 task-force", and codified during its [October 2020 meeting](https://github.com/unicode-org/message-format-wg/blob/HEAD/meetings/task-force/%23103-2020-10-26.md).
+  Accepted at the [November 2020 meeting](https://github.com/unicode-org/message-format-wg/blob/HEAD/meetings/2020/notes-2020-11-16.md) of the working group.
+- **Consensus 3 & 4:**
+  Reached in principle during the [December 2020 meeting](https://github.com/unicode-org/message-format-wg/blob/HEAD/meetings/2020/notes-2020-12-14.md) of the working group.
+  Codified in [issue #137](https://github.com/unicode-org/message-format-wg/issues/137).
+  Discussed and accepted at the [January 2021](https://github.com/unicode-org/message-format-wg/issues/146) and [February 2021](https://github.com/unicode-org/message-format-wg/blob/HEAD/meetings/2021/notes-2021-02-15.md) meetings of the working group.
+- **Consensus 5 & 6:**
+  Codified in [issue #137](https://github.com/unicode-org/message-format-wg/issues/137) during the [January 2021 meeting](https://github.com/unicode-org/message-format-wg/issues/146) of the working group.
+  Discussed and accepted at the  [February 2021 meeting](https://github.com/unicode-org/message-format-wg/blob/HEAD/meetings/2021/notes-2021-02-15.md) of the working group.
+
 ## 1: Include message references in the data model.
 
 **Discussion:**
