@@ -30,7 +30,7 @@ It will unfortunately still be possible, but much more difficult, for users to d
 One of the drawbacks of message references is that referenced messages effectively have a public API (names of parameters, variables, variants, etc.) which must be consistent across all callsites.
 This leads us to consensus 2.
 
-## 2: Allow parameters passed with message references to the message being referenced and validate it.
+## 2: Allow message references to include parameters in a form that enables their validation.
 
 **Discussion:**
 The variables/fields passed should not be completely untyped and unchecked.
