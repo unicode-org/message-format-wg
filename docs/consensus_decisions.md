@@ -25,7 +25,7 @@ For more details on the process that lead to these decisions, please refer to th
 
 **Discussion:**
 The implementers would find a way to include references anyways, but including it in the data model (standard) can make it subject to best practices.
-It’s still possible for users to do “the wrong thing” (ex: concatenation of strings/messages), but then you would find it more difficult to achieve.
+It will unfortunately still be possible, but much more difficult, for users to do “the wrong thing” by concatenating strings or messages.
 
 One of the drawbacks of message references is that referenced messages effectively have a public API (names of parameters, variables, variants, etc.) which must be consistent across all callsites.
 This leads us to consensus 2.
@@ -34,14 +34,14 @@ This leads us to consensus 2.
 
 **Discussion:**
 The variables/fields passed should not be completely untyped and unchecked.
-We want a validation mechanism that can allow providing early error feedback to the translators & developers.
-We need to decide on when the validation can & should happen, including the meaning of “build time” and “run time” in regards to validation.
+We want a validation mechanism that can allow providing early error feedback to the translators and developers.
+We need to decide on when the validation can and should happen, including the meaning of “build time” and “run time” in regards to validation.
 
 ## 3: Allow for selectors to select a case depending on the value of one or more input arguments.
 
 **Discussion:**
 This is a prerequisite for top-level selectors to be able to represent complex messages, without requiring those messages to be split up in an unergonomic manner.
-This is an extension or relaxation of what's allowed in MessageFromat 1.
+This is an extension or relaxation of what's allowed in MessageFormat 1.
 
 While message references make it technically possible for the data model to represent multi-argument selectors otherwise, this requires the use of n²-1 artificial "messages", where n is the number of arguments. This is not desirable.
 
