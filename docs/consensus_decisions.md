@@ -65,5 +65,5 @@ The group believes that the known value of this feature can be sufficiently cove
 
 **Discussion:**
 The cost analysis of the nested selectors feature was performed in the absence of sufficient in-field experience of use in production systems.
-In result, the group's decision to reject the feature is based on the lack of sufficient known value that would require them, which the group recognizes may change in the future.
+In result, the group's decision to not currently incorporate the feature is based on the lack of sufficient known value that would require them, which the group recognizes may change in the future.
 In result, it is the intent of the group to attempt to design MessageFormat 2 in such a way, that wouldn't block future revisions of the standard to be extended with nested selectors feature.
