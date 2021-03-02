@@ -61,7 +61,7 @@ Furthermore, we may enable complete reversibility of message transformations to 
 Nested selectors provides capabilities that may be useful in avoiding variant permutation explosion in edge cases, but the use of them has not been evaluated in production localization systems to date.
 The group believes that the known value of this feature can be sufficiently covered by the combination of message references and top level selection features, which together provide a sufficient feature set at a lower cost to the ecosystem than nested selectors would do.
 
-## 6: The group will attempt to avoid blocking addition of nested selectors in the future revisions of the standard.
+## 6: The group does not intend to block the addition of nested selectors in the future revisions of the standard.
 
 **Discussion:**
 The cost analysis of the nested selectors feature was performed in the absence of sufficient in-field experience of use in production systems.
