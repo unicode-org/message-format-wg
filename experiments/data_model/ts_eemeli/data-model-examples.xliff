@@ -53,7 +53,7 @@
         <mf:selectArg>{ func: plural, args: [{ var_path: [dungeon-count] }] }</mf:selectArg>
       </mf:select>
 
-      <unit id="u:kill-count:one" name="one">
+      <unit id="u:kill-count:one" mf:case="one">
         <originalData>
           <data id="d1">[monsters, { var_path: [monster] }, indefinite]</data>
         </originalData>
@@ -66,7 +66,7 @@
         </segment>
       </unit>
 
-      <unit id="u:kill-count:other:one" name="other one">
+      <unit id="u:kill-count:other:one" mf:case="other one">
         <originalData>
           <data id="d1">{ func: number, args: [{ var_path: [monster-count] }] }</data>
           <data id="d2">[monsters, { var_path: [monster] }, plural]</data>
@@ -82,7 +82,7 @@
         </segment>
       </unit>
 
-      <unit id="u:kill-count:other:other" name="other other">
+      <unit id="u:kill-count:other:other" mf:case="other other">
         <originalData>
           <data id="d1">{ func: number, args: [{ var_path: [monster-count] }] }</data>
           <data id="d2">[monsters, { var_path: [monster] }, plural]</data>
