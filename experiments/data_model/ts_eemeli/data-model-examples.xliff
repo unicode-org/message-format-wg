@@ -110,13 +110,13 @@
                   {
                     func: 'grammatical_case',
                     args: [],
-                    options: { case: <mf:value optId="o1" /> }
+                    options: { case: <mf:value option="o1" /> }
                   },
                   { var_path: [ 'people' ] }
                 ]
               }
             ],
-            options: { type: <mf:value optId="o2" /> }
+            options: { type: <mf:value option="o2" /> }
           }
         </data>
       </originalData>
