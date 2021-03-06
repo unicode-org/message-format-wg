@@ -1,0 +1,142 @@
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0"
+    xmlns:mf="http://www.unicode.org/ns/2021/messageformat/2.0/not-real-yet"
+    xmlns:res="urn:oasis:names:tc:xliff:resourcedata:2.0"
+    srcLang="en" trgLang="tlh">
+  <file id="f:game-messages">
+
+    <group id="g:monsters">
+      <notes>
+        <note>Can't be bothered to add the elephants and ogres too.</note>
+      </notes>
+      <group id="g:monsters.dinosaur">
+        <unit id="u:monsters.dinosaur.indefinite">
+          <segment>
+            <source>a Dinosaur</source>
+          </segment>
+        </unit>
+        <unit id="u:monsters.dinosaur.plural">
+          <segment>
+            <source>Dinosaurs</source>
+          </segment>
+        </unit>
+      </group>
+      <group id="g:monsters.other">
+        <unit id="u:monsters.other.indefinite">
+          <segment>
+            <source>a Monster</source>
+          </segment>
+        </unit>
+        <unit id="u:monsters.other.plural">
+          <segment>
+            <source>Monsters</source>
+          </segment>
+        </unit>
+      </group>
+    </group>
+
+    <unit id="u:killed-by">
+      <originalData>
+        <data id="d1">['monsters', { var_path: ['monster'] }, 'indefinite']</data>
+      </originalData>
+      <segment>
+        <source>
+          You have been killed by
+          <ph id="1" dataRef="d1" disp="monsters.$monster.indefinite" mf:type="msg" />
+        </source>
+      </segment>
+    </unit>
+
+    <group id="g:kill-count">
+      <mf:select>
+        <mf:selectArg>{ func: 'plural', args: [{ var_path: ['monster-count'] }] }</mf:selectArg>
+        <mf:selectArg>{ func: 'plural', args: [{ var_path: ['dungeon-count'] }] }</mf:selectArg>
+      </mf:select>
+
+      <unit id="u:kill-count:one">
+        <originalData>
+          <data id="d1">['monsters', { var_path: ['monster'] }, 'indefinite']</data>
+        </originalData>
+        <segment>
+          <source>
+            You have killed
+            <ph id="1" dataRef="d1" disp="monsters.$monster.indefinite" mf:type="msg" />.
+          </source>
+        </segment>
+      </unit>
+
+      <unit id="u:kill-count:other:one">
+        <originalData>
+          <data id="d1">{ func: 'number', args: [{ var_path: ['monster-count'] }] }</data>
+          <data id="d2">['monsters', { var_path: ['monster'] }, 'plural']</data>
+        </originalData>
+        <segment>
+          <source>
+            You have killed
+            <ph id="1" dataRef="d1" disp="number($monster-count)" mf:type="func"
+            /> <ph id="2" dataRef="d2" disp="monsters.$monster.plural" mf:type="msg" />
+            in one dungeon.
+          </source>
+        </segment>
+      </unit>
+
+      <unit id="u:kill-count:other:other">
+        <originalData>
+          <data id="d1">{ func: 'number', args: [{ var_path: ['monster-count'] }] }</data>
+          <data id="d2">['monsters', { var_path: ['monster'] }, 'plural']</data>
+          <data id="d3">{ func: 'number', args: [{ var_path: ['dungeon-count'] }] }</data>
+        </originalData>
+        <segment>
+          <source>
+            You have killed
+            <ph id="1" dataRef="d1" disp="number($monster-count)" mf:type="func"
+            /> <ph id="2" dataRef="d2" disp="monsters.$monster.plural" mf:type="msg" />
+            in
+            <ph id="1" dataRef="d3" disp="number($dungeon-count)" mf:type="func" />
+            dungeons.
+          </source>
+        </segment>
+      </unit>
+    </group>
+
+    <unit id="u:gift-recipients">
+      <originalData>
+        <data id="d1">
+          {
+            func: 'list',
+            args: [
+              {
+                func: 'map',
+                args: [
+                  {
+                    func: 'grammatical_case',
+                    args: [],
+                    options: { case: <mf:value optId="o1" /> }
+                  },
+                  { var_path: [ 'people' ] }
+                ]
+              }
+            ],
+            options: { type: <mf:value optId="o2" /> }
+          }
+        </data>
+      </originalData>
+
+      <res:resourceData>
+        <res:resourceItem context="no">
+          <res:source>
+            <mf:option id="o1" disp="list/map/grammatical_case.case" type="case">genitive</mf:option>
+            <mf:option id="o2" disp="list.type" values="and or">and</mf:option>
+          </res:source>
+        </res:resourceItem>
+      </res:resourceData>
+
+      <segment>
+        <source>
+          I gave gifts to
+          <ph id="1" dataRef="d1" disp="list(map(grammatical_case,$people))" mf:type="func" />
+        </source>
+      </segment>
+    </unit>
+
+  </file>
+</xliff>
