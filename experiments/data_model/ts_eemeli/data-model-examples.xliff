@@ -40,8 +40,9 @@
       </originalData>
       <segment>
         <source>
-          You have been killed by
-          <ph id="1" dataRef="d1" disp="monsters.$monster.indefinite" mf:type="msg" />
+          You have been killed by <ph
+            id="1" dataRef="d1" disp="monsters.$monster.indefinite" mf:type="msg"
+          />
         </source>
       </segment>
     </unit>
@@ -58,8 +59,9 @@
         </originalData>
         <segment>
           <source>
-            You have killed
-            <ph id="1" dataRef="d1" disp="monsters.$monster.indefinite" mf:type="msg" />.
+            You have killed <ph
+              id="1" dataRef="d1" disp="monsters.$monster.indefinite" mf:type="msg"
+            />.
           </source>
         </segment>
       </unit>
@@ -71,10 +73,11 @@
         </originalData>
         <segment>
           <source>
-            You have killed
-            <ph id="1" dataRef="d1" disp="number($monster-count)" mf:type="func"
-            /> <ph id="2" dataRef="d2" disp="monsters.$monster.plural" mf:type="msg" />
-            in one dungeon.
+            You have killed <ph
+              id="1" dataRef="d1" disp="number($monster-count)" mf:type="func"
+            /> <ph
+              id="2" dataRef="d2" disp="monsters.$monster.plural" mf:type="msg"
+            /> in one dungeon.
           </source>
         </segment>
       </unit>
@@ -87,12 +90,13 @@
         </originalData>
         <segment>
           <source>
-            You have killed
-            <ph id="1" dataRef="d1" disp="number($monster-count)" mf:type="func"
-            /> <ph id="2" dataRef="d2" disp="monsters.$monster.plural" mf:type="msg" />
-            in
-            <ph id="1" dataRef="d3" disp="number($dungeon-count)" mf:type="func" />
-            dungeons.
+            You have killed <ph
+              id="1" dataRef="d1" disp="number($monster-count)" mf:type="func"
+            /> <ph
+              id="2" dataRef="d2" disp="monsters.$monster.plural" mf:type="msg"
+            /> in <ph
+              id="3" dataRef="d3" disp="number($dungeon-count)" mf:type="func"
+            /> dungeons.
           </source>
         </segment>
       </unit>
@@ -101,14 +105,11 @@
     <unit id="u:gift-recipients">
       <originalData>
         <data id="d1">
-          {
-            func: 'list',
+          { func: 'list',
             args: [
-              {
-                func: 'map',
+              { func: 'map',
                 args: [
-                  {
-                    func: 'grammatical_case',
+                  { func: 'grammatical_case',
                     args: [],
                     options: { case: <mf:value option="o1" /> }
                   },
@@ -132,8 +133,9 @@
 
       <segment>
         <source>
-          I gave gifts to
-          <ph id="1" dataRef="d1" disp="list(map(grammatical_case,$people))" mf:type="func" />
+          I gave gifts to <ph
+            id="1" dataRef="d1" disp="list(map(grammatical_case,$people))" mf:type="func"
+          />
         </source>
       </segment>
     </unit>
