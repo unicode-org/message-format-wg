@@ -36,7 +36,7 @@
 
     <unit id="u:killed-by">
       <originalData>
-        <data id="d1">['monsters', { var_path: ['monster'] }, 'indefinite']</data>
+        <data id="d1">[monsters, { var_path: [monster] }, indefinite]</data>
       </originalData>
       <segment>
         <source>
@@ -49,13 +49,13 @@
 
     <group id="g:kill-count">
       <mf:select>
-        <mf:selectArg>{ func: 'plural', args: [{ var_path: ['monster-count'] }] }</mf:selectArg>
-        <mf:selectArg>{ func: 'plural', args: [{ var_path: ['dungeon-count'] }] }</mf:selectArg>
+        <mf:selectArg>{ func: plural, args: [{ var_path: [monster-count] }] }</mf:selectArg>
+        <mf:selectArg>{ func: plural, args: [{ var_path: [dungeon-count] }] }</mf:selectArg>
       </mf:select>
 
       <unit id="u:kill-count:one">
         <originalData>
-          <data id="d1">['monsters', { var_path: ['monster'] }, 'indefinite']</data>
+          <data id="d1">[monsters, { var_path: [monster] }, indefinite]</data>
         </originalData>
         <segment>
           <source>
@@ -68,8 +68,8 @@
 
       <unit id="u:kill-count:other:one">
         <originalData>
-          <data id="d1">{ func: 'number', args: [{ var_path: ['monster-count'] }] }</data>
-          <data id="d2">['monsters', { var_path: ['monster'] }, 'plural']</data>
+          <data id="d1">{ func: number, args: [{ var_path: [monster-count] }] }</data>
+          <data id="d2">[monsters, { var_path: [monster] }, plural]</data>
         </originalData>
         <segment>
           <source>
@@ -84,9 +84,9 @@
 
       <unit id="u:kill-count:other:other">
         <originalData>
-          <data id="d1">{ func: 'number', args: [{ var_path: ['monster-count'] }] }</data>
-          <data id="d2">['monsters', { var_path: ['monster'] }, 'plural']</data>
-          <data id="d3">{ func: 'number', args: [{ var_path: ['dungeon-count'] }] }</data>
+          <data id="d1">{ func: number, args: [{ var_path: [monster-count] }] }</data>
+          <data id="d2">[monsters, { var_path: [monster] }, plural]</data>
+          <data id="d3">{ func: number, args: [{ var_path: [dungeon-count] }] }</data>
         </originalData>
         <segment>
           <source>
@@ -105,20 +105,15 @@
     <unit id="u:gift-recipients">
       <originalData>
         <data id="d1">
-          { func: 'list',
-            args: [
-              { func: 'map',
-                args: [
-                  { func: 'grammatical_case',
-                    args: [],
-                    options: { case: <mf:value option="o1" /> }
-                  },
-                  { var_path: [ 'people' ] }
-                ]
-              }
-            ],
-            options: { type: <mf:value option="o2" /> }
-          }
+          func: list
+          args:
+            - func: map
+              args:
+                - func: grammatical_case
+                  args: []
+                  options: { case: *o1 }
+                - var_path: [people]
+          options: { type: *o2 }
         </data>
       </originalData>
 
