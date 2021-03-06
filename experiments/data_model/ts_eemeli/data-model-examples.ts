@@ -23,49 +23,42 @@ const countPlural: Select = {
 const gameMessages: Resource = {
   id: 'game-messages',
   locale: 'en',
-  entries: [
-    {
-      id: 'monsters',
-      entries: [
-        {
-          id: 'dinosaur',
-          entries: [
-            { id: 'indefinite', value: ['a Dinosaur'] },
-            { id: 'plural', value: ['Dinosaurs'] }
-          ]
+  entries: {
+    monsters: {
+      entries: {
+        dinosaur: {
+          entries: {
+            indefinite: { value: ['a Dinosaur'] },
+            plural: { value: ['Dinosaurs'] }
+          }
         },
-        {
-          id: 'elephant',
-          entries: [
-            { id: 'indefinite', value: ['an Elephant'] },
-            { id: 'plural', value: ['Elephants'] }
-          ]
+        elephant: {
+          entries: {
+            indefinite: { value: ['an Elephant'] },
+            plural: { value: ['Elephants'] }
+          }
         },
-        {
-          id: 'ogre',
-          entries: [
-            { id: 'indefinite', value: ['an Ogre'] },
-            { id: 'plural', value: ['Ogres'] }
-          ]
+        ogre: {
+          entries: {
+            indefinite: { value: ['an Ogre'] },
+            plural: { value: ['Ogres'] }
+          }
         },
-        {
-          id: 'other',
-          entries: [
-            { id: 'indefinite', value: ['a Monster'] },
-            { id: 'plural', value: ['Monsters'] }
-          ]
+        other: {
+          entries: {
+            indefinite: { value: ['a Monster'] },
+            plural: { value: ['Monsters'] }
+          }
         }
-      ]
+      }
     },
-    {
-      id: 'killed-by',
+    'killed-by': {
       value: [
         'You have been killed by ',
         { msg_path: ['monsters', { var_path: ['monster'] }, 'indefinite'] }
       ]
     },
-    {
-      id: 'kill-count',
+    'kill-count': {
       value: {
         select: [
           { func: 'plural', args: [{ var_path: ['monster-count'] }] },
@@ -107,15 +100,14 @@ const gameMessages: Resource = {
         ]
       }
     }
-  ]
+  }
 }
 
 const extMessages: Resource = {
   id: 'remote-ref',
   locale: 'en',
-  entries: [
-    {
-      id: 'friend',
+  entries: {
+    friend: {
       value: [
         'Your friend has become ',
         {
@@ -143,8 +135,7 @@ const extMessages: Resource = {
      * list(...args: Array<string | Iterable<string>>, options: { type: 'and' | 'or' }): string
      * // Apply a list formatter on the input arguments, which may be a mix of strings and string sequences
      */
-    {
-      id: 'gift-recipients',
+    'gift-recipients': {
       value: [
         'I gave gifts to ',
         {
@@ -156,19 +147,18 @@ const extMessages: Resource = {
                 {
                   func: 'grammatical_case',
                   args: [],
-                  options: [{ key: 'case', value: 'genitive' }]
+                  options: { case: 'genitive' }
                 },
                 { var_path: ['people'] }
               ]
             }
           ],
-          options: [{ key: 'type', value: 'and' }]
+          options: { type: 'and' }
         }
       ]
     },
 
-    {
-      id: 'gift-recipients-with-meta',
+    'gift-recipients-with-meta': {
       meta: {
         comment:
           'Requested by Mihai, ' +
@@ -185,7 +175,7 @@ const extMessages: Resource = {
                 {
                   func: 'grammatical_case',
                   args: [],
-                  options: [{ key: 'case', value: 'genitive' }],
+                  options: { case: 'genitive' },
                   meta: {
                     comment:
                       'Applies the desired grammatical case on the input value',
@@ -210,7 +200,7 @@ const extMessages: Resource = {
               }
             }
           ],
-          options: [{ key: 'type', value: 'and' }],
+          options: { type: 'and' },
           meta: {
             comment:
               'Apply a list formatter on the input arguments, ' +
@@ -221,5 +211,5 @@ const extMessages: Resource = {
         }
       ]
     }
-  ]
+  }
 }

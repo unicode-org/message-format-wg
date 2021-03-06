@@ -7,15 +7,12 @@
 interface Resource {
   id: string
   locale: string
-  entries: Entry[]
+  entries: Record<string, Message | MessageGroup>
   meta?: Meta
 }
 
-type Entry = Message | MessageGroup
-
 interface MessageGroup {
-  id: string
-  entries: Entry[]
+  entries: Record<string, Message | MessageGroup>
   meta?: Meta
 }
 
@@ -29,12 +26,11 @@ interface Meta {
 }
 
 /**
- * The core of the spec, each message carries its own identifier and value.
+ * The core of the spec, the representation of a single message.
  * The shape of the value is an implementation detail, and may vary for the
  * same message in different languages.
  */
 interface Message {
-  id: string
   value: Pattern | Select
   meta?: Meta
 }
@@ -108,7 +104,7 @@ interface VariableReference {
 interface FunctionReference {
   func: string
   args: Part[]
-  options?: Array<{ key: string; value: string | number | boolean }>
+  options?: Record<string, string | number | boolean>
   meta?: Meta
 }
 
@@ -126,7 +122,7 @@ interface FunctionReference {
 interface MessageReference {
   res_id?: string
   msg_path: Path
-  scope?: Scope[]
+  scope?: Scope
   meta?: Meta
 }
 
@@ -142,7 +138,4 @@ type Path = Part[]
  * message formatter. Used by the VariableReference resolver, and may be
  * extended in a MessageReference.
  */
-interface Scope {
-  name: string
-  value: Part | boolean | Scope
-}
+type Scope = { [key: string]: Part | boolean | Scope }
