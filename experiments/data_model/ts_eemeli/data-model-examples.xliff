@@ -34,15 +34,50 @@
       </group>
     </group>
 
-    <unit id="u:killed-by" name="killed-by">
+    <unit id="u:killed-by-original-data" name="killed-by">
       <originalData>
         <data id="d1">[monsters, { var_path: [monster] }, indefinite]</data>
       </originalData>
       <segment>
         <source>
-          You have been killed by <ph
-            id="1" dataRef="d1" disp="monsters.$monster.indefinite" mf:type="msg"
-          />
+          You have been killed by <ph id="1" dataRef="d1" disp="a Monster" mf:type="msg" />
+        </source>
+      </segment>
+    </unit>
+
+    <unit id="u:killed-by-option" name="killed-by">
+      <res:resourceData>
+        <res:resourceItem context="no" id="r1" mf:type="option" mf:values="indefinite plural">
+          <res:source>
+            <mf:option>indefinite</mf:option>
+          </res:source>
+        </res:resourceItem>
+      </res:resourceData>
+      <originalData>
+        <data id="d1">[monsters, { var_path: [monster] }, *r1]</data>
+      </originalData>
+      <segment>
+        <source>
+          You have been killed by <ph id="1" dataRef="d1" disp="a Monster" mf:type="msg" />
+        </source>
+      </segment>
+    </unit>
+
+    <unit id="u:killed-by-resource-data" name="killed-by">
+      <res:resourceData>
+        <res:resourceItem context="no" id="r1" mf:type="msgPath">
+          <res:source>
+            <mf:literal>monsters</mf:literal>
+            <mf:var>
+              <mf:literal>monster</mf:literal>
+            </mf:var>
+            <mf:literal>indefinite</mf:literal>
+          </res:source>
+        </res:resourceItem>
+      </res:resourceData>
+      <segment>
+        <source>
+          You have been killed by <ph id="1" disp="a Monster" mf:type="msg" mf:res="r1" />
         </source>
       </segment>
     </unit>
@@ -59,9 +94,7 @@
         </originalData>
         <segment>
           <source>
-            You have killed <ph
-              id="1" dataRef="d1" disp="monsters.$monster.indefinite" mf:type="msg"
-            />.
+            You have killed <ph id="1" dataRef="d1" disp="a Monster" mf:type="msg" />.
           </source>
         </segment>
       </unit>
@@ -76,7 +109,7 @@
             You have killed <ph
               id="1" dataRef="d1" disp="number($monster-count)" mf:type="func"
             /> <ph
-              id="2" dataRef="d2" disp="monsters.$monster.plural" mf:type="msg"
+              id="2" dataRef="d2" disp="Monsters" mf:type="msg"
             /> in one dungeon.
           </source>
         </segment>
@@ -93,7 +126,7 @@
             You have killed <ph
               id="1" dataRef="d1" disp="number($monster-count)" mf:type="func"
             /> <ph
-              id="2" dataRef="d2" disp="monsters.$monster.plural" mf:type="msg"
+              id="2" dataRef="d2" disp="Monsters" mf:type="msg"
             /> in <ph
               id="3" dataRef="d3" disp="number($dungeon-count)" mf:type="func"
             /> dungeons.
@@ -111,17 +144,21 @@
               args:
                 - func: grammatical_case
                   args: []
-                  options: { case: *o1 }
+                  options: { case: *r1 }
                 - var_path: [people]
-          options: { type: *o2 }
+          options: { type: *r2 }
         </data>
       </originalData>
 
       <res:resourceData>
-        <res:resourceItem context="no">
+        <res:resourceItem context="no" id="r1" mf:type="option" mf:optionType="case" mf:title="list/map/grammatical_case.case">
           <res:source>
-            <mf:option id="o1" disp="list/map/grammatical_case.case" type="case">genitive</mf:option>
-            <mf:option id="o2" disp="list.type" values="and or">and</mf:option>
+            <mf:option>genitive</mf:option>
+          </res:source>
+        </res:resourceItem>
+        <res:resourceItem context="no" id="r2" mf:type="option" mf:values="and or" mf:title="list.type">
+          <res:source>
+            <mf:option>and</mf:option>
           </res:source>
         </res:resourceItem>
       </res:resourceData>
