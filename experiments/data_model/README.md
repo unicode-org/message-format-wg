@@ -1,16 +1,11 @@
-# Readme for Typescript data models and optional test code
+# Readme for Typescript Data Models
 
-## Instructions for running Node.js tests
+## Areas of Consensus Achieved So Far
 
-### One time setup
+See:
+* Details of [data models name mapping](ts_data_models_name_mapping.md)
 
-* Install NPM (Node Package Manager)
-* Then run `npm install` in the directory of code for Node + JS/TypeScript
+## Consolidated Data Model Proposals
 
-### Run tests
-
-`npm run lint` runs the linter
-
-`npm test` runs all tests
-
-`npm run test` runs tests in the folder `test`
+* [ts_eemeli](ts_eemeli) - proposal that favors expressiveness / completeness
+* [ts_mihai](ts_mihai) - proposal that favors simplicity / soundness
