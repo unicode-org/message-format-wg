@@ -1,0 +1,34 @@
+name: rust_eemeli
+
+on:
+  push:
+    branches: [experiments]
+  workflow_dispatch:
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: run
+          args: >
+            --manifest-path=experiments/data_model/rust_eemeli/Cargo.toml
+            experiments/data_model/rust_eemeli/messages.json
+            experiments/data_model/rust_eemeli/scope.json
+
+  node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - run: node list-format-proto messages.json scope.json
+        working-directory: experiments/data_model/rust_eemeli/
