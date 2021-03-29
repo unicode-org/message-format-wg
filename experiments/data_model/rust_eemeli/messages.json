@@ -1,0 +1,45 @@
+{
+  "id": "list-messages",
+  "locale": "en",
+  "entries": {
+    "literal-one": {
+      "value": [{ "func": "list-format", "args": ["item"] }]
+    },
+    "literal-three": {
+      "value": [{ "func": "list-format", "args": ["one", "two", "three"] }]
+    },
+    "var-one": {
+      "value": [{ "func": "list-format", "args": [{ "var_path": ["var1"] }] }]
+    },
+    "var-three": {
+      "value": [
+        {
+          "func": "list-format",
+          "args": [{ "var_path": ["var1"] }, { "var_path": ["var2"] }, { "var_path": ["var3"] }]
+        }
+      ]
+    },
+    "mix-three": {
+      "value": [
+        { "var_path": ["var2"] },
+        " literal / ",
+        {
+          "func": "list-format",
+          "args": [{ "var_path": ["var1"] }, "two", { "var_path": ["var3"] }]
+        }
+      ]
+    },
+    "list-in-list": {
+      "value": [
+        {
+          "func": "list-format",
+          "args": [
+            { "var_path": ["var1"] },
+            { "func": "list-format", "args": ["one", "two", "three"] }
+          ]
+        }
+      ]
+
+    }
+  }
+}
