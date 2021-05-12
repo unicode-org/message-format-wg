@@ -78,11 +78,26 @@ public class Placeholder implements IPlaceholder {
 		}
 	}
 
+	static class MsgReference implements IPlaceholderFormatter {
+		@Override
+		public String format(Object value, String locale, Map<String, String> options) {
+			if (value instanceof CharSequence) { // messageID
+				Message m = Message.RES_MANAGER.get(value.toString());
+				Map<String, Object> h = new HashMap<>();
+				if (options != null)
+					h.putAll(options);
+				return m.format(h);
+			}
+			return null;			
+		}
+	}
+
 	final static Map<String, IPlaceholderFormatter> _defaultFormatterFunctions = new HashMap<>();
 	static {
 		_defaultFormatterFunctions.put("date", new FormatDateTime());
 		_defaultFormatterFunctions.put("time", new FormatDateTime());
 		_defaultFormatterFunctions.put("number", new FormatNumber());
+		_defaultFormatterFunctions.put("msgRef", new MsgReference());
 	}
 
 	public Placeholder(String name) {
@@ -117,7 +132,14 @@ public class Placeholder implements IPlaceholder {
 
 	@Override
 	public String format(String locale, Map<String, Object> parameters) {
-		Object value = parameters.get(name);
+		Object value = null;
+		if (name.startsWith("$")) {
+			value = Message.VARIABLES.get(name.substring(1));
+		} else {
+			if (parameters != null) {
+				value = parameters.get(name);
+			}
+		}
 		String result = null;
 		IPlaceholderFormatter formatterFunction = _defaultFormatterFunctions.get(formatter_name);
 		if (formatterFunction != null) {

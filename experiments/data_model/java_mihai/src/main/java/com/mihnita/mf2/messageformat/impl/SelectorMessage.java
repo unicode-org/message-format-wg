@@ -73,6 +73,7 @@ public class SelectorMessage extends Message implements ISelectorMessage, IMessa
 		_defaultSelectorFunctions.put("plural", new PluralSelector());
 		_defaultSelectorFunctions.put("gender", new GenderSelector());
 		_defaultSelectorFunctions.put("select", new GenericSelector());
+		_defaultSelectorFunctions.put("grammar_case", new GenericSelector());
 	}
 
 	public SelectorMessage(String id, String locale, ISelectorArg[] selectorArgs, OrderedMap<ISelectorVal[], ISimpleMessage> messages) {

@@ -9,7 +9,7 @@ import com.mihnita.mf2.messageformat.datamodel.functions.IMessageFormatter;
 public class SimpleMessage extends Message implements ISimpleMessage, IMessageFormatter { // xliff:unit
 	private final IPart[] parts;
 
-	public SimpleMessage(java.lang.String id, java.lang.String locale, IPart[] parts) {
+	public SimpleMessage(String id, String locale, IPart[] parts) {
 		super(id, locale);
 		this.parts = parts;
 	}
