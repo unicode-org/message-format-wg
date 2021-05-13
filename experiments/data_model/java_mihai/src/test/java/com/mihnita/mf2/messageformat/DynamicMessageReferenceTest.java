@@ -21,12 +21,12 @@ import com.mihnita.mf2.messageformat.impl.SimpleMessage;
 @SuppressWarnings("static-method")
 public class DynamicMessageReferenceTest {
 
+	// Dynamic References
 	// https://github.com/unicode-org/message-format-wg/issues/130
 
 	static private final ISelectorVal CASE_GENITIVE = new SelectorVal("genitive");
 	static private final ISelectorVal CASE_OTHER = new SelectorVal("other");
 	static private final String LOCALE_ID = "fi";
-
 
 	@BeforeClass
 	public static void createMessages() {

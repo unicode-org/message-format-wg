@@ -75,6 +75,7 @@ public class SelectorMessage extends Message implements ISelectorMessage, IMessa
 		_defaultSelectorFunctions.put("select", new GenericSelector());
 		_defaultSelectorFunctions.put("grammar_case", new GenericSelector());
 	}
+	public final static Map<String, ISelectorScoreFn> CUSTOM_SELECTOR_FUNCTIONS = new HashMap<>();
 
 	public SelectorMessage(String id, String locale, ISelectorArg[] selectorArgs, OrderedMap<ISelectorVal[], ISimpleMessage> messages) {
 		super(id, locale);
@@ -158,6 +159,14 @@ public class SelectorMessage extends Message implements ISelectorMessage, IMessa
 			return selectorName;
 		}
 	}
+	
+	private static ISelectorScoreFn getSelectorFunction(String functionName) {
+		ISelectorScoreFn result = _defaultSelectorFunctions.get(functionName);
+		if (result == null) {
+			result = CUSTOM_SELECTOR_FUNCTIONS.get(functionName);
+		}
+		return result;
+	}
 
 	@Override
 	public String format(Map<String, Object> parameters) {
@@ -168,7 +177,7 @@ public class SelectorMessage extends Message implements ISelectorMessage, IMessa
 			for (int i = 0; i < selectorArgs.length; i++) {
 				ISelectorArg selector = selectorArgs[i];
 				Object value = parameters.get(selector.name());
-				ISelectorScoreFn selectorFunction = _defaultSelectorFunctions.get(selector.selectorName());
+				ISelectorScoreFn selectorFunction = getSelectorFunction(selector.selectorName());
 				if (selectorFunction != null) {
 					ISelectorVal[] selectVals = e.getKey();
 					int score = selectorFunction.select(value, selectVals[i], locale);

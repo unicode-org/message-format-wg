@@ -21,7 +21,6 @@ public class Placeholder implements IPlaceholder {
 	private final String formatter_name;
 	private final Map<String, String> options;
 
-	 
 	static class FormatDateTime implements IPlaceholderFormatter {
 		@Override
 		public String format(Object value, String locale, Map<String, String> options) {
@@ -100,6 +99,8 @@ public class Placeholder implements IPlaceholder {
 		_defaultFormatterFunctions.put("msgRef", new MsgReference());
 	}
 
+	final public static Map<String, IPlaceholderFormatter> CUSTOM_FORMATTER_FUNC = new HashMap<>();
+
 	public Placeholder(String name) {
 		this(name, null, null);
 	}
@@ -130,6 +131,14 @@ public class Placeholder implements IPlaceholder {
 		return options;
 	}
 
+	private static IPlaceholderFormatter getFormatterFunction(String functionName) {
+		IPlaceholderFormatter result = _defaultFormatterFunctions.get(functionName);
+		if (result == null) {
+			result = CUSTOM_FORMATTER_FUNC.get(functionName);
+		}
+		return result;
+	}
+
 	@Override
 	public String format(String locale, Map<String, Object> parameters) {
 		Object value = null;
@@ -141,7 +150,7 @@ public class Placeholder implements IPlaceholder {
 			}
 		}
 		String result = null;
-		IPlaceholderFormatter formatterFunction = _defaultFormatterFunctions.get(formatter_name);
+		IPlaceholderFormatter formatterFunction = getFormatterFunction(formatter_name);
 		if (formatterFunction != null) {
 			result = formatterFunction.format(value, locale, options);
 		} else if (value != null) {

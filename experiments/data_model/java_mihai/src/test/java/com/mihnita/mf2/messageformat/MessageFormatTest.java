@@ -1,5 +1,11 @@
 package com.mihnita.mf2.messageformat;
 
+import static com.mihnita.mf2.messageformat.helpers.ConstSelectors.CASE_EXACTLY_ONE;
+import static com.mihnita.mf2.messageformat.helpers.ConstSelectors.CASE_EXACTLY_ZERO;
+import static com.mihnita.mf2.messageformat.helpers.ConstSelectors.CASE_FEMALE;
+import static com.mihnita.mf2.messageformat.helpers.ConstSelectors.CASE_FEW;
+import static com.mihnita.mf2.messageformat.helpers.ConstSelectors.CASE_MALE;
+import static com.mihnita.mf2.messageformat.helpers.ConstSelectors.CASE_OTHER;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Currency;
@@ -21,7 +27,6 @@ import com.mihnita.mf2.messageformat.impl.Placeholder;
 import com.mihnita.mf2.messageformat.impl.PlainText;
 import com.mihnita.mf2.messageformat.impl.SelectorMessage;
 import com.mihnita.mf2.messageformat.impl.SelectorMessage.SelectorArg;
-import com.mihnita.mf2.messageformat.impl.SelectorMessage.SelectorVal;
 import com.mihnita.mf2.messageformat.impl.SimpleMessage;
 
 @RunWith(JUnit4.class)
@@ -100,13 +105,6 @@ public class MessageFormatTest {
 		assertEquals(expectedMsg, mf.format(Parameters.msg().put("count", 14.2).build()));
 	}
 
-	static private final ISelectorVal CASE_EXACTLY_ZERO = new SelectorVal(0);
-	static private final ISelectorVal CASE_EXACTLY_ONE = new SelectorVal(1);
-	static private final ISelectorVal CASE_FEW = new SelectorVal("few");
-	static private final ISelectorVal CASE_OTHER = new SelectorVal("other");
-	static private final ISelectorVal CASE_MALE = new SelectorVal("male");
-	static private final ISelectorVal CASE_FEMALE = new SelectorVal("female");
-
 	@Test
 	public void testSimplePlural() {
 		final String localeRo = "ro";
@@ -169,6 +167,9 @@ public class MessageFormatTest {
 		assertEquals(expectedMsgM, mf.format(Parameters.msg().put("host_gender", "male").build()));
 		assertEquals(expectedMsgO, mf.format(Parameters.msg().put("host_gender", "we_do_not_know").build()));
 	}
+
+	// The multi-selector messages of #119
+	// https://github.com/unicode-org/message-format-wg/issues/119
 
 	@Test
 	public void testDoublePlural() {
