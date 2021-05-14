@@ -48,7 +48,7 @@ public class Placeholder implements IPlaceholder {
 			    	style = "";
 			    switch (style) {
 			    	case "currency":
-			    		String currencyCode = options == null ? null : options.get("currency_code");
+			    		String currencyCode = options == null ? null : options.get("currencyCode");
 			    		if (currencyCode != null && !currencyCode.isEmpty()) {
 			    			value = new CurrencyAmount(nValue, Currency.getInstance(currencyCode));
 			    		}
@@ -131,7 +131,7 @@ public class Placeholder implements IPlaceholder {
 		return options;
 	}
 
-	private static IPlaceholderFormatter getFormatterFunction(String functionName) {
+	public static IPlaceholderFormatter getFormatterFunction(String functionName) {
 		IPlaceholderFormatter result = _defaultFormatterFunctions.get(functionName);
 		if (result == null) {
 			result = CUSTOM_FORMATTER_FUNC.get(functionName);
@@ -157,5 +157,22 @@ public class Placeholder implements IPlaceholder {
 			result = value.toString();
 		}
 		return result == null ? "<undefined " + name + ">" : result;
+	}
+
+	public static IPlaceholderFormatter[] getFunctions(String functionNames) {
+		String[] arrFunctionNames = functionNames.split("\\|");
+		IPlaceholderFormatter[] result = new IPlaceholderFormatter[arrFunctionNames.length]; 
+		for (int i = 0; i < arrFunctionNames.length; i++) {
+			result[i] = Placeholder.getFormatterFunction(arrFunctionNames[i]);
+		}
+		return result;
+	}
+
+	public static String applyFunctions(Object value, String locale, Map<String, String> options, IPlaceholderFormatter ... functions) {
+		Object r = value;
+		for (IPlaceholderFormatter function : functions) {
+			r = function.format(r, locale, options);
+		}
+		return r.toString();
 	}
 }

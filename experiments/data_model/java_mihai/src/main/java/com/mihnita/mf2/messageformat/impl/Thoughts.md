@@ -38,3 +38,31 @@ mf.format("Hello {userName}, your card expires on {expDate}", parameters);
 It is technically the same thing, just syntactic sugar, with pros and cons.
 
 The main difference would be scope. Variables would feel somewhat "global", you don't have to pass them explicitely to each message formatter.
+
+
+====
+
+Chaining placeholder functions:
+```
+interface PhfunctionFormatter {
+    Formatted format(Formattable fmt, options, ...);
+    Formatted formatToParts(Formattable fmt, options, ...);
+    Formattable chain(Formattable fmt, options, ...);
+}
+```
+
+Then one can do something like this:
+```
+placeholder.format(functionList, value) {
+	Formattable tmpValue = value;
+	for (function : functionList) {
+		if isLast(function))
+			return function.format(tmpValue);
+		tmpValue = function.chain(tmpValue);
+	}
+}
+```
+
+====
+
+ToDo: cleanup, extract some helper classes that can be reused to reduce clutter.
