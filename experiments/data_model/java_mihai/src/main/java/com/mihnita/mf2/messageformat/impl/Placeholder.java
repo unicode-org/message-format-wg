@@ -5,6 +5,8 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.StringJoiner;
 
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.text.DateFormat;
@@ -174,5 +176,26 @@ public class Placeholder implements IPlaceholder {
 			r = function.format(r, locale, options);
 		}
 		return r.toString();
+	}
+	
+	@Override
+	public String toString() {
+		StringJoiner result = new StringJoiner(", ", "{", "}");
+
+		result.add("id:'" + name + "'");
+		if (formatter_name != null) {
+			result.add("func:'" + formatter_name + "'");
+		} else {
+			result.add("null");
+		}
+		if (options != null) {
+			StringJoiner optionsString = new StringJoiner(", ", "{", "}");
+			for (Entry<String, String> e : options.entrySet()) {
+				optionsString.add(e.getKey() + ":'" + e.getValue() + "'");
+			}
+			result.add("opt:" + optionsString.toString());
+		}
+
+		return result.toString();
 	}
 }

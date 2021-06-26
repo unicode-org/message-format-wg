@@ -1,6 +1,7 @@
 package com.mihnita.mf2.messageformat.impl;
 
 import java.security.InvalidParameterException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -158,6 +159,11 @@ public class SelectorMessage extends Message implements ISelectorMessage, IMessa
 		public String selectorName() {
 			return selectorName;
 		}
+
+		@Override
+		public String toString() {
+			return "{" + name +"::"+ selectorName + "}";
+		}
 	}
 	
 	private static ISelectorScoreFn getSelectorFunction(String functionName) {
@@ -193,5 +199,23 @@ public class SelectorMessage extends Message implements ISelectorMessage, IMessa
 			return bestMessage.format(parameters);
 		}
 		throw new RuntimeException("Some troubles.\nParameters: " + parameters);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder result = new StringBuilder();
+
+		result.append("Selectors: [\n");
+		for (ISelectorArg e : this.selectorArgs) {
+			result.append("  " + e + "\n");
+		}
+		result.append("]\n");
+		result.append("messages: {\n");
+		for (Entry<ISelectorVal[], ISimpleMessage> e : messages.entrySet()) {
+			result.append("  " + Arrays.toString(e.getKey()) + " : " + e.getValue() + "\n");
+		}
+		result.append("}\n");
+
+		return result.toString();
 	}
 }

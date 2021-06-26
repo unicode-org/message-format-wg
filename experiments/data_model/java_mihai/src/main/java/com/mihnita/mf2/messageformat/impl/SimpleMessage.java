@@ -24,11 +24,20 @@ public class SimpleMessage extends Message implements ISimpleMessage, IMessageFo
 		StringBuilder result = new StringBuilder();
 		for (IPart part : this.parts) {
 			if (part instanceof PlainText) {
-				result = result.append(((PlainText) part).value());
+				result.append(((PlainText) part).value());
 			} else if (part instanceof Placeholder) {
-				result = result.append(((Placeholder) part).format(locale, parameters));
+				result.append(((Placeholder) part).format(locale, parameters));
 			}
 		}
 		return result.toString();
-	}	
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder result = new StringBuilder();
+		for (IPart part : this.parts) {
+			result.append(part.toString());
+		}
+		return result.toString();
+	}
 }

@@ -13,4 +13,9 @@ public class PlainText implements IPlainText { // we can attach some "meta" to i
 	public String value() {
 		return value;
 	}
+
+	@Override
+	public String toString() {
+		return value;
+	}
 }
