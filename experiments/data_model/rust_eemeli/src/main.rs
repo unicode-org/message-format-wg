@@ -1,3 +1,19 @@
+/**
+ * THIS IS NOT A GENERAL-PURPOSE EXAMPLE.
+ *
+ * This is a PoC requested by Mihai for handling function references with an
+ * unlimited number of arguments of variable shapes. This was seen as obviously
+ * possible in dynamically types languages such as JavaScript; hence this
+ * implementation showing that it can also be used with statically typed
+ * languages such as Rust.
+ *
+ * In other words, this partial implementation should not be taken as any
+ * indication of the suggested execution model of the EZ data model. For that,
+ * see:
+ *
+ * https://github.com/messageformat/messageformat/tree/mf2/packages/messageformat/src
+ */
+
 use serde_json::{Map, Value};
 use std::env;
 use std::fs;
