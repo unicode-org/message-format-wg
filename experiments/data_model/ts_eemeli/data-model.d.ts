@@ -1,4 +1,12 @@
 /**
+ * For a complete implementation of this data model, including
+ * MF1 & Fluent parsers, XLIFF transforms, and a complete
+ * runtime that includes an Intl.MessageFormat polyfill, see:
+ *
+ *     https://github.com/messageformat/messageformat/tree/mf2/packages/messageformat/src
+ */
+
+/**
  * The root of a message structure is a Resource. It is somewhat (but not
  * necessarily entirely) analogous to a single file in a file system.
  *
@@ -51,10 +59,24 @@ type Pattern = Part[]
  *
  * It is likely that in nearly all cases the source of the placeholder's value
  * will be a variable in the local scope.
+ *
+ * If a selection argument does not define an explicit `default` value for
+ * itself, the string `'other'` is used.
  */
 interface Select {
-  select: Part[]
-  cases: Array<{ key: Literal[]; value: Pattern; meta?: Meta }>
+  select: Selector[]
+  cases: SelectCase[]
+}
+
+interface Selector {
+  value: Part
+  default?: Literal
+}
+
+interface SelectCase {
+  key: Literal[]
+  value: Pattern
+  meta?: Meta
 }
 
 /**
@@ -104,9 +126,11 @@ interface VariableReference {
 interface FunctionReference {
   func: string
   args: Part[]
-  options?: Record<string, string | number | boolean>
+  options?: FunctionOptions
   meta?: Meta
 }
+
+type FunctionOptions = Record<string, string | number | boolean>
 
 /**
  * A MessageReference is a pointer to a Message or a Select.
@@ -122,9 +146,14 @@ interface FunctionReference {
 interface MessageReference {
   res_id?: string
   msg_path: Path
-  scope?: Scope
+  scope?: MessageScope
   meta?: Meta
 }
+
+type MessageScope = Record<
+  string,
+  Part | boolean | (string | number | boolean)[]
+>
 
 /**
  * Variables and messages may each be located within their surrounding
@@ -134,8 +163,32 @@ interface MessageReference {
 type Path = Part[]
 
 /**
- * At its simplest, a representation of the parameters/arguments passed to a
- * message formatter. Used by the VariableReference resolver, and may be
- * extended in a MessageReference.
+ * The runtime function registry available for function references.
+ *
+ * Functions in `select` are available for case selection, while functions in
+ * `format` are available for formatting. Keys do not need to be unique across
+ * both realms, and the same function may be available in both.
+ *
+ * Note that `select` functions are only used for functions immediately within
+ * `Select['select']`; for example their arguments are resolved using `format`
+ * functions.
  */
-type Scope = { [key: string]: Part | boolean | Scope }
+interface Runtime<R = string> {
+  select: { [key: string]: RuntimeFunction<Literal | Literal[]> }
+  format: { [key: string]: RuntimeFunction<R> }
+}
+
+type RuntimeFunction<R> = (
+  locales: string[],
+  options: FunctionOptions | undefined,
+  ...args: any[]
+) => R
+
+/**
+ * A representation of the parameters/arguments passed to a message formatter.
+ * Used by the VariableReference resolver, and may be extended in a
+ * MessageReference.
+ */
+interface Scope<S = unknown> {
+  [key: string]: S
+}

@@ -1,6 +1,6 @@
 // MF1: { gender, select, male{he} female{she} other{they} }
 const genderSelect: Select = {
-  select: [{ var_path: ['gender'] }],
+  select: [{ value: { var_path: ['gender'] } }],
   cases: [
     { key: ['male'], value: ['he'] },
     { key: ['female'], value: ['she'] },
@@ -10,7 +10,7 @@ const genderSelect: Select = {
 
 // MF1: { count, plural, one{a message} other{# messages} }
 const countPlural: Select = {
-  select: [{ func: 'plural', args: [{ var_path: ['count'] }] }],
+  select: [{ value: { func: 'plural', args: [{ var_path: ['count'] }] } }],
   cases: [
     { key: ['one'], value: ['a message'] },
     {
@@ -61,8 +61,10 @@ const gameMessages: Resource = {
     'kill-count': {
       value: {
         select: [
-          { func: 'plural', args: [{ var_path: ['monster-count'] }] },
-          { func: 'plural', args: [{ var_path: ['dungeon-count'] }] }
+          {
+            value: { func: 'plural', args: [{ var_path: ['monster-count'] }] }
+          },
+          { value: { func: 'plural', args: [{ var_path: ['dungeon-count'] }] } }
         ],
         cases: [
           {
