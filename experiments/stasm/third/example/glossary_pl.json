@@ -1,0 +1,16 @@
+{
+  "t-shirt": {
+    "singular_nominative": "tiszert",
+    "plural_nominative": "tiszerty",
+    "plural_genitive": "tiszertów",
+    "gender": "masculine",
+    "animate": false
+  },
+  "red": {
+    "singular_masculine": "czerwony",
+    "singular_feminine": "czerwona",
+    "singular_neuter": "czerwone",
+    "plural_masculine_animate": "czerwoni",
+    "plural_other": "czerwone"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "@stasm/messageformat2",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Experimental data model and implementation of MessageFormat 2.0",
+  "type": "module",
+  "dependencies": {
+    "typescript": "^4.3.5"
+  },
+  "devDependencies": {
+    "@types/node": "^16.4.13"
+  },
+  "scripts": {
+    "start": "tsc && node example/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Staś Małolepszy <stas@duzodobrze.pl>",
+  "license": "ISC"
+}

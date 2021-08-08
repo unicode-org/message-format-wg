@@ -1,0 +1,12 @@
+{
+  "t-shirt": {
+    "singular_nominative": "T-shirt",
+    "singular_genitive": "T-shirt's",
+    "plural_nominative": "T-shirts",
+    "plural_genitive": "T-shirts'"
+  },
+  "red": {
+    "nominative": "red",
+    "genitive": "red's"
+  }
+}
