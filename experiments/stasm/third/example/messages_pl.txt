@@ -1,0 +1,13 @@
+accord-adjective-with-item =
+	"{NOUN item CAPITALIZED} jest {ADJECTIVE red ACCORD_WITH item}."
+
+flat-variants [PLURAL photoCount : other, VAR userGender : many] =
+	[one, masculine] "{VAR userName} dodał nowe zdjęcie do swojego albumu."
+	[one, feminine] "{VAR userName} dodała nowe zdjęcie do swojego albumu."
+	[one, other] "Użytkownik {VAR userName} dodał nowe zdjęcie do swojego albumu."
+	[few, masculine] "{VAR userName} dodał {VAR photoCount} nowe zdjęcia do swojego albumu."
+	[few, feminine] "{VAR userName} dodała {VAR photoCount} nowe zdjęcia do swojego albumu."
+	[few, other] "Użytkownik {VAR userName} dodał {VAR photoCount} nowe zdjęcia do swojego albumu."
+	[many, masculine] "{VAR userName} dodał {VAR photoCount} nowych zdjęć do swojego albumu."
+	[many, feminine] "{VAR userName} dodała {VAR photoCount} nowych zdjęć do swojego albumu."
+	[many, other] "Użytkownik {VAR userName} dodał {VAR photoCount} nowych zdjęć do swojego albumu."
