@@ -18,7 +18,7 @@ export let en_phrases = <Message>{
 					keys: ["other"],
 					value: <Pattern>[
 						"added ",
-						<Func>{name: "VAR", args: ["photoCount"], scope: {}},
+						<Func>{name: "PLURAL", args: ["photoCount"], scope: {}},
 						" new photos",
 					],
 				},
@@ -74,6 +74,7 @@ export let en_accord = <Message>{
 						accord_with: "item",
 					},
 				},
+				".",
 			],
 		},
 	],

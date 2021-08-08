@@ -10,7 +10,7 @@ export let pl_phrases = <Message>{
 			default: "other",
 		},
 		{
-			expr: <Func>{name: "VAR", args: ["photoCount"], scope: {}},
+			expr: <Func>{name: "PLURAL", args: ["photoCount"], scope: {}},
 			default: "many",
 		},
 	],
@@ -114,6 +114,7 @@ export let pl_accord = <Message>{
 						accord_with: "item",
 					},
 				},
+				".",
 			],
 		},
 	],
