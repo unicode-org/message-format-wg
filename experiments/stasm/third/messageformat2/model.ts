@@ -15,7 +15,7 @@ export interface Phrase {
 }
 
 export interface Selector {
-	expr: Func | null;
+	expr: VariableReference | FunctionCall | null;
 	default: string;
 }
 
@@ -24,12 +24,19 @@ export interface Variant {
 	value: Array<Part>;
 }
 
-export interface Func {
+export interface FunctionCall {
+	type: "FunctionCall";
 	name: string;
-	args: Array<string>;
-	scope: Record<string, Primitive>;
+	args: Array<Argument>;
+	scope: Record<string, Parameter>;
 }
 
-export type Primitive = boolean | string | number;
+export interface VariableReference {
+	type: "VariableReference";
+	name: string;
+}
+
+export type Argument = string | VariableReference;
+export type Parameter = boolean | number | Argument;
 export type Pattern = Array<Part>;
-export type Part = string | Func;
+export type Part = string | VariableReference | FunctionCall;

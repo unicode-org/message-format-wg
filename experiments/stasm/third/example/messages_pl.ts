@@ -1,102 +1,107 @@
-import {Func, Message, Pattern} from "../messageformat2/model.js";
+import {Message} from "../messageformat2/model.js";
 
-export let pl_phrases = <Message>{
+export let pl_phrases: Message = {
 	type: "Message",
 	id: "phrases",
 	phrases: {},
 	selectors: [
 		{
-			expr: <Func>{name: "VAR", args: ["userGender"], scope: {}},
+			expr: {type: "VariableReference", name: "userGender"},
 			default: "other",
 		},
 		{
-			expr: <Func>{name: "PLURAL", args: ["photoCount"], scope: {}},
+			expr: {
+				type: "FunctionCall",
+				name: "PLURAL",
+				args: [{type: "VariableReference", name: "photoCount"}],
+				scope: {},
+			},
 			default: "many",
 		},
 	],
 	variants: [
 		{
 			keys: ["masculine", "one"],
-			value: <Pattern>[
-				<Func>{name: "VAR", args: ["userName"], scope: {}},
+			value: [
+				{type: "VariableReference", name: "userName"},
 				" dodał nowe zdjęcie do swojego albumu.",
 			],
 		},
 		{
 			keys: ["masculine", "few"],
-			value: <Pattern>[
-				<Func>{name: "VAR", args: ["userName"], scope: {}},
+			value: [
+				{type: "VariableReference", name: "userName"},
 				" dodał ",
-				<Func>{name: "VAR", args: ["photoCount"], scope: {}},
+				{type: "VariableReference", name: "photoCount"},
 				"nowe zdjęcia do swojego albumu.",
 			],
 		},
 		{
 			keys: ["masculine", "many"],
-			value: <Pattern>[
-				<Func>{name: "VAR", args: ["userName"], scope: {}},
+			value: [
+				{type: "VariableReference", name: "userName"},
 				" dodał ",
-				<Func>{name: "VAR", args: ["photoCount"], scope: {}},
+				{type: "VariableReference", name: "photoCount"},
 				"nowych zdjęć do swojego albumu.",
 			],
 		},
 		{
 			keys: ["feminine", "one"],
-			value: <Pattern>[
-				<Func>{name: "VAR", args: ["userName"], scope: {}},
+			value: [
+				{type: "VariableReference", name: "userName"},
 				" dodała nowe zdjęcie do swojego albumu.",
 			],
 		},
 		{
 			keys: ["feminine", "few"],
-			value: <Pattern>[
-				<Func>{name: "VAR", args: ["userName"], scope: {}},
+			value: [
+				{type: "VariableReference", name: "userName"},
 				" dodała ",
-				<Func>{name: "VAR", args: ["photoCount"], scope: {}},
+				{type: "VariableReference", name: "photoCount"},
 				" nowe zdjęcia do swojego albumu.",
 			],
 		},
 		{
 			keys: ["feminine", "many"],
-			value: <Pattern>[
-				<Func>{name: "VAR", args: ["userName"], scope: {}},
+			value: [
+				{type: "VariableReference", name: "userName"},
 				" dodała ",
-				<Func>{name: "VAR", args: ["photoCount"], scope: {}},
+				{type: "VariableReference", name: "photoCount"},
 				" nowych zdjęć do swojego albumu.",
 			],
 		},
 		{
 			keys: ["other", "one"],
-			value: <Pattern>[
+			value: [
 				"Użytkownik ",
-				<Func>{name: "VAR", args: ["userName"], scope: {}},
+				{type: "VariableReference", name: "userName"},
 				" dodał nowe zdjęcie do swojego albumu.",
 			],
 		},
 		{
 			keys: ["other", "few"],
-			value: <Pattern>[
+			value: [
 				"Użytkownik ",
-				<Func>{name: "VAR", args: ["userName"], scope: {}},
+				{type: "VariableReference", name: "userName"},
 				" dodał ",
-				<Func>{name: "VAR", args: ["photoCount"], scope: {}},
+				{type: "VariableReference", name: "photoCount"},
 				" nowe zdjęcia do swojego albumu.",
 			],
 		},
 		{
 			keys: ["other", "many"],
-			value: <Pattern>[
+			value: [
 				"Użytkownik ",
-				<Func>{name: "VAR", args: ["userName"], scope: {}},
+				{type: "VariableReference", name: "userName"},
 				" dodał ",
-				<Func>{name: "VAR", args: ["photoCount"], scope: {}},
+				{type: "VariableReference", name: "photoCount"},
 				" nowych zdjęć do swojego albumu.",
 			],
 		},
 	],
 };
 
-export let pl_accord = <Message>{
+export let pl_accord: Message = {
 	type: "Message",
 	id: "accord",
 	phrases: {},
@@ -104,14 +109,20 @@ export let pl_accord = <Message>{
 	variants: [
 		{
 			keys: ["default"],
-			value: <Pattern>[
-				<Func>{name: "NOUN", args: ["item"], scope: {capitalized: true}},
+			value: [
+				{
+					type: "FunctionCall",
+					name: "NOUN",
+					args: [{type: "VariableReference", name: "item"}],
+					scope: {capitalized: true},
+				},
 				" jest ",
-				<Func>{
+				{
+					type: "FunctionCall",
 					name: "ADJECTIVE",
-					args: ["color"],
+					args: [{type: "VariableReference", name: "color"}],
 					scope: {
-						accord_with: "item",
+						accord_with: {type: "VariableReference", name: "item"},
 					},
 				},
 				".",

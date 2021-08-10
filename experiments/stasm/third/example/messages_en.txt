@@ -1,20 +1,20 @@
 accord-adjective-with-item =
-	"The {NOUN item} is {ADJECTIVE red ACCORD_WITH item}."
+	"The {NOUN $item} is {ADJECTIVE $red ACCORD_WITH $item}."
 
-flat-variants [PLURAL photoCount : other, VAR userGender : other] =
-	[one, masculine] "{VAR userName} added a new photo to his album."
-	[one, feminine] "{VAR userName} added a new photo to her album."
-	[one, other] "{VAR userName} added a new photo to their album."
-	[other, masculine] "{VAR userName} added {VAR photoCount} new photos to his album."
-	[other, feminine] "{VAR userName} added {VAR photoCount} new photos to her album."
-	[other, other] "{VAR userName} added {VAR photoCount} new photos to their album."
+flat-variants [PLURAL $photoCount : other, $userGender : other] =
+	[one, masculine] "{$userName} added a new photo to his album."
+	[one, feminine] "{$userName} added a new photo to her album."
+	[one, other] "{$userName} added a new photo to their album."
+	[other, masculine] "{$userName} added {$photoCount} new photos to his album."
+	[other, feminine] "{$userName} added {$photoCount} new photos to her album."
+	[other, other] "{$userName} added {$photoCount} new photos to their album."
 
 nested-phrases =
-	"{VAR userName} {PHRASE added-photo} to {PHRASE their-album}."
-nested.added-photo [PLURAL photoCount : other] =
+	"{$userName} {PHRASE added-photo} to {PHRASE their-album}."
+nested-phrases.added-photo [PLURAL $photoCount : other] =
 	[one] "added a new photo"
-	[other] "added {VAR photoCount} new photos"
-nested.their-album [VAR userGender : other] =
+	[other] "added {$photoCount} new photos"
+nested-phrases.their-album [$userGender : other] =
 	[masculine] "his album"
 	[feminine] "her album"
 	[other] "their album"

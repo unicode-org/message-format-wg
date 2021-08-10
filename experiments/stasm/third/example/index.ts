@@ -1,19 +1,17 @@
-import {format} from "../messageformat2/context.js";
+import {format, resolve_arg, resolve_param} from "../messageformat2/context.js";
 import {en_accord, en_phrases} from "./messages_en.js";
 import {REGISTRY} from "../messageformat2/registry.js";
 import {Context} from "../messageformat2/context.js";
 import {get_term} from "./glossary.js";
-import {Primitive} from "../messageformat2/model";
+import {Argument, Parameter} from "../messageformat2/model";
 import {pl_accord, pl_phrases} from "./messages_pl.js";
 
 REGISTRY["NOUN"] = function get_noun(
 	ctx: Context,
-	args: Array<string>,
-	scope: Record<string, Primitive>
+	args: Array<Argument>,
+	scope: Record<string, Parameter>
 ): string {
-	let var_name = args[0];
-	let noun_name = ctx.vars[var_name];
-
+	let noun_name = resolve_arg(ctx, args[0]);
 	if (typeof noun_name !== "string") {
 		throw new TypeError();
 	}
@@ -30,12 +28,10 @@ REGISTRY["NOUN"] = function get_noun(
 
 REGISTRY["ADJECTIVE"] = function get_adjective(
 	ctx: Context,
-	args: Array<string>,
-	scope: Record<string, Primitive>
+	args: Array<Argument>,
+	scope: Record<string, Parameter>
 ): string {
-	let var_name = args[0];
-	let adj_name = ctx.vars[var_name];
-
+	let adj_name = resolve_arg(ctx, args[0]);
 	if (typeof adj_name !== "string") {
 		throw new TypeError();
 	}
@@ -46,10 +42,7 @@ REGISTRY["ADJECTIVE"] = function get_adjective(
 			return adjective["nominative"].toString();
 		}
 		case "pl": {
-			if (typeof scope["accord_with"] !== "string") {
-				throw new TypeError();
-			}
-			let noun_name = ctx.vars[scope["accord_with"]];
+			let noun_name = resolve_param(ctx, scope["accord_with"]);
 			if (typeof noun_name !== "string") {
 				throw new TypeError();
 			}

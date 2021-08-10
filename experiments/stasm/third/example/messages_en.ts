@@ -1,41 +1,46 @@
-import {Func, Message, Pattern, Phrase} from "../messageformat2/model.js";
+import {Message} from "../messageformat2/model.js";
 
-export let en_phrases = <Message>{
+export let en_phrases: Message = {
 	type: "Message",
 	id: "phrases",
 	phrases: {
-		"added-photo": <Phrase>{
+		"added-photo": {
 			type: "Phrase",
 			selectors: [
 				{
-					expr: <Func>{name: "VAR", args: ["photoCount"], scope: {}},
+					expr: {type: "VariableReference", name: "photoCount"},
 					default: "other",
 				},
 			],
 			variants: [
-				{keys: ["one"], value: <Pattern>["added a new photo"]},
+				{keys: ["one"], value: ["added a new photo"]},
 				{
 					keys: ["other"],
-					value: <Pattern>[
+					value: [
 						"added ",
-						<Func>{name: "PLURAL", args: ["photoCount"], scope: {}},
+						{
+							type: "FunctionCall",
+							name: "PLURAL",
+							args: [{type: "VariableReference", name: "photoCount"}],
+							scope: {},
+						},
 						" new photos",
 					],
 				},
 			],
 		},
-		"their-album": <Phrase>{
+		"their-album": {
 			type: "Phrase",
 			selectors: [
 				{
-					expr: <Func>{name: "VAR", args: ["userGender"], scope: {}},
+					expr: {type: "VariableReference", name: "userGender"},
 					default: "other",
 				},
 			],
 			variants: [
-				{keys: ["masculine"], value: <Pattern>["his album"]},
-				{keys: ["feminine"], value: <Pattern>["her album"]},
-				{keys: ["other"], value: <Pattern>["their album"]},
+				{keys: ["masculine"], value: ["his album"]},
+				{keys: ["feminine"], value: ["her album"]},
+				{keys: ["other"], value: ["their album"]},
 			],
 		},
 	},
@@ -43,19 +48,19 @@ export let en_phrases = <Message>{
 	variants: [
 		{
 			keys: ["default"],
-			value: <Pattern>[
-				<Func>{name: "VAR", args: ["userName"], scope: {}},
+			value: [
+				{type: "VariableReference", name: "userName"},
 				" ",
-				<Func>{name: "PHRASE", args: ["added-photo"], scope: {}},
+				{type: "FunctionCall", name: "PHRASE", args: ["added-photo"], scope: {}},
 				" to ",
-				<Func>{name: "PHRASE", args: ["their-album"], scope: {}},
+				{type: "FunctionCall", name: "PHRASE", args: ["their-album"], scope: {}},
 				".",
 			],
 		},
 	],
 };
 
-export let en_accord = <Message>{
+export let en_accord: Message = {
 	type: "Message",
 	id: "accord",
 	phrases: {},
@@ -63,15 +68,21 @@ export let en_accord = <Message>{
 	variants: [
 		{
 			keys: ["default"],
-			value: <Pattern>[
+			value: [
 				"The ",
-				<Func>{name: "NOUN", args: ["item"], scope: {}},
+				{
+					type: "FunctionCall",
+					name: "NOUN",
+					args: [{type: "VariableReference", name: "item"}],
+					scope: {},
+				},
 				" is ",
-				<Func>{
+				{
+					type: "FunctionCall",
 					name: "ADJECTIVE",
-					args: ["color"],
+					args: [{type: "VariableReference", name: "color"}],
 					scope: {
-						accord_with: "item",
+						accord_with: {type: "VariableReference", name: "item"},
 					},
 				},
 				".",

@@ -1,36 +1,21 @@
-import {Context, format} from "./context.js";
-import {Primitive} from "./model";
+import {Context, format, resolve_arg} from "./context.js";
+import {Argument, Parameter} from "./model";
 
 export type RegistryFunc = (
 	ctx: Context,
-	args: Array<string>,
-	scope: Record<string, Primitive>
+	args: Array<Argument>,
+	scope: Record<string, Parameter>
 ) => string;
 
 export const REGISTRY: Record<string, RegistryFunc> = {
-	VAR: get_variable,
 	PLURAL: get_plural,
 	PHRASE: get_phrase,
 };
 
-function get_variable(ctx: Context, args: Array<string>, scope: Record<string, Primitive>): string {
-	let var_name = args[0];
-	let value = ctx.vars[var_name];
+// Built-in functions.
 
-	switch (typeof value) {
-		case "string":
-			return value;
-		case "number":
-			// TODO(stasm): Cache NumberFormat.
-			// TODO(stasm): Pass options.
-			return new Intl.NumberFormat(ctx.locale).format(value);
-	}
-}
-
-function get_plural(ctx: Context, args: Array<string>, scope: Record<string, Primitive>): string {
-	let var_name = args[0];
-	let value = ctx.vars[var_name];
-
+function get_plural(ctx: Context, args: Array<Argument>, scope: Record<string, Parameter>): string {
+	let value = resolve_arg(ctx, args[0]);
 	if (typeof value !== "number") {
 		throw new TypeError();
 	}
@@ -41,12 +26,13 @@ function get_plural(ctx: Context, args: Array<string>, scope: Record<string, Pri
 	return pr.select(value);
 }
 
-function get_phrase(ctx: Context, args: Array<string>, scope: Record<string, Primitive>): string {
+function get_phrase(ctx: Context, args: Array<Argument>, scope: Record<string, Parameter>): string {
 	if (ctx.formattable.type === "Phrase") {
+		// Forbid referencing a phrase in a phrase.
 		throw new TypeError();
 	}
 
-	let phrase_name = args[0];
+	let phrase_name = resolve_arg(ctx, args[0]);
 	let phrase = ctx.formattable.phrases[phrase_name];
 	return format(ctx.locale, phrase, {...ctx.vars, ...scope});
 }
