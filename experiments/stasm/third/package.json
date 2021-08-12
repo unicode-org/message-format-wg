@@ -11,7 +11,7 @@
     "@types/node": "^16.4.13"
   },
   "scripts": {
-    "start": "tsc && node example/index.js",
+    "example": "tsc && node example/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Staś Małolepszy <stas@duzodobrze.pl>",
