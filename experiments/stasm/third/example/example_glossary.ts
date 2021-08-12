@@ -2,7 +2,7 @@ import {format, resolve_arg, resolve_param} from "../messageformat2/context.js";
 import {REGISTRY} from "../messageformat2/registry.js";
 import {Context} from "../messageformat2/context.js";
 import {get_term} from "./glossary.js";
-import {Argument, Message, Parameter} from "../messageformat2/model";
+import {Argument, Message, Parameter} from "../messageformat2/model.js";
 
 REGISTRY["NOUN"] = function get_noun(
 	ctx: Context,

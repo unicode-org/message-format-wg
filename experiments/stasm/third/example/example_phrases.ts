@@ -1,5 +1,5 @@
 import {format} from "../messageformat2/context.js";
-import {Message} from "../messageformat2/model";
+import {Message} from "../messageformat2/model.js";
 
 console.log("==== English ====");
 

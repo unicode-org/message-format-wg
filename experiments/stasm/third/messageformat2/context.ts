@@ -8,8 +8,10 @@ import {
 } from "./model.js";
 import {REGISTRY} from "./registry.js";
 
-// TODO(stasm): Allow other variable types.
-export type RuntimeVariable = string | number;
+export interface RuntimeVariable {
+	valueOf(): any;
+	toString(): string;
+}
 
 export interface Context {
 	locale: string;
