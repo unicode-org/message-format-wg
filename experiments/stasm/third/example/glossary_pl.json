@@ -12,5 +12,17 @@
     "singular_neuter": "czerwone",
     "plural_masculine_animate": "czerwoni",
     "plural_other": "czerwone"
+  },
+  "actor_dinosaur": {
+    "nominative": "dinozaur",
+    "accusative": "dinozaura"
+  },
+  "actor_elephant": {
+    "nominative": "słoń",
+    "accusative": "słoń"
+  },
+  "actor_ogre": {
+    "nominative": "ogr",
+    "accusative": "ogra"
   }
 }

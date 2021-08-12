@@ -82,10 +82,58 @@ export let en_accord: Message = {
 					name: "ADJECTIVE",
 					args: [{type: "VariableReference", name: "color"}],
 					scope: {
-						accord_with: {type: "VariableReference", name: "item"},
+						ACCORD_WITH: {type: "VariableReference", name: "item"},
 					},
 				},
 				".",
+			],
+		},
+	],
+};
+
+export let en_you_see: Message = {
+	type: "Message",
+	id: "you-see",
+	phrases: {},
+	selectors: [{expr: null, default: "default"}],
+	variants: [
+		{
+			keys: ["default"],
+			value: [
+				"You see ",
+				{
+					type: "FunctionCall",
+					name: "ACTOR",
+					args: [{type: "VariableReference", name: "monster"}],
+					scope: {
+						INDEFINITE: true,
+					},
+				},
+				"!",
+			],
+		},
+	],
+};
+
+export let en_they_wave: Message = {
+	type: "Message",
+	id: "they-wave",
+	phrases: {},
+	selectors: [{expr: null, default: "default"}],
+	variants: [
+		{
+			keys: ["default"],
+			value: [
+				{
+					type: "FunctionCall",
+					name: "ACTOR",
+					args: [{type: "VariableReference", name: "monster"}],
+					scope: {
+						DEFINITE: true,
+						CAPITALIZED: true,
+					},
+				},
+				" waves at you!",
 			],
 		},
 	],

@@ -18,3 +18,9 @@ nested-phrases.their-album [$userGender : other] =
 	[masculine] "his album"
 	[feminine] "her album"
 	[other] "their album"
+
+you-see =
+	"You see {ACTOR $monster INDEFINITE}!"
+
+they-wave =
+	"{ACTOR $monster DEFINITE CAPITALIZED} waves at you!"

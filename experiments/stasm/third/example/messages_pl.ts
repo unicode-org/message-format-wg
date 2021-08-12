@@ -114,7 +114,7 @@ export let pl_accord: Message = {
 					type: "FunctionCall",
 					name: "NOUN",
 					args: [{type: "VariableReference", name: "item"}],
-					scope: {capitalized: true},
+					scope: {CAPITALIZED: true},
 				},
 				" jest ",
 				{
@@ -122,10 +122,58 @@ export let pl_accord: Message = {
 					name: "ADJECTIVE",
 					args: [{type: "VariableReference", name: "color"}],
 					scope: {
-						accord_with: {type: "VariableReference", name: "item"},
+						ACCORD_WITH: {type: "VariableReference", name: "item"},
 					},
 				},
 				".",
+			],
+		},
+	],
+};
+
+export let pl_you_see: Message = {
+	type: "Message",
+	id: "you-see",
+	phrases: {},
+	selectors: [{expr: null, default: "default"}],
+	variants: [
+		{
+			keys: ["default"],
+			value: [
+				"Widzisz ",
+				{
+					type: "FunctionCall",
+					name: "ACTOR",
+					args: [{type: "VariableReference", name: "monster"}],
+					scope: {
+						CASE: "accusative",
+					},
+				},
+				"!",
+			],
+		},
+	],
+};
+
+export let pl_they_wave: Message = {
+	type: "Message",
+	id: "they-wave",
+	phrases: {},
+	selectors: [{expr: null, default: "default"}],
+	variants: [
+		{
+			keys: ["default"],
+			value: [
+				{
+					type: "FunctionCall",
+					name: "ACTOR",
+					args: [{type: "VariableReference", name: "monster"}],
+					scope: {
+						CASE: "nominative",
+						CAPITALIZED: true,
+					},
+				},
+				" macha do ciebie!",
 			],
 		},
 	],

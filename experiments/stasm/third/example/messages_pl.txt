@@ -11,3 +11,9 @@ flat-variants [PLURAL $photoCount : other, $userGender : many] =
 	[many, masculine] "{$userName} dodał {$photoCount} nowych zdjęć do swojego albumu."
 	[many, feminine] "{$userName} dodała {$photoCount} nowych zdjęć do swojego albumu."
 	[many, other] "Użytkownik {$userName} dodał {$photoCount} nowych zdjęć do swojego albumu."
+
+you-see =
+	"Widzisz {ACTOR $monster CASE accusative}!"
+
+they-wave =
+	"{ACTOR $monster CASE nominative CAPITALIZED} macha do ciebie!"
