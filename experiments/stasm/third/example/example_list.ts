@@ -7,7 +7,7 @@ REGISTRY["PLURAL_LEN"] = function (
 	args: Array<Argument>,
 	scope: Record<string, Parameter>
 ): string {
-	let value = resolve_arg(ctx, args[0]).valueOf();
+	let value = resolve_arg(ctx, args[0]);
 	if (!Array.isArray(value)) {
 		throw new TypeError();
 	}
@@ -21,7 +21,7 @@ REGISTRY["LIST"] = function (
 	args: Array<Argument>,
 	scope: Record<string, Parameter>
 ): string {
-	let value = resolve_arg(ctx, args[0]).valueOf();
+	let value = resolve_arg(ctx, args[0]);
 	if (!Array.isArray(value)) {
 		throw new TypeError();
 	}
@@ -76,34 +76,34 @@ console.log("==== Romanian ====");
 					args: [{type: "VariableReference", name: "names"}],
 					scope: {},
 				},
-				default: "other",
+				default: {type: "StringValue", value: "other"},
 			},
 		],
 		variants: [
 			{
-				keys: ["one"],
+				keys: [{type: "StringValue", value: "one"}],
 				value: [
-					"I-am dat cadouri  ",
+					{type: "StringValue", value: "I-am dat cadouri  "},
 					{
 						type: "FunctionCall",
 						name: "LIST",
 						args: [{type: "VariableReference", name: "names"}],
-						scope: {CASE: "dative"},
+						scope: {CASE: {type: "StringValue", value: "dative"}},
 					},
-					".",
+					{type: "StringValue", value: "."},
 				],
 			},
 			{
-				keys: ["other"],
+				keys: [{type: "StringValue", value: "other"}],
 				value: [
-					"Le-am dat cadouri ",
+					{type: "StringValue", value: "Le-am dat cadouri "},
 					{
 						type: "FunctionCall",
 						name: "LIST",
 						args: [{type: "VariableReference", name: "names"}],
-						scope: {CASE: "dative"},
+						scope: {CASE: {type: "StringValue", value: "dative"}},
 					},
-					".",
+					{type: "StringValue", value: "."},
 				],
 			},
 		],

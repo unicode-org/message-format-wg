@@ -5,11 +5,13 @@ import {
 	Parameter,
 	Selector,
 	VariableReference,
+	Argument,
+	StringValue,
 } from "./model.js";
 import {REGISTRY} from "./registry.js";
 
 export interface RuntimeVariable {
-	valueOf(): any;
+	valueOf(): unknown;
 	toString(): string;
 }
 
@@ -36,8 +38,11 @@ export function format(
 		resolved_selectors.push(resolve_selector(ctx, selector));
 	}
 
-	function matches_corresponding_selector(key: Parameter, idx: number) {
-		return key === resolved_selectors[idx].value || key === resolved_selectors[idx].default;
+	function matches_corresponding_selector(key: StringValue, idx: number) {
+		return (
+			key.value === resolved_selectors[idx].value ||
+			key.value === resolved_selectors[idx].default
+		);
 	}
 
 	for (let variant of formattable.variants) {
@@ -50,45 +55,46 @@ export function format(
 }
 
 interface ResolvedSelector {
-	value: Parameter | null;
-	default: Parameter;
+	value: string | null;
+	default: string;
 }
 
 function resolve_selector(ctx: Context, selector: Selector): ResolvedSelector {
 	if (selector.expr === null) {
 		// A special selector which only selects its default value. Used in the
 		// data model of single-variant messages.
-		return {value: null, default: selector.default};
+		return {value: null, default: selector.default.value};
 	}
 
 	switch (selector.expr.type) {
 		case "VariableReference": {
+			// TODO(stasm): Should selection logic format the selector?
 			let value = format_var(ctx, selector.expr);
-			return {value, default: selector.default};
+			return {value, default: selector.default.value};
 		}
 		case "FunctionCall": {
 			let value = call_func(ctx, selector.expr);
-			return {value, default: selector.default};
+			return {value, default: selector.default.value};
 		}
+		default:
+			// TODO(stasm): Should we allow StringValue or NumberValue as selectors?
+			throw new TypeError();
 	}
 }
 
 function resolve_pattern(ctx: Context, pattern: Pattern): string {
 	let result = "";
 	for (let part of pattern) {
-		if (typeof part === "string") {
-			result += part;
-			continue;
-		}
-
-		if (part.type === "VariableReference") {
-			result += format_var(ctx, part).toString();
-			continue;
-		}
-
-		if (part.type === "FunctionCall") {
-			result += call_func(ctx, part).toString();
-			continue;
+		switch (part.type) {
+			case "StringValue":
+				result += part.value;
+				continue;
+			case "VariableReference":
+				result += format_var(ctx, part).toString();
+				continue;
+			case "FunctionCall":
+				result += call_func(ctx, part).toString();
+				continue;
 		}
 	}
 	return result;
@@ -114,24 +120,22 @@ function format_var(ctx: Context, variable: VariableReference): string {
 	}
 }
 
-export function resolve_arg(
-	ctx: Context,
-	arg: string | VariableReference
-): string | RuntimeVariable {
-	if (typeof arg === "string") {
-		return arg;
-	} else {
-		return ctx.vars[arg.name];
+export function resolve_arg(ctx: Context, arg: Argument): unknown {
+	switch (arg.type) {
+		case "StringValue":
+			return arg.value;
+		case "VariableReference":
+			return ctx.vars[arg.name].valueOf();
+		default:
+			throw new TypeError("Invalid argument type.");
 	}
 }
 
-export function resolve_param(
-	ctx: Context,
-	param: Parameter
-): string | number | boolean | RuntimeVariable {
-	if (typeof param === "string" || typeof param === "number" || typeof param === "boolean") {
-		return param;
-	} else {
-		return ctx.vars[param.name];
+export function resolve_param(ctx: Context, param: Parameter): unknown {
+	switch (param.type) {
+		case "VariableReference":
+			return ctx.vars[param.name].valueOf();
+		default:
+			return param.value;
 	}
 }

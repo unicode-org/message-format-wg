@@ -32,7 +32,7 @@ function get_phrase(ctx: Context, args: Array<Argument>, scope: Record<string, P
 		throw new TypeError();
 	}
 
-	let phrase_name = resolve_arg(ctx, args[0]).valueOf();
+	let phrase_name = resolve_arg(ctx, args[0]);
 	if (typeof phrase_name !== "string") {
 		throw new TypeError();
 	}
