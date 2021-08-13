@@ -53,5 +53,4 @@ export interface BooleanValue {
 
 export type Argument = StringValue | VariableReference;
 export type Parameter = StringValue | VariableReference | BooleanValue | NumberValue;
-export type Pattern = Array<Part>;
 export type Part = StringValue | VariableReference | FunctionCall;

@@ -1,12 +1,12 @@
 import {
 	Formattable,
 	FunctionCall,
-	Pattern,
 	Parameter,
 	Selector,
 	VariableReference,
 	Argument,
 	StringValue,
+	Part,
 } from "./model.js";
 import {REGISTRY} from "./registry.js";
 
@@ -47,7 +47,7 @@ export function format(
 
 	for (let variant of formattable.variants) {
 		if (variant.keys.every(matches_corresponding_selector)) {
-			return resolve_pattern(ctx, variant.value);
+			return resolve_parts(ctx, variant.value);
 		}
 	}
 
@@ -82,9 +82,9 @@ function resolve_selector(ctx: Context, selector: Selector): ResolvedSelector {
 	}
 }
 
-function resolve_pattern(ctx: Context, pattern: Pattern): string {
+function resolve_parts(ctx: Context, parts: Array<Part>): string {
 	let result = "";
-	for (let part of pattern) {
+	for (let part of parts) {
 		switch (part.type) {
 			case "StringValue":
 				result += part.value;
