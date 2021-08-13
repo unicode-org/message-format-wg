@@ -28,7 +28,7 @@ export interface FunctionCall {
 	type: "FunctionCall";
 	name: string;
 	args: Array<Argument>;
-	scope: Record<string, Parameter>;
+	opts: Record<string, Parameter>;
 }
 
 export interface VariableReference {

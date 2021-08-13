@@ -7,7 +7,7 @@ import {Argument, Message, Parameter} from "../messageformat2/model.js";
 REGISTRY["NOUN"] = function get_noun(
 	ctx: Context,
 	args: Array<Argument>,
-	scope: Record<string, Parameter>
+	opts: Record<string, Parameter>
 ): string {
 	let noun_name = resolve_arg(ctx, args[0]);
 	if (typeof noun_name !== "string") {
@@ -17,7 +17,7 @@ REGISTRY["NOUN"] = function get_noun(
 	let noun = get_term(ctx.locale, noun_name);
 	let value = noun["singular_nominative"].toString();
 
-	if (scope["CAPITALIZED"]) {
+	if (opts["CAPITALIZED"]) {
 		return value[0].toUpperCase() + value.slice(1);
 	}
 
@@ -27,7 +27,7 @@ REGISTRY["NOUN"] = function get_noun(
 REGISTRY["ADJECTIVE"] = function get_adjective(
 	ctx: Context,
 	args: Array<Argument>,
-	scope: Record<string, Parameter>
+	opts: Record<string, Parameter>
 ): string {
 	let adj_name = resolve_arg(ctx, args[0]);
 	if (typeof adj_name !== "string") {
@@ -40,7 +40,7 @@ REGISTRY["ADJECTIVE"] = function get_adjective(
 			return adjective["nominative"].toString();
 		}
 		case "pl": {
-			let noun_name = resolve_param(ctx, scope["ACCORD_WITH"]);
+			let noun_name = resolve_param(ctx, opts["ACCORD_WITH"]);
 			if (typeof noun_name !== "string") {
 				throw new TypeError();
 			}
@@ -56,7 +56,7 @@ REGISTRY["ADJECTIVE"] = function get_adjective(
 REGISTRY["ACTOR"] = function get_noun(
 	ctx: Context,
 	args: Array<Argument>,
-	scope: Record<string, Parameter>
+	opts: Record<string, Parameter>
 ): string {
 	let name = resolve_arg(ctx, args[0]);
 	if (typeof name !== "string") {
@@ -68,28 +68,28 @@ REGISTRY["ACTOR"] = function get_noun(
 	switch (ctx.locale) {
 		case "en": {
 			let value: string;
-			if (scope["DEFINITE"]) {
+			if (opts["DEFINITE"]) {
 				value = term["definite"].toString();
-			} else if (scope["INDEFINITE"]) {
+			} else if (opts["INDEFINITE"]) {
 				value = term["indefinite"].toString();
 			} else {
 				value = term["bare"].toString();
 			}
 
-			if (scope["CAPITALIZED"]) {
+			if (opts["CAPITALIZED"]) {
 				return value[0].toUpperCase() + value.slice(1);
 			}
 
 			return value;
 		}
 		case "pl": {
-			let declension = resolve_param(ctx, scope["CASE"]);
+			let declension = resolve_param(ctx, opts["CASE"]);
 			if (typeof declension !== "string") {
 				throw new TypeError();
 			}
 
 			let value = term[declension].toString();
-			if (scope["CAPITALIZED"]) {
+			if (opts["CAPITALIZED"]) {
 				return value[0].toUpperCase() + value.slice(1);
 			}
 
@@ -117,14 +117,14 @@ console.log("==== English ====");
 						type: "FunctionCall",
 						name: "NOUN",
 						args: [{type: "VariableReference", name: "item"}],
-						scope: {},
+						opts: {},
 					},
 					{type: "StringValue", value: " is "},
 					{
 						type: "FunctionCall",
 						name: "ADJECTIVE",
 						args: [{type: "VariableReference", name: "color"}],
-						scope: {
+						opts: {
 							ACCORD_WITH: {type: "VariableReference", name: "item"},
 						},
 					},
@@ -151,7 +151,7 @@ console.log("==== English ====");
 						type: "FunctionCall",
 						name: "ACTOR",
 						args: [{type: "VariableReference", name: "monster"}],
-						scope: {
+						opts: {
 							INDEFINITE: {type: "BooleanValue", value: true},
 						},
 					},
@@ -177,7 +177,7 @@ console.log("==== English ====");
 						type: "FunctionCall",
 						name: "ACTOR",
 						args: [{type: "VariableReference", name: "monster"}],
-						scope: {
+						opts: {
 							DEFINITE: {type: "BooleanValue", value: true},
 							CAPITALIZED: {type: "BooleanValue", value: true},
 						},
@@ -207,7 +207,7 @@ console.log("==== polski ====");
 						type: "FunctionCall",
 						name: "NOUN",
 						args: [{type: "VariableReference", name: "item"}],
-						scope: {
+						opts: {
 							CAPITALIZED: {type: "BooleanValue", value: true},
 						},
 					},
@@ -216,7 +216,7 @@ console.log("==== polski ====");
 						type: "FunctionCall",
 						name: "ADJECTIVE",
 						args: [{type: "VariableReference", name: "color"}],
-						scope: {
+						opts: {
 							ACCORD_WITH: {type: "VariableReference", name: "item"},
 						},
 					},
@@ -243,7 +243,7 @@ console.log("==== polski ====");
 						type: "FunctionCall",
 						name: "ACTOR",
 						args: [{type: "VariableReference", name: "monster"}],
-						scope: {
+						opts: {
 							CASE: {type: "StringValue", value: "accusative"},
 						},
 					},
@@ -269,7 +269,7 @@ console.log("==== polski ====");
 						type: "FunctionCall",
 						name: "ACTOR",
 						args: [{type: "VariableReference", name: "monster"}],
-						scope: {
+						opts: {
 							CASE: {type: "StringValue", value: "nominative"},
 							CAPITALIZED: {type: "BooleanValue", value: true},
 						},

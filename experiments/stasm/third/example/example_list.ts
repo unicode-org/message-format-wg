@@ -5,7 +5,7 @@ import {REGISTRY} from "../messageformat2/registry.js";
 REGISTRY["PLURAL_LEN"] = function (
 	ctx: Context,
 	args: Array<Argument>,
-	scope: Record<string, Parameter>
+	opts: Record<string, Parameter>
 ): string {
 	let value = resolve_arg(ctx, args[0]);
 	if (!Array.isArray(value)) {
@@ -19,14 +19,14 @@ REGISTRY["PLURAL_LEN"] = function (
 REGISTRY["LIST"] = function (
 	ctx: Context,
 	args: Array<Argument>,
-	scope: Record<string, Parameter>
+	opts: Record<string, Parameter>
 ): string {
 	let value = resolve_arg(ctx, args[0]);
 	if (!Array.isArray(value)) {
 		throw new TypeError();
 	}
 
-	let declension = resolve_param(ctx, scope["CASE"]);
+	let declension = resolve_param(ctx, opts["CASE"]);
 	if (typeof declension !== "string") {
 		throw new TypeError();
 	}
@@ -74,7 +74,7 @@ console.log("==== Romanian ====");
 					type: "FunctionCall",
 					name: "PLURAL_LEN",
 					args: [{type: "VariableReference", name: "names"}],
-					scope: {},
+					opts: {},
 				},
 				default: {type: "StringValue", value: "other"},
 			},
@@ -88,7 +88,7 @@ console.log("==== Romanian ====");
 						type: "FunctionCall",
 						name: "LIST",
 						args: [{type: "VariableReference", name: "names"}],
-						scope: {CASE: {type: "StringValue", value: "dative"}},
+						opts: {CASE: {type: "StringValue", value: "dative"}},
 					},
 					{type: "StringValue", value: "."},
 				],
@@ -101,7 +101,7 @@ console.log("==== Romanian ====");
 						type: "FunctionCall",
 						name: "LIST",
 						args: [{type: "VariableReference", name: "names"}],
-						scope: {CASE: {type: "StringValue", value: "dative"}},
+						opts: {CASE: {type: "StringValue", value: "dative"}},
 					},
 					{type: "StringValue", value: "."},
 				],

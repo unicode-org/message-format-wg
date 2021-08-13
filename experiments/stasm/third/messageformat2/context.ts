@@ -102,7 +102,7 @@ function resolve_parts(ctx: Context, parts: Array<Part>): string {
 
 function call_func(ctx: Context, func: FunctionCall): string {
 	let callable = REGISTRY[func.name];
-	return callable(ctx, func.args, func.scope);
+	return callable(ctx, func.args, func.opts);
 }
 
 function format_var(ctx: Context, variable: VariableReference): string {

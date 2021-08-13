@@ -4,7 +4,7 @@ import {Argument, Parameter} from "./model";
 export type RegistryFunc = (
 	ctx: Context,
 	args: Array<Argument>,
-	scope: Record<string, Parameter>
+	opts: Record<string, Parameter>
 ) => string;
 
 export const REGISTRY: Record<string, RegistryFunc> = {
@@ -14,7 +14,7 @@ export const REGISTRY: Record<string, RegistryFunc> = {
 
 // Built-in functions.
 
-function get_plural(ctx: Context, args: Array<Argument>, scope: Record<string, Parameter>): string {
+function get_plural(ctx: Context, args: Array<Argument>, opts: Record<string, Parameter>): string {
 	let value = resolve_arg(ctx, args[0]);
 	if (typeof value !== "number") {
 		throw new TypeError();
@@ -26,7 +26,7 @@ function get_plural(ctx: Context, args: Array<Argument>, scope: Record<string, P
 	return pr.select(value);
 }
 
-function get_phrase(ctx: Context, args: Array<Argument>, scope: Record<string, Parameter>): string {
+function get_phrase(ctx: Context, args: Array<Argument>, opts: Record<string, Parameter>): string {
 	if (ctx.formattable.type === "Phrase") {
 		// Forbid referencing a phrase in a phrase.
 		throw new TypeError();
@@ -38,5 +38,5 @@ function get_phrase(ctx: Context, args: Array<Argument>, scope: Record<string, P
 	}
 
 	let phrase = ctx.formattable.phrases[phrase_name];
-	return format(ctx.locale, phrase, {...ctx.vars, ...scope});
+	return format(ctx.locale, phrase, {...ctx.vars, ...opts});
 }
