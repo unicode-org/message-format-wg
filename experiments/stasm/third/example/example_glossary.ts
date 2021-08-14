@@ -1,6 +1,7 @@
-import {format, resolve_value, StringValue} from "../messageformat2/context.js";
+import {resolve_value, StringValue} from "../messageformat2/runtime.js";
+import {format_message} from "../messageformat2/index.js";
 import {REGISTRY} from "../messageformat2/registry.js";
-import {Context} from "../messageformat2/context.js";
+import {Context} from "../messageformat2/runtime.js";
 import {get_term} from "./glossary.js";
 import {Argument, Message, Parameter} from "../messageformat2/model.js";
 
@@ -138,7 +139,7 @@ console.log("==== English ====");
 		],
 	};
 	console.log(
-		format("en", message, {
+		format_message("en", message, {
 			item: new StringValue("t-shirt"),
 			color: new StringValue("red"),
 		})
@@ -170,7 +171,7 @@ console.log("==== English ====");
 		],
 	};
 	console.log(
-		format("en", message, {
+		format_message("en", message, {
 			monster: new StringValue("dinosaur"),
 		})
 	);
@@ -201,7 +202,7 @@ console.log("==== English ====");
 		],
 	};
 	console.log(
-		format("en", message, {
+		format_message("en", message, {
 			monster: new StringValue("ogre"),
 		})
 	);
@@ -243,7 +244,7 @@ console.log("==== polski ====");
 		],
 	};
 	console.log(
-		format("pl", message, {
+		format_message("pl", message, {
 			item: new StringValue("t-shirt"),
 			color: new StringValue("red"),
 		})
@@ -275,7 +276,7 @@ console.log("==== polski ====");
 		],
 	};
 	console.log(
-		format("pl", message, {
+		format_message("pl", message, {
 			monster: new StringValue("dinosaur"),
 		})
 	);
@@ -307,7 +308,7 @@ console.log("==== polski ====");
 	};
 
 	console.log(
-		format("pl", message, {
+		format_message("pl", message, {
 			monster: new StringValue("ogre"),
 		})
 	);

@@ -1,10 +1,5 @@
-import {
-	Context,
-	format,
-	resolve_value,
-	RuntimeValue,
-	StringValue,
-} from "../messageformat2/context.js";
+import {Context, resolve_value, RuntimeValue, StringValue} from "../messageformat2/runtime.js";
+import {format_message} from "../messageformat2/index.js";
 import {Argument, Message, Parameter} from "../messageformat2/model.js";
 import {REGISTRY} from "../messageformat2/registry.js";
 
@@ -122,7 +117,7 @@ console.log("==== Romanian ====");
 		],
 	};
 	console.log(
-		format("ro", message, {
+		format_message("ro", message, {
 			names: new ArrayValue(["Maria", "Ileana", "Petre"]),
 		})
 	);

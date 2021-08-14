@@ -1,11 +1,13 @@
 import {
-	Formattable,
 	FunctionCall,
 	Parameter,
 	Selector,
 	VariableReference,
 	StringLiteral,
 	Part,
+	Message,
+	Variant,
+	Phrase,
 } from "./model.js";
 import {REGISTRY} from "./registry.js";
 
@@ -45,26 +47,38 @@ export class BooleanValue extends RuntimeValue<boolean> {
 	}
 }
 
-export interface Context {
+export class Context {
 	locale: string;
-	formattable: Formattable;
+	message: Message;
 	vars: Record<string, RuntimeValue<unknown>>;
+	visited: WeakSet<Array<Part>>;
 	// cached formatters,
+
+	constructor(locale: string, message: Message, vars: Record<string, RuntimeValue<unknown>>) {
+		this.locale = locale;
+		this.message = message;
+		this.vars = vars;
+		this.visited = new WeakSet();
+	}
 }
 
-export function format(
-	locale: string,
-	formattable: Formattable,
-	vars: Record<string, RuntimeValue<unknown>>
-): string {
-	let ctx: Context = {
-		locale,
-		formattable,
-		vars,
-	};
+export function format_phrase(ctx: Context, phrase: Phrase): string {
+	let variant = resolve_variant(ctx, phrase.variants, phrase.selectors);
+	return resolve_parts(ctx, variant.value);
+}
 
+interface ResolvedSelector {
+	value: string | null;
+	default: string;
+}
+
+export function resolve_variant(
+	ctx: Context,
+	variants: Array<Variant>,
+	selectors: Array<Selector>
+): Variant {
 	let resolved_selectors: Array<ResolvedSelector> = [];
-	for (let selector of formattable.selectors) {
+	for (let selector of selectors) {
 		resolved_selectors.push(resolve_selector(ctx, selector));
 	}
 
@@ -75,18 +89,13 @@ export function format(
 		);
 	}
 
-	for (let variant of formattable.variants) {
+	for (let variant of variants) {
 		if (variant.keys.every(matches_corresponding_selector)) {
-			return resolve_parts(ctx, variant.value);
+			return variant;
 		}
 	}
 
-	throw new RangeError();
-}
-
-interface ResolvedSelector {
-	value: string | null;
-	default: string;
+	throw new RangeError("No variant matched the selectors.");
 }
 
 function resolve_selector(ctx: Context, selector: Selector): ResolvedSelector {
@@ -112,7 +121,13 @@ function resolve_selector(ctx: Context, selector: Selector): ResolvedSelector {
 	}
 }
 
-function resolve_parts(ctx: Context, parts: Array<Part>): string {
+export function resolve_parts(ctx: Context, parts: Array<Part>): string {
+	if (ctx.visited.has(parts)) {
+		throw new RangeError("Recursive reference to a variant value.");
+	}
+
+	ctx.visited.add(parts);
+
 	let result = "";
 	for (let part of parts) {
 		switch (part.type) {
@@ -127,6 +142,8 @@ function resolve_parts(ctx: Context, parts: Array<Part>): string {
 				continue;
 		}
 	}
+
+	ctx.visited.delete(parts);
 	return result;
 }
 

@@ -1,4 +1,11 @@
-import {Context, format, NumberValue, resolve_value, StringValue} from "./context.js";
+import {
+	Context,
+	NumberValue,
+	resolve_parts,
+	resolve_value,
+	resolve_variant,
+	StringValue,
+} from "./runtime.js";
 import {Argument, Parameter} from "./model";
 
 export type RegistryFunc = (
@@ -27,16 +34,12 @@ function get_plural(ctx: Context, args: Array<Argument>, opts: Record<string, Pa
 }
 
 function get_phrase(ctx: Context, args: Array<Argument>, opts: Record<string, Parameter>): string {
-	if (ctx.formattable.type === "Phrase") {
-		// Forbid referencing a phrase in a phrase.
-		throw new TypeError();
-	}
-
 	let phrase_name = resolve_value(ctx, args[0]);
 	if (!(phrase_name instanceof StringValue)) {
 		throw new TypeError();
 	}
 
-	let phrase = ctx.formattable.phrases[phrase_name.value];
-	return format(ctx.locale, phrase, ctx.vars);
+	let phrase = ctx.message.phrases[phrase_name.value];
+	let variant = resolve_variant(ctx, phrase.variants, phrase.selectors);
+	return resolve_parts(ctx, variant.value);
 }
