@@ -1,19 +1,32 @@
-import {Context, format, resolve_arg, resolve_param} from "../messageformat2/context.js";
+import {
+	Context,
+	format,
+	resolve_value,
+	RuntimeValue,
+	StringValue,
+} from "../messageformat2/context.js";
 import {Argument, Message, Parameter} from "../messageformat2/model.js";
 import {REGISTRY} from "../messageformat2/registry.js";
+
+class ArrayValue extends RuntimeValue<Array<string>> {
+	format(ctx: Context): string {
+		// TODO(stasm): Better list formatting.
+		return this.value.join(", ");
+	}
+}
 
 REGISTRY["PLURAL_LEN"] = function (
 	ctx: Context,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
-	let value = resolve_arg(ctx, args[0]);
-	if (!Array.isArray(value)) {
+	let elements = resolve_value(ctx, args[0]);
+	if (!(elements instanceof ArrayValue)) {
 		throw new TypeError();
 	}
 
 	let plural_rules = new Intl.PluralRules(ctx.locale);
-	return plural_rules.select(value.length);
+	return plural_rules.select(elements.value.length);
 };
 
 REGISTRY["LIST"] = function (
@@ -21,20 +34,20 @@ REGISTRY["LIST"] = function (
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
-	let value = resolve_arg(ctx, args[0]);
-	if (!Array.isArray(value)) {
+	let elements = resolve_value(ctx, args[0]);
+	if (!(elements instanceof ArrayValue)) {
 		throw new TypeError();
 	}
 
-	let declension = resolve_param(ctx, opts["CASE"]);
-	if (typeof declension !== "string") {
+	let declension = resolve_value(ctx, opts["CASE"]);
+	if (!(declension instanceof StringValue)) {
 		throw new TypeError();
 	}
 
 	let values: Array<string> = [];
-	switch (declension) {
+	switch (declension.value) {
 		case "dative": {
-			values = value.map((x) => dative(ctx.locale, x));
+			values = elements.value.map((x) => dative(ctx.locale, x));
 			break;
 		}
 	}
@@ -110,7 +123,7 @@ console.log("==== Romanian ====");
 	};
 	console.log(
 		format("ro", message, {
-			names: ["Maria", "Ileana", "Petre"],
+			names: new ArrayValue(["Maria", "Ileana", "Petre"]),
 		})
 	);
 }

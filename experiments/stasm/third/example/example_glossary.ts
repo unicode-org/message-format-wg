@@ -1,4 +1,4 @@
-import {format, resolve_arg, resolve_param} from "../messageformat2/context.js";
+import {format, resolve_value, StringValue} from "../messageformat2/context.js";
 import {REGISTRY} from "../messageformat2/registry.js";
 import {Context} from "../messageformat2/context.js";
 import {get_term} from "./glossary.js";
@@ -9,15 +9,16 @@ REGISTRY["NOUN"] = function get_noun(
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
-	let noun_name = resolve_arg(ctx, args[0]);
-	if (typeof noun_name !== "string") {
+	let noun_name = resolve_value(ctx, args[0]);
+	if (!(noun_name instanceof StringValue)) {
 		throw new TypeError();
 	}
 
-	let noun = get_term(ctx.locale, noun_name);
+	let noun = get_term(ctx.locale, noun_name.value);
 	let value = noun["singular_nominative"].toString();
 
-	if (opts["CAPITALIZED"]) {
+	let capitalized = resolve_value(ctx, opts["CAPITALIZED"]);
+	if (capitalized.value) {
 		return value[0].toUpperCase() + value.slice(1);
 	}
 
@@ -29,23 +30,24 @@ REGISTRY["ADJECTIVE"] = function get_adjective(
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
-	let adj_name = resolve_arg(ctx, args[0]);
-	if (typeof adj_name !== "string") {
+	let adj_name = resolve_value(ctx, args[0]);
+	if (!(adj_name instanceof StringValue)) {
 		throw new TypeError();
 	}
 
 	switch (ctx.locale) {
 		case "en": {
-			let adjective = get_term(ctx.locale, adj_name);
+			let adjective = get_term(ctx.locale, adj_name.value);
 			return adjective["nominative"].toString();
 		}
 		case "pl": {
-			let noun_name = resolve_param(ctx, opts["ACCORD_WITH"]);
-			if (typeof noun_name !== "string") {
+			let noun_name = resolve_value(ctx, opts["ACCORD_WITH"]);
+			if (!(noun_name instanceof StringValue)) {
 				throw new TypeError();
 			}
-			let noun = get_term(ctx.locale, noun_name);
-			let adjective = get_term(ctx.locale, adj_name);
+
+			let noun = get_term(ctx.locale, noun_name.value);
+			let adjective = get_term(ctx.locale, adj_name.value);
 			return adjective["singular_" + noun["gender"]].toString();
 		}
 		default:
@@ -58,45 +60,47 @@ REGISTRY["ACTOR"] = function get_noun(
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
-	let name = resolve_arg(ctx, args[0]);
-	if (typeof name !== "string") {
+	let name = resolve_value(ctx, args[0]);
+	if (!(name instanceof StringValue)) {
 		throw new TypeError();
 	}
 
-	let term = get_term(ctx.locale, "actor_" + name);
+	let term = get_term(ctx.locale, "actor_" + name.value);
 
 	switch (ctx.locale) {
 		case "en": {
 			let value: string;
-			if (opts["DEFINITE"]) {
+			if (resolve_value(ctx, opts["DEFINITE"]).value) {
 				value = term["definite"].toString();
-			} else if (opts["INDEFINITE"]) {
+			} else if (resolve_value(ctx, opts["INDEFINITE"]).value) {
 				value = term["indefinite"].toString();
 			} else {
 				value = term["bare"].toString();
 			}
 
-			if (opts["CAPITALIZED"]) {
+			if (resolve_value(ctx, opts["CAPITALIZED"]).value) {
 				return value[0].toUpperCase() + value.slice(1);
 			}
 
 			return value;
 		}
 		case "pl": {
-			let declension = resolve_param(ctx, opts["CASE"]);
-			if (typeof declension !== "string") {
+			let declension = resolve_value(ctx, opts["CASE"]);
+			if (!(declension instanceof StringValue)) {
 				throw new TypeError();
 			}
 
-			let value = term[declension].toString();
-			if (opts["CAPITALIZED"]) {
+			let value = term[declension.value].toString();
+
+			let capitalized = resolve_value(ctx, opts["CAPITALIZED"]);
+			if (capitalized.value) {
 				return value[0].toUpperCase() + value.slice(1);
 			}
 
 			return value;
 		}
 		default:
-			return name;
+			return name.value;
 	}
 };
 
@@ -133,7 +137,12 @@ console.log("==== English ====");
 			},
 		],
 	};
-	console.log(format("en", message, {item: "t-shirt", color: "red"}));
+	console.log(
+		format("en", message, {
+			item: new StringValue("t-shirt"),
+			color: new StringValue("red"),
+		})
+	);
 }
 
 {
@@ -160,7 +169,11 @@ console.log("==== English ====");
 			},
 		],
 	};
-	console.log(format("en", message, {monster: "dinosaur"}));
+	console.log(
+		format("en", message, {
+			monster: new StringValue("dinosaur"),
+		})
+	);
 }
 
 {
@@ -187,7 +200,11 @@ console.log("==== English ====");
 			},
 		],
 	};
-	console.log(format("en", message, {monster: "ogre"}));
+	console.log(
+		format("en", message, {
+			monster: new StringValue("ogre"),
+		})
+	);
 }
 
 console.log();
@@ -225,7 +242,12 @@ console.log("==== polski ====");
 			},
 		],
 	};
-	console.log(format("pl", message, {item: "t-shirt", color: "red"}));
+	console.log(
+		format("pl", message, {
+			item: new StringValue("t-shirt"),
+			color: new StringValue("red"),
+		})
+	);
 }
 
 {
@@ -252,7 +274,11 @@ console.log("==== polski ====");
 			},
 		],
 	};
-	console.log(format("pl", message, {monster: "dinosaur"}));
+	console.log(
+		format("pl", message, {
+			monster: new StringValue("dinosaur"),
+		})
+	);
 }
 
 {
@@ -280,5 +306,9 @@ console.log("==== polski ====");
 		],
 	};
 
-	console.log(format("pl", message, {monster: "ogre"}));
+	console.log(
+		format("pl", message, {
+			monster: new StringValue("ogre"),
+		})
+	);
 }

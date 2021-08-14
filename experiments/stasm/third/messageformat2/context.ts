@@ -4,28 +4,58 @@ import {
 	Parameter,
 	Selector,
 	VariableReference,
-	Argument,
 	StringLiteral,
 	Part,
 } from "./model.js";
 import {REGISTRY} from "./registry.js";
 
-export interface RuntimeVariable {
-	valueOf(): unknown;
-	toString(): string;
+// A value passed in as a variable to format() or to which literals are resolved
+// at runtime. There are 3 built-in runtime value types in this JavaScript
+// implementation: StringValue, NumberValue, BooleanValue. Other implementations
+// may introduce additional types, e.g. Uint32Value. RuntimeValue can also be
+// inherited from in the userspace code to create new variable types; see
+// example_list's ArrayValue type.
+export abstract class RuntimeValue<T> {
+	public value: T;
+
+	constructor(value: T) {
+		this.value = value;
+	}
+
+	abstract format(ctx: Context): string;
+}
+
+export class StringValue extends RuntimeValue<string> {
+	format(ctx: Context): string {
+		return this.value;
+	}
+}
+
+export class NumberValue extends RuntimeValue<number> {
+	format(ctx: Context): string {
+		// TODO(stasm): Cache NumberFormat.
+		// TODO(stasm): Pass options.
+		return new Intl.NumberFormat(ctx.locale).format(this.value);
+	}
+}
+
+export class BooleanValue extends RuntimeValue<boolean> {
+	format(ctx: Context): string {
+		throw new TypeError("BooleanValue is not formattable.");
+	}
 }
 
 export interface Context {
 	locale: string;
 	formattable: Formattable;
-	vars: Record<string, RuntimeVariable>;
+	vars: Record<string, RuntimeValue<unknown>>;
 	// cached formatters,
 }
 
 export function format(
 	locale: string,
 	formattable: Formattable,
-	vars: Record<string, any>
+	vars: Record<string, RuntimeValue<unknown>>
 ): string {
 	let ctx: Context = {
 		locale,
@@ -90,10 +120,10 @@ function resolve_parts(ctx: Context, parts: Array<Part>): string {
 				result += part.value;
 				continue;
 			case "VariableReference":
-				result += format_var(ctx, part).toString();
+				result += format_var(ctx, part);
 				continue;
 			case "FunctionCall":
-				result += call_func(ctx, part).toString();
+				result += call_func(ctx, part);
 				continue;
 		}
 	}
@@ -107,35 +137,24 @@ function call_func(ctx: Context, func: FunctionCall): string {
 
 function format_var(ctx: Context, variable: VariableReference): string {
 	let value = ctx.vars[variable.name];
-	switch (typeof value) {
-		case "string":
-			return value;
-		case "number":
-			// TODO(stasm): Cache NumberFormat.
-			// TODO(stasm): Pass options.
-			return new Intl.NumberFormat(ctx.locale).format(value);
-		default:
-			// TODO(stasm): How to format other variable types?
-			throw new TypeError("Unknown variable type.");
-	}
+	return value.format(ctx);
 }
 
-export function resolve_arg(ctx: Context, arg: Argument): unknown {
-	switch (arg.type) {
+export function resolve_value(ctx: Context, node: Parameter): RuntimeValue<unknown> {
+	if (typeof node === "undefined") {
+		return new BooleanValue(false);
+	}
+
+	switch (node.type) {
 		case "StringLiteral":
-			return arg.value;
+			return new StringValue(node.value);
+		case "NumberLiteral":
+			return new NumberValue(parseFloat(node.value));
+		case "BooleanLiteral":
+			return new BooleanValue(node.value);
 		case "VariableReference":
-			return ctx.vars[arg.name].valueOf();
+			return ctx.vars[node.name];
 		default:
-			throw new TypeError("Invalid argument type.");
-	}
-}
-
-export function resolve_param(ctx: Context, param: Parameter): unknown {
-	switch (param.type) {
-		case "VariableReference":
-			return ctx.vars[param.name].valueOf();
-		default:
-			return param.value;
+			throw new TypeError("Invalid node type.");
 	}
 }

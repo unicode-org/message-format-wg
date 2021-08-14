@@ -1,4 +1,4 @@
-import {format} from "../messageformat2/context.js";
+import {format, NumberValue, StringValue} from "../messageformat2/context.js";
 import {Message} from "../messageformat2/model.js";
 
 console.log("==== English ====");
@@ -87,9 +87,9 @@ console.log("==== English ====");
 	};
 	console.log(
 		format("en", message, {
-			userName: "Mary",
-			userGender: "feminine",
-			photoCount: 34,
+			userName: new StringValue("Mary"),
+			userGender: new StringValue("feminine"),
+			photoCount: new NumberValue(34),
 		})
 	);
 }
@@ -227,9 +227,9 @@ console.log("==== polski ====");
 	};
 	console.log(
 		format("pl", message, {
-			userName: "Mary",
-			userGender: "feminine",
-			photoCount: 34,
+			userName: new StringValue("Mary"),
+			userGender: new StringValue("feminine"),
+			photoCount: new NumberValue(34),
 		})
 	);
 }
