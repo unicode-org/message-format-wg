@@ -76,34 +76,34 @@ console.log("==== Romanian ====");
 					args: [{type: "VariableReference", name: "names"}],
 					opts: {},
 				},
-				default: {type: "StringValue", value: "other"},
+				default: {type: "StringLiteral", value: "other"},
 			},
 		],
 		variants: [
 			{
-				keys: [{type: "StringValue", value: "one"}],
+				keys: [{type: "StringLiteral", value: "one"}],
 				value: [
-					{type: "StringValue", value: "I-am dat cadouri  "},
+					{type: "StringLiteral", value: "I-am dat cadouri  "},
 					{
 						type: "FunctionCall",
 						name: "LIST",
 						args: [{type: "VariableReference", name: "names"}],
-						opts: {CASE: {type: "StringValue", value: "dative"}},
+						opts: {CASE: {type: "StringLiteral", value: "dative"}},
 					},
-					{type: "StringValue", value: "."},
+					{type: "StringLiteral", value: "."},
 				],
 			},
 			{
-				keys: [{type: "StringValue", value: "other"}],
+				keys: [{type: "StringLiteral", value: "other"}],
 				value: [
-					{type: "StringValue", value: "Le-am dat cadouri "},
+					{type: "StringLiteral", value: "Le-am dat cadouri "},
 					{
 						type: "FunctionCall",
 						name: "LIST",
 						args: [{type: "VariableReference", name: "names"}],
-						opts: {CASE: {type: "StringValue", value: "dative"}},
+						opts: {CASE: {type: "StringLiteral", value: "dative"}},
 					},
-					{type: "StringValue", value: "."},
+					{type: "StringLiteral", value: "."},
 				],
 			},
 		],

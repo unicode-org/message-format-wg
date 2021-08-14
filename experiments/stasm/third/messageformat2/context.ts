@@ -5,7 +5,7 @@ import {
 	Selector,
 	VariableReference,
 	Argument,
-	StringValue,
+	StringLiteral,
 	Part,
 } from "./model.js";
 import {REGISTRY} from "./registry.js";
@@ -38,7 +38,7 @@ export function format(
 		resolved_selectors.push(resolve_selector(ctx, selector));
 	}
 
-	function matches_corresponding_selector(key: StringValue, idx: number) {
+	function matches_corresponding_selector(key: StringLiteral, idx: number) {
 		return (
 			key.value === resolved_selectors[idx].value ||
 			key.value === resolved_selectors[idx].default
@@ -77,7 +77,7 @@ function resolve_selector(ctx: Context, selector: Selector): ResolvedSelector {
 			return {value, default: selector.default.value};
 		}
 		default:
-			// TODO(stasm): Should we allow StringValue or NumberValue as selectors?
+			// TODO(stasm): Should we allow Literals as selectors?
 			throw new TypeError();
 	}
 }
@@ -86,7 +86,7 @@ function resolve_parts(ctx: Context, parts: Array<Part>): string {
 	let result = "";
 	for (let part of parts) {
 		switch (part.type) {
-			case "StringValue":
+			case "StringLiteral":
 				result += part.value;
 				continue;
 			case "VariableReference":
@@ -122,7 +122,7 @@ function format_var(ctx: Context, variable: VariableReference): string {
 
 export function resolve_arg(ctx: Context, arg: Argument): unknown {
 	switch (arg.type) {
-		case "StringValue":
+		case "StringLiteral":
 			return arg.value;
 		case "VariableReference":
 			return ctx.vars[arg.name].valueOf();

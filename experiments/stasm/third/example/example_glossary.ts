@@ -107,19 +107,19 @@ console.log("==== English ====");
 		type: "Message",
 		id: "accord",
 		phrases: {},
-		selectors: [{expr: null, default: {type: "StringValue", value: "default"}}],
+		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
 		variants: [
 			{
-				keys: [{type: "StringValue", value: "default"}],
+				keys: [{type: "StringLiteral", value: "default"}],
 				value: [
-					{type: "StringValue", value: "The "},
+					{type: "StringLiteral", value: "The "},
 					{
 						type: "FunctionCall",
 						name: "NOUN",
 						args: [{type: "VariableReference", name: "item"}],
 						opts: {},
 					},
-					{type: "StringValue", value: " is "},
+					{type: "StringLiteral", value: " is "},
 					{
 						type: "FunctionCall",
 						name: "ADJECTIVE",
@@ -128,7 +128,7 @@ console.log("==== English ====");
 							ACCORD_WITH: {type: "VariableReference", name: "item"},
 						},
 					},
-					{type: "StringValue", value: "."},
+					{type: "StringLiteral", value: "."},
 				],
 			},
 		],
@@ -141,21 +141,21 @@ console.log("==== English ====");
 		type: "Message",
 		id: "you-see",
 		phrases: {},
-		selectors: [{expr: null, default: {type: "StringValue", value: "default"}}],
+		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
 		variants: [
 			{
-				keys: [{type: "StringValue", value: "default"}],
+				keys: [{type: "StringLiteral", value: "default"}],
 				value: [
-					{type: "StringValue", value: "You see "},
+					{type: "StringLiteral", value: "You see "},
 					{
 						type: "FunctionCall",
 						name: "ACTOR",
 						args: [{type: "VariableReference", name: "monster"}],
 						opts: {
-							INDEFINITE: {type: "BooleanValue", value: true},
+							INDEFINITE: {type: "BooleanLiteral", value: true},
 						},
 					},
-					{type: "StringValue", value: "!"},
+					{type: "StringLiteral", value: "!"},
 				],
 			},
 		],
@@ -168,21 +168,21 @@ console.log("==== English ====");
 		type: "Message",
 		id: "they-wave",
 		phrases: {},
-		selectors: [{expr: null, default: {type: "StringValue", value: "default"}}],
+		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
 		variants: [
 			{
-				keys: [{type: "StringValue", value: "default"}],
+				keys: [{type: "StringLiteral", value: "default"}],
 				value: [
 					{
 						type: "FunctionCall",
 						name: "ACTOR",
 						args: [{type: "VariableReference", name: "monster"}],
 						opts: {
-							DEFINITE: {type: "BooleanValue", value: true},
-							CAPITALIZED: {type: "BooleanValue", value: true},
+							DEFINITE: {type: "BooleanLiteral", value: true},
+							CAPITALIZED: {type: "BooleanLiteral", value: true},
 						},
 					},
-					{type: "StringValue", value: " waves at you!"},
+					{type: "StringLiteral", value: " waves at you!"},
 				],
 			},
 		],
@@ -198,20 +198,20 @@ console.log("==== polski ====");
 		type: "Message",
 		id: "accord",
 		phrases: {},
-		selectors: [{expr: null, default: {type: "StringValue", value: "default"}}],
+		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
 		variants: [
 			{
-				keys: [{type: "StringValue", value: "default"}],
+				keys: [{type: "StringLiteral", value: "default"}],
 				value: [
 					{
 						type: "FunctionCall",
 						name: "NOUN",
 						args: [{type: "VariableReference", name: "item"}],
 						opts: {
-							CAPITALIZED: {type: "BooleanValue", value: true},
+							CAPITALIZED: {type: "BooleanLiteral", value: true},
 						},
 					},
-					{type: "StringValue", value: " jest "},
+					{type: "StringLiteral", value: " jest "},
 					{
 						type: "FunctionCall",
 						name: "ADJECTIVE",
@@ -220,7 +220,7 @@ console.log("==== polski ====");
 							ACCORD_WITH: {type: "VariableReference", name: "item"},
 						},
 					},
-					{type: "StringValue", value: "."},
+					{type: "StringLiteral", value: "."},
 				],
 			},
 		],
@@ -233,21 +233,21 @@ console.log("==== polski ====");
 		type: "Message",
 		id: "you-see",
 		phrases: {},
-		selectors: [{expr: null, default: {type: "StringValue", value: "default"}}],
+		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
 		variants: [
 			{
-				keys: [{type: "StringValue", value: "default"}],
+				keys: [{type: "StringLiteral", value: "default"}],
 				value: [
-					{type: "StringValue", value: "Widzisz "},
+					{type: "StringLiteral", value: "Widzisz "},
 					{
 						type: "FunctionCall",
 						name: "ACTOR",
 						args: [{type: "VariableReference", name: "monster"}],
 						opts: {
-							CASE: {type: "StringValue", value: "accusative"},
+							CASE: {type: "StringLiteral", value: "accusative"},
 						},
 					},
-					{type: "StringValue", value: "!"},
+					{type: "StringLiteral", value: "!"},
 				],
 			},
 		],
@@ -260,21 +260,21 @@ console.log("==== polski ====");
 		type: "Message",
 		id: "they-wave",
 		phrases: {},
-		selectors: [{expr: null, default: {type: "StringValue", value: "default"}}],
+		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
 		variants: [
 			{
-				keys: [{type: "StringValue", value: "default"}],
+				keys: [{type: "StringLiteral", value: "default"}],
 				value: [
 					{
 						type: "FunctionCall",
 						name: "ACTOR",
 						args: [{type: "VariableReference", name: "monster"}],
 						opts: {
-							CASE: {type: "StringValue", value: "nominative"},
-							CAPITALIZED: {type: "BooleanValue", value: true},
+							CASE: {type: "StringLiteral", value: "nominative"},
+							CAPITALIZED: {type: "BooleanLiteral", value: true},
 						},
 					},
-					{type: "StringValue", value: " macha do ciebie!"},
+					{type: "StringLiteral", value: " macha do ciebie!"},
 				],
 			},
 		],

@@ -16,11 +16,11 @@ export interface Phrase {
 
 export interface Selector {
 	expr: VariableReference | FunctionCall | null;
-	default: StringValue;
+	default: StringLiteral;
 }
 
 export interface Variant {
-	keys: Array<StringValue>;
+	keys: Array<StringLiteral>;
 	value: Array<Part>;
 }
 
@@ -36,21 +36,21 @@ export interface VariableReference {
 	name: string;
 }
 
-export interface StringValue {
-	type: "StringValue";
+export interface StringLiteral {
+	type: "StringLiteral";
 	value: string;
 }
 
-export interface NumberValue {
-	type: "NumberValue";
+export interface NumberLiteral {
+	type: "NumberLiteral";
 	value: string;
 }
 
-export interface BooleanValue {
-	type: "BooleanValue";
+export interface BooleanLiteral {
+	type: "BooleanLiteral";
 	value: boolean;
 }
 
-export type Argument = StringValue | VariableReference;
-export type Parameter = StringValue | VariableReference | BooleanValue | NumberValue;
-export type Part = StringValue | VariableReference | FunctionCall;
+export type Argument = StringLiteral | VariableReference;
+export type Parameter = StringLiteral | VariableReference | BooleanLiteral | NumberLiteral;
+export type Part = StringLiteral | VariableReference | FunctionCall;

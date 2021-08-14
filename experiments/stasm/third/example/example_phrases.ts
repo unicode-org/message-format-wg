@@ -18,20 +18,20 @@ console.log("==== English ====");
 							args: [{type: "VariableReference", name: "photoCount"}],
 							opts: {},
 						},
-						default: {type: "StringValue", value: "other"},
+						default: {type: "StringLiteral", value: "other"},
 					},
 				],
 				variants: [
 					{
-						keys: [{type: "StringValue", value: "one"}],
-						value: [{type: "StringValue", value: "added a new photo"}],
+						keys: [{type: "StringLiteral", value: "one"}],
+						value: [{type: "StringLiteral", value: "added a new photo"}],
 					},
 					{
-						keys: [{type: "StringValue", value: "other"}],
+						keys: [{type: "StringLiteral", value: "other"}],
 						value: [
-							{type: "StringValue", value: "added "},
+							{type: "StringLiteral", value: "added "},
 							{type: "VariableReference", name: "photoCount"},
-							{type: "StringValue", value: " new photos"},
+							{type: "StringLiteral", value: " new photos"},
 						],
 					},
 				],
@@ -41,46 +41,46 @@ console.log("==== English ====");
 				selectors: [
 					{
 						expr: {type: "VariableReference", name: "userGender"},
-						default: {type: "StringValue", value: "other"},
+						default: {type: "StringLiteral", value: "other"},
 					},
 				],
 				variants: [
 					{
-						keys: [{type: "StringValue", value: "masculine"}],
-						value: [{type: "StringValue", value: "his album"}],
+						keys: [{type: "StringLiteral", value: "masculine"}],
+						value: [{type: "StringLiteral", value: "his album"}],
 					},
 					{
-						keys: [{type: "StringValue", value: "feminine"}],
-						value: [{type: "StringValue", value: "her album"}],
+						keys: [{type: "StringLiteral", value: "feminine"}],
+						value: [{type: "StringLiteral", value: "her album"}],
 					},
 					{
-						keys: [{type: "StringValue", value: "other"}],
-						value: [{type: "StringValue", value: "their album"}],
+						keys: [{type: "StringLiteral", value: "other"}],
+						value: [{type: "StringLiteral", value: "their album"}],
 					},
 				],
 			},
 		},
-		selectors: [{expr: null, default: {type: "StringValue", value: "default"}}],
+		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
 		variants: [
 			{
-				keys: [{type: "StringValue", value: "default"}],
+				keys: [{type: "StringLiteral", value: "default"}],
 				value: [
 					{type: "VariableReference", name: "userName"},
-					{type: "StringValue", value: " "},
+					{type: "StringLiteral", value: " "},
 					{
 						type: "FunctionCall",
 						name: "PHRASE",
-						args: [{type: "StringValue", value: "added-photo"}],
+						args: [{type: "StringLiteral", value: "added-photo"}],
 						opts: {},
 					},
-					{type: "StringValue", value: " to "},
+					{type: "StringLiteral", value: " to "},
 					{
 						type: "FunctionCall",
 						name: "PHRASE",
-						args: [{type: "StringValue", value: "their-album"}],
+						args: [{type: "StringLiteral", value: "their-album"}],
 						opts: {},
 					},
-					{type: "StringValue", value: "."},
+					{type: "StringLiteral", value: "."},
 				],
 			},
 		],
@@ -105,7 +105,7 @@ console.log("==== polski ====");
 		selectors: [
 			{
 				expr: {type: "VariableReference", name: "userGender"},
-				default: {type: "StringValue", value: "other"},
+				default: {type: "StringLiteral", value: "other"},
 			},
 			{
 				expr: {
@@ -114,113 +114,113 @@ console.log("==== polski ====");
 					args: [{type: "VariableReference", name: "photoCount"}],
 					opts: {},
 				},
-				default: {type: "StringValue", value: "many"},
+				default: {type: "StringLiteral", value: "many"},
 			},
 		],
 		variants: [
 			{
 				keys: [
-					{type: "StringValue", value: "masculine"},
-					{type: "StringValue", value: "one"},
+					{type: "StringLiteral", value: "masculine"},
+					{type: "StringLiteral", value: "one"},
 				],
 				value: [
 					{type: "VariableReference", name: "userName"},
-					{type: "StringValue", value: " dodał nowe zdjęcie do swojego albumu."},
+					{type: "StringLiteral", value: " dodał nowe zdjęcie do swojego albumu."},
 				],
 			},
 			{
 				keys: [
-					{type: "StringValue", value: "masculine"},
-					{type: "StringValue", value: "few"},
+					{type: "StringLiteral", value: "masculine"},
+					{type: "StringLiteral", value: "few"},
 				],
 				value: [
 					{type: "VariableReference", name: "userName"},
-					{type: "StringValue", value: " dodał "},
+					{type: "StringLiteral", value: " dodał "},
 					{type: "VariableReference", name: "photoCount"},
-					{type: "StringValue", value: "nowe zdjęcia do swojego albumu."},
+					{type: "StringLiteral", value: "nowe zdjęcia do swojego albumu."},
 				],
 			},
 			{
 				keys: [
-					{type: "StringValue", value: "masculine"},
-					{type: "StringValue", value: "many"},
+					{type: "StringLiteral", value: "masculine"},
+					{type: "StringLiteral", value: "many"},
 				],
 				value: [
 					{type: "VariableReference", name: "userName"},
-					{type: "StringValue", value: " dodał "},
+					{type: "StringLiteral", value: " dodał "},
 					{type: "VariableReference", name: "photoCount"},
-					{type: "StringValue", value: "nowych zdjęć do swojego albumu."},
+					{type: "StringLiteral", value: "nowych zdjęć do swojego albumu."},
 				],
 			},
 			{
 				keys: [
-					{type: "StringValue", value: "feminine"},
-					{type: "StringValue", value: "one"},
+					{type: "StringLiteral", value: "feminine"},
+					{type: "StringLiteral", value: "one"},
 				],
 				value: [
 					{type: "VariableReference", name: "userName"},
-					{type: "StringValue", value: " dodała nowe zdjęcie do swojego albumu."},
+					{type: "StringLiteral", value: " dodała nowe zdjęcie do swojego albumu."},
 				],
 			},
 			{
 				keys: [
-					{type: "StringValue", value: "feminine"},
-					{type: "StringValue", value: "few"},
+					{type: "StringLiteral", value: "feminine"},
+					{type: "StringLiteral", value: "few"},
 				],
 				value: [
 					{type: "VariableReference", name: "userName"},
-					{type: "StringValue", value: " dodała "},
+					{type: "StringLiteral", value: " dodała "},
 					{type: "VariableReference", name: "photoCount"},
-					{type: "StringValue", value: " nowe zdjęcia do swojego albumu."},
+					{type: "StringLiteral", value: " nowe zdjęcia do swojego albumu."},
 				],
 			},
 			{
 				keys: [
-					{type: "StringValue", value: "feminine"},
-					{type: "StringValue", value: "many"},
+					{type: "StringLiteral", value: "feminine"},
+					{type: "StringLiteral", value: "many"},
 				],
 				value: [
 					{type: "VariableReference", name: "userName"},
-					{type: "StringValue", value: " dodała "},
+					{type: "StringLiteral", value: " dodała "},
 					{type: "VariableReference", name: "photoCount"},
-					{type: "StringValue", value: " nowych zdjęć do swojego albumu."},
+					{type: "StringLiteral", value: " nowych zdjęć do swojego albumu."},
 				],
 			},
 			{
 				keys: [
-					{type: "StringValue", value: "other"},
-					{type: "StringValue", value: "one"},
+					{type: "StringLiteral", value: "other"},
+					{type: "StringLiteral", value: "one"},
 				],
 				value: [
-					{type: "StringValue", value: "Użytkownik "},
+					{type: "StringLiteral", value: "Użytkownik "},
 					{type: "VariableReference", name: "userName"},
-					{type: "StringValue", value: " dodał nowe zdjęcie do swojego albumu."},
+					{type: "StringLiteral", value: " dodał nowe zdjęcie do swojego albumu."},
 				],
 			},
 			{
 				keys: [
-					{type: "StringValue", value: "other"},
-					{type: "StringValue", value: "few"},
+					{type: "StringLiteral", value: "other"},
+					{type: "StringLiteral", value: "few"},
 				],
 				value: [
-					{type: "StringValue", value: "Użytkownik "},
+					{type: "StringLiteral", value: "Użytkownik "},
 					{type: "VariableReference", name: "userName"},
-					{type: "StringValue", value: " dodał "},
+					{type: "StringLiteral", value: " dodał "},
 					{type: "VariableReference", name: "photoCount"},
-					{type: "StringValue", value: " nowe zdjęcia do swojego albumu."},
+					{type: "StringLiteral", value: " nowe zdjęcia do swojego albumu."},
 				],
 			},
 			{
 				keys: [
-					{type: "StringValue", value: "other"},
-					{type: "StringValue", value: "many"},
+					{type: "StringLiteral", value: "other"},
+					{type: "StringLiteral", value: "many"},
 				],
 				value: [
-					{type: "StringValue", value: "Użytkownik "},
+					{type: "StringLiteral", value: "Użytkownik "},
 					{type: "VariableReference", name: "userName"},
-					{type: "StringValue", value: " dodał "},
+					{type: "StringLiteral", value: " dodał "},
 					{type: "VariableReference", name: "photoCount"},
-					{type: "StringValue", value: " nowych zdjęć do swojego albumu."},
+					{type: "StringLiteral", value: " nowych zdjęć do swojego albumu."},
 				],
 			},
 		],
