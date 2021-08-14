@@ -19,7 +19,7 @@ function get_plural(
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
-	let count = ctx.resolveValue(args[0]);
+	let count = ctx.toRuntimeValue(args[0]);
 	if (!(count instanceof NumberValue)) {
 		throw new TypeError();
 	}
@@ -35,7 +35,7 @@ function get_phrase(
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
-	let phrase_name = ctx.resolveValue(args[0]);
+	let phrase_name = ctx.toRuntimeValue(args[0]);
 	if (!(phrase_name instanceof StringValue)) {
 		throw new TypeError();
 	}

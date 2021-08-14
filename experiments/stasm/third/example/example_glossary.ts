@@ -10,7 +10,7 @@ REGISTRY["NOUN"] = function get_noun(
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
-	let noun_name = ctx.resolveValue(args[0]);
+	let noun_name = ctx.toRuntimeValue(args[0]);
 	if (!(noun_name instanceof StringValue)) {
 		throw new TypeError();
 	}
@@ -18,7 +18,7 @@ REGISTRY["NOUN"] = function get_noun(
 	let noun = get_term(ctx.locale, noun_name.value);
 	let value = noun["singular_nominative"].toString();
 
-	let capitalized = ctx.resolveValue(opts["CAPITALIZED"]);
+	let capitalized = ctx.toRuntimeValue(opts["CAPITALIZED"]);
 	if (capitalized.value) {
 		return value[0].toUpperCase() + value.slice(1);
 	}
@@ -31,7 +31,7 @@ REGISTRY["ADJECTIVE"] = function get_adjective(
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
-	let adj_name = ctx.resolveValue(args[0]);
+	let adj_name = ctx.toRuntimeValue(args[0]);
 	if (!(adj_name instanceof StringValue)) {
 		throw new TypeError();
 	}
@@ -42,7 +42,7 @@ REGISTRY["ADJECTIVE"] = function get_adjective(
 			return adjective["nominative"].toString();
 		}
 		case "pl": {
-			let noun_name = ctx.resolveValue(opts["ACCORD_WITH"]);
+			let noun_name = ctx.toRuntimeValue(opts["ACCORD_WITH"]);
 			if (!(noun_name instanceof StringValue)) {
 				throw new TypeError();
 			}
@@ -61,7 +61,7 @@ REGISTRY["ACTOR"] = function get_noun(
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
-	let name = ctx.resolveValue(args[0]);
+	let name = ctx.toRuntimeValue(args[0]);
 	if (!(name instanceof StringValue)) {
 		throw new TypeError();
 	}
@@ -71,29 +71,29 @@ REGISTRY["ACTOR"] = function get_noun(
 	switch (ctx.locale) {
 		case "en": {
 			let value: string;
-			if (ctx.resolveValue(opts["DEFINITE"]).value) {
+			if (ctx.toRuntimeValue(opts["DEFINITE"]).value) {
 				value = term["definite"].toString();
-			} else if (ctx.resolveValue(opts["INDEFINITE"]).value) {
+			} else if (ctx.toRuntimeValue(opts["INDEFINITE"]).value) {
 				value = term["indefinite"].toString();
 			} else {
 				value = term["bare"].toString();
 			}
 
-			if (ctx.resolveValue(opts["CAPITALIZED"]).value) {
+			if (ctx.toRuntimeValue(opts["CAPITALIZED"]).value) {
 				return value[0].toUpperCase() + value.slice(1);
 			}
 
 			return value;
 		}
 		case "pl": {
-			let declension = ctx.resolveValue(opts["CASE"]);
+			let declension = ctx.toRuntimeValue(opts["CASE"]);
 			if (!(declension instanceof StringValue)) {
 				throw new TypeError();
 			}
 
 			let value = term[declension.value].toString();
 
-			let capitalized = ctx.resolveValue(opts["CAPITALIZED"]);
+			let capitalized = ctx.toRuntimeValue(opts["CAPITALIZED"]);
 			if (capitalized.value) {
 				return value[0].toUpperCase() + value.slice(1);
 			}

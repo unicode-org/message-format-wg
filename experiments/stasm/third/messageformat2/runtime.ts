@@ -142,7 +142,7 @@ export class FormattingContext {
 		throw new RangeError("No variant matched the selectors.");
 	}
 
-	resolveValue(node: Parameter): RuntimeValue<unknown> {
+	toRuntimeValue(node: Parameter): RuntimeValue<unknown> {
 		if (typeof node === "undefined") {
 			return new BooleanValue(false);
 		}

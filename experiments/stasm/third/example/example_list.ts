@@ -15,7 +15,7 @@ REGISTRY["PLURAL_LEN"] = function (
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
-	let elements = ctx.resolveValue(args[0]);
+	let elements = ctx.toRuntimeValue(args[0]);
 	if (!(elements instanceof ArrayValue)) {
 		throw new TypeError();
 	}
@@ -29,12 +29,12 @@ REGISTRY["LIST"] = function (
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
-	let elements = ctx.resolveValue(args[0]);
+	let elements = ctx.toRuntimeValue(args[0]);
 	if (!(elements instanceof ArrayValue)) {
 		throw new TypeError();
 	}
 
-	let declension = ctx.resolveValue(opts["CASE"]);
+	let declension = ctx.toRuntimeValue(opts["CASE"]);
 	if (!(declension instanceof StringValue)) {
 		throw new TypeError();
 	}
