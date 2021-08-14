@@ -95,7 +95,6 @@ console.log("==== English ====");
 	);
 }
 
-console.log();
 console.log("==== polski ====");
 
 {

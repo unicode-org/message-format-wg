@@ -12,6 +12,7 @@
   },
   "scripts": {
     "example": "tsc && node example/index.js",
+    "start": "tsc && (node example/index.js glossary; node example/index.js list; node example/index.js phrases)",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Staś Małolepszy <stas@duzodobrze.pl>",
