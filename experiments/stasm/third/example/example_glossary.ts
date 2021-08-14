@@ -1,9 +1,7 @@
-import {StringValue} from "../messageformat2/runtime.js";
-import {formatMessage} from "../messageformat2/index.js";
-import {REGISTRY} from "../messageformat2/registry.js";
-import {FormattingContext} from "../messageformat2/runtime.js";
-import {get_term} from "./glossary.js";
 import {Argument, Message, Parameter} from "../messageformat2/model.js";
+import {REGISTRY} from "../messageformat2/registry.js";
+import {formatMessage, FormattingContext, StringValue} from "../messageformat2/runtime.js";
+import {get_term} from "./glossary.js";
 
 REGISTRY["NOUN"] = function get_noun(
 	ctx: FormattingContext,

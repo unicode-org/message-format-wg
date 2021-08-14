@@ -1,7 +1,11 @@
-import {FormattingContext, RuntimeValue, StringValue} from "../messageformat2/runtime.js";
-import {formatMessage} from "../messageformat2/index.js";
 import {Argument, Message, Parameter} from "../messageformat2/model.js";
 import {REGISTRY} from "../messageformat2/registry.js";
+import {
+	formatMessage,
+	FormattingContext,
+	RuntimeValue,
+	StringValue,
+} from "../messageformat2/runtime.js";
 
 class ArrayValue extends RuntimeValue<Array<string>> {
 	format(ctx: FormattingContext): string {

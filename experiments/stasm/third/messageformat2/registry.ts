@@ -1,5 +1,5 @@
+import {Argument, Parameter} from "./model.js";
 import {FormattingContext, NumberValue, StringValue} from "./runtime.js";
-import {Argument, Parameter} from "./model";
 
 export type RegistryFunc = (
 	ctx: FormattingContext,

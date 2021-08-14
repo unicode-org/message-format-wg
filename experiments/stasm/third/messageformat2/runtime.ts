@@ -1,13 +1,13 @@
 import {
 	FunctionCall,
-	Parameter,
-	Selector,
-	VariableReference,
-	StringLiteral,
-	Part,
 	Message,
-	Variant,
+	Parameter,
+	Part,
 	Phrase,
+	Selector,
+	StringLiteral,
+	VariableReference,
+	Variant,
 } from "./model.js";
 import {REGISTRY} from "./registry.js";
 
@@ -170,4 +170,14 @@ function call_func(ctx: FormattingContext, func: FunctionCall): string {
 function format_var(ctx: FormattingContext, variable: VariableReference): string {
 	let value = ctx.vars[variable.name];
 	return value.format(ctx);
+}
+
+export function formatMessage(
+	locale: string,
+	message: Message,
+	vars: Record<string, RuntimeValue<unknown>>
+): string {
+	let ctx = new FormattingContext(locale, message, vars);
+	let variant = ctx.selectVariant(message.variants, message.selectors);
+	return ctx.formatPattern(variant.value);
 }

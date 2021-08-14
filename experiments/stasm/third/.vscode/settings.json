@@ -2,5 +2,10 @@
 	"files.exclude": {
 		"**/node_modules": true,
 		"**/*.js": true
-	}
+	},
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": true
+	},
+	"typescript.preferences.importModuleSpecifierEnding": "js",
 }

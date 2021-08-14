@@ -1,5 +1,4 @@
 import {readFileSync} from "fs";
-import {resolve} from "path";
 
 export interface Glossary {
 	[key: string]: Term;

@@ -1,5 +1,3 @@
-export type Formattable = Message | Phrase;
-
 export interface Message {
 	type: "Message";
 	id: string;

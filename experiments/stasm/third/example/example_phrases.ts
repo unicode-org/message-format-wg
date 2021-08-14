@@ -1,6 +1,5 @@
-import {NumberValue, StringValue} from "../messageformat2/runtime.js";
-import {formatMessage} from "../messageformat2/index.js";
 import {Message} from "../messageformat2/model.js";
+import {formatMessage, NumberValue, StringValue} from "../messageformat2/runtime.js";
 
 console.log("==== English ====");
 
