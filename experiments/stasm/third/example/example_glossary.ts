@@ -1,12 +1,12 @@
 import {StringValue} from "../messageformat2/runtime.js";
-import {format_message} from "../messageformat2/index.js";
+import {formatMessage} from "../messageformat2/index.js";
 import {REGISTRY} from "../messageformat2/registry.js";
-import {Context} from "../messageformat2/runtime.js";
+import {FormattingContext} from "../messageformat2/runtime.js";
 import {get_term} from "./glossary.js";
 import {Argument, Message, Parameter} from "../messageformat2/model.js";
 
 REGISTRY["NOUN"] = function get_noun(
-	ctx: Context,
+	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
@@ -27,7 +27,7 @@ REGISTRY["NOUN"] = function get_noun(
 };
 
 REGISTRY["ADJECTIVE"] = function get_adjective(
-	ctx: Context,
+	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
@@ -57,7 +57,7 @@ REGISTRY["ADJECTIVE"] = function get_adjective(
 };
 
 REGISTRY["ACTOR"] = function get_noun(
-	ctx: Context,
+	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
@@ -139,7 +139,7 @@ console.log("==== English ====");
 		],
 	};
 	console.log(
-		format_message("en", message, {
+		formatMessage("en", message, {
 			item: new StringValue("t-shirt"),
 			color: new StringValue("red"),
 		})
@@ -171,7 +171,7 @@ console.log("==== English ====");
 		],
 	};
 	console.log(
-		format_message("en", message, {
+		formatMessage("en", message, {
 			monster: new StringValue("dinosaur"),
 		})
 	);
@@ -202,7 +202,7 @@ console.log("==== English ====");
 		],
 	};
 	console.log(
-		format_message("en", message, {
+		formatMessage("en", message, {
 			monster: new StringValue("ogre"),
 		})
 	);
@@ -244,7 +244,7 @@ console.log("==== polski ====");
 		],
 	};
 	console.log(
-		format_message("pl", message, {
+		formatMessage("pl", message, {
 			item: new StringValue("t-shirt"),
 			color: new StringValue("red"),
 		})
@@ -276,7 +276,7 @@ console.log("==== polski ====");
 		],
 	};
 	console.log(
-		format_message("pl", message, {
+		formatMessage("pl", message, {
 			monster: new StringValue("dinosaur"),
 		})
 	);
@@ -308,7 +308,7 @@ console.log("==== polski ====");
 	};
 
 	console.log(
-		format_message("pl", message, {
+		formatMessage("pl", message, {
 			monster: new StringValue("ogre"),
 		})
 	);

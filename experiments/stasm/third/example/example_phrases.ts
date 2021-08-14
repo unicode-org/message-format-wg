@@ -1,5 +1,5 @@
 import {NumberValue, StringValue} from "../messageformat2/runtime.js";
-import {format_message} from "../messageformat2/index.js";
+import {formatMessage} from "../messageformat2/index.js";
 import {Message} from "../messageformat2/model.js";
 
 console.log("==== English ====");
@@ -87,7 +87,7 @@ console.log("==== English ====");
 		],
 	};
 	console.log(
-		format_message("en", message, {
+		formatMessage("en", message, {
 			userName: new StringValue("Mary"),
 			userGender: new StringValue("feminine"),
 			photoCount: new NumberValue(34),
@@ -227,7 +227,7 @@ console.log("==== polski ====");
 		],
 	};
 	console.log(
-		format_message("pl", message, {
+		formatMessage("pl", message, {
 			userName: new StringValue("Mary"),
 			userGender: new StringValue("feminine"),
 			photoCount: new NumberValue(34),

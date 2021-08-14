@@ -1,8 +1,8 @@
-import {Context, NumberValue, StringValue} from "./runtime.js";
+import {FormattingContext, NumberValue, StringValue} from "./runtime.js";
 import {Argument, Parameter} from "./model";
 
 export type RegistryFunc = (
-	ctx: Context,
+	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ) => string;
@@ -14,7 +14,11 @@ export const REGISTRY: Record<string, RegistryFunc> = {
 
 // Built-in functions.
 
-function get_plural(ctx: Context, args: Array<Argument>, opts: Record<string, Parameter>): string {
+function get_plural(
+	ctx: FormattingContext,
+	args: Array<Argument>,
+	opts: Record<string, Parameter>
+): string {
 	let count = ctx.resolveValue(args[0]);
 	if (!(count instanceof NumberValue)) {
 		throw new TypeError();
@@ -26,7 +30,11 @@ function get_plural(ctx: Context, args: Array<Argument>, opts: Record<string, Pa
 	return pr.select(count.value);
 }
 
-function get_phrase(ctx: Context, args: Array<Argument>, opts: Record<string, Parameter>): string {
+function get_phrase(
+	ctx: FormattingContext,
+	args: Array<Argument>,
+	opts: Record<string, Parameter>
+): string {
 	let phrase_name = ctx.resolveValue(args[0]);
 	if (!(phrase_name instanceof StringValue)) {
 		throw new TypeError();

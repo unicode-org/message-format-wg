@@ -24,17 +24,17 @@ export abstract class RuntimeValue<T> {
 		this.value = value;
 	}
 
-	abstract format(ctx: Context): string;
+	abstract format(ctx: FormattingContext): string;
 }
 
 export class StringValue extends RuntimeValue<string> {
-	format(ctx: Context): string {
+	format(ctx: FormattingContext): string {
 		return this.value;
 	}
 }
 
 export class NumberValue extends RuntimeValue<number> {
-	format(ctx: Context): string {
+	format(ctx: FormattingContext): string {
 		// TODO(stasm): Cache NumberFormat.
 		// TODO(stasm): Pass options.
 		return new Intl.NumberFormat(ctx.locale).format(this.value);
@@ -42,13 +42,13 @@ export class NumberValue extends RuntimeValue<number> {
 }
 
 export class BooleanValue extends RuntimeValue<boolean> {
-	format(ctx: Context): string {
+	format(ctx: FormattingContext): string {
 		throw new TypeError("BooleanValue is not formattable.");
 	}
 }
 
-// Resolution context for a single format_message() call.
-export class Context {
+// Resolution context for a single formatMessage() call.
+export class FormattingContext {
 	locale: string;
 	message: Message;
 	vars: Record<string, RuntimeValue<unknown>>;
@@ -162,12 +162,12 @@ export class Context {
 	}
 }
 
-function call_func(ctx: Context, func: FunctionCall): string {
+function call_func(ctx: FormattingContext, func: FunctionCall): string {
 	let callable = REGISTRY[func.name];
 	return callable(ctx, func.args, func.opts);
 }
 
-function format_var(ctx: Context, variable: VariableReference): string {
+function format_var(ctx: FormattingContext, variable: VariableReference): string {
 	let value = ctx.vars[variable.name];
 	return value.format(ctx);
 }

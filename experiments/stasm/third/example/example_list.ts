@@ -1,17 +1,17 @@
-import {Context, RuntimeValue, StringValue} from "../messageformat2/runtime.js";
-import {format_message} from "../messageformat2/index.js";
+import {FormattingContext, RuntimeValue, StringValue} from "../messageformat2/runtime.js";
+import {formatMessage} from "../messageformat2/index.js";
 import {Argument, Message, Parameter} from "../messageformat2/model.js";
 import {REGISTRY} from "../messageformat2/registry.js";
 
 class ArrayValue extends RuntimeValue<Array<string>> {
-	format(ctx: Context): string {
+	format(ctx: FormattingContext): string {
 		// TODO(stasm): Better list formatting.
 		return this.value.join(", ");
 	}
 }
 
 REGISTRY["PLURAL_LEN"] = function (
-	ctx: Context,
+	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
@@ -25,7 +25,7 @@ REGISTRY["PLURAL_LEN"] = function (
 };
 
 REGISTRY["LIST"] = function (
-	ctx: Context,
+	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
@@ -117,7 +117,7 @@ console.log("==== Romanian ====");
 		],
 	};
 	console.log(
-		format_message("ro", message, {
+		formatMessage("ro", message, {
 			names: new ArrayValue(["Maria", "Ileana", "Petre"]),
 		})
 	);
