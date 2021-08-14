@@ -47,6 +47,7 @@ export class BooleanValue extends RuntimeValue<boolean> {
 	}
 }
 
+// Resolution context for a single format_message() call.
 export class Context {
 	locale: string;
 	message: Message;
@@ -60,91 +61,105 @@ export class Context {
 		this.vars = vars;
 		this.visited = new WeakSet();
 	}
-}
 
-export function format_phrase(ctx: Context, phrase: Phrase): string {
-	let variant = resolve_variant(ctx, phrase.variants, phrase.selectors);
-	return resolve_parts(ctx, variant.value);
-}
-
-interface ResolvedSelector {
-	value: string | null;
-	default: string;
-}
-
-export function resolve_variant(
-	ctx: Context,
-	variants: Array<Variant>,
-	selectors: Array<Selector>
-): Variant {
-	let resolved_selectors: Array<ResolvedSelector> = [];
-	for (let selector of selectors) {
-		resolved_selectors.push(resolve_selector(ctx, selector));
+	formatPhrase(phrase: Phrase): string {
+		let variant = this.selectVariant(phrase.variants, phrase.selectors);
+		return this.formatPattern(variant.value);
 	}
 
-	function matches_corresponding_selector(key: StringLiteral, idx: number) {
-		return (
-			key.value === resolved_selectors[idx].value ||
-			key.value === resolved_selectors[idx].default
-		);
-	}
-
-	for (let variant of variants) {
-		if (variant.keys.every(matches_corresponding_selector)) {
-			return variant;
+	formatPattern(parts: Array<Part>): string {
+		if (this.visited.has(parts)) {
+			throw new RangeError("Recursive reference to a variant value.");
 		}
-	}
 
-	throw new RangeError("No variant matched the selectors.");
-}
+		this.visited.add(parts);
 
-function resolve_selector(ctx: Context, selector: Selector): ResolvedSelector {
-	if (selector.expr === null) {
-		// A special selector which only selects its default value. Used in the
-		// data model of single-variant messages.
-		return {value: null, default: selector.default.value};
-	}
-
-	switch (selector.expr.type) {
-		case "VariableReference": {
-			// TODO(stasm): Should selection logic format the selector?
-			let value = format_var(ctx, selector.expr);
-			return {value, default: selector.default.value};
+		let result = "";
+		for (let part of parts) {
+			switch (part.type) {
+				case "StringLiteral":
+					result += part.value;
+					continue;
+				case "VariableReference":
+					result += format_var(this, part);
+					continue;
+				case "FunctionCall":
+					result += call_func(this, part);
+					continue;
+			}
 		}
-		case "FunctionCall": {
-			let value = call_func(ctx, selector.expr);
-			return {value, default: selector.default.value};
+
+		this.visited.delete(parts);
+		return result;
+	}
+
+	selectVariant(variants: Array<Variant>, selectors: Array<Selector>): Variant {
+		interface ResolvedSelector {
+			value: string | null;
+			default: string;
 		}
-		default:
-			// TODO(stasm): Should we allow Literals as selectors?
-			throw new TypeError();
+
+		let resolved_selectors: Array<ResolvedSelector> = [];
+		for (let selector of selectors) {
+			if (selector.expr === null) {
+				// A special selector which only selects its default value. Used in the
+				// data model of single-variant messages.
+				resolved_selectors.push({value: null, default: selector.default.value});
+				continue;
+			}
+
+			switch (selector.expr.type) {
+				case "VariableReference": {
+					// TODO(stasm): Should selection logic format the selector?
+					let value = format_var(this, selector.expr);
+					resolved_selectors.push({value, default: selector.default.value});
+					break;
+				}
+				case "FunctionCall": {
+					let value = call_func(this, selector.expr);
+					resolved_selectors.push({value, default: selector.default.value});
+					break;
+				}
+				default:
+					// TODO(stasm): Should we allow Literals as selectors?
+					throw new TypeError();
+			}
+		}
+
+		function matches_corresponding_selector(key: StringLiteral, idx: number) {
+			return (
+				key.value === resolved_selectors[idx].value ||
+				key.value === resolved_selectors[idx].default
+			);
+		}
+
+		for (let variant of variants) {
+			if (variant.keys.every(matches_corresponding_selector)) {
+				return variant;
+			}
+		}
+
+		throw new RangeError("No variant matched the selectors.");
 	}
-}
 
-export function resolve_parts(ctx: Context, parts: Array<Part>): string {
-	if (ctx.visited.has(parts)) {
-		throw new RangeError("Recursive reference to a variant value.");
-	}
+	resolveValue(node: Parameter): RuntimeValue<unknown> {
+		if (typeof node === "undefined") {
+			return new BooleanValue(false);
+		}
 
-	ctx.visited.add(parts);
-
-	let result = "";
-	for (let part of parts) {
-		switch (part.type) {
+		switch (node.type) {
 			case "StringLiteral":
-				result += part.value;
-				continue;
+				return new StringValue(node.value);
+			case "NumberLiteral":
+				return new NumberValue(parseFloat(node.value));
+			case "BooleanLiteral":
+				return new BooleanValue(node.value);
 			case "VariableReference":
-				result += format_var(ctx, part);
-				continue;
-			case "FunctionCall":
-				result += call_func(ctx, part);
-				continue;
+				return this.vars[node.name];
+			default:
+				throw new TypeError("Invalid node type.");
 		}
 	}
-
-	ctx.visited.delete(parts);
-	return result;
 }
 
 function call_func(ctx: Context, func: FunctionCall): string {
@@ -155,23 +170,4 @@ function call_func(ctx: Context, func: FunctionCall): string {
 function format_var(ctx: Context, variable: VariableReference): string {
 	let value = ctx.vars[variable.name];
 	return value.format(ctx);
-}
-
-export function resolve_value(ctx: Context, node: Parameter): RuntimeValue<unknown> {
-	if (typeof node === "undefined") {
-		return new BooleanValue(false);
-	}
-
-	switch (node.type) {
-		case "StringLiteral":
-			return new StringValue(node.value);
-		case "NumberLiteral":
-			return new NumberValue(parseFloat(node.value));
-		case "BooleanLiteral":
-			return new BooleanValue(node.value);
-		case "VariableReference":
-			return ctx.vars[node.name];
-		default:
-			throw new TypeError("Invalid node type.");
-	}
 }

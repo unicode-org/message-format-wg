@@ -1,4 +1,4 @@
-import {Context, resolve_value, RuntimeValue, StringValue} from "../messageformat2/runtime.js";
+import {Context, RuntimeValue, StringValue} from "../messageformat2/runtime.js";
 import {format_message} from "../messageformat2/index.js";
 import {Argument, Message, Parameter} from "../messageformat2/model.js";
 import {REGISTRY} from "../messageformat2/registry.js";
@@ -15,7 +15,7 @@ REGISTRY["PLURAL_LEN"] = function (
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
-	let elements = resolve_value(ctx, args[0]);
+	let elements = ctx.resolveValue(args[0]);
 	if (!(elements instanceof ArrayValue)) {
 		throw new TypeError();
 	}
@@ -29,12 +29,12 @@ REGISTRY["LIST"] = function (
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
 ): string {
-	let elements = resolve_value(ctx, args[0]);
+	let elements = ctx.resolveValue(args[0]);
 	if (!(elements instanceof ArrayValue)) {
 		throw new TypeError();
 	}
 
-	let declension = resolve_value(ctx, opts["CASE"]);
+	let declension = ctx.resolveValue(opts["CASE"]);
 	if (!(declension instanceof StringValue)) {
 		throw new TypeError();
 	}

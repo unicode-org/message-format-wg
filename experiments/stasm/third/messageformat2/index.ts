@@ -1,4 +1,4 @@
-import {RuntimeValue, Context, resolve_variant, resolve_parts} from "./runtime.js";
+import {RuntimeValue, Context} from "./runtime.js";
 import {Message} from "./model.js";
 
 export function format_message(
@@ -7,6 +7,6 @@ export function format_message(
 	vars: Record<string, RuntimeValue<unknown>>
 ): string {
 	let ctx = new Context(locale, message, vars);
-	let variant = resolve_variant(ctx, message.variants, message.selectors);
-	return resolve_parts(ctx, variant.value);
+	let variant = ctx.selectVariant(message.variants, message.selectors);
+	return ctx.formatPattern(variant.value);
 }
