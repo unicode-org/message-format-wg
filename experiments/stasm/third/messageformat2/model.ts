@@ -1,5 +1,4 @@
 export interface Message {
-	type: "Message";
 	id: string;
 	selectors: Array<Selector>;
 	variants: Array<Variant>;
@@ -7,7 +6,6 @@ export interface Message {
 }
 
 export interface Phrase {
-	type: "Phrase";
 	selectors: Array<Selector>;
 	variants: Array<Variant>;
 }

@@ -1,22 +1,12 @@
-import {
-	FunctionCall,
-	Message,
-	Parameter,
-	Part,
-	Phrase,
-	Selector,
-	StringLiteral,
-	VariableReference,
-	Variant,
-} from "./model.js";
+import {Message, Parameter, Part, Phrase, Selector, StringLiteral, Variant} from "./model.js";
 import {REGISTRY} from "./registry.js";
 
 // A value passed in as a variable to format() or to which literals are resolved
-// at runtime. There are 3 built-in runtime value types in this JavaScript
-// implementation: StringValue, NumberValue, BooleanValue. Other implementations
-// may introduce additional types, e.g. Uint32Value. RuntimeValue can also be
-// inherited from in the userspace code to create new variable types; see
-// example_list's ArrayValue type.
+// at runtime. There are 4 built-in runtime value types in this implementation:
+// StringValue, NumberValue, PluralValue, and BooleanValue. Other
+// implementations may introduce additional types, e.g. Uint32Value.
+// RuntimeValue can also be inherited from in the userspace code to create new
+// variable types; see example_list's ArrayValue type.
 export abstract class RuntimeValue<T> {
 	public value: T;
 
@@ -38,6 +28,15 @@ export class NumberValue extends RuntimeValue<number> {
 		// TODO(stasm): Cache NumberFormat.
 		// TODO(stasm): Pass options.
 		return new Intl.NumberFormat(ctx.locale).format(this.value);
+	}
+}
+
+export class PluralValue extends RuntimeValue<number> {
+	format(ctx: FormattingContext): string {
+		// TODO(stasm): Cache PluralRules.
+		// TODO(stasm): Pass options.
+		let pr = new Intl.PluralRules(ctx.locale);
+		return pr.select(this.value);
 	}
 }
 
@@ -73,19 +72,23 @@ export class FormattingContext {
 		}
 
 		this.visited.add(parts);
-
 		let result = "";
 		for (let part of parts) {
 			switch (part.type) {
 				case "StringLiteral":
 					result += part.value;
 					continue;
-				case "VariableReference":
-					result += format_var(this, part);
+				case "VariableReference": {
+					let value = this.vars[part.name];
+					result += value.format(this);
 					continue;
-				case "FunctionCall":
-					result += call_func(this, part);
+				}
+				case "FunctionCall": {
+					let callable = REGISTRY[part.name];
+					let value = callable(this, part.args, part.opts);
+					result += value.format(this);
 					continue;
+				}
 			}
 		}
 
@@ -94,30 +97,43 @@ export class FormattingContext {
 	}
 
 	selectVariant(variants: Array<Variant>, selectors: Array<Selector>): Variant {
-		interface ResolvedSelector {
-			value: string | null;
+		interface ResolvedSelector<T> {
+			value: T | null;
+			string: string | null;
 			default: string;
 		}
 
-		let resolved_selectors: Array<ResolvedSelector> = [];
+		let resolved_selectors: Array<ResolvedSelector<unknown>> = [];
 		for (let selector of selectors) {
 			if (selector.expr === null) {
 				// A special selector which only selects its default value. Used in the
 				// data model of single-variant messages.
-				resolved_selectors.push({value: null, default: selector.default.value});
+				resolved_selectors.push({
+					value: null,
+					string: null,
+					default: selector.default.value,
+				});
 				continue;
 			}
 
 			switch (selector.expr.type) {
 				case "VariableReference": {
-					// TODO(stasm): Should selection logic format the selector?
-					let value = format_var(this, selector.expr);
-					resolved_selectors.push({value, default: selector.default.value});
+					let value = this.vars[selector.expr.name];
+					resolved_selectors.push({
+						value: value.value,
+						string: value.format(this),
+						default: selector.default.value,
+					});
 					break;
 				}
 				case "FunctionCall": {
-					let value = call_func(this, selector.expr);
-					resolved_selectors.push({value, default: selector.default.value});
+					let callable = REGISTRY[selector.expr.name];
+					let value = callable(this, selector.expr.args, selector.expr.opts);
+					resolved_selectors.push({
+						value: value.value,
+						string: value.format(this),
+						default: selector.default.value,
+					});
 					break;
 				}
 				default:
@@ -126,9 +142,10 @@ export class FormattingContext {
 			}
 		}
 
+		// TODO(stasm): Add NumberLiterals as keys (maybe).
 		function matches_corresponding_selector(key: StringLiteral, idx: number) {
 			return (
-				key.value === resolved_selectors[idx].value ||
+				key.value === resolved_selectors[idx].string ||
 				key.value === resolved_selectors[idx].default
 			);
 		}
@@ -160,16 +177,6 @@ export class FormattingContext {
 				throw new TypeError("Invalid node type.");
 		}
 	}
-}
-
-function call_func(ctx: FormattingContext, func: FunctionCall): string {
-	let callable = REGISTRY[func.name];
-	return callable(ctx, func.args, func.opts);
-}
-
-function format_var(ctx: FormattingContext, variable: VariableReference): string {
-	let value = ctx.vars[variable.name];
-	return value.format(ctx);
 }
 
 export function formatMessage(

@@ -5,11 +5,9 @@ console.log("==== English ====");
 
 {
 	let message: Message = {
-		type: "Message",
 		id: "phrases",
 		phrases: {
 			"added-photo": {
-				type: "Phrase",
 				selectors: [
 					{
 						expr: {
@@ -37,7 +35,6 @@ console.log("==== English ====");
 				],
 			},
 			"their-album": {
-				type: "Phrase",
 				selectors: [
 					{
 						expr: {type: "VariableReference", name: "userGender"},
@@ -98,7 +95,6 @@ console.log("==== polski ====");
 
 {
 	let message: Message = {
-		type: "Message",
 		id: "phrases",
 		phrases: {},
 		selectors: [

@@ -1,40 +1,36 @@
 import {Argument, Parameter} from "./model.js";
-import {FormattingContext, NumberValue, StringValue} from "./runtime.js";
+import {FormattingContext, NumberValue, PluralValue, RuntimeValue, StringValue} from "./runtime.js";
 
-export type RegistryFunc = (
+export type RegistryFunc<T> = (
 	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
-) => string;
+) => RuntimeValue<T>;
 
-export const REGISTRY: Record<string, RegistryFunc> = {
+// The built-in functions.
+export const REGISTRY: Record<string, RegistryFunc<unknown>> = {
 	PLURAL: get_plural,
 	PHRASE: get_phrase,
 };
-
-// Built-in functions.
 
 function get_plural(
 	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
-): string {
+): PluralValue {
 	let count = ctx.toRuntimeValue(args[0]);
 	if (!(count instanceof NumberValue)) {
 		throw new TypeError();
 	}
 
-	// TODO(stasm): Cache PluralRules.
-	// TODO(stasm): Pass options.
-	let pr = new Intl.PluralRules(ctx.locale);
-	return pr.select(count.value);
+	return new PluralValue(count.value);
 }
 
 function get_phrase(
 	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
-): string {
+): StringValue {
 	let phrase_name = ctx.toRuntimeValue(args[0]);
 	if (!(phrase_name instanceof StringValue)) {
 		throw new TypeError();
@@ -42,5 +38,5 @@ function get_phrase(
 
 	let phrase = ctx.message.phrases[phrase_name.value];
 	let variant = ctx.selectVariant(phrase.variants, phrase.selectors);
-	return ctx.formatPattern(variant.value);
+	return new StringValue(ctx.formatPattern(variant.value));
 }

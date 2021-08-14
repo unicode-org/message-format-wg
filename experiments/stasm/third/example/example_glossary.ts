@@ -7,7 +7,7 @@ REGISTRY["NOUN"] = function get_noun(
 	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
-): string {
+): StringValue {
 	let noun_name = ctx.toRuntimeValue(args[0]);
 	if (!(noun_name instanceof StringValue)) {
 		throw new TypeError();
@@ -18,17 +18,17 @@ REGISTRY["NOUN"] = function get_noun(
 
 	let capitalized = ctx.toRuntimeValue(opts["CAPITALIZED"]);
 	if (capitalized.value) {
-		return value[0].toUpperCase() + value.slice(1);
+		return new StringValue(value[0].toUpperCase() + value.slice(1));
 	}
 
-	return value;
+	return new StringValue(value);
 };
 
 REGISTRY["ADJECTIVE"] = function get_adjective(
 	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
-): string {
+): StringValue {
 	let adj_name = ctx.toRuntimeValue(args[0]);
 	if (!(adj_name instanceof StringValue)) {
 		throw new TypeError();
@@ -37,7 +37,7 @@ REGISTRY["ADJECTIVE"] = function get_adjective(
 	switch (ctx.locale) {
 		case "en": {
 			let adjective = get_term(ctx.locale, adj_name.value);
-			return adjective["nominative"].toString();
+			return new StringValue(adjective["nominative"].toString());
 		}
 		case "pl": {
 			let noun_name = ctx.toRuntimeValue(opts["ACCORD_WITH"]);
@@ -47,10 +47,10 @@ REGISTRY["ADJECTIVE"] = function get_adjective(
 
 			let noun = get_term(ctx.locale, noun_name.value);
 			let adjective = get_term(ctx.locale, adj_name.value);
-			return adjective["singular_" + noun["gender"]].toString();
+			return new StringValue(adjective["singular_" + noun["gender"]].toString());
 		}
 		default:
-			return adj_name.toString();
+			return new StringValue(adj_name.toString());
 	}
 };
 
@@ -58,7 +58,7 @@ REGISTRY["ACTOR"] = function get_noun(
 	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
-): string {
+): StringValue {
 	let name = ctx.toRuntimeValue(args[0]);
 	if (!(name instanceof StringValue)) {
 		throw new TypeError();
@@ -78,10 +78,10 @@ REGISTRY["ACTOR"] = function get_noun(
 			}
 
 			if (ctx.toRuntimeValue(opts["CAPITALIZED"]).value) {
-				return value[0].toUpperCase() + value.slice(1);
+				return new StringValue(value[0].toUpperCase() + value.slice(1));
 			}
 
-			return value;
+			return new StringValue(value);
 		}
 		case "pl": {
 			let declension = ctx.toRuntimeValue(opts["CASE"]);
@@ -93,13 +93,13 @@ REGISTRY["ACTOR"] = function get_noun(
 
 			let capitalized = ctx.toRuntimeValue(opts["CAPITALIZED"]);
 			if (capitalized.value) {
-				return value[0].toUpperCase() + value.slice(1);
+				return new StringValue(value[0].toUpperCase() + value.slice(1));
 			}
 
-			return value;
+			return new StringValue(value);
 		}
 		default:
-			return name.value;
+			return new StringValue(name.value);
 	}
 };
 
@@ -107,7 +107,6 @@ console.log("==== English ====");
 
 {
 	let message: Message = {
-		type: "Message",
 		id: "accord",
 		phrases: {},
 		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
@@ -146,7 +145,6 @@ console.log("==== English ====");
 
 {
 	let message: Message = {
-		type: "Message",
 		id: "you-see",
 		phrases: {},
 		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
@@ -177,7 +175,6 @@ console.log("==== English ====");
 
 {
 	let message: Message = {
-		type: "Message",
 		id: "they-wave",
 		phrases: {},
 		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
@@ -210,7 +207,6 @@ console.log("==== polski ====");
 
 {
 	let message: Message = {
-		type: "Message",
 		id: "accord",
 		phrases: {},
 		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
@@ -250,7 +246,6 @@ console.log("==== polski ====");
 
 {
 	let message: Message = {
-		type: "Message",
 		id: "you-see",
 		phrases: {},
 		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
@@ -281,7 +276,6 @@ console.log("==== polski ====");
 
 {
 	let message: Message = {
-		type: "Message",
 		id: "they-wave",
 		phrases: {},
 		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
