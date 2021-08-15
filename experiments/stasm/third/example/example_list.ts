@@ -1,12 +1,12 @@
-import {Argument, Message, Parameter} from "../messageformat2/model.js";
-import {REGISTRY} from "../messageformat2/registry.js";
+import {Argument, Message, Parameter} from "../impl/model.js";
+import {REGISTRY} from "../impl/registry.js";
 import {
 	formatMessage,
 	FormattingContext,
 	PluralValue,
 	RuntimeValue,
 	StringValue,
-} from "../messageformat2/runtime.js";
+} from "../impl/runtime.js";
 
 class Person {
 	firstName: string;

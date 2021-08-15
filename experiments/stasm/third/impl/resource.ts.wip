@@ -1,0 +1,157 @@
+import {Message, Phrase, Selector, Variant, Func, Pattern} from "./model.js";
+
+const RE_MESSAGE_SINGLE = /^ *([a-zA-Z][\w-]*) *= */y;
+const RE_MESSAGE_MULTI = /^ *([a-zA-Z][\w-]*) *\[(.*)\] *= */y;
+const RE_PHRASE_SINGLE = /^ *([a-zA-Z][\w-]*)\.([a-zA-Z][\w-]*) *= */y;
+const RE_PHRASE_MULTI = /^ *([a-zA-Z][\w-]*)\.([a-zA-Z][\w-]*) *\[(.*)\] *= */y;
+
+const RE_VARIANT_START = /\*?\[/y;
+const RE_FUNCTION_NAME = /^[A-Z][A-Z0-9_]*$/;
+const RE_ARGUMENT = /^[a-zA-Z][\w-]*$/;
+
+const RE_TEXT_RUN = /([^{}"]+)/y;
+
+// Common tokens.
+const TOKEN_BRACE_OPEN = /{\s*/y;
+const TOKEN_BRACE_CLOSE = /\s*}/y;
+const TOKEN_BRACKET_OPEN = /\[\s*/y;
+const TOKEN_BRACKET_CLOSE = /\s*] */y;
+const TOKEN_QUOTE_DOUBLE = /"/y;
+const TOKEN_COLON = /\s*:\s*/y;
+const TOKEN_COMMA = /\s*,?\s*/y;
+const TOKEN_BLANK = /\s+/y;
+
+const enum ParserState {
+	None,
+	Single,
+	Variant,
+}
+
+/**
+ * Fluent Resource is a structure storing parsed localization entries.
+ */
+export class FluentResource {
+	public messages: Map<string, Message> = new Map();
+	private state: ParserState = ParserState.None;
+
+	constructor(source: string) {
+		let cursor: number;
+		let lines = source.split(/\r?\n/);
+		for (let line of lines) {
+			cursor = 0;
+
+			if (test(RE_MESSAGE_SINGLE, line)) {
+				let message_id = match1(RE_MESSAGE_SINGLE, line);
+				this.state = ParserState.Single;
+				continue;
+			}
+			if (test(RE_MESSAGE_MULTI, line)) {
+				let [message_id, selectors] = match(RE_MESSAGE_MULTI, line);
+				// TODO: parse selectors
+				this.state = ParserState.Variant;
+				continue;
+			}
+			if (test(RE_PHRASE_SINGLE, line)) {
+				let [message_id, phrase_id] = match(RE_PHRASE_SINGLE, line);
+				this.state = ParserState.Single;
+				continue;
+			}
+			if (test(RE_PHRASE_MULTI, line)) {
+				let [message_id, phrase_id, selectors] = match(RE_PHRASE_MULTI, line);
+				// TODO: parse selectors
+				this.state = ParserState.Variant;
+				continue;
+			}
+
+			switch (this.state) {
+				case ParserState.Single: {
+					parsePattern(line);
+					continue;
+				}
+				case ParserState.Variant: {
+					parseVariant(line);
+					continue;
+				}
+			}
+		}
+
+		function test(re: RegExp, line: string): boolean {
+			re.lastIndex = cursor;
+			return re.test(source);
+		}
+
+		// Advance the cursor by the token if it matches.
+		function consumeToken(re: RegExp, line: string): boolean {
+			if (test(re, line)) {
+				cursor = re.lastIndex;
+				return true;
+			}
+			return false;
+		}
+
+		// Execute a regex, advance the cursor, and return all capture groups.
+		function match(re: RegExp, line: string): RegExpExecArray {
+			re.lastIndex = cursor;
+			let result = re.exec(line);
+			if (result === null) {
+				throw new SyntaxError(`Expected ${re.toString()}`);
+			}
+			cursor = re.lastIndex;
+			return result;
+		}
+
+		// Execute a regex, advance the cursor, and return the capture group.
+		function match1(re: RegExp, line: string): string {
+			return match(re, line)[1];
+		}
+
+		function parsePattern(line: string): Pattern {
+			consumeToken(TOKEN_BLANK, line);
+			consumeToken(TOKEN_QUOTE_DOUBLE, line);
+
+			let parts = [];
+			while (true) {
+				if (test(RE_TEXT_RUN, line)) {
+					parts.push(match1(RE_TEXT_RUN, line));
+					continue;
+				}
+
+				if (source[cursor] === "{") {
+					consumeToken(TOKEN_BRACE_OPEN, line);
+					parts.push(parseFunction(line));
+					consumeToken(TOKEN_BRACE_CLOSE, line);
+					continue;
+				}
+
+				if (source[cursor] === "}") {
+					throw new SyntaxError("Unbalanced closing brace");
+				}
+
+				break;
+			}
+
+			return parts;
+		}
+
+		function parseFunction(line: string): Func {
+			consumeToken(TOKEN_BLANK, line);
+			let name = match1(RE_FUNCTION_NAME, line);
+			let args = [];
+			while (true) {
+				consumeToken(TOKEN_BLANK, line);
+				if (test(RE_ARGUMENT, line)) {
+					args.push(match1(RE_ARGUMENT, line));
+					continue;
+				}
+
+				break;
+			}
+
+			return {
+				name,
+				args,
+				opts: {},
+			};
+		}
+	}
+}
