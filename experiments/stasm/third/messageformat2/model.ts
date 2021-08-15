@@ -1,4 +1,5 @@
 export interface Message {
+	lang: string;
 	id: string;
 	selectors: Array<Selector>;
 	variants: Array<Variant>;
@@ -47,6 +48,6 @@ export interface BooleanLiteral {
 	value: boolean;
 }
 
-export type Argument = StringLiteral | VariableReference;
-export type Parameter = StringLiteral | VariableReference | BooleanLiteral | NumberLiteral;
+export type Argument = VariableReference | StringLiteral;
+export type Parameter = VariableReference | StringLiteral | BooleanLiteral | NumberLiteral;
 export type Part = StringLiteral | VariableReference | FunctionCall;

@@ -5,6 +5,7 @@ console.log("==== English ====");
 
 {
 	let message: Message = {
+		lang: "en",
 		id: "phrases",
 		phrases: {
 			"added-photo": {
@@ -83,7 +84,7 @@ console.log("==== English ====");
 		],
 	};
 	console.log(
-		formatMessage("en", message, {
+		formatMessage(message, {
 			userName: new StringValue("Mary"),
 			userGender: new StringValue("feminine"),
 			photoCount: new NumberValue(34),
@@ -95,6 +96,7 @@ console.log("==== polski ====");
 
 {
 	let message: Message = {
+		lang: "pl",
 		id: "phrases",
 		phrases: {},
 		selectors: [
@@ -221,7 +223,7 @@ console.log("==== polski ====");
 		],
 	};
 	console.log(
-		formatMessage("pl", message, {
+		formatMessage(message, {
 			userName: new StringValue("Mary"),
 			userGender: new StringValue("feminine"),
 			photoCount: new NumberValue(34),

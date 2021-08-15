@@ -107,6 +107,7 @@ console.log("==== English ====");
 
 {
 	let message: Message = {
+		lang: "en",
 		id: "accord",
 		phrases: {},
 		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
@@ -136,7 +137,7 @@ console.log("==== English ====");
 		],
 	};
 	console.log(
-		formatMessage("en", message, {
+		formatMessage(message, {
 			item: new StringValue("t-shirt"),
 			color: new StringValue("red"),
 		})
@@ -145,6 +146,7 @@ console.log("==== English ====");
 
 {
 	let message: Message = {
+		lang: "en",
 		id: "you-see",
 		phrases: {},
 		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
@@ -167,7 +169,7 @@ console.log("==== English ====");
 		],
 	};
 	console.log(
-		formatMessage("en", message, {
+		formatMessage(message, {
 			monster: new StringValue("dinosaur"),
 		})
 	);
@@ -175,6 +177,7 @@ console.log("==== English ====");
 
 {
 	let message: Message = {
+		lang: "en",
 		id: "they-wave",
 		phrases: {},
 		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
@@ -197,7 +200,7 @@ console.log("==== English ====");
 		],
 	};
 	console.log(
-		formatMessage("en", message, {
+		formatMessage(message, {
 			monster: new StringValue("ogre"),
 		})
 	);
@@ -207,6 +210,7 @@ console.log("==== polski ====");
 
 {
 	let message: Message = {
+		lang: "pl",
 		id: "accord",
 		phrases: {},
 		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
@@ -237,7 +241,7 @@ console.log("==== polski ====");
 		],
 	};
 	console.log(
-		formatMessage("pl", message, {
+		formatMessage(message, {
 			item: new StringValue("t-shirt"),
 			color: new StringValue("red"),
 		})
@@ -246,6 +250,7 @@ console.log("==== polski ====");
 
 {
 	let message: Message = {
+		lang: "pl",
 		id: "you-see",
 		phrases: {},
 		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
@@ -268,7 +273,7 @@ console.log("==== polski ====");
 		],
 	};
 	console.log(
-		formatMessage("pl", message, {
+		formatMessage(message, {
 			monster: new StringValue("dinosaur"),
 		})
 	);
@@ -276,6 +281,7 @@ console.log("==== polski ====");
 
 {
 	let message: Message = {
+		lang: "pl",
 		id: "they-wave",
 		phrases: {},
 		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
@@ -299,7 +305,7 @@ console.log("==== polski ====");
 	};
 
 	console.log(
-		formatMessage("pl", message, {
+		formatMessage(message, {
 			monster: new StringValue("ogre"),
 		})
 	);

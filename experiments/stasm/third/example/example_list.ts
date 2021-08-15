@@ -111,6 +111,7 @@ console.log("==== Romanian ====");
 	//     [one] "I-am dat cadouri {PEOPLE_LIST $names STYLE long TYPE conjunction CASE dative NAME first}."
 	//     [other] "Le-am dat cadouri {PEOPLE_LIST $names STYLE long TYPE conjunction CASE dative NAME first}."
 	let message: Message = {
+		lang: "ro",
 		id: "gifts",
 		phrases: {},
 		selectors: [
@@ -164,7 +165,7 @@ console.log("==== Romanian ====");
 		],
 	};
 	console.log(
-		formatMessage("ro", message, {
+		formatMessage(message, {
 			names: new PeopleValue([
 				new Person("Maria", "Stanescu"),
 				new Person("Ileana", "Zamfir"),
@@ -179,6 +180,7 @@ console.log("==== Romanian ====");
 	//     [one] "I-am dat cadouri {PEOPLE_LIST $names STYLE long TYPE disjunction CASE dative NAME full}."
 	//     [other] "Le-am dat cadouri {PEOPLE_LIST $names STYLE long TYPE disjunction CASE dative NAME full}."
 	let message: Message = {
+		lang: "ro",
 		id: "gifts",
 		phrases: {},
 		selectors: [
@@ -232,7 +234,7 @@ console.log("==== Romanian ====");
 		],
 	};
 	console.log(
-		formatMessage("ro", message, {
+		formatMessage(message, {
 			names: new PeopleValue([
 				new Person("Maria", "Stanescu"),
 				new Person("Ileana", "Zamfir"),
