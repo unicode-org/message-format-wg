@@ -127,9 +127,7 @@ console.log("==== English ====");
 						type: "FunctionCall",
 						name: "ADJECTIVE",
 						args: [{type: "VariableReference", name: "color"}],
-						opts: {
-							ACCORD_WITH: {type: "VariableReference", name: "item"},
-						},
+						opts: {},
 					},
 					{type: "StringLiteral", value: "."},
 				],

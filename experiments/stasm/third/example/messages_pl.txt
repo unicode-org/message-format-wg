@@ -1,5 +1,5 @@
 accord-adjective-with-item =
-	"{NOUN $item CAPITALIZED} jest {ADJECTIVE $red ACCORD_WITH $item}."
+	"{NOUN $item CAPITALIZED} jest {ADJECTIVE $color ACCORD_WITH $item}."
 
 flat-variants [PLURAL $photoCount : other, $userGender : many] =
 	[one, masculine] "{$userName} dodał nowe zdjęcie do swojego albumu."
