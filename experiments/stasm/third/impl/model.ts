@@ -18,10 +18,10 @@ export interface Selector {
 
 export interface Variant {
 	keys: Array<StringLiteral>;
-	value: Array<Part>;
+	value: Array<PatternElement>;
 }
 
-export type Part = StringLiteral | VariableReference | FunctionCall;
+export type PatternElement = StringLiteral | VariableReference | FunctionCall;
 
 export interface FunctionCall {
 	type: "FunctionCall";

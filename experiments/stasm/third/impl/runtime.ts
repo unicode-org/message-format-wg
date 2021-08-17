@@ -1,4 +1,12 @@
-import {Message, Parameter, Part, Phrase, Selector, StringLiteral, Variant} from "./model.js";
+import {
+	Message,
+	Parameter,
+	PatternElement,
+	Phrase,
+	Selector,
+	StringLiteral,
+	Variant,
+} from "./model.js";
 import {REGISTRY} from "./registry.js";
 
 // A value passed in as a variable to format() or to which literals are resolved
@@ -51,7 +59,7 @@ export class FormattingContext {
 	locale: string;
 	message: Message;
 	vars: Record<string, RuntimeValue<unknown>>;
-	visited: WeakSet<Array<Part>>;
+	visited: WeakSet<Array<PatternElement>>;
 	// TODO(stasm): expose cached formatters, etc.
 
 	constructor(locale: string, message: Message, vars: Record<string, RuntimeValue<unknown>>) {
@@ -66,33 +74,33 @@ export class FormattingContext {
 		return this.formatPattern(variant.value);
 	}
 
-	formatPattern(parts: Array<Part>): string {
-		if (this.visited.has(parts)) {
+	formatPattern(pattern: Array<PatternElement>): string {
+		if (this.visited.has(pattern)) {
 			throw new RangeError("Recursive reference to a variant value.");
 		}
 
-		this.visited.add(parts);
+		this.visited.add(pattern);
 		let result = "";
-		for (let part of parts) {
-			switch (part.type) {
+		for (let element of pattern) {
+			switch (element.type) {
 				case "StringLiteral":
-					result += part.value;
+					result += element.value;
 					continue;
 				case "VariableReference": {
-					let value = this.vars[part.name];
+					let value = this.vars[element.name];
 					result += value.format(this);
 					continue;
 				}
 				case "FunctionCall": {
-					let callable = REGISTRY[part.name];
-					let value = callable(this, part.args, part.opts);
+					let callable = REGISTRY[element.name];
+					let value = callable(this, element.args, element.opts);
 					result += value.format(this);
 					continue;
 				}
 			}
 		}
 
-		this.visited.delete(parts);
+		this.visited.delete(pattern);
 		return result;
 	}
 
