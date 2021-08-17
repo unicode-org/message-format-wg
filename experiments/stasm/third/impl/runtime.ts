@@ -24,12 +24,12 @@ export abstract class RuntimeValue<T> {
 		this.value = value;
 	}
 
-	abstract format(ctx: FormattingContext): string;
+	abstract formatToString(ctx: FormattingContext): string;
 	abstract formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart | OpaquePart>;
 }
 
 export class StringValue extends RuntimeValue<string> {
-	format(ctx: FormattingContext): string {
+	formatToString(ctx: FormattingContext): string {
 		return this.value;
 	}
 
@@ -46,7 +46,7 @@ export class NumberValue extends RuntimeValue<number> {
 		this.opts = opts;
 	}
 
-	format(ctx: FormattingContext): string {
+	formatToString(ctx: FormattingContext): string {
 		// TODO(stasm): Cache NumberFormat.
 		return new Intl.NumberFormat(ctx.locale, this.opts).format(this.value);
 	}
@@ -64,7 +64,7 @@ export class PluralValue extends RuntimeValue<number> {
 		this.opts = opts;
 	}
 
-	format(ctx: FormattingContext): string {
+	formatToString(ctx: FormattingContext): string {
 		// TODO(stasm): Cache PluralRules.
 		let pr = new Intl.PluralRules(ctx.locale, this.opts);
 		return pr.select(this.value);
@@ -76,7 +76,7 @@ export class PluralValue extends RuntimeValue<number> {
 }
 
 export class BooleanValue extends RuntimeValue<boolean> {
-	format(ctx: FormattingContext): string {
+	formatToString(ctx: FormattingContext): string {
 		throw new TypeError("BooleanValue is not formattable.");
 	}
 
@@ -86,7 +86,7 @@ export class BooleanValue extends RuntimeValue<boolean> {
 }
 
 export class PatternValue extends RuntimeValue<Array<PatternElement>> {
-	format(ctx: FormattingContext): string {
+	formatToString(ctx: FormattingContext): string {
 		return ctx.formatPattern(this.value);
 	}
 
@@ -115,7 +115,7 @@ export class FormattingContext {
 	formatPattern(pattern: Array<PatternElement>): string {
 		let output = "";
 		for (let value of this.resolvePattern(pattern)) {
-			output += value.format(this);
+			output += value.formatToString(this);
 		}
 		return output;
 	}
@@ -173,7 +173,7 @@ export class FormattingContext {
 					let value = this.vars[selector.expr.name];
 					resolved_selectors.push({
 						value: value.value,
-						string: value.format(this),
+						string: value.formatToString(this),
 						default: selector.default.value,
 					});
 					break;
@@ -183,7 +183,7 @@ export class FormattingContext {
 					let value = callable(this, selector.expr.args, selector.expr.opts);
 					resolved_selectors.push({
 						value: value.value,
-						string: value.format(this),
+						string: value.formatToString(this),
 						default: selector.default.value,
 					});
 					break;

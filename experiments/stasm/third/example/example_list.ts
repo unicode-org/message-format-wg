@@ -29,7 +29,7 @@ class ListValue<T> extends RuntimeValue<Array<T>> {
 		this.opts = opts;
 	}
 
-	format(ctx: FormattingContext): string {
+	formatToString(ctx: FormattingContext): string {
 		// TODO(stasm): Cache ListFormat.
 		// @ts-ignore
 		let lf = new Intl.ListFormat(ctx.locale, this.opts);
