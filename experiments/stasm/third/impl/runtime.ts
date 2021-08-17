@@ -52,7 +52,7 @@ export class FormattingContext {
 	message: Message;
 	vars: Record<string, RuntimeValue<unknown>>;
 	visited: WeakSet<Array<Part>>;
-	// cached formatters,
+	// TODO(stasm): expose cached formatters, etc.
 
 	constructor(locale: string, message: Message, vars: Record<string, RuntimeValue<unknown>>) {
 		this.locale = locale;

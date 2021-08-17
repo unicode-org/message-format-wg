@@ -4,7 +4,7 @@
 
 The proposed data model is a compromise between the EM and the EZ model. In particular:
 
-- Refactor the data model of placeholders in the EM model and introduce explicit variable references — this brings it closer to the EZ and allows one-level-deep indirection via `FUNC($var)`.
+- Refactor the data model of placeholders in the EM model and introduce explicit variable references — this brings it closer to EZ and allows one-level-deep indirection via `FUNC($var)`.
 - Drop nested function calls from the EZ model — and recommend that the complexity should instead be handled by programmers inside custom functions' implementation.
 
 ## Model Differences
@@ -17,11 +17,14 @@ Limited by design. The longest structural path that a message may contain is: `M
 
 ### Message References
 
-No built-in support. Allows for the definition of a message reference resolver as a custom formatting function, which can be used to implement shared glossaries. For avoid the problem of variant explosion the data model introduces _phrases_ — sub-messages stored inside the message referencing them.
+No built-in support. However:
+
+- Glossaries of shared terms can be implemented through custom functions. See [`example_glossary.ts`](https://github.com/unicode-org/message-format-wg/blob/experiments/experiments/stasm/third/example/example_glossary.ts).
+- The problem of variant explosion is solved by introducing _phrases_ — sub-messages stored inside the message referencing them. See [`example_phrases.ts`](https://github.com/unicode-org/message-format-wg/blob/experiments/experiments/stasm/third/example/example_phrases.ts).
 
 ### Runtime Variable References
 
-Fully supported, first-class citizens of the data model. Can be used as placeholders (when they're interpolated into the suraorunding text) or as arguments and options in function calls.
+Fully supported, first-class citizens of the data model. Can be used as placeholders (when they're interpolated into the surrounding text) or as arguments and options in function calls.
 
 ### Formatting Function Dependencies
 
