@@ -20,7 +20,7 @@ class Person {
 	}
 }
 
-// TODO(stasm): Move this to impl/runtime.ts?
+// TODO(stasm): This is generic enough that it could be in impl/runtime.ts.
 class ListValue<T> extends RuntimeValue<Array<T>> {
 	private opts: Record<string, string>; // ListFormatOptions
 

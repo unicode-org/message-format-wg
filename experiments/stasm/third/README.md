@@ -73,6 +73,7 @@ Run each example individually:
     npm run example phrases
     npm run example list
     npm run example number
+    npm run example opaque
 
 ## References
 
