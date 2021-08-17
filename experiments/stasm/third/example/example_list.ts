@@ -2,6 +2,7 @@ import {Argument, Message, Parameter} from "../impl/model.js";
 import {REGISTRY} from "../impl/registry.js";
 import {
 	formatMessage,
+	FormattedPart,
 	FormattingContext,
 	PluralValue,
 	RuntimeValue,
@@ -20,7 +21,12 @@ class Person {
 
 class PeopleValue extends RuntimeValue<Array<Person>> {
 	format(ctx: FormattingContext): string {
-		throw new RangeError("Must be formatted via PEOPLE_LIST.");
+		// TODO(stasm): Implement this.
+		throw new Error("Not implemented yet.");
+	}
+	*formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart> {
+		// TODO(stasm): Implement this.
+		throw new Error("Not implemented yet.");
 	}
 }
 

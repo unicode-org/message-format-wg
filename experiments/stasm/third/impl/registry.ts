@@ -1,5 +1,12 @@
 import {Argument, Parameter} from "./model.js";
-import {FormattingContext, NumberValue, PluralValue, RuntimeValue, StringValue} from "./runtime.js";
+import {
+	FormattingContext,
+	NumberValue,
+	PatternValue,
+	PluralValue,
+	RuntimeValue,
+	StringValue,
+} from "./runtime.js";
 
 export type RegistryFunc<T> = (
 	ctx: FormattingContext,
@@ -31,7 +38,7 @@ function get_phrase(
 	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
-): StringValue {
+): PatternValue {
 	let phrase_name = ctx.toRuntimeValue(args[0]);
 	if (!(phrase_name instanceof StringValue)) {
 		throw new TypeError();
@@ -39,7 +46,7 @@ function get_phrase(
 
 	let phrase = ctx.message.phrases[phrase_name.value];
 	let variant = ctx.selectVariant(phrase.variants, phrase.selectors);
-	return new StringValue(ctx.formatPattern(variant.value));
+	return new PatternValue(variant.value);
 }
 
 function format_number(

@@ -1,5 +1,5 @@
 import {Message} from "../impl/model.js";
-import {formatMessage, NumberValue} from "../impl/runtime.js";
+import {formatMessage, formatToParts, NumberValue} from "../impl/runtime.js";
 
 console.log("==== English ====");
 
@@ -77,5 +77,12 @@ console.log("==== French ====");
 		formatMessage(message, {
 			payloadSize: new NumberValue(1.23),
 		})
+	);
+	console.log(
+		Array.of(
+			...formatToParts(message, {
+				payloadSize: new NumberValue(1.23),
+			})
+		)
 	);
 }
