@@ -32,18 +32,30 @@ export class StringValue extends RuntimeValue<string> {
 }
 
 export class NumberValue extends RuntimeValue<number> {
+	private opts: Intl.NumberFormatOptions;
+
+	constructor(value: number, opts: Intl.NumberFormatOptions = {}) {
+		super(value);
+		this.opts = opts;
+	}
+
 	format(ctx: FormattingContext): string {
 		// TODO(stasm): Cache NumberFormat.
-		// TODO(stasm): Pass options.
-		return new Intl.NumberFormat(ctx.locale).format(this.value);
+		return new Intl.NumberFormat(ctx.locale, this.opts).format(this.value);
 	}
 }
 
 export class PluralValue extends RuntimeValue<number> {
+	private opts: Intl.PluralRulesOptions;
+
+	constructor(value: number, opts: Intl.PluralRulesOptions = {}) {
+		super(value);
+		this.opts = opts;
+	}
+
 	format(ctx: FormattingContext): string {
 		// TODO(stasm): Cache PluralRules.
-		// TODO(stasm): Pass options.
-		let pr = new Intl.PluralRules(ctx.locale);
+		let pr = new Intl.PluralRules(ctx.locale, this.opts);
 		return pr.select(this.value);
 	}
 }
