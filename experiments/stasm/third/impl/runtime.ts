@@ -167,7 +167,9 @@ export class FormattingContext {
 		switch (node.type) {
 			case "StringLiteral":
 				return new StringValue(node.value);
-			case "NumberLiteral":
+			case "IntegerLiteral":
+				return new NumberValue(parseInt(node.value));
+			case "DecimalLiteral":
 				return new NumberValue(parseFloat(node.value));
 			case "BooleanLiteral":
 				return new BooleanValue(node.value);

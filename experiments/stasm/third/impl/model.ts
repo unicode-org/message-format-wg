@@ -21,6 +21,8 @@ export interface Variant {
 	value: Array<Part>;
 }
 
+export type Part = StringLiteral | VariableReference | FunctionCall;
+
 export interface FunctionCall {
 	type: "FunctionCall";
 	name: string;
@@ -38,8 +40,13 @@ export interface StringLiteral {
 	value: string;
 }
 
-export interface NumberLiteral {
-	type: "NumberLiteral";
+export interface IntegerLiteral {
+	type: "IntegerLiteral";
+	value: string;
+}
+
+export interface DecimalLiteral {
+	type: "DecimalLiteral";
 	value: string;
 }
 
@@ -49,5 +56,9 @@ export interface BooleanLiteral {
 }
 
 export type Argument = VariableReference | StringLiteral;
-export type Parameter = VariableReference | StringLiteral | BooleanLiteral | NumberLiteral;
-export type Part = StringLiteral | VariableReference | FunctionCall;
+export type Parameter =
+	| VariableReference
+	| StringLiteral
+	| BooleanLiteral
+	| IntegerLiteral
+	| DecimalLiteral;
