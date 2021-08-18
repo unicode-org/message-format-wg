@@ -22,22 +22,20 @@ class Person {
 
 // TODO(stasm): This is generic enough that it could be in impl/runtime.ts.
 class ListValue<T> extends RuntimeValue<Array<T>> {
-	private opts: Record<string, string>; // ListFormatOptions
+	private opts: Intl.ListFormatOptions;
 
-	constructor(value: Array<T>, opts: Record<string, string> = {}) {
+	constructor(value: Array<T>, opts: Intl.ListFormatOptions = {}) {
 		super(value);
 		this.opts = opts;
 	}
 
 	formatToString(ctx: FormattingContext): string {
 		// TODO(stasm): Cache ListFormat.
-		// @ts-ignore
 		let lf = new Intl.ListFormat(ctx.locale, this.opts);
 		return lf.format(this.value);
 	}
 
 	*formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart> {
-		// @ts-ignore
 		let lf = new Intl.ListFormat(ctx.locale, this.opts);
 		yield* lf.formatToParts(this.value);
 	}
