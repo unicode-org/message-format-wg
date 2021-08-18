@@ -1,9 +1,9 @@
+import {FormattingContext} from "../impl/context.js";
 import {Argument, Message, Parameter} from "../impl/model.js";
 import {REGISTRY} from "../impl/registry.js";
 import {
 	formatMessage,
 	FormattedPart,
-	FormattingContext,
 	formatToParts,
 	PluralValue,
 	RuntimeValue,

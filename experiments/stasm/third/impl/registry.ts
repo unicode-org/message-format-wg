@@ -1,12 +1,6 @@
+import {FormattingContext} from "./context.js";
 import {Argument, Parameter} from "./model.js";
-import {
-	FormattingContext,
-	NumberValue,
-	PatternValue,
-	PluralValue,
-	RuntimeValue,
-	StringValue,
-} from "./runtime.js";
+import {NumberValue, PatternValue, PluralValue, RuntimeValue, StringValue} from "./runtime.js";
 
 export type RegistryFunc<T> = (
 	ctx: FormattingContext,

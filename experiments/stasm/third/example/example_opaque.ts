@@ -1,5 +1,6 @@
+import {FormattingContext} from "../impl/context.js";
 import {Message} from "../impl/model.js";
-import {FormattingContext, formatToParts, OpaquePart, RuntimeValue} from "../impl/runtime.js";
+import {formatToParts, OpaquePart, RuntimeValue} from "../impl/runtime.js";
 
 // We want to pass it into the translation and get it back out unformatted, in
 // the correct position in the sentence, via formatToParts.
