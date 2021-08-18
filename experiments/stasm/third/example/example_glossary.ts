@@ -1,6 +1,6 @@
 import {Argument, Message, Parameter} from "../impl/model.js";
 import {REGISTRY} from "../impl/registry.js";
-import {formatMessage, FormattingContext, StringValue} from "../impl/runtime.js";
+import {formatMessage, FormattingContext, formatToParts, StringValue} from "../impl/runtime.js";
 import {get_term} from "./glossary.js";
 
 REGISTRY["NOUN"] = function get_noun(
@@ -139,6 +139,15 @@ console.log("==== English ====");
 			item: new StringValue("t-shirt"),
 			color: new StringValue("red"),
 		})
+	);
+
+	console.log(
+		Array.of(
+			...formatToParts(message, {
+				item: new StringValue("t-shirt"),
+				color: new StringValue("red"),
+			})
+		)
 	);
 }
 

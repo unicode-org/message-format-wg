@@ -2,7 +2,9 @@ import {Argument, Message, Parameter} from "../impl/model.js";
 import {REGISTRY} from "../impl/registry.js";
 import {
 	formatMessage,
+	FormattedPart,
 	FormattingContext,
+	formatToParts,
 	PluralValue,
 	RuntimeValue,
 	StringValue,
@@ -18,9 +20,24 @@ class Person {
 	}
 }
 
-class PeopleValue extends RuntimeValue<Array<Person>> {
-	format(ctx: FormattingContext): string {
-		throw new RangeError("Must be formatted via PEOPLE_LIST.");
+// TODO(stasm): This is generic enough that it could be in impl/runtime.ts.
+class ListValue<T> extends RuntimeValue<Array<T>> {
+	private opts: Intl.ListFormatOptions;
+
+	constructor(value: Array<T>, opts: Intl.ListFormatOptions = {}) {
+		super(value);
+		this.opts = opts;
+	}
+
+	formatToString(ctx: FormattingContext): string {
+		// TODO(stasm): Cache ListFormat.
+		let lf = new Intl.ListFormat(ctx.locale, this.opts);
+		return lf.format(this.value);
+	}
+
+	*formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart> {
+		let lf = new Intl.ListFormat(ctx.locale, this.opts);
+		yield* lf.formatToParts(this.value);
 	}
 }
 
@@ -30,7 +47,7 @@ REGISTRY["PLURAL_LEN"] = function (
 	opts: Record<string, Parameter>
 ): PluralValue {
 	let elements = ctx.toRuntimeValue(args[0]);
-	if (!(elements instanceof PeopleValue)) {
+	if (!(elements instanceof ListValue)) {
 		throw new TypeError();
 	}
 
@@ -41,13 +58,13 @@ REGISTRY["PEOPLE_LIST"] = function (
 	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
-): StringValue {
+): ListValue<string> {
 	if (ctx.locale !== "ro") {
 		throw new Error("Only Romanian supported");
 	}
 
 	let elements = ctx.toRuntimeValue(args[0]);
-	if (!(elements instanceof PeopleValue)) {
+	if (!(elements instanceof ListValue)) {
 		throw new TypeError();
 	}
 
@@ -70,14 +87,21 @@ REGISTRY["PEOPLE_LIST"] = function (
 			break;
 	}
 
-	// @ts-ignore
-	let lf = new Intl.ListFormat(ctx.locale, {
-		// TODO(stasm): Type-check these.
+	let list_style = ctx.toRuntimeValue(opts["STYLE"]);
+	if (!(list_style instanceof StringValue)) {
+		throw new TypeError();
+	}
+
+	let list_type = ctx.toRuntimeValue(opts["TYPE"]);
+	if (!(list_type instanceof StringValue)) {
+		throw new TypeError();
+	}
+
+	return new ListValue(names, {
 		// TODO(stasm): Add default options.
-		style: ctx.toRuntimeValue(opts["STYLE"]).value,
-		type: ctx.toRuntimeValue(opts["TYPE"]).value,
+		style: list_style.value,
+		type: list_type.value,
 	});
-	return new StringValue(lf.format(names));
 
 	function decline(name: string): string {
 		let declension = ctx.toRuntimeValue(opts["CASE"]);
@@ -166,12 +190,23 @@ console.log("==== Romanian ====");
 	};
 	console.log(
 		formatMessage(message, {
-			names: new PeopleValue([
+			names: new ListValue([
 				new Person("Maria", "Stanescu"),
 				new Person("Ileana", "Zamfir"),
 				new Person("Petre", "Belu"),
 			]),
 		})
+	);
+	console.log(
+		Array.of(
+			...formatToParts(message, {
+				names: new ListValue([
+					new Person("Maria", "Stanescu"),
+					new Person("Ileana", "Zamfir"),
+					new Person("Petre", "Belu"),
+				]),
+			})
+		)
 	);
 }
 
@@ -235,7 +270,7 @@ console.log("==== Romanian ====");
 	};
 	console.log(
 		formatMessage(message, {
-			names: new PeopleValue([
+			names: new ListValue([
 				new Person("Maria", "Stanescu"),
 				new Person("Ileana", "Zamfir"),
 				new Person("Petre", "Belu"),

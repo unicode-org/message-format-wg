@@ -1,13 +1,15 @@
-import {
-	Message,
-	Parameter,
-	PatternElement,
-	Phrase,
-	Selector,
-	StringLiteral,
-	Variant,
-} from "./model.js";
+import {Message, Parameter, PatternElement, Selector, StringLiteral, Variant} from "./model.js";
 import {REGISTRY} from "./registry.js";
+
+export interface FormattedPart {
+	type: string;
+	value: string;
+}
+
+export interface OpaquePart {
+	type: "opaque";
+	value: unknown;
+}
 
 // A value passed in as a variable to format() or to which literals are resolved
 // at runtime. There are 4 built-in runtime value types in this implementation:
@@ -22,12 +24,17 @@ export abstract class RuntimeValue<T> {
 		this.value = value;
 	}
 
-	abstract format(ctx: FormattingContext): string;
+	abstract formatToString(ctx: FormattingContext): string;
+	abstract formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart | OpaquePart>;
 }
 
 export class StringValue extends RuntimeValue<string> {
-	format(ctx: FormattingContext): string {
+	formatToString(ctx: FormattingContext): string {
 		return this.value;
+	}
+
+	*formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart> {
+		yield {type: "literal", value: this.value};
 	}
 }
 
@@ -39,9 +46,13 @@ export class NumberValue extends RuntimeValue<number> {
 		this.opts = opts;
 	}
 
-	format(ctx: FormattingContext): string {
+	formatToString(ctx: FormattingContext): string {
 		// TODO(stasm): Cache NumberFormat.
 		return new Intl.NumberFormat(ctx.locale, this.opts).format(this.value);
+	}
+
+	*formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart> {
+		yield* new Intl.NumberFormat(ctx.locale, this.opts).formatToParts(this.value);
 	}
 }
 
@@ -53,16 +64,36 @@ export class PluralValue extends RuntimeValue<number> {
 		this.opts = opts;
 	}
 
-	format(ctx: FormattingContext): string {
+	formatToString(ctx: FormattingContext): string {
 		// TODO(stasm): Cache PluralRules.
 		let pr = new Intl.PluralRules(ctx.locale, this.opts);
 		return pr.select(this.value);
 	}
+
+	*formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart> {
+		throw new TypeError("Pluralvalue is not formattable to parts.");
+	}
 }
 
 export class BooleanValue extends RuntimeValue<boolean> {
-	format(ctx: FormattingContext): string {
+	formatToString(ctx: FormattingContext): string {
 		throw new TypeError("BooleanValue is not formattable.");
+	}
+
+	*formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart> {
+		throw new TypeError("BooleanValue is not formattable to parts.");
+	}
+}
+
+export class PatternValue extends RuntimeValue<Array<PatternElement>> {
+	formatToString(ctx: FormattingContext): string {
+		return ctx.formatPattern(this.value);
+	}
+
+	*formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart | OpaquePart> {
+		for (let value of ctx.resolvePattern(this.value)) {
+			yield* value.formatToParts(ctx);
+		}
 	}
 }
 
@@ -81,12 +112,15 @@ export class FormattingContext {
 		this.visited = new WeakSet();
 	}
 
-	formatPhrase(phrase: Phrase): string {
-		let variant = this.selectVariant(phrase.variants, phrase.selectors);
-		return this.formatPattern(variant.value);
+	formatPattern(pattern: Array<PatternElement>): string {
+		let output = "";
+		for (let value of this.resolvePattern(pattern)) {
+			output += value.formatToString(this);
+		}
+		return output;
 	}
 
-	formatPattern(pattern: Array<PatternElement>): string {
+	*resolvePattern(pattern: Array<PatternElement>): IterableIterator<RuntimeValue<unknown>> {
 		if (this.visited.has(pattern)) {
 			throw new RangeError("Recursive reference to a variant value.");
 		}
@@ -96,17 +130,15 @@ export class FormattingContext {
 		for (let element of pattern) {
 			switch (element.type) {
 				case "StringLiteral":
-					result += element.value;
+					yield new StringValue(element.value);
 					continue;
 				case "VariableReference": {
-					let value = this.vars[element.name];
-					result += value.format(this);
+					yield this.vars[element.name];
 					continue;
 				}
 				case "FunctionCall": {
 					let callable = REGISTRY[element.name];
-					let value = callable(this, element.args, element.opts);
-					result += value.format(this);
+					yield callable(this, element.args, element.opts);
 					continue;
 				}
 			}
@@ -141,7 +173,7 @@ export class FormattingContext {
 					let value = this.vars[selector.expr.name];
 					resolved_selectors.push({
 						value: value.value,
-						string: value.format(this),
+						string: value.formatToString(this),
 						default: selector.default.value,
 					});
 					break;
@@ -151,7 +183,7 @@ export class FormattingContext {
 					let value = callable(this, selector.expr.args, selector.expr.opts);
 					resolved_selectors.push({
 						value: value.value,
-						string: value.format(this),
+						string: value.formatToString(this),
 						default: selector.default.value,
 					});
 					break;
@@ -208,4 +240,15 @@ export function formatMessage(
 	let ctx = new FormattingContext(message.lang, message, vars);
 	let variant = ctx.selectVariant(message.variants, message.selectors);
 	return ctx.formatPattern(variant.value);
+}
+
+export function* formatToParts(
+	message: Message,
+	vars: Record<string, RuntimeValue<unknown>>
+): IterableIterator<FormattedPart | OpaquePart> {
+	let ctx = new FormattingContext(message.lang, message, vars);
+	let variant = ctx.selectVariant(message.variants, message.selectors);
+	for (let value of ctx.resolvePattern(variant.value)) {
+		yield* value.formatToParts(ctx);
+	}
 }

@@ -1,5 +1,5 @@
 import {Message} from "../impl/model.js";
-import {formatMessage, NumberValue, StringValue} from "../impl/runtime.js";
+import {formatMessage, formatToParts, NumberValue, StringValue} from "../impl/runtime.js";
 
 console.log("==== English ====");
 
@@ -89,6 +89,16 @@ console.log("==== English ====");
 			userGender: new StringValue("feminine"),
 			photoCount: new NumberValue(34),
 		})
+	);
+
+	console.log(
+		Array.of(
+			...formatToParts(message, {
+				userName: new StringValue("Mary"),
+				userGender: new StringValue("feminine"),
+				photoCount: new NumberValue(34),
+			})
+		)
 	);
 }
 
