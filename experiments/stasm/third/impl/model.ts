@@ -17,7 +17,7 @@ export interface Selector {
 }
 
 export interface Variant {
-	keys: Array<StringLiteral>;
+	keys: Array<StringLiteral | IntegerLiteral>;
 	value: Array<PatternElement>;
 }
 

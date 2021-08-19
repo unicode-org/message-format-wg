@@ -1,6 +1,14 @@
-import {Message, Parameter, PatternElement, Selector, StringLiteral, Variant} from "./model.js";
+import {
+	IntegerLiteral,
+	Message,
+	Parameter,
+	PatternElement,
+	Selector,
+	StringLiteral,
+	Variant,
+} from "./model.js";
 import {REGISTRY} from "./registry.js";
-import {BooleanValue, NumberValue, RuntimeValue, StringValue} from "./runtime.js";
+import {BooleanValue, NumberValue, PluralValue, RuntimeValue, StringValue} from "./runtime.js";
 
 // Resolution context for a single formatMessage() call.
 
@@ -95,12 +103,31 @@ export class FormattingContext {
 			}
 		}
 
-		// TODO(stasm): Add NumberLiterals as keys (maybe).
-		function matches_corresponding_selector(key: StringLiteral, idx: number) {
-			return (
-				key.value === resolved_selectors[idx].value?.value ||
-				key.value === resolved_selectors[idx].default
-			);
+		function matches_corresponding_selector(key: StringLiteral | IntegerLiteral, idx: number) {
+			let selector = resolved_selectors[idx];
+			switch (key.type) {
+				case "StringLiteral": {
+					if (key.value === selector.value?.value) {
+						return true;
+					}
+					break;
+				}
+				case "IntegerLiteral": {
+					let num = parseInt(key.value);
+					if (selector.value instanceof NumberValue) {
+						if (num === selector.value.value) {
+							return true;
+						}
+					} else if (selector.value instanceof PluralValue) {
+						if (key.value === selector.value.value || num === selector.value.count) {
+							return true;
+						}
+					}
+					break;
+				}
+			}
+
+			return key.value === selector.default;
 		}
 
 		for (let variant of variants) {

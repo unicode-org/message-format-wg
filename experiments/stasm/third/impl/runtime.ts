@@ -57,7 +57,7 @@ export class NumberValue extends RuntimeValue<number> {
 }
 
 export class PluralValue extends RuntimeValue<Intl.LDMLPluralRule> {
-	private count: number;
+	public count: number;
 
 	constructor(value: Intl.LDMLPluralRule, count: number) {
 		super(value);
