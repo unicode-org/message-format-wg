@@ -51,7 +51,10 @@ REGISTRY["PLURAL_LEN"] = function (
 		throw new TypeError();
 	}
 
-	return new PluralValue(elements.value.length);
+	// TODO(stasm): Cache PluralRules.
+	let pr = new Intl.PluralRules(ctx.locale);
+	let category = pr.select(elements.value.length);
+	return new PluralValue(category, elements.value.length);
 };
 
 REGISTRY["PEOPLE_LIST"] = function (
