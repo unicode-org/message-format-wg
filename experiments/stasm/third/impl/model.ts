@@ -12,7 +12,7 @@ export interface Phrase {
 }
 
 export interface Selector {
-	expr: VariableReference | FunctionCall | null;
+	expr: VariableReference | FunctionCall;
 	default: StringLiteral;
 }
 

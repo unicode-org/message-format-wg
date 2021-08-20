@@ -24,15 +24,10 @@ console.log("==== English ====");
 		lang: "en",
 		id: "submit",
 		phrases: {},
-		selectors: [
-			{
-				expr: null,
-				default: {type: "StringLiteral", value: "default"},
-			},
-		],
+		selectors: [],
 		variants: [
 			{
-				keys: [{type: "StringLiteral", value: "default"}],
+				keys: [],
 				value: [
 					{type: "StringLiteral", value: "Ready? Then  "},
 					{

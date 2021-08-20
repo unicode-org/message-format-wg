@@ -65,22 +65,12 @@ export class FormattingContext {
 
 	selectVariant(variants: Array<Variant>, selectors: Array<Selector>): Variant {
 		interface ResolvedSelector {
-			value: RuntimeValue<unknown> | null;
+			value: RuntimeValue<unknown>;
 			default: string;
 		}
 
 		let resolved_selectors: Array<ResolvedSelector> = [];
 		for (let selector of selectors) {
-			if (selector.expr === null) {
-				// A special selector which only selects its default value. Used in the
-				// data model of single-variant messages.
-				resolved_selectors.push({
-					value: null,
-					default: selector.default.value,
-				});
-				continue;
-			}
-
 			switch (selector.expr.type) {
 				case "VariableReference": {
 					resolved_selectors.push({
@@ -107,7 +97,7 @@ export class FormattingContext {
 			let selector = resolved_selectors[idx];
 			switch (key.type) {
 				case "StringLiteral": {
-					if (key.value === selector.value?.value) {
+					if (key.value === selector.value.value) {
 						return true;
 					}
 					break;
@@ -131,6 +121,8 @@ export class FormattingContext {
 		}
 
 		for (let variant of variants) {
+			// When keys is an empty array, every() always returns true. This is
+			// used single-variant messages to return their only variant.
 			if (variant.keys.every(matches_corresponding_selector)) {
 				return variant;
 			}
