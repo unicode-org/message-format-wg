@@ -1,6 +1,6 @@
 import {test} from "tap";
 import {FormattingContext} from "../impl/context.js";
-import {Argument, Message, Parameter} from "../impl/model.js";
+import {Argument, Message, Parameter, VariantKey} from "../impl/model.js";
 import {REGISTRY} from "../impl/registry.js";
 import {
 	formatMessage,
@@ -39,6 +39,10 @@ class ListValue<T> extends RuntimeValue<Array<T>> {
 	*formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart> {
 		let lf = new Intl.ListFormat(ctx.locale, this.opts);
 		yield* lf.formatToParts(this.value);
+	}
+
+	match(ctx: FormattingContext, key: VariantKey): boolean {
+		return false;
 	}
 }
 

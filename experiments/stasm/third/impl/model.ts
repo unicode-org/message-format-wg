@@ -17,10 +17,11 @@ export interface Selector {
 }
 
 export interface Variant {
-	keys: Array<StringLiteral | IntegerLiteral>;
+	keys: Array<VariantKey>;
 	value: Array<PatternElement>;
 }
 
+export type VariantKey = StringLiteral | IntegerLiteral;
 export type PatternElement = StringLiteral | VariableReference | FunctionCall;
 
 export interface FunctionCall {

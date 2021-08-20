@@ -1,6 +1,6 @@
 import {test} from "tap";
 import {FormattingContext} from "../impl/context.js";
-import {Message} from "../impl/model.js";
+import {Message, VariantKey} from "../impl/model.js";
 import {formatToParts, OpaquePart, RuntimeValue} from "../impl/runtime.js";
 
 // We want to pass it into the translation and get it back out unformatted, in
@@ -15,6 +15,10 @@ class WrappedValue extends RuntimeValue<SomeUnstringifiableClass> {
 
 	*formatToParts(ctx: FormattingContext): IterableIterator<OpaquePart> {
 		yield {type: "opaque", value: this.value};
+	}
+
+	match(ctx: FormattingContext, key: VariantKey): boolean {
+		return false;
 	}
 }
 

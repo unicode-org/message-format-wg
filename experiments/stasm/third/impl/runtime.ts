@@ -1,5 +1,5 @@
 import {FormattingContext} from "./context.js";
-import {Message, PatternElement} from "./model.js";
+import {Message, PatternElement, VariantKey} from "./model.js";
 
 export interface FormattedPart {
 	type: string;
@@ -26,6 +26,7 @@ export abstract class RuntimeValue<T> {
 
 	abstract formatToString(ctx: FormattingContext): string;
 	abstract formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart | OpaquePart>;
+	abstract match(ctx: FormattingContext, key: VariantKey): boolean;
 }
 
 export class StringValue extends RuntimeValue<string> {
@@ -35,6 +36,10 @@ export class StringValue extends RuntimeValue<string> {
 
 	*formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart> {
 		yield {type: "literal", value: this.value};
+	}
+
+	match(ctx: FormattingContext, key: VariantKey): boolean {
+		return this.value === key.value;
 	}
 }
 
@@ -54,6 +59,13 @@ export class NumberValue extends RuntimeValue<number> {
 	*formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart> {
 		yield* new Intl.NumberFormat(ctx.locale, this.opts).formatToParts(this.value);
 	}
+
+	match(ctx: FormattingContext, key: VariantKey): boolean {
+		if (key.type === "IntegerLiteral") {
+			return this.value === parseInt(key.value);
+		}
+		return false;
+	}
 }
 
 export class PluralValue extends RuntimeValue<Intl.LDMLPluralRule> {
@@ -71,6 +83,17 @@ export class PluralValue extends RuntimeValue<Intl.LDMLPluralRule> {
 	*formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart> {
 		throw new TypeError("PluralValue is not formattable.");
 	}
+
+	match(ctx: FormattingContext, key: VariantKey): boolean {
+		switch (key.type) {
+			case "StringLiteral": {
+				return this.value === key.value;
+			}
+			case "IntegerLiteral": {
+				return this.count === parseInt(key.value);
+			}
+		}
+	}
 }
 
 export class BooleanValue extends RuntimeValue<boolean> {
@@ -80,6 +103,10 @@ export class BooleanValue extends RuntimeValue<boolean> {
 
 	*formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart> {
 		throw new TypeError("BooleanValue is not formattable to parts.");
+	}
+
+	match(ctx: FormattingContext, key: VariantKey): boolean {
+		throw new TypeError("BooleanValue cannot match.");
 	}
 }
 
@@ -92,6 +119,10 @@ export class PatternValue extends RuntimeValue<Array<PatternElement>> {
 		for (let value of ctx.resolvePattern(this.value)) {
 			yield* value.formatToParts(ctx);
 		}
+	}
+
+	match(ctx: FormattingContext, key: VariantKey): boolean {
+		throw new TypeError("PatternValue cannot match.");
 	}
 }
 
