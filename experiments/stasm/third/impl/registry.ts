@@ -25,7 +25,10 @@ function select_plural(
 		throw new TypeError();
 	}
 
-	return new PluralValue(count.value);
+	// TODO(stasm): Cache PluralRules.
+	let pr = new Intl.PluralRules(ctx.locale);
+	let category = pr.select(count.value);
+	return new PluralValue(category, count.value);
 }
 
 function get_phrase(

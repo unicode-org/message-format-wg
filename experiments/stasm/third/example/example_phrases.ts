@@ -58,10 +58,10 @@ console.log("==== English ====");
 				],
 			},
 		},
-		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
+		selectors: [],
 		variants: [
 			{
-				keys: [{type: "StringLiteral", value: "default"}],
+				keys: [],
 				value: [
 					{type: "VariableReference", name: "userName"},
 					{type: "StringLiteral", value: " "},

@@ -12,12 +12,12 @@ export interface Phrase {
 }
 
 export interface Selector {
-	expr: VariableReference | FunctionCall | null;
+	expr: VariableReference | FunctionCall;
 	default: StringLiteral;
 }
 
 export interface Variant {
-	keys: Array<StringLiteral>;
+	keys: Array<StringLiteral | IntegerLiteral>;
 	value: Array<PatternElement>;
 }
 

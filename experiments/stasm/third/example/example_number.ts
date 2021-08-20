@@ -9,15 +9,10 @@ console.log("==== English ====");
 		lang: "en",
 		id: "transferred",
 		phrases: {},
-		selectors: [
-			{
-				expr: null,
-				default: {type: "StringLiteral", value: "default"},
-			},
-		],
+		selectors: [],
 		variants: [
 			{
-				keys: [{type: "StringLiteral", value: "default"}],
+				keys: [],
 				value: [
 					{type: "StringLiteral", value: "Transferred "},
 					{
@@ -49,15 +44,10 @@ console.log("==== French ====");
 		lang: "fr",
 		id: "transferred",
 		phrases: {},
-		selectors: [
-			{
-				expr: null,
-				default: {type: "StringLiteral", value: "default"},
-			},
-		],
+		selectors: [],
 		variants: [
 			{
-				keys: [{type: "StringLiteral", value: "default"}],
+				keys: [],
 				value: [
 					{
 						type: "FunctionCall",

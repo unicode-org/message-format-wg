@@ -111,10 +111,10 @@ console.log("==== English ====");
 		lang: "en",
 		id: "accord",
 		phrases: {},
-		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
+		selectors: [],
 		variants: [
 			{
-				keys: [{type: "StringLiteral", value: "default"}],
+				keys: [],
 				value: [
 					{type: "StringLiteral", value: "The "},
 					{
@@ -157,10 +157,10 @@ console.log("==== English ====");
 		lang: "en",
 		id: "you-see",
 		phrases: {},
-		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
+		selectors: [],
 		variants: [
 			{
-				keys: [{type: "StringLiteral", value: "default"}],
+				keys: [],
 				value: [
 					{type: "StringLiteral", value: "You see "},
 					{
@@ -188,10 +188,10 @@ console.log("==== English ====");
 		lang: "en",
 		id: "they-wave",
 		phrases: {},
-		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
+		selectors: [],
 		variants: [
 			{
-				keys: [{type: "StringLiteral", value: "default"}],
+				keys: [],
 				value: [
 					{
 						type: "FunctionCall",
@@ -221,10 +221,10 @@ console.log("==== polski ====");
 		lang: "pl",
 		id: "accord",
 		phrases: {},
-		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
+		selectors: [],
 		variants: [
 			{
-				keys: [{type: "StringLiteral", value: "default"}],
+				keys: [],
 				value: [
 					{
 						type: "FunctionCall",
@@ -261,10 +261,10 @@ console.log("==== polski ====");
 		lang: "pl",
 		id: "you-see",
 		phrases: {},
-		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
+		selectors: [],
 		variants: [
 			{
-				keys: [{type: "StringLiteral", value: "default"}],
+				keys: [],
 				value: [
 					{type: "StringLiteral", value: "Widzisz "},
 					{
@@ -292,10 +292,10 @@ console.log("==== polski ====");
 		lang: "pl",
 		id: "they-wave",
 		phrases: {},
-		selectors: [{expr: null, default: {type: "StringLiteral", value: "default"}}],
+		selectors: [],
 		variants: [
 			{
-				keys: [{type: "StringLiteral", value: "default"}],
+				keys: [],
 				value: [
 					{
 						type: "FunctionCall",

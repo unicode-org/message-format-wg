@@ -1,6 +1,14 @@
-import {Message, Parameter, PatternElement, Selector, StringLiteral, Variant} from "./model.js";
+import {
+	IntegerLiteral,
+	Message,
+	Parameter,
+	PatternElement,
+	Selector,
+	StringLiteral,
+	Variant,
+} from "./model.js";
 import {REGISTRY} from "./registry.js";
-import {BooleanValue, NumberValue, RuntimeValue, StringValue} from "./runtime.js";
+import {BooleanValue, NumberValue, PluralValue, RuntimeValue, StringValue} from "./runtime.js";
 
 // Resolution context for a single formatMessage() call.
 
@@ -56,41 +64,25 @@ export class FormattingContext {
 	}
 
 	selectVariant(variants: Array<Variant>, selectors: Array<Selector>): Variant {
-		interface ResolvedSelector<T> {
-			value: T | null;
-			string: string | null;
+		interface ResolvedSelector {
+			value: RuntimeValue<unknown>;
 			default: string;
 		}
 
-		let resolved_selectors: Array<ResolvedSelector<unknown>> = [];
+		let resolved_selectors: Array<ResolvedSelector> = [];
 		for (let selector of selectors) {
-			if (selector.expr === null) {
-				// A special selector which only selects its default value. Used in the
-				// data model of single-variant messages.
-				resolved_selectors.push({
-					value: null,
-					string: null,
-					default: selector.default.value,
-				});
-				continue;
-			}
-
 			switch (selector.expr.type) {
 				case "VariableReference": {
-					let value = this.vars[selector.expr.name];
 					resolved_selectors.push({
-						value: value.value,
-						string: value.formatToString(this),
+						value: this.vars[selector.expr.name],
 						default: selector.default.value,
 					});
 					break;
 				}
 				case "FunctionCall": {
 					let callable = REGISTRY[selector.expr.name];
-					let value = callable(this, selector.expr.args, selector.expr.opts);
 					resolved_selectors.push({
-						value: value.value,
-						string: value.formatToString(this),
+						value: callable(this, selector.expr.args, selector.expr.opts),
 						default: selector.default.value,
 					});
 					break;
@@ -101,15 +93,36 @@ export class FormattingContext {
 			}
 		}
 
-		// TODO(stasm): Add NumberLiterals as keys (maybe).
-		function matches_corresponding_selector(key: StringLiteral, idx: number) {
-			return (
-				key.value === resolved_selectors[idx].string ||
-				key.value === resolved_selectors[idx].default
-			);
+		function matches_corresponding_selector(key: StringLiteral | IntegerLiteral, idx: number) {
+			let selector = resolved_selectors[idx];
+			switch (key.type) {
+				case "StringLiteral": {
+					if (key.value === selector.value.value) {
+						return true;
+					}
+					break;
+				}
+				case "IntegerLiteral": {
+					let num = parseInt(key.value);
+					if (selector.value instanceof NumberValue) {
+						if (num === selector.value.value) {
+							return true;
+						}
+					} else if (selector.value instanceof PluralValue) {
+						if (key.value === selector.value.value || num === selector.value.count) {
+							return true;
+						}
+					}
+					break;
+				}
+			}
+
+			return key.value === selector.default;
 		}
 
 		for (let variant of variants) {
+			// When keys is an empty array, every() always returns true. This is
+			// used single-variant messages to return their only variant.
 			if (variant.keys.every(matches_corresponding_selector)) {
 				return variant;
 			}

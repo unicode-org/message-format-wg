@@ -56,22 +56,20 @@ export class NumberValue extends RuntimeValue<number> {
 	}
 }
 
-export class PluralValue extends RuntimeValue<number> {
-	private opts: Intl.PluralRulesOptions;
+export class PluralValue extends RuntimeValue<Intl.LDMLPluralRule> {
+	public count: number;
 
-	constructor(value: number, opts: Intl.PluralRulesOptions = {}) {
+	constructor(value: Intl.LDMLPluralRule, count: number) {
 		super(value);
-		this.opts = opts;
+		this.count = count;
 	}
 
 	formatToString(ctx: FormattingContext): string {
-		// TODO(stasm): Cache PluralRules.
-		let pr = new Intl.PluralRules(ctx.locale, this.opts);
-		return pr.select(this.value);
+		throw new TypeError("PluralValue is not formattable.");
 	}
 
 	*formatToParts(ctx: FormattingContext): IterableIterator<FormattedPart> {
-		throw new TypeError("Pluralvalue is not formattable to parts.");
+		throw new TypeError("PluralValue is not formattable.");
 	}
 }
 
