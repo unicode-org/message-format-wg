@@ -4,16 +4,14 @@
   "private": true,
   "description": "Experimental data model and implementation of MessageFormat 2.0",
   "type": "module",
-  "dependencies": {
+  "devDependencies": {
+    "@types/node": "^16.4.13",
+    "@types/tap": "^15.0.5",
+    "tap": "^15.0.9",
     "typescript": "^4.3.5"
   },
-  "devDependencies": {
-    "@types/node": "^16.4.13"
-  },
   "scripts": {
-    "example": "tsc && node example/index.js",
-    "start": "tsc && (node example/index.js glossary; node example/index.js list; node example/index.js phrases; node example/index.js number; node example/index.js opaque)",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsc && tap example/example_*.js"
   },
   "author": "Staś Małolepszy <stas@duzodobrze.pl>",
   "license": "ISC"

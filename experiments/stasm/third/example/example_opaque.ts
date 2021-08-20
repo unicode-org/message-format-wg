@@ -1,3 +1,4 @@
+import {test} from "tap";
 import {FormattingContext} from "../impl/context.js";
 import {Message} from "../impl/model.js";
 import {formatToParts, OpaquePart, RuntimeValue} from "../impl/runtime.js";
@@ -11,14 +12,13 @@ class WrappedValue extends RuntimeValue<SomeUnstringifiableClass> {
 	formatToString(ctx: FormattingContext): string {
 		throw new Error("Method not implemented.");
 	}
+
 	*formatToParts(ctx: FormattingContext): IterableIterator<OpaquePart> {
 		yield {type: "opaque", value: this.value};
 	}
 }
 
-console.log("==== English ====");
-
-{
+test("Pass an opaque instance as a variable", (tap) => {
 	// "Ready? Then {$submitButton}!"
 	let message: Message = {
 		lang: "en",
@@ -39,11 +39,19 @@ console.log("==== English ====");
 			},
 		],
 	};
-	console.log(
-		Array.of(
-			...formatToParts(message, {
-				submitButton: new WrappedValue(new SomeUnstringifiableClass()),
-			})
-		)
+
+	let instance = new SomeUnstringifiableClass();
+
+	tap.same(
+		formatToParts(message, {
+			submitButton: new WrappedValue(instance),
+		}),
+		[
+			{type: "literal", value: "Ready? Then  "},
+			{type: "opaque", value: instance},
+			{type: "literal", value: "!"},
+		]
 	);
-}
+
+	tap.end();
+});

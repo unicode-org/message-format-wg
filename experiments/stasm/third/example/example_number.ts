@@ -1,9 +1,8 @@
+import {test} from "tap";
 import {Message} from "../impl/model.js";
 import {formatMessage, formatToParts, NumberValue} from "../impl/runtime.js";
 
-console.log("==== English ====");
-
-{
+test("Number formatting (English)", (tap) => {
 	// "Transferred {NUMBER $payloadSize STYLE unit UNIT megabyte}."
 	let message: Message = {
 		lang: "en",
@@ -29,16 +28,33 @@ console.log("==== English ====");
 			},
 		],
 	};
-	console.log(
+
+	tap.equal(
 		formatMessage(message, {
 			payloadSize: new NumberValue(1.23),
-		})
+		}),
+		"Transferred 1.23 MB."
 	);
-}
 
-console.log("==== French ====");
+	tap.same(
+		formatToParts(message, {
+			payloadSize: new NumberValue(1.23),
+		}),
+		[
+			{type: "literal", value: "Transferred "},
+			{type: "integer", value: "1"},
+			{type: "decimal", value: "."},
+			{type: "fraction", value: "23"},
+			{type: "literal", value: " "},
+			{type: "unit", value: "MB"},
+			{type: "literal", value: "."},
+		]
+	);
 
-{
+	tap.end();
+});
+
+test("Number formatting (French)", (tap) => {
 	// "{NUMBER $payloadSize STYLE unit UNIT megabyte} transféré."
 	let message: Message = {
 		lang: "fr",
@@ -63,16 +79,27 @@ console.log("==== French ====");
 			},
 		],
 	};
-	console.log(
+
+	tap.equal(
 		formatMessage(message, {
 			payloadSize: new NumberValue(1.23),
-		})
+		}),
+		"1,23 Mo transféré."
 	);
-	console.log(
-		Array.of(
-			...formatToParts(message, {
-				payloadSize: new NumberValue(1.23),
-			})
-		)
+
+	tap.same(
+		formatToParts(message, {
+			payloadSize: new NumberValue(1.23),
+		}),
+		[
+			{type: "integer", value: "1"},
+			{type: "decimal", value: ","},
+			{type: "fraction", value: "23"},
+			{type: "literal", value: " "},
+			{type: "unit", value: "Mo"},
+			{type: "literal", value: " transféré."},
+		]
 	);
-}
+
+	tap.end();
+});

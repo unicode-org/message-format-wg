@@ -1,9 +1,8 @@
+import {test} from "tap";
 import {Message} from "../impl/model.js";
 import {formatMessage, formatToParts, NumberValue, StringValue} from "../impl/runtime.js";
 
-console.log("==== English ====");
-
-{
+test("Phrase references (English)", (tap) => {
 	let message: Message = {
 		lang: "en",
 		id: "phrases",
@@ -83,28 +82,38 @@ console.log("==== English ====");
 			},
 		],
 	};
-	console.log(
+
+	tap.equal(
 		formatMessage(message, {
 			userName: new StringValue("Mary"),
 			userGender: new StringValue("feminine"),
 			photoCount: new NumberValue(34),
-		})
+		}),
+		"Mary added 34 new photos to her album."
 	);
 
-	console.log(
-		Array.of(
-			...formatToParts(message, {
-				userName: new StringValue("Mary"),
-				userGender: new StringValue("feminine"),
-				photoCount: new NumberValue(34),
-			})
-		)
+	tap.same(
+		formatToParts(message, {
+			userName: new StringValue("Mary"),
+			userGender: new StringValue("feminine"),
+			photoCount: new NumberValue(34),
+		}),
+		[
+			{type: "literal", value: "Mary"},
+			{type: "literal", value: " "},
+			{type: "literal", value: "added "},
+			{type: "integer", value: "34"},
+			{type: "literal", value: " new photos"},
+			{type: "literal", value: " to "},
+			{type: "literal", value: "her album"},
+			{type: "literal", value: "."},
+		]
 	);
-}
 
-console.log("==== polski ====");
+	tap.end();
+});
 
-{
+test("Phrase references (Polish)", (tap) => {
 	let message: Message = {
 		lang: "pl",
 		id: "phrases",
@@ -232,11 +241,29 @@ console.log("==== polski ====");
 			},
 		],
 	};
-	console.log(
+
+	tap.equal(
 		formatMessage(message, {
 			userName: new StringValue("Mary"),
 			userGender: new StringValue("feminine"),
 			photoCount: new NumberValue(34),
-		})
+		}),
+		"Mary dodała 34 nowe zdjęcia do swojego albumu."
 	);
-}
+
+	tap.same(
+		formatToParts(message, {
+			userName: new StringValue("Mary"),
+			userGender: new StringValue("feminine"),
+			photoCount: new NumberValue(34),
+		}),
+		[
+			{type: "literal", value: "Mary"},
+			{type: "literal", value: " dodała "},
+			{type: "integer", value: "34"},
+			{type: "literal", value: " nowe zdjęcia do swojego albumu."},
+		]
+	);
+
+	tap.end();
+});

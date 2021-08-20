@@ -1,3 +1,4 @@
+import {test} from "tap";
 import {FormattingContext} from "../impl/context.js";
 import {Argument, Message, Parameter} from "../impl/model.js";
 import {REGISTRY} from "../impl/registry.js";
@@ -131,9 +132,7 @@ REGISTRY["PEOPLE_LIST"] = function (
 	}
 };
 
-console.log("==== Romanian ====");
-
-{
+test("Fancy list formatting, first names only", (tap) => {
 	// gifts [PLURAL_LEN $names : other] =
 	//     [one] "I-am dat cadouri {PEOPLE_LIST $names STYLE long TYPE conjunction CASE dative NAME first}."
 	//     [other] "Le-am dat cadouri {PEOPLE_LIST $names STYLE long TYPE conjunction CASE dative NAME first}."
@@ -191,29 +190,41 @@ console.log("==== Romanian ====");
 			},
 		],
 	};
-	console.log(
+
+	tap.equal(
 		formatMessage(message, {
 			names: new ListValue([
 				new Person("Maria", "Stanescu"),
 				new Person("Ileana", "Zamfir"),
 				new Person("Petre", "Belu"),
 			]),
-		})
+		}),
+		"Le-am dat cadouri Mariei, Ilenei și lui Petre."
 	);
-	console.log(
-		Array.of(
-			...formatToParts(message, {
-				names: new ListValue([
-					new Person("Maria", "Stanescu"),
-					new Person("Ileana", "Zamfir"),
-					new Person("Petre", "Belu"),
-				]),
-			})
-		)
-	);
-}
 
-{
+	tap.same(
+		formatToParts(message, {
+			names: new ListValue([
+				new Person("Maria", "Stanescu"),
+				new Person("Ileana", "Zamfir"),
+				new Person("Petre", "Belu"),
+			]),
+		}),
+		[
+			{type: "literal", value: "Le-am dat cadouri "},
+			{type: "element", value: "Mariei"},
+			{type: "literal", value: ", "},
+			{type: "element", value: "Ilenei"},
+			{type: "literal", value: " și "},
+			{type: "element", value: "lui Petre"},
+			{type: "literal", value: "."},
+		]
+	);
+
+	tap.end();
+});
+
+test("Fancy list formatting, full names", (tap) => {
 	// gifts [PLURAL_LEN $names : other] =
 	//     [one] "I-am dat cadouri {PEOPLE_LIST $names STYLE long TYPE disjunction CASE dative NAME full}."
 	//     [other] "Le-am dat cadouri {PEOPLE_LIST $names STYLE long TYPE disjunction CASE dative NAME full}."
@@ -271,13 +282,36 @@ console.log("==== Romanian ====");
 			},
 		],
 	};
-	console.log(
+
+	tap.equal(
 		formatMessage(message, {
 			names: new ListValue([
 				new Person("Maria", "Stanescu"),
 				new Person("Ileana", "Zamfir"),
 				new Person("Petre", "Belu"),
 			]),
-		})
+		}),
+		"Le-am dat cadouri Mariei Stanescu, Ilenei Zamfir sau lui Petre Belu."
 	);
-}
+
+	tap.same(
+		formatToParts(message, {
+			names: new ListValue([
+				new Person("Maria", "Stanescu"),
+				new Person("Ileana", "Zamfir"),
+				new Person("Petre", "Belu"),
+			]),
+		}),
+		[
+			{type: "literal", value: "Le-am dat cadouri "},
+			{type: "element", value: "Mariei Stanescu"},
+			{type: "literal", value: ", "},
+			{type: "element", value: "Ilenei Zamfir"},
+			{type: "literal", value: " sau "},
+			{type: "element", value: "lui Petre Belu"},
+			{type: "literal", value: "."},
+		]
+	);
+
+	tap.end();
+});

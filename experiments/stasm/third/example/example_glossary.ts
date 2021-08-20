@@ -1,3 +1,4 @@
+import {test} from "tap";
 import {FormattingContext} from "../impl/context.js";
 import {Argument, Message, Parameter} from "../impl/model.js";
 import {REGISTRY} from "../impl/registry.js";
@@ -104,9 +105,7 @@ REGISTRY["ACTOR"] = function get_noun(
 	}
 };
 
-console.log("==== English ====");
-
-{
+test("NOUN is ADJECTIVE (English)", (tap) => {
 	let message: Message = {
 		lang: "en",
 		id: "accord",
@@ -135,88 +134,33 @@ console.log("==== English ====");
 			},
 		],
 	};
-	console.log(
+
+	tap.equal(
 		formatMessage(message, {
 			item: new StringValue("t-shirt"),
 			color: new StringValue("red"),
-		})
+		}),
+		"The T-shirt is red."
 	);
 
-	console.log(
-		Array.of(
-			...formatToParts(message, {
-				item: new StringValue("t-shirt"),
-				color: new StringValue("red"),
-			})
-		)
+	tap.same(
+		formatToParts(message, {
+			item: new StringValue("t-shirt"),
+			color: new StringValue("red"),
+		}),
+		[
+			{type: "literal", value: "The "},
+			{type: "literal", value: "T-shirt"},
+			{type: "literal", value: " is "},
+			{type: "literal", value: "red"},
+			{type: "literal", value: "."},
+		]
 	);
-}
 
-{
-	let message: Message = {
-		lang: "en",
-		id: "you-see",
-		phrases: {},
-		selectors: [],
-		variants: [
-			{
-				keys: [],
-				value: [
-					{type: "StringLiteral", value: "You see "},
-					{
-						type: "FunctionCall",
-						name: "ACTOR",
-						args: [{type: "VariableReference", name: "monster"}],
-						opts: {
-							INDEFINITE: {type: "BooleanLiteral", value: true},
-						},
-					},
-					{type: "StringLiteral", value: "!"},
-				],
-			},
-		],
-	};
-	console.log(
-		formatMessage(message, {
-			monster: new StringValue("dinosaur"),
-		})
-	);
-}
+	tap.end();
+});
 
-{
-	let message: Message = {
-		lang: "en",
-		id: "they-wave",
-		phrases: {},
-		selectors: [],
-		variants: [
-			{
-				keys: [],
-				value: [
-					{
-						type: "FunctionCall",
-						name: "ACTOR",
-						args: [{type: "VariableReference", name: "monster"}],
-						opts: {
-							DEFINITE: {type: "BooleanLiteral", value: true},
-							CAPITALIZED: {type: "BooleanLiteral", value: true},
-						},
-					},
-					{type: "StringLiteral", value: " waves at you!"},
-				],
-			},
-		],
-	};
-	console.log(
-		formatMessage(message, {
-			monster: new StringValue("ogre"),
-		})
-	);
-}
-
-console.log("==== polski ====");
-
-{
+test("NOUN is ADJECTIVE (Polish; requires according the gender of the adjective)", (tap) => {
 	let message: Message = {
 		lang: "pl",
 		id: "accord",
@@ -248,15 +192,78 @@ console.log("==== polski ====");
 			},
 		],
 	};
-	console.log(
+
+	tap.equal(
 		formatMessage(message, {
 			item: new StringValue("t-shirt"),
 			color: new StringValue("red"),
-		})
+		}),
+		"Tiszert jest czerwony."
 	);
-}
 
-{
+	tap.same(
+		formatToParts(message, {
+			item: new StringValue("t-shirt"),
+			color: new StringValue("red"),
+		}),
+		[
+			{type: "literal", value: "Tiszert"},
+			{type: "literal", value: " jest "},
+			{type: "literal", value: "czerwony"},
+			{type: "literal", value: "."},
+		]
+	);
+
+	tap.end();
+});
+
+test("Subject verb OBJECT (English)", (tap) => {
+	let message: Message = {
+		lang: "en",
+		id: "you-see",
+		phrases: {},
+		selectors: [],
+		variants: [
+			{
+				keys: [],
+				value: [
+					{type: "StringLiteral", value: "You see "},
+					{
+						type: "FunctionCall",
+						name: "ACTOR",
+						args: [{type: "VariableReference", name: "monster"}],
+						opts: {
+							INDEFINITE: {type: "BooleanLiteral", value: true},
+						},
+					},
+					{type: "StringLiteral", value: "!"},
+				],
+			},
+		],
+	};
+
+	tap.equal(
+		formatMessage(message, {
+			monster: new StringValue("dinosaur"),
+		}),
+		"You see a dinosaur!"
+	);
+
+	tap.same(
+		formatToParts(message, {
+			monster: new StringValue("dinosaur"),
+		}),
+		[
+			{type: "literal", value: "You see "},
+			{type: "literal", value: "a dinosaur"},
+			{type: "literal", value: "!"},
+		]
+	);
+
+	tap.end();
+});
+
+test("Subject verb OBJECT (Polish; requires the accusative case)", (tap) => {
 	let message: Message = {
 		lang: "pl",
 		id: "you-see",
@@ -280,14 +287,74 @@ console.log("==== polski ====");
 			},
 		],
 	};
-	console.log(
+
+	tap.equal(
 		formatMessage(message, {
 			monster: new StringValue("dinosaur"),
-		})
+		}),
+		"Widzisz dinozaura!"
 	);
-}
 
-{
+	tap.same(
+		formatToParts(message, {
+			monster: new StringValue("dinosaur"),
+		}),
+		[
+			{type: "literal", value: "Widzisz "},
+			{type: "literal", value: "dinozaura"},
+			{type: "literal", value: "!"},
+		]
+	);
+
+	tap.end();
+});
+
+test("SUBJECT verb (English)", (tap) => {
+	let message: Message = {
+		lang: "en",
+		id: "they-wave",
+		phrases: {},
+		selectors: [],
+		variants: [
+			{
+				keys: [],
+				value: [
+					{
+						type: "FunctionCall",
+						name: "ACTOR",
+						args: [{type: "VariableReference", name: "monster"}],
+						opts: {
+							DEFINITE: {type: "BooleanLiteral", value: true},
+							CAPITALIZED: {type: "BooleanLiteral", value: true},
+						},
+					},
+					{type: "StringLiteral", value: " waves at you!"},
+				],
+			},
+		],
+	};
+
+	tap.equal(
+		formatMessage(message, {
+			monster: new StringValue("ogre"),
+		}),
+		"The ogre waves at you!"
+	);
+
+	tap.same(
+		formatToParts(message, {
+			monster: new StringValue("ogre"),
+		}),
+		[
+			{type: "literal", value: "The ogre"},
+			{type: "literal", value: " waves at you!"},
+		]
+	);
+
+	tap.end();
+});
+
+test("SUBJECT verb (Polish)", (tap) => {
 	let message: Message = {
 		lang: "pl",
 		id: "they-wave",
@@ -312,9 +379,22 @@ console.log("==== polski ====");
 		],
 	};
 
-	console.log(
+	tap.equal(
 		formatMessage(message, {
 			monster: new StringValue("ogre"),
-		})
+		}),
+		"Ogr macha do ciebie!"
 	);
-}
+
+	tap.same(
+		formatToParts(message, {
+			monster: new StringValue("ogre"),
+		}),
+		[
+			{type: "literal", value: "Ogr"},
+			{type: "literal", value: " macha do ciebie!"},
+		]
+	);
+
+	tap.end();
+});

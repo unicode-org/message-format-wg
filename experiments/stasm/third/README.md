@@ -61,19 +61,16 @@ Easy. Variable references are first-class citizens of the data model, making it 
 - Restricting message references and introducing phrases
     - [#149 Restricting message references](https://github.com/unicode-org/message-format-wg/discussions/149)
 
-## How to Run
+## Running the Test Suite
 
 Run all examples:
 
-    npm start
+    npm test
 
-Run each example individually:
+Run an example individually:
 
-    npm run example glossary
-    npm run example phrases
-    npm run example list
-    npm run example number
-    npm run example opaque
+    npx tsc
+    node example/example_number.js
 
 ## References
 
