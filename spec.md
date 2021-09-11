@@ -96,7 +96,60 @@ and eventually have it accepted as a Unicode Technical Standard (UTS).
 
 ## Data Model
 
-> _The data-only representation of a message._
+A Message provides the representation of a single message.
+It takes one of two forms,
+either as a PatternMessage or a SelectMessage.
+In a multi-locale context,
+a single message's choice of representation as one or the other
+should not affect its representation in other languages or locales.
+
+```ts
+type Message = PatternMessage | SelectMessage
+```
+
+A PatternMessage contains a list of PatternElement values,
+some of which are directly defined literal values,
+while others are placeholders with formatted values depending on additional data.
+
+```ts
+interface PatternMessage {
+  type: 'message'
+  value: PatternElement[]
+  meta?: Meta
+}
+```
+
+SelectMessage provides for the selection of one list of PatternElement values
+to use as the message's value when formatting,
+depending on the value of one or more Selector values.
+
+Each SelectCase is defined by a `key` of one or more string identifiers,
+and selection between them is made according to the corresponding Selector values.
+From this it follows that a valid SelectMessage must have at least as many `select` entries
+as its highest count of SelectCase `key` entries within its `cases`.
+
+As a SelectMessage is not a valid PatternElement,
+it is not possible for it to be placed within the `value` of another message.
+
+```ts
+interface SelectMessage {
+  type: 'select'
+  select: Selector[]
+  cases: SelectCase[]
+  meta?: Meta
+}
+
+interface Selector {
+  value: PatternElement
+  fallback?: string
+}
+
+interface SelectCase {
+  key: string[]
+  value: PatternElement[]
+  meta?: Meta
+}
+```
 
 ## Select Case Resolution
 
