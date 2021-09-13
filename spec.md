@@ -166,7 +166,68 @@ interface Selector {
 
 ## Select Case Resolution
 
-> _How a single pattern is selected from a SelectMessage at runtime._
+When formatting a SelectMessage,
+it is necessary to first select one of its `cases`.
+This is done by first determining the Formattable values for each of its `select` values,
+and then looking for the first `cases` entry for which all the keys provide a match.
+Each Selector may define a `fallback` value to use if an exact match is not found.
+If a `fallback` is not defined, the default value **"other"** is used.
+
+This algorithm relies on `cases` being in an apropriate order,
+as the first full match will be selected.
+Therefore, cases with more precise `key` values should precede more general values.
+A case with an empty list as its `key` will always be selected,
+unless an earlier case was matched first.
+
+Plural selection is achieved by relying on the `match()` method of
+a FormattableNumber instance returning **true** for a corresponding CLDR category match.
+For instance, in many languages calling `match("one")` will return **true** for numbers.
+
+The exact algorithm is defined using the following abstract operations:
+
+### SelectMessageCase(_select_, _cases_)
+
+The SelectMessageCase abstract operation is called with arguments
+_select_ (which must be a list of Selector objects) and
+_cases_ (which must be a list of SelectCase objects).
+It returns either a SelectCase object or **undefined**.
+The following steps are taken:
+
+1. Let _formattables_ be an initially empty list of Formattable objects.
+1. Let _fallbacks_ be an initially empty list of strings.
+1. For each Selector _selector_ of _select_, do:
+   1. Let _selFmt_ be AsFormattable(_selector_.value).
+   1. Append _selFmt_ as the last element of _formattables_.
+   1. Let _selFb_ be _selector_.fallback.
+   1. If _selFb_ is **undefined**, then
+      1. Append **"other"** as the last element of _fallbacks_.
+   1. Else,
+      1. Append _selFb_ as the last element of _fallbacks_.
+1. For each SelectCase _selCase_ of _cases_, do:
+   1. Let _match_ be SelectMessageKeyMatches(_selCase_.key, _formattables_, _fallbacks_).
+   1. If _match_ is **true**, then
+      1. Return _selCase_.
+1. Return **undefined**.
+
+### SelectMessageKeyMatches(_selKey_, _formattables_, _fallbacks_)
+
+The SelectMessageKeyMatches abstract operation is called with arguments
+_selKey_ (which must be a list of strings),
+_formattables_ (which must be a list of Formattable objects) and
+_fallbacks_ (which must be a list of strings).
+It returns a boolean value.
+The following steps are taken:
+
+1. Let _i_ be 0.
+1. Let _len_ be length of the list _selKey_.
+1. Repeat, while _i_ < _len_:
+   1. Let _key_ be the string at index _i_ of _selKey_.
+   1. Let _selFmt_ be the Formattable at index _i_ of _formattables_.
+   1. Let _fallback_ be the string at index _i_ of _fallbacks_.
+   1. Let _match_ be the boolean result of calling _selFmt_.matchSelectKey(_key_).
+   1. If _match_ is **false** and _fallback_ is not equal to _key_, then
+      1. Return **false**.
+1. Return **true**.
 
 # Pattern Elements
 
