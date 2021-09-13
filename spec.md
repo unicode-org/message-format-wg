@@ -109,7 +109,7 @@ type Message = PatternMessage | SelectMessage
 
 A PatternMessage contains a list of PatternElement values,
 some of which are directly defined literal values,
-while others are placeholders with formatted values depending on additional data.
+while others are placeholders with formatted values that depend on additional data.
 
 ```ts
 interface PatternMessage {
@@ -127,6 +127,9 @@ Each SelectCase is defined by a `key` of one or more string identifiers,
 and selection between them is made according to the corresponding Selector values.
 From this it follows that a valid SelectMessage must have at least as many `select` entries
 as its highest count of SelectCase `key` entries within its `cases`.
+The `fallback` value of a Selector is used in addition to its `value`
+when selecting one of the `cases` during formatting.
+It should match exactly one of the corresponding SelectCase `key` values.
 
 As a SelectMessage is not a valid PatternElement,
 it is not possible for it to be placed within the `value` of another message.
