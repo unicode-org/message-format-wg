@@ -609,13 +609,25 @@ The following steps are taken:
    1. Let _fmt_ be an implementation-defined Formattable object that wraps _value_.
 1. Return _fmt_.
 
-## formatToString()
+## Formatting Context
+
+### CreateFormattingContext
+
+## MessageFormat
+
+### constructor()
+
+### addResources()
+
+### formatToString()
 
 > _Turning a message into a string._
 
-## formatToParts()
+### formatToParts()
 
 > _Turning a message into a sequence of parts._
+
+### getMessage()
 
 ## Error Handling
 
