@@ -611,7 +611,49 @@ The following steps are taken:
 
 ## Formatting Context
 
-### CreateFormattingContext
+The formatting of a message is dependent on a number of environmental or runtime factors.
+These are all encapsulated in a FormattingContext object,
+which holds information about the current locale,
+as well as any PatternElementFormatter-specific context.
+
+```ts
+interface FormattingContext {
+  asFormattable(elem: PatternElement): Formattable
+  formatToParts(elem: PatternElement): MessageFormatPart[]
+  formatToString(elem: PatternElement): string
+  localeMatcher: 'best fit' | 'lookup'
+  locales: string[]
+  types: Record<string, unknown>
+}
+```
+
+The `types` object holds context info for any PatternElementFormatter
+that defines an `initContext` method.
+It is keyed by the `type` identifier of each PatternElementFormatter.
+
+### CreateFormattingContext(_mf_, _resId_, _scope_)
+
+The abstract operation CreateFormattingContext is called with the arguments
+_mf_ (which must be a MessageFormat object),
+_resId_ (which must be a string), and
+an optional argument _scope_.
+It returns a FormattingContext object.
+The following steps are taken:
+
+1. Let _locales_ be _mf_.\[\[Locales]].
+1. Let _localeMatcher_ be _mf_.\[\[LocaleMatcher]].
+1. Let _context_ be a new FormattingContext object.
+1. Set _context_.locales to _locales_.
+1. Set _context_.localeMatcher to _localeMatcher_.
+1. Set _context_.types to be a new empty object.
+1. Let _formatters_ be MessageFormat.\[\[Formatters]].
+1. For each _formatter_ of _formatters, do:
+   1. Let _init_ be _formatter_.initContext
+   1. If _init_ is a function, then
+      1. Let _type_ be _formatter_.type.
+      1. Let _fmtCtx_ be _init_(_context_, _resId_, _scope_).
+      1. Add a property _type_ to _context_.types with the value _fmtCtx_.
+1. Return _context_.
 
 ## MessageFormat
 
