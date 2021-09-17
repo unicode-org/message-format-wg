@@ -657,19 +657,100 @@ The following steps are taken:
 
 ## MessageFormat
 
-### constructor()
+The MessageFormat class provides the main entry point for message formatting.
 
-### addResources()
+### MessageFormat.\[\[Formatters]]
 
-### formatToString()
+### new MessageFormat(_locales_, _options_)
 
-> _Turning a message into a string._
+When the MessageFormat constructor is called with
+the optional arguments _locales_ and \_options,
+the following steps are taken:
 
-### formatToParts()
+1. Let _mf_ be a new MessageFormat instance with internal slots
+   \[\[LocaleMatcher]], \[\[Locales]], \[\[Resources]], and \[\[Runtime]].
+1. If _locales_ is a string, then
+   1. Set _locales_ to be a list of strings containing its previous valus as its only entry.
+1. If _locales_ is a list of strings, then
+   1. Set _mf_.\[\[Locales]] to _locales_.
+1. If _options_ is an object that defines a property _options_.localeMatcher, then
+   1. Let _localeMatcher_ be _options_.localeMatcher.
+   1. Assert: _localeMatcher_ is **"best fit"** or **"lookup"**.
+   1. Set _mf_.\[\[LocaleMatcher]] to _localeMatcher_.
+1. Else,
+   1. Set _mf_.\[\[LocaleMatcher]] to **"best fit"**.
+1. Set _mf_.\[\[Resource]] to an empty list of MessageResourceReader objects.
+1. If _options_ is an object that defines a property _options_.runtime, then
+   1. Assert: _options_.runtime is a Runtime object.
+   1. Let _runtime_ be _options_.runtime.
+1. Else,
+   1. Let _runtime_ be GetDefaultRuntime().
+1. Set _mf_.\[\[Runtime]] to _runtime_.
+1. Return _mf_.
+
+### MessageFormat#addResources(_addResources_)
+
+The addResources method is called with an argument
+_addResources_ (which must be a list of Resource or MessageResourceReader objects).
+The following steps are taken:
+
+1. Let _mf_ be the **this** value.
+1. Let _resources_ be _mf_.\[\[Resources]].
+1. Let _size_ be the number of elements of _addResources_.
+1. Let _i_ be _size_ - 1.
+1. Repeat, while _i_ ≥ 0,
+   1. Let _resource_ be _addResources_\[_i_].
+   1. If _resource_ is a MessageResourceReader object, then
+      1. Let _reader_ be _resource_.
+   1. Else,
+      1. Assert: _resource_ is a Resource object.
+      1. Let _reader_ be CreateMessageResourceReader(_resource_).
+   1. Prepend _reader_ to be the new first element of _resources_.
+   1. Decrement _i_ by 1.
+
+### MessageFormat#format(_resId_, _msgPath_, _scope_)
+
+The format method is called with the arguments
+_resId_ (which must be a string),
+_msgPath_ (which must be a list of strings), and
+an optional argument _scope_.
+It returns a string.
+The following steps are taken:
+
+### MessageFormat#formatToParts(_resId_, _msgPath_, _scope_)
 
 > _Turning a message into a sequence of parts._
 
-### getMessage()
+### MessageFormat#getMessage()
+
+### GetFormattableMessage(_resId_, _msgPath_, _scope_)
+
+The abstract operation GetFormattableMessage is called with the arguments
+_resId_ (which must be a string),
+_msgPath_ (which must be a list of strings), and
+an optional argument _scope_.
+It returns a FormattableMessage object or **undefined**.
+The following steps are taken:
+
+1. Let _mf_ be the **this** value.
+1. Let _resources_ be _mf_.\[\[Resources]].
+1. Let _message_ be GetMessage(_resources_, _resId_, _msgPath_).
+1. If _message_ is **undefined**, then
+   1. Return **undefined**.
+1. Let _context_ be CreateFormattingContext(_mf_, _resId_, _scope_).
+1. Return CreateFormattableMessage(_context_, _message_).
+
+### GetDefaultRuntime
+
+> _TODO_
+
+### GetPatternElementFormatter
+
+> _TODO_
+
+### Runtime
+
+> _TODO_
 
 ## Error Handling
 
