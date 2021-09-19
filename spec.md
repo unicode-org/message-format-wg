@@ -99,9 +99,6 @@ and eventually have it accepted as a Unicode Technical Standard (UTS).
 A Message provides the representation of a single message.
 It takes one of two forms,
 either as a PatternMessage or a SelectMessage.
-In a multi-locale context,
-a single message's choice of representation as one or the other
-should not affect its representation in other languages or locales.
 
 ```ts
 type Message = PatternMessage | SelectMessage
@@ -130,9 +127,6 @@ as its highest count of SelectCase `key` entries within its `cases`.
 The `fallback` value of a Selector is used in addition to its `value`
 when selecting one of the `cases` during formatting.
 It should match exactly one of the corresponding SelectCase `key` values.
-
-As a SelectMessage is not a valid PatternElement,
-it is not possible for it to be placed within the `value` of another message.
 
 ```ts
 interface SelectMessage {
