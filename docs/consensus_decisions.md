@@ -20,6 +20,8 @@ For more details on the process that lead to these decisions, please refer to th
   The solution for [issue #127](https://github.com/unicode-org/message-format-wg/issues/127).
   Codified in [issue #137](https://github.com/unicode-org/message-format-wg/issues/137) during the [January 2021 meeting](https://github.com/unicode-org/message-format-wg/issues/146) of the working group.
   Discussed and accepted at the  [February 2021 meeting](https://github.com/unicode-org/message-format-wg/blob/HEAD/meetings/2021/notes-2021-02-15.md) of the working group.
+- **Consensus 7:**
+  Discussed at the [22 September 2021 meeting](https://github.com/unicode-org/message-format-wg/issues/196) of the working group.
 
 ## 1: Include message references in the data model.
 
@@ -67,3 +69,19 @@ The group believes that the known value of this feature can be sufficiently cove
 The cost analysis of the nested selectors feature was performed in the absence of sufficient in-field experience of use in production systems.
 In result, the group's decision to not currently incorporate the feature is based on the lack of sufficient known value that would require them, which the group recognizes may change in the future.
 In result, it is the intent of the group to design MessageFormat 2 in a way that wouldn't prevent future revisions of the standard to be extended with nested selectors feature.
+
+## 7: A valid MessageFormat implementation may require all formatting functions to be run without access to the runtime context.
+
+**Discussion:**
+It is theoretically possible for formatting functions to become an attack vector to a system,
+as they are often handling user-controlled inputs.
+It is important to ensure that it is possible for an implementation to consider formatting functions as untrusted code,
+while not requiring that this is done.
+An implementation that does limit formatting function access is still expected to
+allow for e.g. message references and other parts of the specification to work.
+
+The "runtime context" here refers to information about the current message,
+other available messages,
+the available formatting functions,
+and any arguments or parameters that may have been made available when calling the message formatter.
+The formatting function would in all cases still have access to the explicit values and options with which it was called.
