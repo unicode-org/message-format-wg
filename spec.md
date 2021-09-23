@@ -102,6 +102,8 @@ either as a PatternMessage or a SelectMessage.
 
 ```ts
 type Message = PatternMessage | SelectMessage
+
+type MessageBody = PatternElement[]
 ```
 
 A PatternMessage contains a list of PatternElement values,
@@ -109,10 +111,15 @@ some of which are directly defined literal values,
 while others are placeholders with formatted values that depend on additional data.
 
 ```ts
+// Abstract data type
+interface PatternMessage {
+  value: MessageBody
+}
+
+// Canonical JSON representation
 interface PatternMessage {
   type: 'message'
-  value: PatternElement[]
-  meta?: Meta
+  value: MessageBody
 }
 ```
 
@@ -120,20 +127,34 @@ SelectMessage provides for the selection of one list of PatternElement values
 to use as the message's value when formatting,
 depending on the value of one or more Selector values.
 
-Each SelectCase is defined by a `key` of one or more string identifiers,
+Each of the SelectMessage `cases` is defined by a key of one or more string identifiers,
 and selection between them is made according to the corresponding Selector values.
 From this it follows that a valid SelectMessage must have at least as many `select` entries
-as its highest count of SelectCase `key` entries within its `cases`.
+as its highest count of string entries within the keys of its `cases`.
 The `fallback` value of a Selector is used in addition to its `value`
 when selecting one of the `cases` during formatting.
 It should match exactly one of the corresponding SelectCase `key` values.
 
+As the SelectMessage `cases` uses a map with complex keys that cannot be represented in JSON,
+its canonical JSON representation is a corresponding array of `key`, `value` pairs.
+
 ```ts
+// Abstract data type
+interface SelectMessage {
+  select: Selector[]
+  cases: Map<string[], PatternMessage>
+}
+
+interface Selector {
+  value: PatternElement
+  fallback?: string
+}
+
+// Canonical JSON representation
 interface SelectMessage {
   type: 'select'
   select: Selector[]
   cases: SelectCase[]
-  meta?: Meta
 }
 
 interface Selector {
@@ -143,8 +164,7 @@ interface Selector {
 
 interface SelectCase {
   key: string[]
-  value: PatternElement[]
-  meta?: Meta
+  value: MessageBody
 }
 ```
 
