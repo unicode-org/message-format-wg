@@ -313,7 +313,117 @@ It returns a string value.
 
 ### FormattableMessage
 
-> _The behaviour of a message when wrapped up in a Formattable._
+The Formattable wrapper for Message values has the following method implementations and
+abstract operations.
+
+#### FormattableMessage#matchSelectKey(_locales_, _localeMatcher_, _key_)
+
+When the matchSelectKey method of a FormattableMessage instance is called
+with arguments _locales_, _localeMatcher_, and _key_,
+the following steps are taken:
+
+1. Let _fmtMsg_ be **this** value.
+1. Let _str_ be _fmtMsg_.toString().
+1. If _key_ and _str_ are equal, then
+   1. Return **true**.
+1. Else,
+   1. Return **false**.
+
+#### FormattableMessage#toParts(_locales_, _localeMatcher_, _source_)
+
+When the toParts method of a FormattableMessage instance is called
+with arguments _locales_, _localeMatcher_ and _source_,
+the following steps are taken:
+
+1. Let _fmtMsg_ be **this** value.
+1. Let _res_ be an empty list of MessageFormatParts.
+1. Let _fmtMeta_ be _fmtMsg_.\[\[Meta]].
+1. Let _selResult_ be _fmtMsg_.\[\[SelectFailed]].
+1. If _fmtMeta_ is not **undefined** or _selResult_ is **"no-match"**, then
+   1. Let _metaPart_ be a new MessageFormatPart object.
+   1. Set _metaPart_.type to **"meta"**.
+   1. Set _metaPart_.value to en empty string.
+   1. Let _meta_ be an empty object with string values.
+   1. If _fmtMeta_ is not **undefined**, then
+      1. For each key-value pair _key_, _value_ of _fmtMeta_, do:
+         1. Set the property _key_ of _meta_ to _value_.
+   1. If _selResult_ is a non-empty string, then
+      1. Set the property **"select-result"** of _meta_ to _selResult_.
+   1. Set _metaPart_.meta to _meta_.
+   1. Append _metaPart_ as the last entry of _res_.
+1. Let _context_ be _fmtMsg_.\[\[Context]].
+1. Let _pattern_ be GetMessagePattern(_fmtMsg_).
+1. For each PatternElement _elem_ of _pattern_, do:
+   1. Let _elemFmt_ be GetPatternElementFormatter(_elem_).
+   1. Let _elemtParts_ be _elemFmt_.formatToParts(_context_, _elem_).
+   1. For each MessageFormatPart _part_ of _elemParts_, do:
+      1. Append _part_ as the last entry of _res_.
+1. If _source_ is a non-empty string, then
+   1. For each MessageFormatPart _part_ of _res_, do:
+      1. Let _prevSource_ be _part_.source.
+      1. If _prevSource_ is a non-empty string, then
+         1. Set _part.source_ to the string-concatenation of
+            _source_, **"/"**, and _prevSource_.
+      1. Else,
+         1. Set _part_.source to _source_.
+1. Return _res_.
+
+#### FormattableMessage#toString()
+
+When the toString method of a FormattableMessage instance is called,
+the following steps are taken:
+
+1. Let _fmtMsg_ be **this** value.
+1. Let _str_ be an empty string.
+1. Let _context_ be _fmtMsg_.\[\[Context]].
+1. Let _pattern_ be GetMessagePattern(_fmtMsg_).
+1. For each PatternElement _elem_ of _pattern_, do:
+   1. Let _elemFmt_ be GetPatternElementFormatter(_elem_).
+   1. Let _elemtStr_ be _elemFmt_.formatToString(_context_, _elem_).
+   1. Append _elemStr_ to the end of _str_.
+1. Return _str_.
+
+#### CreateFormattableMessage(_context_, _message_)
+
+The CreateFormattableMessage abstract operation is called with arguments
+_context_ (which must be a FormattingContext object) and
+_message_ (which must be a Message object).
+It returns a FormattableMessage object.
+The following steps are taken:
+
+1. Let _fmtMsg_ be a new FormattableMessage instance with
+   internal slots \[\[Context]], \[\[Meta]], \[\[Value]] and \[\[SelectResult]].
+1. Set _fmtMsg_.\[\[Context]] to _context_.
+1. Set _fmtMsg_.\[\[Value]] to _message_.
+1. Set _fmtMsg_.\[\[SelectResult]] to **undefined**.
+1. If _message_.meta is **undefined**, then
+   1. Set _fmtMsg_.\[\[Meta]] to **undefined**.
+1. Else,
+   1. Set _fmtMsg_.\[\[Meta]] to a shallow copy of _message_.meta.
+1. Return _fmtMsg_.
+
+#### GetMessagePattern(_fmtMsg_)
+
+The GetMessagePattern abstract operation is called with an argument
+_fmtMsg_ (which must be a FormattableMessage object).
+It returns a list of PatternElement objects.
+The following steps are taken:
+
+1. Let _msg_ be _fmtMsg_.\[\[Value]].
+1. Let _type_ be _msg_.type.
+1. If _type_ is **"message"**, then
+   1. Return _msg_.value.
+1. Else if _type_ is not **"select"**, then
+   1. Throw a **TypeError** excpetion.
+1. Let _select_ be _msg_.select.
+1. Let _cases_ be _msg_.cases.
+1. Let _selCase_ be SelectMessageCase(_select_, _cases_).
+1. If _selCase_ is **undefined**, then
+   1. Set _fmtMsg_.\[\[SelectResult]] to **"no-match"**.
+   1. Return an empty list.
+1. Else,
+   1. Set _fmtMsg_.\[\[SelectResult]] to **"success"**.
+   1. Return _selCase_.value.
 
 ### FormattableNumber
 
@@ -339,6 +449,20 @@ The matchSelectKey method of a FormattableNumber instance is defined as follows:
    1. Return **true**.
 1. Else,
    1. Return **false**.
+
+### AsFormattable(_value_)
+
+The abstract operation AsFormattable is called with the argument _value_.
+It returns a Formattable object.
+The following steps are taken:
+
+1. If _value_ is a Formattable object, then
+   1. Return _value_.
+1. If _value_ is a number, then
+   1. Let _fmt_ be a FormattableNumber object that wraps _value_.
+1. Else,
+   1. Let _fmt_ be an implementation-defined Formattable object that wraps _value_.
+1. Return _fmt_.
 
 ## formatToString()
 
