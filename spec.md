@@ -222,19 +222,101 @@ interface Selector {
 
 ## Formattables
 
-> _Representations of runtime values with associated options, metadata and formatters._
+Formattable is a general interface for values which may be formatted
+to a string or to a sequence of MessageFormatParts,
+such as Messages, literals and runtime variables.
+Its purpose is to allow for each Message and PatternElement formatter to
+encapsulate any value while providing a fixed external interface.
+
+The value and any formatting options must be set during the construction of the Formattable.
+They are expected to remain unchanged during the lifetime of the Formattable,
+allowing its methods to be considered pure and memoizable.
+
+Except for `getValue()`, the arguments of Formattable methods always include
+_locales_ (a list of valid language code strings) and
+_localeMatcher_ (either **"best fit"** or **"lookup"**).
+These allow for a Formattable to be defined in a context where the formatting locale is not yet known.
+It is also possible for a Formattable to define its own locale and ignore the method arguments.
+
+```ts
+interface Formattable {
+  getValue(): unknown
+  matchSelectKey(
+    locales: string[],
+    localeMatcher: 'best fit' | 'lookup',
+    key: string
+  ): boolean
+  toParts(
+    locales: string[],
+    localeMatcher: 'best fit' | 'lookup',
+    source: string
+  ): MessageFormatPart[]
+  toString(locales: string[], localeMatcher: 'best fit' | 'lookup'): string
+}
+```
 
 ### getValue()
 
-### matchSelectKey()
+The getValue method is called with no arguments.
+It is expected to return the source value of the Formattable.
 
-### toString()
+### matchSelectKey(_locales_, _localeMatcher_, _key_)
 
-### toParts()
+The matchSelectKey method is called during SelectMessage case resolution with arguments
+_locales_ (which must be a list of valid language code strings),
+_localeMatcher_ (which must be either **"best fit"** or **"lookup"**), and
+_key_ (which must be a string).
+It returns a boolean value.
+
+The returned value is expected to be **true** if the value of this Formattable matches the given _key_.
+Otherwise, the method should return **false**.
+
+### toParts(_locales_, _localeMatcher_, _source_)
+
+The toParts method is called when formatting a message to parts with arguments
+_locales_ (which must be a list of valid language code strings),
+_localeMatcher_ (which must be either **"best fit"** or **"lookup"**), and
+_source_ (which must be a string).
+It returns a list of MessageFormatPart objects.
+
+If _source_ is a non-empty string, the `source` value of each of the returned MessageFormatParts
+is expected to start with that string.
+
+### toString(_locales_, _localeMatcher_)
+
+The toString method is called when formatting a message to a string with arguments
+_locales_ (which must be a list of valid language code strings) and
+_localeMatcher_ (which must be either **"best fit"** or **"lookup"**).
+It returns a string value.
+
+### FormattableMessage
+
+> _The behaviour of a message when wrapped up in a Formattable._
 
 ### FormattableNumber
 
-### FormattableDateTime
+Number values must be wrapped in a FormattableNumber,
+i.e. a class that implements the Formattable interface but has the following behaviour.
+An implementation may further extend the FormattableNumber class to account for different
+representations of numbers.
+
+#### FormattableNumber#matchSelectKey(_locales_, _localeMatcher_, _key_)
+
+The matchSelectKey method of a FormattableNumber instance is defined as follows:
+
+1. Let _fmtNum_ be **this** value.
+1. Let _num_ be _fmtNum_.getValue().
+1. If _num_ is an integer, then
+   1. Let _strNum_ be the default, non-localized string representation of _num_.
+   1. If _key_ and _strNum_ are equal, then
+      1. Return **true**.
+1. Let _pluralCat_ be the CLDR string identifier of the plural category corresponding to _num_,
+   while taking into account _locales_, _localeMatcher_, and
+   any options previously passed to the FormattableNumber.
+1. If _key_ and _pluralCat_ are equal, then
+   1. Return **true**.
+1. Else,
+   1. Return **false**.
 
 ## formatToString()
 
