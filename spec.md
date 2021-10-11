@@ -10,10 +10,31 @@ to be in agreement with each other.
 
 To **add** content to or **change** a section of this document
 or to **reorganise** sections,
-please file a PR to this repo's `master` branch.
+please file a PR to this repo's `main` branch.
 Each PR should only either add or change one section
 (i.e. content directly under a `#` header or under a single `##` section title),
 or reorganise sections.
+
+### Before submiting a PR
+Pull Request lifecycle to contribute in `.spec` document is divided into two parts `Draft process` and `Review Process`.
+
+The `Draft process` is the work done to get the Pull Request ready for review. The other is the review cycle itself.
+
+> For editorial or non-complex changes some of the following steps don't apply.
+
+### Draft process
+- Before start, verify if there is an issue/discussion open about the topic, preferably with labels `spec-text` and `help-wanted`. 
+- The issue/discussion must have all the requirements for the topic and depending on the complexity some extra work may be required
+    - [ ] Design Document
+    - [ ] POC or Examples
+    - [ ] Meetings with Chair Group or other members to coordinate
+- When issue/discussion iteration is complete and all requirements are met, draft is ready to be started.
+
+> If the topic to be added to the spec is not already listed in the backlog please open an issue and iterate over the steps.
+
+
+### Review process
+
 Once a valid PR has been open for at least **two weeks**
 it may be merged if:
 
@@ -38,6 +59,8 @@ it may be merged if:
     will decide which PR gets initially merged at the end of the meeting.
   - For PRs changing the contents of an existing section,
     discussion will **continue offline** and at subsequent plenary meetings.
+
+### Format & Style
 
 Contents of this working draft of the spec should be written in
 [GitHub-flavoured markdown](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax),
