@@ -111,14 +111,7 @@ some of which are directly defined literal values,
 while others are placeholders with formatted values that depend on additional data.
 
 ```ts
-// Abstract data type
 interface PatternMessage {
-  value: MessageBody
-}
-
-// Canonical JSON representation
-interface PatternMessage {
-  type: 'message'
   value: MessageBody
 }
 ```
@@ -135,11 +128,7 @@ The `fallback` value of a Selector is used in addition to its `value`
 when selecting one of the `cases` during formatting.
 It should match exactly one of the corresponding SelectCase `key` values.
 
-As the SelectMessage `cases` uses a map with complex keys that cannot be represented in JSON,
-its canonical JSON representation is a corresponding array of `key`, `value` pairs.
-
 ```ts
-// Abstract data type
 interface SelectMessage {
   select: Selector[]
   cases: Map<string[], PatternMessage>
@@ -149,25 +138,9 @@ interface Selector {
   value: PatternElement
   fallback?: string
 }
-
-// Canonical JSON representation
-interface SelectMessage {
-  type: 'select'
-  select: Selector[]
-  cases: SelectCase[]
-}
-
-interface Selector {
-  value: PatternElement
-  fallback?: string
-}
-
-interface SelectCase {
-  key: string[]
-  value: MessageBody
-}
 ```
-> Note: The shape of `SelectMessage`, in particular the representation of fallback values, is still under discussion and will be further reviewed by the WG.
+
+> _The shape of `SelectMessage`, in particular the representation of fallback values, is still under discussion and will be further reviewed by the WG._
 
 ## Select Case Resolution
 
