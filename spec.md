@@ -91,7 +91,6 @@ but may be constructed from any source.
 It is not necessary for an implementation to use Resources to hold messages.
 
 ```ts
-// Abstract data types
 interface Resource {
   id: string
   locale: string
@@ -99,19 +98,6 @@ interface Resource {
 }
 
 interface MessageGroup {
-  entries: Record<string, Message | MessageGroup>
-}
-
-// Canonical JSON representations
-interface Resource {
-  type: 'resource'
-  id: string
-  locale: string
-  entries: Record<string, Message | MessageGroup>
-}
-
-interface MessageGroup {
-  type: 'group'
   entries: Record<string, Message | MessageGroup>
 }
 ```
