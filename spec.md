@@ -167,6 +167,7 @@ interface SelectCase {
   value: MessageBody
 }
 ```
+> Note: The shape of `SelectMessage`, in particular the representation of fallback values, is still under discussion and will be further reviewed by the WG.
 
 ## Select Case Resolution
 
