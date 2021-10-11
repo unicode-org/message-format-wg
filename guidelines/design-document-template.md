@@ -1,3 +1,10 @@
+<!-- 
+This document intends to provide a simple boilerplate to start a design document, fields aren't strictly required and other templates can be found here:
+- [Chromium Design Doc Template](https://docs.google.com/document/d/14YBYKgk-uSfjfwpKFlp_omgUq5hwMVazy_M965s_1KA/edit)
+- [ICU4X Desing docs](https://github.com/unicode-org/icu4x/tree/main/docs/design)
+- []
+-->
+ 
 # Design Document - My proposal 
 
 ## Overview 
