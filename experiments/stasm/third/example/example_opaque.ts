@@ -1,9 +1,12 @@
 import {test} from "tap";
-import {FormattingContext} from "../impl/context.js";
-import {Formattable, OpaquePart} from "../impl/Formattable.js";
-import {formatToParts} from "../impl/index.js";
 import {Message} from "../impl/model.js";
-import {RuntimeValue} from "../impl/RuntimeValue.js";
+import {
+	Formattable,
+	FormattingContext,
+	formatToParts,
+	OpaquePart,
+	RuntimeValue,
+} from "../impl/runtime.js";
 
 // We want to pass it into the translation and get it back out unformatted, in
 // the correct position in the sentence, via formatToParts.

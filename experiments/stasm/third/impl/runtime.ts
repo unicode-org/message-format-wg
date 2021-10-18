@@ -1,7 +1,12 @@
-import {FormattingContext} from "./context.js";
 import {FormattedPart, OpaquePart} from "./Formattable.js";
+import {FormattingContext} from "./FormattingContext.js";
 import {Message} from "./model.js";
 import {RuntimeValue} from "./RuntimeValue.js";
+
+export * from "./Formattable.js";
+export * from "./FormattingContext.js";
+export * from "./Matchable.js";
+export * from "./RuntimeValue.js";
 
 export function formatMessage(
 	message: Message,

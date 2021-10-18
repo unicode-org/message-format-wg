@@ -1,11 +1,17 @@
 import {test} from "tap";
-import {FormattingContext} from "../impl/context.js";
-import {Formattable, FormattedPart} from "../impl/Formattable.js";
-import {formatMessage, formatToParts} from "../impl/index.js";
-import {Matchable, MatchablePlural} from "../impl/Matchable.js";
 import {Argument, Message, Parameter} from "../impl/model.js";
 import {REGISTRY_FORMAT, REGISTRY_MATCH} from "../impl/registry.js";
-import {RuntimeString, RuntimeValue} from "../impl/RuntimeValue.js";
+import {
+	formatMessage,
+	Formattable,
+	FormattedPart,
+	FormattingContext,
+	formatToParts,
+	Matchable,
+	MatchablePlural,
+	RuntimeString,
+	RuntimeValue,
+} from "../impl/runtime.js";
 
 class Person {
 	firstName: string;

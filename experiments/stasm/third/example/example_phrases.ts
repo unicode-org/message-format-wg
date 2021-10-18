@@ -1,7 +1,11 @@
 import {test} from "tap";
-import {FormattableNumber, FormattableString} from "../impl/Formattable.js";
-import {formatMessage, formatToParts} from "../impl/index.js";
 import {Message} from "../impl/model.js";
+import {
+	formatMessage,
+	FormattableNumber,
+	FormattableString,
+	formatToParts,
+} from "../impl/runtime.js";
 
 test("Phrase references (English)", (tap) => {
 	let message: Message = {

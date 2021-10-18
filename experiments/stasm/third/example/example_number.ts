@@ -1,7 +1,6 @@
 import {test} from "tap";
-import {FormattableNumber} from "../impl/Formattable.js";
-import {formatMessage, formatToParts} from "../impl/index.js";
 import {Message} from "../impl/model.js";
+import {formatMessage, FormattableNumber, formatToParts} from "../impl/runtime.js";
 
 test("Number formatting (English)", (tap) => {
 	// "Transferred {NUMBER $payloadSize STYLE unit UNIT megabyte}."

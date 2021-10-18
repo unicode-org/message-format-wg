@@ -1,10 +1,14 @@
 import {test} from "tap";
-import {FormattingContext} from "../impl/context.js";
-import {Formattable, FormattableString} from "../impl/Formattable.js";
-import {formatMessage, formatToParts} from "../impl/index.js";
 import {Argument, Message, Parameter} from "../impl/model.js";
 import {REGISTRY_FORMAT} from "../impl/registry.js";
-import {RuntimeString} from "../impl/RuntimeValue.js";
+import {
+	formatMessage,
+	Formattable,
+	FormattableString,
+	FormattingContext,
+	formatToParts,
+	RuntimeString,
+} from "../impl/runtime.js";
 import {get_term} from "./glossary.js";
 
 REGISTRY_FORMAT["NOUN"] = function get_noun(

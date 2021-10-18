@@ -1,5 +1,5 @@
-import {FormattingContext} from "./context.js";
 import {Formattable, FormattableNumber, FormattablePattern} from "./Formattable.js";
+import {FormattingContext} from "./FormattingContext.js";
 import {Matchable, MatchableNumber, MatchablePlural, MatchableString} from "./Matchable.js";
 import {Argument, Parameter} from "./model.js";
 import {RuntimeNumber, RuntimeString} from "./RuntimeValue.js";

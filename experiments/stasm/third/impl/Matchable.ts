@@ -1,4 +1,4 @@
-import {FormattingContext} from "./context.js";
+import {FormattingContext} from "./FormattingContext.js";
 import {VariantKey} from "./model.js";
 import {RuntimeNumber, RuntimeString, RuntimeValue} from "./RuntimeValue.js";
 
