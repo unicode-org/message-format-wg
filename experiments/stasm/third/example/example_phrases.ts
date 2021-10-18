@@ -1,6 +1,7 @@
 import {test} from "tap";
+import {FormattableNumber, FormattableString} from "../impl/Formattable.js";
+import {formatMessage, formatToParts} from "../impl/index.js";
 import {Message} from "../impl/model.js";
-import {formatMessage, formatToParts, NumberValue, StringValue} from "../impl/runtime.js";
 
 test("Phrase references (English)", (tap) => {
 	let message: Message = {
@@ -37,7 +38,12 @@ test("Phrase references (English)", (tap) => {
 			"their-album": {
 				selectors: [
 					{
-						expr: {type: "VariableReference", name: "userGender"},
+						expr: {
+							type: "FunctionCall",
+							name: "CHOOSE",
+							args: [{type: "VariableReference", name: "userGender"}],
+							opts: {},
+						},
 						default: {type: "StringLiteral", value: "other"},
 					},
 				],
@@ -85,18 +91,18 @@ test("Phrase references (English)", (tap) => {
 
 	tap.equal(
 		formatMessage(message, {
-			userName: new StringValue("Mary"),
-			userGender: new StringValue("feminine"),
-			photoCount: new NumberValue(34),
+			userName: new FormattableString("Mary"),
+			userGender: new FormattableString("feminine"),
+			photoCount: new FormattableNumber(34),
 		}),
 		"Mary added 34 new photos to her album."
 	);
 
 	tap.same(
 		formatToParts(message, {
-			userName: new StringValue("Mary"),
-			userGender: new StringValue("feminine"),
-			photoCount: new NumberValue(34),
+			userName: new FormattableString("Mary"),
+			userGender: new FormattableString("feminine"),
+			photoCount: new FormattableNumber(34),
 		}),
 		[
 			{type: "literal", value: "Mary"},
@@ -120,7 +126,12 @@ test("Phrase references (Polish)", (tap) => {
 		phrases: {},
 		selectors: [
 			{
-				expr: {type: "VariableReference", name: "userGender"},
+				expr: {
+					type: "FunctionCall",
+					name: "CHOOSE",
+					args: [{type: "VariableReference", name: "userGender"}],
+					opts: {},
+				},
 				default: {type: "StringLiteral", value: "other"},
 			},
 			{
@@ -244,18 +255,18 @@ test("Phrase references (Polish)", (tap) => {
 
 	tap.equal(
 		formatMessage(message, {
-			userName: new StringValue("Mary"),
-			userGender: new StringValue("feminine"),
-			photoCount: new NumberValue(34),
+			userName: new FormattableString("Mary"),
+			userGender: new FormattableString("feminine"),
+			photoCount: new FormattableNumber(34),
 		}),
 		"Mary dodała 34 nowe zdjęcia do swojego albumu."
 	);
 
 	tap.same(
 		formatToParts(message, {
-			userName: new StringValue("Mary"),
-			userGender: new StringValue("feminine"),
-			photoCount: new NumberValue(34),
+			userName: new FormattableString("Mary"),
+			userGender: new FormattableString("feminine"),
+			photoCount: new FormattableNumber(34),
 		}),
 		[
 			{type: "literal", value: "Mary"},

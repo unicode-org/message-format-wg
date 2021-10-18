@@ -1,6 +1,8 @@
+import {Formattable, FormattableString, isFormattable} from "./Formattable.js";
+import {Matchable} from "./Matchable.js";
 import {Message, Parameter, PatternElement, Selector, StringLiteral, Variant} from "./model.js";
-import {REGISTRY} from "./registry.js";
-import {BooleanValue, NumberValue, RuntimeValue, StringValue} from "./runtime.js";
+import {REGISTRY_FORMAT, REGISTRY_MATCH} from "./registry.js";
+import {RuntimeBoolean, RuntimeNumber, RuntimeString, RuntimeValue} from "./RuntimeValue.js";
 
 // Resolution context for a single formatMessage() call.
 
@@ -26,7 +28,7 @@ export class FormattingContext {
 		return output;
 	}
 
-	*resolvePattern(pattern: Array<PatternElement>): IterableIterator<RuntimeValue<unknown>> {
+	*resolvePattern(pattern: Array<PatternElement>): IterableIterator<Formattable> {
 		if (this.visited.has(pattern)) {
 			throw new RangeError("Recursive reference to a variant value.");
 		}
@@ -37,14 +39,19 @@ export class FormattingContext {
 		for (let element of pattern) {
 			switch (element.type) {
 				case "StringLiteral":
-					yield new StringValue(element.value);
+					yield new FormattableString(element.value);
 					continue;
 				case "VariableReference": {
-					yield this.vars[element.name];
-					continue;
+					let value = this.vars[element.name];
+					if (isFormattable(value)) {
+						yield value;
+						continue;
+					} else {
+						throw new TypeError("Invalid variable type.");
+					}
 				}
 				case "FunctionCall": {
-					let callable = REGISTRY[element.name];
+					let callable = REGISTRY_FORMAT[element.name];
 					yield callable(this, element.args, element.opts);
 					continue;
 				}
@@ -56,27 +63,25 @@ export class FormattingContext {
 	}
 
 	selectVariant(variants: Array<Variant>, selectors: Array<Selector>): Variant {
-		let selector_values: Array<RuntimeValue<unknown>> = [];
+		let selector_values: Array<Matchable> = [];
 		let selector_defaults: Array<StringLiteral> = [];
 
 		for (let selector of selectors) {
 			switch (selector.expr.type) {
-				case "VariableReference": {
-					let value = this.vars[selector.expr.name];
-					selector_values.push(value);
-					selector_defaults.push(selector.default);
-					break;
-				}
 				case "FunctionCall": {
-					let callable = REGISTRY[selector.expr.name];
+					let callable = REGISTRY_MATCH[selector.expr.name];
 					let value = callable(this, selector.expr.args, selector.expr.opts);
 					selector_values.push(value);
 					selector_defaults.push(selector.default);
 					break;
 				}
+				case "VariableReference": {
+					// TODO(stasm): Should we allow stand-alone variables as selectors?
+					throw new TypeError("Invalid selector type.");
+				}
 				default:
 					// TODO(stasm): Should we allow Literals as selectors?
-					throw new TypeError();
+					throw new TypeError("Invalid selector type.");
 			}
 		}
 
@@ -101,18 +106,18 @@ export class FormattingContext {
 
 	toRuntimeValue(node: Parameter): RuntimeValue<unknown> {
 		if (typeof node === "undefined") {
-			return new BooleanValue(false);
+			return new RuntimeBoolean(false);
 		}
 
 		switch (node.type) {
 			case "StringLiteral":
-				return new StringValue(node.value);
+				return new RuntimeString(node.value);
 			case "IntegerLiteral":
-				return new NumberValue(parseInt(node.value));
+				return new RuntimeNumber(parseInt(node.value));
 			case "DecimalLiteral":
-				return new NumberValue(parseFloat(node.value));
+				return new RuntimeNumber(parseFloat(node.value));
 			case "BooleanLiteral":
-				return new BooleanValue(node.value);
+				return new RuntimeBoolean(node.value);
 			case "VariableReference":
 				return this.vars[node.name];
 			default:

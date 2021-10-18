@@ -1,7 +1,7 @@
 accord-adjective-with-item =
 	"{NOUN $item CAPITALIZED} jest {ADJECTIVE $color ACCORD_WITH $item}."
 
-flat-variants [PLURAL $photoCount : other, $userGender : many] =
+flat-variants [PLURAL $photoCount : other, CHOOSE $userGender : many] =
 	[one, masculine] "{$userName} dodał nowe zdjęcie do swojego albumu."
 	[one, feminine] "{$userName} dodała nowe zdjęcie do swojego albumu."
 	[one, other] "Użytkownik {$userName} dodał nowe zdjęcie do swojego albumu."

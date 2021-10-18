@@ -1,7 +1,7 @@
 accord-adjective-with-item =
 	"The {NOUN $item} is {ADJECTIVE $color}."
 
-flat-variants [PLURAL $photoCount : other, $userGender : other] =
+flat-variants [PLURAL $photoCount : other, CHOOSE $userGender : other] =
 	[one, masculine] "{$userName} added a new photo to his album."
 	[one, feminine] "{$userName} added a new photo to her album."
 	[one, other] "{$userName} added a new photo to their album."

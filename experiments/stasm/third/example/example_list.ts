@@ -1,15 +1,11 @@
 import {test} from "tap";
 import {FormattingContext} from "../impl/context.js";
-import {Argument, Message, Parameter, VariantKey} from "../impl/model.js";
-import {REGISTRY} from "../impl/registry.js";
-import {
-	formatMessage,
-	FormattedPart,
-	formatToParts,
-	PluralValue,
-	RuntimeValue,
-	StringValue,
-} from "../impl/runtime.js";
+import {Formattable, FormattedPart} from "../impl/Formattable.js";
+import {formatMessage, formatToParts} from "../impl/index.js";
+import {Matchable, MatchablePlural} from "../impl/Matchable.js";
+import {Argument, Message, Parameter} from "../impl/model.js";
+import {REGISTRY_FORMAT, REGISTRY_MATCH} from "../impl/registry.js";
+import {RuntimeString, RuntimeValue} from "../impl/RuntimeValue.js";
 
 class Person {
 	firstName: string;
@@ -21,8 +17,8 @@ class Person {
 	}
 }
 
-// TODO(stasm): This is generic enough that it could be in impl/runtime.ts.
-class ListValue<T> extends RuntimeValue<Array<T>> {
+// TODO(stasm): This is generic enough that it could be in impl/Formattable.ts.
+class FormattableList<T> extends RuntimeValue<Array<T>> implements Formattable {
 	private opts: Intl.ListFormatOptions;
 
 	constructor(value: Array<T>, opts: Intl.ListFormatOptions = {}) {
@@ -40,44 +36,40 @@ class ListValue<T> extends RuntimeValue<Array<T>> {
 		let lf = new Intl.ListFormat(ctx.locale, this.opts);
 		yield* lf.formatToParts(this.value);
 	}
-
-	match(ctx: FormattingContext, key: VariantKey): boolean {
-		return false;
-	}
 }
 
-REGISTRY["PLURAL_LEN"] = function (
+REGISTRY_MATCH["PLURAL_LEN"] = function (
 	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
-): PluralValue {
+): Matchable {
 	let elements = ctx.toRuntimeValue(args[0]);
-	if (!(elements instanceof ListValue)) {
+	if (!(elements instanceof FormattableList)) {
 		throw new TypeError();
 	}
 
 	// TODO(stasm): Cache PluralRules.
 	let pr = new Intl.PluralRules(ctx.locale);
 	let category = pr.select(elements.value.length);
-	return new PluralValue(category, elements.value.length);
+	return new MatchablePlural(category, elements.value.length);
 };
 
-REGISTRY["PEOPLE_LIST"] = function (
+REGISTRY_FORMAT["PEOPLE_LIST"] = function (
 	ctx: FormattingContext,
 	args: Array<Argument>,
 	opts: Record<string, Parameter>
-): ListValue<string> {
+): FormattableList<string> {
 	if (ctx.locale !== "ro") {
 		throw new Error("Only Romanian supported");
 	}
 
 	let elements = ctx.toRuntimeValue(args[0]);
-	if (!(elements instanceof ListValue)) {
+	if (!(elements instanceof FormattableList)) {
 		throw new TypeError();
 	}
 
 	let name_format = ctx.toRuntimeValue(opts["NAME"]);
-	if (!(name_format instanceof StringValue)) {
+	if (!(name_format instanceof RuntimeString)) {
 		throw new TypeError();
 	}
 
@@ -96,16 +88,16 @@ REGISTRY["PEOPLE_LIST"] = function (
 	}
 
 	let list_style = ctx.toRuntimeValue(opts["STYLE"]);
-	if (!(list_style instanceof StringValue)) {
+	if (!(list_style instanceof RuntimeString)) {
 		throw new TypeError();
 	}
 
 	let list_type = ctx.toRuntimeValue(opts["TYPE"]);
-	if (!(list_type instanceof StringValue)) {
+	if (!(list_type instanceof RuntimeString)) {
 		throw new TypeError();
 	}
 
-	return new ListValue(names, {
+	return new FormattableList(names, {
 		// TODO(stasm): Add default options.
 		style: list_style.value,
 		type: list_type.value,
@@ -113,7 +105,7 @@ REGISTRY["PEOPLE_LIST"] = function (
 
 	function decline(name: string): string {
 		let declension = ctx.toRuntimeValue(opts["CASE"]);
-		if (!(declension instanceof StringValue)) {
+		if (!(declension instanceof RuntimeString)) {
 			throw new TypeError();
 		}
 
@@ -197,7 +189,7 @@ test("Fancy list formatting, first names only", (tap) => {
 
 	tap.equal(
 		formatMessage(message, {
-			names: new ListValue([
+			names: new FormattableList([
 				new Person("Maria", "Stanescu"),
 				new Person("Ileana", "Zamfir"),
 				new Person("Petre", "Belu"),
@@ -208,7 +200,7 @@ test("Fancy list formatting, first names only", (tap) => {
 
 	tap.same(
 		formatToParts(message, {
-			names: new ListValue([
+			names: new FormattableList([
 				new Person("Maria", "Stanescu"),
 				new Person("Ileana", "Zamfir"),
 				new Person("Petre", "Belu"),
@@ -289,7 +281,7 @@ test("Fancy list formatting, full names", (tap) => {
 
 	tap.equal(
 		formatMessage(message, {
-			names: new ListValue([
+			names: new FormattableList([
 				new Person("Maria", "Stanescu"),
 				new Person("Ileana", "Zamfir"),
 				new Person("Petre", "Belu"),
@@ -300,7 +292,7 @@ test("Fancy list formatting, full names", (tap) => {
 
 	tap.same(
 		formatToParts(message, {
-			names: new ListValue([
+			names: new FormattableList([
 				new Person("Maria", "Stanescu"),
 				new Person("Ileana", "Zamfir"),
 				new Person("Petre", "Belu"),
