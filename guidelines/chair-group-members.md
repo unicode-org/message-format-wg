@@ -8,3 +8,4 @@
 - Staś Małolepszy
 - Rafael Xavier de Souza
 - Addison Phillips
+- Daniel Minor
