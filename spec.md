@@ -78,16 +78,16 @@ and eventually have it accepted as a Unicode Technical Standard (UTS).
 
 ## Data Model
 
-As practically speaking all MessageFormat use cases make use of more than one related message,
-It is beneficial to be able to group and organise them in the data model.
+As practically all MessageFormat use cases will make use of more than one related message,
+it is beneficial to be able to group and organise related messages in the data model.
 
 A Resource provides an externally addressable set of messages,
 which all share a single _locale_ identifier.
 Within a Resource, the structure of Messages may be completely flat,
-or use MessageGroups to provide a hierarchy of messages.
+or MessageGroups may be used to provide a hierarchy of messages.
 
 A Resource is often the data model representation of a single file,
-but may be constructed from any source.
+but may be constructed from any number and type of sources.
 It is not necessary for an implementation to use Resources to hold messages.
 
 ```ts
