@@ -450,8 +450,6 @@ interface PatternElement {
 
 ### formatToString()
 
-### formatToParts()
-
 ## Literal
 
 Literal values are immediately defined in the data model.
@@ -542,7 +540,7 @@ Variables are defined by the current Scope.
 ## Formattables
 
 Formattable is a general interface for values which may be formatted
-to a string or to a sequence of MessageFormatParts,
+to a string or to some other target,
 such as Messages, literals and runtime variables.
 Its purpose is to allow for each Message and PatternElement formatter to
 encapsulate any value while providing a fixed external interface.
@@ -557,14 +555,17 @@ _localeMatcher_ (either **"best fit"** or **"lookup"**).
 These allow for a Formattable to be defined in a context where the formatting locale is not yet known.
 It is also possible for a Formattable to define its own locale and ignore the method arguments.
 
+In addition to `toString()`,
+an implementation of Formattable may provide other formatters,
+supporting other corresponding formatting targets.
+For example,
+an implementation may provide an interface for formatting a message to
+a sequence of parts representing ther resolved value of each of the message's pattern elements,
+including metadata about their shape and origin.
+
 ```ts
 interface Formattable {
   getValue(): unknown
-  toParts(
-    locales: string[],
-    localeMatcher: 'best fit' | 'lookup',
-    source: string
-  ): MessageFormatPart[]
   toString(locales: string[], localeMatcher: 'best fit' | 'lookup'): string
 }
 ```
@@ -573,17 +574,6 @@ interface Formattable {
 
 The getValue method is called with no arguments.
 It is expected to return the source value of the Formattable.
-
-### toParts(_locales_, _localeMatcher_, _source_)
-
-The toParts method is called when formatting a message to parts with arguments
-_locales_ (which must be a list of valid language code strings),
-_localeMatcher_ (which must be either **"best fit"** or **"lookup"**), and
-_source_ (which must be a string).
-It returns a list of MessageFormatPart objects.
-
-If _source_ is a non-empty string, the `source` value of each of the returned MessageFormatParts
-is expected to start with that string.
 
 ### toString(_locales_, _localeMatcher_)
 
@@ -596,45 +586,6 @@ It returns a string value.
 
 The Formattable wrapper for Message values has the following method implementations and
 abstract operations.
-
-#### FormattableMessage#toParts(_locales_, _localeMatcher_, _source_)
-
-When the toParts method of a FormattableMessage instance is called
-with arguments _locales_, _localeMatcher_ and _source_,
-the following steps are taken:
-
-1. Let _fmtMsg_ be **this** value.
-1. Let _res_ be an empty list of MessageFormatParts.
-1. Let _fmtMeta_ be _fmtMsg_.\[\[Meta]].
-1. Let _selResult_ be _fmtMsg_.\[\[SelectFailed]].
-1. If _fmtMeta_ is not **undefined** or _selResult_ is **"no-match"**, then
-   1. Let _metaPart_ be a new MessageFormatPart object.
-   1. Set _metaPart_.type to **"meta"**.
-   1. Set _metaPart_.value to en empty string.
-   1. Let _meta_ be an empty object with string values.
-   1. If _fmtMeta_ is not **undefined**, then
-      1. For each key-value pair _key_, _value_ of _fmtMeta_, do:
-         1. Set the property _key_ of _meta_ to _value_.
-   1. If _selResult_ is a non-empty string, then
-      1. Set the property **"select-result"** of _meta_ to _selResult_.
-   1. Set _metaPart_.meta to _meta_.
-   1. Append _metaPart_ as the last entry of _res_.
-1. Let _context_ be _fmtMsg_.\[\[Context]].
-1. Let _pattern_ be GetMessagePattern(_fmtMsg_).
-1. For each PatternElement _elem_ of _pattern_, do:
-   1. Let _elemFmt_ be GetPatternElementFormatter(_elem_).
-   1. Let _elemtParts_ be _elemFmt_.formatToParts(_context_, _elem_).
-   1. For each MessageFormatPart _part_ of _elemParts_, do:
-      1. Append _part_ as the last entry of _res_.
-1. If _source_ is a non-empty string, then
-   1. For each MessageFormatPart _part_ of _res_, do:
-      1. Let _prevSource_ be _part_.source.
-      1. If _prevSource_ is a non-empty string, then
-         1. Set _part.source_ to the string-concatenation of
-            _source_, **"/"**, and _prevSource_.
-      1. Else,
-         1. Set _part_.source to _source_.
-1. Return _res_.
 
 #### FormattableMessage#toString()
 
@@ -713,7 +664,6 @@ as well as any PatternElementFormatter-specific context.
 ```ts
 interface FormattingContext {
   asFormattable(elem: PatternElement): Formattable
-  formatToParts(elem: PatternElement): MessageFormatPart[]
   formatToString(elem: PatternElement): string
   localeMatcher: 'best fit' | 'lookup'
   locales: string[]
@@ -810,10 +760,6 @@ _msgPath_ (which must be a list of strings), and
 an optional argument _scope_.
 It returns a string.
 The following steps are taken:
-
-### MessageFormat#formatToParts(_resId_, _msgPath_, _scope_)
-
-> _Turning a message into a sequence of parts._
 
 ### MessageFormat#getMessage()
 
