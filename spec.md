@@ -252,7 +252,7 @@ interface Selector {
 
 When formatting a SelectMessage,
 it is necessary to first select one of its `cases`.
-This is done by first determining the Formattable values for each of its `select` values,
+This is done by first determining the Matchable values for each of its `select` values,
 and then looking for the first `cases` entry for which all the keys provide a match.
 Each Selector may define a `fallback` value to use if an exact match is not found.
 If a `fallback` is not defined, the default value **"other"** is used.
@@ -264,8 +264,8 @@ A case with an empty list as its `key` will always be selected,
 unless an earlier case was matched first.
 
 Plural selection is achieved by relying on the `match()` method of
-a FormattableNumber instance returning **true** for a corresponding CLDR category match.
-For instance, in many languages calling `match("one")` will return **true** for numbers.
+a MatchableNumber instance returning **true** for a corresponding CLDR category match.
+For instance, in many languages calling `match("one")` will return **true** for the number `1`.
 
 The exact algorithm is defined using the following abstract operations:
 
@@ -277,27 +277,27 @@ _cases_ (which must be a list of SelectCase objects).
 It returns either a SelectCase object or **undefined**.
 The following steps are taken:
 
-1. Let _formattables_ be an initially empty list of Formattable objects.
+1. Let _matchables_ be an initially empty list of Matchable objects.
 1. Let _fallbacks_ be an initially empty list of strings.
 1. For each Selector _selector_ of _select_, do:
-   1. Let _selFmt_ be AsFormattable(_selector_.value).
-   1. Append _selFmt_ as the last element of _formattables_.
-   1. Let _selFb_ be _selector_.fallback.
-   1. If _selFb_ is **undefined**, then
+   1. Let _sm_ be AsMatchable(_selector_.value).
+   1. Append _sm_ as the last element of _matchables_.
+   1. Let _sf_ be _selector_.fallback.
+   1. If _sf_ is **undefined**, then
       1. Append **"other"** as the last element of _fallbacks_.
    1. Else,
-      1. Append _selFb_ as the last element of _fallbacks_.
+      1. Append _sf_ as the last element of _fallbacks_.
 1. For each SelectCase _selCase_ of _cases_, do:
-   1. Let _match_ be SelectMessageKeyMatches(_selCase_.key, _formattables_, _fallbacks_).
+   1. Let _match_ be SelectMessageKeyMatches(_selCase_.key, _matchables_, _fallbacks_).
    1. If _match_ is **true**, then
       1. Return _selCase_.
 1. Return **undefined**.
 
-### SelectMessageKeyMatches(_selKey_, _formattables_, _fallbacks_)
+### SelectMessageKeyMatches(_selKey_, _matchables_, _fallbacks_)
 
 The SelectMessageKeyMatches abstract operation is called with arguments
 _selKey_ (which must be a list of strings),
-_formattables_ (which must be a list of Formattable objects) and
+_matchables_ (which must be a list of Matchable objects) and
 _fallbacks_ (which must be a list of strings).
 It returns a boolean value.
 The following steps are taken:
@@ -306,12 +306,122 @@ The following steps are taken:
 1. Let _len_ be length of the list _selKey_.
 1. Repeat, while _i_ < _len_:
    1. Let _key_ be the string at index _i_ of _selKey_.
-   1. Let _selFmt_ be the Formattable at index _i_ of _formattables_.
+   1. Let _sm_ be the Matchable at index _i_ of _matchables_.
    1. Let _fallback_ be the string at index _i_ of _fallbacks_.
-   1. Let _match_ be the boolean result of calling _selFmt_.matchSelectKey(_key_).
+   1. Let _match_ be the boolean result of calling _sm_.matchSelectKey(_key_).
    1. If _match_ is **false** and _fallback_ is not equal to _key_, then
       1. Return **false**.
 1. Return **true**.
+
+## Matchables
+
+Matchable is a general interface for values which may be used as a SelectMessage selector value.
+Its purpose is to allow for each Message and PatternElement formatter to
+encapsulate any value while providing a fixed external interface.
+
+The value and any formatting options must be set during the construction of the Matchable.
+They are expected to remain unchanged during the lifetime of the Matchable,
+allowing its methods to be considered pure and memoizable.
+
+```ts
+interface Matchable {
+  matchSelectKey(
+    locales: string[],
+    localeMatcher: 'best fit' | 'lookup',
+    key: string
+  ): boolean
+}
+```
+
+### matchSelectKey(_locales_, _localeMatcher_, _key_)
+
+The matchSelectKey method is called during SelectMessage case resolution with arguments
+_locales_ (which must be a list of valid language code strings),
+_localeMatcher_ (which must be either **"best fit"** or **"lookup"**), and
+_key_ (which must be a string).
+It returns a boolean value.
+
+Always including the locale information in the method arguments allow for a Matchable
+to be defined in a context where the formatting locale is not yet known.
+It is also possible for a Matchable to define its own locale and ignore the method arguments.
+
+The returned value is expected to be **true** if the value of this Matchable matches the given _key_.
+Otherwise, the method should return **false**.
+
+### MatchableMessage
+
+The Matchable wrapper for Message values must implement the following behaviour:
+
+#### MatchableMessage#matchSelectKey(_locales_, _localeMatcher_, _key_)
+
+When the matchSelectKey method of a FormattableMessage instance is called
+with arguments _locales_, _localeMatcher_, and _key_,
+the following steps are taken:
+
+1. Let _msg_ be **this** value.
+1. Let _str_ be _msg_.toString().
+1. If _key_ and _str_ are equal, then
+   1. Return **true**.
+1. Else,
+   1. Return **false**.
+
+#### CreateMatchableMessage(_context_, _message_)
+
+The CreateMatchableMessage abstract operation is called with arguments
+_context_ (which must be a FormattingContext object) and
+_message_ (which must be a Message object).
+It returns a MatchableMessage object.
+The following steps are taken:
+
+1. Let _msg_ be a new MatchableMessage instance with
+   internal slots \[\[Context]], \[\[Meta]], \[\[Value]] and \[\[SelectResult]].
+1. Set _msg_.\[\[Context]] to _context_.
+1. Set _msg_.\[\[Value]] to _message_.
+1. Set _msg_.\[\[SelectResult]] to **undefined**.
+1. If _message_.meta is **undefined**, then
+   1. Set _msg_.\[\[Meta]] to **undefined**.
+1. Else,
+   1. Set _msg_.\[\[Meta]] to a shallow copy of _message_.meta.
+1. Return _msg_.
+
+### MatchableNumber
+
+Number values must be wrapped in a MatchableNumber,
+i.e. a class that implements the Matchable interface but has the following behaviour.
+An implementation may further extend the MatchableNumber class to account for different
+representations of numbers.
+
+#### MatchableNumber#matchSelectKey(_locales_, _localeMatcher_, _key_)
+
+The matchSelectKey method of a MatchableNumber instance is defined as follows:
+
+1. Let _matchNum_ be **this** value.
+1. Let _num_ be _matchNum_.getValue().
+1. If _num_ is an integer, then
+   1. Let _strNum_ be the default, non-localized string representation of _num_.
+   1. If _key_ and _strNum_ are equal, then
+      1. Return **true**.
+1. Let _pluralCat_ be the CLDR string identifier of the plural category corresponding to _num_,
+   while taking into account _locales_, _localeMatcher_, and
+   any options previously passed to the MatchableNumber.
+1. If _key_ and _pluralCat_ are equal, then
+   1. Return **true**.
+1. Else,
+   1. Return **false**.
+
+### AsMatchable(_value_)
+
+The abstract operation AsMatchable is called with the argument _value_.
+It returns a Matchable object.
+The following steps are taken:
+
+1. If _value_ is a Matchable object, then
+   1. Return _value_.
+1. If _value_ is a number, then
+   1. Let _match_ be a MatchableNumber object that wraps _value_.
+1. Else,
+   1. Let _match_ be an implementation-defined Matchable object that wraps _value_.
+1. Return _match_.
 
 # Pattern Elements
 
@@ -450,11 +560,6 @@ It is also possible for a Formattable to define its own locale and ignore the me
 ```ts
 interface Formattable {
   getValue(): unknown
-  matchSelectKey(
-    locales: string[],
-    localeMatcher: 'best fit' | 'lookup',
-    key: string
-  ): boolean
   toParts(
     locales: string[],
     localeMatcher: 'best fit' | 'lookup',
@@ -468,17 +573,6 @@ interface Formattable {
 
 The getValue method is called with no arguments.
 It is expected to return the source value of the Formattable.
-
-### matchSelectKey(_locales_, _localeMatcher_, _key_)
-
-The matchSelectKey method is called during SelectMessage case resolution with arguments
-_locales_ (which must be a list of valid language code strings),
-_localeMatcher_ (which must be either **"best fit"** or **"lookup"**), and
-_key_ (which must be a string).
-It returns a boolean value.
-
-The returned value is expected to be **true** if the value of this Formattable matches the given _key_.
-Otherwise, the method should return **false**.
 
 ### toParts(_locales_, _localeMatcher_, _source_)
 
@@ -502,19 +596,6 @@ It returns a string value.
 
 The Formattable wrapper for Message values has the following method implementations and
 abstract operations.
-
-#### FormattableMessage#matchSelectKey(_locales_, _localeMatcher_, _key_)
-
-When the matchSelectKey method of a FormattableMessage instance is called
-with arguments _locales_, _localeMatcher_, and _key_,
-the following steps are taken:
-
-1. Let _fmtMsg_ be **this** value.
-1. Let _str_ be _fmtMsg_.toString().
-1. If _key_ and _str_ are equal, then
-   1. Return **true**.
-1. Else,
-   1. Return **false**.
 
 #### FormattableMessage#toParts(_locales_, _localeMatcher_, _source_)
 
@@ -612,31 +693,6 @@ The following steps are taken:
    1. Set _fmtMsg_.\[\[SelectResult]] to **"success"**.
    1. Return _selCase_.value.
 
-### FormattableNumber
-
-Number values must be wrapped in a FormattableNumber,
-i.e. a class that implements the Formattable interface but has the following behaviour.
-An implementation may further extend the FormattableNumber class to account for different
-representations of numbers.
-
-#### FormattableNumber#matchSelectKey(_locales_, _localeMatcher_, _key_)
-
-The matchSelectKey method of a FormattableNumber instance is defined as follows:
-
-1. Let _fmtNum_ be **this** value.
-1. Let _num_ be _fmtNum_.getValue().
-1. If _num_ is an integer, then
-   1. Let _strNum_ be the default, non-localized string representation of _num_.
-   1. If _key_ and _strNum_ are equal, then
-      1. Return **true**.
-1. Let _pluralCat_ be the CLDR string identifier of the plural category corresponding to _num_,
-   while taking into account _locales_, _localeMatcher_, and
-   any options previously passed to the FormattableNumber.
-1. If _key_ and _pluralCat_ are equal, then
-   1. Return **true**.
-1. Else,
-   1. Return **false**.
-
 ### AsFormattable(_value_)
 
 The abstract operation AsFormattable is called with the argument _value_.
@@ -645,11 +701,7 @@ The following steps are taken:
 
 1. If _value_ is a Formattable object, then
    1. Return _value_.
-1. If _value_ is a number, then
-   1. Let _fmt_ be a FormattableNumber object that wraps _value_.
-1. Else,
-   1. Let _fmt_ be an implementation-defined Formattable object that wraps _value_.
-1. Return _fmt_.
+1. Return an implementation-defined Formattable object that wraps _value_.
 
 ## Formatting Context
 
