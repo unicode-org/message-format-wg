@@ -315,7 +315,20 @@ The following steps are taken:
 
 # Pattern Elements
 
-> _The types of pieces that can make up a message._
+In the data model, pattern elements are used in three places:
+1. The body of each message is a sequence of pattern elements.
+2. The selector value is a pattern element.
+3. Some pattern elements may contain other pattern elements,
+   defining the values of arguments or options.
+
+When formatting a message,
+each pattern element is handled by a corresponding pattern element formatter.
+
+```ts
+interface PatternElement {
+  type: string
+}
+```
 
 ## Pattern Formatter Interface
 
@@ -331,19 +344,48 @@ The following steps are taken:
 
 ## Literal
 
-> _Values that are defined directly in the message data._
+Literal values are immediately defined in the data model.
 
 ### Data Model
+
+The canonical value of a Literal is always a string.
+
+```ts
+interface Literal extends PatternElement {
+  type: 'literal'
+  value: string
+}
+```
 
 ## Variable
 
-> _Values that are provided as runtime arguments or parameters to the formatter._
+Variables are formatted with values that are
+provided as runtime arguments or parameters to the formatter.
 
 ### Data Model
+
+```ts
+interface Variable extends PatternElement {
+  type: 'variable'
+  var_path: (Literal | Variable)[];
+}
+```
+
+Using an array with more than one value refers to an inner property of an object value,
+so e.g. `['user', 'name']` would require something like `{ name: 'Kat' }`
+as the value of the `'user'` scope variable.
 
 ### Runtime Scope
 
 > _How the formatting arguments/parameters are accessed._
+
+```ts
+interface Scope {
+  [key: string]: unknown
+}
+```
+
+Variables are defined by the current Scope.
 
 ## Function
 
