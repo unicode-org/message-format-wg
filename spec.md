@@ -149,19 +149,29 @@ interface Selector {
 ## Pattern Elements
 
 Pattern elements are used in three places:
+
 1. The body of each PatternMessage is a sequence of pattern elements.
-2. The selector value is a pattern element.
+2. The Selector value is a pattern element.
 3. Some pattern elements may contain other pattern elements,
    defining the values of arguments or options.
 
-When formatting a message,
-each pattern element is handled by a corresponding pattern element formatter.
+This specification defines the following four pattern elements:
+
+- Literal
+- VariableRef
+- FunctionRef
+- MessageRef
 
 ```ts
 interface PatternElement {
   type: string
 }
 ```
+
+An implementation MAY support additional custom pattern elements.
+If it does so, each such custom PatternElement must extend the PatternElement interface and
+include a U+003A COLON `:` character within its `type` value
+(used for namespacing and to ensure forward compatibility).
 
 ### Literal
 
@@ -175,15 +185,15 @@ interface Literal extends PatternElement {
 }
 ```
 
-### Variable
+### VariableRef
 
-Variables are formatted with values that are
+Variables are resolved with values that are
 provided as runtime arguments or parameters to the formatter.
 
 ```ts
-interface Variable extends PatternElement {
+interface VariableRef extends PatternElement {
   type: 'variable'
-  var_path: (Literal | Variable)[];
+  var_path: (Literal | VariableRef)[]
 }
 ```
 
@@ -191,13 +201,53 @@ Using an array with more than one value refers to an inner property of an object
 so e.g. `['user', 'name']` would require something like `{ name: 'Kat' }`
 as the value of the `'user'` runtime parameter.
 
-### Function
+### FunctionRef
 
-> _Values defined by a user-definable function call._
+FunctionRef elements represent values defined by a user-definable function call.
+To resolve a FunctionRef,
+an externally defined function is called with
+the resolved values of the specified arguments and options.
 
-### Term
+```ts
+interface FunctionRef extends PatternElement {
+  type: 'function'
+  func: string
+  args: (Literal | VariableRef)[]
+  options?: Record<string, Literal | VariableRef>
+}
+```
 
-> _Include one message within another message._
+The `func` identifies a function that takes in the current locale,
+the arguments `args`,
+as well as any `options`,
+and returns some corresponding output.
+Likely functions available by default would include formatters for numeric and date values.
+
+### MessageRef
+
+A MessageRef is a pointer to a Message,
+which allows for including one message within another message.
+To resolve a MessageRef,
+that message is first identified and then resolved.
+
+```ts
+interface MessageRef extends PatternElement {
+  type: 'message'
+  res_id?: string
+  msg_path: (Literal | VariableRef)[]
+  scope?: Record<string, Literal | VariableRef>
+}
+```
+
+If `res_id` is undefined, the message is sought in the current Resource.
+If it is set, it identifies the resource for the sought message.
+It is entirely intentional that this value may not be defined at runtime,
+as this allows for a static determination of the resources required to format a message.
+
+`msg_path` is used to locate the Message within the Resource,
+and it may include VariableRef values.
+
+`scope` overrides values in the current scope when resolving the message.
 
 # Message Resolution
 
@@ -480,7 +530,7 @@ The following steps are taken:
 
 ## Literal
 
-## Variable
+## VariableRef
 
 ### Runtime Scope
 
@@ -494,17 +544,17 @@ interface Scope {
 
 Variables are defined by the current Scope.
 
-## Function
+## FunctionRef
 
 > _Values defined by a user-definable function call._
 
 ### Data Model
 
-### Function Call Signature
+### FunctionRef Call Signature
 
 > _The arguments and return type for user-definable functions._
 
-### Function Options
+### FunctionRef Options
 
 > _How to define the options that a function provides._
 
@@ -516,11 +566,7 @@ Variables are defined by the current Scope.
 
 #### datetime()
 
-## Term
-
-> _Include one message within another message._
-
-### Data Model
+## MessageRef
 
 ### Message Access
 
