@@ -86,7 +86,8 @@ or MessageGroups may be used to provide a hierarchy of messages.
 
 A Resource is often the data model representation of a single file,
 but may be constructed from any number and type of sources.
-It is not necessary for an implementation to use Resources to hold messages.
+It is not necessary for a message formatter to actually use Resources to hold messages,
+but this may be useful for Message Selection.
 
 ```ts
 interface Resource {
@@ -249,41 +250,17 @@ and it may include VariableRef values.
 
 `scope` overrides values in the current scope when resolving the message.
 
-# Message Resolution
+# Message Selection
 
-Message resolution is the process of identifying a single message from a set of Resources,
+Message selection is the process of identifying a single message from a set of Message Resources,
 given a Resource identifier and a key path from the root of that Resource.
-This is achieved using the GetMessage abstract operation,
-which is called internally by MessageFormat methods.
+While this process MAY be used by an implementation's API
+when initially selecting a message for formatting,
+it MUST be used when resolving a MessageRef pattern element.
 
-GetMessage will return the first Message that it finds in a Resource
-with the given identifier that contains an entry at its full key path.
-In other words, the order of resources determines priority,
-if multiple Resources use the same identifier and
-each provide a message at the same key path.
-
-## GetMessage(_readers_, _resId_, _path_)
-
-The GetMessage abstract operation is called with arguments
-_readers_ (which must be a list of MessageResourceReader object),
-_resId_ (which must be a string), and
-_path_ (which must be a list of strings).
-It returns a Message object or **undefined**.
-The following steps are taken:
-
-1. For each _reader_ of _readers_, do:
-   1. Let _id_ be the result of calling _reader_.getId().
-   1. If _id_ and _resId_ are equal, then
-      1. Let _msg_ be the result of calling _reader_.getMessage(_path_).
-      1. If _msg_ is not **undefined**, then
-         1. Return _msg_.
-1. Return **undefined**.
-
-## MessageResourceReader
-
-MessageResourceReader provides the minimum required runtime interface for accessing resources.
-It may be extended by an implementation to provide access to a set of messages
-that cannot easily be represented as a Resource.
+As an implementation may use a different internal representation of messages than Message Resources,
+Message Selection is presented here in terms of a minimal shared interface, MessageResourceReader.
+The construction and internal behaviour of its methods are presented based on Message Resources.
 
 ```ts
 interface MessageResourceReader {
@@ -292,24 +269,20 @@ interface MessageResourceReader {
 }
 ```
 
-### CreateMessageResourceReader(_resource_)
+## MessageResourceReader Methods
 
-The CreateMessageResourceReader abstract operation is called with an argument
-_resource_ (which must be a Resource object).
-It returns a MessageResourceReader object.
-The following steps are taken:
-
-1. Let _reader_ be a new MessageResourceReader instance with
-   an internal slot \[\[Data]].
-1. Set _reader_.\[\[Data]] as _resource_.
-1. Return _reader_.
+The methods of a MessageResourceReader MUST be synchronous,
+to ensure that message formatting can be fast.
+If some asynchrony is needed e.g. due to loading or parsing source files,
+This asynchrony should be handled before or during
+the construction of a MessageResourceReader instance.
 
 ### MessageResourceReader#getId()
 
-When called with no arguments,
-the getId method returns its string identifier.
+The getId method is called with no arguments.
+It returns the string identifier of the current message resource.
 
-With the default Resource-based implementation,
+With an implementation constructed with CreateMessageResourceReader(_resource_),
 the following steps are taken:
 
 1. Let _reader_ be the **this** value.
@@ -323,7 +296,7 @@ _path_ (which must be a list of strings).
 It returns either a Message object corresponding to the _path_,
 or **undefined** if not such Message exists.
 
-With the default Resource-based implementation,
+With an implementation constructed with CreateMessageResourceReader(_resource_),
 the following steps are taken:
 
 1. If _path_ is an empty list,
@@ -340,6 +313,44 @@ the following steps are taken:
    1. Return _msg_.
 1. Else,
    1. Return **undefined**.
+
+## Abstract Operations
+
+### CreateMessageResourceReader(_resource_)
+
+The CreateMessageResourceReader abstract operation is called with an argument
+_resource_ (which must be a Resource object).
+It returns a MessageResourceReader object.
+The following steps are taken:
+
+1. Let _reader_ be a new MessageResourceReader instance with
+   an internal slot \[\[Data]].
+1. Set _reader_.\[\[Data]] as _resource_.
+1. Return _reader_.
+
+### GetMessage(_readers_, _resId_, _path_)
+
+The GetMessage abstract operation is called with arguments
+_readers_ (which must be a list of MessageResourceReader objects that allows for synchronous iteration),
+_resId_ (which must be a string), and
+_path_ (which must be a list of strings).
+It returns a Message object or **undefined**.
+
+GetMessage will return the first Message that it finds in a Resource
+with the given identifier that contains an entry at its full key path.
+In other words, the order of resources determines priority,
+if multiple Resources use the same identifier and
+each provide a message at the same key path.
+
+The following steps are taken:
+
+1. For each _reader_ of _readers_, do:
+   1. Let _id_ be the result of calling _reader_.getId().
+   1. If _id_ and _resId_ are equal, then
+      1. Let _msg_ be the result of calling _reader_.getMessage(_path_).
+      1. If _msg_ is not **undefined**, then
+         1. Return _msg_.
+1. Return **undefined**.
 
 # Select Case Resolution
 
