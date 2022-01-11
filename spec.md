@@ -72,11 +72,9 @@ and eventually have it accepted as a Unicode Technical Standard (UTS).
 
 > _How we define compliance with the spec._
 
-# Message Resources
+# Data Model
 
-> _The structures that hold messages within them._
-
-## Data Model
+## Message Resources
 
 As practically all MessageFormat use cases will make use of more than one related message,
 it is beneficial to be able to group and organise related messages in the data model.
@@ -102,105 +100,7 @@ interface MessageGroup {
 }
 ```
 
-## Message Resolution
-
-Message resolution is the process of identifying a single message from a set of Resources,
-given a Resource identifier and a key path from the root of that Resource.
-This is achieved using the GetMessage abstract operation,
-which is called internally by MessageFormat methods.
-
-GetMessage will return the first Message that it finds in a Resource
-with the given identifier that contains an entry at its full key path.
-In other words, the order of resources determines priority,
-if multiple Resources use the same identifier and
-each provide a message at the same key path.
-
-### GetMessage(_readers_, _resId_, _path_)
-
-The GetMessage abstract operation is called with arguments
-_readers_ (which must be a list of MessageResourceReader object),
-_resId_ (which must be a string), and
-_path_ (which must be a list of strings).
-It returns a Message object or **undefined**.
-The following steps are taken:
-
-1. For each _reader_ of _readers_, do:
-   1. Let _id_ be the result of calling _reader_.getId().
-   1. If _id_ and _resId_ are equal, then
-      1. Let _msg_ be the result of calling _reader_.getMessage(_path_).
-      1. If _msg_ is not **undefined**, then
-         1. Return _msg_.
-1. Return **undefined**.
-
-### MessageResourceReader
-
-MessageResourceReader provides the minimum required runtime interface for accessing resources.
-It may be extended by an implementation to provide access to a set of messages
-that cannot easily be represented as a Resource.
-
-```ts
-interface MessageResourceReader {
-  getId(): string
-  getMessage(path: string[]): Message | undefined
-}
-```
-
-#### CreateMessageResourceReader(_resource_)
-
-The CreateMessageResourceReader abstract operation is called with an argument
-_resource_ (which must be a Resource object).
-It returns a MessageResourceReader object.
-The following steps are taken:
-
-1. Let _reader_ be a new MessageResourceReader instance with
-   an internal slot \[\[Data]].
-1. Set _reader_.\[\[Data]] as _resource_.
-1. Return _reader_.
-
-#### MessageResourceReader#getId()
-
-When called with no arguments,
-the getId method returns its string identifier.
-
-With the default Resource-based implementation,
-the following steps are taken:
-
-1. Let _reader_ be the **this** value.
-1. Let _resource_ be _reader_.\[\[Data]].
-1. Return _resource_.id.
-
-#### MessageResourceReader#getMessage(_path_)
-
-The getMessage method is called with an argument
-_path_ (which must be a list of strings).
-It returns either a Message object corresponding to the _path_,
-or **undefined** if not such Message exists.
-
-With the default Resource-based implementation,
-the following steps are taken:
-
-1. If _path_ is an empty list,
-   1. Return **undefined**.
-1. Let _reader_ be the **this** value.
-1. Let _msg_ be _reader_.\[\[Data]].
-1. For each string _key_ of _path_, do:
-   1. If _msg_ is **undefined** or _msg_.type is **"message"** or **"select"**, then
-      1. Return **undefined**.
-   1. Let _entries_ be _msg_.entries.
-   1. Set _msg_ to the value of the property _key_ in _entries_ or
-      **undefined** if no such property exists.
-1. If _msg_ is not **undefined** and _msg_.type is **"message"** or **"select"**, then
-   1. Return _msg_.
-1. Else,
-   1. Return **undefined**.
-
-## Mapping Other Message Structures to MessageFormat Resources
-
-> _How messages stored in various formats can or may be represented in MF2._
-
-# Messages
-
-## Data Model
+## Messages
 
 A Message provides the representation of a single message.
 It takes one of two forms,
@@ -246,9 +146,152 @@ interface Selector {
 }
 ```
 
-> _The shape of `SelectMessage`, in particular the representation of fallback values, is still under discussion and will be further reviewed by the WG._
+## Pattern Elements
 
-## Select Case Resolution
+Pattern elements are used in three places:
+1. The body of each PatternMessage is a sequence of pattern elements.
+2. The selector value is a pattern element.
+3. Some pattern elements may contain other pattern elements,
+   defining the values of arguments or options.
+
+When formatting a message,
+each pattern element is handled by a corresponding pattern element formatter.
+
+```ts
+interface PatternElement {
+  type: string
+}
+```
+
+### Literal
+
+Literal values are immediately defined in the data model.
+The canonical value of a Literal is always a string.
+
+```ts
+interface Literal extends PatternElement {
+  type: 'literal'
+  value: string
+}
+```
+
+### Variable
+
+Variables are formatted with values that are
+provided as runtime arguments or parameters to the formatter.
+
+```ts
+interface Variable extends PatternElement {
+  type: 'variable'
+  var_path: (Literal | Variable)[];
+}
+```
+
+Using an array with more than one value refers to an inner property of an object value,
+so e.g. `['user', 'name']` would require something like `{ name: 'Kat' }`
+as the value of the `'user'` runtime parameter.
+
+### Function
+
+> _Values defined by a user-definable function call._
+
+### Term
+
+> _Include one message within another message._
+
+# Message Resolution
+
+Message resolution is the process of identifying a single message from a set of Resources,
+given a Resource identifier and a key path from the root of that Resource.
+This is achieved using the GetMessage abstract operation,
+which is called internally by MessageFormat methods.
+
+GetMessage will return the first Message that it finds in a Resource
+with the given identifier that contains an entry at its full key path.
+In other words, the order of resources determines priority,
+if multiple Resources use the same identifier and
+each provide a message at the same key path.
+
+## GetMessage(_readers_, _resId_, _path_)
+
+The GetMessage abstract operation is called with arguments
+_readers_ (which must be a list of MessageResourceReader object),
+_resId_ (which must be a string), and
+_path_ (which must be a list of strings).
+It returns a Message object or **undefined**.
+The following steps are taken:
+
+1. For each _reader_ of _readers_, do:
+   1. Let _id_ be the result of calling _reader_.getId().
+   1. If _id_ and _resId_ are equal, then
+      1. Let _msg_ be the result of calling _reader_.getMessage(_path_).
+      1. If _msg_ is not **undefined**, then
+         1. Return _msg_.
+1. Return **undefined**.
+
+## MessageResourceReader
+
+MessageResourceReader provides the minimum required runtime interface for accessing resources.
+It may be extended by an implementation to provide access to a set of messages
+that cannot easily be represented as a Resource.
+
+```ts
+interface MessageResourceReader {
+  getId(): string
+  getMessage(path: string[]): Message | undefined
+}
+```
+
+### CreateMessageResourceReader(_resource_)
+
+The CreateMessageResourceReader abstract operation is called with an argument
+_resource_ (which must be a Resource object).
+It returns a MessageResourceReader object.
+The following steps are taken:
+
+1. Let _reader_ be a new MessageResourceReader instance with
+   an internal slot \[\[Data]].
+1. Set _reader_.\[\[Data]] as _resource_.
+1. Return _reader_.
+
+### MessageResourceReader#getId()
+
+When called with no arguments,
+the getId method returns its string identifier.
+
+With the default Resource-based implementation,
+the following steps are taken:
+
+1. Let _reader_ be the **this** value.
+1. Let _resource_ be _reader_.\[\[Data]].
+1. Return _resource_.id.
+
+### MessageResourceReader#getMessage(_path_)
+
+The getMessage method is called with an argument
+_path_ (which must be a list of strings).
+It returns either a Message object corresponding to the _path_,
+or **undefined** if not such Message exists.
+
+With the default Resource-based implementation,
+the following steps are taken:
+
+1. If _path_ is an empty list,
+   1. Return **undefined**.
+1. Let _reader_ be the **this** value.
+1. Let _msg_ be _reader_.\[\[Data]].
+1. For each string _key_ of _path_, do:
+   1. If _msg_ is **undefined** or _msg_.type is **"message"** or **"select"**, then
+      1. Return **undefined**.
+   1. Let _entries_ be _msg_.entries.
+   1. Set _msg_ to the value of the property _key_ in _entries_ or
+      **undefined** if no such property exists.
+1. If _msg_ is not **undefined** and _msg_.type is **"message"** or **"select"**, then
+   1. Return _msg_.
+1. Else,
+   1. Return **undefined**.
+
+# Select Case Resolution
 
 When formatting a SelectMessage,
 it is necessary to first select one of its `cases`.
@@ -269,7 +312,7 @@ For instance, in many languages calling `match("one")` will return **true** for 
 
 The exact algorithm is defined using the following abstract operations:
 
-### SelectMessageCase(_select_, _cases_)
+## SelectMessageCase(_select_, _cases_)
 
 The SelectMessageCase abstract operation is called with arguments
 _select_ (which must be a list of Selector objects) and
@@ -293,7 +336,7 @@ The following steps are taken:
       1. Return _selCase_.
 1. Return **undefined**.
 
-### SelectMessageKeyMatches(_selKey_, _matchables_, _fallbacks_)
+## SelectMessageKeyMatches(_selKey_, _matchables_, _fallbacks_)
 
 The SelectMessageKeyMatches abstract operation is called with arguments
 _selKey_ (which must be a list of strings),
@@ -425,21 +468,6 @@ The following steps are taken:
 
 # Pattern Elements
 
-In the data model, pattern elements are used in three places:
-1. The body of each message is a sequence of pattern elements.
-2. The selector value is a pattern element.
-3. Some pattern elements may contain other pattern elements,
-   defining the values of arguments or options.
-
-When formatting a message,
-each pattern element is handled by a corresponding pattern element formatter.
-
-```ts
-interface PatternElement {
-  type: string
-}
-```
-
 ## Pattern Formatter Interface
 
 > _The runtime interface required of all pattern element formatters._
@@ -452,36 +480,7 @@ interface PatternElement {
 
 ## Literal
 
-Literal values are immediately defined in the data model.
-
-### Data Model
-
-The canonical value of a Literal is always a string.
-
-```ts
-interface Literal extends PatternElement {
-  type: 'literal'
-  value: string
-}
-```
-
 ## Variable
-
-Variables are formatted with values that are
-provided as runtime arguments or parameters to the formatter.
-
-### Data Model
-
-```ts
-interface Variable extends PatternElement {
-  type: 'variable'
-  var_path: (Literal | Variable)[];
-}
-```
-
-Using an array with more than one value refers to an inner property of an object value,
-so e.g. `['user', 'name']` would require something like `{ name: 'Kat' }`
-as the value of the `'user'` scope variable.
 
 ### Runtime Scope
 
@@ -807,6 +806,10 @@ The following steps are taken:
 ## Message Resources
 
 > _The canonical file format for MF2._
+
+# Mapping Other Message Structures to MessageFormat Resources
+
+> _How messages stored in various formats can or may be represented in MF2._
 
 # XLIFF 2 Interoperability
 
