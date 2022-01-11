@@ -643,7 +643,9 @@ The following steps are taken:
    1. Set _fmtMsg_.\[\[SelectResult]] to **"success"**.
    1. Return _selCase_.value.
 
-### AsFormattable(_value_)
+### Abstract Operations
+
+#### AsFormattable(_value_)
 
 The abstract operation AsFormattable is called with the argument _value_.
 It returns a Formattable object.
@@ -652,6 +654,10 @@ The following steps are taken:
 1. If _value_ is a Formattable object, then
    1. Return _value_.
 1. Return an implementation-defined Formattable object that wraps _value_.
+
+#### GetPatternElementFormatter
+
+> _TODO_
 
 ## Formatting Context
 
@@ -674,120 +680,11 @@ The `types` object holds context info for any PatternElementFormatter
 that defines an `initContext` method.
 It is keyed by the `type` identifier of each PatternElementFormatter.
 
-### CreateFormattingContext(_mf_, _resId_, _scope_)
+## Runtime
 
-The abstract operation CreateFormattingContext is called with the arguments
-_mf_ (which must be a MessageFormat object),
-_resId_ (which must be a string), and
-an optional argument _scope_.
-It returns a FormattingContext object.
-The following steps are taken:
-
-1. Let _locales_ be _mf_.\[\[Locales]].
-1. Let _localeMatcher_ be _mf_.\[\[LocaleMatcher]].
-1. Let _context_ be a new FormattingContext object.
-1. Set _context_.locales to _locales_.
-1. Set _context_.localeMatcher to _localeMatcher_.
-1. Set _context_.types to be a new empty object.
-1. Let _formatters_ be MessageFormat.\[\[Formatters]].
-1. For each _formatter_ of _formatters, do:
-   1. Let _init_ be _formatter_.initContext
-   1. If _init_ is a function, then
-      1. Let _type_ be _formatter_.type.
-      1. Let _fmtCtx_ be _init_(_context_, _resId_, _scope_).
-      1. Add a property _type_ to _context_.types with the value _fmtCtx_.
-1. Return _context_.
-
-## MessageFormat
-
-The MessageFormat class provides the main entry point for message formatting.
-
-### MessageFormat.\[\[Formatters]]
-
-### new MessageFormat(_locales_, _options_)
-
-When the MessageFormat constructor is called with
-the optional arguments _locales_ and \_options,
-the following steps are taken:
-
-1. Let _mf_ be a new MessageFormat instance with internal slots
-   \[\[LocaleMatcher]], \[\[Locales]], \[\[Resources]], and \[\[Runtime]].
-1. If _locales_ is a string, then
-   1. Set _locales_ to be a list of strings containing its previous valus as its only entry.
-1. If _locales_ is a list of strings, then
-   1. Set _mf_.\[\[Locales]] to _locales_.
-1. If _options_ is an object that defines a property _options_.localeMatcher, then
-   1. Let _localeMatcher_ be _options_.localeMatcher.
-   1. Assert: _localeMatcher_ is **"best fit"** or **"lookup"**.
-   1. Set _mf_.\[\[LocaleMatcher]] to _localeMatcher_.
-1. Else,
-   1. Set _mf_.\[\[LocaleMatcher]] to **"best fit"**.
-1. Set _mf_.\[\[Resource]] to an empty list of MessageResourceReader objects.
-1. If _options_ is an object that defines a property _options_.runtime, then
-   1. Assert: _options_.runtime is a Runtime object.
-   1. Let _runtime_ be _options_.runtime.
-1. Else,
-   1. Let _runtime_ be GetDefaultRuntime().
-1. Set _mf_.\[\[Runtime]] to _runtime_.
-1. Return _mf_.
-
-### MessageFormat#addResources(_addResources_)
-
-The addResources method is called with an argument
-_addResources_ (which must be a list of Resource or MessageResourceReader objects).
-The following steps are taken:
-
-1. Let _mf_ be the **this** value.
-1. Let _resources_ be _mf_.\[\[Resources]].
-1. Let _size_ be the number of elements of _addResources_.
-1. Let _i_ be _size_ - 1.
-1. Repeat, while _i_ ≥ 0,
-   1. Let _resource_ be _addResources_\[_i_].
-   1. If _resource_ is a MessageResourceReader object, then
-      1. Let _reader_ be _resource_.
-   1. Else,
-      1. Assert: _resource_ is a Resource object.
-      1. Let _reader_ be CreateMessageResourceReader(_resource_).
-   1. Prepend _reader_ to be the new first element of _resources_.
-   1. Decrement _i_ by 1.
-
-### MessageFormat#format(_resId_, _msgPath_, _scope_)
-
-The format method is called with the arguments
-_resId_ (which must be a string),
-_msgPath_ (which must be a list of strings), and
-an optional argument _scope_.
-It returns a string.
-The following steps are taken:
-
-### MessageFormat#getMessage()
-
-### GetFormattableMessage(_resId_, _msgPath_, _scope_)
-
-The abstract operation GetFormattableMessage is called with the arguments
-_resId_ (which must be a string),
-_msgPath_ (which must be a list of strings), and
-an optional argument _scope_.
-It returns a FormattableMessage object or **undefined**.
-The following steps are taken:
-
-1. Let _mf_ be the **this** value.
-1. Let _resources_ be _mf_.\[\[Resources]].
-1. Let _message_ be GetMessage(_resources_, _resId_, _msgPath_).
-1. If _message_ is **undefined**, then
-   1. Return **undefined**.
-1. Let _context_ be CreateFormattingContext(_mf_, _resId_, _scope_).
-1. Return CreateFormattableMessage(_context_, _message_).
+> _TODO_
 
 ### GetDefaultRuntime
-
-> _TODO_
-
-### GetPatternElementFormatter
-
-> _TODO_
-
-### Runtime
 
 > _TODO_
 
