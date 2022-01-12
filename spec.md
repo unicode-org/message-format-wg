@@ -352,16 +352,18 @@ The following steps are taken:
          1. Return _msg_.
 1. Return **undefined**.
 
-# Select Case Resolution
+# Message Pattern Selection
 
-When formatting a SelectMessage,
-it is necessary to first select one of its `cases`.
-This is done by first determining the Matchable values for each of its `select` values,
+When resolving and formatting a SelectMessage,
+it is necessary to first select the PatternMessage of one of its `cases`.
+
+Case selection is done by first determining the Matchable values for
+each of the SelectMessage `select` values,
 and then looking for the first `cases` entry for which all the keys provide a match.
 Each Selector may define a `fallback` value to use if an exact match is not found.
 If a `fallback` is not defined, the default value **"other"** is used.
 
-This algorithm relies on `cases` being in an apropriate order,
+This algorithm relies on `cases` being in an appropriate order,
 as the first full match will be selected.
 Therefore, cases with more precise `key` values should precede more general values.
 A case with an empty list as its `key` will always be selected,
