@@ -9,11 +9,10 @@
 resource = [ res_head ]
            { group | res_message | res_comment | empty_line }
 
-res_head = { res_comment | res_meta | empty_line }
-group = { res_comment }
-        { res_meta }
-        "[" { sp } group_path { sp } "]"
-        { sp } nl
+res_head = { res_comment | res_meta | empty_line } empty_line
+group = group_path { sp } nl
+        ( "-" "-" "-" { "-" } | "=" "=" "=" { "=" } ) { sp } nl
+        [ res_head ]
 res_comment = comment { sp } nl
 res_meta = msg_meta { sp } nl
 group_path = literal { { sp } "." { sp } literal }
