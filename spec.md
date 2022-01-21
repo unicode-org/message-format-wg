@@ -94,12 +94,32 @@ interface Resource {
   id: string
   locale: string
   entries: Record<string, Message | MessageGroup>
+  comment?: string
+  meta?: Meta
 }
 
 interface MessageGroup {
   entries: Record<string, Message | MessageGroup>
+  comment?: string
+  meta?: Meta
 }
 ```
+
+## Comments and Metadata
+
+Each Resource, MessageGroup, Message and PatternElement
+may have comments and metadata associated with it.
+A _comment_ is expected to contain unstructured text,
+while _meta_ is a key-value record of structured data.
+Both are intended to provide context and other information about the messages they contain.
+
+```ts
+type Meta = Record<string, string | number | boolean>
+```
+
+Comments are not used or included in any resolved or formatted message output.
+Message and PatternElement _meta_ values are included in their resolved values,
+and may be used e.g. by custom formatting functions.
 
 ## Messages
 
@@ -120,6 +140,8 @@ while others are placeholders with formatted values that depend on additional da
 ```ts
 interface PatternMessage {
   value: MessageBody
+  comment?: string
+  meta?: Meta
 }
 ```
 
@@ -139,6 +161,8 @@ It should match exactly one of the corresponding SelectCase `key` values.
 interface SelectMessage {
   select: Selector[]
   cases: Map<string[], PatternMessage>
+  comment?: string
+  meta?: Meta
 }
 
 interface Selector {
@@ -166,6 +190,8 @@ This specification defines the following four pattern elements:
 ```ts
 interface PatternElement {
   type: string
+  comment?: string
+  meta?: Meta
 }
 ```
 
