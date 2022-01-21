@@ -229,9 +229,7 @@ interface VariableRef extends PatternElement {
 }
 ```
 
-Using an array with more than one value refers to an inner property of an object value,
-so e.g. `['user', 'name']` would require something like `{ name: 'Kat' }`
-as the value of the `'user'` runtime parameter.
+Using a `var_path` array with more than one value refers to an inner property of an object value.
 
 ### FunctionRef
 
@@ -296,6 +294,83 @@ interface Alias extends PatternElement {
 Each Alias must be defined exactly once within a message where it is used.
 The definition of an alias may come after its use,
 but creating a loop where the value of an alias depends on its own value is an error.
+
+# Formatting Context
+
+The resolution and formatting of a message may be dependent on
+a number of environmental or runtime factors.
+Some of this context -- in particular, information about the current locale --
+is common to all pattern elements,
+while other parts are specific to each pattern element.
+
+As formatting a message often requires interaction with external and user-controlled values,
+contextual access SHOULD be limited as much as possible during value resolution and formatting.
+
+The Literal and Alias pattern elements
+do not require any external context for their resolution.
+
+## Locale Information
+
+The exact shape of locale information is implementation-dependent,
+but must be made available when resolving or formatting each part of a message.
+Locale information MUST at least include the tag of a preferred locale,
+but MAY also include additional information such as a list of fallback tags.
+Implementations SHOULD NOT assume that a message in a resource with a specific locale
+will always be formatted with that exact locale.
+
+## VariableRef
+
+Resolving the value of a variable requires access to variables.
+At its simplest,
+this may be achieved by having the formatting call include
+a map of variable values as an argument.
+
+As a VariableRef may include a `var_path` array with more than one value,
+its resolution may require accessing inner properties of an object value.
+For example, a path with a resolved value of `['user', 'name']` would either
+require something like `{ name: 'Kat' }` as the value of the `'user'` variable,
+or a more complex data structure as the map of variable values.
+
+## FunctionRef
+
+A MessageFormat implementation MUST provide a way for
+formatting functions to be defined by its users.
+As the same formatting functions are expected to be used relatively widely,
+such functions may well be shared across multiple MessageFormat instances.
+
+All functions share a single namespace,
+and in the data model their `func` identifiers are static strings.
+This allows for (but does not require) an implementation to check while loading a resource
+whether all of the FunctionRefs included in its messages
+refer to known registered functions.
+
+Formatting functions MUST be pure, i.e.
+provide the same outputs for the same input arguments and options,
+and have no side effects.
+This does not forbid such formatting functions from internally memoizing or sharing
+formatters or other functions,
+as long as this has no external visibility.
+
+As formatting functions are often custom code written for a specific user,
+implementations SHOULD take this into account in their treatment of formatting functions
+and the development of their security models.
+The contextual access of a formatting function SHOULD be limited as much as possible,
+and the access level required to define a new function SHOULD be higher than the access level
+required to introduce a new message to be formatted.
+
+Formatting functions MUST NOT treat their inputs differently depending on their origin.
+This means that a formatting function that is (for example) given a string value as an argument
+MUST provide the same output independently of whether the string is the resolved value of
+a Literal or a VariableRef pattern element.
+
+## MessageRef
+
+The resolution of a MessageRef requires access to the currently available messages.
+Resolving a MessageRef with a `res_id` value requires
+access not only to messages in the current resource, but also to other message resources.
+
+The shape and requirements of the context required for this
+are presented in the Message Selection section.
 
 # Message Selection
 
@@ -764,27 +839,6 @@ The following steps are taken:
 #### GetPatternElementFormatter
 
 > _TODO_
-
-## Formatting Context
-
-The formatting of a message is dependent on a number of environmental or runtime factors.
-These are all encapsulated in a FormattingContext object,
-which holds information about the current locale,
-as well as any PatternElementFormatter-specific context.
-
-```ts
-interface FormattingContext {
-  asFormattable(elem: PatternElement): Formattable
-  formatToString(elem: PatternElement): string
-  localeMatcher: 'best fit' | 'lookup'
-  locales: string[]
-  types: Record<string, unknown>
-}
-```
-
-The `types` object holds context info for any PatternElementFormatter
-that defines an `initContext` method.
-It is keyed by the `type` identifier of each PatternElementFormatter.
 
 ## Runtime
 
