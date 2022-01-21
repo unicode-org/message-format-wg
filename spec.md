@@ -455,6 +455,59 @@ While the shape of the resolved formattable values is entirely implementation-de
 implementations SHOULD include at least one output format other than a concatenated string,
 which is able to represent the resolved type and metadata information of the message's parts.
 
+# Error Handling
+
+A MessageFormat implementation MUST provide a formatter interface that will always
+return at least some fallback representation in the expected target form,
+despite any errors during its resolution or formatting.
+An implementation SHOULD provide for a side channel of some description for reporting and handling such errors,
+while still returning output in the expected form.
+
+The specifics of the error side channel are left for each implementation,
+but the following string fallback representations MUST be used with any string formatting target.
+In a concatenated string output,
+any failed parts MUST be preceded by U+007B LEFT CURLY BRACKET `{` and
+followed by U+007D RIGHT CURLY BRACKET `}` characters.
+
+## VariableRef
+
+If a variable is undefined or its resolution or formatting fails for some other reason,
+represent it with a U+0024 DOLLAR SIGN `$` followed by the variable's resolved path,
+joined together with a U+002E FULL STOP `.` character between each part.
+
+## FunctionRef
+
+If a formatting function is not available,
+throws an error when called,
+returns `undefined`, or
+its resolution or formatting fails for some other reason,
+represent it with its name followed by the characters U+0028 LEFT PARENTHESIS `(` and U+0029 RIGHT PARENTHESIS `)`.
+
+An implementation MAY allow for a formatting function to include
+the resolved values of its arguments between the parenthesis characters,
+separated by a U+002C COMMA `,` followed by a U+0020 SPACE (SP) ` `.
+
+## MessageRef
+
+If a message is not available,
+is a SelectMessage that does not resolve to any of its cases, or
+its resolution or formatting fails for some other reason,
+represent it with a U+002D HYPHEN-MINUS `-` followed by its resolved path,
+joined together with a U+002E FULL STOP `.` character between each part.
+If the MessageRef included a `res_id` value other than that of the current resource,
+include it immediately after then hyphen `-`, followed by a U+003A COLON `:`.
+
+## Alias
+
+If an alias is not defined or
+its resolution or formatting fails for some other reason,
+represent it with an U+002A ASTERISK `*` followed by its name.
+
+## Unknown Pattern Element
+
+If a message includes a pattern element that is not supported or recognised,
+represent it with its `type` value.
+
 # Message Selection
 
 Message selection is the process of identifying a single message from a set of Message Resources,
@@ -560,20 +613,6 @@ The following steps are taken:
 
 
 
-
-
-
-
-# Pattern Elements
-
-## Supporting Custom Pattern Elements
-
-> _How to extend the spec when you need to._
-
-## Fallback Behaviour for Unknown Pattern Elements
-
-> _What to do on encountering a pattern element of an unsupported type._
-
 # Default Function Registry
 
 > _The functions that are always available._
@@ -581,10 +620,6 @@ The following steps are taken:
 ## number()
 
 ## datetime()
-
-# Error Handling
-
-> _How to always provide some output, and loudly complain only in dev mode._
 
 # Syntax
 
