@@ -550,28 +550,20 @@ encapsulate any value while providing a fixed external interface.
 The value and any formatting options must be set during the construction of the Matchable.
 They are expected to remain unchanged during the lifetime of the Matchable,
 allowing its methods to be considered pure and memoizable.
+A Matchable may be defined in a context where the formatting locale is not yet known.
+In such a case, that information must be filled in by the formatter implementation.
 
 ```ts
 interface Matchable {
-  matchSelectKey(
-    locales: string[],
-    localeMatcher: 'best fit' | 'lookup',
-    key: string
-  ): boolean
+  matchSelectKey(key: string): boolean
 }
 ```
 
-### matchSelectKey(_locales_, _localeMatcher_, _key_)
+### matchSelectKey(_key_)
 
-The matchSelectKey method is called during SelectMessage case resolution with arguments
-_locales_ (which must be a list of valid language code strings),
-_localeMatcher_ (which must be either **"best fit"** or **"lookup"**), and
-_key_ (which must be a string).
+The matchSelectKey method is called during SelectMessage case resolution with
+an argument _key_ (which must be a string).
 It returns a boolean value.
-
-Always including the locale information in the method arguments allow for a Matchable
-to be defined in a context where the formatting locale is not yet known.
-It is also possible for a Matchable to define its own locale and ignore the method arguments.
 
 The returned value is expected to be **true** if the value of this Matchable matches the given _key_.
 Otherwise, the method should return **false**.
@@ -580,10 +572,10 @@ Otherwise, the method should return **false**.
 
 The Matchable wrapper for Message values must implement the following behaviour:
 
-#### MatchableMessage#matchSelectKey(_locales_, _localeMatcher_, _key_)
+#### MatchableMessage#matchSelectKey(_key_)
 
 When the matchSelectKey method of a FormattableMessage instance is called
-with arguments _locales_, _localeMatcher_, and _key_,
+with an argument _key_,
 the following steps are taken:
 
 1. Let _msg_ be **this** value.
@@ -619,7 +611,7 @@ i.e. a class that implements the Matchable interface but has the following behav
 An implementation may further extend the MatchableNumber class to account for different
 representations of numbers.
 
-#### MatchableNumber#matchSelectKey(_locales_, _localeMatcher_, _key_)
+#### MatchableNumber#matchSelectKey(_key_)
 
 The matchSelectKey method of a MatchableNumber instance is defined as follows:
 
@@ -630,7 +622,7 @@ The matchSelectKey method of a MatchableNumber instance is defined as follows:
    1. If _key_ and _strNum_ are equal, then
       1. Return **true**.
 1. Let _pluralCat_ be the CLDR string identifier of the plural category corresponding to _num_,
-   while taking into account _locales_, _localeMatcher_, and
+   while taking into account the current locale and
    any options previously passed to the MatchableNumber.
 1. If _key_ and _pluralCat_ are equal, then
    1. Return **true**.
@@ -651,72 +643,6 @@ The following steps are taken:
    1. Let _match_ be an implementation-defined Matchable object that wraps _value_.
 1. Return _match_.
 
-# Pattern Elements
-
-## Pattern Formatter Interface
-
-> _The runtime interface required of all pattern element formatters._
-
-### initContext()
-
-### getValue()
-
-### formatToString()
-
-## Literal
-
-## VariableRef
-
-### Runtime Scope
-
-> _How the formatting arguments/parameters are accessed._
-
-```ts
-interface Scope {
-  [key: string]: unknown
-}
-```
-
-Variables are defined by the current Scope.
-
-## FunctionRef
-
-> _Values defined by a user-definable function call._
-
-### Data Model
-
-### FunctionRef Call Signature
-
-> _The arguments and return type for user-definable functions._
-
-### FunctionRef Options
-
-> _How to define the options that a function provides._
-
-### Default Function Registry
-
-> _The functions that are always available._
-
-#### number()
-
-#### datetime()
-
-## MessageRef
-
-### Message Access
-
-## Supporting Custom Pattern Elements
-
-> _How to extend the spec when you need to._
-
-## Fallback Behaviour for Unknown Pattern Elements
-
-> _What to do on encountering a pattern element of an unsupported type._
-
-# Formatting Messages
-
-> _How the runtime actually runs._
-
 ## Formattables
 
 Formattable is a general interface for values which may be formatted
@@ -729,10 +655,7 @@ The value and any formatting options must be set during the construction of the 
 They are expected to remain unchanged during the lifetime of the Formattable,
 allowing its methods to be considered pure and memoizable.
 
-Except for `getValue()`, the arguments of Formattable methods always include
-_locales_ (a list of valid language code strings) and
-_localeMatcher_ (either **"best fit"** or **"lookup"**).
-These allow for a Formattable to be defined in a context where the formatting locale is not yet known.
+A Formattable may be defined in a context where the formatting locale is not yet known.
 It is also possible for a Formattable to define its own locale and ignore the method arguments.
 
 In addition to `toString()`,
@@ -740,13 +663,13 @@ an implementation of Formattable may provide other formatters,
 supporting other corresponding formatting targets.
 For example,
 an implementation may provide an interface for formatting a message to
-a sequence of parts representing ther resolved value of each of the message's pattern elements,
+a sequence of parts representing their resolved value of each of the message's pattern elements,
 including metadata about their shape and origin.
 
 ```ts
 interface Formattable {
   getValue(): unknown
-  toString(locales: string[], localeMatcher: 'best fit' | 'lookup'): string
+  toString(): string
 }
 ```
 
@@ -755,11 +678,9 @@ interface Formattable {
 The getValue method is called with no arguments.
 It is expected to return the source value of the Formattable.
 
-### toString(_locales_, _localeMatcher_)
+### toString()
 
-The toString method is called when formatting a message to a string with arguments
-_locales_ (which must be a list of valid language code strings) and
-_localeMatcher_ (which must be either **"best fit"** or **"lookup"**).
+The toString method is called when formatting a message to a string.
 It returns a string value.
 
 ### FormattableMessage
@@ -777,8 +698,8 @@ the following steps are taken:
 1. Let _context_ be _fmtMsg_.\[\[Context]].
 1. Let _pattern_ be GetMessagePattern(_fmtMsg_).
 1. For each PatternElement _elem_ of _pattern_, do:
-   1. Let _elemFmt_ be GetPatternElementFormatter(_elem_).
-   1. Let _elemtStr_ be _elemFmt_.formatToString(_context_, _elem_).
+   1. Let _elemFmt_ be ResolvePatternElement(_context_, _elem_).
+   1. Let _elemtStr_ be _elemFmt_.toString().
    1. Append _elemStr_ to the end of _str_.
 1. Return _str_.
 
@@ -821,7 +742,6 @@ The following steps are taken:
    1. Set _fmtMsg_.\[\[SelectResult]] to **"no-match"**.
    1. Return an empty list.
 1. Else,
-   1. Set _fmtMsg_.\[\[SelectResult]] to **"success"**.
    1. Return _selCase_.value.
 
 ### Abstract Operations
@@ -836,19 +756,31 @@ The following steps are taken:
    1. Return _value_.
 1. Return an implementation-defined Formattable object that wraps _value_.
 
-#### GetPatternElementFormatter
+#### ResolvePatternElement(_context_, _elem_)
+
+The abstract operation ResolvePatternElement
 
 > _TODO_
 
-## Runtime
+# Pattern Elements
 
-> _TODO_
+## Supporting Custom Pattern Elements
 
-### GetDefaultRuntime
+> _How to extend the spec when you need to._
 
-> _TODO_
+## Fallback Behaviour for Unknown Pattern Elements
 
-## Error Handling
+> _What to do on encountering a pattern element of an unsupported type._
+
+# Default Function Registry
+
+> _The functions that are always available._
+
+## number()
+
+## datetime()
+
+# Error Handling
 
 > _How to always provide some output, and loudly complain only in dev mode._
 
