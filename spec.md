@@ -295,13 +295,87 @@ Each Alias must be defined exactly once within a message where it is used.
 The definition of an alias may come after its use,
 but creating a loop where the value of an alias depends on its own value is an error.
 
-# Formatting Context
+# Message Pattern Selection
+
+When resolving and formatting a SelectMessage,
+it is necessary to first select the PatternMessage of one of its `cases`.
+
+Case selection is done by first resolving the value of
+each of the SelectMessage `select` values,
+and then looking for the first `cases` entry for which all the keys provide a match.
+Each Selector may define a `fallback` value to use if an exact match is not found.
+If a `fallback` is not defined, the default value **"other"** is used.
+
+To perform case selection:
+
+1. Resolve the value of each `select` entry.
+1. Consider each _key_ of `cases` in their specified order.
+1. If every _key_ value matches the corresponding resolved value of `select` or its fallback value,
+   select the current case.
+   If the selection made use of at least one fallback value,
+   include a `meta` value `selectResult: 'fallback'` in the resolved value of this message.
+1. If no case is selected:
+   1. Report an error in an implementation-specified manner.
+   1. Use a fallback representation as the resolved value of the current message,
+      including a `meta` value `selectResult: 'no-match'`.
+
+This algorithm relies on `cases` being in an appropriate order,
+as the first full match will be selected.
+Therefore, cases with more precise key values should precede more general values.
+A case with an empty list as its key will always be selected,
+unless an earlier case was matched first.
+
+In order to compare a selector value with its corresponding string key value,
+either the selector value must itself be a string,
+it must be representable as a string, or
+the implementation must provide special handling for its value type.
+If none of these applies for a selector,
+its value cannot provide a match for any key value.
+
+## Plural Category Selectors
+
+In order to support plural category selection,
+an implementation MUST provide special handling for selectors which resolve to numerical values,
+as well as selectors which resolve to some representation of a numerical value combined with formatting options.
+
+For such numerical values,
+if a key value is one of the CLDR plural categories
+`zero`, `one`, `two`, `few`, `many` or `other`,
+the corresponding plural category of the selector value MUST be determined for the current locale,
+and the given key value compared to it rather than a string representation of the value itself.
+If the selector value includes any formatting options,
+these must be accounted for when determining the plural category.
+
+Specifically, the formatting options described here may include
+an option specifying a minimum number of fraction digits,
+as well as an option specifying ordinal (rather than the default cardinal) plurals to be used.
+
+Separately from the CLDR plural category values,
+if a key value consists entirely of a string representation of a decimal integer,
+this integer value is compared to the selector's numerical value
+instead of the customary string comparison.
+Notably, in this comparison any formatting options of the numerical value are not considered.
+
+## MessageRef as Selector
+
+If a MessageRef is used as a selector value,
+it will match a key value if the resolved message's formatted-string output matches the corresponding key value exactly.
+If the selector message's resolution or formatting resulted in any errors,
+it will not match any key value.
+
+# Message Pattern Resolution
 
 The resolution and formatting of a message may be dependent on
 a number of environmental or runtime factors.
 Some of this context -- in particular, information about the current locale --
 is common to all pattern elements,
 while other parts are specific to each pattern element.
+
+It may be useful for an implementation to consider the resolution of pattern element values
+as a separate step from their formatting.
+For example, selector values that resolve to numerical values need special handling.
+Separating formatting from resolution also allows for formattable data types to
+be handled independently of their origin.
 
 As formatting a message often requires interaction with external and user-controlled values,
 contextual access SHOULD be limited as much as possible during value resolution and formatting.
@@ -473,74 +547,6 @@ The following steps are taken:
       1. If _msg_ is not **undefined**, then
          1. Return _msg_.
 1. Return **undefined**.
-
-# Message Pattern Selection
-
-When resolving and formatting a SelectMessage,
-it is necessary to first select the PatternMessage of one of its `cases`.
-
-Case selection is done by first resolving the value of
-each of the SelectMessage `select` values,
-and then looking for the first `cases` entry for which all the keys provide a match.
-Each Selector may define a `fallback` value to use if an exact match is not found.
-If a `fallback` is not defined, the default value **"other"** is used.
-
-To perform case selection:
-
-1. Resolve the value of each `select` entry.
-1. Consider each _key_ of `cases` in their specified order.
-1. If every _key_ value matches the corresponding resolved value of `select` or its fallback value,
-   select the current case.
-   If the selection made use of at least one fallback value,
-   include a `meta` value `selectResult: 'fallback'` in the resolved value of this message.
-1. If no case is selected:
-   1. Report an error in an implementation-specified manner.
-   1. Use a fallback representation as the resolved value of the current message,
-      including a `meta` value `selectResult: 'no-match'`.
-
-This algorithm relies on `cases` being in an appropriate order,
-as the first full match will be selected.
-Therefore, cases with more precise key values should precede more general values.
-A case with an empty list as its key will always be selected,
-unless an earlier case was matched first.
-
-In order to compare a selector value with its corresponding string key value,
-either the selector value must itself be a string,
-it must be representable as a string, or
-the implementation must provide special handling for its value type.
-If none of these applies for a selector,
-its value cannot provide a match for any key value.
-
-## Plural Category Selectors
-
-In order to support plural category selection,
-an implementation MUST provide special handling for selectors which resolve to numerical values,
-as well as selectors which resolve to some representation of a numerical value combined with formatting options.
-
-For such numerical values,
-if a key value is one of the CLDR plural categories
-`zero`, `one`, `two`, `few`, `many` or `other`,
-the corresponding plural category of the selector value MUST be determined for the current locale,
-and the given key value compared to it rather than a string representation of the value itself.
-If the selector value includes any formatting options,
-these must be accounted for when determining the plural category.
-
-Specifically, the formatting options described here may include
-an option specifying a minimum number of fraction digits,
-as well as an option specifying ordinal (rather than the default cardinal) plurals to be used.
-
-Separately from the CLDR plural category values,
-if a key value consists entirely of a string representation of a decimal integer,
-this integer value is compared to the selector's numerical value
-instead of the customary string comparison.
-Notably, in this comparison any formatting options of the numerical value are not considered.
-
-## MessageRef as Selector
-
-If a MessageRef is used as a selector value,
-it will match a key value if the resolved message's formatted-string output matches the corresponding key value exactly.
-If the selector message's resolution or formatting resulted in any errors,
-it will not match any key value.
 
 
 
