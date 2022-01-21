@@ -479,288 +479,75 @@ The following steps are taken:
 When resolving and formatting a SelectMessage,
 it is necessary to first select the PatternMessage of one of its `cases`.
 
-Case selection is done by first determining the Matchable values for
+Case selection is done by first resolving the value of
 each of the SelectMessage `select` values,
 and then looking for the first `cases` entry for which all the keys provide a match.
 Each Selector may define a `fallback` value to use if an exact match is not found.
 If a `fallback` is not defined, the default value **"other"** is used.
 
+To perform case selection:
+
+1. Resolve the value of each `select` entry.
+1. Consider each _key_ of `cases` in their specified order.
+1. If every _key_ value matches the corresponding resolved value of `select` or its fallback value,
+   select the current case.
+   If the selection made use of at least one fallback value,
+   include a `meta` value `selectResult: 'fallback'` in the resolved value of this message.
+1. If no case is selected:
+   1. Report an error in an implementation-specified manner.
+   1. Use a fallback representation as the resolved value of the current message,
+      including a `meta` value `selectResult: 'no-match'`.
+
 This algorithm relies on `cases` being in an appropriate order,
 as the first full match will be selected.
-Therefore, cases with more precise `key` values should precede more general values.
-A case with an empty list as its `key` will always be selected,
+Therefore, cases with more precise key values should precede more general values.
+A case with an empty list as its key will always be selected,
 unless an earlier case was matched first.
 
-Plural selection is achieved by relying on the `match()` method of
-a MatchableNumber instance returning **true** for a corresponding CLDR category match.
-For instance, in many languages calling `match("one")` will return **true** for the number `1`.
+In order to compare a selector value with its corresponding string key value,
+either the selector value must itself be a string,
+it must be representable as a string, or
+the implementation must provide special handling for its value type.
+If none of these applies for a selector,
+its value cannot provide a match for any key value.
 
-The exact algorithm is defined using the following abstract operations:
+## Plural Category Selectors
 
-## SelectMessageCase(_select_, _cases_)
+In order to support plural category selection,
+an implementation MUST provide special handling for selectors which resolve to numerical values,
+as well as selectors which resolve to some representation of a numerical value combined with formatting options.
 
-The SelectMessageCase abstract operation is called with arguments
-_select_ (which must be a list of Selector objects) and
-_cases_ (which must be a list of SelectCase objects).
-It returns either a SelectCase object or **undefined**.
-The following steps are taken:
+For such numerical values,
+if a key value is one of the CLDR plural categories
+`zero`, `one`, `two`, `few`, `many` or `other`,
+the corresponding plural category of the selector value MUST be determined for the current locale,
+and the given key value compared to it rather than a string representation of the value itself.
+If the selector value includes any formatting options,
+these must be accounted for when determining the plural category.
 
-1. Let _matchables_ be an initially empty list of Matchable objects.
-1. Let _fallbacks_ be an initially empty list of strings.
-1. For each Selector _selector_ of _select_, do:
-   1. Let _sm_ be AsMatchable(_selector_.value).
-   1. Append _sm_ as the last element of _matchables_.
-   1. Let _sf_ be _selector_.fallback.
-   1. If _sf_ is **undefined**, then
-      1. Append **"other"** as the last element of _fallbacks_.
-   1. Else,
-      1. Append _sf_ as the last element of _fallbacks_.
-1. For each SelectCase _selCase_ of _cases_, do:
-   1. Let _match_ be SelectMessageKeyMatches(_selCase_.key, _matchables_, _fallbacks_).
-   1. If _match_ is **true**, then
-      1. Return _selCase_.
-1. Return **undefined**.
+Specifically, the formatting options described here may include
+an option specifying a minimum number of fraction digits,
+as well as an option specifying ordinal (rather than the default cardinal) plurals to be used.
 
-## SelectMessageKeyMatches(_selKey_, _matchables_, _fallbacks_)
+Separately from the CLDR plural category values,
+if a key value consists entirely of a string representation of a decimal integer,
+this integer value is compared to the selector's numerical value
+instead of the customary string comparison.
+Notably, in this comparison any formatting options of the numerical value are not considered.
 
-The SelectMessageKeyMatches abstract operation is called with arguments
-_selKey_ (which must be a list of strings),
-_matchables_ (which must be a list of Matchable objects) and
-_fallbacks_ (which must be a list of strings).
-It returns a boolean value.
-The following steps are taken:
+## MessageRef as Selector
 
-1. Let _i_ be 0.
-1. Let _len_ be length of the list _selKey_.
-1. Repeat, while _i_ < _len_:
-   1. Let _key_ be the string at index _i_ of _selKey_.
-   1. Let _sm_ be the Matchable at index _i_ of _matchables_.
-   1. Let _fallback_ be the string at index _i_ of _fallbacks_.
-   1. Let _match_ be the boolean result of calling _sm_.matchSelectKey(_key_).
-   1. If _match_ is **false** and _fallback_ is not equal to _key_, then
-      1. Return **false**.
-1. Return **true**.
+If a MessageRef is used as a selector value,
+it will match a key value if the resolved message's formatted-string output matches the corresponding key value exactly.
+If the selector message's resolution or formatting resulted in any errors,
+it will not match any key value.
 
-## Matchables
 
-Matchable is a general interface for values which may be used as a SelectMessage selector value.
-Its purpose is to allow for each Message and PatternElement formatter to
-encapsulate any value while providing a fixed external interface.
 
-The value and any formatting options must be set during the construction of the Matchable.
-They are expected to remain unchanged during the lifetime of the Matchable,
-allowing its methods to be considered pure and memoizable.
-A Matchable may be defined in a context where the formatting locale is not yet known.
-In such a case, that information must be filled in by the formatter implementation.
 
-```ts
-interface Matchable {
-  matchSelectKey(key: string): boolean
-}
-```
 
-### matchSelectKey(_key_)
 
-The matchSelectKey method is called during SelectMessage case resolution with
-an argument _key_ (which must be a string).
-It returns a boolean value.
 
-The returned value is expected to be **true** if the value of this Matchable matches the given _key_.
-Otherwise, the method should return **false**.
-
-### MatchableMessage
-
-The Matchable wrapper for Message values must implement the following behaviour:
-
-#### MatchableMessage#matchSelectKey(_key_)
-
-When the matchSelectKey method of a FormattableMessage instance is called
-with an argument _key_,
-the following steps are taken:
-
-1. Let _msg_ be **this** value.
-1. Let _str_ be _msg_.toString().
-1. If _key_ and _str_ are equal, then
-   1. Return **true**.
-1. Else,
-   1. Return **false**.
-
-#### CreateMatchableMessage(_context_, _message_)
-
-The CreateMatchableMessage abstract operation is called with arguments
-_context_ (which must be a FormattingContext object) and
-_message_ (which must be a Message object).
-It returns a MatchableMessage object.
-The following steps are taken:
-
-1. Let _msg_ be a new MatchableMessage instance with
-   internal slots \[\[Context]], \[\[Meta]], \[\[Value]] and \[\[SelectResult]].
-1. Set _msg_.\[\[Context]] to _context_.
-1. Set _msg_.\[\[Value]] to _message_.
-1. Set _msg_.\[\[SelectResult]] to **undefined**.
-1. If _message_.meta is **undefined**, then
-   1. Set _msg_.\[\[Meta]] to **undefined**.
-1. Else,
-   1. Set _msg_.\[\[Meta]] to a shallow copy of _message_.meta.
-1. Return _msg_.
-
-### MatchableNumber
-
-Number values must be wrapped in a MatchableNumber,
-i.e. a class that implements the Matchable interface but has the following behaviour.
-An implementation may further extend the MatchableNumber class to account for different
-representations of numbers.
-
-#### MatchableNumber#matchSelectKey(_key_)
-
-The matchSelectKey method of a MatchableNumber instance is defined as follows:
-
-1. Let _matchNum_ be **this** value.
-1. Let _num_ be _matchNum_.getValue().
-1. If _num_ is an integer, then
-   1. Let _strNum_ be the default, non-localized string representation of _num_.
-   1. If _key_ and _strNum_ are equal, then
-      1. Return **true**.
-1. Let _pluralCat_ be the CLDR string identifier of the plural category corresponding to _num_,
-   while taking into account the current locale and
-   any options previously passed to the MatchableNumber.
-1. If _key_ and _pluralCat_ are equal, then
-   1. Return **true**.
-1. Else,
-   1. Return **false**.
-
-### AsMatchable(_value_)
-
-The abstract operation AsMatchable is called with the argument _value_.
-It returns a Matchable object.
-The following steps are taken:
-
-1. If _value_ is a Matchable object, then
-   1. Return _value_.
-1. If _value_ is a number, then
-   1. Let _match_ be a MatchableNumber object that wraps _value_.
-1. Else,
-   1. Let _match_ be an implementation-defined Matchable object that wraps _value_.
-1. Return _match_.
-
-## Formattables
-
-Formattable is a general interface for values which may be formatted
-to a string or to some other target,
-such as Messages, literals and runtime variables.
-Its purpose is to allow for each Message and PatternElement formatter to
-encapsulate any value while providing a fixed external interface.
-
-The value and any formatting options must be set during the construction of the Formattable.
-They are expected to remain unchanged during the lifetime of the Formattable,
-allowing its methods to be considered pure and memoizable.
-
-A Formattable may be defined in a context where the formatting locale is not yet known.
-It is also possible for a Formattable to define its own locale and ignore the method arguments.
-
-In addition to `toString()`,
-an implementation of Formattable may provide other formatters,
-supporting other corresponding formatting targets.
-For example,
-an implementation may provide an interface for formatting a message to
-a sequence of parts representing their resolved value of each of the message's pattern elements,
-including metadata about their shape and origin.
-
-```ts
-interface Formattable {
-  getValue(): unknown
-  toString(): string
-}
-```
-
-### getValue()
-
-The getValue method is called with no arguments.
-It is expected to return the source value of the Formattable.
-
-### toString()
-
-The toString method is called when formatting a message to a string.
-It returns a string value.
-
-### FormattableMessage
-
-The Formattable wrapper for Message values has the following method implementations and
-abstract operations.
-
-#### FormattableMessage#toString()
-
-When the toString method of a FormattableMessage instance is called,
-the following steps are taken:
-
-1. Let _fmtMsg_ be **this** value.
-1. Let _str_ be an empty string.
-1. Let _context_ be _fmtMsg_.\[\[Context]].
-1. Let _pattern_ be GetMessagePattern(_fmtMsg_).
-1. For each PatternElement _elem_ of _pattern_, do:
-   1. Let _elemFmt_ be ResolvePatternElement(_context_, _elem_).
-   1. Let _elemtStr_ be _elemFmt_.toString().
-   1. Append _elemStr_ to the end of _str_.
-1. Return _str_.
-
-#### CreateFormattableMessage(_context_, _message_)
-
-The CreateFormattableMessage abstract operation is called with arguments
-_context_ (which must be a FormattingContext object) and
-_message_ (which must be a Message object).
-It returns a FormattableMessage object.
-The following steps are taken:
-
-1. Let _fmtMsg_ be a new FormattableMessage instance with
-   internal slots \[\[Context]], \[\[Meta]], \[\[Value]] and \[\[SelectResult]].
-1. Set _fmtMsg_.\[\[Context]] to _context_.
-1. Set _fmtMsg_.\[\[Value]] to _message_.
-1. Set _fmtMsg_.\[\[SelectResult]] to **undefined**.
-1. If _message_.meta is **undefined**, then
-   1. Set _fmtMsg_.\[\[Meta]] to **undefined**.
-1. Else,
-   1. Set _fmtMsg_.\[\[Meta]] to a shallow copy of _message_.meta.
-1. Return _fmtMsg_.
-
-#### GetMessagePattern(_fmtMsg_)
-
-The GetMessagePattern abstract operation is called with an argument
-_fmtMsg_ (which must be a FormattableMessage object).
-It returns a list of PatternElement objects.
-The following steps are taken:
-
-1. Let _msg_ be _fmtMsg_.\[\[Value]].
-1. Let _type_ be _msg_.type.
-1. If _type_ is **"message"**, then
-   1. Return _msg_.value.
-1. Else if _type_ is not **"select"**, then
-   1. Throw a **TypeError** excpetion.
-1. Let _select_ be _msg_.select.
-1. Let _cases_ be _msg_.cases.
-1. Let _selCase_ be SelectMessageCase(_select_, _cases_).
-1. If _selCase_ is **undefined**, then
-   1. Set _fmtMsg_.\[\[SelectResult]] to **"no-match"**.
-   1. Return an empty list.
-1. Else,
-   1. Return _selCase_.value.
-
-### Abstract Operations
-
-#### AsFormattable(_value_)
-
-The abstract operation AsFormattable is called with the argument _value_.
-It returns a Formattable object.
-The following steps are taken:
-
-1. If _value_ is a Formattable object, then
-   1. Return _value_.
-1. Return an implementation-defined Formattable object that wraps _value_.
-
-#### ResolvePatternElement(_context_, _elem_)
-
-The abstract operation ResolvePatternElement
-
-> _TODO_
 
 # Pattern Elements
 
