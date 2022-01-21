@@ -180,16 +180,18 @@ Pattern elements are used in three places:
 3. Some pattern elements may contain other pattern elements,
    defining the values of arguments or options.
 
-This specification defines the following four pattern elements:
+This specification defines the following pattern elements:
 
 - Literal
 - VariableRef
 - FunctionRef
 - MessageRef
+- Alias
 
 ```ts
 interface PatternElement {
   type: string
+  alias?: string
   comment?: string
   meta?: Meta
 }
@@ -199,6 +201,9 @@ An implementation MAY support additional custom pattern elements.
 If it does so, each such custom PatternElement must extend the PatternElement interface and
 include a U+003A COLON `:` character within its `type` value
 (used for namespacing and to ensure forward compatibility).
+
+For explanations of the optional fields available for all pattern elements,
+see the sections on Comments and Metadata as well as the Alias pattern element.
 
 ### Literal
 
@@ -275,6 +280,22 @@ as this allows for a static determination of the resources required to format a 
 and it may include VariableRef values.
 
 `scope` overrides values in the current scope when resolving the message.
+
+### Alias
+
+An Alias is a pointer to another PatternElement within the current message.
+Its resolved value is equivalent to that of the non-alias PatternElement with the same `alias` value.
+
+```ts
+interface Alias extends PatternElement {
+  type: 'alias'
+  alias: string
+}
+```
+
+Each Alias must be defined exactly once within a message where it is used.
+The definition of an alias may come after its use,
+but creating a loop where the value of an alias depends on its own value is an error.
 
 # Message Selection
 
