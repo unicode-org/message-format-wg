@@ -97,11 +97,11 @@ To that end, conformance is defined separately for various roles:
   A single-message formatter MAY use only the fallback representation
   when formatting any MessageRef pattern elements.
 
-- A **resource syntax generator** is conformant with this specification if it can
+- A **resource syntax serialiser** is conformant with this specification if it can
   take as input the data model representation of a message resource,
   and produce a valid string representation of the same.
 
-- A **single-message syntax generator** is conformant with this specification if it can
+- A **single-message syntax serialiser** is conformant with this specification if it can
   take as input the data model representation of a single message,
   and produce a valid string representation of the same.
 
