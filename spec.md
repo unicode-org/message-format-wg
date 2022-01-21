@@ -70,7 +70,44 @@ and eventually have it accepted as a Unicode Technical Standard (UTS).
 
 # Conformance
 
-> _How we define compliance with the spec._
+The MessageFormat specification describes a syntax, a data model,
+the behaviour of a formatting runtime, and
+an XLIFF 2 representation for messages and message resources.
+It is expected that a system, library or other tool interacting with MessageFormat
+will be making use of some subset of these interfaces and processes.
+To that end, conformance is defined separately for various roles:
+
+- A **resource parser** is conformant with this specification if it can
+  read a string representation of a message resource
+  and produce a corresponding data model.
+
+- A **single-message parser** is conformant with this specification if it can
+  read a string representation of a single message
+  and produce a corresponding data model.
+
+- A **formatter** is conformant with this specification if it can
+  accept the data model of one or more message resources,
+  along with any necessary formatting context inputs,
+  and produce formatted output in one or more formatting targets.
+
+- A **single-messsage formatter** is conformant with this specification if it can
+  accept the data model of a single message,
+  along with any necessary formatting context inputs,
+  and produce formatted output in one or more formatting targets.
+  A single-message formatter MAY use only the fallback representation
+  when formatting any MessageRef pattern elements.
+
+- A **resource syntax generator** is conformant with this specification if it can
+  take as input the data model representation of a message resource,
+  and produce a valid string representation of the same.
+
+- A **single-message syntax generator** is conformant with this specification if it can
+  take as input the data model representation of a single message,
+  and produce a valid string representation of the same.
+
+- An **XLIFF processor** is conformant with this specification if it can
+  convert both ways between the data model and XLIFF 2 representations of
+  a message resource, merging and separating source and target language content as necessary.
 
 # Data Model
 
@@ -609,9 +646,6 @@ The following steps are taken:
       1. If _msg_ is not **undefined**, then
          1. Return _msg_.
 1. Return **undefined**.
-
-
-
 
 # Default Function Registry
 
