@@ -481,7 +481,7 @@ Resolving a MessageRef with a `res_id` value requires
 access not only to messages in the current resource, but also to other message resources.
 
 The shape and requirements of the context required for this
-are presented in the [Message Selection](./message-selection.md) section.
+are presented in the [Message Selection](./spec-message-selection.md) section.
 
 # Message Formatting
 
