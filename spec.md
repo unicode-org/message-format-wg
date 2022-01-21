@@ -492,6 +492,12 @@ While the shape of the resolved formattable values is entirely implementation-de
 implementations SHOULD include at least one output format other than a concatenated string,
 which is able to represent the resolved type and metadata information of the message's parts.
 
+If a resolved value is numeric,
+an implementation MUST format it as if it were the single argument of a `number` formatter with no options.
+If a resolved value is a datetime value,
+an implementation MUST format it as if it were the single argument of a `datetime` formatter with no options.
+And implementation MAY define other similar rules for other data types.
+
 # Error Handling
 
 A MessageFormat implementation MUST provide a formatter interface that will always
@@ -545,36 +551,48 @@ represent it with an U+002A ASTERISK `*` followed by its name.
 If a message includes a pattern element that is not supported or recognised,
 represent it with its `type` value.
 
-# Default Function Registry
+# Default Formatting Functions
 
-> _The functions that are always available._
+In general, implementations and their users are free to define formatting functions,
+with two exceptions:
 
-## number()
+- An implementation MUST provide a `number` formatter as specified here.
+- If the programming language of the implementation provides a native datetime type,
+  the implementation MUST provide a `datetime` formatter as specified here.
 
-## datetime()
+## number
 
-# Syntax
+The `number` formatter MUST accept a single numeric argument as its input.
+The formatter MUST support at least the following options:
 
-> _How MF2 messages look like to programmers, and sometimes translators._
+- `minimumFractionDigits` with a non-negative integer value
+- `maximumFractionDigits` with a non-negative integer value
+- `type` with either `'cardinal'` or `'ordinal'` as its value
 
-## Message Contents
+An implementation MAY support additional options,
+as well as additional values for the above options.
 
-> _The representation of a message's contents, embeddable in various file formats._
+If `minimumFractionDigits` is defined, the formatted representation MUST include
+at least that many fraction digits.
+If `maximumFractionDigits` is defined, the formatted representation MUST NOT include
+more than that many fraction digits.
+If `maximumFractionDigits` is less than `minimumFractionDigits`,
+that SHOULD be considered an error.
+A `type` value MUST NOT influence the formatted representation of the numeric value,
+but MUST be detectable if a `number` formatter is used as a SelectMessage selector value.
 
-## Message Resources
+## datetime
 
-> _The canonical file format for MF2._
+The `datetime` formatter MUST accept a single datetime argument as its input.
+The formatter MUST support at least the following options:
 
-# Mapping Other Message Structures to MessageFormat Resources
+- `dateStyle` with either `'long'`, `'medium'`, or `'short'` as its value
+- `timeStyle` with either `'long'`, `'medium'`, or `'short'` as its value
 
-> _How messages stored in various formats can or may be represented in MF2._
+An implementation MAY support additional options,
+as well as additional values for the above options.
 
-# XLIFF 2 Interoperability
-
-> _How MF2 messages and resources map to XLIFF._
-
-## The XLIFF 2 MessageFormat Module
-
-## MessageFormat to XLIFF
-
-## XLIFF to MessageFormat
+If `dateStyle` is defined, the formatted representation MUST include
+a representation of the date value of a corresponding length.
+If `timeStyle` is defined, the formatted representation MUST include
+a representation of the time value of a corresponding length.
