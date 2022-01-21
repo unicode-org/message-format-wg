@@ -446,6 +446,15 @@ access not only to messages in the current resource, but also to other message r
 The shape and requirements of the context required for this
 are presented in the Message Selection section.
 
+# Message Formatting
+
+After a message is resolved to a single sequence of values,
+it may be formatted.
+Each implementation MAY support any number of formatting targets.
+While the shape of the resolved formattable values is entirely implementation-defined,
+implementations SHOULD include at least one output format other than a concatenated string,
+which is able to represent the resolved type and metadata information of the message's parts.
+
 # Message Selection
 
 Message selection is the process of identifying a single message from a set of Message Resources,
