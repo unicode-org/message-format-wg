@@ -4,7 +4,7 @@
 *)
 
 
-(* Resource file *)
+(* Message Resource *)
 
 resource = [ res_head ]
            { group | res_message | res_comment | empty_line }
