@@ -1,9 +1,3 @@
-(*
-  This syntax is also described in a document available at:
-  https://docs.google.com/document/d/17n8hp_Js1Am4FJn55ZeUeZ8M1trdw5uA9sacj4MFvMA/edit?usp=sharing
-*)
-
-
 (* Message Resource *)
 
 resource = [ res_head ]
@@ -33,16 +27,17 @@ res_message = { comment { sp } nl }
 msg_meta = "@" literal { sp } ( ":" | "=" ) { sp } literal
 msg_alias = "*" literal { sp } ( ":" | "=" ) { sp } ( literal | placeholder )
 msg_key = literal
-msg_body = select_body | "=" { sp } pattern 
-select_body = select_head
-              { sp } "=" { sp } nl
-              { sp { sp } select_case }
+msg_body = select | "=" { sp } pattern
+select = select_head
+         { sp } "=" { sp } nl
+         { sp { sp } select_case }
 
 (* One message by itself *)
 
-one_message = { comment ws { ws } }
-              { ( msg_meta | msg_alias ) ws { ws } }
-              ( one_select | pattern )
+one_message = { comment wsc { wsc } }
+              { ( msg_meta | msg_alias ) wsc { wsc } }
+              ( one_select | one_pattern )
+wsc = ws | ","
 one_select = select_head
              { ws } "=" { ws }
              { one_select_case }
@@ -50,7 +45,8 @@ one_select_case = { comment ws { ws } }
                   select_key { ws }
                   { meta ws { ws } }
                   one_case_value
-one_case_value = ? like pattern, but with no unescaped "[" characters ?
+one_case_value = ? pattern, but with no unescaped "[" characters ?
+one_pattern = ? pattern, but a first msg_literal must start with a word or escaped_char ?
 
 (* Select message *)
 

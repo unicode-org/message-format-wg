@@ -13,6 +13,7 @@ to be in agreement with each other.
 The body of the specification is split into the following documents:
 
 - [META](./spec-meta.md) - How to contribute changes
+- [Syntax](./spec-syntax.md) - A human-friendly syntax for MessageFormat
 - [Data Model](./spec-data-model.md) - The data model for representing messages and message resources
 - [Formatting Behaviour](./spec-formatting.md) - The expected behaviour of a message formatter
 - [Message Selection]('./spec-message-selection.md) - The detailed behaviour of message selection, for MessageRef resolution
