@@ -14,9 +14,9 @@ If a `fallback` is not defined, the default value **"other"** is used.
 To perform case selection:
 
 1. Resolve the value of each `select` entry.
-1. Consider each _key_ of `cases` in their specified order.
-1. If every _key_ value matches the corresponding resolved value of `select` or its fallback value,
-   select the current case.
+1. Consider each `key` of `cases` in their specified order.
+1. If every `key` value matches the corresponding resolved value of `select` or its fallback value,
+   select the `value` of the current case.
    If the selection made use of at least one fallback value,
    include a `meta` value `selectResult: 'fallback'` in the resolved value of this message.
 1. If no case is selected:
@@ -27,7 +27,7 @@ To perform case selection:
 This algorithm relies on `cases` being in an appropriate order,
 as the first full match will be selected.
 Therefore, cases with more precise key values should precede more general values.
-A case with an empty list as its key will always be selected,
+A case with an empty list as its `key` will always be selected,
 unless an earlier case was matched first.
 
 In order to compare a selector value with its corresponding string key value,
@@ -54,6 +54,7 @@ these must be accounted for when determining the plural category.
 Specifically, the formatting options described here may include
 an option specifying a minimum number of fraction digits,
 as well as an option specifying ordinal (rather than the default cardinal) plurals to be used.
+In many locales, these options affect the plural category of a numerical value.
 
 Separately from the CLDR plural category values,
 if a key value consists entirely of a string representation of a decimal integer,

@@ -1,5 +1,14 @@
 # Data Model
 
+The MessageFormat data model defines a syntax-independent representation of a message,
+or of a resource containing a hierarchy of messages.
+
+The canonical model presented here is suitable for interchange between systems,
+using a form that is suitable for representation as JSON.
+Implementations that are internally generating and processing a message data model
+from a different representation are free to use a different representation
+or to simplify the model.
+
 ## Message Resources
 
 As practically all MessageFormat use cases will make use of more than one related message,
@@ -17,6 +26,7 @@ but this may be useful for Message Selection.
 
 ```ts
 interface Resource {
+  type: 'resource'
   id: string
   locale: string
   entries: Record<string, Message | MessageGroup>
@@ -25,6 +35,7 @@ interface Resource {
 }
 
 interface MessageGroup {
+  type: 'group'
   entries: Record<string, Message | MessageGroup>
   comment?: string
   meta?: Meta
@@ -65,6 +76,7 @@ while others are placeholders with formatted values that depend on additional da
 
 ```ts
 interface PatternMessage {
+  type: 'message'
   value: MessageBody
   comment?: string
   meta?: Meta
@@ -85,8 +97,9 @@ It should match exactly one of the corresponding SelectCase `key` values.
 
 ```ts
 interface SelectMessage {
+  type: 'select'
   select: Selector[]
-  cases: Map<string[], PatternMessage>
+  cases: SelectCase[]
   comment?: string
   meta?: Meta
 }
@@ -94,19 +107,6 @@ interface SelectMessage {
 interface Selector {
   value: PatternElement
   fallback?: string
-}
-```
-
-If a SelectMessage needs to be represented in a context
-which does not natively support an ordered map keyed by a string array,
-the following equivalent representation must be used instead.
-
-```ts
-interface SelectMessageAlt {
-  select: Selector[]
-  cases: SelectCase[]
-  comment?: string
-  meta?: Meta
 }
 
 interface SelectCase {

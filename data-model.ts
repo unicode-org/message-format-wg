@@ -1,6 +1,7 @@
-// Messsage Resource
+// Message Resource
 
 interface Resource {
+  type: 'resource'
   id: string
   locale: string
   entries: Record<string, Message | MessageGroup>
@@ -9,6 +10,7 @@ interface Resource {
 }
 
 interface MessageGroup {
+  type: 'group'
   entries: Record<string, Message | MessageGroup>
   comment?: string
   meta?: Meta
@@ -23,6 +25,7 @@ type Message = PatternMessage | SelectMessage
 type MessageBody = PatternElement[]
 
 interface PatternMessage {
+  type: 'message'
   value: MessageBody
   comment?: string
   meta?: Meta
@@ -31,8 +34,9 @@ interface PatternMessage {
 // Select Message
 
 interface SelectMessage {
+  type: 'select'
   select: Selector[]
-  cases: Map<string[], PatternMessage>
+  cases: SelectCase[]
   comment?: string
   meta?: Meta
 }
@@ -40,13 +44,6 @@ interface SelectMessage {
 interface Selector {
   value: PatternElement
   fallback?: string
-}
-
-interface SelectMessageAlt {
-  select: Selector[]
-  cases: SelectCase[]
-  comment?: string
-  meta?: Meta
 }
 
 interface SelectCase {
