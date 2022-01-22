@@ -97,6 +97,24 @@ interface Selector {
 }
 ```
 
+If a SelectMessage needs to be represented in a context
+which does not natively support an ordered map keyed by a string array,
+the following equivalent representation must be used instead.
+
+```ts
+interface SelectMessageAlt {
+  select: Selector[]
+  cases: SelectCase[]
+  comment?: string
+  meta?: Meta
+}
+
+interface SelectCase {
+  key: string[]
+  value: PatternMessage
+}
+```
+
 ## Pattern Elements
 
 Pattern elements are used in three places:

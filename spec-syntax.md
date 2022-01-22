@@ -357,7 +357,7 @@ The selector block is separated from the cases by an equals sign `=`.
 Selector values may be
 any pattern element that would also be valid within a curly brace block,
 i.e. anything except for a display element.
-If the selector uses a default case key other than other,
+If the selector uses a custom fallback case key,
 that may be indicated in the selector by
 adding an equals sign `=` after the selector value, followed by a literal value.
 With multiple selectors a comma `,` is used as a separator.
@@ -396,6 +396,9 @@ select_case = { comment { sp } nl sp { sp } }
 select_key = "[" { sp } literal { { sp } "," { sp } literal } "]"
 select_value = ? like pattern, but with no ( nl { sp } "[" ) sequences ?
 ```
+
+The process for selecting a case is described in the
+[Message Pattern Selection](./spec-formatting.md#message-pattern-selection) section.
 
 ## Single-Message Syntax
 

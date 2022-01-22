@@ -42,6 +42,18 @@ interface Selector {
   fallback?: string
 }
 
+interface SelectMessageAlt {
+  select: Selector[]
+  cases: SelectCase[]
+  comment?: string
+  meta?: Meta
+}
+
+interface SelectCase {
+  key: string[]
+  value: PatternMessage
+}
+
 // Pattern Elements
 
 interface PatternElement {
