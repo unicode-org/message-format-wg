@@ -34,17 +34,11 @@ select = select_head
 
 (* One message by itself *)
 
-one_message = { comment wsc { wsc } }
-              { ( msg_meta | msg_alias ) wsc { wsc } }
-              ( one_select | one_pattern )
-wsc = ws | ","
+one_message = one_select | one_pattern
 one_select = select_head
              { ws } "=" { ws }
              { one_select_case }
-one_select_case = { comment ws { ws } }
-                  select_key { ws }
-                  { meta ws { ws } }
-                  one_case_value
+one_select_case = select_key { ws } one_case_value
 one_case_value = ? pattern, but with no unescaped "[" characters ?
 one_pattern = ? pattern, but a first msg_literal must start with a word or escaped_char ?
 
@@ -55,10 +49,7 @@ selector = [ "*" word { ws } ( ":" | "=" ) { ws } ]
            ( quoted_literal | variable | function | msgref | alias )
            [ { sp } "=" { sp } literal ]
 
-select_case = { comment { sp } nl sp { sp } }
-              select_key { sp }
-              { msg_meta { sp } nl sp { sp } }
-              select_value nl
+select_case = select_key { sp } select_value nl
 select_key = "[" { sp } literal { { sp } "," { sp } literal } "]"
 select_value = ? like pattern, but with no ( nl { sp } "[" ) sequences ?
 

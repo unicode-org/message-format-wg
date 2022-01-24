@@ -71,10 +71,18 @@ There is no reason to diverge from the customary use of curly braces `{ … }` a
 ```ebnf
 placeholder = "{" { ws }
               [ "*" word { ws } ( ":" | "=" ) { ws } ]
-              ( quoted_literal | variable | function | msgref | alias )
+              [ quoted_literal | variable | function | msgref | alias ]
               { ws { ws } ( meta | comment ) }
               { ws } "}"
 ```
+
+A placeholder that does not contain a value is only valid at the beginning of a pattern.
+Its metadata and/or comments are considered to apply to the message as a whole.
+During resolution and formatting,
+only the metadata of a selected case's pattern will be used.
+Whitespace before and after an empty placeholder is trimmed.
+
+### Escaped Characters
 
 Treating certain characters as special means that their use as a Literal
 will need to be allowed somehow;
@@ -326,7 +334,7 @@ cb_char = ? any_char, but with no ("#" "#" "#") sequences ?
 comment_line = "#" { any_char - nl }
 ```
 
-Metadata values may be assigned to any non-empty brace or chevron block
+Metadata values may be assigned to any brace or chevron block
 with syntax similar to named arguments,
 using an at-sign `@` as a prefix,
 immediately followed by a literal metadata key,
@@ -389,10 +397,7 @@ selector = [ "*" word { ws } ( ":" | "=" ) { ws } ]
            ( quoted_literal | variable | function | msgref | alias )
            [ { sp } "=" { sp } literal ]
 
-select_case = { comment { sp } nl sp { sp } }
-              select_key { sp }
-              { msg_meta { sp } nl sp { sp } }
-              select_value nl
+select_case = select_key { sp } select_value nl
 select_key = "[" { sp } literal { { sp } "," { sp } literal } "]"
 select_value = ? like pattern, but with no ( nl { sp } "[" ) sequences ?
 ```
@@ -412,29 +417,17 @@ All open square brackets in the message body need to then be escaped `\[`.
     [$count] = [one] You have one message. [other] You have {$count} messages.
 
 ```ebnf
-one_message = { comment wsc { wsc } }
-              { ( msg_meta | msg_alias ) wsc { wsc } }
-              ( one_select | one_pattern )
-wsc = ws | ","
+one_message = one_select | one_pattern
 one_select = select_head
              { ws } "=" { ws }
              { one_select_case }
-one_select_case = { comment ws { ws } }
-                  select_key { ws }
-                  { meta ws { ws } }
-                  one_case_value
+one_select_case = select_key { ws } one_case_value
 one_case_value = ? pattern, but with no unescaped "[" characters ?
 one_pattern = ? pattern, but a first msg_literal must start with a word or escaped_char ?
 ```
 
-When using the single-message single-line variant of the syntax,
-a line break is not required to separate the message body from
-the preceding metadata and alias definitions.
-For clarity, a comma `,` is treated as white space in this case.
-
-If such a message starts with a literal
-which includes a non-word character as its first character,
-it will need to be escaped.
+If a pattern message starts with an open square bracket,
+it will need to be escaped `\[`.
 
 ## Message Resources
 
@@ -508,7 +501,7 @@ Comments must be placed before any metadata and alias declarations.
 Using the single-message variant of the syntax,
 the above message may be equivalently represented as:
 
-    ### An encouragement ### *thing: { $project }, @style: inspiring, Let’s start the {*thing}!
+    { @style: inspiring ### An encouragement ### } Let’s start the {*thing = $project}!
 
 ### Message Groups
 
