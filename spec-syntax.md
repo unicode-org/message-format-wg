@@ -182,7 +182,7 @@ Such a braced section may only contain a variable reference.
 ```ebnf
 variable = "$" var_path
 var_path = var_part { { sp } "." { sp } var_part }
-var_part = literal | "{" { sp } variable { sp } "}"
+var_part = literal | "{" { sp } variable | alias { sp } "}"
 ```
 
 References to messages in other message resources need to identify that resource

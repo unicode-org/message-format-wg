@@ -170,7 +170,7 @@ provided as runtime arguments or parameters to the formatter.
 ```ts
 interface VariableRef extends PatternElement {
   type: 'variable'
-  var_path: (Literal | VariableRef)[]
+  var_path: (Literal | VariableRef | Alias)[]
 }
 ```
 
@@ -187,8 +187,8 @@ the resolved values of the specified arguments and options.
 interface FunctionRef extends PatternElement {
   type: 'function'
   func: string
-  args: (Literal | VariableRef)[]
-  options?: Record<string, Literal | VariableRef>
+  args: (Literal | VariableRef | Alias)[]
+  options?: Record<string, Literal | VariableRef | Alias>
 }
 ```
 
@@ -209,8 +209,8 @@ that message is first identified and then resolved.
 interface MessageRef extends PatternElement {
   type: 'message'
   res_id?: string
-  msg_path: (Literal | VariableRef)[]
-  scope?: Record<string, Literal | VariableRef>
+  msg_path: (Literal | VariableRef | Alias)[]
+  scope?: Record<string, Literal | VariableRef | Alias>
 }
 ```
 
@@ -219,8 +219,8 @@ If it is set, it identifies the resource for the sought message.
 It is entirely intentional that this value may not be defined at runtime,
 as this allows for a static determination of the resources required to format a message.
 
-`msg_path` is used to locate the Message within the Resource,
-and it may include VariableRef values.
+`msg_path` is used to locate the Message within the Resource.
+Unlike the `res_id`, it may include parts that require additional context to resolve.
 
 `scope` overrides values in the current scope when resolving the message.
 
