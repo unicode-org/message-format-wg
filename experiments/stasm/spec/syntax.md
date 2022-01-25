@@ -294,8 +294,8 @@ Expressions can be either of the following productions:
 Expression ::= LiteralFmt | VariableFmt | FunctionCall
 LiteralFmt ::= Literal FunctionCall?
 VariableFmt ::= Variable FunctionCall?
-FunctionCall ::= Symbol FunctionOpt*
-FunctionOpt ::= Symbol ":" (Symbol | Literal | Variable)
+FunctionCall ::= Symbol Option*
+Option ::= Symbol ":" (Symbol | Literal | Variable)
 ```
 
 Examples:
@@ -395,8 +395,8 @@ Placeable ::= "{" Expression "}"
 Expression ::= LiteralFmt | VariableFmt | FunctionCall
 LiteralFmt ::= Literal FunctionCall?
 VariableFmt ::= Variable FunctionCall?
-FunctionCall ::= Symbol FunctionOpt*
-FunctionOpt ::= Symbol ":" (Symbol | Literal | Variable)
+FunctionCall ::= Symbol Option*
+Option ::= Symbol ":" (Symbol | Literal | Variable)
 
 <?TOKENS?>
 
