@@ -132,6 +132,7 @@ This specification defines the following pattern elements:
 - FunctionRef
 - MessageRef
 - Alias
+- Element
 
 ```ts
 interface PatternElement {
@@ -239,3 +240,32 @@ interface Alias extends PatternElement {
 Each Alias must be defined exactly once within a message where it is used.
 The definition of an alias may come after its use,
 but creating a loop where the value of an alias depends on its own value is an error.
+
+### Element
+
+Display and markup elements represent anything from
+HTML tags, formatting information for the voice assistant,
+to instructions for a translator to keep an inner span as untranslated.
+
+Unlike other placeholders, elements in general have no textual representation themselves.
+Instead, they modify or qualify the presentation of their contents,
+or are represented in the final message by some non-textual representation.
+Some elements may have no formatted representation at all.
+
+```ts
+interface Element extends PatternElement {
+  type: 'element'
+  elem: string
+  has_body: boolean
+  options?: Record<string, Literal | VariableRef | Alias>
+}
+
+interface ElementEnd extends PatternElement {
+  type: 'element-end'
+  elem: string
+}
+```
+
+If the `has_body` value of an Element is `true`,
+the message is expected to contain a matching ElementEnd later in the current pattern,
+i.e. one with the same `elem` value.

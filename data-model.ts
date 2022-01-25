@@ -86,3 +86,15 @@ interface Alias extends PatternElement {
   type: 'alias'
   alias: string
 }
+
+interface Element extends PatternElement {
+  type: 'element'
+  elem: string
+  has_body: boolean
+  options?: Record<string, Literal | VariableRef | Alias>
+}
+
+interface ElementEnd extends PatternElement {
+  type: 'element-end'
+  elem: string
+}

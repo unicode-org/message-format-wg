@@ -303,7 +303,6 @@ whitespace is generally ignored within the element.
 
 ```ebnf
 element = "<" { ws } word
-          { ws { ws } ( argument | comment ) }
           { ws { ws } ( option | comment ) }
           { ws { ws } ( meta | comment ) }
           { ws } [ "/" ] ">"
@@ -311,7 +310,7 @@ element = "<" { ws } word
 ```
 
 Within a starting and standalone display element's chevron block,
-the same syntax is used as for formatting functions.
+options and metadata are supported with the same syntax is used as for formatting functions.
 An ending element must only contain the name of the element that it's closing;
 again as with formatting functions,
 said name must only contain word characters.

@@ -89,7 +89,6 @@ msgref = "-" [ literal ":" ] var_path
 alias = "*" word
 
 element = "<" { ws } word
-          { ws { ws } ( argument | comment ) }
           { ws { ws } ( option | comment ) }
           { ws { ws } ( meta | comment ) }
           { ws } [ "/" ] ">"

@@ -152,6 +152,48 @@ access not only to messages in the current resource, but also to other message r
 The shape and requirements of the context required for this
 are presented in the [Message Selection](./spec-message-selection.md) section.
 
+### Element
+
+Resolving an Element and its corresponding ElementEnd (if any) requires
+a function capable of transforming
+the element's name, resolved `options`, and any body contents into an appropriate representation.
+
+As the intended use and formatted representation of an Element may be highly variable,
+an implementation MAY transform the Element and ElementEnd pattern elements individually,
+rather than considering them and their body contents to have a single value.
+
+An implementation MAY use additional context when formatting an Element and its body,
+for example to overlay option values with those provided in the Element.
+
+#### Improperly Nested Elements
+
+If Element/ElementEnd pattern element pairs are improperly nested
+an implementation MUST do one of the following:
+
+1. Consider this an error and use a fallback representation for some or all of the Element and ElementEnd pattern elements.
+2. Resolve the impropriety somehow, potentially removing or duplicating some of the pattern elements.
+3. Do nothing, as the Element formatter and the output target may support such content directly.
+
+For example, an input message
+
+    This is <b>bold <i>both</b> italic</i>
+
+could be formatted the same as any of the following, depending on the implementation and the target format:
+
+    This is bold both italic
+    This is <b>bold <i>both</i></b><i> italic</i>
+    This is <b>bold <i>both</b> italic</i>
+
+#### Element Without Corresponding ElementEnd
+
+It is an error for an Element to expect to be followed by a later ElementEnd,
+and for no such ElementEnd to be available during formatting.
+
+In such a case, an implementation MUST resolve the message as if the expected ElementEnd was included
+immediately before the first other ElementEnd corresponding to an Element before the current one,
+or at the end of the current pattern,
+whichever comes first.
+
 ## Message Formatting
 
 After a message is resolved to a single sequence of values,
@@ -178,7 +220,7 @@ while still returning output in the expected form.
 The specifics of the error side channel are left for each implementation,
 but the following string fallback representations MUST be used with any string formatting target.
 In a concatenated string output,
-any failed parts MUST be preceded by U+007B LEFT CURLY BRACKET `{` and
+any failed parts except for elements MUST be preceded by U+007B LEFT CURLY BRACKET `{` and
 followed by U+007D RIGHT CURLY BRACKET `}` characters.
 
 ### VariableRef
@@ -214,6 +256,16 @@ include it immediately after then hyphen `-`, followed by a U+003A COLON `:`.
 If an alias is not defined or
 its resolution or formatting fails for some other reason,
 represent it with an U+002A ASTERISK `*` followed by its name.
+
+### Element & ElementEnd
+
+If an element formatter is not available,
+throws an error when called, or
+its resolution or formatting fails for some other reason,
+represent the individual Element and ElementEnd as empty strings.
+
+Implementations MAY choose to use this representation for all elements,
+effectively considering all such elements to be discarded during formatting.
 
 ### Unknown Pattern Element
 
