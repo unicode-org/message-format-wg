@@ -1,8 +1,7 @@
 # Syntax
 
 A reasonably human-friendly syntax is needed to enable the representation of
-messages made possible by MF2,
-as certain aspects of the specification allow for
+messages made possible by MF2, as certain aspects of the specification allow for
 features that are not available or present in other existing message formatting syntaxes.
 This should not – and does not! – preclude MF2 from being used together with
 practically speaking any other syntax, such as ICU MessageFormat.
@@ -58,14 +57,14 @@ or to be surrounded by double quotes `"…"`.
 literal = word | quoted_literal
 word = word_char { word_char }
 word_char = \p{Letter} | \p{Number} | "_"
-quoted_literal = '"' { any_char - '"' } '"'
+quoted_literal = '"' { any_char - '"' | escaped_char } '"'
 ```
 
 ### Placeholders
 
 Variable, Function and Message References need to be separated from
 the surrounding message by some syntax.
-There is no reason to diverge from the customary use of curly braces `{ … }` as that separator.
+The proposed syntax uses `{ … }` as that separator.
 
 ```ebnf
 placeholder = "{" { ws }
@@ -291,7 +290,7 @@ format to a US English string as “42.0 bananas.”
 Separately from formatting functions,
 MF2 allows for messages to include display and markup elements,
 i.e. pattern elements that could represent anything from
-HTML tags to instructions for a translator to keep an inner span as untranslated.
+HTML tags, formatting information for the voice assistant, to instructions for a translator to keep an inner span as untranslated.
 
 To underline the difference between elements and formatting functions,
 these use a syntax much closer to HTML or XML,
@@ -408,8 +407,7 @@ The process for selecting a case is described in the
 
 An alternative message syntax is available for situations where
 a single message is being parsed, rather than a complete resource.
-With this syntax variant,
-select cases do not require any preceding white space,
+With this syntax variant, select cases do not require any preceding white space,
 and the whole message may be represented on a single line.
 All open square brackets in the message body need to then be escaped `\[`.
 
