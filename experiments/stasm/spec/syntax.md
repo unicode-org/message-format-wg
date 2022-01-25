@@ -182,10 +182,10 @@ Message Format 2.0 improves upon the Message Format 1.0 syntax through the follo
 
     Message Format 1.0:
     ```
-    {foo, func
+    {foo, func,
         foo1 {Value 1},
         foo2 {
-            {bar, func
+            {bar, func,
                 bar1 {Value 2a}
                 bar2 {Value 2b}}}}
     ```
@@ -198,7 +198,7 @@ Message Format 2.0 improves upon the Message Format 1.0 syntax through the follo
         foo2 bar1 [Value 2a]
         foo2 bar2 [Value 2b]
     ```
-1. In Message Format 2.0, these a strong separation between the syntax used to introduce expressions (`{...}`) and the syntax used to defined translatable content (`[...]`).
+1. Message Format 2.0 differentiates between the syntax used to introduce expressions (`{...}`) and the syntax used to defined translatable content (`[...]`).
 
 1. Message Format 2.0 uses the dollar sign (`$`) as the sigil for variable references, and only allows named options to functions. The purpose of this change is to help disambiguate between the different parts of a placeholder (variable references, function names, literals etc.).
 
