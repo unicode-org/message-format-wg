@@ -283,19 +283,25 @@ key 0 [Hello, world!]
 
 ### Expressions
 
-Expressions can be either of the following two productions:
+Expressions can be either of the following productions:
 
-- _Variable references_ start with the variable's name and are optionally followed by the formatting function and its named options. Formatting functions do not accept any positional arguments other than the variable in front of them.
+- _Number formatters_ start with the number literal optionally followed by the formatting function and its named options. Formatting functions do not accept any positional arguments other than the number literal in front of them.
+- _Variable formatters_ start with the variable's name and are optionally followed by the formatting function and its named options. Formatting functions do not accept any positional arguments other than the variable in front of them.
 - _Function calls_ are standalone invocations which start with the function's name optionally followed by its named options. Functions do not accept any positional arguments.
 
 ```
-Expression ::= VariableRef | FunctionCall
-VariableRef ::= VariableName FunctionCall?
+Expression ::= NumberFmt | VariableFmt | FunctionCall
+NumberFmt ::= Number FunctionCall?
+VariableFmt ::= VariableName FunctionCall?
 FunctionCall ::= Symbol FunctionOpt*
 FunctionOpt ::= Symbol ":" (Literal | VariableName)
 ```
 
 Examples:
+
+```
+1.23 number maxFractionDigits:1
+```
 
 ```
 $when datetime style:long
@@ -376,8 +382,9 @@ Pattern ::= "[" (Text | Placeable)* "]" /* ws: explicit */
 Placeable ::= "{" Expression "}"
 
 /* Expressions */
-Expression ::= VariableRef | FunctionCall
-VariableRef ::= VariableName FunctionCall?
+Expression ::= NumberFmt | VariableFmt | FunctionCall
+NumberFmt ::= Number FunctionCall?
+VariableFmt ::= VariableName FunctionCall?
 FunctionCall ::= Symbol FunctionOpt*
 FunctionOpt ::= Symbol ":" (Literal | VariableName)
 

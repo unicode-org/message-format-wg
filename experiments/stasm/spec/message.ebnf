@@ -11,8 +11,9 @@ Pattern ::= "[" (Text | Placeable)* "]" /* ws: explicit */
 Placeable ::= "{" Expression "}"
 
 /* Expressions */
-Expression ::= VariableRef | FunctionCall
-VariableRef ::= VariableName FunctionCall?
+Expression ::= NumberFmt | VariableFmt | FunctionCall
+NumberFmt ::= Number FunctionCall?
+VariableFmt ::= VariableName FunctionCall?
 FunctionCall ::= Symbol FunctionOpt*
 FunctionOpt ::= Symbol ":" (Literal | VariableName)
 
