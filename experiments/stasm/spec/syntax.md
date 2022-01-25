@@ -1,4 +1,4 @@
-# Message Format 2.0 Syntax
+# MessageFormat 2.0 Syntax
 
 <details>
 <summary>Changelog</summary>
@@ -23,7 +23,7 @@
     1. [Formatting Functions](#formatting-functions)
     1. [Selection](#selection)
     1. [Complex Messages](#complex-messages)
-1. [Comparison with Message Format 1.0](#comparison-with-message-format-10)
+1. [Comparison with ICU MessageFormat 1.0](#comparison-with-icu-messageformat-10)
 1. [Productions](#productions)
     1. [Message](#message)
     1. [Definitions](#definitions)
@@ -40,17 +40,19 @@
 
 This document defines the formal grammar describing the syntax of a single message. A separate syntax shall be specified to describe collections of messages (_MessageResources_), including message identifiers, metadata, comments, groups, etc.
 
+The document is part of the MessageFormat 2.0 specification, the successor to ICU MessageFormat, henceforth called ICU MessageFormat 1.0.
+
 ### Design Goals
 
 The design goals of the syntax specification are as follows:
 
-1. The syntax should be an incremental update over the Message Format 1.0 syntax in order to leverage the familiarity and the single-message model that is ubiquitous in the localization tooling today, and increase the chance of adoption.
+1. The syntax should be an incremental update over the ICU MessageFormat 1.0 syntax in order to leverage the familiarity and the single-message model that is ubiquitous in the localization tooling today, and increase the chance of adoption.
 
-    * _Non-Goal_: Be backwards-compatible with the Message Format 1.0 syntax.
+    * _Non-Goal_: Be backwards-compatible with the ICU MessageFormat 1.0 syntax.
 
-1. The syntax inside translatable content should be easy to understand for humans. This includes making it clear which parts of the message body _are_ translatable content, which parts are placeholders, as well as making the selection logic predictable and easy to reason about.
+1. The syntax inside translatable content should be easy to understand for humans. This includes making it clear which parts of the message body _are_ translatable content, which parts inside it are placeholders, as well as making the selection logic predictable and easy to reason about.
 
-    * _Non-Goal_: Make the syntax intuitive enough for non-technical translators to hand-edit. Instead, we assume that most translators will work with Message Format 2.0 by means of GUI tooling, CAT workbenches etc.
+    * _Non-Goal_: Make the syntax intuitive enough for non-technical translators to hand-edit. Instead, we assume that most translators will work with MessageFormat 2.0 by means of GUI tooling, CAT workbenches etc.
 
 1. The syntax surrounding translatable content should be easy to write and edit for developers, localization engineers, and easy to parse by machines.
 
@@ -175,13 +177,13 @@ A complex message with two selectors and local variable definitions:
         other 2 [{$hostName} invites {$guestName} and one other person to their party.]
         other [{$hostName} invites {$guestName} and {$guestsOther} other people to their party.]
 
-## Comparison with Message Format 1.0
+## Comparison with ICU MessageFormat 1.0
 
-Message Format 2.0 improves upon the Message Format 1.0 syntax through the following changes:
+MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the following changes:
 
-1. In Message Format 2.0, variants can only be defined at the top level of the message, thus precluding any possible nestedness of expressions. 
+1. In MessageFormat 2.0, variants can only be defined at the top level of the message, thus precluding any possible nestedness of expressions.
 
-    Message Format 1.0:
+    ICU MessageFormat 1.0:
     ```
     {foo, func,
         foo1 {Value 1},
@@ -191,7 +193,7 @@ Message Format 2.0 improves upon the Message Format 1.0 syntax through the follo
                 bar2 {Value 2b}}}}
     ```
 
-    Message Format 2.0:
+    MessageFormat 2.0:
     ```
     {$foo func}?
     {$bar func}?
@@ -199,23 +201,24 @@ Message Format 2.0 improves upon the Message Format 1.0 syntax through the follo
         foo2 bar1 [Value 2a]
         foo2 bar2 [Value 2b]
     ```
-1. Message Format 2.0 differentiates between the syntax used to introduce expressions (`{...}`) and the syntax used to defined translatable content (`[...]`).
 
-1. Message Format 2.0 uses the dollar sign (`$`) as the sigil for variable references, and only allows named options to functions. The purpose of this change is to help disambiguate between the different parts of a placeholder (variable references, function names, literals etc.).
+1. MessageFormat 2.0 differentiates between the syntax used to introduce expressions (`{...}`) and the syntax used to defined translatable content (`[...]`).
 
-    Message Format 1.0:
+1. MessageFormat 2.0 uses the dollar sign (`$`) as the sigil for variable references, and only allows named options to functions. The purpose of this change is to help disambiguate between the different parts of a placeholder (variable references, function names, literals etc.).
+
+    ICU MessageFormat 1.0:
     ```
     {when, date, short}
     ```
 
-    Message Format 2.0:
+    MessageFormat 2.0:
     ```
     {$when date style:short}
     ```
 
-1. Message Format 2.0 doesn't provide the `#` shorthand inside variants. Instead it allows aliases to be defined at the top of the message; these aliases can then be referred to inside patterns similar to other variables.
+1. MessageFormat 2.0 doesn't provide the `#` shorthand inside variants. Instead it allows aliases to be defined at the top of the message; these aliases can then be referred to inside patterns similar to other variables.
 
-1. Message Format 2.0 doesn't require commas (`,`) inside placeholders.
+1. MessageFormat 2.0 doesn't require commas (`,`) inside placeholders.
 
 ## Productions
 
