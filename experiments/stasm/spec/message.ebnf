@@ -19,16 +19,19 @@ FunctionOpt ::= Symbol ":" (Literal | VariableName)
 <?TOKENS?>
 
 /* Literals & Identifiers*/
-Text ::= TextChar+
+Text ::= (TextChar | EscapeSeq)+
 VariableName ::= "$" Symbol /* ws: explicit */
 Literal ::= Symbol | Number /* ws: explicit */
 Symbol ::= (SymbolChar | "_") (SymbolChar | DigitChar | "_" | "-")* /* ws: explicit */
 Number ::= ("-")? DigitChar+ ("." DigitChar+)? /* ws: explicit */
 
 /* Character classes */
+TextChar ::= . - ("]" | "{" | #x5c)
 SymbolChar ::= [a-zA-Z]
 DigitChar ::= [0-9]
-TextChar ::= . - ("]" | "{")
+
+/* Escape sequences */
+EscapeSeq ::= #x5c "]" | #x5c "{"
 
 /* All whitespace outside text is ignored */
 WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP /* ws: definition */

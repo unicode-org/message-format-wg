@@ -2,11 +2,13 @@
 
 <details>
 <summary>Changelog</summary>
+
 |   Date   | Description |
 |----------|-------------|
-| **TODO** |Escape sequences|
 | **TODO** |Aliases to submessages|
+|2022-01-25|Specify escape sequences|
 |2022-01-25|Initial design|
+
 </details>
 
 ## Table of Contents
@@ -309,7 +311,7 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 ### Literals & Identifiers
 
 ```
-Text ::= TextChar+
+Text ::= (TextChar | EscapeSeq)+
 VariableName ::= "$" Symbol /* ws: explicit */
 Literal ::= Symbol | Number /* ws: explicit */
 Symbol ::= (SymbolChar | "_") (SymbolChar | DigitChar | "_" | "-")* /* ws: explicit */
@@ -318,10 +320,20 @@ Number ::= ("-")? DigitChar+ ("." DigitChar+)? /* ws: explicit */
 
 ### Character Classes
 
+Any Unicode codepoint is allowed in the translatable text, with the exception of `]` (which ends the pattern), `{` (which starts a placeholder), and `\\` (which starts an escape sequence).
+
 ```
+TextChar ::= . - ("]" | "{" | #x5c)
 SymbolChar ::= [a-zA-Z]
 DigitChar ::= [0-9]
-TextChar ::= . - ("]" | "{")
+```
+
+### Escape Sequences
+
+Escape sequences are introduced inside translatable text by the backslash character (`\\`).
+
+```
+EscapeSeq ::= #x5c "]" | #x5c "{"
 ```
 
 ### Whitespace
@@ -366,16 +378,19 @@ FunctionOpt ::= Symbol ":" (Literal | VariableName)
 <?TOKENS?>
 
 /* Literals & Identifiers*/
-Text ::= TextChar+
+Text ::= (TextChar | EscapeSeq)+
 VariableName ::= "$" Symbol /* ws: explicit */
 Literal ::= Symbol | Number /* ws: explicit */
 Symbol ::= (SymbolChar | "_") (SymbolChar | DigitChar | "_" | "-")* /* ws: explicit */
 Number ::= ("-")? DigitChar+ ("." DigitChar+)? /* ws: explicit */
 
 /* Character classes */
+TextChar ::= . - ("]" | "{" | #x5c)
 SymbolChar ::= [a-zA-Z]
 DigitChar ::= [0-9]
-TextChar ::= . - ("]" | "{")
+
+/* Escape sequences */
+EscapeSeq ::= #x5c "]" | #x5c "{"
 
 /* All whitespace outside text is ignored */
 WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP /* ws: definition */
