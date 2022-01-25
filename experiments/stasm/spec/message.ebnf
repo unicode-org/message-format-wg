@@ -1,0 +1,42 @@
+Message ::= Definition* Variant+
+
+/* Aliases and selectors */
+Definition ::= Alias? "{" Expression "}" "?"?
+Alias ::= VariableName "="
+
+/* Pattern and pattern elements */
+Variant ::= VariantKey? Pattern
+VariantKey ::= (Literal Literal*)
+Pattern ::= "[" (Text | Placeable)* "]" /* ws: explicit */
+Placeable ::= "{" Expression "}"
+
+/* Expressions */
+Expression ::= VariableRef | FunctionCall
+VariableRef ::= VariableName FunctionCall?
+FunctionCall ::= Symbol FunctionOpt*
+FunctionOpt ::= Symbol ":" (Literal | VariableName)
+
+<?TOKENS?>
+
+/* Literals & Identifiers*/
+Text ::= TextChar+
+VariableName ::= "$" Symbol /* ws: explicit */
+Literal ::= Symbol | Number /* ws: explicit */
+Symbol ::= (SymbolChar | "_") (SymbolChar | DigitChar | "_" | "-")* /* ws: explicit */
+Number ::= ("-")? DigitChar+ ("." DigitChar+)? /* ws: explicit */
+
+/* Character classes */
+SymbolChar ::= [a-zA-Z]
+DigitChar ::= [0-9]
+TextChar ::= . - ("]" | "{")
+
+/* All whitespace outside text is ignored */
+WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP /* ws: definition */
+TAB ::= #x0009
+VT ::= #x000B
+FF ::= #x000C
+SP ::= #x0020
+NBSP ::= #x00A0
+BOM ::= #xFEFF
+USP ::= [#x0009-#x000D] | #x0020 | #x0085 | #x00A0 | #x1680 | #x180E
+      | [#x2000-#x200A] | #x2028 | #x2029 | #x202F | #x205F | #x3000
