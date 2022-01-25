@@ -68,8 +68,6 @@ either as a PatternMessage or a SelectMessage.
 
 ```ts
 type Message = PatternMessage | SelectMessage
-
-type MessageBody = PatternElement[]
 ```
 
 A PatternMessage contains a list of PatternElement values,
@@ -79,14 +77,14 @@ while others are placeholders with formatted values that depend on additional da
 ```ts
 interface PatternMessage {
   type: 'message'
-  value: MessageBody
+  pattern: PatternElement[]
   comment?: string
   meta?: Meta
 }
 ```
 
 SelectMessage provides for the selection of one list of PatternElement values
-to use as the message's value when formatting,
+to use as the message's pattern when formatting,
 depending on the value of one or more Selector values.
 
 Each of the SelectMessage `cases` is defined by a key of one or more string identifiers,

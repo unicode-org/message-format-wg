@@ -22,11 +22,9 @@ type Meta = Record<string, string | number | boolean>
 
 type Message = PatternMessage | SelectMessage
 
-type MessageBody = PatternElement[]
-
 interface PatternMessage {
   type: 'message'
-  value: MessageBody
+  pattern: PatternElement[]
   comment?: string
   meta?: Meta
 }
