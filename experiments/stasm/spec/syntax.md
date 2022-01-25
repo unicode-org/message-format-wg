@@ -2,13 +2,35 @@
 
 <details>
 <summary>Changelog</summary>
-
 |   Date   | Description |
 |----------|-------------|
 | **TODO** |Escape sequences|
 | **TODO** |Aliases to submessages|
 |2022-01-25|Initial design|
 </details>
+
+## Table of Contents
+
+1. [Introduction](#introduction)
+    1. [Design Goals](#design-goals)
+    1. [Design Restrictions](#design-restrictions)
+1. [Overview & Examples](#overview--examples)
+    1. [Simple Messages](#simple-messages)
+    1. [Simple Placeholders](#simple-placeholders)
+    1. [Formatting Functions](#formatting-functions)
+    1. [Selection](#selection)
+    1. [Complex Messages](#complex-messages)
+1. [Comparison with Message Format 1.0](#comparison-with-message-format-10)
+1. [Productions](#productions)
+    1. [Message](#message)
+    1. [Definitions](#definitions)
+    1. [Variants & Patterns](#variants--patterns)
+    1. [Expressions](#expressions)
+1. [Tokens](#tokens)
+    1. [Literals & Identifiers](#literals--identifiers)
+    1. [Character Classes](#character-classes)
+    1. [Whitespace](#whitespace)
+1. [Complete EBNF](#complete-ebnf)
 
 ## Introduction
 
@@ -149,7 +171,7 @@ A complex message with two selectors and local variable definitions:
         other 2 [{$hostName} invites {$guestName} and one other person to their party.]
         other [{$hostName} invites {$guestName} and {$guestsOther} other people to their party.]
 
-## Comparison to Message Format 1.0
+## Comparison with Message Format 1.0
 
 Message Format 2.0 improves upon the Message Format 1.0 syntax through the following changes:
 
@@ -294,7 +316,7 @@ Symbol ::= (SymbolChar | "_") (SymbolChar | DigitChar | "_" | "-")* /* ws: expli
 Number ::= ("-")? DigitChar+ ("." DigitChar+)? /* ws: explicit */
 ```
 
-### Characters
+### Character Classes
 
 ```
 SymbolChar ::= [a-zA-Z]
