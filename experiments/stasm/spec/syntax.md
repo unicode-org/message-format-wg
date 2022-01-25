@@ -343,8 +343,8 @@ Any Unicode codepoint is allowed in string literals, with the exception of `"` (
 The set of characters that can be used in symbols is intentionally limited to simplify parsing and error recovery, discourage complexity in custom function implementations, and encourage using the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
 
 ```
-TextChar ::= . - ("]" | "{" | #x5c)
-StringChar ::= . - (#x22 | #x5c)
+TextChar ::= . - ("]" | "{" | Esc)
+StringChar ::= . - (#x22 | Esc)
 SymbolChar ::= [a-zA-Z]
 DecimalDigit ::= [0-9]
 HexDigit ::= [0-9a-fA-F]
@@ -355,10 +355,11 @@ HexDigit ::= [0-9a-fA-F]
 Escape sequences are introduced by the backslash character (`\`). They are allowed in translatable text as well as in string literals.
 
 ```
-TextEscape ::= #x5c "]" | #x5c "{" | UnicodeEscape
-StringEscape ::= #x5c #x22 | UnicodeEscape
-UnicodeEscape ::= #x5c "u" HexDigit HexDigit HexDigit HexDigit
-                | #x5c "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
+Esc ::= #x5c
+TextEscape ::= Esc "]" | Esc "{" | UnicodeEscape
+StringEscape ::= Esc #x22 | UnicodeEscape
+UnicodeEscape ::= Esc "u" HexDigit HexDigit HexDigit HexDigit
+                | Esc "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 ```
 
 ### Whitespace
@@ -412,17 +413,18 @@ String ::= #x22 (StringChar | StringEscape)* #x22 /* ws: explicit */
 Number ::= ("-")? DecimalDigit+ ("." DecimalDigit+)? /* ws: explicit */
 
 /* Character classes */
-TextChar ::= . - ("]" | "{" | #x5c)
-StringChar ::= . - (#x22 | #x5c)
+TextChar ::= . - ("]" | "{" | Esc)
+StringChar ::= . - (#x22 | Esc)
 SymbolChar ::= [a-zA-Z]
 DecimalDigit ::= [0-9]
 HexDigit ::= [0-9a-fA-F]
 
 /* Escape sequences */
-TextEscape ::= #x5c "]" | #x5c "{" | UnicodeEscape
-StringEscape ::= #x5c #x22 | UnicodeEscape
-UnicodeEscape ::= #x5c "u" HexDigit HexDigit HexDigit HexDigit
-                | #x5c "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
+Esc ::= #x5c
+TextEscape ::= Esc "]" | Esc "{" | UnicodeEscape
+StringEscape ::= Esc #x22 | UnicodeEscape
+UnicodeEscape ::= Esc "u" HexDigit HexDigit HexDigit HexDigit
+                | Esc "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 
 /* All whitespace outside text is ignored */
 WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP /* ws: definition */
