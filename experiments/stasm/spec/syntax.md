@@ -233,7 +233,7 @@ A definition is an _expression_ which may be used as a selector to select an app
 
 ```
 Definition ::= Alias? "{" Expression "}" "?"?
-Alias ::= VariableName "="
+Alias ::= Variable "="
 ```
 
 Examples:
@@ -293,9 +293,9 @@ Expressions can be either of the following productions:
 ```
 Expression ::= LiteralFmt | VariableFmt | FunctionCall
 LiteralFmt ::= Literal FunctionCall?
-VariableFmt ::= VariableName FunctionCall?
+VariableFmt ::= Variable FunctionCall?
 FunctionCall ::= Symbol FunctionOpt*
-FunctionOpt ::= Symbol ":" (Symbol | Literal | VariableName)
+FunctionOpt ::= Symbol ":" (Symbol | Literal | Variable)
 ```
 
 Examples:
@@ -323,9 +323,9 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 ### Literals & Identifiers
 
 ```
-Text ::= (TextChar | TextEscape)+
-VariableName ::= "$" Symbol /* ws: explicit */
+Variable ::= "$" Symbol /* ws: explicit */
 Symbol ::= (SymbolChar | "_") (SymbolChar | DecimalDigit | "_" | "-")* /* ws: explicit */
+Text ::= (TextChar | TextEscape)+
 Literal ::= String | Number /* ws: explicit */
 String ::= #x22 (StringChar | StringEscape)* #x22 /* ws: explicit */
 Number ::= ("-")? DecimalDigit+ ("." DecimalDigit+)? /* ws: explicit */
@@ -383,7 +383,7 @@ Message ::= Definition* Variant+
 
 /* Aliases and selectors */
 Definition ::= Alias? "{" Expression "}" "?"?
-Alias ::= VariableName "="
+Alias ::= Variable "="
 
 /* Pattern and pattern elements */
 Variant ::= VariantKey* Pattern
@@ -394,16 +394,16 @@ Placeable ::= "{" Expression "}"
 /* Expressions */
 Expression ::= LiteralFmt | VariableFmt | FunctionCall
 LiteralFmt ::= Literal FunctionCall?
-VariableFmt ::= VariableName FunctionCall?
+VariableFmt ::= Variable FunctionCall?
 FunctionCall ::= Symbol FunctionOpt*
-FunctionOpt ::= Symbol ":" (Symbol | Literal | VariableName)
+FunctionOpt ::= Symbol ":" (Symbol | Literal | Variable)
 
 <?TOKENS?>
 
 /* Literals & Identifiers*/
-Text ::= (TextChar | TextEscape)+
-VariableName ::= "$" Symbol /* ws: explicit */
+Variable ::= "$" Symbol /* ws: explicit */
 Symbol ::= (SymbolChar | "_") (SymbolChar | DecimalDigit | "_" | "-")* /* ws: explicit */
+Text ::= (TextChar | TextEscape)+
 Literal ::= String | Number /* ws: explicit */
 String ::= #x22 (StringChar | StringEscape)* #x22 /* ws: explicit */
 Number ::= ("-")? DecimalDigit+ ("." DecimalDigit+)? /* ws: explicit */
