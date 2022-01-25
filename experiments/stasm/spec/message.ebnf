@@ -5,37 +5,40 @@ Definition ::= Alias? "{" Expression "}" "?"?
 Alias ::= VariableName "="
 
 /* Pattern and pattern elements */
-Variant ::= VariantKey? Pattern
-VariantKey ::= (Literal Literal*)
+Variant ::= VariantKey* Pattern
+VariantKey ::= Symbol | Literal
 Pattern ::= "[" (Text | Placeable)* "]" /* ws: explicit */
 Placeable ::= "{" Expression "}"
 
 /* Expressions */
-Expression ::= NumberFmt | VariableFmt | FunctionCall
-NumberFmt ::= Number FunctionCall?
+Expression ::= LiteralFmt | VariableFmt | FunctionCall
+LiteralFmt ::= Literal FunctionCall?
 VariableFmt ::= VariableName FunctionCall?
 FunctionCall ::= Symbol FunctionOpt*
-FunctionOpt ::= Symbol ":" (Literal | VariableName)
+FunctionOpt ::= Symbol ":" (Symbol | Literal | VariableName)
 
 <?TOKENS?>
 
 /* Literals & Identifiers*/
-Text ::= (TextChar | EscapeSeq)+
+Text ::= (TextChar | TextEscape)+
 VariableName ::= "$" Symbol /* ws: explicit */
-Literal ::= Symbol | Number /* ws: explicit */
 Symbol ::= (SymbolChar | "_") (SymbolChar | DecimalDigit | "_" | "-")* /* ws: explicit */
+Literal ::= String | Number /* ws: explicit */
+String ::= #x22 (StringChar | StringEscape)* #x22 /* ws: explicit */
 Number ::= ("-")? DecimalDigit+ ("." DecimalDigit+)? /* ws: explicit */
 
 /* Character classes */
 TextChar ::= . - ("]" | "{" | #x5c)
+StringChar ::= . - (#x22 | #x5c)
 SymbolChar ::= [a-zA-Z]
 DecimalDigit ::= [0-9]
 HexDigit ::= [0-9a-fA-F]
 
 /* Escape sequences */
-EscapeSeq ::= #x5c "]" | #x5c "{" | UnicodeSeq
-UnicodeSeq ::= #x5c "u" HexDigit HexDigit HexDigit HexDigit
-             | #x5c "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
+TextEscape ::= #x5c "]" | #x5c "{" | UnicodeEscape
+StringEscape ::= #x5c #x22 | UnicodeEscape
+UnicodeEscape ::= #x5c "u" HexDigit HexDigit HexDigit HexDigit
+                | #x5c "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 
 /* All whitespace outside text is ignored */
 WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP /* ws: definition */

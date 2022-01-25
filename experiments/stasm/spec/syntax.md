@@ -6,6 +6,7 @@
 |   Date   | Description |
 |----------|-------------|
 | **TODO** |Aliases to submessages|
+|2022-01-25|Add string literals and literal formatters|
 |2022-01-25|Specify escape sequences|
 |2022-01-25|Initial design|
 
@@ -261,8 +262,8 @@ A message must include at least one _variant_. The translatable content of a var
 Variants can be optionally keyed, in which case their keys will be matched against the message's selectors. The formatting specification defines which variant is chosen by comparing its keys to the message's selectors, including the situation when no keys or no selectors are defined.
 
 ```
-Variant ::= VariantKey? Pattern
-VariantKey ::= (Literal Literal*)
+Variant ::= VariantKey* Pattern
+VariantKey ::= Symbol | Literal
 Pattern ::= "[" (Text | Placeable)* "]" /* ws: explicit */
 Placeable ::= "{" Expression "}"
 ```
@@ -285,22 +286,26 @@ key 0 [Hello, world!]
 
 Expressions can be either of the following productions:
 
-- _Number formatters_ start with the number literal optionally followed by the formatting function and its named options. Formatting functions do not accept any positional arguments other than the number literal in front of them.
+- Literal formatters_ start with a literal optionally followed by the formatting function and its named options. Formatting functions do not accept any positional arguments other than the number literal in front of them.
 - _Variable formatters_ start with the variable's name and are optionally followed by the formatting function and its named options. Formatting functions do not accept any positional arguments other than the variable in front of them.
 - _Function calls_ are standalone invocations which start with the function's name optionally followed by its named options. Functions do not accept any positional arguments.
 
 ```
-Expression ::= NumberFmt | VariableFmt | FunctionCall
-NumberFmt ::= Number FunctionCall?
+Expression ::= LiteralFmt | VariableFmt | FunctionCall
+LiteralFmt ::= Literal FunctionCall?
 VariableFmt ::= VariableName FunctionCall?
 FunctionCall ::= Symbol FunctionOpt*
-FunctionOpt ::= Symbol ":" (Literal | VariableName)
+FunctionOpt ::= Symbol ":" (Symbol | Literal | VariableName)
 ```
 
 Examples:
 
 ```
 1.23 number maxFractionDigits:1
+```
+
+```
+"1970-01-01T13:37:00.000Z" datetime weekday:long
 ```
 
 ```
@@ -318,10 +323,11 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 ### Literals & Identifiers
 
 ```
-Text ::= (TextChar | EscapeSeq)+
+Text ::= (TextChar | TextEscape)+
 VariableName ::= "$" Symbol /* ws: explicit */
-Literal ::= Symbol | Number /* ws: explicit */
 Symbol ::= (SymbolChar | "_") (SymbolChar | DecimalDigit | "_" | "-")* /* ws: explicit */
+Literal ::= String | Number /* ws: explicit */
+String ::= #x22 (StringChar | StringEscape)* #x22 /* ws: explicit */
 Number ::= ("-")? DecimalDigit+ ("." DecimalDigit+)? /* ws: explicit */
 ```
 
@@ -329,10 +335,13 @@ Number ::= ("-")? DecimalDigit+ ("." DecimalDigit+)? /* ws: explicit */
 
 Any Unicode codepoint is allowed in the translatable text, with the exception of `]` (which ends the pattern), `{` (which starts a placeholder), and `\` (which starts an escape sequence).
 
+Any Unicode codepoint is allowed in string literals, with the exception of `"` (which ends the string literal, and `\` (which starts an escape sequence).
+
 The set of characters that can be used in symbols is intentionally limited to simplify parsing and error recovery, discourage complexity in custom function implementations, and encourage using the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
 
 ```
 TextChar ::= . - ("]" | "{" | #x5c)
+StringChar ::= . - (#x22 | #x5c)
 SymbolChar ::= [a-zA-Z]
 DecimalDigit ::= [0-9]
 HexDigit ::= [0-9a-fA-F]
@@ -340,12 +349,13 @@ HexDigit ::= [0-9a-fA-F]
 
 ### Escape Sequences
 
-Escape sequences are introduced inside translatable text by the backslash character (`\`).
+Escape sequences are introduced by the backslash character (`\`). They are allowed in translatable text as well as in string literals.
 
 ```
-EscapeSeq ::= #x5c "]" | #x5c "{" | UnicodeSeq
-UnicodeSeq ::= #x5c "u" HexDigit HexDigit HexDigit HexDigit
-             | #x5c "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
+TextEscape ::= #x5c "]" | #x5c "{" | UnicodeEscape
+StringEscape ::= #x5c #x22 | UnicodeEscape
+UnicodeEscape ::= #x5c "u" HexDigit HexDigit HexDigit HexDigit
+                | #x5c "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 ```
 
 ### Whitespace
@@ -376,37 +386,40 @@ Definition ::= Alias? "{" Expression "}" "?"?
 Alias ::= VariableName "="
 
 /* Pattern and pattern elements */
-Variant ::= VariantKey? Pattern
-VariantKey ::= (Literal Literal*)
+Variant ::= VariantKey* Pattern
+VariantKey ::= Symbol | Literal
 Pattern ::= "[" (Text | Placeable)* "]" /* ws: explicit */
 Placeable ::= "{" Expression "}"
 
 /* Expressions */
-Expression ::= NumberFmt | VariableFmt | FunctionCall
-NumberFmt ::= Number FunctionCall?
+Expression ::= LiteralFmt | VariableFmt | FunctionCall
+LiteralFmt ::= Literal FunctionCall?
 VariableFmt ::= VariableName FunctionCall?
 FunctionCall ::= Symbol FunctionOpt*
-FunctionOpt ::= Symbol ":" (Literal | VariableName)
+FunctionOpt ::= Symbol ":" (Symbol | Literal | VariableName)
 
 <?TOKENS?>
 
 /* Literals & Identifiers*/
-Text ::= (TextChar | EscapeSeq)+
+Text ::= (TextChar | TextEscape)+
 VariableName ::= "$" Symbol /* ws: explicit */
-Literal ::= Symbol | Number /* ws: explicit */
 Symbol ::= (SymbolChar | "_") (SymbolChar | DecimalDigit | "_" | "-")* /* ws: explicit */
+Literal ::= String | Number /* ws: explicit */
+String ::= #x22 (StringChar | StringEscape)* #x22 /* ws: explicit */
 Number ::= ("-")? DecimalDigit+ ("." DecimalDigit+)? /* ws: explicit */
 
 /* Character classes */
 TextChar ::= . - ("]" | "{" | #x5c)
+StringChar ::= . - (#x22 | #x5c)
 SymbolChar ::= [a-zA-Z]
 DecimalDigit ::= [0-9]
 HexDigit ::= [0-9a-fA-F]
 
 /* Escape sequences */
-EscapeSeq ::= #x5c "]" | #x5c "{" | UnicodeSeq
-UnicodeSeq ::= #x5c "u" HexDigit HexDigit HexDigit HexDigit
-             | #x5c "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
+TextEscape ::= #x5c "]" | #x5c "{" | UnicodeEscape
+StringEscape ::= #x5c #x22 | UnicodeEscape
+UnicodeEscape ::= #x5c "u" HexDigit HexDigit HexDigit HexDigit
+                | #x5c "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 
 /* All whitespace outside text is ignored */
 WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP /* ws: definition */
