@@ -87,7 +87,7 @@ app.greetings.hello = [Hello, world!]
 The same message defined inline in JavaScript:
 
 ```js
-let hello = new Intl.MessageFormat("[Hello, world!]");
+let hello = new MessageFormat("[Hello, world!]");
 hello.format();
 ```
 
@@ -106,7 +106,7 @@ app.greetings.hello = [Hello, {$userName}!]
 The same message defined inline in JavaScript:
 
 ```js
-let hello = new Intl.MessageFormat("[Hello, {$userName}!]");
+let hello = new MessageFormat("[Hello, {$userName}!]");
 hello.format({userName: "Anne"});
 ```
 
