@@ -321,7 +321,7 @@ Number ::= ("-")? DecimalDigit+ ("." DecimalDigit+)? /* ws: explicit */
 
 ### Character Classes
 
-Any Unicode codepoint is allowed in the translatable text, with the exception of `]` (which ends the pattern), `{` (which starts a placeholder), and `\\` (which starts an escape sequence).
+Any Unicode codepoint is allowed in the translatable text, with the exception of `]` (which ends the pattern), `{` (which starts a placeholder), and `\` (which starts an escape sequence).
 
 The set of characters that can be used in symbols is intentionally limited to simplify parsing and error recovery, discourage complexity in custom function implementations, and encourage using the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
 
@@ -334,7 +334,7 @@ HexDigit ::= [0-9a-fA-F]
 
 ### Escape Sequences
 
-Escape sequences are introduced inside translatable text by the backslash character (`\\`).
+Escape sequences are introduced inside translatable text by the backslash character (`\`).
 
 ```
 EscapeSeq ::= #x5c "]" | #x5c "{" | UnicodeSeq
