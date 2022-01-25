@@ -31,6 +31,7 @@
 1. [Tokens](#tokens)
     1. [Literals & Identifiers](#literals--identifiers)
     1. [Character Classes](#character-classes)
+    1. [Escape Sequences](#escape-sequences)
     1. [Whitespace](#whitespace)
 1. [Complete EBNF](#complete-ebnf)
 
