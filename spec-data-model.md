@@ -54,7 +54,7 @@ while _meta_ is a key-value record of structured data.
 Both are intended to provide context and other information about the messages they contain.
 
 ```ts
-type Meta = Record<string, string | number | boolean>
+type Meta = Record<string, string>
 ```
 
 Comments are not used or included in any resolved or formatted message output.

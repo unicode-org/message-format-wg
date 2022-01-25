@@ -16,7 +16,7 @@ interface MessageGroup {
   meta?: Meta
 }
 
-type Meta = Record<string, string | number | boolean>
+type Meta = Record<string, string>
 
 // Message
 
