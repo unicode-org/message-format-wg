@@ -62,9 +62,7 @@ The design goals of the syntax specification are as follows:
 
 The syntax specification takes into account the following design restrictions:
 
-1. The syntax should be described by an LL(1) grammar without backtracking.
-
-1. Whitespace outside the translatable content should be insignificant. A message can be defined entirely on a single line with no ambiguitiy, or it can be formatted over multiple lines for clarity.
+1. Whitespace outside the translatable content should be insignificant. It should be possible to define a message entirely on a single line with no ambiguitiy, as well as to format it over multiple lines for clarity.
 
 1. The syntax should not use nor reserve any keywords in any natural language, such as `if`, `match`, or `let`.
 
@@ -380,7 +378,7 @@ USP ::= [#x0009-#x000D] | #x0020 | #x0085 | #x00A0 | #x1680 | #x180E
 
 ## Complete EBNF
 
-The following EBNF uses the [W3C flavor](https://www.w3.org/TR/xml/#sec-notation) of the BNF notation.
+The following EBNF uses the [W3C flavor](https://www.w3.org/TR/xml/#sec-notation) of the BNF notation. The grammar is an LL(1) grammar without backtracking.
 
 ```ebnf
 Message ::= Definition* Variant+
