@@ -6,14 +6,17 @@
 
 The following is an incomplete working draft of the Unicode MessageFormat 2 specification.
 
-MessageFormat 2.0 is a localization system designed to be integrated into a variety of user interface systems (graphical, textual, voice, ambient etc.) providing a comperhensive solution for localization of the interface.
+MessageFormat 2.0 is a localization system designed to be integrated into a variety of user interface systems
+(graphical, textual, voice, ambient etc.)
+providing a comperhensive solution for localization of the interface.
 
 The system is composed of:
 * Data - potentially encoded in one or more syntaxes
 * Resolution Logic - describes extensible behavior and integration with other I18n APIs
 * API - allows for direct formatting as well as binding the system as an input to UI frameworks.
 
-Together, the system provides complete solution to localization of user interfaces in line with best practices of the Unicode project and well integrated into other Unicode components.
+Together, the system provides complete solution to localization of user interfaces
+in line with best practices of the Unicode project and well integrated into other Unicode components.
 
 ## Contents
 
@@ -32,13 +35,20 @@ Supporting files include:
 
 ## Introduction
 
-User interfaces provide rich and diverse set of primitives for human-computer interactions (HCI). Enabling UIs to be adaptable to all languages and cultures requires a large and neuanced set of features designed to enable whole spectrum of cultural expressions.
+User interfaces provide rich and diverse set of primitives for human-computer interactions (HCI).
+Enabling UIs to be adaptable to all languages and cultures requires
+a large and neuanced set of features designed to enable whole spectrum of cultural expressions.
 
-The goal of the localization system is to abstract the complexity and minimize the burden placed on the developers and developer experience, while enabling localizers to adapt the UIs to their language and culture.
+The goal of the localization system is to abstract the complexity and
+minimize the burden placed on the developers and developer experience,
+while enabling localizers to adapt the UIs to their language and culture.
 
-MessageFormat 2.0 builds on top of Unicode and ICU projects leveraging wide range of internationalization components such as plural rules, date, time, list and number formatting, CLDR and bi-directionality techniques.
+MessageFormat 2.0 builds on top of Unicode and ICU projects
+leveraging wide range of internationalization components
+such as plural rules, date, time, list and number formatting, CLDR and bi-directionality techniques.
 
-The output of the API may be either a stand-alone complete string, or a rich structured data to be composed by the UI framework into localized user interface.
+The output of the API may be either a stand-alone complete string,
+or a rich structured data to be composed by the UI framework into localized user interface.
 
 ### Terminology
 

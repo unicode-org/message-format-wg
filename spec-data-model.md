@@ -19,7 +19,8 @@ which all share a single _locale_ identifier.
 Within a Resource, the structure of Messages may be completely flat,
 or MessageGroups may be used to provide a hierarchy of messages.
 
-Groups of messages are useful for associating shared meta data information that can be used by the localization tools, and for scenarios where a single user interface primitive requires multiple messages to be resolved together to localize it.
+Groups of messages are useful for associating shared meta data information that can be used by the localization tools,
+and for scenarios where a single user interface primitive requires multiple messages to be resolved together to localize it.
 
 A Resource is often the data model representation of a single file,
 but may be constructed from any number and type of sources.
