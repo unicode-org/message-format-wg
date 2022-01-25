@@ -14,8 +14,7 @@ though that may be made possible by some systems and workflows.
 To that end, many of the conventions used as a base for the syntax are from
 programming languages, and their practices.
 
-Structurally,
-this document defines the syntax starting from the details and
+Structurally, this document defines the syntax starting from the details and
 ending with the overall resource format,
 defining a syntax for individual messages along the way.
 
