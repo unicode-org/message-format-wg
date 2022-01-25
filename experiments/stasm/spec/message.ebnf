@@ -22,16 +22,19 @@ FunctionOpt ::= Symbol ":" (Literal | VariableName)
 Text ::= (TextChar | EscapeSeq)+
 VariableName ::= "$" Symbol /* ws: explicit */
 Literal ::= Symbol | Number /* ws: explicit */
-Symbol ::= (SymbolChar | "_") (SymbolChar | DigitChar | "_" | "-")* /* ws: explicit */
-Number ::= ("-")? DigitChar+ ("." DigitChar+)? /* ws: explicit */
+Symbol ::= (SymbolChar | "_") (SymbolChar | DecimalDigit | "_" | "-")* /* ws: explicit */
+Number ::= ("-")? DecimalDigit+ ("." DecimalDigit+)? /* ws: explicit */
 
 /* Character classes */
 TextChar ::= . - ("]" | "{" | #x5c)
 SymbolChar ::= [a-zA-Z]
-DigitChar ::= [0-9]
+DecimalDigit ::= [0-9]
+HexDigit ::= [0-9a-fA-F]
 
 /* Escape sequences */
-EscapeSeq ::= #x5c "]" | #x5c "{"
+EscapeSeq ::= #x5c "]" | #x5c "{" | UnicodeSeq
+UnicodeSeq ::= #x5c "u" HexDigit HexDigit HexDigit HexDigit
+             | #x5c "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 
 /* All whitespace outside text is ignored */
 WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP /* ws: definition */

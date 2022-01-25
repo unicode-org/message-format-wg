@@ -314,18 +314,21 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 Text ::= (TextChar | EscapeSeq)+
 VariableName ::= "$" Symbol /* ws: explicit */
 Literal ::= Symbol | Number /* ws: explicit */
-Symbol ::= (SymbolChar | "_") (SymbolChar | DigitChar | "_" | "-")* /* ws: explicit */
-Number ::= ("-")? DigitChar+ ("." DigitChar+)? /* ws: explicit */
+Symbol ::= (SymbolChar | "_") (SymbolChar | DecimalDigit | "_" | "-")* /* ws: explicit */
+Number ::= ("-")? DecimalDigit+ ("." DecimalDigit+)? /* ws: explicit */
 ```
 
 ### Character Classes
 
 Any Unicode codepoint is allowed in the translatable text, with the exception of `]` (which ends the pattern), `{` (which starts a placeholder), and `\\` (which starts an escape sequence).
 
+The set of characters that can be used in symbols is intentionally limited to simplify parsing and error recovery, discourage complexity in custom function implementations, and encourage using the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
+
 ```
 TextChar ::= . - ("]" | "{" | #x5c)
 SymbolChar ::= [a-zA-Z]
-DigitChar ::= [0-9]
+DecimalDigit ::= [0-9]
+HexDigit ::= [0-9a-fA-F]
 ```
 
 ### Escape Sequences
@@ -333,7 +336,9 @@ DigitChar ::= [0-9]
 Escape sequences are introduced inside translatable text by the backslash character (`\\`).
 
 ```
-EscapeSeq ::= #x5c "]" | #x5c "{"
+EscapeSeq ::= #x5c "]" | #x5c "{" | UnicodeSeq
+UnicodeSeq ::= #x5c "u" HexDigit HexDigit HexDigit HexDigit
+             | #x5c "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 ```
 
 ### Whitespace
@@ -381,16 +386,19 @@ FunctionOpt ::= Symbol ":" (Literal | VariableName)
 Text ::= (TextChar | EscapeSeq)+
 VariableName ::= "$" Symbol /* ws: explicit */
 Literal ::= Symbol | Number /* ws: explicit */
-Symbol ::= (SymbolChar | "_") (SymbolChar | DigitChar | "_" | "-")* /* ws: explicit */
-Number ::= ("-")? DigitChar+ ("." DigitChar+)? /* ws: explicit */
+Symbol ::= (SymbolChar | "_") (SymbolChar | DecimalDigit | "_" | "-")* /* ws: explicit */
+Number ::= ("-")? DecimalDigit+ ("." DecimalDigit+)? /* ws: explicit */
 
 /* Character classes */
 TextChar ::= . - ("]" | "{" | #x5c)
 SymbolChar ::= [a-zA-Z]
-DigitChar ::= [0-9]
+DecimalDigit ::= [0-9]
+HexDigit ::= [0-9a-fA-F]
 
 /* Escape sequences */
-EscapeSeq ::= #x5c "]" | #x5c "{"
+EscapeSeq ::= #x5c "]" | #x5c "{" | UnicodeSeq
+UnicodeSeq ::= #x5c "u" HexDigit HexDigit HexDigit HexDigit
+             | #x5c "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 
 /* All whitespace outside text is ignored */
 WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP /* ws: definition */
