@@ -13,7 +13,7 @@ it MUST provide a description of how the messages in its representation
 would map to a Message Resource object.
 
 The execution of the GetMessage operation MUST be synchronous,
-to ensure that message formatting can be fast.
+to ensure that message formatting is guaranteed to be a synchronous operation itself.
 If some asynchrony is needed e.g. due to loading or parsing source files,
 This asynchrony should be handled before or during
 the construction of a Message Resource.

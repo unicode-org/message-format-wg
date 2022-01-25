@@ -446,6 +446,10 @@ empty_line = { sp } nl
 
 In a message resource,
 each message starts with its identifier at the very beginning of a line.
+
+The identifier is an important component of the error fallback system as it double serves as a last resort display of a message reference, similarly to how variable identifier serves as a last resort display for variable reference.
+This means that if all else fails, the message may be exposed to the user with message identifier in place of where it should be resolved and is expected to provide best possible worst case scenario user experience.
+
 For pattern messages,
 this is followed by an equals sign `=`, and then the body of the message.
 For select messages,
