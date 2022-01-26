@@ -1,20 +1,20 @@
 Message ::= Declaration* Variant+
 
 /* Aliases and selectors */
-Declaration ::= Alias? "{" Expression "}" "?"?
-Alias ::= Variable "="
+Declaration ::= Alias? '{' Expression '}' '?'?
+Alias ::= Variable '='
 
 /* Pattern and pattern elements */
 Variant ::= VariantKey* Pattern
 VariantKey ::= Symbol | Literal
-Pattern ::= "[" (Text | Placeable)* "]" /* ws: explicit */
-Placeable ::= "{" Expression "}"
+Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
+Placeable ::= '{' Expression '}'
 
 /* Expressions */
 Expression ::= FormatCall | FunctionCall
 FormatCall ::= (Literal | Variable) FunctionCall?
 FunctionCall ::= Symbol Option*
-Option ::= Symbol ":" (Symbol | Literal | Variable)
+Option ::= Symbol ':' (Symbol | Literal | Variable)
 
 /* Ignored tokens */
 Ignore ::= Comment | WhiteSpace /* ws: definition */
@@ -22,29 +22,29 @@ Ignore ::= Comment | WhiteSpace /* ws: definition */
 <?TOKENS?>
 
 /* Literals & Identifiers*/
-Variable ::= "$" Symbol /* ws: explicit */
-Symbol ::= (SymbolChar | "_") (SymbolChar | DecimalDigit | "_" | "-")* /* ws: explicit */
+Variable ::= '$' Symbol /* ws: explicit */
+Symbol ::= (SymbolChar | '_') (SymbolChar | DecimalDigit | '_' | '-')* /* ws: explicit */
 Text ::= (TextChar | TextEscape)+
 Literal ::= String | Number /* ws: explicit */
-String ::= #x22 (StringChar | StringEscape)* #x22 /* ws: explicit */
-Number ::= ("-")? DecimalDigit+ ("." DecimalDigit+)? /* ws: explicit */
+String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
+Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
 
 /* Character classes */
-TextChar ::= . - ("]" | "{" | Esc)
-StringChar ::= . - (#x22 | Esc)
+TextChar ::= . - (']' | '{' | Esc)
+StringChar ::= . - ('"'| Esc)
 SymbolChar ::= [a-zA-Z]
 DecimalDigit ::= [0-9]
 HexDigit ::= [0-9a-fA-F]
 
 /* Escape sequences */
-Esc ::= #x5c
-TextEscape ::= Esc "]" | Esc "{" | UnicodeEscape
-StringEscape ::= Esc #x22 | UnicodeEscape
-UnicodeEscape ::= Esc "u" HexDigit HexDigit HexDigit HexDigit
-                | Esc "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
+Esc ::= '\'
+TextEscape ::= Esc ']' | Esc '{' | UnicodeEscape
+StringEscape ::= Esc '"' | UnicodeEscape
+UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
+                | Esc 'U' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 
 /* Comments */
-Comment ::= "/*" (.* - (.* "*/" .*)) "*/"
+Comment ::= '/*' (.* - (.* '*/' .*)) '*/'
 
 /* WhiteSpace */
 WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP

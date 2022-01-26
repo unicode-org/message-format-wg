@@ -257,8 +257,8 @@ A declaration is an _expression_ specified at the beginning of the message. It m
 When followed by `?`, a declaration is also a selector used to select an appropriate variant of the message.
 
 ```
-Declaration ::= Alias? "{" Expression "}" "?"?
-Alias ::= Variable "="
+Declaration ::= Alias? '{' Expression '}' '?'?
+Alias ::= Variable '='
 ```
 
 Examples:
@@ -281,7 +281,7 @@ $itemAccusative = {$item noun case:accusative}?
 A message must include at least one _variant_. The translatable content of a variant is called a _pattern_. Patterns are always delimited with `[` at the start, and `]` at the end. This serves 3 purposes:
 
 * The message should be unambiguously embeddable in various container formats regardless of the container's whitespace trimming rules. E.g. in Java `.properties` files, `hello = [Hello]` will unambiguously define the `Hello` message without the space in front of it.
-* The message should be conveniently embeddable in various programming languages without the need to escape characters commonly related to strings, e.g. `"` and `'`. Such need may still occur when a singe or double quote is used in the translatable content.
+* The message should be conveniently embeddable in various programming languages without the need to escape characters commonly related to strings, e.g. `"` and `'`. Such need may still occur when a singe or double quote is used in the translatable content or to delimit a string literal.
 * The syntax should make it as clear as possible which parts of the message body are translatable and which are part of the formatting logic definition.
 
 Variants can be optionally keyed, in which case their keys will be matched against the message's selectors. The formatting specification defines which variant is chosen by comparing its keys to the message's selectors, including the situation when no keys or no selectors are defined.
@@ -289,8 +289,8 @@ Variants can be optionally keyed, in which case their keys will be matched again
 ```
 Variant ::= VariantKey* Pattern
 VariantKey ::= Symbol | Literal
-Pattern ::= "[" (Text | Placeable)* "]" /* ws: explicit */
-Placeable ::= "{" Expression "}"
+Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
+Placeable ::= '{' Expression '}'
 ```
 
 Examples:
@@ -318,7 +318,7 @@ Expressions can be either of the following productions:
 Expression ::= FormatCall | FunctionCall
 FormatCall ::= (Literal | Variable) FunctionCall?
 FunctionCall ::= Symbol Option*
-Option ::= Symbol ":" (Symbol | Literal | Variable)
+Option ::= Symbol ':' (Symbol | Literal | Variable)
 ```
 
 Examples:
@@ -346,12 +346,12 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 ### Literals & Identifiers
 
 ```
-Variable ::= "$" Symbol /* ws: explicit */
-Symbol ::= (SymbolChar | "_") (SymbolChar | DecimalDigit | "_" | "-")* /* ws: explicit */
-Text ::= (TextChar | TextEscape)+
+Variable ::= '$' Symbol /* ws: explicit */
+Symbol ::= (SymbolChar | '_') (SymbolChar | DecimalDigit | '_' | '-')* /* ws: explicit */
+Text ::= (TextChar | TextEscape)+ /* ws: explicit */
 Literal ::= String | Number /* ws: explicit */
-String ::= #x22 (StringChar | StringEscape)* #x22 /* ws: explicit */
-Number ::= ("-")? DecimalDigit+ ("." DecimalDigit+)? /* ws: explicit */
+String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
+Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
 ```
 
 ### Character Classes
@@ -363,8 +363,8 @@ Any Unicode codepoint is allowed in string literals, with the exception of `"` (
 The set of characters that can be used in symbols is intentionally limited to simplify parsing and error recovery, discourage complexity in custom function implementations, and encourage using the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
 
 ```
-TextChar ::= . - ("]" | "{" | Esc)
-StringChar ::= . - (#x22 | Esc)
+TextChar ::= . - (']' | '{' | Esc)
+StringChar ::= . - ('"' | Esc)
 SymbolChar ::= [a-zA-Z]
 DecimalDigit ::= [0-9]
 HexDigit ::= [0-9a-fA-F]
@@ -376,10 +376,10 @@ Escape sequences are introduced by the backslash character (`\`). They are allow
 
 ```
 Esc ::= #x5c
-TextEscape ::= Esc "]" | Esc "{" | UnicodeEscape
-StringEscape ::= Esc #x22 | UnicodeEscape
-UnicodeEscape ::= Esc "u" HexDigit HexDigit HexDigit HexDigit
-                | Esc "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
+TextEscape ::= Esc ']' | Esc '{' | UnicodeEscape
+StringEscape ::= Esc '"' | UnicodeEscape
+UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
+                | Esc 'U' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 ```
 
 ### Comments
@@ -387,7 +387,7 @@ UnicodeEscape ::= Esc "u" HexDigit HexDigit HexDigit HexDigit
 Comments are delimited with `/*` at the start, and `*/` at the end, and can contain any Unicode codepoint including line breaks. Comments can only appear outside translatable text.
 
 ```
-Comment ::= "/*" (.* - (.* "*/" .*)) "*/"
+Comment ::= '/*' (.* - (.* '*/' .*)) '*/'
 ```
 
 ### Whitespace
@@ -414,20 +414,20 @@ The following EBNF uses the [W3C flavor](https://www.w3.org/TR/xml/#sec-notation
 Message ::= Declaration* Variant+
 
 /* Aliases and selectors */
-Declaration ::= Alias? "{" Expression "}" "?"?
-Alias ::= Variable "="
+Declaration ::= Alias? '{' Expression '}' '?'?
+Alias ::= Variable '='
 
 /* Pattern and pattern elements */
 Variant ::= VariantKey* Pattern
 VariantKey ::= Symbol | Literal
-Pattern ::= "[" (Text | Placeable)* "]" /* ws: explicit */
-Placeable ::= "{" Expression "}"
+Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
+Placeable ::= '{' Expression '}'
 
 /* Expressions */
 Expression ::= FormatCall | FunctionCall
 FormatCall ::= (Literal | Variable) FunctionCall?
 FunctionCall ::= Symbol Option*
-Option ::= Symbol ":" (Symbol | Literal | Variable)
+Option ::= Symbol ':' (Symbol | Literal | Variable)
 
 /* Ignored tokens */
 Ignore ::= Comment | WhiteSpace /* ws: definition */
@@ -435,29 +435,29 @@ Ignore ::= Comment | WhiteSpace /* ws: definition */
 <?TOKENS?>
 
 /* Literals & Identifiers*/
-Variable ::= "$" Symbol /* ws: explicit */
-Symbol ::= (SymbolChar | "_") (SymbolChar | DecimalDigit | "_" | "-")* /* ws: explicit */
+Variable ::= '$' Symbol /* ws: explicit */
+Symbol ::= (SymbolChar | '_') (SymbolChar | DecimalDigit | '_' | '-')* /* ws: explicit */
 Text ::= (TextChar | TextEscape)+
 Literal ::= String | Number /* ws: explicit */
-String ::= #x22 (StringChar | StringEscape)* #x22 /* ws: explicit */
-Number ::= ("-")? DecimalDigit+ ("." DecimalDigit+)? /* ws: explicit */
+String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
+Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
 
 /* Character classes */
-TextChar ::= . - ("]" | "{" | Esc)
-StringChar ::= . - (#x22 | Esc)
+TextChar ::= . - (']' | '{' | Esc)
+StringChar ::= . - ('"'| Esc)
 SymbolChar ::= [a-zA-Z]
 DecimalDigit ::= [0-9]
 HexDigit ::= [0-9a-fA-F]
 
 /* Escape sequences */
-Esc ::= #x5c
-TextEscape ::= Esc "]" | Esc "{" | UnicodeEscape
-StringEscape ::= Esc #x22 | UnicodeEscape
-UnicodeEscape ::= Esc "u" HexDigit HexDigit HexDigit HexDigit
-                | Esc "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
+Esc ::= '\'
+TextEscape ::= Esc ']' | Esc '{' | UnicodeEscape
+StringEscape ::= Esc '"' | UnicodeEscape
+UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
+                | Esc 'U' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 
 /* Comments */
-Comment ::= "/*" (.* - (.* "*/" .*)) "*/"
+Comment ::= '/*' (.* - (.* '*/' .*)) '*/'
 
 /* WhiteSpace */
 WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP
