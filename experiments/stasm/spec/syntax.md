@@ -6,6 +6,7 @@
 |   Date   | Description |
 |----------|-------------|
 | **TODO** |Aliases to submessages|
+|2022-01-27|Change opt:value to opt=value|
 |2022-01-26|Specify symbols more precisely. Restrict whitespace.|
 |2022-01-26|Add `/*...*/` comments|
 |2022-01-25|Add `"..."` string literals and literal formatters|
@@ -117,22 +118,22 @@ hello.format({userName: "Anne"});
 
 A message with an interpolated `$date` variable formatted with a custom `datetime` function:
 
-    [Today is {$date datetime weekday:long}]
+    [Today is {$date datetime weekday=long}]
 
 A message with an interpolated `$userName` variable formatted with a custom `name` function capable of declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
 
-    [Hello, {$userName name case:vocative}!]
+    [Hello, {$userName name case=vocative}!]
 
 A message with an interpolated `$userObj` variable formatted with a custom `name` function capable of plucking the first name from the object representing a person:
 
-    [Hello, {$userObj name first:full}!]
+    [Hello, {$userObj name first=full}!]
 
 ### Aliases
 
 A message defining a `$whom` alias which is then used twice inside the pattern:
 
-    $whom = {$monster noun case:accusative}
-    [You see {$quality adjective article:indefinite accord:$whom} {$whom}!]
+    $whom = {$monster noun case=accusative}
+    [You see {$quality adjective article=indefinite accord=$whom} {$whom}!]
 
 ### Selection
 
@@ -149,8 +150,8 @@ A message with a single selector which is an invocation of a custom function nam
 A message with a single selector and a custom `hasCase` function which allows the message to query for presence of grammatical cases required for each variant:
 
     {$userName hasCase}?
-        vocative [Hello, {$userName name case:vocative}!]
-        accusative [Please welcome {$userName name case:accusative}!]
+        vocative [Hello, {$userName name case=vocative}!]
+        accusative [Please welcome {$userName name case=accusative}!]
         _ [Hello!]
 
 A message with two selectors:
@@ -165,21 +166,21 @@ A message with two selectors:
 
 A message defining two aliases: `$itemAcc` and `$countInt`, and using `$countInt` as a selector:
 
-    $itemAcc = {$item noun count:$count case:accusative}
-    $countInt = {$count number maxFractionDigits:0}?
-        one [You bought {$color adj article:indefinite accord:$itemAcc} {$itemAcc}.]
-        other [You bought {$countInt} {$color adj accord:$itemAcc} {$itemAcc}.]
+    $itemAcc = {$item noun count=$count case=accusative}
+    $countInt = {$count number maxFractionDigits=0}?
+        one [You bought {$color adj article=indefinite accord=$itemAcc} {$itemAcc}.]
+        other [You bought {$countInt} {$color adj accord=$itemAcc} {$itemAcc}.]
 
 ### Complex Messages
 
 A complex message with 2 selectors and 3 local variable definitions:
 
     /* The host's first name. */
-    $hostName = {$host name first:full}
+    $hostName = {$host name first=full}
     /* The first guest's first name. */
-    $guestName = {$guest name first:full}
+    $guestName = {$guest name first=full}
     /* The number of guests excluding the first guest. */
-    $guestsOther = {$guestCount number /* Remove 1 from $guestCount */ offset:1}
+    $guestsOther = {$guestCount number /* Remove 1 from $guestCount */ offset=1}
 
     {$host gender}? {$guestCount number}?
         /* The host is female. */
@@ -235,7 +236,7 @@ MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the fol
 
     MessageFormat 2.0:
     ```
-    {$when date style:short}
+    {$when date style=short}
     ```
 
 1. MessageFormat 2.0 doesn't provide the `#` shorthand inside variants. Instead it allows aliases to be defined at the top of the message; these aliases can then be referred to inside patterns similar to other variables.
@@ -274,7 +275,7 @@ Examples:
 ```
 
 ```
-$itemAccusative = {$item noun case:accusative}
+$itemAccusative = {$item noun case=accusative}
 ```
 
 
@@ -320,25 +321,25 @@ Expressions can be either of the following productions:
 Expression ::= FormatCall | FunctionCall
 FormatCall ::= (Literal | Variable) FunctionCall?
 FunctionCall ::= Symbol Option*
-Option ::= Symbol ':' (Symbol | Literal | Variable)
+Option ::= Symbol '=' (Symbol | Literal | Variable)
 ```
 
 Examples:
 
 ```
-1.23 number maxFractionDigits:1
+1.23 number maxFractionDigits=1
 ```
 
 ```
-"1970-01-01T13:37:00.000Z" datetime weekday:long
+"1970-01-01T13:37:00.000Z" datetime weekday=long
 ```
 
 ```
-$when datetime style:long
+$when datetime style=long
 ```
 
 ```
-ref msgid:some_other_message
+ref msgid=some_other_message
 ```
 
 ## Tokens
@@ -349,7 +350,7 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 
 A _symbol_ is a versatile token used in variable names (prefixed with `$`), function names, option names, and commonly as option values and variant keys.
 
-The symbol's definition is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name) to maximally align it with [NMTOKEN](https://www.w3.org/TR/xml/#NT-Nmtoken) which is used throughout the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html). The only difference between a symbol and XML Name is that symbols must not contain `:`.
+The symbol's definition is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name) to maximally align it with [NMTOKEN](https://www.w3.org/TR/xml/#NT-Nmtoken) which is used throughout the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
 
 ```
 Variable ::= '$' Symbol /* ws: explicit */
@@ -437,7 +438,7 @@ Placeable ::= '{' Expression '}'
 Expression ::= FormatCall | FunctionCall
 FormatCall ::= (Literal | Variable) FunctionCall?
 FunctionCall ::= Symbol Option*
-Option ::= Symbol ':' (Symbol | Literal | Variable)
+Option ::= Symbol '=' (Symbol | Literal | Variable)
 
 /* Ignored tokens */
 Ignore ::= Comment | WhiteSpace /* ws: definition */
