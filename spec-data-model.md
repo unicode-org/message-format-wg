@@ -171,7 +171,7 @@ provided as runtime arguments or parameters to the formatter.
 ```ts
 interface VariableRef extends PatternElement {
   type: 'variable'
-  var_path: (Literal | VariableRef | Alias)[]
+  var_path: string[]
 }
 ```
 

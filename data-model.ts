@@ -65,7 +65,7 @@ interface Literal extends PatternElement {
 
 interface VariableRef extends PatternElement {
   type: 'variable'
-  var_path: (Literal | VariableRef)[]
+  var_path: string[]
 }
 
 interface FunctionRef extends PatternElement {

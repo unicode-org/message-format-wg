@@ -295,39 +295,20 @@ Within such a quoted block,
 curly braces and all other characters except for the terminal `"`
 lose their special status and do not need to be escaped.
 
-### Variable and Message Paths
+### Variable References
 
-As variables and messages may both be identified by a path rather than a single key,
+As variables may be identified by a path rather than a single key,
 a separator is needed for path parts: the period `.`.
-This means that `-foo.bar` is a reference to the message “bar” in the message group “foo”.
-If a message or variable key includes any non-word characters,
-it must be escaped with double quotes;
+This means that `$foo.bar` is a reference to the variable “bar” within an object “foo”.
+If a variable key includes any non-word characters,
+it must be escaped with double quotes `"…"`;
 `$var."the.var"` is a variable reference with two path parts “var” and “the.var”.
 
-To support dynamic references,
-parts of the path may themselves be defined by variable references.
-Such variable references need to be wrapped in curly braces `{ … }`.
-For instance, `-group.{$var}.other` is a reference to a message “other”
-in a message group identified by the variable reference “var”,
-itself in a message group “group”.
-Such a braced section may only contain a variable reference.
-
 ```ebnf
-variable = "$" var_path
-var_path = var_part { { sp } "." { sp } var_part }
-var_part = literal | "{" { sp } variable | alias { sp } "}"
+variable = "$" literal { { sp } "." { sp } literal }
 ```
 
-References to messages in other message resources need to identify that resource
-with an initial part that's separate from the rest of its path with a colon `:`.
-This part must be a literal,
-but it may be quoted if it contains a non-word character;
-`-res:foo` and `-"res":foo` are both references to the message “foo” in a message resource “res”.
-If a resource identifier is not provided,
-the message must be found in the current resource,
-with its path starting from the resource root.
-
-### Function Arguments and Options
+### Function References
 
 MF2 allows for formatting functions to have both positional and named arguments,
 which may have values determined by literals or variables.
@@ -348,7 +329,7 @@ An argument with a literal value needs to be double quoted `"…"`
 if it contains any non-word characters;
 otherwise it may be included directly.
 An argument with a variable value needs to start with
-a dollar sign $ and then a valid path, as defined above.
+a dollar sign `$` and then a valid path, as defined above.
 
 The key of a named option must be a literal value,
 and must be double quoted `"…"` if it contains any non-word characters.
@@ -365,7 +346,34 @@ Put together, this means that the message
 should format in US English to a string as “Pi is about 3.14”,
 presuming a mathematically appropriate runtime value of the variable “pi”.
 
-### Parametric Message References
+### Message References
+
+Similarly to variable references, messages may be identified by a path rather than a single key.
+This means that `-foo.bar` is a reference to the message “bar” in the message group “foo”.
+
+To support dynamic message references,
+parts of the path may themselves be defined by variable references or aliases.
+Such dynamic values need to be wrapped in curly braces `{ … }`.
+For instance, `-group.{$var}.other` is a reference to a message “other”
+in a message group identified by the variable reference “var”,
+itself in a message group “group”.
+Such a braced section may only contain a variable reference or an alias.
+
+```ebnf
+msgref = "-" [ literal ":" ] msg_path
+         { ws { ws } ( option | comment ) }
+msg_path = msg_part { { sp } "." { sp } msg_part }
+msg_part = literal | "{" { sp } variable | alias { sp } "}"
+```
+
+References to messages in other message resources need to identify that resource
+with an initial part that's separate from the rest of its path with a colon `:`.
+This part must be a literal,
+but it may be quoted if it contains a non-word character;
+`-res:foo` and `-"res":foo` are both references to the message “foo” in a message resource “res”.
+If a resource identifier is not provided,
+the message must be found in the current resource,
+with its path starting from the resource root.
 
 As it's possible to set or override runtime variable values
 during the resolution of a message reference,
@@ -373,12 +381,7 @@ a braced block that starts with a message reference
 may include after the message identifier a space-separated set of named arguments.
 These follow the same structure and syntax as formatting function options,
 i.e. while the variable name must be a literal,
-its value may be a literal or itself a variable reference.
-
-```ebnf
-msgref = "-" [ literal ":" ] var_path
-         { ws { ws } ( option | comment ) }
-```
+its value may be a literal, variable reference, or an alias.
 
 No capability exists for explicitly setting in a message reference
 the value of a variable within an object, or of creating such an object.

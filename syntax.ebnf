@@ -84,16 +84,16 @@ meta = "@" literal { ws } ( ":" | "=" ) { ws } literal
 literal = word | quoted_literal
 quoted_literal = '"' { any_char - '"' } '"'
 
-variable = "$" var_path
-var_path = var_part { { sp } "." { sp } var_part }
-var_part = literal | "{" { sp } variable | alias { sp } "}"
+variable = "$" literal { { sp } "." { sp } literal }
 
 function = word
            { ws { ws } ( argument | comment ) }
            { ws { ws } ( option | comment ) }
 
-msgref = "-" [ literal ":" ] var_path
+msgref = "-" [ literal ":" ] msg_path
          { ws { ws } ( option | comment ) }
+msg_path = msg_part { { sp } "." { sp } msg_part }
+msg_part = literal | "{" { sp } variable | alias { sp } "}"
 
 alias = "*" word
 
