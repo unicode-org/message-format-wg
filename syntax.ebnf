@@ -11,12 +11,21 @@ res_comment = comment { sp } nl
 res_meta = msg_meta { sp } nl
 group_path = literal { { sp } "." { sp } literal }
 
+empty_line = { sp } nl
+
+(* Comments *)
+
 comment = comment_block | comment_line
 comment_block = "#" "#" "#" { cb_char } "#" "#" "#"
 cb_char = ? any_char, but with no ("#" "#" "#") sequences ?
 comment_line = "#" { any_char - nl }
 
-empty_line = { sp } nl
+comment_body = { [ meta_comment | var_comment| alias_comment ] { any_char - nl } nl }
+meta_comment = { sp } "@" word sp { sp }
+var_comment = { sp } "$" var_name sp { sp }
+var_name = ? a sequence of characters exactly matching that of a variable reference ?
+alias_comment = { sp } "*" alias_name sp { sp }
+alias_name = ? a sequence of characters exactly matching that of an alias ?
 
 (* Message within resource *)
 

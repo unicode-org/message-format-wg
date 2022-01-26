@@ -315,15 +315,17 @@ An ending element must only contain the name of the element that it's closing;
 again as with formatting functions,
 said name must only contain word characters.
 
-### Comments and Metadata
+### Comments
 
 The MF2 syntax supports comments within brace and chevron blocks,
 as well as outside of message content in resources.
-These are primarily intended to contain contextual and other information to a translator.
-Line comments start with a hash # character and continue until the next line break.
+These are primarily intended to contain contextual and other information to a translator,
+or other non-formatting users of messages.
+Line comments start with a hash `#` character and continue until the next line break.
 Block comments start with a triple-hash `###` and continue until
 the next appearance of a triple-hash `###`.
-Comments are not included in the resolved value of the corresponding pattern element.
+Comments are not included in the resolved value of the corresponding pattern element,
+and must not influence the formatted value of a message.
 
 ```ebnf
 comment = comment_block | comment_line
@@ -331,6 +333,38 @@ comment_block = "#" "#" "#" { cb_char } "#" "#" "#"
 cb_char = ? any_char, but with no ("#" "#" "#") sequences ?
 comment_line = "#" { any_char - nl }
 ```
+
+Comments may include semantic data fields.
+The general form for a semantic comment is an identifier
+that starts with one of the characters `@` / `$` / `*`,
+followed by white space, and finally its value.
+Each identifier must be the first non-empty content of the comment line or the comment block,
+excluding any comment markers.
+If a value contains multiple lines,
+each line must be indented more than semantic comment's identifier.
+
+Semantic comment identifiers starting with `@` must be followed by a single word.
+Semantic comment identifiers starting with `$` or `*` must be followed by
+the same representation of a variable reference or an alias as it is used in the message.
+
+```ebnf
+comment_body = { [ meta_comment | var_comment| alias_comment ] { any_char - nl } nl }
+meta_comment = { sp } "@" word sp { sp }
+var_comment = { sp } "$" var_name sp { sp }
+var_name = ? a sequence of characters exactly matching that of a variable reference ?
+alias_comment = { sp } "*" alias_name sp { sp }
+alias_name = ? a sequence of characters exactly matching that of an alias ?
+```
+
+The `comment_body` rule may only be used to parse the value of
+one or more contiguous comment lines and comment block,
+each separated from the preceding by a newline `\n` character.
+The value of a semantic comment is determined by concatenating
+the remainder of the line that starts with its identifier
+with all immediately subsequent `comment_body` lines that start with
+characters matching its initial `{ sp }` characters.
+
+### Metadata
 
 Metadata values may be assigned to any brace or chevron block
 with syntax similar to named arguments,
@@ -494,7 +528,7 @@ with `\n` representing newline characters.
 Lines immediately before a message may contain
 line-break-separated comments, metadata and aliases
 that are associated with the message.
-ach metadata and alias field may take a single literal or braced placeholder as its value.
+Each metadata and alias field may take a single literal or braced placeholder as its value.
 Literal values that contain non-word characters must be double quoted.
 Comments must be placed before any metadata and alias declarations.
 
@@ -567,11 +601,14 @@ while the second would be associated with the “brand” message group.
 
 ## Notes on the EBNF Notation
 
-There are two primary entry points for the EBNF notation of the syntax;
-`resource` when parsing a complete message resource,
-and `one_message` when parsing a single message.
-There is a minor difference between the two,
-as the latter does not expect an initial equals sign `=` for pattern messages,
+There are three primary entry points for the EBNF notation of the syntax:
+
+- `resource` when parsing a complete message resource,
+- `one_message` when parsing a single message, and
+- `comment_body` when parsing semantic data in comments.
+
+There is a minor difference between the first two,
+as `one_message` does not expect an initial equals sign `=` for pattern messages,
 and allows for the single-line select message variant.
 
 For simplicity,
