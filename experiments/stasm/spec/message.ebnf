@@ -30,8 +30,9 @@ String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
 Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
 
 /* Character classes */
-TextChar ::= . - (']' | '{' | Esc)
-StringChar ::= . - ('"'| Esc)
+AnyChar ::= .
+TextChar ::= AnyChar - (']' | '{' | Esc)
+StringChar ::= AnyChar - ('"'| Esc)
 SymbolChar ::= [a-zA-Z]
 DecimalDigit ::= [0-9]
 HexDigit ::= [0-9a-fA-F]
@@ -44,7 +45,7 @@ UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
                 | Esc 'U' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 
 /* Comments */
-Comment ::= '/*' (.* - (.* '*/' .*)) '*/'
+Comment ::= '/*' (AnyChar* - (AnyChar* '*/' AnyChar*)) '*/'
 
 /* WhiteSpace */
 WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP

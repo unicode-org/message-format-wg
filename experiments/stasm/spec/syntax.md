@@ -363,8 +363,9 @@ Any Unicode codepoint is allowed in string literals, with the exception of `"` (
 The set of characters that can be used in symbols is intentionally limited to simplify parsing and error recovery, discourage complexity in custom function implementations, and encourage using the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
 
 ```
-TextChar ::= . - (']' | '{' | Esc)
-StringChar ::= . - ('"' | Esc)
+AnyChar ::= .
+TextChar ::= AnyChar - (']' | '{' | Esc)
+StringChar ::= AnyChar - ('"' | Esc)
 SymbolChar ::= [a-zA-Z]
 DecimalDigit ::= [0-9]
 HexDigit ::= [0-9a-fA-F]
@@ -387,7 +388,7 @@ UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
 Comments are delimited with `/*` at the start, and `*/` at the end, and can contain any Unicode codepoint including line breaks. Comments can only appear outside translatable text.
 
 ```
-Comment ::= '/*' (.* - (.* '*/' .*)) '*/'
+Comment ::= '/*' (AnyChar* - (AnyChar* '*/' AnyChar*)) '*/'
 ```
 
 ### Whitespace
@@ -443,8 +444,9 @@ String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
 Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
 
 /* Character classes */
-TextChar ::= . - (']' | '{' | Esc)
-StringChar ::= . - ('"'| Esc)
+AnyChar ::= .
+TextChar ::= AnyChar - (']' | '{' | Esc)
+StringChar ::= AnyChar - ('"'| Esc)
 SymbolChar ::= [a-zA-Z]
 DecimalDigit ::= [0-9]
 HexDigit ::= [0-9a-fA-F]
@@ -457,7 +459,7 @@ UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
                 | Esc 'U' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 
 /* Comments */
-Comment ::= '/*' (.* - (.* '*/' .*)) '*/'
+Comment ::= '/*' (AnyChar* - (AnyChar* '*/' AnyChar*)) '*/'
 
 /* WhiteSpace */
 WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP
