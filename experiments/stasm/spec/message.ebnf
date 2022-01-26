@@ -1,7 +1,7 @@
-Message ::= Definition* Variant+
+Message ::= Declaration* Variant+
 
 /* Aliases and selectors */
-Definition ::= Alias? "{" Expression "}" "?"?
+Declaration ::= Alias? "{" Expression "}" "?"?
 Alias ::= Variable "="
 
 /* Pattern and pattern elements */

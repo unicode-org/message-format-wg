@@ -22,12 +22,13 @@
     1. [Simple Messages](#simple-messages)
     1. [Simple Placeholders](#simple-placeholders)
     1. [Formatting Functions](#formatting-functions)
+    1. [Aliases](#aliases)
     1. [Selection](#selection)
     1. [Complex Messages](#complex-messages)
 1. [Comparison with ICU MessageFormat 1.0](#comparison-with-icu-messageformat-10)
 1. [Productions](#productions)
     1. [Message](#message)
-    1. [Definitions](#definitions)
+    1. [Declarations](#declarations)
     1. [Variants & Patterns](#variants--patterns)
     1. [Expressions](#expressions)
 1. [Tokens](#tokens)
@@ -124,6 +125,13 @@ A message with an interpolated `$userObj` variable formatted with a custom `name
 
     [Hello, {$userObj name first:full}!]
 
+### Aliases
+
+A message defining a `$whom` alias which is then used twice inside the pattern:
+
+    $whom = {$monster noun case:accusative}
+    [You see {$quality adjective article:indefinite accord:$whom} {$whom}!]
+
 ### Selection
 
 A message with a single selector:
@@ -153,9 +161,16 @@ A message with two selectors:
         other feminine [{$userName} added {$photoCount} photos to her album.]
         other other [{$userName} added {$photoCount} photos to their album.]
 
+A message defining two aliases: `$itemAcc` and `$countInt`, and using `$countInt` as a selector:
+
+    $itemAcc = {$item noun count:$count case:accusative}
+    $countInt = {$count number maxFractionDigits:0}?
+        one [You bought {$color adj article:indefinite accord:$itemAcc} {$itemAcc}.]
+        other [You bought {$countInt} {$color adj accord:$itemAcc} {$itemAcc}.]
+
 ### Complex Messages
 
-A complex message with two selectors and local variable definitions:
+A complex message with 2 selectors and 3 local variable definitions:
 
     /* The host's first name. */
     $hostName = {$host name first:full}
@@ -229,18 +244,20 @@ MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the fol
 
 ### Message
 
-A single message consists of zero of more _definitions_ and at least one _variant_.
+A single message consists of zero of more _declarations_ and at least one _variant_.
 
 ```
-Message ::= Definition* Variant+
+Message ::= Declaration* Variant+
 ```
 
-### Definitions
+### Declarations
 
-A definition is an _expression_ which may be used as a selector to select an appropriate variant.  It may also be bound to an _alias_ which can then be used in subsequent definitions and variant patterns.
+A declaration is an _expression_ specified at the beginning of the message. It may be bound to an _alias_ which can then be used in other expressions.
+
+When followed by `?`, a declaration is also a selector used to select an appropriate variant of the message.
 
 ```
-Definition ::= Alias? "{" Expression "}" "?"?
+Declaration ::= Alias? "{" Expression "}" "?"?
 Alias ::= Variable "="
 ```
 
@@ -394,10 +411,10 @@ USP ::= [#x0009-#x000D] | #x0020 | #x0085 | #x00A0 | #x1680 | #x180E
 The following EBNF uses the [W3C flavor](https://www.w3.org/TR/xml/#sec-notation) of the BNF notation. The grammar is an LL(1) grammar without backtracking.
 
 ```ebnf
-Message ::= Definition* Variant+
+Message ::= Declaration* Variant+
 
 /* Aliases and selectors */
-Definition ::= Alias? "{" Expression "}" "?"?
+Declaration ::= Alias? "{" Expression "}" "?"?
 Alias ::= Variable "="
 
 /* Pattern and pattern elements */
