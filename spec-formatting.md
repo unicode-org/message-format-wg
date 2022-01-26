@@ -9,7 +9,7 @@ Case selection is done by first resolving the value of
 each of the SelectMessage `select` values,
 and then looking for the first `cases` entry for which all the keys provide a match.
 Each Selector may define a `fallback` value to use if an exact match is not found.
-If a `fallback` is not defined, the default value **"other"** is used.
+If a `fallback` is not defined, the default value **"_"** is used.
 
 To perform case selection:
 

@@ -415,7 +415,7 @@ in some way depends on its own value is not allowed.
 
     [*num = number $count minimumFractionDigits:1] =
       [0] No bananas.
-      [other] { *num } bananas.
+      [_] { *num } bananas.
 
 As an example, the above message would,
 with an input value of `42` for the “count” variable,
