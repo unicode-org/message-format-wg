@@ -20,6 +20,139 @@ defining a syntax for individual messages along the way.
 The full EBNF notation for the syntax is available separately as
 [syntax.ebnf](./syntax.ebnf).
 
+## Overview & Examples
+
+### Simple Messages
+
+A simple message without any variables:
+
+    Hello, world!
+
+The same message defined in a `.properties` file:
+
+```properties
+app.greetings.hello = Hello, world!
+```
+
+The same message defined inline in JavaScript:
+
+```js
+const hello = new MessageFormat('Hello, world!')
+hello.format()
+```
+
+The same message, when defined within a message resource file:
+
+```properties
+greeting = Hello, world!
+```
+
+### Simple Placeholders
+
+A message with an interpolated variable:
+
+    Hello, {$userName}!
+
+The same message defined in a `.properties` file:
+
+```properties
+app.greetings.hello = Hello, {$userName}!
+```
+
+The same message defined inline in JavaScript:
+
+```js
+let hello = new MessageFormat('Hello, {$userName}!')
+hello.format({ userName: 'Anne' })
+```
+
+### Formatting Functions
+
+A message with an interpolated `$date` variable formatted with a custom `datetime` function:
+
+    Today is {datetime $date weekday:long}
+
+A message with an interpolated `$userName` variable formatted with a custom `name` function
+capable of declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
+
+    Hello, {name $userName case:vocative}!
+
+A message with an interpolated `$userObj` variable formatted with a custom `name` function
+capable of plucking the first name from the object representing a person:
+
+    Hello, {name $userObj first:full}!
+
+A message with a date range defined by interpolated `$start` and `$end` variables,
+formatted with a custom `range` function:
+
+    Your tickets are valid {range $start $end dateStyle:medium}.
+
+### Selection
+
+A standalone message with a single selector:
+
+    [number $count] =
+        [one] You have one notification.
+        [other] You have {$count} notification.
+
+The same message, when defined within a message resource file:
+
+```
+notifications [number $count] =
+    [one] You have one notification.
+    [other] You have {$count} notification.
+```
+
+A standalone message with a single selector
+which is an invocation of a custom function named `platform`,
+formatted on a single line:
+
+    [platform] = [windows] Settings [_] Preferences
+
+A standalone message with a single selector and a custom `hasCase` function
+which allows the message to query for presence of grammatical cases required for each variant:
+
+    [hasCase $userName] =
+        [vocative] Hello, {name $userName case:vocative}!
+        [accusative] Please welcome {name $userName case:accusative}!
+        [_] Hello!
+
+A message with two selectors:
+
+    [number $photoCount, $userGender] =
+        [one, masculine] {$userName} added a new photo to his album.
+        [one, feminine] {$userName} added a new photo to her album.
+        [one, other] {$userName} added a new photo to their album.
+        [other, masculine] {$userName} added {$photoCount} photos to his album.
+        [other, feminine] {$userName} added {$photoCount} photos to her album.
+        [other, other] {$userName} added {$photoCount} photos to their album.
+
+### Complex Messages
+
+A complex message with two selectors and local variable definitions:
+
+    # *hostName The host's first name.
+    # *guestName The first guest's first name.
+    # *guestsOther The number of guests excluding the first guest.
+    *hostName = {name $host first:full}
+    *guestName = {name $guest first:full}
+    *guestsOther = {number $guestCount ### Remove 1 from $guestCount ### offset:1}
+    partypeople [gender $host, number $guestCount] =
+        [female, 0] {*hostName} does not give a party.
+        [female, 1] {*hostName} invites {*guestName} to her party.
+        [female, 2] {*hostName} invites {*guestName} and one other person to her party.
+        [female] {*hostName} invites {*guestName} and {*guestsOther} other people to her party.
+
+        [male, 0] {*hostName} does not give a party.
+        [male, 1] {*hostName} invites {*guestName} to his party.
+        [male, 2] {*hostName} invites {*guestName} and one other person to his party.
+        [male] {*hostName} invites {*guestName} and {*guestsOther} other people to his party.
+
+        [other, 0] {*hostName} does not give a party.
+        [other, 1] {*hostName} invites {*guestName} to their party.
+        [other, 2] {*hostName} invites {*guestName} and one other person to their party.
+        [other] {*hostName} invites {*guestName} and {*guestsOther} other people to their party.
+
 ## Pattern Elements
 
 A simple message consists of a sequence of pattern elements,
