@@ -6,6 +6,7 @@
 |   Date   | Description |
 |----------|-------------|
 | **TODO** |Aliases to submessages|
+|2022-01-26|Add comments|
 |2022-01-25|Add string literals and literal formatters|
 |2022-01-25|Specify escape sequences|
 |2022-01-25|Initial design|
@@ -33,6 +34,7 @@
     1. [Literals & Identifiers](#literals--identifiers)
     1. [Character Classes](#character-classes)
     1. [Escape Sequences](#escape-sequences)
+    1. [Comments](#comments)
     1. [Whitespace](#whitespace)
 1. [Complete EBNF](#complete-ebnf)
 
@@ -155,16 +157,21 @@ A message with two selectors:
 
 A complex message with two selectors and local variable definitions:
 
+    /* The host's first name. */
     $hostName = {$host name first:full}
+    /* The first guest's first name. */
     $guestName = {$guest name first:full}
-    $guestsOther = {$guestCount number offset:1}
+    /* The number of guests excluding the first guest. */
+    $guestsOther = {$guestCount number /* Remove 1 from $guestCount */ offset:1}
 
     {$host gender}? {$guestCount number}?
+        /* The host is female. */
         female 0 [{$hostName} does not give a party.]
         female 1 [{$hostName} invites {$guestName} to her party.]
         female 2 [{$hostName} invites {$guestName} and one other person to her party.]
         female [{$hostName} invites {$guestName} and {$guestsOther} other people to her party.]
 
+        /* The host is male. */
         male 0 [{$hostName} does not give a party.]
         male 1 [{$hostName} invites {$guestName} to his party.]
         male 2 [{$hostName} invites {$guestName} and one other person to his party.]
@@ -360,12 +367,20 @@ UnicodeEscape ::= Esc "u" HexDigit HexDigit HexDigit HexDigit
                 | Esc "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 ```
 
+### Comments
+
+Comments are delimited with `/*` at the start, and `*/` at the end, and can contain any Unicode codepoint including line breaks. Comments can only appear outside translatable text.
+
+```
+Comment ::= "/*" (.* - (.* "*/" .*)) "*/"
+```
+
 ### Whitespace
 
 Inside patterns, whitespace is part of the translatable content and is recorded and stored verbatim. Outside translatable text, whitespace is not significant, unless it's required to differentiate between two literals.
 
 ```
-WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP /* ws: definition */
+WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP
 TAB ::= #x0009
 VT ::= #x000B
 FF ::= #x000C
@@ -400,6 +415,9 @@ VariableFmt ::= Variable FunctionCall?
 FunctionCall ::= Symbol Option*
 Option ::= Symbol ":" (Symbol | Literal | Variable)
 
+/* Ignored tokens */
+Ignore ::= Comment | WhiteSpace /* ws: definition */
+
 <?TOKENS?>
 
 /* Literals & Identifiers*/
@@ -424,8 +442,11 @@ StringEscape ::= Esc #x22 | UnicodeEscape
 UnicodeEscape ::= Esc "u" HexDigit HexDigit HexDigit HexDigit
                 | Esc "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 
-/* All whitespace outside text is ignored */
-WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP /* ws: definition */
+/* Comments */
+Comment ::= "/*" (.* - (.* "*/" .*)) "*/"
+
+/* WhiteSpace */
+WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP
 TAB ::= #x0009
 VT ::= #x000B
 FF ::= #x000C

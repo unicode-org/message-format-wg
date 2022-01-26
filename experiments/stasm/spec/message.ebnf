@@ -17,6 +17,9 @@ VariableFmt ::= Variable FunctionCall?
 FunctionCall ::= Symbol Option*
 Option ::= Symbol ":" (Symbol | Literal | Variable)
 
+/* Ignored tokens */
+Ignore ::= Comment | WhiteSpace /* ws: definition */
+
 <?TOKENS?>
 
 /* Literals & Identifiers*/
@@ -41,8 +44,11 @@ StringEscape ::= Esc #x22 | UnicodeEscape
 UnicodeEscape ::= Esc "u" HexDigit HexDigit HexDigit HexDigit
                 | Esc "U" HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 
-/* All whitespace outside text is ignored */
-WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP /* ws: definition */
+/* Comments */
+Comment ::= "/*" (.* - (.* "*/" .*)) "*/"
+
+/* WhiteSpace */
+WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP
 TAB ::= #x0009
 VT ::= #x000B
 FF ::= #x000C
