@@ -1,7 +1,12 @@
 # Unicode MessageFormat 2.0
 
 ##### Unofficial Proposal Draft, January 2022
-##### Authors: Eemeli Aaro (Mozilla), Zibi Braniecki (Unicode), Staś Małolepszy (Google), Erik Nordin (Mozilla)
+* Champions:
+  * Eemeli Aaro (Mozilla)
+  * Zibi Braniecki (Unicode)
+* Contributors:
+  * Staś Małolepszy (Google)
+  * Erik Nordin (Mozilla)
 
 ---
 
