@@ -6,8 +6,9 @@
 |   Date   | Description |
 |----------|-------------|
 | **TODO** |Aliases to submessages|
-|2022-01-26|Add comments|
-|2022-01-25|Add string literals and literal formatters|
+|2022-01-26|Specify symbols more precisely. Restrict whitespace.|
+|2022-01-26|Add `/*...*/` comments|
+|2022-01-25|Add `"..."` string literals and literal formatters|
 |2022-01-25|Specify escape sequences|
 |2022-01-25|Initial design|
 
@@ -32,8 +33,9 @@
     1. [Variants & Patterns](#variants--patterns)
     1. [Expressions](#expressions)
 1. [Tokens](#tokens)
-    1. [Literals & Identifiers](#literals--identifiers)
-    1. [Character Classes](#character-classes)
+    1. [Names](#names)
+    1. [Text](#text)
+    1. [Literals](#literals)
     1. [Escape Sequences](#escape-sequences)
     1. [Comments](#comments)
     1. [Whitespace](#whitespace)
@@ -272,7 +274,7 @@ Examples:
 ```
 
 ```
-$itemAccusative = {$item noun case:accusative}?
+$itemAccusative = {$item noun case:accusative}
 ```
 
 
@@ -343,32 +345,44 @@ ref msgid:some_other_message
 
 The grammar defines the following tokens for the purpose of the lexical analysis.
 
-### Literals & Identifiers
+### Names
+
+A _symbol_ is a versatile token used in variable names (prefixed with `$`), function names, option names, and commonly as option values and variant keys.
+
+The symbol's definition is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name) to maximally align it with [NMTOKEN](https://www.w3.org/TR/xml/#NT-Nmtoken) which is used throughout the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html). The only difference between a symbol and XML Name is that symbols must not contain `:`.
 
 ```
 Variable ::= '$' Symbol /* ws: explicit */
-Symbol ::= (SymbolChar | '_') (SymbolChar | DecimalDigit | '_' | '-')* /* ws: explicit */
-Text ::= (TextChar | TextEscape)+ /* ws: explicit */
-Literal ::= String | Number /* ws: explicit */
-String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
-Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
+Symbol ::= SymbolStart SymbolChar* /* ws: explicit */
+SymbolStart ::= [a-zA-Z] | "_"
+               | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
+               | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
+               | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
+               | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+SymbolChar ::= SymbolStart | DecimalDigit | "-" | "." | #xB7
+             | [#x0300-#x036F] | [#x203F-#x2040]
 ```
 
-### Character Classes
+### Text
 
-Any Unicode codepoint is allowed in the translatable text, with the exception of `]` (which ends the pattern), `{` (which starts a placeholder), and `\` (which starts an escape sequence).
+Text is the translatable content of a _pattern_. Any Unicode codepoint is allowed in text, with the exception of `]` (which ends the pattern), `{` (which starts a placeholder), and `\` (which starts an escape sequence).
+
+```
+Text ::= (TextChar | TextEscape)+ /* ws: explicit */
+TextChar ::= AnyChar - (']' | '{' | Esc)
+AnyChar ::= .
+```
+
+### Literals
 
 Any Unicode codepoint is allowed in string literals, with the exception of `"` (which ends the string literal, and `\` (which starts an escape sequence).
 
-The set of characters that can be used in symbols is intentionally limited to simplify parsing and error recovery, and discourage complexity in custom function implementations. This narrow set is enough to support the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
-
 ```
-AnyChar ::= .
-TextChar ::= AnyChar - (']' | '{' | Esc)
+Literal ::= String | Number /* ws: explicit */
+String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
+Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
 StringChar ::= AnyChar - ('"' | Esc)
-SymbolChar ::= [a-zA-Z]
 DecimalDigit ::= [0-9]
-HexDigit ::= [0-9a-fA-F]
 ```
 
 ### Escape Sequences
@@ -381,6 +395,7 @@ TextEscape ::= Esc ']' | Esc '{' | UnicodeEscape
 StringEscape ::= Esc '"' | UnicodeEscape
 UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
                 | Esc 'U' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
+HexDigit ::= [0-9a-fA-F]
 ```
 
 ### Comments
@@ -393,18 +408,12 @@ Comment ::= '/*' (AnyChar* - (AnyChar* '*/' AnyChar*)) '*/'
 
 ### Whitespace
 
+Whitespace is defined as tab, carriage return, line feed, or the space character.
+
 Inside patterns, whitespace is part of the translatable content and is recorded and stored verbatim. Outside translatable text, whitespace is not significant, unless it's required to differentiate between two literals.
 
 ```
-WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP
-TAB ::= #x0009
-VT ::= #x000B
-FF ::= #x000C
-SP ::= #x0020
-NBSP ::= #x00A0
-BOM ::= #xFEFF
-USP ::= [#x0009-#x000D] | #x0020 | #x0085 | #x00A0 | #x1680 | #x180E
-      | [#x2000-#x200A] | #x2028 | #x2029 | #x202F | #x205F | #x3000
+WhiteSpace ::= #x9 | #xD | #xA | #x20
 ```
 
 ## Complete EBNF
@@ -435,21 +444,28 @@ Ignore ::= Comment | WhiteSpace /* ws: definition */
 
 <?TOKENS?>
 
-/* Literals & Identifiers*/
+/* Names */
 Variable ::= '$' Symbol /* ws: explicit */
-Symbol ::= (SymbolChar | '_') (SymbolChar | DecimalDigit | '_' | '-')* /* ws: explicit */
+Symbol ::= SymbolStart SymbolChar* /* ws: explicit */
+SymbolStart ::= [a-zA-Z] | "_"
+               | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
+               | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
+               | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
+               | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+SymbolChar ::= SymbolStart | DecimalDigit | "-" | "." | #xB7
+             | [#x0300-#x036F] | [#x203F-#x2040]
+
+/* Text */
 Text ::= (TextChar | TextEscape)+
+TextChar ::= AnyChar - (']' | '{' | Esc)
+AnyChar ::= .
+
+/* Literals */
 Literal ::= String | Number /* ws: explicit */
 String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
 Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
-
-/* Character classes */
-AnyChar ::= .
-TextChar ::= AnyChar - (']' | '{' | Esc)
 StringChar ::= AnyChar - ('"'| Esc)
-SymbolChar ::= [a-zA-Z]
 DecimalDigit ::= [0-9]
-HexDigit ::= [0-9a-fA-F]
 
 /* Escape sequences */
 Esc ::= '\'
@@ -457,18 +473,11 @@ TextEscape ::= Esc ']' | Esc '{' | UnicodeEscape
 StringEscape ::= Esc '"' | UnicodeEscape
 UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
                 | Esc 'U' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
+HexDigit ::= [0-9a-fA-F]
 
 /* Comments */
 Comment ::= '/*' (AnyChar* - (AnyChar* '*/' AnyChar*)) '*/'
 
 /* WhiteSpace */
-WhiteSpace ::= TAB | VT | FF | SP | NBSP | BOM | USP
-TAB ::= #x0009
-VT ::= #x000B
-FF ::= #x000C
-SP ::= #x0020
-NBSP ::= #x00A0
-BOM ::= #xFEFF
-USP ::= [#x0009-#x000D] | #x0020 | #x0085 | #x00A0 | #x1680 | #x180E
-      | [#x2000-#x200A] | #x2028 | #x2029 | #x202F | #x205F | #x3000
+WhiteSpace ::= #x9 | #xD | #xA | #x20
 ```
