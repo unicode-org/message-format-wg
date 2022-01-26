@@ -294,14 +294,12 @@ key 0 [Hello, world!]
 
 Expressions can be either of the following productions:
 
-- Literal formatters_ start with a literal optionally followed by the formatting function and its named options. Formatting functions do not accept any positional arguments other than the number literal in front of them.
-- _Variable formatters_ start with the variable's name and are optionally followed by the formatting function and its named options. Formatting functions do not accept any positional arguments other than the variable in front of them.
+- _Format calls_ start with a literal or a variable name, optionally followed by the formatting function and its named options. Formatting functions do not accept any positional arguments other than the number literal in front of them.
 - _Function calls_ are standalone invocations which start with the function's name optionally followed by its named options. Functions do not accept any positional arguments.
 
 ```
-Expression ::= LiteralFmt | VariableFmt | FunctionCall
-LiteralFmt ::= Literal FunctionCall?
-VariableFmt ::= Variable FunctionCall?
+Expression ::= FormatCall | FunctionCall
+FormatCall ::= (Literal | Variable) FunctionCall?
 FunctionCall ::= Symbol Option*
 Option ::= Symbol ":" (Symbol | Literal | Variable)
 ```
@@ -409,9 +407,8 @@ Pattern ::= "[" (Text | Placeable)* "]" /* ws: explicit */
 Placeable ::= "{" Expression "}"
 
 /* Expressions */
-Expression ::= LiteralFmt | VariableFmt | FunctionCall
-LiteralFmt ::= Literal FunctionCall?
-VariableFmt ::= Variable FunctionCall?
+Expression ::= FormatCall | FunctionCall
+FormatCall ::= (Literal | Variable) FunctionCall?
 FunctionCall ::= Symbol Option*
 Option ::= Symbol ":" (Symbol | Literal | Variable)
 
