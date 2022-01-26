@@ -254,7 +254,7 @@ Message ::= Declaration* Variant+
 
 A declaration is an _expression_ specified at the beginning of the message. It may be bound to an _alias_ which can then be used in other expressions.
 
-When followed by `?`, a declaration is also a selector used to select an appropriate variant of the message.
+When followed by `?`, a declaration is also a selector which will be used during formatting to select an appropriate variant of the message.
 
 ```
 Declaration ::= Alias? '{' Expression '}' '?'?
@@ -282,9 +282,9 @@ A message must include at least one _variant_. The translatable content of a var
 
 * The message should be unambiguously embeddable in various container formats regardless of the container's whitespace trimming rules. E.g. in Java `.properties` files, `hello = [Hello]` will unambiguously define the `Hello` message without the space in front of it.
 * The message should be conveniently embeddable in various programming languages without the need to escape characters commonly related to strings, e.g. `"` and `'`. Such need may still occur when a singe or double quote is used in the translatable content or to delimit a string literal.
-* The syntax should make it as clear as possible which parts of the message body are translatable and which are part of the formatting logic definition.
+* The syntax should make it as clear as possible which parts of the message body are translatable and which ones are part of the formatting logic definition.
 
-Variants can be optionally keyed, in which case their keys will be matched against the message's selectors. The formatting specification defines which variant is chosen by comparing its keys to the message's selectors, including the situation when no keys or no selectors are defined.
+Variants can be optionally keyed; during formatting their keys will be matched against the message's selectors. The formatting specification defines which variant is chosen by comparing its keys to the message's selectors, including the situation when no keys or no selectors are defined.
 
 ```
 Variant ::= VariantKey* Pattern
@@ -311,7 +311,7 @@ key 0 [Hello, world!]
 
 Expressions can be either of the following productions:
 
-- _Format calls_ start with a literal or a variable name, optionally followed by the formatting function and its named options. Formatting functions do not accept any positional arguments other than the number literal in front of them.
+- _Format calls_ start with a literal or a variable name, optionally followed by the formatting function and its named options. Formatting functions do not accept any positional arguments other than the argument in front of them.
 - _Function calls_ are standalone invocations which start with the function's name optionally followed by its named options. Functions do not accept any positional arguments.
 
 ```
@@ -360,7 +360,7 @@ Any Unicode codepoint is allowed in the translatable text, with the exception of
 
 Any Unicode codepoint is allowed in string literals, with the exception of `"` (which ends the string literal, and `\` (which starts an escape sequence).
 
-The set of characters that can be used in symbols is intentionally limited to simplify parsing and error recovery, discourage complexity in custom function implementations, and encourage using the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
+The set of characters that can be used in symbols is intentionally limited to simplify parsing and error recovery, and discourage complexity in custom function implementations. This narrow set is enough to support the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
 
 ```
 AnyChar ::= .
