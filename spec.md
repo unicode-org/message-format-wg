@@ -23,18 +23,31 @@ in line with the best practices of the Unicode project and well integrated into 
 
 ## Contents
 
-The body of the specification is split into the following documents:
+The body of the specification is split into the following sections:
 
-- [Meta](./spec-meta.md) - How to contribute changes
 - [Syntax](./spec-syntax.md) - A human-friendly syntax for MessageFormat
 - [Data Model](./spec-data-model.md) - The data model for representing messages and message resources
 - [Formatting Behaviour](./spec-formatting.md) - The expected behaviour of a message formatter
 - [Message Selection](./spec-message-selection.md) - The detailed behaviour of message selection, for MessageRef resolution
 
-Supporting files include:
+Supporting files and documents:
 
+- [Meta](./spec-meta.md) - How to contribute changes into this specification
 - [data-model.ts](./data-model.ts) - A standalone TypeScript definition of the data model
 - [syntax.ebnf](./syntax.ebnf) - An EBNF formulation of the syntax
+
+Supporting external materials:
+
+- Document: [Message Pattern Elements](https://docs.google.com/document/d/1f9He3gTjKp0vrg7XMfTfm1t68lfIruWcboGs2H4Szo4/edit?usp=sharing) -
+  Lays out the foundations of pattern elements, as used in the specification
+- Document: [Runtime Behaviour](https://docs.google.com/document/d/1lCSg7H_Nz20_LITon3g12Iq5KtE9cxXTg58zyLeW3gw/edit?usp=sharing) -
+  More detailed exploration of what is actually required and possible when formatting messages
+- [Intl.MessageFormat proposal](https://github.com/dminor/proposal-intl-messageformat/) -
+  For eventual presentation and consideration as an ECMA-402 stage-1 proposal
+- [JavaScript implementation](https://github.com/messageformat/messageformat/blob/mf2/packages/messageformat/src/messageformat.ts) -
+  A polyfill implementation of the proposed `Intl.MessageFormat`, along with MF2 parsers for ICU MessageFormat and Fluent syntaxes
+- [DOM Localization proposal](https://nordzilla.github.io/dom-l10n-draft-spec/) -
+  A "collection of interesting ideas" towards an eventual proposal for a web standard for DOM localization
 
 ## Introduction
 
