@@ -2,6 +2,10 @@
 
 The following is the work-in-progress MessageFormat 2.0 specification proposal developed for the [Message Format Working Group](https://github.com/unicode-org/message-format-wg).
 
+## Motivation
+
+The ambition of this proposal is to create a maximally minimal message formatting specification. The proposal attempts this by moving a large part of the complexity resulting from grammatical features of natural languages and the runtime requirements of the user to the implementation of custom functions, as well as to sources of data agnostic and external to the translation.
+
 ## Specifications
 
 * [Data Model](./model.md) - The representation of a single message suitable for runtime evaluation, transport, and interchange.
