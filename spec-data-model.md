@@ -177,6 +177,22 @@ interface VariableRef extends PatternElement {
 
 Using a `var_path` array with more than one value refers to an inner property of an object value.
 
+### Alias
+
+An Alias is a pointer to another PatternElement within the current message.
+Its resolved value is equivalent to that of the non-alias PatternElement with the same `alias` value.
+
+```ts
+interface Alias extends PatternElement {
+  type: 'alias'
+  alias: string
+}
+```
+
+Each Alias must be defined exactly once within a message where it is used.
+The definition of an alias may come after its use,
+but creating a loop where the value of an alias depends on its own value is an error.
+
 ### FunctionRef
 
 FunctionRef elements represent values defined by a user-definable function call.
@@ -185,11 +201,13 @@ an externally defined function is called with
 the resolved values of the specified arguments and options.
 
 ```ts
+type Argument = Literal | VariableRef | Alias
+
 interface FunctionRef extends PatternElement {
   type: 'function'
   func: string
-  args: (Literal | VariableRef | Alias)[]
-  options?: Record<string, Literal | VariableRef | Alias>
+  args: Argument[]
+  options?: Record<string, Argument>
 }
 ```
 
@@ -210,8 +228,8 @@ that message is first identified and then resolved.
 interface MessageRef extends PatternElement {
   type: 'message'
   res_id?: string
-  msg_path: (Literal | VariableRef | Alias)[]
-  scope?: Record<string, Literal | VariableRef | Alias>
+  msg_path: Argument[]
+  scope?: Record<string, Argument>
 }
 ```
 
@@ -224,22 +242,6 @@ as this allows for a static determination of the resources required to format a 
 Unlike the `res_id`, it may include parts that require additional context to resolve.
 
 `scope` overrides values in the current scope when resolving the message.
-
-### Alias
-
-An Alias is a pointer to another PatternElement within the current message.
-Its resolved value is equivalent to that of the non-alias PatternElement with the same `alias` value.
-
-```ts
-interface Alias extends PatternElement {
-  type: 'alias'
-  alias: string
-}
-```
-
-Each Alias must be defined exactly once within a message where it is used.
-The definition of an alias may come after its use,
-but creating a loop where the value of an alias depends on its own value is an error.
 
 ### Element
 
@@ -257,7 +259,7 @@ interface Element extends PatternElement {
   type: 'element'
   elem: string
   has_body: boolean
-  options?: Record<string, Literal | VariableRef | Alias>
+  options?: Record<string, Argument>
 }
 
 interface ElementEnd extends PatternElement {

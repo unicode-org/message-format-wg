@@ -68,30 +68,32 @@ interface VariableRef extends PatternElement {
   var_path: string[]
 }
 
+interface Alias extends PatternElement {
+  type: 'alias'
+  alias: string
+}
+
+type Argument = Literal | VariableRef | Alias
+
 interface FunctionRef extends PatternElement {
   type: 'function'
   func: string
-  args: (Literal | VariableRef)[]
-  options?: Record<string, Literal | VariableRef>
+  args: Argument[]
+  options?: Record<string, Argument>
 }
 
 interface MessageRef extends PatternElement {
   type: 'message'
   res_id?: string
-  msg_path: (Literal | VariableRef)[]
-  scope?: Record<string, Literal | VariableRef>
-}
-
-interface Alias extends PatternElement {
-  type: 'alias'
-  alias: string
+  msg_path: Argument[]
+  scope?: Record<string, Argument>
 }
 
 interface Element extends PatternElement {
   type: 'element'
   elem: string
   has_body: boolean
-  options?: Record<string, Literal | VariableRef | Alias>
+  options?: Record<string, Argument>
 }
 
 interface ElementEnd extends PatternElement {
