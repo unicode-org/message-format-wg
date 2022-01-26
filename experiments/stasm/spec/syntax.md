@@ -356,10 +356,10 @@ The symbol's definition is based on XML's [Name](https://www.w3.org/TR/xml/#NT-N
 Variable ::= '$' Symbol /* ws: explicit */
 Symbol ::= SymbolStart SymbolChar* /* ws: explicit */
 SymbolStart ::= [a-zA-Z] | "_"
-               | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
-               | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
-               | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
-               | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+              | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
+              | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
+              | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
+              | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
 SymbolChar ::= SymbolStart | DecimalDigit | "-" | "." | #xB7
              | [#x0300-#x036F] | [#x203F-#x2040]
 ```
@@ -391,7 +391,7 @@ DecimalDigit ::= [0-9]
 Escape sequences are introduced by the backslash character (`\`). They are allowed in translatable text as well as in string literals.
 
 ```
-Esc ::= #x5c
+Esc ::= '\'
 TextEscape ::= Esc ']' | Esc '{' | UnicodeEscape
 StringEscape ::= Esc '"' | UnicodeEscape
 UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
@@ -449,10 +449,10 @@ Ignore ::= Comment | WhiteSpace /* ws: definition */
 Variable ::= '$' Symbol /* ws: explicit */
 Symbol ::= SymbolStart SymbolChar* /* ws: explicit */
 SymbolStart ::= [a-zA-Z] | "_"
-               | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
-               | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
-               | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
-               | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+              | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
+              | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
+              | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
+              | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
 SymbolChar ::= SymbolStart | DecimalDigit | "-" | "." | #xB7
              | [#x0300-#x036F] | [#x203F-#x2040]
 
