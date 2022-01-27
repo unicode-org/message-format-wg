@@ -28,6 +28,7 @@ The registry contains descriptions of function signatures. The following DTD des
 <!ATTLIST param regex CDATA #IMPLIED>
 <!ATTLIST param title CDATA #IMPLIED>
 <!ATTLIST param required (true|false) "false">
+<!ATTLIST param readonly (true|false) "false">
 
 <!ELEMENT match EMPTY>
 <!ATTLIST match keys NMTOKENS #IMPLIED>
@@ -40,7 +41,7 @@ The `<signature>` element defines the calling context of a function with the `ty
 
 A signature may define the type of input it accepts with one or more `<input>` elments. Note that in MessageFormat 2.0 functions can only ever accept one positional argument. Multiple `<input>` elements can be used to define different validation rules for this single argument input, together with appropriate human-readable descriptions.
 
-A signature may also define one or more `<param>` elements representing _named options_ to the function. Parameters are optional by default, unless the `required` attribute is present. They accept either a finite enumeration of values (the `values` attribute) or validate they input with a regular expression (the `regex` attribute).
+A signature may also define one or more `<param>` elements representing _named options_ to the function. Parameters are optional by default, unless the `required` attribute is present. They accept either a finite enumeration of values (the `values` attribute) or validate they input with a regular expression (the `regex` attribute). Read-only parameters (the `readonly` attribute) can be displayed to translators in CAT tools, but may not be edited.
 
 Matching-function signatures additionally include one or more `<match>` elements to define the keys against which they're capable of matching.
 
@@ -64,7 +65,6 @@ The following `registry.xml` is an example of a registry file which may be provi
 		<description>Format a number. Match a numerical value against CLDR plural categories or against a number literal.</description>
 		<signature type="match" locales="en">
 			<input regex="[0-9]+(\.[0-9]+)?"/>
-			<param name="localeMatcher" values="lookup bestfit"/>
 			<param name="type" values="cardinal ordinal"/>
 			<param name="minimumIntegerDigits" regex="[0-9]+"/>
 			<param name="minimumFractionDigits" regex="[0-9]+"/>
@@ -76,12 +76,13 @@ The following `registry.xml` is an example of a registry file which may be provi
 		</signature>
 		<signature type="format" locales="en">
 			<input regex="[0-9]+(\.[0-9]+)?"/>
-			<param name="localeMatcher" values="lookup bestfit"/>
 			<param name="minimumIntegerDigits" regex="[0-9]+"/>
 			<param name="minimumFractionDigits" regex="[0-9]+"/>
 			<param name="maximumFractionDigits" regex="[0-9]+"/>
 			<param name="minimumSignificantDigits" regex="[0-9]+"/>
 			<param name="maximumSignificantDigits" regex="[0-9]+"/>
+			<param name="style" readonly="true" values="decimal currency percent unit"/>
+			<param name="currency" readonly="true" regex="[A-Z]{3}"/>
 		</signature>
 	</function>
 </registry>
