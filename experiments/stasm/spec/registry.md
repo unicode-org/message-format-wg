@@ -14,8 +14,9 @@ The registry contains descriptions of function signatures. The following DTD des
 
 <!ELEMENT description>
 
-<!ELEMENT signature (input*, param*, match*) >
+<!ELEMENT signature (input*, param*, match*)>
 <!ATTLIST signature type (match|format) #REQUIRED>
+<!ATTLIST signature locales NMTOKENS #IMPLIED>
 
 <!ELEMENT input EMPTY>
 <!ATTLIST input title CDATA #IMPLIED>
@@ -23,7 +24,6 @@ The registry contains descriptions of function signatures. The following DTD des
 
 <!ELEMENT param EMPTY>
 <!ATTLIST param name NMTOKEN #REQUIRED>
-<!ATTLIST param locale NMTOKEN #IMPLIED>
 <!ATTLIST param values NMTOKENS #IMPLIED>
 <!ATTLIST param regex CDATA #IMPLIED>
 <!ATTLIST param title CDATA #IMPLIED>
@@ -36,17 +36,17 @@ The registry contains descriptions of function signatures. The following DTD des
 
 The main building block of the registry is the `<function>` element. It represents an implementation of a custom function available to translation at runtime. A function defines a human-readable _description_ of its behavior and one or more _signatures_ of how to call it.
 
-The `<signature>` element defines the calling context of a function with the `type` attribute. A `type="format"` function can only be called inside a placeholder inside translatable text. A `type="match"` function can only be called inside a selector.
+The `<signature>` element defines the calling context of a function with the `type` attribute. A `type="format"` function can only be called inside a placeholder inside translatable text. A `type="match"` function can only be called inside a selector. Signatures with a non-empty `locales` attribute are locale-specific.
 
 A signature may define the type of input it accepts with one or more `<input>` elments. Note that in MessageFormat 2.0 functions can only ever accept one positional argument. Multiple `<input>` elements can be used to define different validation rules for this single argument input, together with appropriate human-readable descriptions.
 
-A signature may also define one or more `<param>` elements representing _named options_ to the function. Parameters are optional by default, unless the `required` attribute is present. They may be locale-specific. They accept either a finite enumeration of values (the `values` attribute) or validate they input with a regular expression (the `regex` attribute).
+A signature may also define one or more `<param>` elements representing _named options_ to the function. Parameters are optional by default, unless the `required` attribute is present. They accept either a finite enumeration of values (the `values` attribute) or validate they input with a regular expression (the `regex` attribute).
 
 Matching-function signatures additionally include one or more `<match>` elements to define the keys against which they're capable of matching.
 
 ## Example
 
-The following `registry.xml` is an example of a registry file which may be provided by an implementation to describe its built-in functions.
+The following `registry.xml` is an example of a registry file which may be provided by an implementation to describe its built-in functions. For the sake of brevity, only `locales="en"` is considered.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -66,7 +66,7 @@ The following `registry.xml` is an example of a registry file which may be provi
 
 	<function id="number">
 		<description>Format a number. Match a numerical value against CLDR plural categories or against a number literal.</description>
-		<signature type="match">
+		<signature type="match" locales="en">
 			<input regex="[0-9]+(\.[0-9]+)?"/>
 			<param name="localeMatcher" values="lookup bestfit"/>
 			<param name="type" values="cardinal ordinal"/>
@@ -75,15 +75,11 @@ The following `registry.xml` is an example of a registry file which may be provi
 			<param name="maximumFractionDigits" regex="[0-9]+"/>
 			<param name="minimumSignificantDigits" regex="[0-9]+"/>
 			<param name="maximumSignificantDigits" regex="[0-9]+"/>
-			<match key="zero"/>
 			<match key="one"/>
-			<match key="two"/>
-			<match key="few"/>
-			<match key="many"/>
 			<match key="other"/>
 			<match regex="[0-9]"/>
 		</signature>
-		<signature type="format">
+		<signature type="format" locales="en">
 			<input regex="[0-9]+(\.[0-9]+)?"/>
 			<param name="localeMatcher" values="lookup bestfit"/>
 			<param name="minimumIntegerDigits" regex="[0-9]+"/>
@@ -103,33 +99,28 @@ A localization engineer can then extend the registry by defining the following `
 <!DOCTYPE registry SYSTEM "./registry.dtd">
 
 <registry>
-	<function id="adjective">
-		<description>Handle grammar of an adjective.</description>
-		<signature type="format">
-			<input title="Adjective id"/>
-			<param locale="en" name="article" values="definite indefinite none"/>
-			<param locale="en" name="plural" values="one other"/>
-			<param locale="en" name="case" values="nominative genitive"/>
-		</signature>
-		<signature type="format">
-			<input title="Adjective id"/>
-			<param locale="en" name="article" values="definite indefinite none"/>
-			<param name="accord"/>
+	<function id="noun">
+		<description>Handle the grammar of a noun.</description>
+		<signature type="format" locales="en">
+			<input title="Noun id"/>
+			<param name="article" values="definite indefinite"/>
+			<param name="plural" values="one other"/>
+			<param name="case" values="nominative genitive"/>
 		</signature>
 	</function>
 
 	<function id="adjective">
-		<description>Handle grammar of an adjective.</description>
-		<signature type="format">
+		<description>Handle the grammar of an adjective.</description>
+		<signature type="format" locales="en">
 			<input title="Adjective id"/>
-			<param locale="en" name="article" values="definite indefinite none"/>
-			<param locale="en" name="plural" values="one other"/>
-			<param locale="en" name="case" values="nominative genitive"/>
+			<param name="article" values="definite indefinite"/>
+			<param name="plural" values="one other"/>
+			<param name="case" values="nominative genitive"/>
 		</signature>
-		<signature type="format">
+		<signature type="format" locales="en">
 			<input title="Adjective id"/>
-			<param locale="en" name="article" values="definite indefinite none"/>
 			<param name="accord"/>
+			<param name="article" values="definite indefinite"/>
 		</signature>
 	</function>
 </registry>
