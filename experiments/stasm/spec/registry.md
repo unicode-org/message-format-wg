@@ -32,7 +32,6 @@ The registry contains descriptions of function signatures. The following DTD des
 <!ELEMENT match EMPTY>
 <!ATTLIST match key NMTOKEN #IMPLIED>
 <!ATTLIST match regex CDATA #IMPLIED>
-<!ATTLIST match default (true|false) "false">
 ```
 
 The main building block of the registry is the `<function>` element. It represents an implementation of a custom function available to translation at runtime. A function defines a human-readable _description_ of its behavior and one or more _signatures_ of how to call it.
@@ -62,7 +61,6 @@ The following `registry.xml` is an example of a registry file which may be provi
 			<match key="macos"/>
 			<match key="android"/>
 			<match key="ios"/>
-			<match key="_" default/>
 		</signature>
 	</function>
 
@@ -82,7 +80,7 @@ The following `registry.xml` is an example of a registry file which may be provi
 			<match key="two"/>
 			<match key="few"/>
 			<match key="many"/>
-			<match key="other" default/>
+			<match key="other"/>
 			<match regex="[0-9]"/>
 		</signature>
 		<signature type="format">
