@@ -11,4 +11,4 @@ The ambition of this proposal is to create a maximally minimal message formattin
 * [Data Model](./model.md) - The representation of a single message suitable for runtime evaluation, transport, and interchange.
 * [Syntax](./syntax.md) - The formal grammar defining a DSL for representing a single translatable message.
 * Runtime - The definition of the runtime behavior during formatting of a single message.
-* Registry - The definition of the global store of formatting function signatures, variable types, etc. which are available to messages at runtime. These declarations can be used by tooling to type-check and lint messages at authoring time or buildtime.
+* [Registry](./registry.md) - The definition of the global store of formatting function signatures, variable types, etc. which are available to messages at runtime. These declarations can be used by tooling to type-check and lint messages at authoring time or buildtime.
