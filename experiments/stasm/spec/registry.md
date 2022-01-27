@@ -30,7 +30,7 @@ The registry contains descriptions of function signatures. The following DTD des
 <!ATTLIST param required (true|false) "false">
 
 <!ELEMENT match EMPTY>
-<!ATTLIST match key NMTOKEN #IMPLIED>
+<!ATTLIST match keys NMTOKENS #IMPLIED>
 <!ATTLIST match regex CDATA #IMPLIED>
 ```
 
@@ -56,11 +56,7 @@ The following `registry.xml` is an example of a registry file which may be provi
 	<function id="platform">
 		<description>Match the current OS.</description>
 		<signature type="match">
-			<match key="windows"/>
-			<match key="linux"/>
-			<match key="macos"/>
-			<match key="android"/>
-			<match key="ios"/>
+			<match keys="windows linux macos android ios"/>
 		</signature>
 	</function>
 
@@ -75,9 +71,8 @@ The following `registry.xml` is an example of a registry file which may be provi
 			<param name="maximumFractionDigits" regex="[0-9]+"/>
 			<param name="minimumSignificantDigits" regex="[0-9]+"/>
 			<param name="maximumSignificantDigits" regex="[0-9]+"/>
-			<match key="one"/>
-			<match key="other"/>
-			<match regex="[0-9]"/>
+			<match keys="one other"/>
+			<match regex="[0-9]+"/>
 		</signature>
 		<signature type="format" locales="en">
 			<input regex="[0-9]+(\.[0-9]+)?"/>
