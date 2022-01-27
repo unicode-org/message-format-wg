@@ -6,6 +6,7 @@
 |   Date   | Description |
 |----------|-------------|
 | **TODO** |Aliases to submessages|
+|2022-01-27|Remove number literals and relax symbol's grammar|
 |2022-01-27|Change opt:value to opt=value|
 |2022-01-26|Specify symbols more precisely. Restrict whitespace.|
 |2022-01-26|Add `/*...*/` comments|
@@ -350,18 +351,18 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 
 A _symbol_ is a versatile token used in variable names (prefixed with `$`), function names, option names, and commonly as option values and variant keys.
 
-The symbol's definition is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name) to maximally align it with [NMTOKEN](https://www.w3.org/TR/xml/#NT-Nmtoken) which is used throughout the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
+The symbol's definition is the same as XML's [NMTOKEN](https://www.w3.org/TR/xml/#NT-Nmtoken) which is used throughout the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
 
 ```
 Variable ::= '$' Symbol /* ws: explicit */
 Symbol ::= SymbolStart SymbolChar* /* ws: explicit */
-SymbolStart ::= [a-zA-Z] | "_"
-              | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
-              | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
-              | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
-              | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
-SymbolChar ::= SymbolStart | DecimalDigit | "-" | "." | #xB7
-             | [#x0300-#x036F] | [#x203F-#x2040]
+Symbol ::= SymbolChar+
+SymbolChar ::= [a-zA-Z] | [0-9] | "-" | "_" | "." | #xB7
+             | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
+             | [#x300-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
+	     | [#x203F-#x2040] | [#x2070-#x218F] | [#x2C00-#x2FEF]
+	     | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD]
+	     | [#x10000-#xEFFFF]
 ```
 
 ### Text
@@ -376,14 +377,11 @@ AnyChar ::= .
 
 ### Literals
 
-Any Unicode codepoint is allowed in string literals, with the exception of `"` (which ends the string literal, and `\` (which starts an escape sequence).
+Any Unicode codepoint is allowed in string literals, with the exception of `"` (which ends the string literal), and `\` (which starts an escape sequence).
 
 ```
-Literal ::= String | Number /* ws: explicit */
 String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
-Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
-StringChar ::= AnyChar - ('"' | Esc)
-DecimalDigit ::= [0-9]
+StringChar ::= AnyChar - ('"'| Esc)
 ```
 
 ### Escape Sequences
@@ -430,15 +428,15 @@ Alias ::= Variable '='
 
 /* Pattern and pattern elements */
 Variant ::= VariantKey* Pattern
-VariantKey ::= Symbol | Literal
+VariantKey ::= Symbol | String
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 Placeable ::= '{' Expression '}'
 
 /* Expressions */
 Expression ::= FormatCall | FunctionCall
-FormatCall ::= (Literal | Variable) FunctionCall?
+FormatCall ::= (String | Variable) FunctionCall?
 FunctionCall ::= Symbol Option*
-Option ::= Symbol '=' (Symbol | Literal | Variable)
+Option ::= Symbol '=' (Symbol | String | Variable)
 
 /* Ignored tokens */
 Ignore ::= Comment | WhiteSpace /* ws: definition */
@@ -447,14 +445,13 @@ Ignore ::= Comment | WhiteSpace /* ws: definition */
 
 /* Names */
 Variable ::= '$' Symbol /* ws: explicit */
-Symbol ::= SymbolStart SymbolChar* /* ws: explicit */
-SymbolStart ::= [a-zA-Z] | "_"
-              | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
-              | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
-              | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
-              | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
-SymbolChar ::= SymbolStart | DecimalDigit | "-" | "." | #xB7
-             | [#x0300-#x036F] | [#x203F-#x2040]
+Symbol ::= SymbolChar+
+SymbolChar ::= [a-zA-Z] | [0-9] | "_" | "-" | "." | #xB7
+             | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
+             | [#x300-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
+	     | [#x203F-#x2040] | [#x2070-#x218F] | [#x2C00-#x2FEF]
+	     | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD]
+	     | [#x10000-#xEFFFF]
 
 /* Text */
 Text ::= (TextChar | TextEscape)+
@@ -462,11 +459,8 @@ TextChar ::= AnyChar - (']' | '{' | Esc)
 AnyChar ::= .
 
 /* Literals */
-Literal ::= String | Number /* ws: explicit */
 String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
-Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
 StringChar ::= AnyChar - ('"'| Esc)
-DecimalDigit ::= [0-9]
 
 /* Escape sequences */
 Esc ::= '\'

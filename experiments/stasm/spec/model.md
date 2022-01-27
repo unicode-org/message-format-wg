@@ -84,7 +84,7 @@ interface FunctionCall {
 ```
 
 ```ts
-type Argument = Literal | Variable;
+type Argument = String | Variable;
 ```
 
 ## Variables
@@ -98,13 +98,7 @@ interface Variable {
 ## Literals
 
 ```ts
-type Literal = StringLiteral | NumberLiteral;
-
-interface StringLiteral {
-	value: string;
-}
-
-interface NumberLiteral {
+interface String {
 	value: string;
 }
 ```
