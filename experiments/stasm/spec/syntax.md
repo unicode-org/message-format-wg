@@ -140,8 +140,8 @@ A message defining a `$whom` alias which is then used twice inside the pattern:
 A message with a single selector:
 
     {$count plural}? 
-        one [$You have one notification.]
-        other [$You have {$count} notification.]
+        one [You have one notification.]
+        other [You have {$count} notification.]
 
 A message with a single selector which is an invocation of a custom function named `platform`, formatted on a single line:
 
