@@ -1,5 +1,17 @@
 # Formatting Behaviour
 
+Conceptually, the act of formatting a message starts by combining
+a data model representation of a message together with contextual information,
+such as variable values and custom formatting functions.
+Together, these allow the message to be resolved as a sequence of parts,
+which may then be formatted to the requested shape.
+
+Implementations are free to define the shape of their own contextual information
+to accord with the capabilities and conventions of their environments,
+as well as the formatting targets that they support.
+Internally, an implementation may choose to combine any of the conceptual stages presented here,
+as long as the externally observable behaviour produces the same results as in this specification.
+
 ## Message Pattern Selection
 
 When resolving and formatting a SelectMessage,

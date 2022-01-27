@@ -82,17 +82,18 @@ or rich structured data to be composed by the UI framework into localized user i
 - `Placeholder` - Pattern element which contains resolvable logic (variable, message reference etc.)
 - `Literal` - Pattern element which contains a hardcoded string
 - `Variable` - Value passed from the runtime context to the message to be used in message resolution
-- `Term` - Type of a message which contains localizable standalone term
-  (brand name, name of a monster, custom term for a shopping cart etc.)
 - `Message Reference` - Reference of one message from within another
 - `Dynamic Message Reference` - Composable system which uses dynamically provided information (variable)
   to select a message or term to be indluded in another
-- `Function` - Processing entity which takes variables and options as input and,
+- `Function` - Processing entity which takes resolved arguments and options as input and,
   potentially using contextual information, returns an output to be used in message formatting
-- `Partially Resolved Variable` - Combination of a variable with options
-  that the developer may provide to the message resolution
-- `FormattedMessage` - Intermediate form of a message which contains a list of parts
-  to be used as an input to for user interface framework or localization tooling.
+- `Resolution` - The act of combining values, formatting options and contextual information such as the locale
+  to produce a single formattable representation thereof.
+- `Formattable` - A value or object that contains sufficient information (e.g. locale, formatting options)
+  for formatting it in one or more output shapes.
+- `Partially Resolved Variable` - A combination of a variable with formatting options
+  that the developer may provide to the message resolution.
+  A partially resolved variable may be formattable.
 - `Message Group` - Set of messages which are semantically related to one aspect of a user interface
 - `Message Resource` - A group of messages and message groups which are stored together.
 - `Comment` - Free flowing textual content that can be attached to any part of the message or resource.
