@@ -3,7 +3,7 @@
 ##### Unofficial Proposal Draft, January 2022
 
 - Champions:
-  - Eemeli Aaro (Mozilla)
+  - Eemeli Aro (Mozilla / OpenJS Foundation)
   - Zibi Braniecki (Unicode)
 - Contributors:
   - Staś Małolepszy (Google)
@@ -76,24 +76,27 @@ or rich structured data to be composed by the UI framework into localized user i
 ### Terminology
 
 - `Message` - Single, complete, stringifiable, message to be communicated (visually, audibly etc.) to the user
-- `Message Part` - Subset of a message
-- `Placeholder` - Part of the message which contains resolvable logic (variable, reference etc.)
-- `Literal` - Message part which contains hardcoded string
+- `Message Pattern` - A sequence of parts that make up the body of a message.
+  A select message has a separate pattern for each of its cases.
+- `Message Pattern Element` - In the data model, one part of a message
+- `Placeholder` - Pattern element which contains resolvable logic (variable, message reference etc.)
+- `Literal` - Pattern element which contains a hardcoded string
 - `Variable` - Value passed from the runtime context to the message to be used in message resolution
-- `Reference` - Reference of one message from within another
 - `Term` - Type of a message which contains localizable standalone term
   (brand name, name of a monster, custom term for a shopping cart etc.)
-- `Dynamic Reference` - Composable system which uses dynamically provided information (variable)
+- `Message Reference` - Reference of one message from within another
+- `Dynamic Message Reference` - Composable system which uses dynamically provided information (variable)
   to select a message or term to be indluded in another
-- `Function` - Processing entity which takes variables and options on an input and,
+- `Function` - Processing entity which takes variables and options as input and,
   potentially using contextual information, returns an output to be used in message formatting
 - `Partially Resolved Variable` - Combination of a variable with options
   that the developer may provide to the message resolution
-- `FormattedMessage` - Intermediate form of a message which contains list of parts
+- `FormattedMessage` - Intermediate form of a message which contains a list of parts
   to be used as an input to for user interface framework or localization tooling.
-- `Group` - Set of messages which are semantically related to the aspect of a user interface
-- `Resource` - Type of a group of messages which are stored together
-- `Comment` - A free flowing textual content that can be attached to any part of the message or resource
+- `Message Group` - Set of messages which are semantically related to one aspect of a user interface
+- `Message Resource` - A group of messages and message groups which are stored together.
+- `Comment` - Free flowing textual content that can be attached to any part of the message or resource.
+  May contain meta information intended solely for non-formatting purposes such as translation.
 - `Meta` - Semantic information attached to messages or resources
   that can be used by the localization tooling (screenshot, role of the message etc.)
   or by runtime user interface toolkit (emphasis and tone information for voice assistant etc.)
