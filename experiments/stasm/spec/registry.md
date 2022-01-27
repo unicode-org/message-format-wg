@@ -1,4 +1,4 @@
-# Registry
+# MessageFormat 2.0 Registry
 
 The implementations and tooling can greatly benefit from a structured definition of formatting and matching functions available to messages at runtime. The _registry_ is a mechanism for storing such declarations. They are portable and can be used by tooling to type-check and lint messages at authoring time or buildtime.
 
@@ -62,7 +62,10 @@ The following `registry.xml` is an example of a registry file which may be provi
 	</function>
 
 	<function id="number">
-		<description>Format a number. Match a numerical value against CLDR plural categories or against a number literal.</description>
+		<description>
+			Format a number. Match a numerical value against CLDR plural categories
+			or against a number literal.
+		</description>
 		<signature type="match" locales="en">
 			<input regex="[0-9]+(\.[0-9]+)?"/>
 			<param name="type" values="cardinal ordinal"/>
@@ -115,14 +118,14 @@ A localization engineer can then extend the registry by defining the following `
 		</signature>
 		<signature type="format" locales="en">
 			<input title="Adjective id"/>
-			<param name="accord"/>
 			<param name="article" values="definite indefinite"/>
+			<param name="accord"/>
 		</signature>
 	</function>
 </registry>
 ```
 
-Messages can now use the `noun` and the `adjective` functions. The following message references the first signature of `adjective`, which expects the `plural` and case` options:
+Messages can now use the `noun` and the `adjective` functions. The following message references the first signature of `adjective`, which expects the `plural` and `case` options:
 
     [You see {$color adjective article=indefinite plural=one case=nominative} {$object noun case=nominative}!]
 
