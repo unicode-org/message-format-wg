@@ -284,7 +284,7 @@ MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the fol
 
 A single message consists of zero of more _alias_ definitions, and one _phrase_ which represents the translatable body of the message.
 
-```
+```ebnf
 Message ::= Alias* Phrase
 ```
 
@@ -295,7 +295,7 @@ A phrase represents the translatable body of the message. It consists of:
 * a single _pattern_ with no _selectors_ nor _keys_, or
 * one or more _selectors_ and one or more keyed _variants_.
 
-```
+```ebnf
 Phrase ::= Pattern | Selector+ Variant+
 ```
 
@@ -309,7 +309,7 @@ A pattern is a sequence of translatable elements. A message must define at least
 * The message should be conveniently embeddable in various programming languages without the need to escape characters commonly related to strings, e.g. `"` and `'`. Such need may still occur when a singe or double quote is used in the translatable content or to delimit a string literal.
 * The syntax should make it as clear as possible which parts of the message body are translatable and which ones are part of the formatting logic definition.
 
-```
+```ebnf
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 Placeable ::= '{' Expression '}'
 ```
@@ -324,7 +324,7 @@ Examples:
 
 A selector is an _expression_ which will be used to choose one of the variants during formatting. Selectors are always suffixed with a `?`. A variant is a keyed _pattern_.
 
-```
+```ebnf
 Selector ::= '{' Expression '}' '?'
 Variant ::= VariantKey+ Pattern
 VariantKey ::= Symbol | String
@@ -342,7 +342,7 @@ Examples:
 
 Expressions start with the operand: a symbol (which evaluates to itself), string literal or a variable name. The operand can be optionally followed by a formatting function and its named options. Formatting functions do not accept any positional arguments other than the operand in front of them.
 
-```
+```ebnf
 Expression ::= Operand Function?
 Operand ::= (Symbol | String | Variable)
 Function ::= Symbol Option*
@@ -371,7 +371,7 @@ some_other_message getMessage
 
 An alias is a local variable bound to an _expression_ or a _phrase_, defined at the beginning of the message. Aliases may be used in other expressions.
 
-```
+```ebnf
 Alias ::= Variable '=' '{' (Expression | Phrase) '}'
 ```
 
@@ -397,7 +397,7 @@ A _symbol_ is a versatile token used in variable names (prefixed with `$`), func
 
 The symbol's definition is the same as XML's [NMTOKEN](https://www.w3.org/TR/xml/#NT-Nmtoken) which is used throughout the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
 
-```
+```ebnf
 Variable ::= '$' Symbol /* ws: explicit */
 Symbol ::= SymbolChar+
 SymbolChar ::= [a-zA-Z] | [0-9] | "-" | "_" | "." | #xB7
@@ -412,7 +412,7 @@ SymbolChar ::= [a-zA-Z] | [0-9] | "-" | "_" | "." | #xB7
 
 Text is the translatable content of a _pattern_. Any Unicode codepoint is allowed in text, with the exception of `]` (which ends the pattern), `{` (which starts a placeholder), and `\` (which starts an escape sequence).
 
-```
+```ebnf
 Text ::= (TextChar | TextEscape)+ /* ws: explicit */
 TextChar ::= AnyChar - (']' | '{' | Esc)
 AnyChar ::= .
@@ -422,7 +422,7 @@ AnyChar ::= .
 
 Any Unicode codepoint is allowed in string literals, with the exception of `"` (which ends the string literal), and `\` (which starts an escape sequence).
 
-```
+```ebnf
 String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
 StringChar ::= AnyChar - ('"'| Esc)
 ```
@@ -431,7 +431,7 @@ StringChar ::= AnyChar - ('"'| Esc)
 
 Escape sequences are introduced by the backslash character (`\`). They are allowed in translatable text as well as in string literals.
 
-```
+```ebnf
 Esc ::= '\'
 TextEscape ::= Esc ']' | Esc '{' | UnicodeEscape
 StringEscape ::= Esc '"' | UnicodeEscape
@@ -444,7 +444,7 @@ HexDigit ::= [0-9a-fA-F]
 
 Comments are delimited with `/*` at the start, and `*/` at the end, and can contain any Unicode codepoint including line breaks. Comments can only appear outside translatable text.
 
-```
+```ebnf
 Comment ::= '/*' (AnyChar* - (AnyChar* '*/' AnyChar*)) '*/'
 ```
 
@@ -454,7 +454,7 @@ Whitespace is defined as tab, carriage return, line feed, or the space character
 
 Inside patterns, whitespace is part of the translatable content and is recorded and stored verbatim. Outside translatable text, whitespace is not significant, unless it's required to differentiate between two literals.
 
-```
+```ebnf
 WhiteSpace ::= #x9 | #xD | #xA | #x20
 ```
 
