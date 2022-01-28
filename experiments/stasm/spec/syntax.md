@@ -452,7 +452,7 @@ Comment ::= '/*' (AnyChar* - (AnyChar* '*/' AnyChar*)) '*/'
 
 Whitespace is defined as tab, carriage return, line feed, or the space character.
 
-Inside patterns, whitespace is part of the translatable content and is recorded and stored verbatim. Outside translatable text, whitespace is not significant, unless it's required to differentiate between two literals.
+Inside patterns, whitespace is part of the translatable content and is recorded and stored verbatim. Whitespace is not significant outside translatable text.
 
 ```ebnf
 WhiteSpace ::= #x9 | #xD | #xA | #x20

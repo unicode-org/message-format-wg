@@ -15,7 +15,7 @@ The data model defined here is not suitable for the parser-serializer roundtrip.
 
 ## Message
 
-A _message_ is a container for a unit of translation. A unit of translation can be a single _pattern_, or can be defined as a set of _variants_ corresponding to a set of _selectors_.
+A _message_ is a container for a unit of translation.
 
 ```ts
 interface Message {
@@ -25,7 +25,7 @@ interface Message {
 }
 ```
 
-Even for the simple case of a single-variant translation, the single `Variant` is stored in an array. The runtime specification defines how the only variant is chosen in absence of selectors. This allows effortless conversion from a single-variant translation in the source language to a multi-variant translation in the target language (or _vice versa_), because it can be done without any changes to the message's structure.
+Even for the simple case of a single-pattern translation, a single `Variant` is stored in an array. The runtime specification defines how the only variant is chosen in absence of selectors and variant keys. This allows effortless conversion from a single-variant translation in the source language to a multi-variant translation in the target language (or _vice versa_), because it can be done without any changes to the message's structure.
 
 The `Message.aliases` map stores locally-scoped variable bindings to `Expression`s or `Phrase`s. These aliases are available inside other expressions throughout the message's definition. The runtime specification defines the exact rules for resolving and evaluating them.
 
@@ -60,7 +60,7 @@ interface Variant {
 }
 ```
 
-Variants are keyed using one or more literals. The runtime specification defines how the variant's keys are matched against the message's _selectors_. It's valid for a variant to have zero keys, in which case it becomes the _default_ variant. A message with a single key-less variant will always select it during formatting.
+Variants are keyed using zero or more literals. The runtime specification defines how the variant's keys are matched against the message's _selectors_. It's valid for a variant to have zero keys, in which case it becomes the _default_ variant. A message with a single key-less variant will always select it during formatting.
 
 ## Patterns
 
