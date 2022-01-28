@@ -4,7 +4,19 @@ The following is the work-in-progress MessageFormat 2.0 specification proposal d
 
 ## Motivation
 
-The ambition of this proposal is to create a maximally minimal message formatting specification. The proposal attempts this by moving a large part of the complexity resulting from grammatical features of natural languages and the runtime requirements of the user to the implementation of custom functions, as well as to sources of data agnostic and external to the translation.
+The ambition of this proposal is to create a **maximally minimal** message formatting specification. The proposal attempts this by moving a large part of the complexity resulting from grammatical features of natural languages and the runtime requirements of the user to the implementation of custom functions, as well as to sources of data agnostic and external to the translation.
+
+The grammar, the data model, and the runtime behavior are intentionally designed to be as simple as possible. Whenever there is an opportunity to re-use an existing concept, syntax or interface — without introducing ambiguity or compromising expressiveness — this proposal does so. The author hopes that this proposal can inform the decisions of the Message Format Working Group by defining the _lower bound_ of the spectrum of design complexity.
+
+## Design Principles
+
+The design of this proposal was informed by the Message Format Working Group's [Goals and Non-Goals](https://github.com/unicode-org/message-format-wg/blob/main/guidelines/goals.md). Additionally, the proposal is centered around the following design principles, largely influenced by [The Rule of Least Power](https://www.w3.org/2001/tag/doc/leastPower.html):
+
+* **Compatibility** - In order to increase the chance of adoption, MessageFormat 2.0 should require little modification of existing localization workflows and tooling in order to be supported by them.
+
+* **Embeddability** - MessageFormat 2.0 translations should be easily embeddable in common container formats, as well as inlineable inside code.
+
+* **Predictability** - The translation content inside message should be easy to reason about. The control flow inside messages should be predictable. MessageFormat 2.0 should be intentionally designed to not be a full programming language.
 
 ## Specifications
 

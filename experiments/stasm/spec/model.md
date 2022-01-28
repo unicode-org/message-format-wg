@@ -40,7 +40,7 @@ interface Variant {
 }
 ```
 
-Variants are keyed using one or more literals. The runtime specification defines how the variant's keys are matched against the message's _selectors_. It's valid for a variant to have zero keys, in which case it becomes the _default_ variant. A special occurence of this is a simple single-variant message with no selectors.
+Variants are keyed using one or more literals. The runtime specification defines how the variant's keys are matched against the message's _selectors_. It's valid for a variant to have zero keys, in which case it becomes the _default_ variant. A message with a single key-less variant will always select it during formatting.
 
 ## Patterns
 

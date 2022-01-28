@@ -70,7 +70,7 @@ The design goals of the syntax specification are as follows:
 
 The syntax specification takes into account the following design restrictions:
 
-1. Whitespace outside the translatable content should be insignificant. It should be possible to define a message entirely on a single line with no ambiguitiy, as well as to format it over multiple lines for clarity.
+1. Whitespace outside the translatable content should be insignificant. It should be possible to define a message entirely on a single line with no ambiguity, as well as to format it over multiple lines for clarity.
 
 1. The syntax should not use nor reserve any keywords in any natural language, such as `if`, `match`, or `let`.
 
