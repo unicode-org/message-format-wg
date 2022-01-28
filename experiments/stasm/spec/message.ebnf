@@ -11,9 +11,9 @@ Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 Placeable ::= '{' Expression '}'
 
 /* Expressions */
-Expression ::= FormatCall | FunctionCall
-FormatCall ::= (String | Variable) FunctionCall?
-FunctionCall ::= Symbol Option*
+Expression ::= Operand Function?
+Operand ::= (Symbol | String | Variable)
+Function ::= Symbol Option*
 Option ::= Symbol '=' (Symbol | String | Variable)
 
 /* Ignored tokens */

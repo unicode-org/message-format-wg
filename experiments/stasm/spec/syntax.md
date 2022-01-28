@@ -6,6 +6,7 @@
 |   Date   | Description |
 |----------|-------------|
 | **TODO** |Aliases to submessages|
+|2022-01-28|Remove standalone functions|
 |2022-01-27|Remove number literals and relax symbol's grammar|
 |2022-01-27|Change opt:value to opt=value|
 |2022-01-26|Specify symbols more precisely. Restrict whitespace.|
@@ -144,9 +145,9 @@ A message with a single selector:
         one [You have one notification.]
         other [You have {$count} notification.]
 
-A message with a single selector which is an invocation of a custom function named `platform`, formatted on a single line:
+A message with a single selector which is an invocation of a custom function `getCurrent("platform")`, formatted on a single line:
 
-    {platform}? windows [Settings] _ [Preferences]
+    {platform getCurrent}? windows [Settings] _ [Preferences]
 
 A message with a single selector and a custom `hasCase` function which allows the message to query for presence of grammatical cases required for each variant:
 
@@ -292,7 +293,7 @@ Variants can be optionally keyed; during formatting their keys will be matched a
 
 ```
 Variant ::= VariantKey* Pattern
-VariantKey ::= Symbol | Literal
+VariantKey ::= Symbol | String
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 Placeable ::= '{' Expression '}'
 ```
@@ -313,16 +314,13 @@ key 0 [Hello, world!]
 
 ### Expressions
 
-Expressions can be either of the following productions:
-
-- _Format calls_ start with a literal or a variable name, optionally followed by the formatting function and its named options. Formatting functions do not accept any positional arguments other than the argument in front of them.
-- _Function calls_ are standalone invocations which start with the function's name optionally followed by its named options. Functions do not accept any positional arguments.
+Expressions start with the operand: a symbol (which evaluates to itself), string literal or a variable name. The operand can be optionally followed by a formatting function and its named options. Formatting functions do not accept any positional arguments other than the operand in front of them.
 
 ```
-Expression ::= FormatCall | FunctionCall
-FormatCall ::= (Literal | Variable) FunctionCall?
-FunctionCall ::= Symbol Option*
-Option ::= Symbol '=' (Symbol | Literal | Variable)
+Expression ::= Operand Function?
+Operand ::= (Symbol | String | Variable)
+Function ::= Symbol Option*
+Option ::= Symbol '=' (Symbol | String | Variable)
 ```
 
 Examples:
@@ -340,7 +338,7 @@ $when datetime style=long
 ```
 
 ```
-ref msgid=some_other_message
+some_other_message getMessage
 ```
 
 ## Tokens
@@ -349,13 +347,12 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 
 ### Names
 
-A _symbol_ is a versatile token used in variable names (prefixed with `$`), function names, option names, and commonly as option values and variant keys.
+A _symbol_ is a versatile token used in variable names (prefixed with `$`), function names, option names, and commonly as option values and variant keys. When used in a value position (as a variant key, expression operand, or an option value), a symbol evaluates to its name; thus behaving like a string literal without the delimiters.
 
 The symbol's definition is the same as XML's [NMTOKEN](https://www.w3.org/TR/xml/#NT-Nmtoken) which is used throughout the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
 
 ```
 Variable ::= '$' Symbol /* ws: explicit */
-Symbol ::= SymbolStart SymbolChar* /* ws: explicit */
 Symbol ::= SymbolChar+
 SymbolChar ::= [a-zA-Z] | [0-9] | "-" | "_" | "." | #xB7
              | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
@@ -433,9 +430,9 @@ Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 Placeable ::= '{' Expression '}'
 
 /* Expressions */
-Expression ::= FormatCall | FunctionCall
-FormatCall ::= (String | Variable) FunctionCall?
-FunctionCall ::= Symbol Option*
+Expression ::= Operand Function?
+Operand ::= (Symbol | String | Variable)
+Function ::= Symbol Option*
 Option ::= Symbol '=' (Symbol | String | Variable)
 
 /* Ignored tokens */

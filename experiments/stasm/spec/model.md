@@ -59,26 +59,18 @@ interface Text {
 
 ## Expressions
 
-An _expression_ represents one of the following two data structures:
-
-* An implicit or explicit formatting of a literal or a variable by means of a function invoked with a map of options (named arguments).
-* A standalone call to a function with a map of options (named arguments).
+An _expression_ represents an implicit or explicit formatting of a literal or a variable by means of a function invoked with a map of options (named arguments).
 
 ```ts
-type Expression = FormatCall | FunctionCall;
-```
-
-```ts
-interface FormatCall {
+interface Expression {
 	argument: Argument;
-	function: null | string;
-	options: Map<string, Argument>;
+	function: null | FunctionCall;
 }
 ```
 
 ```ts
 interface FunctionCall {
-	function: string;
+	name: string;
 	options: Map<string, Argument>;
 }
 ```
@@ -88,6 +80,8 @@ type Argument = String | Variable;
 ```
 
 ## Variables
+
+A _variable_ represents a reference to a value provided at the callsite at runtime, or a reference to an alias defined in the current message.
 
 ```ts
 interface Variable {

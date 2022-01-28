@@ -14,12 +14,13 @@ The registry contains descriptions of function signatures. The following DTD des
 
 <!ELEMENT description>
 
-<!ELEMENT signature (input*, param*, match*)>
+<!ELEMENT signature (input+, param*, match*)>
 <!ATTLIST signature type (match|format) #REQUIRED>
 <!ATTLIST signature locales NMTOKENS #IMPLIED>
 
 <!ELEMENT input EMPTY>
 <!ATTLIST input title CDATA #IMPLIED>
+<!ATTLIST input values NMTOKENS #IMPLIED>
 <!ATTLIST input regex CDATA #IMPLIED>
 
 <!ELEMENT param EMPTY>
@@ -54,10 +55,15 @@ The following `registry.xml` is an example of a registry file which may be provi
 <!DOCTYPE registry SYSTEM "./registry.dtd">
 
 <registry>
-	<function id="platform">
+	<function id="getCurrent">
 		<description>Match the current OS.</description>
 		<signature type="match">
+			<input values="platform">
 			<match keys="windows linux macos android ios"/>
+		</signature>
+		<signature type="match">
+			<input values="theme">
+			<match keys="light dark"/>
 		</signature>
 	</function>
 
