@@ -5,7 +5,9 @@
 
 |   Date   | Description |
 |----------|-------------|
-| **TODO** |Aliases to submessages|
+|2022-01-28|Add aliases to phrases|
+|2022-01-28|Forbid selector-less variants|
+|2022-01-28|Split declarations into aliases and selectors|
 |2022-01-28|Remove standalone functions|
 |2022-01-27|Remove number literals and relax symbol's grammar|
 |2022-01-27|Change opt:value to opt=value|
@@ -26,15 +28,17 @@
     1. [Simple Messages](#simple-messages)
     1. [Simple Placeholders](#simple-placeholders)
     1. [Formatting Functions](#formatting-functions)
-    1. [Aliases](#aliases)
     1. [Selection](#selection)
+    1. [Aliases](#aliases)
     1. [Complex Messages](#complex-messages)
 1. [Comparison with ICU MessageFormat 1.0](#comparison-with-icu-messageformat-10)
 1. [Productions](#productions)
     1. [Message](#message)
-    1. [Declarations](#declarations)
-    1. [Variants & Patterns](#variants--patterns)
+    1. [Phrases](#phrases)
+    1. [Patterns](#patterns)
+    1. [Selectors & Variants](#selectors--variants)
     1. [Expressions](#expressions)
+    1. [Aliases](#aliases)
 1. [Tokens](#tokens)
     1. [Names](#names)
     1. [Text](#text)
@@ -130,13 +134,6 @@ A message with an interpolated `$userObj` variable formatted with a custom `name
 
     [Hello, {$userObj name first=full}!]
 
-### Aliases
-
-A message defining a `$whom` alias which is then used twice inside the pattern:
-
-    $whom = {$monster noun case=accusative}
-    [You see {$quality adjective article=indefinite accord=$whom} {$whom}!]
-
 ### Selection
 
 A message with a single selector:
@@ -156,7 +153,7 @@ A message with a single selector and a custom `hasCase` function which allows th
         accusative [Please welcome {$userName name case=accusative}!]
         _ [Hello!]
 
-A message with two selectors:
+A message with 2 selectors:
 
     {$photoCount plural}? {$userGender}?
         one masculine [{$userName} added a new photo to his album.]
@@ -166,12 +163,48 @@ A message with two selectors:
         other feminine [{$userName} added {$photoCount} photos to her album.]
         other other [{$userName} added {$photoCount} photos to their album.]
 
+A message with 3 plural selectors, which results in 8 variants in English:
+
+    {$roomCount plural}?
+    {$suiteCount plural}?
+    {$guestCount plural}?
+        1 1 1 [This isn't a hotel, okay?]
+        1 1 _ [This hotel has 1 room and 1 suite, accommodating up to {$guestCount} guests.]
+        1 _ 1 [This hotel has 1 room and {$suiteCount} suites, accommodating up to 1 guest.]
+        1 _ _ [This hotel has 1 room and {$suiteCount} suites, accommodating up to {$guestCount} guests.]
+
+        _ 1 1 [This hotel has {$roomCount} rooms and 1 suite, accommodating up to 1 guest.]
+        _ 1 _ [This hotel has {$roomCount} rooms and 1 suite, accommodating up to {$guestCount} guests.]
+        _ _ 1 [This hotel has {$roomCount} rooms and {$suiteCount} suites, accommodating up to 1 guests.]
+        _ _ _ [This hotel has {$roomCount} rooms and {$suiteCount} suites, accommodating up to {$guestCount} guests.]
+
+### Aliases
+
+A message defining a `$whom` alias which is then used twice inside the pattern:
+
+    $whom = {$monster noun case=accusative}
+    [You see {$quality adjective article=indefinite accord=$whom} {$whom}!]
+
 A message defining two aliases: `$itemAcc` and `$countInt`, and using `$countInt` as a selector:
 
     $itemAcc = {$item noun count=$count case=accusative}
-    $countInt = {$count number maxFractionDigits=0}?
+    $countInt = {$count number maximumFractionDigits=0}
+
+    {$countInt}?
         one [You bought {$color adj article=indefinite accord=$itemAcc} {$itemAcc}.]
         other [You bought {$countInt} {$color adj accord=$itemAcc} {$itemAcc}.]
+
+A message defining three aliases bound to message _fragments_, to mitigate the combinatorial explosion of variants from the example above:
+
+    $roomsFragment = {{$roomCount}? 1 [1 room] other [{$roomCount} rooms]}
+    $suitesFragment = {{$suiteCount}? 1 [1 suite] other [{$suitesCount} suites]}
+    $guestsFragment = {{$guestCount}? 1 [1 guest] other [{$guestsCount} guests]}
+
+    {$roomCount plural}?
+    {$suiteCount plural}?
+    {$guestCount plural}?
+        1 1 1 [This isn't a hotel, okay?]
+        _ _ _ [This hotel has {$roomsFragment} and {$suitesFragment}, accommodating up to {$guestsFragment}.]
 
 ### Complex Messages
 
@@ -184,7 +217,7 @@ A complex message with 2 selectors and 3 local variable definitions:
     /* The number of guests excluding the first guest. */
     $guestsOther = {$guestCount number /* Remove 1 from $guestCount */ offset=1}
 
-    {$host gender}? {$guestCount number}?
+    {$host gender}? {$guestOther number}?
         /* The host is female. */
         female 0 [{$hostName} does not give a party.]
         female 1 [{$hostName} invites {$guestName} to her party.]
@@ -249,51 +282,34 @@ MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the fol
 
 ### Message
 
-A single message consists of zero of more _declarations_ and at least one _variant_.
+A single message consists of zero of more _alias_ definitions, and one _phrase_ which represents the translatable body of the message.
 
 ```
-Message ::= Declaration* Variant+
+Message ::= Alias* Phrase
 ```
 
-### Declarations
+### Phrases
 
-A declaration is an _expression_ specified at the beginning of the message. It may be bound to an _alias_ which can then be used in other expressions.
+A phrase represents the translatable body of the message. It consists of:
 
-When followed by `?`, a declaration is also a selector which will be used during formatting to select an appropriate variant of the message.
-
-```
-Declaration ::= Alias? '{' Expression '}' '?'?
-Alias ::= Variable '='
-```
-
-Examples:
+* a single _pattern_ with no _selectors_ nor _keys_, or
+* one or more _selectors_ and one or more keyed _variants_.
 
 ```
-{$userGender}?
+Phrase ::= Pattern | Selector+ Variant+
 ```
 
-```
-{$count plural}?
-```
+Phrases can also be bound to [_aliases_](#aliases). This powerful feature should be used sparingly to declutter very complex messages.
 
-```
-$itemAccusative = {$item noun case=accusative}
-```
+### Patterns
 
-
-### Variants & Patterns
-
-A message must include at least one _variant_. The translatable content of a variant is called a _pattern_. Patterns are always delimited with `[` at the start, and `]` at the end. This serves 3 purposes:
+A pattern is a sequence of translatable elements. A message must define at least one _pattern_, standalone or as part of a _variant_. Patterns are always delimited with `[` at the start, and `]` at the end. This serves 3 purposes:
 
 * The message should be unambiguously embeddable in various container formats regardless of the container's whitespace trimming rules. E.g. in Java `.properties` files, `hello = [Hello]` will unambiguously define the `Hello` message without the space in front of it.
 * The message should be conveniently embeddable in various programming languages without the need to escape characters commonly related to strings, e.g. `"` and `'`. Such need may still occur when a singe or double quote is used in the translatable content or to delimit a string literal.
 * The syntax should make it as clear as possible which parts of the message body are translatable and which ones are part of the formatting logic definition.
 
-Variants can be optionally keyed; during formatting their keys will be matched against the message's selectors. The formatting specification defines which variant is chosen by comparing its keys to the message's selectors, including the situation when no keys or no selectors are defined.
-
 ```
-Variant ::= VariantKey* Pattern
-VariantKey ::= Symbol | String
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 Placeable ::= '{' Expression '}'
 ```
@@ -304,12 +320,22 @@ Examples:
 [Hello, world!]
 ```
 
-```
-key [Hello, world!]
-```
+### Selectors & Variants
+
+A selector is an _expression_ which will be used to choose one of the variants during formatting. Selectors are always suffixed with a `?`. A variant is a keyed _pattern_.
 
 ```
-key 0 [Hello, world!]
+Selector ::= '{' Expression '}' '?'
+Variant ::= VariantKey+ Pattern
+VariantKey ::= Symbol | String
+```
+
+Examples:
+
+```
+{$count plural}?
+    1 [One apple]
+    other [{$count} apples]
 ```
 
 ### Expressions
@@ -341,6 +367,26 @@ $when datetime style=long
 some_other_message getMessage
 ```
 
+### Aliases
+
+An alias is a local variable bound to an _expression_ or a _phrase_, defined at the beginning of the message. Aliases may be used in other expressions.
+
+```
+Alias ::= Variable '=' '{' (Expression | Phrase) '}'
+```
+
+Examples:
+
+```
+$itemAccusative = {$item noun case=accusative}
+```
+
+```
+$roomsFragment = {{$roomCount plural}?
+    one [1 room]
+    other [{$roomCount} rooms]}
+```
+
 ## Tokens
 
 The grammar defines the following tokens for the purpose of the lexical analysis.
@@ -357,9 +403,9 @@ Symbol ::= SymbolChar+
 SymbolChar ::= [a-zA-Z] | [0-9] | "-" | "_" | "." | #xB7
              | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
              | [#x300-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
-	     | [#x203F-#x2040] | [#x2070-#x218F] | [#x2C00-#x2FEF]
-	     | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD]
-	     | [#x10000-#xEFFFF]
+             | [#x203F-#x2040] | [#x2070-#x218F] | [#x2C00-#x2FEF]
+             | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD]
+             | [#x10000-#xEFFFF]
 ```
 
 ### Text
@@ -417,15 +463,16 @@ WhiteSpace ::= #x9 | #xD | #xA | #x20
 The following EBNF uses the [W3C flavor](https://www.w3.org/TR/xml/#sec-notation) of the BNF notation. The grammar is an LL(1) grammar without backtracking.
 
 ```ebnf
-Message ::= Declaration* Variant+
+Message ::= Alias* Phrase
+Alias ::= Variable '=' '{' (Expression | Phrase) '}'
+Phrase ::= Pattern | Selector+ Variant+
 
-/* Aliases and selectors */
-Declaration ::= Alias? '{' Expression '}' '?'?
-Alias ::= Variable '='
+/* Selectors and variants */
+Selector ::= '{' Expression '}' '?'
+Variant ::= VariantKey+ Pattern
+VariantKey ::= Symbol | String
 
 /* Pattern and pattern elements */
-Variant ::= VariantKey* Pattern
-VariantKey ::= Symbol | String
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 Placeable ::= '{' Expression '}'
 
@@ -446,9 +493,9 @@ Symbol ::= SymbolChar+
 SymbolChar ::= [a-zA-Z] | [0-9] | "_" | "-" | "." | #xB7
              | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
              | [#x300-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
-	     | [#x203F-#x2040] | [#x2070-#x218F] | [#x2C00-#x2FEF]
-	     | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD]
-	     | [#x10000-#xEFFFF]
+             | [#x203F-#x2040] | [#x2070-#x218F] | [#x2C00-#x2FEF]
+             | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD]
+             | [#x10000-#xEFFFF]
 
 /* Text */
 Text ::= (TextChar | TextEscape)+

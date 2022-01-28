@@ -19,7 +19,7 @@ A _message_ is a container for a unit of translation. A unit of translation can 
 
 ```ts
 interface Message {
-	aliases: Map<string, Expression>;
+	aliases: Map<string, Expression | Phrase>;
 	selectors: Array<Expression>;
 	variants: Array<Variant>;
 }
@@ -27,7 +27,27 @@ interface Message {
 
 Even for the simple case of a single-variant translation, the single `Variant` is stored in an array. The runtime specification defines how the only variant is chosen in absence of selectors. This allows effortless conversion from a single-variant translation in the source language to a multi-variant translation in the target language (or _vice versa_), because it can be done without any changes to the message's structure.
 
-The `Message.aliases` map stores locally-scoped variable bindings to `Expression`s. These aliases are available inside other expressions throughout the message's definition. The runtime specification defines the exact rules for resolving and evaluating them.
+The `Message.aliases` map stores locally-scoped variable bindings to `Expression`s or `Phrase`s. These aliases are available inside other expressions throughout the message's definition. The runtime specification defines the exact rules for resolving and evaluating them.
+
+## Phrases
+
+A _phrase_ represents a translatable message fragment bound to an _alias_, available to be referenced in expressions throught the message's definition.
+
+```ts
+interface Phrase {
+	selectors: Array<Expression>;
+	variants: Array<Variant>;
+}
+```
+
+Phrases are a powerful feature which should be used sparingly to declutter very complex messages. With phrases, it becomes possible to factor out fragments of the translation into aliases, combatting combinatorial explosion of variants at the cost of introducing locally-scoped indirection.
+
+The benefit of phrases over custom functions implementing message referencing is that phrases are part of the message's definition. This results in:
+
+* better portability, because a message always travels with its required phrases,
+* better integrity, because a message doesn't have to depend on external messages,
+* better introspection, because tooling can always access the definitions of phrases,
+* better isolation, because other messages cannot accidentally or on purpose refer to phrases, which would create implicit dependencies.
 
 ## Variants
 
