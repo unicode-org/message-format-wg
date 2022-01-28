@@ -55,45 +55,45 @@ The following `registry.xml` is an example of a registry file which may be provi
 <!DOCTYPE registry SYSTEM "./registry.dtd">
 
 <registry>
-	<function id="getCurrent">
-		<description>Match the current OS.</description>
-		<signature type="match">
-			<input values="platform">
-			<match keys="windows linux macos android ios"/>
-		</signature>
-		<signature type="match">
-			<input values="theme">
-			<match keys="light dark"/>
-		</signature>
-	</function>
+    <function id="getCurrent">
+        <description>Match the current OS.</description>
+        <signature type="match">
+            <input values="platform">
+            <match keys="windows linux macos android ios"/>
+        </signature>
+        <signature type="match">
+            <input values="theme">
+            <match keys="light dark"/>
+        </signature>
+    </function>
 
-	<function id="number">
-		<description>
-			Format a number. Match a numerical value against CLDR plural categories
-			or against a number literal.
-		</description>
-		<signature type="match" locales="en">
-			<input regex="[0-9]+(\.[0-9]+)?"/>
-			<param name="type" values="cardinal ordinal"/>
-			<param name="minimumIntegerDigits" regex="[0-9]+"/>
-			<param name="minimumFractionDigits" regex="[0-9]+"/>
-			<param name="maximumFractionDigits" regex="[0-9]+"/>
-			<param name="minimumSignificantDigits" regex="[0-9]+"/>
-			<param name="maximumSignificantDigits" regex="[0-9]+"/>
-			<match keys="one other"/>
-			<match regex="[0-9]+"/>
-		</signature>
-		<signature type="format" locales="en">
-			<input regex="[0-9]+(\.[0-9]+)?"/>
-			<param name="minimumIntegerDigits" regex="[0-9]+"/>
-			<param name="minimumFractionDigits" regex="[0-9]+"/>
-			<param name="maximumFractionDigits" regex="[0-9]+"/>
-			<param name="minimumSignificantDigits" regex="[0-9]+"/>
-			<param name="maximumSignificantDigits" regex="[0-9]+"/>
-			<param name="style" readonly="true" values="decimal currency percent unit"/>
-			<param name="currency" readonly="true" regex="[A-Z]{3}"/>
-		</signature>
-	</function>
+    <function id="number">
+        <description>
+            Format a number. Match a numerical value against CLDR plural categories
+            or against a number literal.
+        </description>
+        <signature type="match" locales="en">
+            <input regex="[0-9]+(\.[0-9]+)?"/>
+            <param name="type" values="cardinal ordinal"/>
+            <param name="minimumIntegerDigits" regex="[0-9]+"/>
+            <param name="minimumFractionDigits" regex="[0-9]+"/>
+            <param name="maximumFractionDigits" regex="[0-9]+"/>
+            <param name="minimumSignificantDigits" regex="[0-9]+"/>
+            <param name="maximumSignificantDigits" regex="[0-9]+"/>
+            <match keys="one other"/>
+            <match regex="[0-9]+"/>
+        </signature>
+        <signature type="format" locales="en">
+            <input regex="[0-9]+(\.[0-9]+)?"/>
+            <param name="minimumIntegerDigits" regex="[0-9]+"/>
+            <param name="minimumFractionDigits" regex="[0-9]+"/>
+            <param name="maximumFractionDigits" regex="[0-9]+"/>
+            <param name="minimumSignificantDigits" regex="[0-9]+"/>
+            <param name="maximumSignificantDigits" regex="[0-9]+"/>
+            <param name="style" readonly="true" values="decimal currency percent unit"/>
+            <param name="currency" readonly="true" regex="[A-Z]{3}"/>
+        </signature>
+    </function>
 </registry>
 ```
 
@@ -104,30 +104,30 @@ A localization engineer can then extend the registry by defining the following `
 <!DOCTYPE registry SYSTEM "./registry.dtd">
 
 <registry>
-	<function id="noun">
-		<description>Handle the grammar of a noun.</description>
-		<signature type="format" locales="en">
-			<input title="Noun id"/>
-			<param name="article" values="definite indefinite"/>
-			<param name="plural" values="one other"/>
-			<param name="case" values="nominative genitive"/>
-		</signature>
-	</function>
+    <function id="noun">
+        <description>Handle the grammar of a noun.</description>
+        <signature type="format" locales="en">
+            <input title="Noun id"/>
+            <param name="article" values="definite indefinite"/>
+            <param name="plural" values="one other"/>
+            <param name="case" values="nominative genitive"/>
+        </signature>
+    </function>
 
-	<function id="adjective">
-		<description>Handle the grammar of an adjective.</description>
-		<signature type="format" locales="en">
-			<input title="Adjective id"/>
-			<param name="article" values="definite indefinite"/>
-			<param name="plural" values="one other"/>
-			<param name="case" values="nominative genitive"/>
-		</signature>
-		<signature type="format" locales="en">
-			<input title="Adjective id"/>
-			<param name="article" values="definite indefinite"/>
-			<param name="accord"/>
-		</signature>
-	</function>
+    <function id="adjective">
+        <description>Handle the grammar of an adjective.</description>
+        <signature type="format" locales="en">
+            <input title="Adjective id"/>
+            <param name="article" values="definite indefinite"/>
+            <param name="plural" values="one other"/>
+            <param name="case" values="nominative genitive"/>
+        </signature>
+        <signature type="format" locales="en">
+            <input title="Adjective id"/>
+            <param name="article" values="definite indefinite"/>
+            <param name="accord"/>
+        </signature>
+    </function>
 </registry>
 ```
 
