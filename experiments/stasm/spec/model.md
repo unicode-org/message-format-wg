@@ -6,22 +6,26 @@ The data model defined here is not suitable for the parser-serializer roundtrip.
 
 ## Table of Contents
 
-1. [Message](#message)
-1. [Variants](#variants)
-1. [Patterns](#patterns)
-1. [Expressions](#expressions)
-1. [Variables](#variables)
-1. [Literals](#literals)
+1. [Interfaces](#interfaces)
+    1. [Message](#message)
+    1. [Variants](#variants)
+    1. [Patterns](#patterns)
+    1. [Expressions](#expressions)
+    1. [Variables](#variables)
+    1. [Literals](#literals)
+1. [Examples](#examples)
 
-## Message
+## Interfaces
+
+### Message
 
 A _message_ is a container for a unit of translation.
 
 ```ts
 interface Message {
-	aliases: Map<string, Expression | Phrase>;
-	selectors: Array<Expression>;
-	variants: Array<Variant>;
+    aliases: Map<string, Expression | Phrase>;
+    selectors: Array<Expression>;
+    variants: Array<Variant>;
 }
 ```
 
@@ -29,14 +33,14 @@ Even for the simple case of a single-pattern translation, a single `Variant` is 
 
 The `Message.aliases` map stores locally-scoped variable bindings to `Expression`s or `Phrase`s. These aliases are available inside other expressions throughout the message's definition. The runtime specification defines the exact rules for resolving and evaluating them.
 
-## Phrases
+### Phrases
 
 A _phrase_ represents a translatable message fragment bound to an _alias_, available to be referenced in expressions throught the message's definition.
 
 ```ts
 interface Phrase {
-	selectors: Array<Expression>;
-	variants: Array<Variant>;
+    selectors: Array<Expression>;
+    variants: Array<Variant>;
 }
 ```
 
@@ -49,20 +53,20 @@ The benefit of phrases over custom functions implementing message referencing is
 * better introspection, because tooling can always access the definitions of phrases,
 * better isolation, because other messages cannot accidentally or on purpose refer to phrases, which would create implicit dependencies.
 
-## Variants
+### Variants
 
 A _variant_ is a container for a single _facet_ of the translation.
 
 ```ts
 interface Variant {
-	keys: Array<Literal>;
-	pattern: Pattern;
+    keys: Array<Literal>;
+    pattern: Pattern;
 }
 ```
 
 Variants are keyed using zero or more literals. The runtime specification defines how the variant's keys are matched against the message's _selectors_. It's valid for a variant to have zero keys, in which case it becomes the _default_ variant. A message with a single key-less variant will always select it during formatting.
 
-## Patterns
+### Patterns
 
 A _pattern_ is a sequence of _pattern elements_.
 
@@ -73,25 +77,25 @@ type PatternElement = Text | Expression;
 
 ```ts
 interface Text {
-	value: string;
+    value: string;
 }
 ```
 
-## Expressions
+### Expressions
 
 An _expression_ represents an implicit or explicit formatting of a literal or a variable by means of a function invoked with a map of options (named arguments).
 
 ```ts
 interface Expression {
-	argument: Argument;
-	function: null | FunctionCall;
+    argument: Argument;
+    function: null | FunctionCall;
 }
 ```
 
 ```ts
 interface FunctionCall {
-	name: string;
-	options: Map<string, Argument>;
+    name: string;
+    options: Map<string, Argument>;
 }
 ```
 
@@ -99,20 +103,120 @@ interface FunctionCall {
 type Argument = String | Variable;
 ```
 
-## Variables
+### Variables
 
 A _variable_ represents a reference to a value provided at the callsite at runtime, or a reference to an alias defined in the current message.
 
 ```ts
 interface Variable {
-	name: string;
+    name: string;
 }
 ```
 
-## Literals
+### Literals
 
 ```ts
 interface String {
-	value: string;
+    value: string;
 }
 ```
+
+## Examples
+
+<table>
+<tr>
+<th>Syntax</th>
+<th>Data Model</th>
+</tr>
+
+<tr>
+<td>
+
+    [Hello, {$username}!]
+
+</td>
+<td>
+
+    Message {
+        aliases: [],
+        selectors: [],
+        variants: [
+            Variant {
+                keys: [],
+                pattern: Pattern [
+                    Text {
+                        value: "Hello, world!"
+                    },
+                    Expression {
+                        argument: Variable {
+                            name: "username"
+                        },
+                        function: null
+                    },
+                ]
+            },
+        ]
+    }
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+    {$count plural}?
+        1 [One apple]
+        other [{$count} apples]
+
+</td>
+<td>
+
+    Message {
+        aliases: [],
+        selectors: [
+            Expression {
+                argument: Variable {
+                    name: "count"
+                },
+                function: FunctionCall {
+                    name: "plural",
+                    options: Map {}
+                }
+            },
+        ],
+        variants: [
+            Variant {
+                keys: [
+                    String {
+                        value: "1"
+                    },
+                ],
+                pattern: Pattern [
+                    Text {
+                        value: "One apple"
+                    },
+                ]
+            },
+            Variant {
+                keys: [
+                    String {
+                        value: "1"
+                    },
+                ],
+                pattern: Pattern [
+                    Expression {
+                        argument: Variable {
+                            name: "count"
+                        },
+                        function: null
+                    },
+                    Text {
+                        value: " apples"
+                    },
+                ]
+            }
+        ]
+    }
+
+</tr>
+</table>
