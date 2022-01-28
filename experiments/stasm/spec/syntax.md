@@ -134,6 +134,10 @@ A message with an interpolated `$userObj` variable formatted with a custom `name
 
     [Hello, {$userObj name first=full}!]
 
+A message with two markup-like custom functions, `open(elemName)` and `close(elemName)`, which the runtime can use to construct a document tree structure for a UI framework.
+
+    [{button open}Submit{button close} or {link open}cancel{link close}]
+
 ### Selection
 
 A message with a single selector:
@@ -205,6 +209,11 @@ A message defining three aliases bound to message _fragments_, to mitigate the c
     {$guestCount plural}?
         1 1 1 [This isn't a hotel, okay?]
         _ _ _ [This hotel has {$roomsFragment} and {$suitesFragment}, accommodating up to {$guestsFragment}.]
+
+A message using an alias to translate the `title` attribute without nesting patterns.
+
+    $title = {[Let's go, {$username}!]}
+    [{button open title=$title}Continue{button close}]
 
 ### Complex Messages
 
