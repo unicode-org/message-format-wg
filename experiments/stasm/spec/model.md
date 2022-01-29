@@ -11,8 +11,7 @@ The data model defined here is not suitable for the parser-serializer roundtrip.
     1. [Variants](#variants)
     1. [Patterns](#patterns)
     1. [Expressions](#expressions)
-    1. [Variables](#variables)
-    1. [Literals](#literals)
+    1. [Values](#values)
 1. [Examples](#examples)
 
 ## Interfaces
@@ -23,10 +22,12 @@ A _message_ is a container for a unit of translation.
 
 ```ts
 interface Message {
-    aliases: Map<string, Expression | Phrase>;
+    aliases: Map<string, Alias>;
     selectors: Array<Expression>;
     variants: Array<Variant>;
 }
+
+type Alias = Expression | Phrase;
 ```
 
 Even for the simple case of a single-pattern translation, a single `Variant` is stored in an array. The runtime specification defines how the only variant is chosen in absence of selectors and variant keys. This allows effortless conversion from a single-variant translation in the source language to a multi-variant translation in the target language (or _vice versa_), because it can be done without any changes to the message's structure.
@@ -35,7 +36,7 @@ The `Message.aliases` map stores locally-scoped variable bindings to `Expression
 
 ### Phrases
 
-A _phrase_ represents a translatable message fragment bound to an _alias_, available to be referenced in expressions throught the message's definition.
+The _phrase_ type represents a translatable message fragment bound to an _alias_, available to be referenced in expressions throught the message's definition.
 
 ```ts
 interface Phrase {
@@ -59,12 +60,12 @@ A _variant_ is a container for a single _facet_ of the translation.
 
 ```ts
 interface Variant {
-    keys: Array<Literal>;
+    keys: Array<string>;
     pattern: Pattern;
 }
 ```
 
-Variants are keyed using zero or more literals. The runtime specification defines how the variant's keys are matched against the message's _selectors_. It's valid for a variant to have zero keys, in which case it becomes the _default_ variant. A message with a single key-less variant will always select it during formatting.
+Variants are keyed using zero or more strings. The runtime specification defines how the variant's keys are matched against the message's _selectors_. It's valid for a variant to have zero keys, in which case it becomes the _default_ variant. A message with a single key-less variant will always select it during formatting.
 
 ### Patterns
 
@@ -83,11 +84,11 @@ interface Text {
 
 ### Expressions
 
-An _expression_ represents an implicit or explicit formatting of a literal or a variable by means of a function invoked with a map of options (named arguments).
+The _expression_ type represents an implicit or explicit formatting of a literal or a variable by means of a function invoked with a map of options (named arguments).
 
 ```ts
 interface Expression {
-    argument: Argument;
+    operand: Value;
     function: null | FunctionCall;
 }
 ```
@@ -95,17 +96,19 @@ interface Expression {
 ```ts
 interface FunctionCall {
     name: string;
-    options: Map<string, Argument>;
+    options: Map<string, Value>;
 }
 ```
 
+### Values
+
+The following types can be used in value positions, i.e as expression operands and option values.
+
 ```ts
-type Argument = String | Variable;
+type Value = Variable | String;
 ```
 
-### Variables
-
-A _variable_ represents a reference to a value provided at the callsite at runtime, or a reference to an alias defined in the current message.
+The _variable_ type represents a reference to a value provided by the callsite at runtime, or a reference to an alias defined in the current message.
 
 ```ts
 interface Variable {
@@ -113,7 +116,7 @@ interface Variable {
 }
 ```
 
-### Literals
+The _string_ type represents a literal string.
 
 ```ts
 interface String {
@@ -148,7 +151,7 @@ interface String {
                         value: "Hello, world!"
                     },
                     Expression {
-                        argument: Variable {
+                        operand: Variable {
                             name: "username"
                         },
                         function: null
@@ -175,7 +178,7 @@ interface String {
         aliases: [],
         selectors: [
             Expression {
-                argument: Variable {
+                operand: Variable {
                     name: "count"
                 },
                 function: FunctionCall {
@@ -187,9 +190,7 @@ interface String {
         variants: [
             Variant {
                 keys: [
-                    String {
-                        value: "1"
-                    },
+                    1
                 ],
                 pattern: Pattern [
                     Text {
@@ -199,13 +200,11 @@ interface String {
             },
             Variant {
                 keys: [
-                    String {
-                        value: "1"
-                    },
+		    "other"
                 ],
                 pattern: Pattern [
                     Expression {
-                        argument: Variable {
+                        operand: Variable {
                             name: "count"
                         },
                         function: null
