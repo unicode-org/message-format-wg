@@ -5,7 +5,7 @@ Phrase ::= Pattern | Selector+ Variant+
 /* Selectors and variants */
 Selector ::= '{' Expression '}' '?'
 Variant ::= VariantKey+ Pattern
-VariantKey ::= Symbol | String
+VariantKey ::= Nmtoken | String
 
 /* Pattern and pattern elements */
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
@@ -13,9 +13,9 @@ Placeable ::= '{' Expression '}'
 
 /* Expressions */
 Expression ::= Operand Function?
-Operand ::= (Symbol | String | Variable)
-Function ::= Symbol Option*
-Option ::= Symbol '=' (Symbol | String | Variable)
+Operand ::= Nmtoken | String | Variable
+Function ::= Name Option*
+Option ::= Name '=' (Nmtoken | String | Variable)
 
 /* Ignored tokens */
 Ignore ::= Comment | WhiteSpace /* ws: definition */
@@ -23,14 +23,16 @@ Ignore ::= Comment | WhiteSpace /* ws: definition */
 <?TOKENS?>
 
 /* Names */
-Variable ::= '$' Symbol /* ws: explicit */
-Symbol ::= SymbolChar+
-SymbolChar ::= [a-zA-Z] | [0-9] | "_" | "-" | "." | #xB7
-             | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
-             | [#x300-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
-             | [#x203F-#x2040] | [#x2070-#x218F] | [#x2C00-#x2FEF]
-             | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD]
-             | [#x10000-#xEFFFF]
+Variable ::= '$' Name /* ws: explicit */
+Name ::= NameStart NameChar* /* ws: explicit */
+Nmtoken ::= NameChar+ /* ws: explicit */
+NameStart ::= [a-zA-Z] | "_"
+            | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
+            | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
+            | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
+            | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
+           | [#x0300-#x036F] | [#x203F-#x2040]
 
 /* Text */
 Text ::= (TextChar | TextEscape)+

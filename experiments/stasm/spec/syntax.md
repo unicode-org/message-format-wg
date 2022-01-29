@@ -5,6 +5,7 @@
 
 |   Date   | Description |
 |----------|-------------|
+|2022-01-29|Split symbols into names and nmtokens|
 |2022-01-28|Add aliases to phrases|
 |2022-01-28|Forbid selector-less variants|
 |2022-01-28|Split declarations into aliases and selectors|
@@ -336,7 +337,7 @@ A selector is an _expression_ which will be used to choose one of the variants d
 ```ebnf
 Selector ::= '{' Expression '}' '?'
 Variant ::= VariantKey+ Pattern
-VariantKey ::= Symbol | String
+VariantKey ::= Nmtoken | String
 ```
 
 Examples:
@@ -349,13 +350,13 @@ Examples:
 
 ### Expressions
 
-Expressions start with the operand: a symbol (which evaluates to itself), string literal or a variable name. The operand can be optionally followed by a formatting function and its named options. Formatting functions do not accept any positional arguments other than the operand in front of them.
+Expressions start with the operand: a nmtoken (which evaluates to itself), a quoted string literal or a variable name. The operand can be optionally followed by a formatting function and its named options. Formatting functions do not accept any positional arguments other than the operand in front of them.
 
 ```ebnf
 Expression ::= Operand Function?
-Operand ::= (Symbol | String | Variable)
-Function ::= Symbol Option*
-Option ::= Symbol '=' (Symbol | String | Variable)
+Operand ::= Nmtoken | String | Variable
+Function ::= Name Option*
+Option ::= Name '=' (Nmtoken | String | Variable)
 ```
 
 Examples:
@@ -402,19 +403,23 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 
 ### Names
 
-A _symbol_ is a versatile token used in variable names (prefixed with `$`), function names, option names, and commonly as option values and variant keys. When used in a value position (as a variant key, expression operand, or an option value), a symbol evaluates to its name; thus behaving like a string literal without the delimiters.
+The _name_ token is used for variable names (prefixed with `$`), as well as function  and option names. A name cannot start with an ASCII digit and a few other combining characters. Otherwise, the set of characters allowed in names is large.
 
-The symbol's definition is the same as XML's [NMTOKEN](https://www.w3.org/TR/xml/#NT-Nmtoken) which is used throughout the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
+The _nmtoken_ token doesn't have the above restriction on the first character. It's used for variant keys, expression operands, and option values, similar to the quoted string literal. In contrast to quoted string literals, nmtokens are not delimited with quotes.
+
+`Name` and `Nmtoken` are intentionally defined to be the same as XML's [Name](https://www.w3.org/TR/xml/#NT-Name) and [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken) symbols. In particular, Nmtoken is used throughout the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
 
 ```ebnf
-Variable ::= '$' Symbol /* ws: explicit */
-Symbol ::= SymbolChar+
-SymbolChar ::= [a-zA-Z] | [0-9] | "-" | "_" | "." | #xB7
-             | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
-             | [#x300-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
-             | [#x203F-#x2040] | [#x2070-#x218F] | [#x2C00-#x2FEF]
-             | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD]
-             | [#x10000-#xEFFFF]
+Variable ::= '$' Name /* ws: explicit */
+Name ::= NameStart NameChar* /* ws: explicit */
+Nmtoken ::= NameChar+ /* ws: explicit */
+NameStart ::= [a-zA-Z] | "_"
+            | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
+            | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
+            | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
+            | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
+           | [#x0300-#x036F] | [#x203F-#x2040]
 ```
 
 ### Text
@@ -479,7 +484,7 @@ Phrase ::= Pattern | Selector+ Variant+
 /* Selectors and variants */
 Selector ::= '{' Expression '}' '?'
 Variant ::= VariantKey+ Pattern
-VariantKey ::= Symbol | String
+VariantKey ::= Nmtoken | String
 
 /* Pattern and pattern elements */
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
@@ -487,9 +492,9 @@ Placeable ::= '{' Expression '}'
 
 /* Expressions */
 Expression ::= Operand Function?
-Operand ::= (Symbol | String | Variable)
-Function ::= Symbol Option*
-Option ::= Symbol '=' (Symbol | String | Variable)
+Operand ::= Nmtoken | String | Variable
+Function ::= Name Option*
+Option ::= Name '=' (Nmtoken | String | Variable)
 
 /* Ignored tokens */
 Ignore ::= Comment | WhiteSpace /* ws: definition */
@@ -497,14 +502,16 @@ Ignore ::= Comment | WhiteSpace /* ws: definition */
 <?TOKENS?>
 
 /* Names */
-Variable ::= '$' Symbol /* ws: explicit */
-Symbol ::= SymbolChar+
-SymbolChar ::= [a-zA-Z] | [0-9] | "_" | "-" | "." | #xB7
-             | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
-             | [#x300-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
-             | [#x203F-#x2040] | [#x2070-#x218F] | [#x2C00-#x2FEF]
-             | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD]
-             | [#x10000-#xEFFFF]
+Variable ::= '$' Name /* ws: explicit */
+Name ::= NameStart NameChar* /* ws: explicit */
+Nmtoken ::= NameChar+ /* ws: explicit */
+NameStart ::= [a-zA-Z] | "_"
+            | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
+            | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
+            | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
+            | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
+           | [#x0300-#x036F] | [#x203F-#x2040]
 
 /* Text */
 Text ::= (TextChar | TextEscape)+
