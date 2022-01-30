@@ -58,14 +58,14 @@ The following `registry.xml` is an example of a registry file which may be provi
 <!DOCTYPE registry SYSTEM "./registry.dtd">
 
 <registry>
-    <function id="platform">
+    <function id="getPlatform">
         <description>Match the current OS.</description>
         <signature type="match">
             <match type="string" values="windows linux macos android ios"/>
         </signature>
     </function>
 
-    <function id="number">
+    <function id="asNumber">
         <description>
             Format a number. Match a numerical value against CLDR plural categories
             or against a number literal.
@@ -102,7 +102,7 @@ A localization engineer can then extend the registry by defining the following `
 <!DOCTYPE registry SYSTEM "./registry.dtd">
 
 <registry>
-    <function id="noun">
+    <function id="asNoun">
         <description>Handle the grammar of a noun.</description>
         <signature type="format" locales="en">
             <input title="Noun id" type="string"/>
@@ -112,7 +112,7 @@ A localization engineer can then extend the registry by defining the following `
         </signature>
     </function>
 
-    <function id="adjective">
+    <function id="asAdjective">
         <description>Handle the grammar of an adjective.</description>
         <signature type="format" locales="en">
             <input title="Adjective id" type="string"/>
@@ -129,11 +129,11 @@ A localization engineer can then extend the registry by defining the following `
 </registry>
 ```
 
-Messages can now use the `noun` and the `adjective` functions. The following message references the first signature of `adjective`, which expects the `plural` and `case` options:
+Messages can now use the `asNoun` and the `asAdjective` functions. The following message references the first signature of `asAdjective`, which expects the `plural` and `case` options:
 
-    [You see {$color adjective article=indefinite plural=one case=nominative} {$object noun case=nominative}!]
+    [You see {$color asAdjective article=indefinite plural=one case=nominative} {$object asNoun case=nominative}!]
 
-The following message references the second signature of `adjective`, which only expects the `accord` option:
+The following message references the second signature of `asAdjective`, which only expects the `accord` option:
 
-    $obj = {$object noun case=nominative}
-    [You see {$color adjective article=indefinite accord=$obj} {$obj}!]
+    $obj = {$object asNoun case=nominative}
+    [You see {$color asAdjective article=indefinite accord=$obj} {$obj}!]

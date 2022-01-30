@@ -124,44 +124,44 @@ hello.format({userName: "Anne"});
 
 ### Formatting Functions
 
-A message with an interpolated `$date` variable formatted with a custom `datetime` function:
+A message with an interpolated `$date` variable formatted with the `asDateTime` function:
 
-    [Today is {$date datetime weekday=long}]
+    [Today is {$date asDateTime weekday=long}.]
 
-A message with an interpolated `$userName` variable formatted with a custom `name` function capable of declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
+A message with an interpolated `$userName` variable formatted with the custom `asPerson` function capable of declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
 
-    [Hello, {$userName name case=vocative}!]
+    [Hello, {$userName asPerson case=vocative}!]
 
-A message with an interpolated `$userObj` variable formatted with a custom `name` function capable of plucking the first name from the object representing a person:
+A message with an interpolated `$userObj` variable formatted with the custom `asPerson` function capable of plucking the first name from the object representing a person:
 
-    [Hello, {$userObj name first=full}!]
+    [Hello, {$userObj asPerson first=full}!]
 
 A message with two markup-like custom functions, `open(elemName)` and `close(elemName)`, which the runtime can use to construct a document tree structure for a UI framework.
 
-    [{open tag:button}Submit{close tag:button} or {open tag:link}cancel{close tag:link}]
+    [{open tag=button}Submit{close tag=button} or {open tag=link}cancel{close tag=link}]
 
 ### Selection
 
 A message with a single selector:
 
-    {$count plural}? 
+    {$count asNumber}?
         one [You have one notification.]
         other [You have {$count} notification.]
 
-A message with a single selector which is an invocation of a custom function `platform()`, formatted on a single line:
+A message with a single selector which is an invocation of a custom function `getPlatform()`, formatted on a single line:
 
-    {platform}? windows [Settings] _ [Preferences]
+    {getPlatform}? windows [Settings] _ [Preferences]
 
 A message with a single selector and a custom `hasCase` function which allows the message to query for presence of grammatical cases required for each variant:
 
     {$userName hasCase}?
-        vocative [Hello, {$userName name case=vocative}!]
-        accusative [Please welcome {$userName name case=accusative}!]
+        vocative [Hello, {$userName asPerson case=vocative}!]
+        accusative [Please welcome {$userName asPerson case=accusative}!]
         _ [Hello!]
 
 A message with 2 selectors:
 
-    {$photoCount plural}? {$userGender}?
+    {$photoCount asNumber}? {$userGender}?
         one masculine [{$userName} added a new photo to his album.]
         one feminine [{$userName} added a new photo to her album.]
         one other [{$userName} added a new photo to their album.]
@@ -171,9 +171,9 @@ A message with 2 selectors:
 
 A message with 3 plural selectors, which results in 8 variants in English:
 
-    {$roomCount plural}?
-    {$suiteCount plural}?
-    {$guestCount plural}?
+    {$roomCount asNumber}?
+    {$suiteCount asNumber}?
+    {$guestCount asNumber}?
         1 1 1 [This isn't a hotel, okay?]
         1 1 _ [This hotel has 1 room and 1 suite, accommodating up to {$guestCount} guests.]
         1 _ 1 [This hotel has 1 room and {$suiteCount} suites, accommodating up to 1 guest.]
@@ -188,17 +188,17 @@ A message with 3 plural selectors, which results in 8 variants in English:
 
 A message defining a `$whom` alias which is then used twice inside the pattern:
 
-    $whom = {$monster noun case=accusative}
-    [You see {$quality adjective article=indefinite accord=$whom} {$whom}!]
+    $whom = {$monster asNoun case=accusative}
+    [You see {$quality asAdjective article=indefinite accord=$whom} {$whom}!]
 
 A message defining two aliases: `$itemAcc` and `$countInt`, and using `$countInt` as a selector:
 
-    $itemAcc = {$item noun count=$count case=accusative}
-    $countInt = {$count number maximumFractionDigits=0}
+    $itemAcc = {$item asNoun count=$count case=accusative}
+    $countInt = {$count asNumber maximumFractionDigits=0}
 
     {$countInt}?
-        one [You bought {$color adj article=indefinite accord=$itemAcc} {$itemAcc}.]
-        other [You bought {$countInt} {$color adj accord=$itemAcc} {$itemAcc}.]
+        one [You bought {$color asAdjective article=indefinite accord=$itemAcc} {$itemAcc}.]
+        other [You bought {$countInt} {$color asAdjective accord=$itemAcc} {$itemAcc}.]
 
 A message defining three aliases bound to message _fragments_, to mitigate the combinatorial explosion of variants from the example above:
 
@@ -206,29 +206,29 @@ A message defining three aliases bound to message _fragments_, to mitigate the c
     $suitesFragment = {{$suiteCount}? 1 [1 suite] other [{$suitesCount} suites]}
     $guestsFragment = {{$guestCount}? 1 [1 guest] other [{$guestsCount} guests]}
 
-    {$roomCount plural}?
-    {$suiteCount plural}?
-    {$guestCount plural}?
+    {$roomCount asNumber}?
+    {$suiteCount asNumber}?
+    {$guestCount asNumber}?
         1 1 1 [This isn't a hotel, okay?]
         _ _ _ [This hotel has {$roomsFragment} and {$suitesFragment}, accommodating up to {$guestsFragment}.]
 
 A message using an alias to translate the `title` attribute without nesting patterns.
 
     $title = {[Let's go, {$username}!]}
-    [{button open title=$title}Continue{button close}]
+    [{open tag=button title=$title}Continue{close tag=button}]
 
 ### Complex Messages
 
 A complex message with 2 selectors and 3 local variable definitions:
 
     /* The host's first name. */
-    $hostName = {$host name first=full}
+    $hostName = {$host asPerson first=full}
     /* The first guest's first name. */
-    $guestName = {$guest name first=full}
+    $guestName = {$guest asPerson first=full}
     /* The number of guests excluding the first guest. */
-    $guestsOther = {$guestCount number /* Remove 1 from $guestCount */ offset=1}
+    $guestsOther = {$guestCount asNumber /* Remove 1 from $guestCount */ offset=1}
 
-    {$host gender}? {$guestOther number}?
+    {$host getGender}? {$guestOther asNumber}?
         /* The host is female. */
         female 0 [{$hostName} does not give a party.]
         female 1 [{$hostName} invites {$guestName} to her party.]
@@ -344,7 +344,7 @@ VariantKey ::= String | Number | Name
 Examples:
 
 ```
-{$count plural}?
+{$count asNumber}?
     1 [One apple]
     other [{$count} apples]
 ```
@@ -371,19 +371,19 @@ Examples:
 ```
 
 ```
-1.23 number maxFractionDigits=1
+1.23 asNumber maxFractionDigits=1
 ```
 
 ```
-"1970-01-01T13:37:00.000Z" datetime weekday=long
+"1970-01-01T13:37:00.000Z" asDateTime weekday=long
 ```
 
 ```
-$when datetime style=long
+$when asDateTime style=long
 ```
 
 ```
-ref msgid:some_other_message
+getMessage id=some_other_message
 ```
 
 ### Aliases
@@ -397,11 +397,11 @@ Alias ::= Variable '=' '{' (Expression | Phrase) '}'
 Examples:
 
 ```
-$itemAccusative = {$item noun case=accusative}
+$itemAccusative = {$item asNoun case=accusative}
 ```
 
 ```
-$roomsFragment = {{$roomCount plural}?
+$roomsFragment = {{$roomCount asNumber}?
     one [1 room]
     other [{$roomCount} rooms]}
 ```
