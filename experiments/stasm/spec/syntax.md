@@ -134,7 +134,7 @@ A message with an interpolated `$userName` variable formatted with the custom `a
 
 A message with an interpolated `$userObj` variable formatted with the custom `asPerson` function capable of plucking the first name from the object representing a person:
 
-    [Hello, {$userObj asPerson first=full}!]
+    [Hello, {$userObj asPerson firstName=long}!]
 
 A message with two markup-like custom functions, `open(elemName)` and `close(elemName)`, which the runtime can use to construct a document tree structure for a UI framework.
 
@@ -222,9 +222,9 @@ A message using an alias to translate the `title` attribute without nesting patt
 A complex message with 2 selectors and 3 local variable definitions:
 
     /* The host's first name. */
-    $hostName = {$host asPerson first=full}
+    $hostName = {$host asPerson firstName=long}
     /* The first guest's first name. */
-    $guestName = {$guest asPerson first=full}
+    $guestName = {$guest asPerson firstName=long}
     /* The number of guests excluding the first guest. */
     $guestsOther = {$guestCount asNumber /* Remove 1 from $guestCount */ offset=1}
 
