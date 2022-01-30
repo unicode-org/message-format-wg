@@ -22,6 +22,7 @@ A _message_ is a container for a unit of translation.
 
 ```ts
 interface Message {
+    comment: string;
     aliases: Map<string, Alias>;
     selectors: Array<Expression>;
     variants: Array<Variant>;
@@ -156,6 +157,7 @@ interface Number {
 <td>
 
     Message {
+        comment: "",
         aliases: [],
         selectors: [],
         variants: [
@@ -190,6 +192,7 @@ interface Number {
 <td>
 
     Message {
+        comment: "",
         aliases: [],
         selectors: [
             ValueExpression {

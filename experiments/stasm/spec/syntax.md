@@ -5,6 +5,7 @@
 
 |   Date   | Description |
 |----------|-------------|
+|2022-01-30|Add message-level comments and alias doc comments.|
 |2022-01-30|Readd number literals and remove nmtokens. Allow standalone functions.|
 |2022-01-29|Split symbols into names and nmtokens|
 |2022-01-28|Add aliases to phrases|
@@ -221,11 +222,14 @@ A message using an alias to translate the `title` attribute without nesting patt
 
 A complex message with 2 selectors and 3 local variable definitions:
 
-    /* The host's first name. */
+    /*** A notification message shown to the user when one of their connections
+     * organizes a party and at least one guest is also a user's connection. */
+
+    /** The host's first name. */
     $hostName = {$host asPerson firstName=long}
-    /* The first guest's first name. */
+    /** The first guest's first name. */
     $guestName = {$guest asPerson firstName=long}
-    /* The number of guests excluding the first guest. */
+    /** The number of guests excluding the first guest. */
     $guestsOther = {$guestCount asNumber /* Remove 1 from $guestCount */ offset=1}
 
     {$host getGender}? {$guestOther asNumber}?
@@ -296,7 +300,7 @@ MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the fol
 A single message consists of zero of more _alias_ definitions, and one _phrase_ which represents the translatable body of the message.
 
 ```ebnf
-Message ::= Alias* Phrase
+Message ::= TopComment? Alias* Phrase
 ```
 
 ### Phrases
@@ -391,7 +395,7 @@ getMessage id=some_other_message
 An alias is a local variable bound to an _expression_ or a _phrase_, defined at the beginning of the message. Aliases may be used in other expressions.
 
 ```ebnf
-Alias ::= Variable '=' '{' (Expression | Phrase) '}'
+Alias ::= DocComment? Variable '=' '{' (Expression | Phrase) '}'
 ```
 
 Examples:
@@ -466,10 +470,17 @@ HexDigit ::= [0-9a-fA-F]
 
 ### Comments
 
-Comments are delimited with `/*` at the start, and `*/` at the end, and can contain any Unicode codepoint including line breaks. Comments can only appear outside translatable text.
+Comments are delimited with `/*` at the start, and `*/` at the end, and can contain any Unicode codepoint including line breaks. Comments can only appear outside translatable text, and are completely ignored at runtime.
+
+Comments that start with `/***` can only appear at the beginning of the message and should contain the human-readable description of the message. There can be only one message-level comment in a single message.
+
+Comments that start with `/**` can only appear in front of alias definitions and should be used to document them.
 
 ```ebnf
-Comment ::= '/*' (AnyChar* - (AnyChar* '*/' AnyChar*)) '*/'
+TopComment ::= '/***' CommentBody '*/'
+DocComment ::= '/**' ((AnyChar - '*') CommentBody)? '*/'
+AnyComment ::= '/*' ((AnyChar - '*') CommentBody)? '*/'
+CommentBody ::= AnyChar* - (AnyChar* '*/' AnyChar*)
 ```
 
 ### Whitespace
@@ -487,8 +498,8 @@ WhiteSpace ::= #x9 | #xD | #xA | #x20
 The following EBNF uses the [W3C flavor](https://www.w3.org/TR/xml/#sec-notation) of the BNF notation. The grammar is an LL(1) grammar without backtracking.
 
 ```ebnf
-Message ::= Alias* Phrase
-Alias ::= Variable '=' '{' (Expression | Phrase) '}'
+Message ::= TopComment? Alias* Phrase
+Alias ::= DocComment? Variable '=' '{' (Expression | Phrase) '}'
 Phrase ::= Pattern | Selector+ Variant+
 
 /* Selectors and variants */
@@ -507,7 +518,7 @@ Function ::= Name Option*
 Option ::= Name '=' (String | Number | Name | Variable)
 
 /* Ignored tokens */
-Ignore ::= Comment | WhiteSpace /* ws: definition */
+Ignore ::= AnyComment | WhiteSpace /* ws: definition */
 
 <?TOKENS?>
 
@@ -542,7 +553,10 @@ UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
 HexDigit ::= [0-9a-fA-F]
 
 /* Comments */
-Comment ::= '/*' (AnyChar* - (AnyChar* '*/' AnyChar*)) '*/'
+TopComment ::= '/***' CommentBody '*/'
+DocComment ::= '/**' ((AnyChar - '*') CommentBody)? '*/'
+AnyComment ::= '/*' ((AnyChar - '*') CommentBody)? '*/'
+CommentBody ::= AnyChar* - (AnyChar* '*/' AnyChar*)
 
 /* WhiteSpace */
 WhiteSpace ::= #x9 | #xD | #xA | #x20

@@ -1,5 +1,5 @@
-Message ::= Alias* Phrase
-Alias ::= Variable '=' '{' (Expression | Phrase) '}'
+Message ::= TopComment? Alias* Phrase
+Alias ::= DocComment? Variable '=' '{' (Expression | Phrase) '}'
 Phrase ::= Pattern | Selector+ Variant+
 
 /* Selectors and variants */
@@ -18,7 +18,7 @@ Function ::= Name Option*
 Option ::= Name '=' (String | Number | Name | Variable)
 
 /* Ignored tokens */
-Ignore ::= Comment | WhiteSpace /* ws: definition */
+Ignore ::= AnyComment | WhiteSpace /* ws: definition */
 
 <?TOKENS?>
 
@@ -53,7 +53,10 @@ UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
 HexDigit ::= [0-9a-fA-F]
 
 /* Comments */
-Comment ::= '/*' (AnyChar* - (AnyChar* '*/' AnyChar*)) '*/'
+TopComment ::= '/***' CommentBody '*/'
+DocComment ::= '/**' ((AnyChar - '*') CommentBody)? '*/'
+AnyComment ::= '/*' ((AnyChar - '*') CommentBody)? '*/'
+CommentBody ::= AnyChar* - (AnyChar* '*/' AnyChar*)
 
 /* WhiteSpace */
 WhiteSpace ::= #x9 | #xD | #xA | #x20
