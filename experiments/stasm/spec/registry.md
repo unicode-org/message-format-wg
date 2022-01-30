@@ -14,17 +14,19 @@ The registry contains descriptions of function signatures. The following DTD des
 
 <!ELEMENT description>
 
-<!ELEMENT signature (input+, param*, match*)>
+<!ELEMENT signature (input*, param*, match*)>
 <!ATTLIST signature type (match|format) #REQUIRED>
 <!ATTLIST signature locales NMTOKENS #IMPLIED>
 
 <!ELEMENT input EMPTY>
 <!ATTLIST input title CDATA #IMPLIED>
+<!ATTLIST input type (string|number) #IMPLIED>
 <!ATTLIST input values NMTOKENS #IMPLIED>
 <!ATTLIST input regex CDATA #IMPLIED>
 
 <!ELEMENT param EMPTY>
 <!ATTLIST param name NMTOKEN #REQUIRED>
+<!ATTLIST param type (string|number) #IMPLIED>
 <!ATTLIST param values NMTOKENS #IMPLIED>
 <!ATTLIST param regex CDATA #IMPLIED>
 <!ATTLIST param title CDATA #IMPLIED>
@@ -32,7 +34,8 @@ The registry contains descriptions of function signatures. The following DTD des
 <!ATTLIST param readonly (true|false) "false">
 
 <!ELEMENT match EMPTY>
-<!ATTLIST match keys NMTOKENS #IMPLIED>
+<!ATTLIST match type (string|number) #IMPLIED>
+<!ATTLIST match values NMTOKENS #IMPLIED>
 <!ATTLIST match regex CDATA #IMPLIED>
 ```
 
@@ -40,7 +43,7 @@ The main building block of the registry is the `<function>` element. It represen
 
 The `<signature>` element defines the calling context of a function with the `type` attribute. A `type="format"` function can only be called inside a placeholder inside translatable text. A `type="match"` function can only be called inside a selector. Signatures with a non-empty `locales` attribute are locale-specific.
 
-A signature may define the type of input it accepts with one or more `<input>` elments. Note that in MessageFormat 2.0 functions can only ever accept one positional argument. Multiple `<input>` elements can be used to define different validation rules for this single argument input, together with appropriate human-readable descriptions.
+A signature may define the type of input it accepts with zero or more `<input>` elments. Note that in MessageFormat 2.0 functions can only ever accept at most one positional argument. Multiple `<input>` elements can be used to define different validation rules for this single argument input, together with appropriate human-readable descriptions.
 
 A signature may also define one or more `<param>` elements representing _named options_ to the function. Parameters are optional by default, unless the `required` attribute is present. They accept either a finite enumeration of values (the `values` attribute) or validate they input with a regular expression (the `regex` attribute). Read-only parameters (the `readonly` attribute) can be displayed to translators in CAT tools, but may not be edited.
 
@@ -55,15 +58,10 @@ The following `registry.xml` is an example of a registry file which may be provi
 <!DOCTYPE registry SYSTEM "./registry.dtd">
 
 <registry>
-    <function id="getCurrent">
+    <function id="platform">
         <description>Match the current OS.</description>
         <signature type="match">
-            <input values="platform">
-            <match keys="windows linux macos android ios"/>
-        </signature>
-        <signature type="match">
-            <input values="theme">
-            <match keys="light dark"/>
+            <match type="string" values="windows linux macos android ios"/>
         </signature>
     </function>
 
@@ -73,25 +71,25 @@ The following `registry.xml` is an example of a registry file which may be provi
             or against a number literal.
         </description>
         <signature type="match" locales="en">
-            <input regex="[0-9]+(\.[0-9]+)?"/>
-            <param name="type" values="cardinal ordinal"/>
-            <param name="minimumIntegerDigits" regex="[0-9]+"/>
-            <param name="minimumFractionDigits" regex="[0-9]+"/>
-            <param name="maximumFractionDigits" regex="[0-9]+"/>
-            <param name="minimumSignificantDigits" regex="[0-9]+"/>
-            <param name="maximumSignificantDigits" regex="[0-9]+"/>
-            <match keys="one other"/>
-            <match regex="[0-9]+"/>
+            <input type="number"/>
+            <param name="type" type="string" values="cardinal ordinal"/>
+            <param name="minimumIntegerDigits" type="number"/>
+            <param name="minimumFractionDigits" type="number"/>
+            <param name="maximumFractionDigits" type="number"/>
+            <param name="minimumSignificantDigits" type="number"/>
+            <param name="maximumSignificantDigits" type="number"/>
+            <match type="string" values="one other"/>
+            <match type="number"/>
         </signature>
         <signature type="format" locales="en">
-            <input regex="[0-9]+(\.[0-9]+)?"/>
-            <param name="minimumIntegerDigits" regex="[0-9]+"/>
-            <param name="minimumFractionDigits" regex="[0-9]+"/>
-            <param name="maximumFractionDigits" regex="[0-9]+"/>
-            <param name="minimumSignificantDigits" regex="[0-9]+"/>
-            <param name="maximumSignificantDigits" regex="[0-9]+"/>
-            <param name="style" readonly="true" values="decimal currency percent unit"/>
-            <param name="currency" readonly="true" regex="[A-Z]{3}"/>
+            <input type="number"/>
+            <param name="minimumIntegerDigits" type="number"/>
+            <param name="minimumFractionDigits" type="number"/>
+            <param name="maximumFractionDigits" type="number"/>
+            <param name="minimumSignificantDigits" type="number"/>
+            <param name="maximumSignificantDigits" type="number"/>
+            <param name="style" readonly="true" type="string" values="decimal currency percent unit"/>
+            <param name="currency" readonly="true" type="string" regex="[A-Z]{3}"/>
         </signature>
     </function>
 </registry>
@@ -107,24 +105,24 @@ A localization engineer can then extend the registry by defining the following `
     <function id="noun">
         <description>Handle the grammar of a noun.</description>
         <signature type="format" locales="en">
-            <input title="Noun id"/>
-            <param name="article" values="definite indefinite"/>
-            <param name="plural" values="one other"/>
-            <param name="case" values="nominative genitive"/>
+            <input title="Noun id" type="string"/>
+            <param name="article" type="string" values="definite indefinite"/>
+            <param name="plural" type="string" values="one other"/>
+            <param name="case" type="string" values="nominative genitive"/>
         </signature>
     </function>
 
     <function id="adjective">
         <description>Handle the grammar of an adjective.</description>
         <signature type="format" locales="en">
-            <input title="Adjective id"/>
-            <param name="article" values="definite indefinite"/>
-            <param name="plural" values="one other"/>
-            <param name="case" values="nominative genitive"/>
+            <input title="Adjective id" type="string"/>
+            <param name="article" type="string" values="definite indefinite"/>
+            <param name="plural" type="string" values="one other"/>
+            <param name="case" type="string" values="nominative genitive"/>
         </signature>
         <signature type="format" locales="en">
-            <input title="Adjective id"/>
-            <param name="article" values="definite indefinite"/>
+            <input title="Adjective id" type="string"/>
+            <param name="article" type="string" values="definite indefinite"/>
             <param name="accord"/>
         </signature>
     </function>

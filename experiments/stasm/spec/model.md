@@ -84,17 +84,24 @@ interface Text {
 
 ### Expressions
 
-The _expression_ type represents an implicit or explicit formatting of a literal or a variable by means of a function invoked with a map of options (named arguments).
+The _expression_ type represents one of the following two concepts:
+
+* An implicit or explicit formatting of a literal or a variable by means of a function invoked with a map of options (named arguments).
+* A standalone call to a function with a map of options (named arguments).
 
 ```ts
-interface Expression {
+type Expression = ValueExpression | FunctionExpression;
+```
+
+```ts
+interface ValueExpression {
     operand: Value;
-    function: null | FunctionCall;
+    function: null | FunctionExpression;
 }
 ```
 
 ```ts
-interface FunctionCall {
+interface FunctionExpression {
     name: string;
     options: Map<string, Value>;
 }
@@ -150,7 +157,7 @@ interface String {
                     Text {
                         value: "Hello, world!"
                     },
-                    Expression {
+                    ValueExpression {
                         operand: Variable {
                             name: "username"
                         },
@@ -177,11 +184,11 @@ interface String {
     Message {
         aliases: [],
         selectors: [
-            Expression {
+            ValueExpression {
                 operand: Variable {
                     name: "count"
                 },
-                function: FunctionCall {
+                function: FunctionExpression {
                     name: "plural",
                     options: Map {}
                 }
@@ -203,7 +210,7 @@ interface String {
 		    "other"
                 ],
                 pattern: Pattern [
-                    Expression {
+                    ValueExpression {
                         operand: Variable {
                             name: "count"
                         },

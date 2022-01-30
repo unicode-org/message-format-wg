@@ -5,17 +5,17 @@ Phrase ::= Pattern | Selector+ Variant+
 /* Selectors and variants */
 Selector ::= '{' Expression '}' '?'
 Variant ::= VariantKey+ Pattern
-VariantKey ::= Nmtoken | String
+VariantKey ::= String | Number | Name
 
 /* Pattern and pattern elements */
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 Placeable ::= '{' Expression '}'
 
 /* Expressions */
-Expression ::= Operand Function?
-Operand ::= Nmtoken | String | Variable
+Expression ::= Operand Function? | Function
+Operand ::= String | Number | Variable
 Function ::= Name Option*
-Option ::= Name '=' (Nmtoken | String | Variable)
+Option ::= Name '=' (String | Number | Name | Variable)
 
 /* Ignored tokens */
 Ignore ::= Comment | WhiteSpace /* ws: definition */
@@ -25,7 +25,6 @@ Ignore ::= Comment | WhiteSpace /* ws: definition */
 /* Names */
 Variable ::= '$' Name /* ws: explicit */
 Name ::= NameStart NameChar* /* ws: explicit */
-Nmtoken ::= NameChar+ /* ws: explicit */
 NameStart ::= [a-zA-Z] | "_"
             | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
             | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
@@ -41,7 +40,9 @@ AnyChar ::= .
 
 /* Literals */
 String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
+Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
 StringChar ::= AnyChar - ('"'| Esc)
+DecimalDigit ::= [0-9]
 
 /* Escape sequences */
 Esc ::= '\'

@@ -5,6 +5,7 @@
 
 |   Date   | Description |
 |----------|-------------|
+|2022-01-30|Readd number literals and remove nmtokens. Allow standalone functions.|
 |2022-01-29|Split symbols into names and nmtokens|
 |2022-01-28|Add aliases to phrases|
 |2022-01-28|Forbid selector-less variants|
@@ -137,7 +138,7 @@ A message with an interpolated `$userObj` variable formatted with a custom `name
 
 A message with two markup-like custom functions, `open(elemName)` and `close(elemName)`, which the runtime can use to construct a document tree structure for a UI framework.
 
-    [{button open}Submit{button close} or {link open}cancel{link close}]
+    [{open tag:button}Submit{close tag:button} or {open tag:link}cancel{close tag:link}]
 
 ### Selection
 
@@ -147,9 +148,9 @@ A message with a single selector:
         one [You have one notification.]
         other [You have {$count} notification.]
 
-A message with a single selector which is an invocation of a custom function `getCurrent("platform")`, formatted on a single line:
+A message with a single selector which is an invocation of a custom function `platform()`, formatted on a single line:
 
-    {platform getCurrent}? windows [Settings] _ [Preferences]
+    {platform}? windows [Settings] _ [Preferences]
 
 A message with a single selector and a custom `hasCase` function which allows the message to query for presence of grammatical cases required for each variant:
 
@@ -337,7 +338,7 @@ A selector is an _expression_ which will be used to choose one of the variants d
 ```ebnf
 Selector ::= '{' Expression '}' '?'
 Variant ::= VariantKey+ Pattern
-VariantKey ::= Nmtoken | String
+VariantKey ::= String | Number | Name
 ```
 
 Examples:
@@ -350,16 +351,24 @@ Examples:
 
 ### Expressions
 
-Expressions start with the operand: a nmtoken (which evaluates to itself), a quoted string literal or a variable name. The operand can be optionally followed by a formatting function and its named options. Formatting functions do not accept any positional arguments other than the operand in front of them.
+Expressions can either start with an operand, or be standalone function calls.
+
+The operand is a number literal, a quoted string literal or a variable name. The operand can be optionally followed by a formatting function and its named options. Formatting functions do not accept any positional arguments other than the operand in front of them.
+
+Standalone function calls don't have any operands in front of them.
 
 ```ebnf
-Expression ::= Operand Function?
-Operand ::= Nmtoken | String | Variable
+Expression ::= Operand Function? | Function
+Operand ::= String | Number | Variable
 Function ::= Name Option*
-Option ::= Name '=' (Nmtoken | String | Variable)
+Option ::= Name '=' (String | Number | Name | Variable)
 ```
 
 Examples:
+
+```
+1.23
+```
 
 ```
 1.23 number maxFractionDigits=1
@@ -374,7 +383,7 @@ $when datetime style=long
 ```
 
 ```
-some_other_message getMessage
+ref msgid:some_other_message
 ```
 
 ### Aliases
@@ -403,16 +412,15 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 
 ### Names
 
-The _name_ token is used for variable names (prefixed with `$`), as well as function  and option names. A name cannot start with an ASCII digit and a few other combining characters. Otherwise, the set of characters allowed in names is large.
+The _name_ token is used for variable names (prefixed with `$`), as well as function and option names. A name cannot start with an ASCII digit and certain basic combining characters. Otherwise, the set of characters allowed in names is large.
 
-The _nmtoken_ token doesn't have the above restriction on the first character. It's used for variant keys, expression operands, and option values, similar to the quoted string literal. In contrast to quoted string literals, nmtokens are not delimited with quotes.
+Names can also be used as quote-less single-word string literals in variant keys and option values.
 
-`Name` and `Nmtoken` are intentionally defined to be the same as XML's [Name](https://www.w3.org/TR/xml/#NT-Name) and [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken) symbols. In particular, Nmtoken is used throughout the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html).
+_Note:_ The Name symbol is intentionally defined to be the same as XML's [Name](https://www.w3.org/TR/xml/#NT-Name) in order to increase the interoperability with data defined in XML. In particular, the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html) uses [Nmtokens](https://www.w3.org/TR/xml/#NT-Nmtokens), which are similar to Name but don't have the restriction on the first character. When dealing with Nmtokens which are not Names (e.g. `2-digit`), quoted strings can be used to disambiguate from number literals (`day="2-digit"`).
 
 ```ebnf
 Variable ::= '$' Name /* ws: explicit */
 Name ::= NameStart NameChar* /* ws: explicit */
-Nmtoken ::= NameChar+ /* ws: explicit */
 NameStart ::= [a-zA-Z] | "_"
             | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
             | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
@@ -438,7 +446,9 @@ Any Unicode codepoint is allowed in string literals, with the exception of `"` (
 
 ```ebnf
 String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
+Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
 StringChar ::= AnyChar - ('"'| Esc)
+DecimalDigit ::= [0-9]
 ```
 
 ### Escape Sequences
@@ -484,17 +494,17 @@ Phrase ::= Pattern | Selector+ Variant+
 /* Selectors and variants */
 Selector ::= '{' Expression '}' '?'
 Variant ::= VariantKey+ Pattern
-VariantKey ::= Nmtoken | String
+VariantKey ::= String | Number | Name
 
 /* Pattern and pattern elements */
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 Placeable ::= '{' Expression '}'
 
 /* Expressions */
-Expression ::= Operand Function?
-Operand ::= Nmtoken | String | Variable
+Expression ::= Operand Function? | Function
+Operand ::= String | Number | Variable
 Function ::= Name Option*
-Option ::= Name '=' (Nmtoken | String | Variable)
+Option ::= Name '=' (String | Number | Name | Variable)
 
 /* Ignored tokens */
 Ignore ::= Comment | WhiteSpace /* ws: definition */
@@ -504,7 +514,6 @@ Ignore ::= Comment | WhiteSpace /* ws: definition */
 /* Names */
 Variable ::= '$' Name /* ws: explicit */
 Name ::= NameStart NameChar* /* ws: explicit */
-Nmtoken ::= NameChar+ /* ws: explicit */
 NameStart ::= [a-zA-Z] | "_"
             | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
             | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
@@ -520,7 +529,9 @@ AnyChar ::= .
 
 /* Literals */
 String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
+Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
 StringChar ::= AnyChar - ('"'| Esc)
+DecimalDigit ::= [0-9]
 
 /* Escape sequences */
 Esc ::= '\'
