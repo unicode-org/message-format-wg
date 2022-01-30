@@ -2,6 +2,26 @@
 
 The implementations and tooling can greatly benefit from a structured definition of formatting and matching functions available to messages at runtime. The _registry_ is a mechanism for storing such declarations. They are portable and can be used by tooling to type-check and lint messages at authoring time or buildtime.
 
+## Use Cases
+
+The registry enables the following usage scenarios:
+
+* Localization quality:
+    * Type-check values passed into functions.
+    * Validate matching functions as being only used in selectors, formatting functions—only in placeholders.
+    * Verify the exhaustiveness of variant keys given a selector.
+
+* Localization workflow:
+    * Forbid edits to certain function options (e.g. `currency` options).
+    * Autogenerate variant keys for a given locale during XLIFF extraction.
+
+* Authoring experience:
+    * Autocomplete function names, as well as option names passed into functions.
+    * Autogenerate code snippet with all required variant keys.
+    * Display on-hover tooltips for function signatures with documentation.
+    * Validate option values in a linter.
+    * Restrict input in GUI by providing a dropdown with all viable option values.
+
 ## Data Model
 
 The registry contains descriptions of function signatures. The following DTD describes the data model of a registry definition.
