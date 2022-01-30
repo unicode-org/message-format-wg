@@ -147,7 +147,7 @@ A message with a single selector:
 
     {$count asNumber}?
         one [You have one notification.]
-        other [You have {$count} notification.]
+        _ [You have {$count} notification.]
 
 A message with a single selector which is an invocation of a custom function `getPlatform()`, formatted on a single line:
 
@@ -165,10 +165,10 @@ A message with 2 selectors:
     {$photoCount asNumber}? {$userGender}?
         one masculine [{$userName} added a new photo to his album.]
         one feminine [{$userName} added a new photo to her album.]
-        one other [{$userName} added a new photo to their album.]
-        other masculine [{$userName} added {$photoCount} photos to his album.]
-        other feminine [{$userName} added {$photoCount} photos to her album.]
-        other other [{$userName} added {$photoCount} photos to their album.]
+        one _ [{$userName} added a new photo to their album.]
+        _ masculine [{$userName} added {$photoCount} photos to his album.]
+        _ feminine [{$userName} added {$photoCount} photos to her album.]
+        _ _ [{$userName} added {$photoCount} photos to their album.]
 
 A message with 3 plural selectors, which results in 8 variants in English:
 
@@ -197,15 +197,15 @@ A message defining two aliases: `$itemAcc` and `$countInt`, and using `$countInt
     $itemAcc = {$item asNoun count=$count case=accusative}
     $countInt = {$count asNumber maximumFractionDigits=0}
 
-    {$countInt}?
+    {$countInt asNumber}?
         one [You bought {$color asAdjective article=indefinite accord=$itemAcc} {$itemAcc}.]
-        other [You bought {$countInt} {$color asAdjective accord=$itemAcc} {$itemAcc}.]
+        _ [You bought {$countInt} {$color asAdjective accord=$itemAcc} {$itemAcc}.]
 
 A message defining three aliases bound to message _fragments_, to mitigate the combinatorial explosion of variants from the example above:
 
-    $roomsFragment = {{$roomCount}? 1 [1 room] other [{$roomCount} rooms]}
-    $suitesFragment = {{$suiteCount}? 1 [1 suite] other [{$suitesCount} suites]}
-    $guestsFragment = {{$guestCount}? 1 [1 guest] other [{$guestsCount} guests]}
+    $roomsFragment = {{$roomCount}? 1 [1 room] _ [{$roomCount} rooms]}
+    $suitesFragment = {{$suiteCount}? 1 [1 suite] _ [{$suitesCount} suites]}
+    $guestsFragment = {{$guestCount}? 1 [1 guest] _ [{$guestsCount} guests]}
 
     {$roomCount asNumber}?
     {$suiteCount asNumber}?
@@ -237,18 +237,18 @@ A complex message with 2 selectors and 3 local variable definitions:
         female 0 [{$hostName} does not give a party.]
         female 1 [{$hostName} invites {$guestName} to her party.]
         female 2 [{$hostName} invites {$guestName} and one other person to her party.]
-        female [{$hostName} invites {$guestName} and {$guestsOther} other people to her party.]
+        female _ [{$hostName} invites {$guestName} and {$guestsOther} other people to her party.]
 
         /* The host is male. */
         male 0 [{$hostName} does not give a party.]
         male 1 [{$hostName} invites {$guestName} to his party.]
         male 2 [{$hostName} invites {$guestName} and one other person to his party.]
-        male [{$hostName} invites {$guestName} and {$guestsOther} other people to his party.]
+        male _ [{$hostName} invites {$guestName} and {$guestsOther} other people to his party.]
 
-        other 0 [{$hostName} does not give a party.]
-        other 1 [{$hostName} invites {$guestName} to their party.]
-        other 2 [{$hostName} invites {$guestName} and one other person to their party.]
-        other [{$hostName} invites {$guestName} and {$guestsOther} other people to their party.]
+        _ 0 [{$hostName} does not give a party.]
+        _ 1 [{$hostName} invites {$guestName} to their party.]
+        _ 2 [{$hostName} invites {$guestName} and one other person to their party.]
+        _ _ [{$hostName} invites {$guestName} and {$guestsOther} other people to their party.]
 
 ## Comparison with ICU MessageFormat 1.0
 
@@ -294,6 +294,8 @@ MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the fol
 1. MessageFormat 2.0 doesn't require commas (`,`) inside placeholders.
 
 ## Productions
+
+The specification defines the following grammar productions. A message satisfying all rules of the grammar is considered _well-formed_. Furthermore, a well-formed message can is considered _valid_ if it meets additional semantic requirements about its structure, defined below.
 
 ### Message
 
@@ -345,12 +347,17 @@ Variant ::= VariantKey+ Pattern
 VariantKey ::= String | Number | Name
 ```
 
+A well-formed pattern with selectors and variants is considered _valid_ if the following requirements are satisfied:
+
+* The number of keys on each variant must be equal to the number of selectors.
+* At least one variant's keys must all be equal to the catch-all key (`_`).
+
 Examples:
 
 ```
-{$count asNumber}?
+{$count}?
     1 [One apple]
-    other [{$count} apples]
+    _ [{$count} apples]
 ```
 
 ### Expressions
@@ -383,7 +390,7 @@ Examples:
 ```
 
 ```
-$when asDateTime style=long
+$when asDateTime month="2-digit"
 ```
 
 ```
@@ -407,7 +414,7 @@ $itemAccusative = {$item asNoun case=accusative}
 ```
 $roomsFragment = {{$roomCount asNumber}?
     one [1 room]
-    other [{$roomCount} rooms]}
+    _ [{$roomCount} rooms]}
 ```
 
 ## Tokens

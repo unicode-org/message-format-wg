@@ -130,6 +130,7 @@ The _string_ type represents a literal string.
 interface String {
     value: string;
 }
+```
 
 The _number_ type represents a numerical value stored as a string for portability together with the number of fractional digits parsed from the number literal.
 
