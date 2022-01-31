@@ -147,7 +147,7 @@ A message with a single selector:
 
     {$count asNumber}?
         one [You have one notification.]
-        _ [You have {$count} notification.]
+        _ [You have {$count} notifications.]
 
 A message with a single selector which is an invocation of a custom function `getPlatform()`, formatted on a single line:
 

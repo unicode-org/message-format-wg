@@ -8,6 +8,7 @@ The data model defined here is not suitable for the parser-serializer roundtrip.
 
 1. [Interfaces](#interfaces)
     1. [Message](#message)
+    1. [Phrases](#phrases)
     1. [Variants](#variants)
     1. [Patterns](#patterns)
     1. [Expressions](#expressions)
