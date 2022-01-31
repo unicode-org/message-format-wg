@@ -8,6 +8,7 @@ The data model defined here is not suitable for the parser-serializer roundtrip.
 
 1. [Interfaces](#interfaces)
     1. [Message](#message)
+    1. [Aliases](#aliases)
     1. [Phrases](#phrases)
     1. [Variants](#variants)
     1. [Patterns](#patterns)
@@ -28,13 +29,21 @@ interface Message {
     selectors: Array<Expression>;
     variants: Array<Variant>;
 }
-
-type Alias = Expression | Phrase;
 ```
 
 Even for the simple case of a single-pattern translation, a single `Variant` is stored in an array. The runtime specification defines how the only variant is chosen in absence of selectors and variant keys. This allows effortless conversion from a single-variant translation in the source language to a multi-variant translation in the target language (or _vice versa_), because it can be done without any changes to the message's structure.
 
-The `Message.aliases` map stores locally-scoped variable bindings to `Expression`s or `Phrase`s. These aliases are available inside other expressions throughout the message's definition. The runtime specification defines the exact rules for resolving and evaluating them.
+### Aliases
+
+The _alias_ type represents a local binding to an `Expression` or `Phrase`. Aliases are available inside other expressions throughout the message's definition. The runtime specification defines the exact rules for resolving and evaluating them.
+
+```ts
+interface Alias {
+    comment: string;
+    name: string;
+    value: Expression | Phrase;
+}
+```
 
 ### Phrases
 
