@@ -30,5 +30,5 @@ The design of this proposal was informed by the Message Format Working Group's [
 
 * [Data Model](./model.md) - The representation of a single message suitable for runtime evaluation, transport, and interchange.
 * [Syntax](./syntax.md) - The formal grammar defining a DSL for representing a single translatable message.
-* Runtime - The definition of the runtime behavior during formatting of a single message.
+* [Runtime](./runtime.md) - The definition of the runtime behavior during formatting of a single message (_work in progress_).
 * [Registry](./registry.md) - The definition of the global store of formatting function signatures, variable types, etc. which are available to messages at runtime. These declarations can be used by tooling to type-check and lint messages at authoring time or buildtime.
