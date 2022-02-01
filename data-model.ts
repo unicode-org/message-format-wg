@@ -91,12 +91,7 @@ interface MessageRef extends PatternElement {
 
 interface Element extends PatternElement {
   type: 'element'
-  elem: string
-  has_body: boolean
+  name: string
+  tag: 'empty' | 'start' | 'end'
   options?: Record<string, Argument>
-}
-
-interface ElementEnd extends PatternElement {
-  type: 'element-end'
-  elem: string
 }

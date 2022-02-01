@@ -257,17 +257,14 @@ Some elements may have no formatted representation at all.
 ```ts
 interface Element extends PatternElement {
   type: 'element'
-  elem: string
-  has_body: boolean
+  name: string
+  tag: 'empty' | 'start' | 'end'
   options?: Record<string, Argument>
-}
-
-interface ElementEnd extends PatternElement {
-  type: 'element-end'
-  elem: string
 }
 ```
 
-If the `has_body` value of an Element is `true`,
-the message is expected to contain a matching ElementEnd later in the current pattern,
-i.e. one with the same `elem` value.
+If the `tag` of an Element is `start`,
+the message is expected to contain a later Element in the current pattern
+with the same `name` and `tag: 'end'`.
+Elements with `tag: 'empty'` are standalone elements, which do not have an end tag.
+Elements with `tag: 'end'` MUST NOT contain an `options` value.

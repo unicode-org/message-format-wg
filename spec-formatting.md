@@ -166,12 +166,12 @@ are presented in the [Message Selection](./spec-message-selection.md) section.
 
 ### Element
 
-Resolving an Element and its corresponding ElementEnd (if any) requires
+Resolving an Element or a matching `'start'`/`'end'` pair or Elements requires
 a function capable of transforming
-the element's name, resolved `options`, and any body contents into an appropriate representation.
+the element's `name`, resolved `options`, and any body contents into an appropriate representation.
 
 As the intended use and formatted representation of an Element may be highly variable,
-an implementation MAY transform the Element and ElementEnd pattern elements individually,
+an implementation MAY transform the Element pattern elements individually,
 rather than considering them and their body contents to have a single value.
 
 An implementation MAY use additional context when formatting an Element and its body,
@@ -179,10 +179,10 @@ for example to overlay option values with those provided in the Element.
 
 #### Improperly Nested Elements
 
-If Element/ElementEnd pattern element pairs are improperly nested
+If `'start'`/`'end'` pairs of Elements are improperly nested
 an implementation MUST do one of the following:
 
-1. Consider this an error and use a fallback representation for some or all of the Element and ElementEnd pattern elements.
+1. Consider this an error and use a fallback representation for some or all of the Elements.
 2. Resolve the impropriety somehow, potentially removing or duplicating some of the pattern elements.
 3. Do nothing, as the Element formatter and the output target may support such content directly.
 
@@ -196,13 +196,12 @@ could be formatted the same as any of the following, depending on the implementa
     This is <b>bold <i>both</i></b><i> italic</i>
     This is <b>bold <i>both</b> italic</i>
 
-#### Element Without Corresponding ElementEnd
+#### Start Element Without Corresponding End Element
 
-It is an error for an Element to expect to be followed by a later ElementEnd,
-and for no such ElementEnd to be available during formatting.
+It is an error for a `'start'` Element to not be followed by an `'end'` Element during formatting.
 
-In such a case, an implementation MUST resolve the message as if the expected ElementEnd was included
-immediately before the first other ElementEnd corresponding to an Element before the current one,
+In such a case, an implementation MUST resolve the message as if the expected `'end'` Element was included
+immediately before the first other `'end'` Element corresponding to an Element before the current one,
 or at the end of the current pattern,
 whichever comes first.
 
@@ -269,12 +268,12 @@ If an alias is not defined or
 its resolution or formatting fails for some other reason,
 represent it with an U+002A ASTERISK `*` followed by its name.
 
-### Element & ElementEnd
+### Element
 
 If an element formatter is not available,
 throws an error when called, or
 its resolution or formatting fails for some other reason,
-represent the individual Element and ElementEnd as empty strings.
+represent the individual Element as empty strings.
 
 Implementations MAY choose to use this representation for all elements,
 effectively considering all such elements to be discarded during formatting.
