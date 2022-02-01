@@ -93,14 +93,14 @@ A standalone message with a single selector:
 
     [number $count] =
         [one] You have one notification.
-        [other] You have {$count} notification.
+        [other] You have {$count} notifications.
 
 The same message, when defined within a message resource file:
 
 ```
 notifications [number $count] =
     [one] You have one notification.
-    [other] You have {$count} notification.
+    [other] You have {$count} notifications.
 ```
 
 A standalone message with a single selector
