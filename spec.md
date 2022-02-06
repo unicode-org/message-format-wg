@@ -51,7 +51,7 @@ Supporting external materials:
   More detailed exploration of what is actually required and possible when formatting messages
 - [Intl.MessageFormat proposal](https://github.com/dminor/proposal-intl-messageformat/) -
   For eventual presentation and consideration as an ECMA-402 stage-1 proposal
-- [JavaScript implementation](https://github.com/messageformat/messageformat/blob/mf2/packages/messageformat/src/messageformat.ts) -
+- [JavaScript implementation](https://github.com/messageformat/messageformat/tree/master/packages/mf2-messageformat) -
   A polyfill implementation of the proposed `Intl.MessageFormat`, along with MF2 parsers for ICU MessageFormat and Fluent syntaxes
 - [DOM Localization proposal](https://nordzilla.github.io/dom-l10n-draft-spec/) -
   A "collection of interesting ideas" towards an eventual proposal for a web standard for DOM localization
