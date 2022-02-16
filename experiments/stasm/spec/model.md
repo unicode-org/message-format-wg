@@ -71,7 +71,7 @@ A _variant_ is a container for a single _facet_ of the translation.
 
 ```ts
 interface Variant {
-    keys: Array<String | Number>;
+    keys: Array<String>;
     pattern: Pattern;
 }
 ```
@@ -123,7 +123,7 @@ interface FunctionExpression {
 The following types can be used in value positions, i.e as expression operands and option values.
 
 ```ts
-type Value = Variable | String | Number;
+type Value = Variable | String;
 ```
 
 The _variable_ type represents a reference to a value provided by the callsite at runtime, or a reference to an alias defined in the current message.
@@ -139,15 +139,6 @@ The _string_ type represents a literal string.
 ```ts
 interface String {
     value: string;
-}
-```
-
-The _number_ type represents a numerical value stored as a string for portability together with the number of fractional digits parsed from the number literal.
-
-```ts
-interface Number {
-    value: string;
-    precision: number;
 }
 ```
 
@@ -219,9 +210,8 @@ interface Number {
         variants: [
             Variant {
                 keys: [
-                    Number {
+                    String {
                         value: "1",
-                        precision: 0
                     },
                 ],
                 pattern: Pattern [

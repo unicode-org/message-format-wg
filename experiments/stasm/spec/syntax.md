@@ -5,6 +5,7 @@
 
 |   Date   | Description |
 |----------|-------------|
+|2022-02-16|Remove number literals after all.|
 |2022-01-30|Add message-level comments and alias doc comments.|
 |2022-01-30|Readd number literals and remove nmtokens. Allow standalone functions.|
 |2022-01-29|Split symbols into names and nmtokens|
@@ -43,9 +44,9 @@
     1. [Expressions](#expressions)
     1. [Aliases](#aliases)
 1. [Tokens](#tokens)
-    1. [Names](#names)
     1. [Text](#text)
-    1. [Literals](#literals)
+    1. [Names](#names)
+    1. [Quoted Strings](#quoted-strings)
     1. [Escape Sequences](#escape-sequences)
     1. [Comments](#comments)
     1. [Whitespace](#whitespace)
@@ -344,7 +345,7 @@ A selector is an _expression_ which will be used to choose one of the variants d
 ```ebnf
 Selector ::= '{' Expression '}' '?'
 Variant ::= VariantKey+ Pattern
-VariantKey ::= String | Number | Name
+VariantKey ::= String | Nmtoken
 ```
 
 A well-formed pattern with selectors and variants is considered _valid_ if the following requirements are satisfied:
@@ -364,25 +365,25 @@ Examples:
 
 Expressions can either start with an operand, or be standalone function calls.
 
-The operand is a number literal, a quoted string literal or a variable name. The operand can be optionally followed by a formatting function and its named options. Formatting functions do not accept any positional arguments other than the operand in front of them.
+The operand is a quoted string literal or a variable name. The operand can be optionally followed by a formatting function and its named options. Formatting functions do not accept any positional arguments other than the operand in front of them.
 
 Standalone function calls don't have any operands in front of them.
 
 ```ebnf
 Expression ::= Operand Function? | Function
-Operand ::= String | Number | Variable
+Operand ::= String | Variable
 Function ::= Name Option*
-Option ::= Name '=' (String | Number | Name | Variable)
+Option ::= Name '=' (String | Nmtoken | Variable)
 ```
 
 Examples:
 
 ```
-1.23
+"1.23"
 ```
 
 ```
-1.23 asNumber maxFractionDigits=1
+"1.23" asNumber maxFractionDigits=1
 ```
 
 ```
@@ -390,7 +391,11 @@ Examples:
 ```
 
 ```
-$when asDateTime month="2-digit"
+"Thu Jan 01 1970 14:37:00 GMT+0100 (CET)" asDateTime weekday=long
+```
+
+```
+$when asDateTime month=2-digit
 ```
 
 ```
@@ -421,26 +426,6 @@ $roomsFragment = {{$roomCount asNumber}?
 
 The grammar defines the following tokens for the purpose of the lexical analysis.
 
-### Names
-
-The _name_ token is used for variable names (prefixed with `$`), as well as function and option names. A name cannot start with an ASCII digit and certain basic combining characters. Otherwise, the set of characters allowed in names is large.
-
-Names can also be used as quote-less single-word string literals in variant keys and option values.
-
-_Note:_ The Name symbol is intentionally defined to be the same as XML's [Name](https://www.w3.org/TR/xml/#NT-Name) in order to increase the interoperability with data defined in XML. In particular, the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html) uses [Nmtokens](https://www.w3.org/TR/xml/#NT-Nmtokens), which are similar to Name but don't have the restriction on the first character. When dealing with Nmtokens which are not Names (e.g. `2-digit`), quoted strings can be used to disambiguate from number literals (`day="2-digit"`).
-
-```ebnf
-Variable ::= '$' Name /* ws: explicit */
-Name ::= NameStart NameChar* /* ws: explicit */
-NameStart ::= [a-zA-Z] | "_"
-            | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
-            | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
-            | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
-            | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
-NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
-           | [#x0300-#x036F] | [#x203F-#x2040]
-```
-
 ### Text
 
 Text is the translatable content of a _pattern_. Any Unicode codepoint is allowed in text, with the exception of `]` (which ends the pattern), `{` (which starts a placeholder), and `\` (which starts an escape sequence).
@@ -451,15 +436,34 @@ TextChar ::= AnyChar - (']' | '{' | Esc)
 AnyChar ::= .
 ```
 
-### Literals
+### Names
 
-Any Unicode codepoint is allowed in string literals, with the exception of `"` (which ends the string literal), and `\` (which starts an escape sequence).
+The _name_ token is used for variable names (prefixed with `$`), as well as function and option names. A name cannot start with an ASCII digit and certain basic combining characters. Otherwise, the set of characters allowed in names is large.
+
+The _nmtoken_ token doesn't have _name_'s restriction on the first character and is used as variant keys and option values.
+
+_Note:_ The Name and Nmtoken symbols are intentionally defined to be the same as XML's [Name](https://www.w3.org/TR/xml/#NT-Name) and [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtokens) in order to increase the interoperability with data defined in XML. In particular, the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features) and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html) uses Nmtokens.
+
+```ebnf
+Variable ::= '$' Name /* ws: explicit */
+Name ::= NameStart NameChar* /* ws: explicit */
+Nmtoken ::= NameChar+ /* ws: explicit */
+NameStart ::= [a-zA-Z] | "_"
+            | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
+            | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
+            | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
+            | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
+           | [#x0300-#x036F] | [#x203F-#x2040]
+```
+
+### Quoted Strings
+
+Any Unicode codepoint is allowed in quoyed string literals, with the exception of `"` (which ends the string literal), and `\` (which starts an escape sequence).
 
 ```ebnf
 String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
-Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
 StringChar ::= AnyChar - ('"'| Esc)
-DecimalDigit ::= [0-9]
 ```
 
 ### Escape Sequences
@@ -512,7 +516,7 @@ Phrase ::= Pattern | Selector+ Variant+
 /* Selectors and variants */
 Selector ::= '{' Expression '}' '?'
 Variant ::= VariantKey+ Pattern
-VariantKey ::= String | Number | Name
+VariantKey ::= String | Nmtoken
 
 /* Pattern and pattern elements */
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
@@ -520,18 +524,24 @@ Placeable ::= '{' Expression '}'
 
 /* Expressions */
 Expression ::= Operand Function? | Function
-Operand ::= String | Number | Variable
+Operand ::= String | Variable
 Function ::= Name Option*
-Option ::= Name '=' (String | Number | Name | Variable)
+Option ::= Name '=' (String | Nmtoken | Variable)
 
 /* Ignored tokens */
 Ignore ::= AnyComment | WhiteSpace /* ws: definition */
 
 <?TOKENS?>
 
+/* Text */
+Text ::= (TextChar | TextEscape)+
+TextChar ::= AnyChar - (']' | '{' | Esc)
+AnyChar ::= .
+
 /* Names */
 Variable ::= '$' Name /* ws: explicit */
 Name ::= NameStart NameChar* /* ws: explicit */
+Nmtoken ::= NameChar+ /* ws: explicit */
 NameStart ::= [a-zA-Z] | "_"
             | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
             | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
@@ -540,16 +550,9 @@ NameStart ::= [a-zA-Z] | "_"
 NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
            | [#x0300-#x036F] | [#x203F-#x2040]
 
-/* Text */
-Text ::= (TextChar | TextEscape)+
-TextChar ::= AnyChar - (']' | '{' | Esc)
-AnyChar ::= .
-
-/* Literals */
+/* Quoted strings */
 String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
-Number ::= '-'? DecimalDigit+ ('.' DecimalDigit+)? /* ws: explicit */
 StringChar ::= AnyChar - ('"'| Esc)
-DecimalDigit ::= [0-9]
 
 /* Escape sequences */
 Esc ::= '\'

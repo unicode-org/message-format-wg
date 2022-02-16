@@ -7,16 +7,12 @@ _Work in progress..._
 The data model defines the following value types:
 
 ```ts
-type Value = String | Number | Variable;
+type Value = String | Variable;
 ```
 
 ### String
 
-Strings always evaluate to their literal value. They require no additional formatting. Matching on strings consists of making an equality comparison on the string and the key. If the key is a number literal, the result of the comparison is `false`.
-
-### Number
-
-For portability's sake number literals are represented as strings in the data model. Implementations must parse them into a suitable numeric type before further use.
+Strings always evaluate to their literal value. They require no additional formatting, but they may be _annotated_ with a formatting function. Matching on strings consists of making an equality comparison between two strings. Strings are also used to represent numerical data, in which case they need to be formatted with a function which will parse the numerical value out of the string.
 
 ### Variable
 
