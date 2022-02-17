@@ -360,20 +360,11 @@ itself in a message group “group”.
 Such a braced section may only contain a variable reference or an alias.
 
 ```ebnf
-msgref = "-" [ literal ":" ] msg_path
+msgref = "-" msg_path
          { ws { ws } ( option | comment ) }
 msg_path = msg_part { { sp } "." { sp } msg_part }
 msg_part = literal | "{" { sp } variable | alias { sp } "}"
 ```
-
-References to messages in other message resources need to identify that resource
-with an initial part that's separate from the rest of its path with a colon `:`.
-This part must be a literal,
-but it may be quoted if it contains a non-word character;
-`-res:foo` and `-"res":foo` are both references to the message “foo” in a message resource “res”.
-If a resource identifier is not provided,
-the message must be found in the current resource,
-with its path starting from the resource root.
 
 As it's possible to set or override runtime variable values
 during the resolution of a message reference,

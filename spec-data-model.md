@@ -227,21 +227,14 @@ that message is first identified and then resolved.
 ```ts
 interface MessageRef extends PatternElement {
   type: 'message'
-  res_id?: string
   msg_path: Argument[]
-  scope?: Record<string, Argument>
+  values?: Record<string, Argument>
 }
 ```
 
-If `res_id` is undefined, the message is sought in the current Resource.
-If it is set, it identifies the resource for the sought message.
-It is entirely intentional that this value may not be defined at runtime,
-as this allows for a static determination of the resources required to format a message.
-
 `msg_path` is used to locate the Message within the Resource.
-Unlike the `res_id`, it may include parts that require additional context to resolve.
-
-`scope` overrides values in the current scope when resolving the message.
+It may include parts that require additional context to resolve.
+`values` overrides values in the current VariableRef scope when resolving the message.
 
 ### Element
 

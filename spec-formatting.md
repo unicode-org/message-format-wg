@@ -157,12 +157,21 @@ a Literal or a VariableRef pattern element.
 
 ### MessageRef
 
-The resolution of a MessageRef requires access to the currently available messages.
-Resolving a MessageRef with a `res_id` value requires
-access not only to messages in the current resource, but also to other message resources.
+The resolution of a MessageRef requires access to the current message resource.
+Once the `msg_path` is resolved to a sequence of string values,
+the referenced message is identified within the resource.
 
-The shape and requirements of the context required for this
-are presented in the [Message Selection](./spec-message-selection.md) section.
+While resolving the value of a referenced message,
+the values available for any VariableRef within the message
+are overridden by the resolved values of any set in `values`.
+This means that while MessageRef resolution does not itself depend on
+the same variable context as VariableRef,
+it MUST be able to provide a way to override the context used by VariableRef.
+
+As this form of MessageRef is limited to only referring to other messages in the same resource,
+a custom FunctionRef would be needed to reference messages from other resources.
+To that end, implementations SHOULD ensure that such may be
+constructed and memoized without a performance penalty.
 
 ### Element
 

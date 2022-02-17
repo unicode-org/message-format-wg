@@ -84,9 +84,8 @@ interface FunctionRef extends PatternElement {
 
 interface MessageRef extends PatternElement {
   type: 'message'
-  res_id?: string
   msg_path: Argument[]
-  scope?: Record<string, Argument>
+  values?: Record<string, Argument>
 }
 
 interface Element extends PatternElement {
