@@ -93,7 +93,7 @@ The following `registry.xml` is an example of a registry file which may be provi
         </description>
 
 	<pattern name="anyNumber" regex="-?[0-9]+(\.[0-9]+)"/>
-	<pattern name="positiveInteger" regex="-?[0-9]+"/>
+	<pattern name="positiveInteger" regex="[0-9]+"/>
 	<pattern name="currencyCode" regex="[A-Z]{3}"/>
 
         <signature type="match" locales="en">

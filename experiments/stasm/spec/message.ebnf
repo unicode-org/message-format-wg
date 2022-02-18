@@ -12,9 +12,9 @@ Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 Placeable ::= '{' Expression '}'
 
 /* Expressions */
-Expression ::= Operand Function? | Function
+Expression ::= Operand Annotation? | Annotation
 Operand ::= String | Variable
-Function ::= Name Option*
+Annotation ::= Function Option*
 Option ::= Name '=' (String | Nmtoken | Variable)
 
 /* Ignored tokens */
@@ -29,6 +29,7 @@ AnyChar ::= .
 
 /* Names */
 Variable ::= '$' Name /* ws: explicit */
+Function ::= '@' Name /* ws: explicit */
 Name ::= NameStart NameChar* /* ws: explicit */
 Nmtoken ::= NameChar+ /* ws: explicit */
 NameStart ::= [a-zA-Z] | "_"

@@ -5,6 +5,7 @@
 
 |   Date   | Description |
 |----------|-------------|
+|2022-02-18|Prefix function names with @.|
 |2022-02-16|Remove number literals after all.|
 |2022-01-30|Add message-level comments and alias doc comments.|
 |2022-01-30|Readd number literals and remove nmtokens. Allow standalone functions.|
@@ -126,44 +127,44 @@ hello.format({userName: "Anne"});
 
 ### Formatting Functions
 
-A message with an interpolated `$date` variable formatted with the `asDateTime` function:
+A message with an interpolated `$date` variable formatted with the `@DateTime` function:
 
-    [Today is {$date asDateTime weekday=long}.]
+    [Today is {$date @DateTime weekday=long}.]
 
-A message with an interpolated `$userName` variable formatted with the custom `asPerson` function capable of declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
+A message with an interpolated `$userName` variable formatted with the custom `@Person` function capable of declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
 
-    [Hello, {$userName asPerson case=vocative}!]
+    [Hello, {$userName @Person case=vocative}!]
 
-A message with an interpolated `$userObj` variable formatted with the custom `asPerson` function capable of plucking the first name from the object representing a person:
+A message with an interpolated `$userObj` variable formatted with the custom `@Person` function capable of plucking the first name from the object representing a person:
 
-    [Hello, {$userObj asPerson firstName=long}!]
+    [Hello, {$userObj @Person firstName=long}!]
 
 A message with two markup-like custom functions, `open(elemName)` and `close(elemName)`, which the runtime can use to construct a document tree structure for a UI framework.
 
-    [{open tag=button}Submit{close tag=button} or {open tag=link}cancel{close tag=link}]
+    [{@open tag=button}Submit{@close tag=button} or {@open tag=link}cancel{@close tag=link}]
 
 ### Selection
 
 A message with a single selector:
 
-    {$count asNumber}?
+    {$count @Number}?
         one [You have one notification.]
         _ [You have {$count} notifications.]
 
-A message with a single selector which is an invocation of a custom function `getPlatform()`, formatted on a single line:
+A message with a single selector which is an invocation of a custom function `@Platform()`, formatted on a single line:
 
-    {getPlatform}? windows [Settings] _ [Preferences]
+    {@Platform}? windows [Settings] _ [Preferences]
 
-A message with a single selector and a custom `hasCase` function which allows the message to query for presence of grammatical cases required for each variant:
+A message with a single selector and a custom `@HasCase` function which allows the message to query for presence of grammatical cases required for each variant:
 
-    {$userName hasCase}?
-        vocative [Hello, {$userName asPerson case=vocative}!]
-        accusative [Please welcome {$userName asPerson case=accusative}!]
+    {$userName @HasCase}?
+        vocative [Hello, {$userName @Person case=vocative}!]
+        accusative [Please welcome {$userName @Person case=accusative}!]
         _ [Hello!]
 
 A message with 2 selectors:
 
-    {$photoCount asNumber}? {$userGender}?
+    {$photoCount @Number}? {$userGender @Equals}?
         one masculine [{$userName} added a new photo to his album.]
         one feminine [{$userName} added a new photo to her album.]
         one _ [{$userName} added a new photo to their album.]
@@ -173,9 +174,9 @@ A message with 2 selectors:
 
 A message with 3 plural selectors, which results in 8 variants in English:
 
-    {$roomCount asNumber}?
-    {$suiteCount asNumber}?
-    {$guestCount asNumber}?
+    {$roomCount @Number}?
+    {$suiteCount @Number}?
+    {$guestCount @Number}?
         1 1 1 [This isn't a hotel, okay?]
         1 1 _ [This hotel has 1 room and 1 suite, accommodating up to {$guestCount} guests.]
         1 _ 1 [This hotel has 1 room and {$suiteCount} suites, accommodating up to 1 guest.]
@@ -190,17 +191,17 @@ A message with 3 plural selectors, which results in 8 variants in English:
 
 A message defining a `$whom` alias which is then used twice inside the pattern:
 
-    $whom = {$monster asNoun case=accusative}
-    [You see {$quality asAdjective article=indefinite accord=$whom} {$whom}!]
+    $whom = {$monster @Noun case=accusative}
+    [You see {$quality @Adjective article=indefinite accord=$whom} {$whom}!]
 
 A message defining two aliases: `$itemAcc` and `$countInt`, and using `$countInt` as a selector:
 
-    $itemAcc = {$item asNoun count=$count case=accusative}
-    $countInt = {$count asNumber maximumFractionDigits=0}
+    $itemAcc = {$item @Noun count=$count case=accusative}
+    $countInt = {$count @Number maximumFractionDigits=0}
 
-    {$countInt asNumber}?
-        one [You bought {$color asAdjective article=indefinite accord=$itemAcc} {$itemAcc}.]
-        _ [You bought {$countInt} {$color asAdjective accord=$itemAcc} {$itemAcc}.]
+    {$countInt @Number}?
+        one [You bought {$color @Adjective article=indefinite accord=$itemAcc} {$itemAcc}.]
+        _ [You bought {$countInt} {$color @Adjective accord=$itemAcc} {$itemAcc}.]
 
 A message defining three aliases bound to message _fragments_, to mitigate the combinatorial explosion of variants from the example above:
 
@@ -208,16 +209,16 @@ A message defining three aliases bound to message _fragments_, to mitigate the c
     $suitesFragment = {{$suiteCount}? 1 [1 suite] _ [{$suitesCount} suites]}
     $guestsFragment = {{$guestCount}? 1 [1 guest] _ [{$guestsCount} guests]}
 
-    {$roomCount asNumber}?
-    {$suiteCount asNumber}?
-    {$guestCount asNumber}?
+    {$roomCount @Number}?
+    {$suiteCount @Number}?
+    {$guestCount @Number}?
         1 1 1 [This isn't a hotel, okay?]
         _ _ _ [This hotel has {$roomsFragment} and {$suitesFragment}, accommodating up to {$guestsFragment}.]
 
 A message using an alias to translate the `title` attribute without nesting patterns.
 
     $title = {[Let's go, {$username}!]}
-    [{open tag=button title=$title}Continue{close tag=button}]
+    [{@open tag=button title=$title}Continue{@close tag=button}]
 
 ### Complex Messages
 
@@ -227,13 +228,13 @@ A complex message with 2 selectors and 3 local variable definitions:
      * organizes a party and at least one guest is also a user's connection. */
 
     /** The host's first name. */
-    $hostName = {$host asPerson firstName=long}
+    $hostName = {$host @Person firstName=long}
     /** The first guest's first name. */
-    $guestName = {$guest asPerson firstName=long}
+    $guestName = {$guest @Person firstName=long}
     /** The number of guests excluding the first guest. */
-    $guestsOther = {$guestCount asNumber /* Remove 1 from $guestCount */ offset=1}
+    $guestsOther = {$guestCount @Number /* Remove 1 from $guestCount */ offset=1}
 
-    {$host getGender}? {$guestOther asNumber}?
+    {$host @Gender}? {$guestOther @Number}?
         /* The host is female. */
         female 0 [{$hostName} does not give a party.]
         female 1 [{$hostName} invites {$guestName} to her party.]
@@ -269,8 +270,8 @@ MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the fol
 
     MessageFormat 2.0:
     ```
-    {$foo func}?
-    {$bar func}?
+    {$foo @func}?
+    {$bar @func}?
         foo1 [Value 1]
         foo2 bar1 [Value 2a]
         foo2 bar2 [Value 2b]
@@ -278,7 +279,7 @@ MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the fol
 
 1. MessageFormat 2.0 differentiates between the syntax used to introduce expressions (`{...}`) and the syntax used to defined translatable content (`[...]`).
 
-1. MessageFormat 2.0 uses the dollar sign (`$`) as the sigil for variable references, and only allows named options to functions. The purpose of this change is to help disambiguate between the different parts of a placeholder (variable references, function names, literals etc.).
+1. MessageFormat 2.0 uses the dollar sign (`$`) as the sigil for variable references, the _at_ sign (`@`) as the sigil for functions, and only allows named options to functions. The purpose of this change is to help disambiguate between the different parts of a placeholder (variable references, function names, literals etc.).
 
     ICU MessageFormat 1.0:
     ```
@@ -287,7 +288,7 @@ MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the fol
 
     MessageFormat 2.0:
     ```
-    {$when date style=short}
+    {$when @date style=short}
     ```
 
 1. MessageFormat 2.0 doesn't provide the `#` shorthand inside variants. Instead it allows aliases to be defined at the top of the message; these aliases can then be referred to inside patterns similar to other variables.
@@ -365,14 +366,14 @@ Examples:
 
 Expressions can either start with an operand, or be standalone function calls.
 
-The operand is a quoted string literal or a variable name. The operand can be optionally followed by a formatting function and its named options. Formatting functions do not accept any positional arguments other than the operand in front of them.
+The operand is a quoted string literal or a variable name. The operand can be optionally followed by an _annotation_: a formatting function and its named options. Formatting functions do not accept any positional arguments other than the operand in front of them.
 
 Standalone function calls don't have any operands in front of them.
 
 ```ebnf
-Expression ::= Operand Function? | Function
+Expression ::= Operand Annotation? | Annotation
 Operand ::= String | Variable
-Function ::= Name Option*
+Annotation ::= Function Option*
 Option ::= Name '=' (String | Nmtoken | Variable)
 ```
 
@@ -383,23 +384,23 @@ Examples:
 ```
 
 ```
-"1.23" asNumber maxFractionDigits=1
+"1.23" @Number maxFractionDigits=1
 ```
 
 ```
-"1970-01-01T13:37:00.000Z" asDateTime weekday=long
+"1970-01-01T13:37:00.000Z" @DateTime weekday=long
 ```
 
 ```
-"Thu Jan 01 1970 14:37:00 GMT+0100 (CET)" asDateTime weekday=long
+"Thu Jan 01 1970 14:37:00 GMT+0100 (CET)" @DateTime weekday=long
 ```
 
 ```
-$when asDateTime month=2-digit
+$when @DateTime month=2-digit
 ```
 
 ```
-getMessage id=some_other_message
+@Message id=some_other_message
 ```
 
 ### Aliases
@@ -413,11 +414,11 @@ Alias ::= DocComment? Variable '=' '{' (Expression | Phrase) '}'
 Examples:
 
 ```
-$itemAccusative = {$item asNoun case=accusative}
+$itemAccusative = {$item @Noun case=accusative}
 ```
 
 ```
-$roomsFragment = {{$roomCount asNumber}?
+$roomsFragment = {{$roomCount @Number}?
     one [1 room]
     _ [{$roomCount} rooms]}
 ```
@@ -438,7 +439,7 @@ AnyChar ::= .
 
 ### Names
 
-The _name_ token is used for variable names (prefixed with `$`), as well as function and option names. A name cannot start with an ASCII digit and certain basic combining characters. Otherwise, the set of characters allowed in names is large.
+The _name_ token is used for variable names (prefixed with `$`), function names (prefixed with `@`) as well as option names. A name cannot start with an ASCII digit and certain basic combining characters. Otherwise, the set of characters allowed in names is large.
 
 The _nmtoken_ token doesn't have _name_'s restriction on the first character and is used as variant keys and option values.
 
@@ -446,6 +447,7 @@ _Note:_ The Name and Nmtoken symbols are intentionally defined to be the same as
 
 ```ebnf
 Variable ::= '$' Name /* ws: explicit */
+Function ::= '@' Name /* ws: explicit */
 Name ::= NameStart NameChar* /* ws: explicit */
 Nmtoken ::= NameChar+ /* ws: explicit */
 NameStart ::= [a-zA-Z] | "_"
@@ -523,9 +525,9 @@ Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 Placeable ::= '{' Expression '}'
 
 /* Expressions */
-Expression ::= Operand Function? | Function
+Expression ::= Operand Annotation? | Annotation
 Operand ::= String | Variable
-Function ::= Name Option*
+Annotation ::= Function Option*
 Option ::= Name '=' (String | Nmtoken | Variable)
 
 /* Ignored tokens */
@@ -540,6 +542,7 @@ AnyChar ::= .
 
 /* Names */
 Variable ::= '$' Name /* ws: explicit */
+Function ::= '@' Name /* ws: explicit */
 Name ::= NameStart NameChar* /* ws: explicit */
 Nmtoken ::= NameChar+ /* ws: explicit */
 NameStart ::= [a-zA-Z] | "_"
