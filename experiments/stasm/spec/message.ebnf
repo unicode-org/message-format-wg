@@ -1,13 +1,15 @@
-Message ::= TopComment? Alias* (Pattern | Selector+ Variant+)
-Alias ::= DocComment? Variable '=' '{' Expression '}'
+Message ::= TopComment? Preamble? Variant+
 
-/* Selectors and variants */
-Selector ::= '{' Expression '}' '?'
-Variant ::= VariantKey+ Pattern
+/* Preamble */
+Preamble ::= '{' Selector* '}'
+Selector ::= DocComment? (Variable '=')? '{' Expression '}'
+
+/* Variants and Patterns */
+Variant ::= VariantKey* Pattern
 VariantKey ::= String | Nmtoken
-
-/* Pattern and pattern elements */
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
+
+/* Placeables */
 Placeable ::= '{' Expression '}'
 
 /* Expressions */

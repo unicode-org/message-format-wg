@@ -156,11 +156,11 @@ A localization engineer can then extend the registry by defining the following `
 </registry>
 ```
 
-Messages can now use the `asNoun` and the `asAdjective` functions. The following message references the first signature of `asAdjective`, which expects the `plural` and `case` options:
+Messages can now use the `@Noun` and the `@Adjective` functions. The following message references the first signature of `@Adjective`, which expects the `plural` and `case` options:
 
-    [You see {$color asAdjective article=indefinite plural=one case=nominative} {$object asNoun case=nominative}!]
+    [You see {$color @Adjective article=indefinite plural=one case=nominative} {$object asNoun case=nominative}!]
 
-The following message references the second signature of `asAdjective`, which only expects the `accord` option:
+The following message references the second signature of `@Adjective`, which only expects the `accord` option:
 
-    $obj = {$object asNoun case=nominative}
-    [You see {$color asAdjective article=indefinite accord=$obj} {$obj}!]
+    {$obj = {$object @Noun case=nominative}}
+    [You see {$color @Adjective article=indefinite accord=$obj} {$obj}!]

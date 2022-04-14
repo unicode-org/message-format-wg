@@ -5,6 +5,7 @@
 
 |   Date   | Description |
 |----------|-------------|
+|2022-04-13|Add the preamble, simplify aliases.|
 |2022-04-13|Remove phrases (sub-messages).|
 |2022-02-18|Prefix function names with @.|
 |2022-02-16|Remove number literals after all.|
@@ -40,10 +41,10 @@
 1. [Comparison with ICU MessageFormat 1.0](#comparison-with-icu-messageformat-10)
 1. [Productions](#productions)
     1. [Message](#message)
+    1. [Preamble](#preamble)
+    1. [Variants](#variants)
     1. [Patterns](#patterns)
-    1. [Selectors & Variants](#selectors--variants)
     1. [Expressions](#expressions)
-    1. [Aliases](#aliases)
 1. [Tokens](#tokens)
     1. [Text](#text)
     1. [Names](#names)
@@ -147,24 +148,24 @@ A message with two markup-like custom functions, `open(elemName)` and `close(ele
 
 A message with a single selector:
 
-    {$count @Number}?
+    {{$count @Number}}
         one [You have one notification.]
         _ [You have {$count} notifications.]
 
 A message with a single selector which is an invocation of a custom function `@Platform()`, formatted on a single line:
 
-    {@Platform}? windows [Settings] _ [Preferences]
+    {{@Platform}} windows [Settings] _ [Preferences]
 
 A message with a single selector and a custom `@HasCase` function which allows the message to query for presence of grammatical cases required for each variant:
 
-    {$userName @HasCase}?
+    {{$userName @HasCase}}
         vocative [Hello, {$userName @Person case=vocative}!]
         accusative [Please welcome {$userName @Person case=accusative}!]
         _ [Hello!]
 
 A message with 2 selectors:
 
-    {$photoCount @Number}? {$userGender @Equals}?
+    {{$photoCount @Number}} {$userGender @Equals}}
         one masculine [{$userName} added a new photo to his album.]
         one feminine [{$userName} added a new photo to her album.]
         one _ [{$userName} added a new photo to their album.]
@@ -176,15 +177,15 @@ A message with 2 selectors:
 
 A message defining a `$whom` alias which is then used twice inside the pattern:
 
-    $whom = {$monster @Noun case=accusative}
+    {$whom = {$monster @Noun case=accusative}}
     [You see {$quality @Adjective article=indefinite accord=$whom} {$whom}!]
 
 A message defining two aliases: `$itemAcc` and `$countInt`, and using `$countInt` as a selector:
 
-    $itemAcc = {$item @Noun count=$count case=accusative}
-    $countInt = {$count @Number maximumFractionDigits=0}
-
-    {$countInt @Number}?
+    {
+        $countInt = {$count @Number maximumFractionDigits=0}
+        $itemAcc = {$item @Noun count=$count case=accusative}
+    }
         one [You bought {$color @Adjective article=indefinite accord=$itemAcc} {$itemAcc}.]
         _ [You bought {$countInt} {$color @Adjective accord=$itemAcc} {$itemAcc}.]
 
@@ -194,15 +195,17 @@ A complex message with 2 selectors and 3 local variable definitions:
 
     /*** A notification message shown to the user when one of their connections
      * organizes a party and at least one guest is also a user's connection. */
+    {
+        {$host @Gender}
+        {$guestOther @Number}
 
-    /** The host's first name. */
-    $hostName = {$host @Person firstName=long}
-    /** The first guest's first name. */
-    $guestName = {$guest @Person firstName=long}
-    /** The number of guests excluding the first guest. */
-    $guestsOther = {$guestCount @Number /* Remove 1 from $guestCount */ offset=1}
-
-    {$host @Gender}? {$guestOther @Number}?
+        /** The host's first name. */
+        $hostName = {$host @Person firstName=long}
+        /** The first guest's first name. */
+        $guestName = {$guest @Person firstName=long}
+        /** The number of guests excluding the first guest. */
+        $guestsOther = {$guestCount @Number /* Remove 1 from $guestCount */ offset=1}
+    }
         /* The host is female. */
         female 0 [{$hostName} does not give a party.]
         female 1 [{$hostName} invites {$guestName} to her party.]
@@ -238,8 +241,7 @@ MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the fol
 
     MessageFormat 2.0:
     ```
-    {$foo @func}?
-    {$bar @func}?
+    {{$foo @func} {$bar @func}}
         foo1 [Value 1]
         foo2 bar1 [Value 2a]
         foo2 bar2 [Value 2b]
@@ -269,15 +271,46 @@ The specification defines the following grammar productions. A message satisfyin
 
 ### Message
 
-A single message consists of zero of more _alias_ definitions, and the translatable body of the message.
+A single message consists of an optional preamble, and one or more variants which represent the translatable body of the message.
 
 ```ebnf
-Message ::= TopComment? Alias* (Pattern | Selector+ Variant+)
+Message ::= TopComment? Preamble? Variant+
 ```
+
+### Preamble
+
+The preamble is where selectors and aliases can be defined. A selector is an expression which will be used to choose one of the variants during formatting. A selector can be optionally bound to an alias. Aliases are local variables which may be used in other expressions.
+
+```ebnf
+Preamble ::= '{' Selector* '}'
+Selector ::= DocComment? (Variable '=')? '{' Expression '}'
+```
+
+Examples:
+
+```
+{$frac = {$count @Number minFractionDigits=2}}
+    one [One apple]
+    _ [{$frac} apples]
+```
+
+### Variants
+
+A variant is a keyed pattern. The keys are used to match against the selectors defined in the preamble, as defined in the [runtime behavior](./runtime.md) spec.
+
+```ebnf
+Variant ::= VariantKey* Pattern
+VariantKey ::= String | Nmtoken
+```
+
+A well-formed message is considered valid if the following requirements are satisfied:
+
+* The number of keys on each variant must be fewer or equal to the number of selectors defined in the preamble.
+* At least one variant's keys must all be equal to the catch-all key (`_`).
 
 ### Patterns
 
-A pattern is a sequence of translatable elements. A message must define at least one _pattern_, standalone or as part of a _variant_. Patterns are always delimited with `[` at the start, and `]` at the end. This serves 3 purposes:
+A pattern is a sequence of translatable elements. Patterns are always delimited with `[` at the start, and `]` at the end. This serves 3 purposes:
 
 * The message should be unambiguously embeddable in various container formats regardless of the container's whitespace trimming rules. E.g. in Java `.properties` files, `hello = [Hello]` will unambiguously define the `Hello` message without the space in front of it.
 * The message should be conveniently embeddable in various programming languages without the need to escape characters commonly related to strings, e.g. `"` and `'`. Such need may still occur when a singe or double quote is used in the translatable content or to delimit a string literal.
@@ -292,29 +325,6 @@ Examples:
 
 ```
 [Hello, world!]
-```
-
-### Selectors & Variants
-
-A selector is an _expression_ which will be used to choose one of the variants during formatting. Selectors are always suffixed with a `?`. A variant is a keyed _pattern_.
-
-```ebnf
-Selector ::= '{' Expression '}' '?'
-Variant ::= VariantKey+ Pattern
-VariantKey ::= String | Nmtoken
-```
-
-A well-formed pattern with selectors and variants is considered _valid_ if the following requirements are satisfied:
-
-* The number of keys on each variant must be equal to the number of selectors.
-* At least one variant's keys must all be equal to the catch-all key (`_`).
-
-Examples:
-
-```
-{$count}?
-    1 [One apple]
-    _ [{$count} apples]
 ```
 
 ### Expressions
@@ -356,26 +366,6 @@ $when @DateTime month=2-digit
 
 ```
 @Message id=some_other_message
-```
-
-### Aliases
-
-An alias is a local variable bound to an _expression_, defined at the beginning of the message. Aliases may be used in other expressions.
-
-```ebnf
-Alias ::= DocComment? Variable '=' '{' Expression '}'
-```
-
-Examples:
-
-```
-$itemAccusative = {$item @Noun case=accusative}
-```
-
-```
-$roomsFragment = {{$roomCount @Number}?
-    one [1 room]
-    _ [{$roomCount} rooms]}
 ```
 
 ## Tokens
@@ -466,16 +456,18 @@ WhiteSpace ::= #x9 | #xD | #xA | #x20
 The following EBNF uses the [W3C flavor](https://www.w3.org/TR/xml/#sec-notation) of the BNF notation. The grammar is an LL(1) grammar without backtracking.
 
 ```ebnf
-Message ::= TopComment? Alias* (Pattern | Selector+ Variant+)
-Alias ::= DocComment? Variable '=' '{' Expression '}'
+Message ::= TopComment? Preamble? Variant+
 
-/* Selectors and variants */
-Selector ::= '{' Expression '}' '?'
-Variant ::= VariantKey+ Pattern
+/* Preamble */
+Preamble ::= '{' Selector* '}'
+Selector ::= DocComment? (Variable '=')? '{' Expression '}'
+
+/* Variants and Patterns */
+Variant ::= VariantKey* Pattern
 VariantKey ::= String | Nmtoken
-
-/* Pattern and pattern elements */
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
+
+/* Placeables */
 Placeable ::= '{' Expression '}'
 
 /* Expressions */

@@ -8,11 +8,11 @@ The data model defined here is not suitable for the parser-serializer roundtrip.
 
 1. [Interfaces](#interfaces)
     1. [Message](#message)
-    1. [Aliases](#aliases)
-    1. [Variants](#variants)
-    1. [Patterns](#patterns)
-    1. [Expressions](#expressions)
-    1. [Values](#values)
+    1. [Selector](#selector)
+    1. [Variant](#variant)
+    1. [Pattern](#pattern)
+    1. [Expression](#expression)
+    1. [Value](#value)
 1. [Examples](#examples)
 
 ## Interfaces
@@ -24,27 +24,26 @@ A _message_ is a container for a unit of translation.
 ```ts
 interface Message {
     comment: string;
-    aliases: Map<string, Alias>;
-    selectors: Array<Expression>;
+    selectors: Array<Selector>;
     variants: Array<Variant>;
 }
 ```
 
 Even for the simple case of a single-pattern translation, a single `Variant` is stored in an array. The runtime specification defines how the only variant is chosen in absence of selectors and variant keys. This allows effortless conversion from a single-variant translation in the source language to a multi-variant translation in the target language (or _vice versa_), because it can be done without any changes to the message's structure.
 
-### Aliases
+### Selector
 
-The _alias_ type represents a local binding to an `Expression`. Aliases are available inside other expressions throughout the message's definition. The runtime specification defines the exact rules for resolving and evaluating them.
+A selector is an expression used to choose the appropriate variant from the message's list of variants. Selectors can be optionally bound to local variables, which are then available inside other expressions throughout the message's definition. The runtime specification defines the exact rules for resolving and evaluating them.
 
 ```ts
-interface Alias {
-    comment: string;
-    name: string;
+interface Selector {
+    comment: null | string;
+    name: null | string;
     value: Expression;
 }
 ```
 
-### Variants
+### Variant
 
 A _variant_ is a container for a single _facet_ of the translation.
 
@@ -57,7 +56,7 @@ interface Variant {
 
 Variants are keyed using zero or more strings. The runtime specification defines how the variant's keys are matched against the message's _selectors_. It's valid for a variant to have zero keys, in which case it becomes the _default_ variant. A message with a single key-less variant will always select it during formatting.
 
-### Patterns
+### Pattern
 
 A _pattern_ is a sequence of _pattern elements_.
 
@@ -72,7 +71,7 @@ interface Text {
 }
 ```
 
-### Expressions
+### Expression
 
 The _expression_ type represents one of the following two concepts:
 
@@ -97,7 +96,7 @@ interface FunctionExpression {
 }
 ```
 
-### Values
+### Value
 
 The following types can be used in value positions, i.e as expression operands and option values.
 
@@ -165,7 +164,7 @@ interface String {
 <tr>
 <td>
 
-    {$count plural}?
+    {{$count @Plural}}
         1 [One apple]
         other [{$count} apples]
 

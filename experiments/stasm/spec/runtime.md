@@ -20,13 +20,13 @@ Variables are resolved eagerly and passed into functions as the data they refer 
 
 ## Alias Evaluation
 
-Alias definitions are evaluated lazily, so that other expressions have access to the raw value as well as the function call data. In the following example, the `$percentage` alias is defined as call to the `asNumber` function operating on the `$progressFloat` input variable.
+Alias definitions are evaluated lazily, so that other expressions have access to the raw value as well as the function call data. In the following example, the `$percentage` alias is defined as call to the `Number` function operating on the `$progressFloat` input variable.
 
-    $percentage = {$progressFloat asNumber style=percent}
+    {$percentage = {$progressFloat @Number style=percent}}
 
-The implementation must allow other expressions to access the raw value of `$progressFloat`. For instance, `asProgressColor` must be able to access both the variable value as a float, the formatting function name associated with the `$percentage` alias, as well as the `{style: "percent"}` option map.
+The implementation must allow other expressions to access the raw value of `$progressFloat`. For instance, `ProgressColor` must be able to access both the variable value as a float, the formatting function name associated with the `$percentage` alias, as well as the `{style: "percent"}` option map.
 
-    [...{$percentage asProgressColor}...]
+    [...{$percentage @ProgressColor}...]
 
 ## Variant Selection
 
