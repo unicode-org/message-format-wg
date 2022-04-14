@@ -5,6 +5,7 @@
 
 |   Date   | Description |
 |----------|-------------|
+|2022-04-14|Use : as the function call syntax; remove function name sigils.|
 |2022-04-13|Remove TopComment.|
 |2022-04-13|Add the preamble, simplify aliases.|
 |2022-04-13|Remove phrases (sub-messages).|
@@ -129,44 +130,44 @@ hello.format({userName: "Anne"});
 
 ### Formatting Functions
 
-A message with an interpolated `$date` variable formatted with the `@DateTime` function:
+A message with an interpolated `$date` variable formatted with the `datetime` function:
 
-    [Today is {$date @DateTime weekday=long}.]
+    [Today is {$date: datetime weekday=long}.]
 
-A message with an interpolated `$userName` variable formatted with the custom `@Person` function capable of declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
+A message with an interpolated `$userName` variable formatted with the custom `person` function capable of declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
 
-    [Hello, {$userName @Person case=vocative}!]
+    [Hello, {$userName: person case=vocative}!]
 
-A message with an interpolated `$userObj` variable formatted with the custom `@Person` function capable of plucking the first name from the object representing a person:
+A message with an interpolated `$userObj` variable formatted with the custom `person` function capable of plucking the first name from the object representing a person:
 
-    [Hello, {$userObj @Person firstName=long}!]
+    [Hello, {$userObj: person firstName=long}!]
 
 A message with two markup-like custom functions, `open(elemName)` and `close(elemName)`, which the runtime can use to construct a document tree structure for a UI framework.
 
-    [{@open tag=button}Submit{@close tag=button} or {@open tag=link}cancel{@close tag=link}]
+    [{:open tag=button}Submit{:close tag=button} or {:open tag=link}cancel{:close tag=link}]
 
 ### Selection
 
 A message with a single selector:
 
-    {{$count @Number}}
+    {{$count: number}}
         one [You have one notification.]
         _ [You have {$count} notifications.]
 
-A message with a single selector which is an invocation of a custom function `@Platform()`, formatted on a single line:
+A message with a single selector which is an invocation of a custom function `platform`, formatted on a single line:
 
-    {{@Platform}} windows [Settings] _ [Preferences]
+    {{:platform}} windows [Settings] _ [Preferences]
 
-A message with a single selector and a custom `@HasCase` function which allows the message to query for presence of grammatical cases required for each variant:
+A message with a single selector and a custom `hasCase` function which allows the message to query for presence of grammatical cases required for each variant:
 
-    {{$userName @HasCase}}
-        vocative [Hello, {$userName @Person case=vocative}!]
-        accusative [Please welcome {$userName @Person case=accusative}!]
+    {{$userName: hasCase}}
+        vocative [Hello, {$userName: person case=vocative}!]
+        accusative [Please welcome {$userName: person case=accusative}!]
         _ [Hello!]
 
 A message with 2 selectors:
 
-    {{$photoCount @Number}} {$userGender @Equals}}
+    {{$photoCount: number}} {$userGender: equals}}
         one masculine [{$userName} added a new photo to his album.]
         one feminine [{$userName} added a new photo to her album.]
         one _ [{$userName} added a new photo to their album.]
@@ -178,17 +179,17 @@ A message with 2 selectors:
 
 A message defining a `$whom` alias which is then used twice inside the pattern:
 
-    {$whom = {$monster @Noun case=accusative}}
-    [You see {$quality @Adjective article=indefinite accord=$whom} {$whom}!]
+    {$whom = {$monster: noun case=accusative}}
+    [You see {$quality: adjective article=indefinite accord=$whom} {$whom}!]
 
 A message defining two aliases: `$itemAcc` and `$countInt`, and using `$countInt` as a selector:
 
     {
-        $countInt = {$count @Number maximumFractionDigits=0}
-        $itemAcc = {$item @Noun count=$count case=accusative}
+        $countInt = {$count: number maximumFractionDigits=0}
+        $itemAcc = {$item: noun count=$count case=accusative}
     }
-        one [You bought {$color @Adjective article=indefinite accord=$itemAcc} {$itemAcc}.]
-        _ [You bought {$countInt} {$color @Adjective accord=$itemAcc} {$itemAcc}.]
+        one [You bought {$color: adjective article=indefinite accord=$itemAcc} {$itemAcc}.]
+        _ [You bought {$countInt} {$color: adjective accord=$itemAcc} {$itemAcc}.]
 
 ### Complex Messages
 
@@ -197,15 +198,15 @@ A complex message with 2 selectors and 3 local variable definitions:
     /*** A notification message shown to the user when one of their connections
      * organizes a party and at least one guest is also a user's connection. */
     {
-        {$host @Gender}
-        {$guestOther @Number}
+        {$host: gender}
+        {$guestOther: number}
 
         /** The host's first name. */
-        $hostName = {$host @Person firstName=long}
+        $hostName = {$host: person firstName=long}
         /** The first guest's first name. */
-        $guestName = {$guest @Person firstName=long}
+        $guestName = {$guest: person firstName=long}
         /** The number of guests excluding the first guest. */
-        $guestsOther = {$guestCount @Number /* Remove 1 from $guestCount */ offset=1}
+        $guestsOther = {$guestCount: number /* Remove 1 from $guestCount */ offset=1}
     }
         /* The host is female. */
         female 0 [{$hostName} does not give a party.]
@@ -242,7 +243,7 @@ MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the fol
 
     MessageFormat 2.0:
     ```
-    {{$foo @func} {$bar @func}}
+    {{$foo: func} {$bar: func}}
         foo1 [Value 1]
         foo2 bar1 [Value 2a]
         foo2 bar2 [Value 2b]
@@ -250,7 +251,7 @@ MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the fol
 
 1. MessageFormat 2.0 differentiates between the syntax used to introduce expressions (`{...}`) and the syntax used to defined translatable content (`[...]`).
 
-1. MessageFormat 2.0 uses the dollar sign (`$`) as the sigil for variable references, the _at_ sign (`@`) as the sigil for functions, and only allows named options to functions. The purpose of this change is to help disambiguate between the different parts of a placeholder (variable references, function names, literals etc.).
+1. MessageFormat 2.0 uses the dollar sign (`$`) as the sigil for variable references, the colon (`:`) as the function call syntax, and only allows named options to functions. The purpose of this change is to help disambiguate between the different parts of a placeholder (variable references, function names, literals etc.).
 
     ICU MessageFormat 1.0:
     ```
@@ -259,7 +260,7 @@ MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the fol
 
     MessageFormat 2.0:
     ```
-    {$when @date style=short}
+    {$when: date style=short}
     ```
 
 1. MessageFormat 2.0 doesn't provide the `#` shorthand inside variants. Instead it allows aliases to be defined at the top of the message; these aliases can then be referred to inside patterns similar to other variables.
@@ -290,7 +291,7 @@ Selector ::= DocComment? (Variable '=')? '{' Expression '}'
 Examples:
 
 ```
-{$frac = {$count @Number minFractionDigits=2}}
+{$frac = {$count: number minFractionDigits=2}}
     one [One apple]
     _ [{$frac} apples]
 ```
@@ -339,7 +340,7 @@ Standalone function calls don't have any operands in front of them.
 ```ebnf
 Expression ::= Operand Annotation? | Annotation
 Operand ::= String | Variable
-Annotation ::= Function Option*
+Annotation ::= ':' Name Option*
 Option ::= Name '=' (String | Nmtoken | Variable)
 ```
 
@@ -350,23 +351,23 @@ Examples:
 ```
 
 ```
-"1.23" @Number maxFractionDigits=1
+"1.23": number maxFractionDigits=1
 ```
 
 ```
-"1970-01-01T13:37:00.000Z" @DateTime weekday=long
+"1970-01-01T13:37:00.000Z": datetime weekday=long
 ```
 
 ```
-"Thu Jan 01 1970 14:37:00 GMT+0100 (CET)" @DateTime weekday=long
+"Thu Jan 01 1970 14:37:00 GMT+0100 (CET)": datetime weekday=long
 ```
 
 ```
-$when @DateTime month=2-digit
+$when: datetime month=2-digit
 ```
 
 ```
-@Message id=some_other_message
+:message id=some_other_message
 ```
 
 ## Tokens
@@ -385,7 +386,7 @@ AnyChar ::= .
 
 ### Names
 
-The _name_ token is used for variable names (prefixed with `$`), function names (prefixed with `@`) as well as option names. A name cannot start with an ASCII digit and certain basic combining characters. Otherwise, the set of characters allowed in names is large.
+The _name_ token is used for variable names (prefixed with `$`), function names as well as option names. A name cannot start with an ASCII digit and certain basic combining characters. Otherwise, the set of characters allowed in names is large.
 
 The _nmtoken_ token doesn't have _name_'s restriction on the first character and is used as variant keys and option values.
 
@@ -393,7 +394,6 @@ _Note:_ The Name and Nmtoken symbols are intentionally defined to be the same as
 
 ```ebnf
 Variable ::= '$' Name /* ws: explicit */
-Function ::= '@' Name /* ws: explicit */
 Name ::= NameStart NameChar* /* ws: explicit */
 Nmtoken ::= NameChar+ /* ws: explicit */
 NameStart ::= [a-zA-Z] | "_"
@@ -471,7 +471,7 @@ Placeable ::= '{' Expression '}'
 /* Expressions */
 Expression ::= Operand Annotation? | Annotation
 Operand ::= String | Variable
-Annotation ::= Function Option*
+Annotation ::= ':' Name Option*
 Option ::= Name '=' (String | Nmtoken | Variable)
 
 /* Ignored tokens */
@@ -486,7 +486,6 @@ AnyChar ::= .
 
 /* Names */
 Variable ::= '$' Name /* ws: explicit */
-Function ::= '@' Name /* ws: explicit */
 Name ::= NameStart NameChar* /* ws: explicit */
 Nmtoken ::= NameChar+ /* ws: explicit */
 NameStart ::= [a-zA-Z] | "_"

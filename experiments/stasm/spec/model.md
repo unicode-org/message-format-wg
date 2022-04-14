@@ -164,7 +164,7 @@ interface String {
 <tr>
 <td>
 
-    {{$count @Plural}}
+    {{$count: plural}}
         1 [One apple]
         other [{$count} apples]
 
