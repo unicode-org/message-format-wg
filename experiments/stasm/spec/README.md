@@ -2,6 +2,12 @@
 
 The following is the work-in-progress MessageFormat 2.0 specification proposal developed for the [Message Format Working Group](https://github.com/unicode-org/message-format-wg).
 
+## History
+
+In January 2022, the [CLDR TC requested](https://groups.google.com/a/chromium.org/g/message-format-wg/c/g0xWXAnxCJI) that champions of the proposals discussed at the time in the MFWG document their respective visions. The following draft was created in response to this call for proposals. The version submitted is available for viewing at [spec@1df329d](https://github.com/unicode-org/message-format-wg/tree/1df329d551867d3798b83c85005de83c20883e34/experiments/stasm/spec).
+
+You are currently reading a newer version of the proposal, which is a result of many more meetings and discussions within CLDR TC (_cf._ [resolution summary](https://groups.google.com/a/chromium.org/g/message-format-wg/c/FLheyedGqHw)) and MFWG. Special thanks go to @eemeli and @mihnita.
+
 ## Motivation
 
 The ambition of this proposal is to create a **maximally minimal** message formatting specification. The proposal attempts this by moving a large part of the complexity resulting from grammatical features of natural languages and the runtime requirements of the user to the implementation of custom functions, as well as to sources of data agnostic and external to the translation.
