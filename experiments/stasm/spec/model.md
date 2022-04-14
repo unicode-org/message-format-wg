@@ -9,7 +9,6 @@ The data model defined here is not suitable for the parser-serializer roundtrip.
 1. [Interfaces](#interfaces)
     1. [Message](#message)
     1. [Aliases](#aliases)
-    1. [Phrases](#phrases)
     1. [Variants](#variants)
     1. [Patterns](#patterns)
     1. [Expressions](#expressions)
@@ -35,35 +34,15 @@ Even for the simple case of a single-pattern translation, a single `Variant` is 
 
 ### Aliases
 
-The _alias_ type represents a local binding to an `Expression` or `Phrase`. Aliases are available inside other expressions throughout the message's definition. The runtime specification defines the exact rules for resolving and evaluating them.
+The _alias_ type represents a local binding to an `Expression`. Aliases are available inside other expressions throughout the message's definition. The runtime specification defines the exact rules for resolving and evaluating them.
 
 ```ts
 interface Alias {
     comment: string;
     name: string;
-    value: Expression | Phrase;
+    value: Expression;
 }
 ```
-
-### Phrases
-
-The _phrase_ type represents a translatable message fragment bound to an _alias_, available to be referenced in expressions throught the message's definition.
-
-```ts
-interface Phrase {
-    selectors: Array<Expression>;
-    variants: Array<Variant>;
-}
-```
-
-Phrases are a powerful feature which should be used sparingly to declutter very complex messages. With phrases, it becomes possible to factor out fragments of the translation into aliases, combatting combinatorial explosion of variants at the cost of introducing locally-scoped indirection.
-
-The benefit of phrases over custom functions implementing message referencing is that phrases are part of the message's definition. This results in:
-
-* better portability, because a message always travels with its required phrases,
-* better integrity, because a message doesn't have to depend on external messages,
-* better introspection, because tooling can always access the definitions of phrases,
-* better isolation, because other messages cannot accidentally or on purpose refer to phrases, which would create implicit dependencies.
 
 ### Variants
 

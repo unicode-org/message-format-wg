@@ -5,6 +5,7 @@
 
 |   Date   | Description |
 |----------|-------------|
+|2022-04-13|Remove phrases (sub-messages).|
 |2022-02-18|Prefix function names with @.|
 |2022-02-16|Remove number literals after all.|
 |2022-01-30|Add message-level comments and alias doc comments.|
@@ -39,7 +40,6 @@
 1. [Comparison with ICU MessageFormat 1.0](#comparison-with-icu-messageformat-10)
 1. [Productions](#productions)
     1. [Message](#message)
-    1. [Phrases](#phrases)
     1. [Patterns](#patterns)
     1. [Selectors & Variants](#selectors--variants)
     1. [Expressions](#expressions)
@@ -172,21 +172,6 @@ A message with 2 selectors:
         _ feminine [{$userName} added {$photoCount} photos to her album.]
         _ _ [{$userName} added {$photoCount} photos to their album.]
 
-A message with 3 plural selectors, which results in 8 variants in English:
-
-    {$roomCount @Number}?
-    {$suiteCount @Number}?
-    {$guestCount @Number}?
-        1 1 1 [This isn't a hotel, okay?]
-        1 1 _ [This hotel has 1 room and 1 suite, accommodating up to {$guestCount} guests.]
-        1 _ 1 [This hotel has 1 room and {$suiteCount} suites, accommodating up to 1 guest.]
-        1 _ _ [This hotel has 1 room and {$suiteCount} suites, accommodating up to {$guestCount} guests.]
-
-        _ 1 1 [This hotel has {$roomCount} rooms and 1 suite, accommodating up to 1 guest.]
-        _ 1 _ [This hotel has {$roomCount} rooms and 1 suite, accommodating up to {$guestCount} guests.]
-        _ _ 1 [This hotel has {$roomCount} rooms and {$suiteCount} suites, accommodating up to 1 guests.]
-        _ _ _ [This hotel has {$roomCount} rooms and {$suiteCount} suites, accommodating up to {$guestCount} guests.]
-
 ### Aliases
 
 A message defining a `$whom` alias which is then used twice inside the pattern:
@@ -202,23 +187,6 @@ A message defining two aliases: `$itemAcc` and `$countInt`, and using `$countInt
     {$countInt @Number}?
         one [You bought {$color @Adjective article=indefinite accord=$itemAcc} {$itemAcc}.]
         _ [You bought {$countInt} {$color @Adjective accord=$itemAcc} {$itemAcc}.]
-
-A message defining three aliases bound to message _fragments_, to mitigate the combinatorial explosion of variants from the example above:
-
-    $roomsFragment = {{$roomCount}? 1 [1 room] _ [{$roomCount} rooms]}
-    $suitesFragment = {{$suiteCount}? 1 [1 suite] _ [{$suitesCount} suites]}
-    $guestsFragment = {{$guestCount}? 1 [1 guest] _ [{$guestsCount} guests]}
-
-    {$roomCount @Number}?
-    {$suiteCount @Number}?
-    {$guestCount @Number}?
-        1 1 1 [This isn't a hotel, okay?]
-        _ _ _ [This hotel has {$roomsFragment} and {$suitesFragment}, accommodating up to {$guestsFragment}.]
-
-A message using an alias to translate the `title` attribute without nesting patterns.
-
-    $title = {[Let's go, {$username}!]}
-    [{@open tag=button title=$title}Continue{@close tag=button}]
 
 ### Complex Messages
 
@@ -301,24 +269,11 @@ The specification defines the following grammar productions. A message satisfyin
 
 ### Message
 
-A single message consists of zero of more _alias_ definitions, and one _phrase_ which represents the translatable body of the message.
+A single message consists of zero of more _alias_ definitions, and the translatable body of the message.
 
 ```ebnf
-Message ::= TopComment? Alias* Phrase
+Message ::= TopComment? Alias* (Pattern | Selector+ Variant+)
 ```
-
-### Phrases
-
-A phrase represents the translatable body of the message. It consists of:
-
-* a single _pattern_ with no _selectors_ nor _keys_, or
-* one or more _selectors_ and one or more keyed _variants_.
-
-```ebnf
-Phrase ::= Pattern | Selector+ Variant+
-```
-
-Phrases can also be bound to [_aliases_](#aliases). This powerful feature should be used sparingly to declutter very complex messages.
 
 ### Patterns
 
@@ -405,10 +360,10 @@ $when @DateTime month=2-digit
 
 ### Aliases
 
-An alias is a local variable bound to an _expression_ or a _phrase_, defined at the beginning of the message. Aliases may be used in other expressions.
+An alias is a local variable bound to an _expression_, defined at the beginning of the message. Aliases may be used in other expressions.
 
 ```ebnf
-Alias ::= DocComment? Variable '=' '{' (Expression | Phrase) '}'
+Alias ::= DocComment? Variable '=' '{' Expression '}'
 ```
 
 Examples:
@@ -511,9 +466,8 @@ WhiteSpace ::= #x9 | #xD | #xA | #x20
 The following EBNF uses the [W3C flavor](https://www.w3.org/TR/xml/#sec-notation) of the BNF notation. The grammar is an LL(1) grammar without backtracking.
 
 ```ebnf
-Message ::= TopComment? Alias* Phrase
-Alias ::= DocComment? Variable '=' '{' (Expression | Phrase) '}'
-Phrase ::= Pattern | Selector+ Variant+
+Message ::= TopComment? Alias* (Pattern | Selector+ Variant+)
+Alias ::= DocComment? Variable '=' '{' Expression '}'
 
 /* Selectors and variants */
 Selector ::= '{' Expression '}' '?'

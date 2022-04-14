@@ -1,6 +1,5 @@
-Message ::= TopComment? Alias* Phrase
-Alias ::= DocComment? Variable '=' '{' (Expression | Phrase) '}'
-Phrase ::= Pattern | Selector+ Variant+
+Message ::= TopComment? Alias* (Pattern | Selector+ Variant+)
+Alias ::= DocComment? Variable '=' '{' Expression '}'
 
 /* Selectors and variants */
 Selector ::= '{' Expression '}' '?'
