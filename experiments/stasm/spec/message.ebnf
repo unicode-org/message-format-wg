@@ -1,4 +1,4 @@
-Message ::= TopComment? Preamble? Variant+
+Message ::= DocComment? Preamble? Variant+
 
 /* Preamble */
 Preamble ::= '{' Selector* '}'
@@ -54,8 +54,7 @@ UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
 HexDigit ::= [0-9a-fA-F]
 
 /* Comments */
-TopComment ::= '/***' CommentBody '*/'
-DocComment ::= '/**' ((AnyChar - '*') CommentBody)? '*/'
+DocComment ::= '/**' CommentBody? '*/'
 AnyComment ::= '/*' ((AnyChar - '*') CommentBody)? '*/'
 CommentBody ::= AnyChar* - (AnyChar* '*/' AnyChar*)
 

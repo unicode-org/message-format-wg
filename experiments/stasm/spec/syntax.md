@@ -5,6 +5,7 @@
 
 |   Date   | Description |
 |----------|-------------|
+|2022-04-13|Remove TopComment.|
 |2022-04-13|Add the preamble, simplify aliases.|
 |2022-04-13|Remove phrases (sub-messages).|
 |2022-02-18|Prefix function names with @.|
@@ -274,7 +275,7 @@ The specification defines the following grammar productions. A message satisfyin
 A single message consists of an optional preamble, and one or more variants which represent the translatable body of the message.
 
 ```ebnf
-Message ::= TopComment? Preamble? Variant+
+Message ::= DocComment? Preamble? Variant+
 ```
 
 ### Preamble
@@ -430,13 +431,10 @@ HexDigit ::= [0-9a-fA-F]
 
 Comments are delimited with `/*` at the start, and `*/` at the end, and can contain any Unicode codepoint including line breaks. Comments can only appear outside translatable text, and are completely ignored at runtime.
 
-Comments that start with `/***` can only appear at the beginning of the message and should contain the human-readable description of the message. There can be only one message-level comment in a single message.
-
-Comments that start with `/**` can only appear in front of alias definitions and should be used to document them.
+Comments that start with `/**` are documentation comments and can only appear in front of the preamble, or inside the preamble in front of selectors.
 
 ```ebnf
-TopComment ::= '/***' CommentBody '*/'
-DocComment ::= '/**' ((AnyChar - '*') CommentBody)? '*/'
+DocComment ::= '/**' CommentBody? '*/'
 AnyComment ::= '/*' ((AnyChar - '*') CommentBody)? '*/'
 CommentBody ::= AnyChar* - (AnyChar* '*/' AnyChar*)
 ```
@@ -456,7 +454,7 @@ WhiteSpace ::= #x9 | #xD | #xA | #x20
 The following EBNF uses the [W3C flavor](https://www.w3.org/TR/xml/#sec-notation) of the BNF notation. The grammar is an LL(1) grammar without backtracking.
 
 ```ebnf
-Message ::= TopComment? Preamble? Variant+
+Message ::= DocComment? Preamble? Variant+
 
 /* Preamble */
 Preamble ::= '{' Selector* '}'
@@ -512,8 +510,7 @@ UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
 HexDigit ::= [0-9a-fA-F]
 
 /* Comments */
-TopComment ::= '/***' CommentBody '*/'
-DocComment ::= '/**' ((AnyChar - '*') CommentBody)? '*/'
+DocComment ::= '/**' CommentBody? '*/'
 AnyComment ::= '/*' ((AnyChar - '*') CommentBody)? '*/'
 CommentBody ::= AnyChar* - (AnyChar* '*/' AnyChar*)
 
