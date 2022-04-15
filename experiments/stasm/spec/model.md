@@ -126,7 +126,7 @@ The following types can be used in value positions, i.e as expression operands a
 type Value = Variable | String;
 ```
 
-The _variable_ type represents a reference to a value provided by the callsite at runtime, or a reference to an alias defined in the current message.
+The _variable_ type represents a reference to a value provided by the callsite at runtime, or a reference to a local variable defined in the current message.
 
 ```ts
 interface Variable {
@@ -160,7 +160,6 @@ interface String {
 
     Message {
         comment: "",
-        aliases: [],
         selectors: [],
         variants: [
             Variant {
@@ -195,17 +194,20 @@ interface String {
 
     Message {
         comment: "",
-        aliases: [],
         selectors: [
-            ValueExpression {
-                operand: Variable {
-                    name: "count"
-                },
-                annotation: FunctionExpression {
-                    name: "plural",
-                    options: Map {}
+            Selector {
+                comment: null,
+                name: null,
+                value: ValueExpression {
+                    operand: Variable {
+                        name: "count"
+                    },
+                    annotation: FunctionExpression {
+                        name: "plural",
+                        options: Map {}
+                    }
                 }
-            },
+            }
         ],
         variants: [
             Variant {

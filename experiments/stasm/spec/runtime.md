@@ -18,13 +18,13 @@ Strings always evaluate to their literal value. They require no additional forma
 
 Variables are resolved eagerly and passed into functions as the data they refer to. Implementations must define default matching and formatting functions for input types that they accept.
 
-## Alias Evaluation
+## Local Variables
 
-Alias definitions are evaluated lazily, so that other expressions have access to the raw value as well as the function call data. In the following example, the `$percentage` alias is defined as call to the `number` function operating on the `$progressFloat` input variable.
+Local variable definitions are evaluated lazily, so that other expressions have access to the raw value as well as the function call data. In the following example, the local variable `$percentage` is defined as call to the `number` function operating on the `$progressFloat` input variable.
 
     {$percentage = {$progressFloat: number style=percent}}
 
-The implementation must allow other expressions to access the raw value of `$progressFloat`. For instance, `progressColor` must be able to access both the variable value as a float, the formatting function name associated with the `$percentage` alias, as well as the `{style: "percent"}` option map.
+The implementation must allow other expressions to access the raw value of `$progressFloat`. For instance, in the example below, `progressColor` must be able to access the value of `$progressFloat` as a float, as well as the fact that the `number` function was used with the `{style: "percent"}` option map.
 
     [...{$percentage: progressColor}...]
 

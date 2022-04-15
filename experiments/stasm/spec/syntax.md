@@ -5,6 +5,7 @@
 
 |   Date   | Description |
 |----------|-------------|
+|2022-04-15|Rename aliases to local variables.|
 |2022-04-15|Allow empty placeables.|
 |2022-04-15|Use {a}{/a} for markup elements.|
 |2022-04-14|Use : as the function call syntax; remove function name sigils.|
@@ -41,7 +42,7 @@
     1. [Formatting Functions](#formatting-functions)
     1. [Markup Elements](#markup-elements)
     1. [Selection](#selection)
-    1. [Aliases](#aliases)
+    1. [Local Variables](#local-variables)
     1. [Complex Messages](#complex-messages)
 1. [Comparison with ICU MessageFormat 1.0](#comparison-with-icu-messageformat-10)
 1. [Productions](#productions)
@@ -182,14 +183,14 @@ A message with 2 selectors:
         _ feminine [{$userName} added {$photoCount} photos to her album.]
         _ _ [{$userName} added {$photoCount} photos to their album.]
 
-### Aliases
+### Local Variables
 
-A message defining a `$whom` alias which is then used twice inside the pattern:
+A message defining a local variable `$whom` which is then used twice inside the pattern:
 
     {$whom = {$monster: noun case=accusative}}
     [You see {$quality: adjective article=indefinite accord=$whom} {$whom}!]
 
-A message defining two aliases: `$itemAcc` and `$countInt`, and using `$countInt` as a selector:
+A message defining two local variables: `$itemAcc` and `$countInt`, and using `$countInt` as a selector:
 
     {
         $countInt = {$count: number maximumFractionDigits=0}
@@ -270,7 +271,7 @@ MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the fol
     {$when: date style=short}
     ```
 
-1. MessageFormat 2.0 doesn't provide the `#` shorthand inside variants. Instead it allows aliases to be defined at the top of the message; these aliases can then be referred to inside patterns similar to other variables.
+1. MessageFormat 2.0 doesn't provide the `#` shorthand inside variants. Instead it allows local variables to be defined in the preamble, which can then be referred to inside patterns similar to other variables.
 
 1. MessageFormat 2.0 doesn't require commas (`,`) inside placeholders.
 
@@ -288,7 +289,7 @@ Message ::= DocComment? Preamble? Variant+
 
 ### Preamble
 
-The preamble is where selectors and aliases can be defined. A selector is an expression which will be used to choose one of the variants during formatting. A selector can be optionally bound to an alias. Aliases are local variables which may be used in other expressions.
+The preamble is where selectors and local variables can be defined. A selector is an expression which will be used to choose one of the variants during formatting. A selector can be optionally bound to a local variable, which may then be used in other expressions.
 
 ```ebnf
 Preamble ::= '{' Selector* '}'
