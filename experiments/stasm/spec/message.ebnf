@@ -29,7 +29,7 @@ Ignore ::= AnyComment | WhiteSpace /* ws: definition */
 
 /* Text */
 Text ::= (TextChar | TextEscape)+
-TextChar ::= AnyChar - (']' | '{' | Esc)
+TextChar ::= AnyChar - ('[' | ']' | '{' | Esc)
 AnyChar ::= .
 
 /* Names */
@@ -50,7 +50,7 @@ StringChar ::= AnyChar - ('"'| Esc)
 
 /* Escape sequences */
 Esc ::= '\'
-TextEscape ::= Esc ']' | Esc '{' | UnicodeEscape
+TextEscape ::= Esc '[' | Esc ']' | Esc '{' | UnicodeEscape
 StringEscape ::= Esc '"' | UnicodeEscape
 UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
                 | Esc 'U' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit

@@ -409,11 +409,11 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 
 ### Text
 
-Text is the translatable content of a _pattern_. Any Unicode codepoint is allowed in text, with the exception of `]` (which ends the pattern), `{` (which starts a placeholder), and `\` (which starts an escape sequence).
+Text is the translatable content of a _pattern_. Any Unicode codepoint is allowed in text, with the exception of `[` and `]` (which delimit patterns), `{` (which starts a placeholder), and `\` (which starts an escape sequence).
 
 ```ebnf
 Text ::= (TextChar | TextEscape)+ /* ws: explicit */
-TextChar ::= AnyChar - (']' | '{' | Esc)
+TextChar ::= AnyChar - ('[' | ']' | '{' | Esc)
 AnyChar ::= .
 ```
 
@@ -453,7 +453,7 @@ Escape sequences are introduced by the backslash character (`\`). They are allow
 
 ```ebnf
 Esc ::= '\'
-TextEscape ::= Esc ']' | Esc '{' | UnicodeEscape
+TextEscape ::= Esc '[' | Esc ']' | Esc '{' | UnicodeEscape
 StringEscape ::= Esc '"' | UnicodeEscape
 UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
                 | Esc 'U' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
@@ -518,7 +518,7 @@ Ignore ::= AnyComment | WhiteSpace /* ws: definition */
 
 /* Text */
 Text ::= (TextChar | TextEscape)+
-TextChar ::= AnyChar - (']' | '{' | Esc)
+TextChar ::= AnyChar - ('[' | ']' | '{' | Esc)
 AnyChar ::= .
 
 /* Names */
@@ -539,7 +539,7 @@ StringChar ::= AnyChar - ('"'| Esc)
 
 /* Escape sequences */
 Esc ::= '\'
-TextEscape ::= Esc ']' | Esc '{' | UnicodeEscape
+TextEscape ::= Esc '[' | Esc ']' | Esc '{' | UnicodeEscape
 StringEscape ::= Esc '"' | UnicodeEscape
 UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
                 | Esc 'U' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
