@@ -453,8 +453,8 @@ Escape sequences are introduced by the backslash character (`\`). They are allow
 
 ```ebnf
 Esc ::= '\'
-TextEscape ::= Esc '[' | Esc ']' | Esc '{' | UnicodeEscape
-StringEscape ::= Esc '"' | UnicodeEscape
+TextEscape ::= Esc Esc | Esc '[' | Esc ']' | Esc '{' | UnicodeEscape
+StringEscape ::= Esc Esc | Esc '"' | UnicodeEscape
 UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
                 | Esc 'U' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 HexDigit ::= [0-9a-fA-F]
@@ -539,8 +539,8 @@ StringChar ::= AnyChar - ('"'| Esc)
 
 /* Escape sequences */
 Esc ::= '\'
-TextEscape ::= Esc '[' | Esc ']' | Esc '{' | UnicodeEscape
-StringEscape ::= Esc '"' | UnicodeEscape
+TextEscape ::= Esc Esc | Esc '[' | Esc ']' | Esc '{' | UnicodeEscape
+StringEscape ::= Esc Esc | Esc '"' | UnicodeEscape
 UnicodeEscape ::= Esc 'u' HexDigit HexDigit HexDigit HexDigit
                 | Esc 'U' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
 HexDigit ::= [0-9a-fA-F]
