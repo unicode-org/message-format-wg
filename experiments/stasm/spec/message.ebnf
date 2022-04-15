@@ -10,7 +10,7 @@ VariantKey ::= String | Nmtoken
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 
 /* Placeables */
-Placeable ::= '{' (Expression | MarkupStart | MarkupEnd) '}'
+Placeable ::= '{' (Expression | MarkupStart | MarkupEnd)? '}'
 
 /* Expressions */
 Expression ::= Operand Annotation? | Annotation

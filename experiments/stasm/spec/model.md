@@ -63,7 +63,7 @@ A _pattern_ is a sequence of _pattern elements_.
 
 ```ts
 type Pattern = Array<PatternElement>;
-type PatternElement = Text | Expression | MarkupElement;
+type PatternElement = Text | Expression | MarkupElement | null;
 ```
 
 ```ts
@@ -76,8 +76,8 @@ interface Text {
 
 The _expression_ type represents one of the following two concepts:
 
-* An implicit or explicit formatting of a literal or a variable by means of a function invoked with a map of options (named arguments).
-* A standalone call to a function with a map of options (named arguments).
+* A literal or a variable, implicitly formatted according to its internal type, or explicitly annotated by a function configured with a map of named options.
+* A standalone call to a function with a map of named options.
 
 ```ts
 type Expression = ValueExpression | FunctionExpression;
@@ -86,7 +86,7 @@ type Expression = ValueExpression | FunctionExpression;
 ```ts
 interface ValueExpression {
     operand: Value;
-    function: null | FunctionExpression;
+    annotation: null | FunctionExpression;
 }
 ```
 
@@ -173,7 +173,7 @@ interface String {
                         operand: Variable {
                             name: "username"
                         },
-                        function: null
+                        annotation: null
                     },
                 ]
             },
@@ -201,7 +201,7 @@ interface String {
                 operand: Variable {
                     name: "count"
                 },
-                function: FunctionExpression {
+                annotation: FunctionExpression {
                     name: "plural",
                     options: Map {}
                 }
@@ -231,7 +231,7 @@ interface String {
                         operand: Variable {
                             name: "count"
                         },
-                        function: null
+                        annotation: null
                     },
                     Text {
                         value: " apples"

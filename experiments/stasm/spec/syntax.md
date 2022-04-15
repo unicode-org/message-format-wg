@@ -5,6 +5,7 @@
 
 |   Date   | Description |
 |----------|-------------|
+|2022-04-15|Allow empty placeables.|
 |2022-04-15|Use {a}{/a} for markup elements.|
 |2022-04-14|Use : as the function call syntax; remove function name sigils.|
 |2022-04-13|Remove TopComment.|
@@ -336,10 +337,10 @@ Examples:
 
 ### Placeables
 
-A placeable is a placeholder for an expression or an open or close markup element.
+A placeable is a placeholder for an expression or an open or close markup element. A placeable can be empty to allow the `{/* ... */}` syntax for inline comments.
 
 ```ebnf
-Placeable ::= '{' (Expression | MarkupStart | MarkupEnd) '}'
+Placeable ::= '{' (Expression | MarkupStart | MarkupEnd)? '}'
 ```
 
 ### Expressions
@@ -498,7 +499,7 @@ VariantKey ::= String | Nmtoken
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 
 /* Placeables */
-Placeable ::= '{' (Expression | MarkupStart | MarkupEnd) '}'
+Placeable ::= '{' (Expression | MarkupStart | MarkupEnd)? '}'
 
 /* Expressions */
 Expression ::= Operand Annotation? | Annotation
