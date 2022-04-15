@@ -1,6 +1,6 @@
-<!ELEMENT registry (function*) >
+<!ELEMENT registry (function*)>
 
-<!ELEMENT function (description, pattern*, signature+) >
+<!ELEMENT function (description, pattern*, signature+)>
 <!ATTLIST function id NMTOKEN #REQUIRED>
 
 <!ELEMENT description (#CDATA)>
@@ -10,7 +10,7 @@
 <!ATTLIST pattern regex CDATA #IMPLIED>
 
 <!ELEMENT signature (input*, param*, match*)>
-<!ATTLIST signature type (match|format) #REQUIRED>
+<!ATTLIST signature type (match|format|markup) #REQUIRED>
 <!ATTLIST signature locales NMTOKENS #IMPLIED>
 
 <!ELEMENT input EMPTY>

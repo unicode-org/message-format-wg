@@ -12,6 +12,7 @@ The data model defined here is not suitable for the parser-serializer roundtrip.
     1. [Variant](#variant)
     1. [Pattern](#pattern)
     1. [Expression](#expression)
+    1. [MarkupElement](#markupelement)
     1. [Value](#value)
 1. [Examples](#examples)
 
@@ -62,7 +63,7 @@ A _pattern_ is a sequence of _pattern elements_.
 
 ```ts
 type Pattern = Array<PatternElement>;
-type PatternElement = Text | Expression;
+type PatternElement = Text | Expression | MarkupElement;
 ```
 
 ```ts
@@ -93,6 +94,27 @@ interface ValueExpression {
 interface FunctionExpression {
     name: string;
     options: Map<string, Value>;
+}
+```
+
+### MarkupElement
+
+Markup elements are placeables which can (but do not have to) be matched by their name in open-close pairs. They do not accept positional arguments, and key-value options are allowed only on the opening element. There are no guarantees about the well-formedness of pairs of elements.
+
+```ts
+type MarkupElement = StartElement | EndElement;
+```
+
+```ts
+interface StartElement {
+    name: string;
+    options: Map<string, Value>;
+}
+```
+
+```ts
+interface EndElement {
+    name: string;
 }
 ```
 

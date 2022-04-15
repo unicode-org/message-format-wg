@@ -27,9 +27,9 @@ The registry enables the following usage scenarios:
 The registry contains descriptions of function signatures. The following DTD describes the data model of a registry definition.
 
 ```xml
-<!ELEMENT registry (function*) >
+<!ELEMENT registry (function*)>
 
-<!ELEMENT function (description, pattern*, signature+) >
+<!ELEMENT function (description, pattern*, signature+)>
 <!ATTLIST function id NMTOKEN #REQUIRED>
 
 <!ELEMENT description (#CDATA)>
@@ -39,7 +39,7 @@ The registry contains descriptions of function signatures. The following DTD des
 <!ATTLIST pattern regex CDATA #IMPLIED>
 
 <!ELEMENT signature (input*, param*, match*)>
-<!ATTLIST signature type (match|format) #REQUIRED>
+<!ATTLIST signature type (match|format|markup) #REQUIRED>
 <!ATTLIST signature locales NMTOKENS #IMPLIED>
 
 <!ELEMENT input EMPTY>
@@ -62,7 +62,7 @@ The registry contains descriptions of function signatures. The following DTD des
 
 The main building block of the registry is the `<function>` element. It represents an implementation of a custom function available to translation at runtime. A function defines a human-readable _description_ of its behavior and one or more _signatures_ of how to call it. Named regex _patterns_ can optionally define validation rules for input, optional values, and variant keys.
 
-The `<signature>` element defines the calling context of a function with the `type` attribute. A `type="format"` function can only be called inside a placeholder inside translatable text. A `type="match"` function can only be called inside a selector. Signatures with a non-empty `locales` attribute are locale-specific.
+The `<signature>` element defines the calling context of a function with the `type` attribute. A `type="format"` function can only be called inside a placeholder inside translatable text. A `type="match"` function can only be called inside a selector. A `type="markup"` function can only be used inside patterns as markup elements. Signatures with a non-empty `locales` attribute are locale-specific and only available in translations in the given languages.
 
 A signature may define the type of input it accepts with zero or more `<input>` elments. Note that in MessageFormat 2.0 functions can only ever accept at most one positional argument. Multiple `<input>` elements can be used to define different validation rules for this single argument input, together with appropriate human-readable descriptions.
 
@@ -92,9 +92,9 @@ The following `registry.xml` is an example of a registry file which may be provi
             or against a number literal.
         </description>
 
-	<pattern name="anyNumber" regex="-?[0-9]+(\.[0-9]+)"/>
-	<pattern name="positiveInteger" regex="[0-9]+"/>
-	<pattern name="currencyCode" regex="[A-Z]{3}"/>
+        <pattern name="anyNumber" regex="-?[0-9]+(\.[0-9]+)"/>
+        <pattern name="positiveInteger" regex="[0-9]+"/>
+        <pattern name="currencyCode" regex="[A-Z]{3}"/>
 
         <signature type="match" locales="en">
             <input pattern="anyNumber"/>
@@ -153,6 +153,14 @@ A localization engineer can then extend the registry by defining the following `
             <param name="accord"/>
         </signature>
     </function>
+
+    <function id="link">
+        <description>Web link markup.</description>
+        <pattern name="url" regex=".*"/>
+        <signature type="markup">
+            <param name="href" readonly="true" pattern="url"/>
+        </signature>
+    </function>
 </registry>
 ```
 
@@ -164,3 +172,7 @@ The following message references the second signature of `adjective`, which only
 
     {$obj = {$object: noun case=nominative}}
     [You see {$color: adjective article=indefinite accord=$obj} {$obj}!]
+
+Additionally, the `link` markup element is now available to messages, too. The registry defines the `href` parameter as `readonly`; therefore it will not be editable by translators.
+
+    [Consult out {link href="/privacy.html"}privacy policy{/link}.]

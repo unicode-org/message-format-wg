@@ -10,13 +10,17 @@ VariantKey ::= String | Nmtoken
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 
 /* Placeables */
-Placeable ::= '{' Expression '}'
+Placeable ::= '{' (Expression | MarkupStart | MarkupEnd) '}'
 
 /* Expressions */
 Expression ::= Operand Annotation? | Annotation
 Operand ::= String | Variable
 Annotation ::= ':' Name Option*
 Option ::= Name '=' (String | Nmtoken | Variable)
+
+/* Markup Tags */
+MarkupStart ::= Name Option*
+MarkupEnd ::= '/' Name
 
 /* Ignored tokens */
 Ignore ::= AnyComment | WhiteSpace /* ws: definition */

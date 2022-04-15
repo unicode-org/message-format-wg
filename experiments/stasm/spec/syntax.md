@@ -5,6 +5,7 @@
 
 |   Date   | Description |
 |----------|-------------|
+|2022-04-15|Use {a}{/a} for markup elements.|
 |2022-04-14|Use : as the function call syntax; remove function name sigils.|
 |2022-04-13|Remove TopComment.|
 |2022-04-13|Add the preamble, simplify aliases.|
@@ -37,6 +38,7 @@
     1. [Simple Messages](#simple-messages)
     1. [Simple Placeholders](#simple-placeholders)
     1. [Formatting Functions](#formatting-functions)
+    1. [Markup Elements](#markup-elements)
     1. [Selection](#selection)
     1. [Aliases](#aliases)
     1. [Complex Messages](#complex-messages)
@@ -46,7 +48,9 @@
     1. [Preamble](#preamble)
     1. [Variants](#variants)
     1. [Patterns](#patterns)
+    1. [Placeables](#placeables)
     1. [Expressions](#expressions)
+    1. [Markup Elements](#markup-elements)
 1. [Tokens](#tokens)
     1. [Text](#text)
     1. [Names](#names)
@@ -142,9 +146,11 @@ A message with an interpolated `$userObj` variable formatted with the custom `pe
 
     [Hello, {$userObj: person firstName=long}!]
 
-A message with two markup-like custom functions, `open(elemName)` and `close(elemName)`, which the runtime can use to construct a document tree structure for a UI framework.
+### Markup Elements
 
-    [{:open tag=button}Submit{:close tag=button} or {:open tag=link}cancel{:close tag=link}]
+A message with two markup-like element placeables, `button` and `link`, which the runtime can use to construct a document tree structure for a UI framework.
+
+    [{button}Submit{/button} or {link}cancel{/link}.]
 
 ### Selection
 
@@ -320,13 +326,20 @@ A pattern is a sequence of translatable elements. Patterns are always delimited 
 
 ```ebnf
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
-Placeable ::= '{' Expression '}'
 ```
 
 Examples:
 
 ```
 [Hello, world!]
+```
+
+### Placeables
+
+A placeable is a placeholder for an expression or an open or close markup element.
+
+```ebnf
+Placeable ::= '{' (Expression | MarkupStart | MarkupEnd) '}'
 ```
 
 ### Expressions
@@ -368,6 +381,25 @@ $when: datetime month=2-digit
 
 ```
 :message id=some_other_message
+```
+
+### Markup
+
+Markup elements provide a structured way to mark up parts of the content. There are two kinds of elements: start (opening) elements and end (closing) elements, each with its own syntax. They mimic XML elements, but do not require well-formedness. Standalone display elements should be represented as function expressions.
+
+```ebnf
+MarkupStart ::= Name Option*
+MarkupEnd ::= '/' Name
+```
+
+Examples:
+
+```
+[This is {b}bold{/b}.]
+```
+
+```
+[{h1 name="above-and-beyond"}Above And Beyond{/h1}]
 ```
 
 ## Tokens
@@ -466,13 +498,17 @@ VariantKey ::= String | Nmtoken
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 
 /* Placeables */
-Placeable ::= '{' Expression '}'
+Placeable ::= '{' (Expression | MarkupStart | MarkupEnd) '}'
 
 /* Expressions */
 Expression ::= Operand Annotation? | Annotation
 Operand ::= String | Variable
 Annotation ::= ':' Name Option*
 Option ::= Name '=' (String | Nmtoken | Variable)
+
+/* Markup Tags */
+MarkupStart ::= Name Option*
+MarkupEnd ::= '/' Name
 
 /* Ignored tokens */
 Ignore ::= AnyComment | WhiteSpace /* ws: definition */
