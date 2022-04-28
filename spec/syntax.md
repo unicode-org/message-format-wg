@@ -526,7 +526,7 @@ whitespace is part of the translatable content and is recorded and stored verbat
 Whitespace is not significant outside translatable text.
 
 ```ebnf
-WhiteSpace ::= #x9 | #xD | #xA | #x20
+WhiteSpace ::= #x9 | #xD | #xA | #x20 /* ws: definition */
 ```
 
 ## Complete EBNF
@@ -558,9 +558,6 @@ Option ::= Name '=' (String | Nmtoken | Variable)
 /* Markup Tags */
 MarkupStart ::= Name Option*
 MarkupEnd ::= '/' Name
-
-/* Ignored tokens */
-Ignore ::= WhiteSpace /* ws: definition */
 
 <?TOKENS?>
 
@@ -597,5 +594,5 @@ TextEscape ::= Esc Esc | Esc '[' | Esc ']' | Esc '{' | Esc '}'
 StringEscape ::= Esc Esc | Esc '"'
 
 /* WhiteSpace */
-WhiteSpace ::= #x9 | #xD | #xA | #x20
+WhiteSpace ::= #x9 | #xD | #xA | #x20 /* ws: definition */
 ```
