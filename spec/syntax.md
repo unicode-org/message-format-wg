@@ -154,7 +154,7 @@ which the runtime can use to construct a document tree structure for a UI framew
 A message with a single selector:
 
     {$count: number}
-        one [You have one notification.]
+        1 [You have one notification.]
         _ [You have {$count} notifications.]
 
 A message with a single selector which is an invocation of
@@ -173,9 +173,9 @@ which allows the message to query for presence of grammatical cases required for
 A message with 2 selectors:
 
     {$photoCount: number} {$userGender: equals}
-        one masculine [{$userName} added a new photo to his album.]
-        one feminine [{$userName} added a new photo to her album.]
-        one _ [{$userName} added a new photo to their album.]
+        1 masculine [{$userName} added a new photo to his album.]
+        1 feminine [{$userName} added a new photo to her album.]
+        1 _ [{$userName} added a new photo to their album.]
         _ masculine [{$userName} added {$photoCount} photos to his album.]
         _ feminine [{$userName} added {$photoCount} photos to her album.]
         _ _ [{$userName} added {$photoCount} photos to their album.]
@@ -325,7 +325,7 @@ Examples:
 
 ```
 $frac = {$count: number minFractionDigits=2}
-    one [One apple]
+    1 [One apple]
     _ [{$frac} apples]
 ```
 
