@@ -13,7 +13,6 @@
    1. [Selection](#selection)
    1. [Local Variables](#local-variables)
    1. [Complex Messages](#complex-messages)
-1. [Comparison with ICU MessageFormat 1.0](#comparison-with-icu-messageformat-10)
 1. [Productions](#productions)
    1. [Message](#message)
    1. [Plain](#plain)
@@ -44,10 +43,10 @@ the successor to ICU MessageFormat, henceforth called ICU MessageFormat 1.0.
 
 The design goals of the syntax specification are as follows:
 
-1. The syntax should be an incremental update over the ICU MessageFormat 1.0 syntax
-   in order to leverage the familiarity and the single-message model
-   that is ubiquitous in the localization tooling today,
-   and increase the chance of adoption.
+1. The syntax should leverage the familiarity with ICU MessageFormat 1.0
+   in order to lower the barrier to entry and increase the chance of adoption.
+   At the same time,
+   the syntax should fix the [pain points of ICU MessageFormat 1.0](../docs/why_mf_next.md).
 
    - _Non-Goal_: Be backwards-compatible with the ICU MessageFormat 1.0 syntax.
 
@@ -220,62 +219,6 @@ A complex message with 2 selectors and 3 local variable definitions:
         _ 1 [{$hostName} invites {$guestName} to their party.]
         _ 2 [{$hostName} invites {$guestName} and one other person to their party.]
         _ _ [{$hostName} invites {$guestName} and {$guestsOther} other people to their party.]
-
-## Comparison with ICU MessageFormat 1.0
-
-MessageFormat 2.0 improves upon the ICU MessageFormat 1.0 syntax through the following changes:
-
-1. In MessageFormat 2.0,
-   variants can only be defined at the top level of the message,
-   thus precluding any possible nestedness of expressions.
-
-   ICU MessageFormat 1.0:
-
-   ```
-   {foo, func,
-       foo1 {Value 1},
-       foo2 {
-           {bar, func,
-               bar1 {Value 2a}
-               bar2 {Value 2b}}}}
-   ```
-
-   MessageFormat 2.0:
-
-   ```
-   {$foo: func} {$bar: func}
-       foo1 [Value 1]
-       foo2 bar1 [Value 2a]
-       foo2 bar2 [Value 2b]
-   ```
-
-1. MessageFormat 2.0 differentiates between
-   the syntax used to introduce expressions (`{...}`) and
-   the syntax used to defined translatable content (`[...]`).
-
-1. MessageFormat 2.0 uses the dollar sign (`$`) as the sigil for variable references,
-   the colon (`:`) as the function call syntax,
-   and only allows named options to functions.
-   The purpose of this change is to help disambiguate between
-   the different parts of a placeholder (variable references, function names, literals etc.).
-
-   ICU MessageFormat 1.0:
-
-   ```
-   {when, date, short}
-   ```
-
-   MessageFormat 2.0:
-
-   ```
-   {$when: date style=short}
-   ```
-
-1. MessageFormat 2.0 doesn't provide the `#` shorthand inside variants.
-   Instead it allows local variables to be defined in the preamble,
-   which can then be referred to inside patterns similar to other variables.
-
-1. MessageFormat 2.0 doesn't require commas (`,`) inside placeholders.
 
 ## Productions
 
@@ -531,68 +474,6 @@ WhiteSpace ::= #x9 | #xD | #xA | #x20 /* ws: definition */
 
 ## Complete EBNF
 
-The following EBNF uses the [W3C flavor](https://www.w3.org/TR/xml/#sec-notation) of the BNF notation.
+The complete EBNF is available as [`message.ebnf`](./message.ebnf).
+It uses the [W3C flavor](https://www.w3.org/TR/xml/#sec-notation) of the BNF notation.
 The grammar is an LL(1) grammar without backtracking.
-
-```ebnf
-Message ::= Plain | Pattern | Preamble Variant+
-
-/* Preamble */
-Preamble ::= Selector+
-Selector ::= (Variable '=')? '{' Expression '}'
-
-/* Variants and Patterns */
-Variant ::= VariantKey* Pattern
-VariantKey ::= String | Nmtoken
-Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
-
-/* Placeables */
-Placeable ::= '{' (Expression | MarkupStart | MarkupEnd)? '}'
-
-/* Expressions */
-Expression ::= Operand Annotation? | Annotation
-Operand ::= String | Variable
-Annotation ::= ':' Name Option*
-Option ::= Name '=' (String | Nmtoken | Variable)
-
-/* Markup Tags */
-MarkupStart ::= Name Option*
-MarkupEnd ::= '/' Name
-
-<?TOKENS?>
-
-/* Plain */
-Plain ::= PlainStart (PlainChar* PlainEnd)?  /* ws: explicit */
-PlainChar ::= AnyChar - ('{' | '}')
-PlainStart ::= PlainChar - ('[' | '$' | WhiteSpace)
-PlainEnd ::= PlainChar - WhiteSpace
-
-/* Text */
-Text ::= (TextChar | TextEscape)+
-TextChar ::= AnyChar - ('[' | ']' | '{' | '}' | Esc)
-AnyChar ::= .
-
-/* Names */
-Variable ::= '$' Name /* ws: explicit */
-Name ::= NameStart NameChar* /* ws: explicit */
-Nmtoken ::= NameChar+ /* ws: explicit */
-NameStart ::= [a-zA-Z] | "_"
-            | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
-            | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
-            | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
-            | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
-NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
-           | [#x0300-#x036F] | [#x203F-#x2040]
-
-/* Quoted strings */
-String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
-StringChar ::= AnyChar - ('"'| Esc)
-
-/* Escape sequences */
-Esc ::= '\'
-TextEscape ::= Esc Esc | Esc '[' | Esc ']' | Esc '{' | Esc '}'
-StringEscape ::= Esc Esc | Esc '"'
-
-/* WhiteSpace */
-WhiteSpace ::= #x9 | #xD | #xA | #x20 /* ws: definition */
-```
