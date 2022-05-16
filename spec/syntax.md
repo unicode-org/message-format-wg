@@ -440,7 +440,7 @@ NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
 
 ### Quoted Strings
 
-Any Unicode codepoint is allowed in quoyed string literals, with the exception of
+Any Unicode codepoint is allowed in quoted string literals, with the exception of
 `"` (which ends the string literal),
 and `\` (which starts an escape sequence).
 
