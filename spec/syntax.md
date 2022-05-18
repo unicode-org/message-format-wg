@@ -154,12 +154,12 @@ A message with a single selector:
 
     {$count: number}
         1 [You have one notification.]
-        _ [You have {$count} notifications.]
+        * [You have {$count} notifications.]
 
 A message with a single selector which is an invocation of
 a custom function `platform`, formatted on a single line:
 
-    {:platform} windows [Settings] _ [Preferences]
+    {:platform} windows [Settings] * [Preferences]
 
 A message with a single selector and a custom `hasCase` function
 which allows the message to query for presence of grammatical cases required for each variant:
@@ -167,17 +167,17 @@ which allows the message to query for presence of grammatical cases required for
     {$userName: hasCase}
         vocative [Hello, {$userName: person case=vocative}!]
         accusative [Please welcome {$userName: person case=accusative}!]
-        _ [Hello!]
+        * [Hello!]
 
 A message with 2 selectors:
 
     {$photoCount: number} {$userGender: equals}
         1 masculine [{$userName} added a new photo to his album.]
         1 feminine [{$userName} added a new photo to her album.]
-        1 _ [{$userName} added a new photo to their album.]
-        _ masculine [{$userName} added {$photoCount} photos to his album.]
-        _ feminine [{$userName} added {$photoCount} photos to her album.]
-        _ _ [{$userName} added {$photoCount} photos to their album.]
+        1 * [{$userName} added a new photo to their album.]
+        * masculine [{$userName} added {$photoCount} photos to his album.]
+        * feminine [{$userName} added {$photoCount} photos to her album.]
+        * * [{$userName} added {$photoCount} photos to their album.]
 
 ### Local Variables
 
@@ -192,7 +192,7 @@ A message defining two local variables:
     $countInt = {$count: number maximumFractionDigits=0}
     $itemAcc = {$item: noun count=$count case=accusative}
         one [You bought {$color: adjective article=indefinite accord=$itemAcc} {$itemAcc}.]
-        _ [You bought {$countInt} {$color: adjective accord=$itemAcc} {$itemAcc}.]
+        * [You bought {$countInt} {$color: adjective accord=$itemAcc} {$itemAcc}.]
 
 ### Complex Messages
 
@@ -208,17 +208,17 @@ A complex message with 2 selectors and 3 local variable definitions:
         female 0 [{$hostName} does not give a party.]
         female 1 [{$hostName} invites {$guestName} to her party.]
         female 2 [{$hostName} invites {$guestName} and one other person to her party.]
-        female _ [{$hostName} invites {$guestName} and {$guestsOther} other people to her party.]
+        female * [{$hostName} invites {$guestName} and {$guestsOther} other people to her party.]
 
         male 0 [{$hostName} does not give a party.]
         male 1 [{$hostName} invites {$guestName} to his party.]
         male 2 [{$hostName} invites {$guestName} and one other person to his party.]
-        male _ [{$hostName} invites {$guestName} and {$guestsOther} other people to his party.]
+        male * [{$hostName} invites {$guestName} and {$guestsOther} other people to his party.]
 
-        _ 0 [{$hostName} does not give a party.]
-        _ 1 [{$hostName} invites {$guestName} to their party.]
-        _ 2 [{$hostName} invites {$guestName} and one other person to their party.]
-        _ _ [{$hostName} invites {$guestName} and {$guestsOther} other people to their party.]
+        * 0 [{$hostName} does not give a party.]
+        * 1 [{$hostName} invites {$guestName} to their party.]
+        * 2 [{$hostName} invites {$guestName} and one other person to their party.]
+        * * [{$hostName} invites {$guestName} and {$guestsOther} other people to their party.]
 
 ## Productions
 
@@ -269,23 +269,24 @@ Examples:
 ```
 $frac = {$count: number minFractionDigits=2}
     1 [One apple]
-    _ [{$frac} apples]
+    * [{$frac} apples]
 ```
 
 ### Variants
 
 A variant is a keyed pattern.
 The keys are used to match against the selectors defined in the preamble.
+The key `*` is a "catch-all" key, matching all selector values.
 
 ```ebnf
 Variant ::= VariantKey* Pattern
-VariantKey ::= String | Nmtoken
+VariantKey ::= String | Nmtoken | '*'
 ```
 
 A well-formed message is considered valid if the following requirements are satisfied:
 
 - The number of keys on each variant must be fewer or equal to the number of selectors defined in the preamble.
-- At least one variant's keys must all be equal to the catch-all key (`_`).
+- At least one variant's keys must all be equal to the catch-all key (`*`).
 
 ### Patterns
 
