@@ -10,7 +10,7 @@ VariantKey ::= String | Nmtoken
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 
 /* Placeables */
-Placeable ::= '{' (Expression | MarkupStart | MarkupEnd)? '}'
+Placeable ::= '{' (Expression | MarkupStart | MarkupEnd | MarkupEmpty)? '}'
 
 /* Expressions */
 Expression ::= Operand Annotation? | Annotation
@@ -21,6 +21,7 @@ Option ::= Name '=' (String | Nmtoken | Variable)
 /* Markup Tags */
 MarkupStart ::= Name Option*
 MarkupEnd ::= '/' Name
+MarkupEmpty ::= Name Option* '/'
 
 <?TOKENS?>
 

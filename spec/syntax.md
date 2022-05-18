@@ -316,10 +316,10 @@ Examples:
 
 ### Placeables
 
-A placeable is a placeholder for an expression or an open or close markup element.
+A placeable is a placeholder for an expression or a markup element.
 
 ```ebnf
-Placeable ::= '{' (Expression | MarkupStart | MarkupEnd) '}'
+Placeable ::= '{' (Expression | MarkupStart | MarkupEnd | MarkupEmpty) '}'
 ```
 
 ### Expressions
@@ -370,14 +370,16 @@ $when: datetime month=2-digit
 ### Markup
 
 Markup elements provide a structured way to mark up parts of the content.
-There are two kinds of elements: start (opening) elements and end (closing) elements,
-each with its own syntax.
+There are three kinds of elements, each with its own syntax:
+start (opening) elements,
+end (closing) elements,
+and empty (self-closing) elements.
 They mimic XML elements, but do not require well-formedness.
-Standalone display elements should be represented as function expressions.
 
 ```ebnf
 MarkupStart ::= Name Option*
 MarkupEnd ::= '/' Name
+MarkupEmpty ::= Name Option* '/'
 ```
 
 Examples:
@@ -388,6 +390,10 @@ Examples:
 
 ```
 [{h1 name="above-and-beyond"}Above And Beyond{/h1}]
+```
+
+```
+[{img src="image.png" title="An image" /}]
 ```
 
 ## Tokens
