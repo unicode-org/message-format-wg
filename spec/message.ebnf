@@ -6,7 +6,7 @@ Selector ::= (Variable '=')? '{' Expression '}'
 
 /* Variants and Patterns */
 Variant ::= VariantKey* Pattern
-VariantKey ::= String | Nmtoken
+VariantKey ::= String | Nmtoken | '*'
 Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
 
 /* Placeables */
