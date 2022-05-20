@@ -280,7 +280,7 @@ The key `*` is a "catch-all" key, matching all selector values.
 
 ```ebnf
 Variant ::= VariantKey* Pattern
-VariantKey ::= String | Nmtoken | '*'
+VariantKey ::= Literal | Nmtoken | '*'
 ```
 
 A well-formed message is considered valid if the following requirements are satisfied:
@@ -300,8 +300,8 @@ This serves 3 purposes:
   `hello = [Hello]` will unambiguously define the `Hello` message without the space in front of it.
 - The message should be conveniently embeddable in various programming languages
   without the need to escape characters commonly related to strings, e.g. `"` and `'`.
-  Such need may still occur when a singe or double quote is
-  used in the translatable content or to delimit a string literal.
+  Such need may still occur when a single or double quote is
+  used in the translatable content.
 - The syntax should make it as clear as possible which parts of the message body
   are translatable and which ones are part of the formatting logic definition.
 
@@ -327,7 +327,7 @@ Placeable ::= '{' (Expression | MarkupStart | MarkupEnd) '}'
 
 Expressions can either start with an operand, or be standalone function calls.
 
-The operand is a quoted string literal or a variable name.
+The operand is a literal or a variable name.
 The operand can be optionally followed by an _annotation_:
 a formatting function and its named options.
 Formatting functions do not accept any positional arguments
@@ -337,27 +337,27 @@ Standalone function calls don't have any operands in front of them.
 
 ```ebnf
 Expression ::= Operand Annotation? | Annotation
-Operand ::= String | Variable
+Operand ::= Literal | Variable
 Annotation ::= ':' Name Option*
-Option ::= Name '=' (String | Nmtoken | Variable)
+Option ::= Name '=' (Literal | Nmtoken | Variable)
 ```
 
 Examples:
 
 ```
-"1.23"
+(1.23)
 ```
 
 ```
-"1.23": number maxFractionDigits=1
+(1.23): number maxFractionDigits=1
 ```
 
 ```
-"1970-01-01T13:37:00.000Z": datetime weekday=long
+(1970-01-01T13:37:00.000Z): datetime weekday=long
 ```
 
 ```
-"Thu Jan 01 1970 14:37:00 GMT+0100 (CET)": datetime weekday=long
+(Thu Jan 01 1970 14:37:00 GMT+0100 \(CET\)): datetime weekday=long
 ```
 
 ```
@@ -388,7 +388,7 @@ Examples:
 ```
 
 ```
-[{h1 name="above-and-beyond"}Above And Beyond{/h1}]
+[{h1 name=(above-and-beyond)}Above And Beyond{/h1}]
 ```
 
 ## Tokens
@@ -439,26 +439,26 @@ NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
            | [#x0300-#x036F] | [#x203F-#x2040]
 ```
 
-### Quoted Strings
+### Literal
 
-Any Unicode codepoint is allowed in quoted string literals, with the exception of
-`"` (which ends the string literal),
+Any Unicode codepoint is allowed in literals,
+with the exception of its delimiters `(` and `)`,
 and `\` (which starts an escape sequence).
 
 ```ebnf
-String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
-StringChar ::= AnyChar - ('"'| Esc)
+Literal ::= '(' (LiteralChar | LiteralEscape)* ')' /* ws: explicit */
+LiteralChar ::= AnyChar - ('(' | ')' | Esc)
 ```
 
 ### Escape Sequences
 
 Escape sequences are introduced by the backslash character (`\`).
-They are allowed in translatable text as well as in string literals.
+They are allowed in translatable text as well as in literals.
 
 ```ebnf
 Esc ::= '\'
 TextEscape ::= Esc Esc | Esc '[' | Esc ']' | Esc '{' | Esc '}'
-StringEscape ::= Esc Esc | Esc '"'
+LiteralEscape ::= Esc Esc | Esc '(' | Esc ')'
 ```
 
 ### Whitespace
