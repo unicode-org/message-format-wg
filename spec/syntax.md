@@ -371,9 +371,10 @@ $when: datetime month=2-digit
 
 Markup elements provide a structured way to mark up parts of the content.
 There are two kinds of elements, each with its own syntax:
-Markup (opening) elements and MarkupEnd (closing) elements.
+Markup (opening or empty) elements and MarkupEnd (closing) elements.
 If a Markup element includes a trailing `/`,
 it is considered to be empty, i.e. self-closing.
+Otherwise, it's an opening element.
 They mimic XML elements, but do not require well-formedness.
 
 ```ebnf
