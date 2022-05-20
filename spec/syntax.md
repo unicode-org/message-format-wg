@@ -319,7 +319,7 @@ Examples:
 A placeable is a placeholder for an expression or a markup element.
 
 ```ebnf
-Placeable ::= '{' (Expression | MarkupStart | MarkupEnd | MarkupEmpty) '}'
+Placeable ::= '{' (Expression | Markup | MarkupEnd) '}'
 ```
 
 ### Expressions
@@ -370,16 +370,15 @@ $when: datetime month=2-digit
 ### Markup
 
 Markup elements provide a structured way to mark up parts of the content.
-There are three kinds of elements, each with its own syntax:
-start (opening) elements,
-end (closing) elements,
-and empty (self-closing) elements.
+There are two kinds of elements, each with its own syntax:
+Markup (opening) elements and MarkupEnd (closing) elements.
+If a Markup element includes a trailing `/`,
+it is considered to be empty, i.e. self-closing.
 They mimic XML elements, but do not require well-formedness.
 
 ```ebnf
-MarkupStart ::= Name Option*
+Markup ::= Name Option* '/'?
 MarkupEnd ::= '/' Name
-MarkupEmpty ::= Name Option* '/'
 ```
 
 Examples:
