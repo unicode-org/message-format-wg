@@ -161,7 +161,7 @@ The same message defined in a `.properties` file:
 ```properties
 app.greetings.notification = {$count: number}\
     1 [You have one notification.]\
-    _ [You have {$count} notifications.]
+    * [You have {$count} notifications.]
 ```
 
 The same message defined inline in JavaScript:
@@ -169,7 +169,7 @@ The same message defined inline in JavaScript:
 ```js
 let notification = new MessageFormat(`{$count: number}
     1 [You have one notification.]
-    _ [You have {$count} notifications.]`)
+    * [You have {$count} notifications.]`)
 notification.format({ count: 3 })
 ```
 
