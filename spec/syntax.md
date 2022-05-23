@@ -156,6 +156,23 @@ A message with a single selector:
         1 [You have one notification.]
         * [You have {$count} notifications.]
 
+The same message defined in a `.properties` file:
+
+```properties
+app.greetings.notification = {$count: number}\
+    1 [You have one notification.]\
+    _ [You have {$count} notifications.]
+```
+
+The same message defined inline in JavaScript:
+
+```js
+let notification = new MessageFormat(`{$count: number}
+    1 [You have one notification.]
+    _ [You have {$count} notifications.]`)
+notification.format({ count: 3 })
+```
+
 A message with a single selector which is an invocation of
 a custom function `platform`, formatted on a single line:
 
