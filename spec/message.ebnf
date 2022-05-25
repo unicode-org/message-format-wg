@@ -7,10 +7,10 @@ Selector ::= (Variable '=')? '{' Expression '}'
 /* Variants and Patterns */
 Variant ::= VariantKey* Pattern
 VariantKey ::= String | Nmtoken | '*'
-Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
+Pattern ::= '[' (Text | Placeholder)* ']' /* ws: explicit */
 
-/* Placeables */
-Placeable ::= '{' (Expression | MarkupStart | MarkupEnd)? '}'
+/* Placeholders */
+Placeholder ::= '{' (Expression | MarkupStart | MarkupEnd)? '}'
 
 /* Expressions */
 Expression ::= Operand Annotation? | Annotation
