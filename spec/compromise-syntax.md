@@ -62,7 +62,7 @@ and we also allow for invoking functions without using argument names or value l
 {$name}
 {$count :number}
 {$fraction :number style=percent minFractions=2}
-{<25> :number}
+{(25) :number}
 {:specialFunction optionKey=optionValue key2=<value with spaces>}
 ```
 
@@ -111,9 +111,16 @@ then its string value is used verbatim and it is read-only for translators.
 - TODO: Value literals need to be delimited (they may contain spaces),
   and the starting delimiter needs to be distinct from the prefixes for
   argument names and functions.
-  Reasonable choices include `<>`, `()`, `[]`, or `||`.
+  Reasonable choices include `<>`, `()`, `[]`, `||`, or a pair of `` characters.
+  We could actually allow *both* `''` and `""` so that
+  a programmer who puts a message string into a string literal using one of these delimiters
+  could escape a value literal using the opposite delimiter.
   Consider that the same delimiters should also be usable (not visually confusing)
   when used in a list of selection values (see below); that probably excludes `||` and `[]`.
+  For a list of space-separated literals,
+  it would be best to use a pair of delimiters that visually indicate and distinguish
+  the start and end of each literal. That suggests using `()`.
+  For example: `[(ab c) (d ef) (g h)]`
 - TODO: Define escaping inside constant values.
   Probably the pattern escapes plus escapes for the constant delimiters.
 
