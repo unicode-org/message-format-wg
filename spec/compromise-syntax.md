@@ -151,14 +151,14 @@ It needs to support multiple selectors.
 In this syntax, a list of N selectors is followed by a list of pairs where
 the first element of each pair is a list of N value literals and
 the second element of each pair is a pattern.
-A `_` is a wildcard value that always matches.
+A `*` is a wildcard value that always matches.
 The last variant must have a list of all wildcard values.
 ```
 [{$count :plural offset=1 grouping=always} {$gender}]
 [1 female] {{$name} added you to her circles.}
 [1 male] {{$name} added you to his circles.}
-[1 _] {{$name} added you to their circles.}
-[_ _] {{$name} added you and {#count} others to their circles.}
+[1 *] {{$name} added you to their circles.}
+[* *] {{$name} added you and {#count} others to their circles.}
 ```
 
 Lists are enclosed in square brackets, reminiscent of Python lists.
@@ -169,7 +169,7 @@ the same pair of delimiters as literals in placeholder (for consistency),
 or whether to make that optional.
 (The `[]` value list syntax already indicates that value literals are enclosed.)
 Some literals may require it if they contain spaces.
-The `_` should probably never be enclosed in literal delimiters.
+The `*` should probably never be enclosed in literal delimiters.
 
 Selector syntax follows placeholder syntax,
 except that a function must be specified.
@@ -222,8 +222,8 @@ $relDate={$date :relativeDateTime fields=Mdjm}
 [{$count :plural offset=1} {$gender}]
 [1 female] {{$name} added you to her circles {$relDate}.}
 [1 male] {{$name} added you to his circles {$relDate}.}
-[1 _] {{$name} added you to their circles {$relDate}.}
-[_ _] {{$name} added you and {#count} others to their circles {$relDate}.}
+[1 *] {{$name} added you to their circles {$relDate}.}
+[* *] {{$name} added you and {#count} others to their circles {$relDate}.}
 ```
 
 When a named expression is used in a pattern placeholder, then no function must be specified.
