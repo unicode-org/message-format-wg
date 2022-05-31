@@ -441,7 +441,7 @@ NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
 
 ### Literal
 
-Any Unicode codepoint is allowed in literals,
+Any Unicode code point is allowed in literals,
 with the exception of its delimiters `(` and `)`,
 and `\` (which starts an escape sequence).
 
