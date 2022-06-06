@@ -19,7 +19,7 @@
    1. [Preamble](#preamble)
    1. [Variants](#variants)
    1. [Patterns](#patterns)
-   1. [Placeables](#placeables)
+   1. [Placeholders](#placeholders)
    1. [Expressions](#expressions)
    1. [Markup Elements](#markup-elements)
 1. [Tokens](#tokens)
@@ -143,7 +143,7 @@ plucking the first name from the object representing a person:
 
 ### Markup Elements
 
-A message with two markup-like element placeables, `button` and `link`,
+A message with two markup-like element placeholders, `button` and `link`,
 which the runtime can use to construct a document tree structure for a UI framework.
 
     [{button}Submit{/button} or {link}cancel{/link}.]
@@ -306,7 +306,7 @@ This serves 3 purposes:
   are translatable and which ones are part of the formatting logic definition.
 
 ```ebnf
-Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
+Pattern ::= '[' (Text | Placeholder)* ']' /* ws: explicit */
 ```
 
 Examples:
@@ -315,12 +315,12 @@ Examples:
 [Hello, world!]
 ```
 
-### Placeables
+### Placeholders
 
-A placeable is a placeholder for an expression or an open or close markup element.
+Placeholders can contain expressions and markup elements.
 
 ```ebnf
-Placeable ::= '{' (Expression | MarkupStart | MarkupEnd) '}'
+Placeholder ::= '{' (Expression | MarkupStart | MarkupEnd) '}'
 ```
 
 ### Expressions
