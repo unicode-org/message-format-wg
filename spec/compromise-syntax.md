@@ -70,6 +70,11 @@ An argument name is a `$` immediately followed by an identifier.
 A message formatting function will typically accept a Map of argument keys to values
 where the keys match argument name identifiers in the patterns of the message.
 
+An argument name identifier may contain one or more dot (`.`) characters.
+The meaning of dotted names is implementation-defined.
+For example, some implementations may support some kind of multi-segment lookup
+in structured value objects.
+
 TODO: For the definition of identifiers we should consult with the Unicode Source Code Working Group.
 
 If the placeholder specifies only an argument name,
@@ -86,9 +91,10 @@ then the function is usually a formatter for its expected input types.
 - TODO: Functions must be listed in a registry.
 - TODO: Functions that accept value literals must specify their syntax.
 - TODO: Reserve a naming convention for private use functions (not in the standard registry). Examples:
+  - Probably best: Contains interior dots – e.g., com.google.fancyNumber –
+    with reverse-domain-name namespaces like Java packages.
   - Starts with `_`
   - Starts with `x`
-  - Contains interior dots – e.g., com.google.fancyNumber
 
 When a function is specified, it can be optionally followed by options which are key-value pairs,
 with `=` (and no white space) between the key identifier and the value.
@@ -96,6 +102,11 @@ The option value can contain any character other than curly braces and white spa
 unless delimited like literal values.
 - TODO: Each registered function must define the available options and their value syntax.
 - TODO: If we allow white space in option values, then we need optional delimiters for such values. Probably the same delimiters as for literal values.
+
+The option value can be a `$` immediately followed by an identifier.
+- TODO: Define what this can mean. There is at least a use case for allowing an argument name,
+  to be looked up like placeholder arguments,
+  in the same Map given to the message formatting function.
 
 Options are not allowed when no function is specified.
 
