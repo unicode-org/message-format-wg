@@ -19,7 +19,7 @@
    1. [Preamble](#preamble)
    1. [Variants](#variants)
    1. [Patterns](#patterns)
-   1. [Placeables](#placeables)
+   1. [Placeholders](#placeholders)
    1. [Expressions](#expressions)
    1. [Markup Elements](#markup-elements)
 1. [Tokens](#tokens)
@@ -125,25 +125,25 @@ hello.format({ userName: 'Anne' })
 
 ### Formatting Functions
 
-A message with an interpolated `$date` variable formatted with the `datetime` function:
+A message with an interpolated `$date` variable formatted with the `:datetime` function:
 
-    [Today is {$date: datetime weekday=long}.]
+    [Today is {$date :datetime weekday=long}.]
 
 A message with an interpolated `$userName` variable formatted with
-the custom `person` function capable of
+the custom `:person` function capable of
 declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
 
-    [Hello, {$userName: person case=vocative}!]
+    [Hello, {$userName :person case=vocative}!]
 
 A message with an interpolated `$userObj` variable formatted with
-the custom `person` function capable of
+the custom `:person` function capable of
 plucking the first name from the object representing a person:
 
-    [Hello, {$userObj: person firstName=long}!]
+    [Hello, {$userObj :person firstName=long}!]
 
 ### Markup Elements
 
-A message with two markup-like element placeables, `button` and `link`,
+A message with two markup-like element placeholders, `button` and `link`,
 which the runtime can use to construct a document tree structure for a UI framework.
 
     [{button}Submit{/button} or {link}cancel{/link}.]
@@ -152,26 +152,26 @@ which the runtime can use to construct a document tree structure for a UI framew
 
 A message with a single selector:
 
-    {$count: number}
+    {$count :number}
         1 [You have one notification.]
         * [You have {$count} notifications.]
 
 A message with a single selector which is an invocation of
-a custom function `platform`, formatted on a single line:
+a custom function `:platform`, formatted on a single line:
 
     {:platform} windows [Settings] * [Preferences]
 
-A message with a single selector and a custom `hasCase` function
+A message with a single selector and a custom `:hasCase` function
 which allows the message to query for presence of grammatical cases required for each variant:
 
-    {$userName: hasCase}
-        vocative [Hello, {$userName: person case=vocative}!]
-        accusative [Please welcome {$userName: person case=accusative}!]
+    {$userName :hasCase}
+        vocative [Hello, {$userName :person case=vocative}!]
+        accusative [Please welcome {$userName :person case=accusative}!]
         * [Hello!]
 
 A message with 2 selectors:
 
-    {$photoCount: number} {$userGender: equals}
+    {$photoCount :number} {$userGender :equals}
         1 masculine [{$userName} added a new photo to his album.]
         1 feminine [{$userName} added a new photo to her album.]
         1 * [{$userName} added a new photo to their album.]
@@ -183,27 +183,27 @@ A message with 2 selectors:
 
 A message defining a local variable `$whom` which is then used twice inside the pattern:
 
-    $whom = {$monster: noun case=accusative}
-    [You see {$quality: adjective article=indefinite accord=$whom} {$whom}!]
+    $whom = {$monster :noun case=accusative}
+    [You see {$quality :adjective article=indefinite accord=$whom} {$whom}!]
 
 A message defining two local variables:
 `$itemAcc` and `$countInt`, and using `$countInt` as a selector:
 
-    $countInt = {$count: number maximumFractionDigits=0}
-    $itemAcc = {$item: noun count=$count case=accusative}
-        one [You bought {$color: adjective article=indefinite accord=$itemAcc} {$itemAcc}.]
-        * [You bought {$countInt} {$color: adjective accord=$itemAcc} {$itemAcc}.]
+    $countInt = {$count :number maximumFractionDigits=0}
+    $itemAcc = {$item :noun count=$count case=accusative}
+        one [You bought {$color :adjective article=indefinite accord=$itemAcc} {$itemAcc}.]
+        * [You bought {$countInt} {$color :adjective accord=$itemAcc} {$itemAcc}.]
 
 ### Complex Messages
 
 A complex message with 2 selectors and 3 local variable definitions:
 
-    {$host: gender}
-    {$guestOther: number}
+    {$host :gender}
+    {$guestOther :number}
 
-    $hostName = {$host: person firstName=long}
-    $guestName = {$guest: person firstName=long}
-    $guestsOther = {$guestCount: number offset=1}
+    $hostName = {$host :person firstName=long}
+    $guestName = {$guest :person firstName=long}
+    $guestsOther = {$guestCount :number offset=1}
 
         female 0 [{$hostName} does not give a party.]
         female 1 [{$hostName} invites {$guestName} to her party.]
@@ -306,7 +306,7 @@ This serves 3 purposes:
   are translatable and which ones are part of the formatting logic definition.
 
 ```ebnf
-Pattern ::= '[' (Text | Placeable)* ']' /* ws: explicit */
+Pattern ::= '[' (Text | Placeholder)* ']' /* ws: explicit */
 ```
 
 Examples:
@@ -315,12 +315,12 @@ Examples:
 [Hello, world!]
 ```
 
-### Placeables
+### Placeholders
 
-A placeable is a placeholder for an expression or an open or close markup element.
+Placeholders can contain expressions and markup elements.
 
 ```ebnf
-Placeable ::= '{' (Expression | MarkupStart | MarkupEnd) '}'
+Placeholder ::= '{' (Expression | MarkupStart | MarkupEnd) '}'
 ```
 
 ### Expressions
@@ -338,7 +338,7 @@ Standalone function calls don't have any operands in front of them.
 ```ebnf
 Expression ::= Operand Annotation? | Annotation
 Operand ::= Literal | Variable
-Annotation ::= ':' Name Option*
+Annotation ::= Function Option*
 Option ::= Name '=' (Literal | Nmtoken | Variable)
 ```
 
@@ -349,19 +349,19 @@ Examples:
 ```
 
 ```
-(1.23): number maxFractionDigits=1
+(1.23) :number maxFractionDigits=1
 ```
 
 ```
-(1970-01-01T13:37:00.000Z): datetime weekday=long
+(1970-01-01T13:37:00.000Z) :datetime weekday=long
 ```
 
 ```
-(Thu Jan 01 1970 14:37:00 GMT+0100 \(CET\)): datetime weekday=long
+(Thu Jan 01 1970 14:37:00 GMT+0100 \(CET\)) :datetime weekday=long
 ```
 
 ```
-$when: datetime month=2-digit
+$when :datetime month=2-digit
 ```
 
 ```
@@ -412,7 +412,7 @@ AnyChar ::= .
 ### Names
 
 The _name_ token is used for variable names (prefixed with `$`),
-function names as well as option names.
+function names (prefixed with `:`) as well as option names.
 A name cannot start with an ASCII digit and certain basic combining characters.
 Otherwise, the set of characters allowed in names is large.
 
@@ -428,6 +428,7 @@ uses Nmtokens.
 
 ```ebnf
 Variable ::= '$' Name /* ws: explicit */
+Function ::= ':' Name /* ws: explicit */
 Name ::= NameStart NameChar* /* ws: explicit */
 Nmtoken ::= NameChar+ /* ws: explicit */
 NameStart ::= [a-zA-Z] | "_"
