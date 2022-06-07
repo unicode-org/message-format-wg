@@ -6,7 +6,7 @@ Selector ::= (Variable '=')? '{' Expression '}'
 
 /* Variants and Patterns */
 Variant ::= VariantKey* Pattern
-VariantKey ::= String | Nmtoken | '*'
+VariantKey ::= Literal | Nmtoken | '*'
 Pattern ::= '[' (Text | Placeholder)* ']' /* ws: explicit */
 
 /* Placeholders */
@@ -14,9 +14,9 @@ Placeholder ::= '{' (Expression | MarkupStart | MarkupEnd)? '}'
 
 /* Expressions */
 Expression ::= Operand Annotation? | Annotation
-Operand ::= String | Variable
+Operand ::= Literal | Variable
 Annotation ::= Function Option*
-Option ::= Name '=' (String | Nmtoken | Variable)
+Option ::= Name '=' (Literal | Nmtoken | Variable)
 
 /* Markup Tags */
 MarkupStart ::= Name Option*
@@ -48,14 +48,14 @@ NameStart ::= [a-zA-Z] | "_"
 NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
            | [#x0300-#x036F] | [#x203F-#x2040]
 
-/* Quoted strings */
-String ::= '"' (StringChar | StringEscape)* '"' /* ws: explicit */
-StringChar ::= AnyChar - ('"'| Esc)
+/* Literals */
+Literal ::= '(' (LiteralChar | LiteralEscape)* ')' /* ws: explicit */
+LiteralChar ::= AnyChar - ('(' | ')' | Esc)
 
 /* Escape sequences */
 Esc ::= '\'
 TextEscape ::= Esc Esc | Esc '[' | Esc ']' | Esc '{' | Esc '}'
-StringEscape ::= Esc Esc | Esc '"'
+LiteralEscape ::= Esc Esc | Esc '(' | Esc ')'
 
 /* WhiteSpace */
 WhiteSpace ::= #x9 | #xD | #xA | #x20 /* ws: definition */
