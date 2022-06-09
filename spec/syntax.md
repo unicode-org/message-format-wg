@@ -320,7 +320,7 @@ Examples:
 Placeholders can contain expressions and markup elements.
 
 ```ebnf
-Placeholder ::= '{' (Expression | MarkupStart | MarkupEnd) '}'
+Placeholder ::= '{' (Expression | Markup | MarkupEnd) '}'
 ```
 
 ### Expressions
@@ -340,6 +340,8 @@ Expression ::= Operand Annotation? | Annotation
 Operand ::= Literal | Variable
 Annotation ::= Function Option*
 Option ::= Name '=' (Literal | Nmtoken | Variable)
+Variable ::= '$' Name /* ws: explicit */
+Function ::= ':' Name /* ws: explicit */
 ```
 
 Examples:
@@ -377,8 +379,9 @@ They mimic XML elements, but do not require well-formedness.
 Standalone display elements should be represented as function expressions.
 
 ```ebnf
-MarkupStart ::= Name Option*
-MarkupEnd ::= '/' Name
+Markup ::= MarkupStart Option*
+MarkupStart ::= '+' Name /* ws: explicit */
+MarkupEnd ::= '-' Name /* ws: explicit */
 ```
 
 Examples:
@@ -412,7 +415,9 @@ AnyChar ::= .
 ### Names
 
 The _name_ token is used for variable names (prefixed with `$`),
-function names (prefixed with `:`) as well as option names.
+function names (prefixed with `:`),
+markup names (prefixed with `+` or `-`),
+as well as option names.
 A name cannot start with an ASCII digit and certain basic combining characters.
 Otherwise, the set of characters allowed in names is large.
 
@@ -427,8 +432,6 @@ and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/g
 uses Nmtokens.
 
 ```ebnf
-Variable ::= '$' Name /* ws: explicit */
-Function ::= ':' Name /* ws: explicit */
 Name ::= NameStart NameChar* /* ws: explicit */
 Nmtoken ::= NameChar+ /* ws: explicit */
 NameStart ::= [a-zA-Z] | "_"
