@@ -448,7 +448,7 @@ and `\` (which starts an escape sequence).
 
 This includes line-breaking characters (such as U+000A LINE FEED and U+000D CARRIAGE RETURN),
 other control characters (such as U+0000 NULL and U+0009 TAB),
-permanently reserved noncharacters (U+FDD0 through U+FDEF and U+<i>n</i>FFFE and U+<i>n</i>FFFF where n is 0 through 0x10),
+permanently reserved noncharacters (U+FDD0 through U+FDEF and U+<i>n</i>FFFE and U+<i>n</i>FFFF where <i>n</i> is 0x0 through 0x10),
 surrogate code points (U+D800 through U+DBFF),
 private-use code points (U+E000 through U+F8FF, U+F0000 through U+FFFFD, and U+100000 through U+10FFFD),
 and unassigned code points.
