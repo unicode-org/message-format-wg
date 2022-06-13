@@ -45,7 +45,7 @@ Please include your primary affiliation (e.g., the company you represent or wher
 - Shane Carr - Google (SFC)
 - Staś Małolepszy - Mozilla (STA)
 - Steven R. Loomis - IBM (SRL)
-- Zibi Braniecki - Mozilla (ZBI)
+- Zibi Braniecki - Amazon Alexa (ZBI)
 
 ### Former
 
