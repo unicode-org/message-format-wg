@@ -33,7 +33,7 @@ PlainEnd ::= PlainChar - WhiteSpace
 /* Text */
 Text ::= (TextChar | TextEscape)+
 TextChar ::= AnyChar - ('[' | ']' | '{' | '}' | Esc)
-AnyChar ::= .
+AnyChar ::= [#x0-#x10FFFF]
 
 /* Names */
 Variable ::= '$' Name /* ws: explicit */
