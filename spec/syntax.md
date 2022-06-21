@@ -15,8 +15,8 @@
    1. [Complex Messages](#complex-messages)
 1. [Productions](#productions)
    1. [Message](#message)
-   1. [Plain](#plain)
-   1. [Preamble](#preamble)
+   1. [Variable Declarations](#variable-declarations)
+   1. [Selectors](#selectors)
    1. [Variants](#variants)
    1. [Patterns](#patterns)
    1. [Placeholders](#placeholders)
@@ -66,9 +66,6 @@ The design goals of the syntax specification are as follows:
    `.properties`, YAML, XML, inlined as string literals in programming languages, etc.
    This includes a future _MessageResource_ specification.
 
-1. Simple messages that do not use any placeholders or selectors should (as far as possible)
-   be represented in the syntax with no additional characters than their actual contents.
-
 ### Design Restrictions
 
 The syntax specification takes into account the following design restrictions:
@@ -77,51 +74,35 @@ The syntax specification takes into account the following design restrictions:
    It should be possible to define a message entirely on a single line with no ambiguity,
    as well as to format it over multiple lines for clarity.
 
-1. The syntax should not use nor reserve any keywords in any natural language,
-   such as `if`, `match`, or `let`.
-
 1. The syntax should define as few special characters and sigils as possible.
 
 ## Overview & Examples
 
 ### Simple Messages
 
-A simple message without any variables does not need any syntax:
+All messages, including simple ones, need `[…]` delimiters:
 
-    Hello, world!
+    [Hello, world!]
 
 The same message defined in a `.properties` file:
 
 ```properties
-app.greetings.hello = Hello, world!
+app.greetings.hello = [Hello, world!]
 ```
 
 The same message defined inline in JavaScript:
 
 ```js
-let hello = new MessageFormat('Hello, world!')
+let hello = new MessageFormat('[Hello, world!]')
 hello.format()
 ```
 
 ### Simple Placeholders
 
-A message with an interpolated variable needs to be interpreted as a pattern,
-which uses `[…]` delimiters:
+Messages may contain placeholders within `{…}` delimiters,
+such as variables that are expected to be passed in as format paramters:
 
     [Hello, {$userName}!]
-
-The same message defined in a `.properties` file:
-
-```properties
-app.greetings.hello = [Hello, {$userName}!]
-```
-
-The same message defined inline in JavaScript:
-
-```js
-let hello = new MessageFormat('[Hello, {$userName}!]')
-hello.format({ userName: 'Anne' })
-```
 
 ### Formatting Functions
 
@@ -152,73 +133,73 @@ which the runtime can use to construct a document tree structure for a UI framew
 
 A message with a single selector:
 
-    {$count :number}
-        1 [You have one notification.]
-        * [You have {$count} notifications.]
+    match {$count :number}
+    when 1 [You have one notification.]
+    when * [You have {$count} notifications.]
 
 A message with a single selector which is an invocation of
 a custom function `:platform`, formatted on a single line:
 
-    {:platform} windows [Settings] * [Preferences]
+    match {:platform} when windows [Settings] when * [Preferences]
 
 A message with a single selector and a custom `:hasCase` function
 which allows the message to query for presence of grammatical cases required for each variant:
 
-    {$userName :hasCase}
-        vocative [Hello, {$userName :person case=vocative}!]
-        accusative [Please welcome {$userName :person case=accusative}!]
-        * [Hello!]
+    match {$userName :hasCase}
+    when vocative [Hello, {$userName :person case=vocative}!]
+    when accusative [Please welcome {$userName :person case=accusative}!]
+    when * [Hello!]
 
 A message with 2 selectors:
 
-    {$photoCount :number} {$userGender :equals}
-        1 masculine [{$userName} added a new photo to his album.]
-        1 feminine [{$userName} added a new photo to her album.]
-        1 * [{$userName} added a new photo to their album.]
-        * masculine [{$userName} added {$photoCount} photos to his album.]
-        * feminine [{$userName} added {$photoCount} photos to her album.]
-        * * [{$userName} added {$photoCount} photos to their album.]
+    match {$photoCount :number} {$userGender :equals}
+    when 1 masculine [{$userName} added a new photo to his album.]
+    when 1 feminine [{$userName} added a new photo to her album.]
+    when 1 * [{$userName} added a new photo to their album.]
+    when * masculine [{$userName} added {$photoCount} photos to his album.]
+    when * feminine [{$userName} added {$photoCount} photos to her album.]
+    when * * [{$userName} added {$photoCount} photos to their album.]
 
 ### Local Variables
 
 A message defining a local variable `$whom` which is then used twice inside the pattern:
 
-    $whom = {$monster :noun case=accusative}
+    let $whom = {$monster :noun case=accusative}
     [You see {$quality :adjective article=indefinite accord=$whom} {$whom}!]
 
 A message defining two local variables:
 `$itemAcc` and `$countInt`, and using `$countInt` as a selector:
 
-    $countInt = {$count :number maximumFractionDigits=0}
-    $itemAcc = {$item :noun count=$count case=accusative}
-        one [You bought {$color :adjective article=indefinite accord=$itemAcc} {$itemAcc}.]
-        * [You bought {$countInt} {$color :adjective accord=$itemAcc} {$itemAcc}.]
+    let $countInt = {$count :number maximumFractionDigits=0}
+    let $itemAcc = {$item :noun count=$count case=accusative}
+    match {$countInt}
+    when one [You bought {$color :adjective article=indefinite accord=$itemAcc} {$itemAcc}.]
+    when * [You bought {$countInt} {$color :adjective accord=$itemAcc} {$itemAcc}.]
 
 ### Complex Messages
 
 A complex message with 2 selectors and 3 local variable definitions:
 
-    {$host :gender}
-    {$guestOther :number}
+    let $hostName = {$host :person firstName=long}
+    let $guestName = {$guest :person firstName=long}
+    let $guestsOther = {$guestCount :number offset=1}
 
-    $hostName = {$host :person firstName=long}
-    $guestName = {$guest :person firstName=long}
-    $guestsOther = {$guestCount :number offset=1}
+    match {$host :gender} {$guestOther :number}
 
-        female 0 [{$hostName} does not give a party.]
-        female 1 [{$hostName} invites {$guestName} to her party.]
-        female 2 [{$hostName} invites {$guestName} and one other person to her party.]
-        female * [{$hostName} invites {$guestName} and {$guestsOther} other people to her party.]
+    when female 0 [{$hostName} does not give a party.]
+    when female 1 [{$hostName} invites {$guestName} to her party.]
+    when female 2 [{$hostName} invites {$guestName} and one other person to her party.]
+    when female * [{$hostName} invites {$guestName} and {$guestsOther} other people to her party.]
 
-        male 0 [{$hostName} does not give a party.]
-        male 1 [{$hostName} invites {$guestName} to his party.]
-        male 2 [{$hostName} invites {$guestName} and one other person to his party.]
-        male * [{$hostName} invites {$guestName} and {$guestsOther} other people to his party.]
+    when male 0 [{$hostName} does not give a party.]
+    when male 1 [{$hostName} invites {$guestName} to his party.]
+    when male 2 [{$hostName} invites {$guestName} and one other person to his party.]
+    when male * [{$hostName} invites {$guestName} and {$guestsOther} other people to his party.]
 
-        * 0 [{$hostName} does not give a party.]
-        * 1 [{$hostName} invites {$guestName} to their party.]
-        * 2 [{$hostName} invites {$guestName} and one other person to their party.]
-        * * [{$hostName} invites {$guestName} and {$guestsOther} other people to their party.]
+    when * 0 [{$hostName} does not give a party.]
+    when * 1 [{$hostName} invites {$guestName} to their party.]
+    when * 2 [{$hostName} invites {$guestName} and one other person to their party.]
+    when * * [{$hostName} invites {$guestName} and {$guestsOther} other people to their party.]
 
 ## Productions
 
@@ -229,63 +210,55 @@ if it meets additional semantic requirements about its structure, defined below.
 
 ### Message
 
-A single message is either a plain message, a single pattern, or has a preamble
+A single message is either a single pattern, or has a `match` statement
 followed by one or more variants which represent the translatable body of the message.
 
 ```ebnf
-Message ::= Plain | Pattern | Preamble Variant+
+Message ::= Declaration* ( Pattern | Selector Variant+ )
 ```
 
-### Plain
+### Variable Declarations
 
-A plain message only contains translatable content;
-placeholders or their delimiters are not allowed inside a plain message.
-Plain messages must not start with one of the syntax characters `[`, `{` or `$`,
-as those would indicate that the message has a more complex structure.
-Any whitespace at the beginning or end of a plain message is ignored.
-A plain message cannot represent an empty string;
-for that, use an empty pattern `[]` instead.
+A variable declaration is an expression binding a variable identifier
+within the scope of the message to the value of an expression.
+This local variable may then be used in other expressions within the same message.
 
 ```ebnf
-Plain ::= PlainStart (PlainChar* PlainEnd)?  /* ws: explicit */
-PlainChar ::= AnyChar - ('{' | '}')
-PlainStart ::= PlainChar - ('[' | '$' | WhiteSpace)
-PlainEnd ::= PlainChar - WhiteSpace
+Declaration ::= 'let' WhiteSpace Variable '=' '{' Expression '}'
 ```
 
-### Preamble
+### Selectors
 
-The preamble is where selectors and local variables can be defined.
-A selector is an expression which will be used to choose one of the variants during formatting.
-A selector can be optionally bound to a local variable, which may then be used in other expressions.
+A selector is a statement containing one or more expressions
+which will be used to choose one of the variants during formatting.
 
 ```ebnf
-Preamble ::= Selector+
-Selector ::= (Variable '=')? '{' Expression '}'
+Selector ::= 'match' ( '{' Expression '}' )+
 ```
 
 Examples:
 
 ```
-$frac = {$count: number minFractionDigits=2}
-    1 [One apple]
-    * [{$frac} apples]
+let $frac = {$count: number minFractionDigits=2}
+match {$frac}
+when 1 [One apple]
+when * [{$frac} apples]
 ```
 
 ### Variants
 
 A variant is a keyed pattern.
-The keys are used to match against the selectors defined in the preamble.
+The keys are used to match against the selectors defined in the `match` statement.
 The key `*` is a "catch-all" key, matching all selector values.
 
 ```ebnf
-Variant ::= VariantKey* Pattern
+Variant ::= 'when' ( WhiteSpace VariantKey )+ Pattern
 VariantKey ::= Literal | Nmtoken | '*'
 ```
 
 A well-formed message is considered valid if the following requirements are satisfied:
 
-- The number of keys on each variant must be fewer or equal to the number of selectors defined in the preamble.
+- The number of keys on each variant must be equal to the number of selectors.
 - At least one variant's keys must all be equal to the catch-all key (`*`).
 
 ### Patterns
