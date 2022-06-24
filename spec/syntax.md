@@ -239,6 +239,12 @@ Selector ::= 'match' ( '{' Expression '}' )+
 Examples:
 
 ```
+match {$count :plural}
+when 1 [One apple]
+when * [{$count} apples]
+```
+
+```
 let $frac = {$count: number minFractionDigits=2}
 match {$frac}
 when 1 [One apple]
