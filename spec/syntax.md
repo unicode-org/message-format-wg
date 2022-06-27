@@ -146,7 +146,7 @@ plucking the first name from the object representing a person:
 A message with two markup-like element placeholders, `button` and `link`,
 which the runtime can use to construct a document tree structure for a UI framework.
 
-    [{button}Submit{/button} or {link}cancel{/link}.]
+    [{+button}Submit{-button} or {+link}cancel{-link}.]
 
 ### Selection
 
@@ -387,11 +387,11 @@ MarkupEnd ::= '-' Name /* ws: explicit */
 Examples:
 
 ```
-[This is {b}bold{/b}.]
+[This is {+b}bold{-b}.]
 ```
 
 ```
-[{h1 name=(above-and-beyond)}Above And Beyond{/h1}]
+[{+h1 name=(above-and-beyond)}Above And Beyond{-h1}]
 ```
 
 ## Tokens
