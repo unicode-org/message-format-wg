@@ -1,11 +1,11 @@
-Message ::= Plain | Pattern | Preamble Variant+
+Message ::= Declaration* ( Pattern | Selector Variant+ )
 
 /* Preamble */
-Preamble ::= Selector+
-Selector ::= (Variable '=')? '{' Expression '}'
+Declaration ::= 'let' WhiteSpace Variable '=' '{' Expression '}'
+Selector ::= 'match' ( '{' Expression '}' )+
 
 /* Variants and Patterns */
-Variant ::= VariantKey* Pattern
+Variant ::= 'when' ( WhiteSpace VariantKey )+ Pattern
 VariantKey ::= Literal | Nmtoken | '*'
 Pattern ::= '[' (Text | Placeholder)* ']' /* ws: explicit */
 
@@ -22,12 +22,6 @@ Option ::= Name '=' (Literal | Nmtoken | Variable)
 Markup ::= MarkupStart Option*
 
 <?TOKENS?>
-
-/* Plain */
-Plain ::= PlainStart (PlainChar* PlainEnd)?  /* ws: explicit */
-PlainChar ::= AnyChar - ('{' | '}')
-PlainStart ::= PlainChar - ('[' | '$' | WhiteSpace)
-PlainEnd ::= PlainChar - WhiteSpace
 
 /* Text */
 Text ::= (TextChar | TextEscape)+
