@@ -99,7 +99,7 @@ hello.format()
 
 ### Simple Placeholders
 
-Messages may contain placeholders within nested `{…}` delimiters,
+Messages may contain placeholders within inner `{…}` delimiters,
 such as variables that are expected to be passed in as format paramters:
 
     {Hello, {$userName}!}
