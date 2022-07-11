@@ -7,7 +7,7 @@ Selector ::= 'match' ( '{' Expression '}' )+
 /* Variants and Patterns */
 Variant ::= 'when' ( WhiteSpace VariantKey )+ Pattern
 VariantKey ::= Literal | Nmtoken | '*'
-Pattern ::= '[' (Text | Placeholder)* ']' /* ws: explicit */
+Pattern ::= '{' (Text | Placeholder)* '}' /* ws: explicit */
 
 /* Placeholders */
 Placeholder ::= '{' (Expression | Markup | MarkupEnd)? '}'
@@ -25,7 +25,7 @@ Markup ::= MarkupStart Option*
 
 /* Text */
 Text ::= (TextChar | TextEscape)+
-TextChar ::= AnyChar - ('[' | ']' | '{' | '}' | Esc)
+TextChar ::= AnyChar - ('{' | '}' | Esc)
 AnyChar ::= [#x0-#x10FFFF]
 
 /* Names */
@@ -49,7 +49,7 @@ LiteralChar ::= AnyChar - ('(' | ')' | Esc)
 
 /* Escape sequences */
 Esc ::= '\'
-TextEscape ::= Esc Esc | Esc '[' | Esc ']' | Esc '{' | Esc '}'
+TextEscape ::= Esc Esc | Esc '{' | Esc '}'
 LiteralEscape ::= Esc Esc | Esc '(' | Esc ')'
 
 /* WhiteSpace */
