@@ -80,92 +80,92 @@ The syntax specification takes into account the following design restrictions:
 
 ### Simple Messages
 
-All messages, including simple ones, need `[…]` delimiters:
+All messages, including simple ones, need `{…}` delimiters:
 
-    [Hello, world!]
+    {Hello, world!}
 
 The same message defined in a `.properties` file:
 
 ```properties
-app.greetings.hello = [Hello, world!]
+app.greetings.hello = {Hello, world!}
 ```
 
 The same message defined inline in JavaScript:
 
 ```js
-let hello = new MessageFormat('[Hello, world!]')
+let hello = new MessageFormat('{Hello, world!}')
 hello.format()
 ```
 
 ### Simple Placeholders
 
-Messages may contain placeholders within `{…}` delimiters,
+Messages may contain placeholders within inner `{…}` delimiters,
 such as variables that are expected to be passed in as format paramters:
 
-    [Hello, {$userName}!]
+    {Hello, {$userName}!}
 
 ### Formatting Functions
 
 A message with an interpolated `$date` variable formatted with the `:datetime` function:
 
-    [Today is {$date :datetime weekday=long}.]
+    {Today is {$date :datetime weekday=long}.}
 
 A message with an interpolated `$userName` variable formatted with
 the custom `:person` function capable of
 declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
 
-    [Hello, {$userName :person case=vocative}!]
+    {Hello, {$userName :person case=vocative}!}
 
 A message with an interpolated `$userObj` variable formatted with
 the custom `:person` function capable of
 plucking the first name from the object representing a person:
 
-    [Hello, {$userObj :person firstName=long}!]
+    {Hello, {$userObj :person firstName=long}!}
 
 ### Markup Elements
 
 A message with two markup-like element placeholders, `button` and `link`,
 which the runtime can use to construct a document tree structure for a UI framework.
 
-    [{+button}Submit{-button} or {+link}cancel{-link}.]
+    {{+button}Submit{-button} or {+link}cancel{-link}.}
 
 ### Selection
 
 A message with a single selector:
 
     match {$count :number}
-    when 1 [You have one notification.]
-    when * [You have {$count} notifications.]
+    when 1 {You have one notification.}
+    when * {You have {$count} notifications.}
 
 A message with a single selector which is an invocation of
 a custom function `:platform`, formatted on a single line:
 
-    match {:platform} when windows [Settings] when * [Preferences]
+    match {:platform} when windows {Settings} when * {Preferences}
 
 A message with a single selector and a custom `:hasCase` function
 which allows the message to query for presence of grammatical cases required for each variant:
 
     match {$userName :hasCase}
-    when vocative [Hello, {$userName :person case=vocative}!]
-    when accusative [Please welcome {$userName :person case=accusative}!]
-    when * [Hello!]
+    when vocative {Hello, {$userName :person case=vocative}!}
+    when accusative {Please welcome {$userName :person case=accusative}!}
+    when * {Hello!}
 
 A message with 2 selectors:
 
     match {$photoCount :number} {$userGender :equals}
-    when 1 masculine [{$userName} added a new photo to his album.]
-    when 1 feminine [{$userName} added a new photo to her album.]
-    when 1 * [{$userName} added a new photo to their album.]
-    when * masculine [{$userName} added {$photoCount} photos to his album.]
-    when * feminine [{$userName} added {$photoCount} photos to her album.]
-    when * * [{$userName} added {$photoCount} photos to their album.]
+    when 1 masculine {{$userName} added a new photo to his album.}
+    when 1 feminine {{$userName} added a new photo to her album.}
+    when 1 * {{$userName} added a new photo to their album.}
+    when * masculine {{$userName} added {$photoCount} photos to his album.}
+    when * feminine {{$userName} added {$photoCount} photos to her album.}
+    when * * {{$userName} added {$photoCount} photos to their album.}
 
 ### Local Variables
 
 A message defining a local variable `$whom` which is then used twice inside the pattern:
 
     let $whom = {$monster :noun case=accusative}
-    [You see {$quality :adjective article=indefinite accord=$whom} {$whom}!]
+    {You see {$quality :adjective article=indefinite accord=$whom} {$whom}!}
 
 A message defining two local variables:
 `$itemAcc` and `$countInt`, and using `$countInt` as a selector:
@@ -173,8 +173,8 @@ A message defining two local variables:
     let $countInt = {$count :number maximumFractionDigits=0}
     let $itemAcc = {$item :noun count=$count case=accusative}
     match {$countInt}
-    when one [You bought {$color :adjective article=indefinite accord=$itemAcc} {$itemAcc}.]
-    when * [You bought {$countInt} {$color :adjective accord=$itemAcc} {$itemAcc}.]
+    when one {You bought {$color :adjective article=indefinite accord=$itemAcc} {$itemAcc}.}
+    when * {You bought {$countInt} {$color :adjective accord=$itemAcc} {$itemAcc}.}
 
 ### Complex Messages
 
@@ -186,20 +186,20 @@ A complex message with 2 selectors and 3 local variable definitions:
 
     match {$host :gender} {$guestOther :number}
 
-    when female 0 [{$hostName} does not give a party.]
-    when female 1 [{$hostName} invites {$guestName} to her party.]
-    when female 2 [{$hostName} invites {$guestName} and one other person to her party.]
-    when female * [{$hostName} invites {$guestName} and {$guestsOther} other people to her party.]
+    when female 0 {{$hostName} does not give a party.}
+    when female 1 {{$hostName} invites {$guestName} to her party.}
+    when female 2 {{$hostName} invites {$guestName} and one other person to her party.}
+    when female * {{$hostName} invites {$guestName} and {$guestsOther} other people to her party.}
 
-    when male 0 [{$hostName} does not give a party.]
-    when male 1 [{$hostName} invites {$guestName} to his party.]
-    when male 2 [{$hostName} invites {$guestName} and one other person to his party.]
-    when male * [{$hostName} invites {$guestName} and {$guestsOther} other people to his party.]
+    when male 0 {{$hostName} does not give a party.}
+    when male 1 {{$hostName} invites {$guestName} to his party.}
+    when male 2 {{$hostName} invites {$guestName} and one other person to his party.}
+    when male * {{$hostName} invites {$guestName} and {$guestsOther} other people to his party.}
 
-    when * 0 [{$hostName} does not give a party.]
-    when * 1 [{$hostName} invites {$guestName} to their party.]
-    when * 2 [{$hostName} invites {$guestName} and one other person to their party.]
-    when * * [{$hostName} invites {$guestName} and {$guestsOther} other people to their party.]
+    when * 0 {{$hostName} does not give a party.}
+    when * 1 {{$hostName} invites {$guestName} to their party.}
+    when * 2 {{$hostName} invites {$guestName} and one other person to their party.}
+    when * * {{$hostName} invites {$guestName} and {$guestsOther} other people to their party.}
 
 ## Productions
 
@@ -240,15 +240,15 @@ Examples:
 
 ```
 match {$count :plural}
-when 1 [One apple]
-when * [{$count} apples]
+when 1 {One apple}
+when * {{$count} apples}
 ```
 
 ```
 let $frac = {$count: number minFractionDigits=2}
 match {$frac}
-when 1 [One apple]
-when * [{$frac} apples]
+when 1 {One apple}
+when * {{$frac} apples}
 ```
 
 ### Variants
@@ -270,13 +270,13 @@ A well-formed message is considered valid if the following requirements are sati
 ### Patterns
 
 A pattern is a sequence of translatable elements.
-Patterns are always delimited with `[` at the start, and `]` at the end.
+Patterns are always delimited with `{` at the start, and `}` at the end.
 This serves 3 purposes:
 
 - The message should be unambiguously embeddable in various container formats
   regardless of the container's whitespace trimming rules.
   E.g. in Java `.properties` files,
-  `hello = [Hello]` will unambiguously define the `Hello` message without the space in front of it.
+  `hello = {Hello}` will unambiguously define the `Hello` message without the space in front of it.
 - The message should be conveniently embeddable in various programming languages
   without the need to escape characters commonly related to strings, e.g. `"` and `'`.
   Such need may still occur when a single or double quote is
@@ -285,13 +285,13 @@ This serves 3 purposes:
   are translatable and which ones are part of the formatting logic definition.
 
 ```ebnf
-Pattern ::= '[' (Text | Placeholder)* ']' /* ws: explicit */
+Pattern ::= '{' (Text | Placeholder)* '}' /* ws: explicit */
 ```
 
 Examples:
 
 ```
-[Hello, world!]
+{Hello, world!}
 ```
 
 ### Placeholders
@@ -366,11 +366,11 @@ MarkupEnd ::= '-' Name /* ws: explicit */
 Examples:
 
 ```
-[This is {+b}bold{-b}.]
+{This is {+b}bold{-b}.}
 ```
 
 ```
-[{+h1 name=(above-and-beyond)}Above And Beyond{-h1}]
+{{+h1 name=(above-and-beyond)}Above And Beyond{-h1}}
 ```
 
 ## Tokens
@@ -381,13 +381,12 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 
 Text is the translatable content of a _pattern_.
 Any Unicode codepoint is allowed in text, with the exception of
-`[` and `]` (which delimit patterns),
-`{` and `}` (which delimit placeholders),
+`{` and `}` (which delimit patterns and placeholders),
 and `\` (which starts an escape sequence).
 
 ```ebnf
 Text ::= (TextChar | TextEscape)+ /* ws: explicit */
-TextChar ::= AnyChar - ('[' | ']' | '{' | '}' | Esc)
+TextChar ::= AnyChar - ('{' | '}' | Esc)
 AnyChar ::= [#x0-#x10FFFF]
 ```
 
@@ -449,7 +448,7 @@ They are allowed in translatable text as well as in literals.
 
 ```ebnf
 Esc ::= '\'
-TextEscape ::= Esc Esc | Esc '[' | Esc ']' | Esc '{' | Esc '}'
+TextEscape ::= Esc Esc | Esc '{' | Esc '}'
 LiteralEscape ::= Esc Esc | Esc '(' | Esc ')'
 ```
 
