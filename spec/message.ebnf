@@ -26,7 +26,7 @@ Markup ::= MarkupStart Option*
 /* Text */
 Text ::= (TextChar | TextEscape)+
 TextChar ::= AnyChar - ('{' | '}' | Esc)
-AnyChar ::= [#x0-#x10FFFF]
+AnyChar ::= [#x0-#x10FFFF] - [#xD800-#xDBFF]
 
 /* Names */
 Variable ::= '$' Name /* ws: explicit */
