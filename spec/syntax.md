@@ -66,6 +66,13 @@ The design goals of the syntax specification are as follows:
    `.properties`, YAML, XML, inlined as string literals in programming languages, etc.
    This includes a future _MessageResource_ specification.
 
+   - _Non-Goal_: Support unnecessary escape sequences, which would theirselves require
+     additional escaping when embedded. Instead, we tolerate direct use of nearly all
+     characters (including line breaks, control characters, etc.) and rely upon escaping
+     in those outer formats to aid human comprehension (e.g., depending upon container
+     format, a U+000A LINE FEED might be represented as `\n`, `\012`, `\x0A`, `\u000A`,
+     `\U0000000A`, `&#xA;`, `&NewLine;`, `%0A`, `<LF>`, or something else entirely).
+
 ### Design Restrictions
 
 The syntax specification takes into account the following design restrictions:
@@ -75,6 +82,12 @@ The syntax specification takes into account the following design restrictions:
    as well as to format it over multiple lines for clarity.
 
 1. The syntax should define as few special characters and sigils as possible.
+   Note that this necessitates extra care when presenting messages for human consumption,
+   because they may contain invisible characters such as U+200B ZERO WIDTH SPACE,
+   control characters such as U+0000 NULL and U+0009 TAB, permanently reserved noncharacters
+   (U+FDD0 through U+FDEF and U+<i>n</i>FFFE and U+<i>n</i>FFFF where <i>n</i> is 0x0 through 0x10),
+   private-use code points (U+E000 through U+F8FF, U+F0000 through U+FFFFD, and
+   U+100000 through U+10FFFD), unassigned code points, and other potentially confusing content.
 
 ## Overview & Examples
 
@@ -377,17 +390,30 @@ Examples:
 
 The grammar defines the following tokens for the purpose of the lexical analysis.
 
-### Text
+### Text and literals
 
-Text is the translatable content of a _pattern_.
-Any Unicode codepoint is allowed in text, with the exception of
-`{` and `}` (which delimit patterns and placeholders),
-and `\` (which starts an escape sequence).
+Text is the translatable content of a _pattern_, and Literal is used for matching
+variants and providing input to expressions.
+Any Unicode code point is allowed in either, with the exception of
+the relevant delimiters (`{` and `}` for Text, `(` and `)` for Literal),
+`\` (which starts an escape sequence), and
+surrogate code points U+D800 through U+DBFF (which cannot be encoded into UTF-8).
+
+All code points are preserved.
+
+#### Text
 
 ```ebnf
 Text ::= (TextChar | TextEscape)+ /* ws: explicit */
 TextChar ::= AnyChar - ('{' | '}' | Esc)
 AnyChar ::= [#x0-#x10FFFF] - [#xD800-#xDBFF]
+```
+
+#### Literal
+
+```ebnf
+Literal ::= '(' (LiteralChar | LiteralEscape)* ')' /* ws: explicit */
+LiteralChar ::= AnyChar - ('(' | ')' | Esc)
 ```
 
 ### Names
@@ -419,26 +445,6 @@ NameStart ::= [a-zA-Z] | "_"
             | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
 NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
            | [#x0300-#x036F] | [#x203F-#x2040]
-```
-
-### Literal
-
-Any Unicode code point is allowed in literals,
-with the exception of `(` and `)` (which delimit literals),
-`\` (which starts an escape sequence), and
-surrogate code points U+D800 through U+DBFF (which cannot be encoded into UTF-8).
-
-This includes line-breaking characters (such as U+000A LINE FEED and U+000D CARRIAGE RETURN),
-other control characters (such as U+0000 NULL and U+0009 TAB),
-permanently reserved noncharacters (U+FDD0 through U+FDEF and U+<i>n</i>FFFE and U+<i>n</i>FFFF where <i>n</i> is 0x0 through 0x10),
-private-use code points (U+E000 through U+F8FF, U+F0000 through U+FFFFD, and U+100000 through U+10FFFD),
-and unassigned code points.
-
-All code points of a literal are preserved.
-
-```ebnf
-Literal ::= '(' (LiteralChar | LiteralEscape)* ')' /* ws: explicit */
-LiteralChar ::= AnyChar - ('(' | ')' | Esc)
 ```
 
 ### Escape Sequences
