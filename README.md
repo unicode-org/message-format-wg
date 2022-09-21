@@ -2,7 +2,7 @@
 
 Welcome to the home page for the MessageFormat Working Group, a subgroup of the [Unicode CLDR-TC](https://unicode.org/cldr).
 
-See the current [Draft MessageFormat 2.0 Syntax](https://github.com/unicode-org/message-format-wg/blob/develop/spec/syntax.md).
+See the current [Draft MessageFormat 2.0 Syntax](./spec/syntax.md).
 
 ## Charter
 
