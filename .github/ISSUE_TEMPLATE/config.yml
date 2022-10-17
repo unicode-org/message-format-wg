@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Feedback
+    url: https://github.com/unicode-org/message-format-wg/discussions/categories/feedback
+    about: Comments, criticisms and other user feedback for the MF2 tech preview
