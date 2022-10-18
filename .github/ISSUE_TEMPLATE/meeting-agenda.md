@@ -9,14 +9,14 @@ assignees: ''
 
 ## Intl.MessageFormat - WG Meeting 
 
-**Time**: 10am PDT (6pm GMT)
+**Time**: 18:30 CEST - 9:30 PDT
 
 **Meeting Notes** :[Link]() *Fill with URL*
 
 **Call** : [Link](https://meet.google.com/nqr-frda-fii)
 
-**TCQ**: [Link]()  *Fill with URL*  [(How to use TCQ)](https://github.com/unicode-org/message-format-wg/blob/master/docs/tcq-howto.md)
 
-## Agenda
+
+## Highlights of the [Agenda](https://github.com/unicode-org/message-format-wg/projects/5#column-16197531)
 - Example Issues
 -  Example Issue 2 [#93 ](https://github.com/unicode-org/message-format-wg/issues/93)

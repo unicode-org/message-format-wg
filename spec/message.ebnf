@@ -1,0 +1,56 @@
+Message ::= Declaration* ( Pattern | Selector Variant+ )
+
+/* Preamble */
+Declaration ::= 'let' WhiteSpace Variable '=' '{' Expression '}'
+Selector ::= 'match' ( '{' Expression '}' )+
+
+/* Variants and Patterns */
+Variant ::= 'when' ( WhiteSpace VariantKey )+ Pattern
+VariantKey ::= Literal | Nmtoken | '*'
+Pattern ::= '{' (Text | Placeholder)* '}' /* ws: explicit */
+
+/* Placeholders */
+Placeholder ::= '{' (Expression | Markup | MarkupEnd)? '}'
+
+/* Expressions */
+Expression ::= Operand Annotation? | Annotation
+Operand ::= Literal | Variable
+Annotation ::= Function Option*
+Option ::= Name '=' (Literal | Nmtoken | Variable)
+
+/* Markup Tags */
+Markup ::= MarkupStart Option*
+
+<?TOKENS?>
+
+/* Text */
+Text ::= (TextChar | TextEscape)+
+TextChar ::= AnyChar - ('{' | '}' | Esc)
+AnyChar ::= [#x0-#x10FFFF] - [#xD800-#xDBFF]
+
+/* Names */
+Variable ::= '$' Name /* ws: explicit */
+Function ::= ':' Name /* ws: explicit */
+MarkupStart ::= '+' Name /* ws: explicit */
+MarkupEnd ::= '-' Name /* ws: explicit */
+Name ::= NameStart NameChar* /* ws: explicit */
+Nmtoken ::= NameChar+ /* ws: explicit */
+NameStart ::= [a-zA-Z] | "_"
+            | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
+            | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
+            | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
+            | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
+           | [#x0300-#x036F] | [#x203F-#x2040]
+
+/* Literals */
+Literal ::= '(' (LiteralChar | LiteralEscape)* ')' /* ws: explicit */
+LiteralChar ::= AnyChar - ('(' | ')' | Esc)
+
+/* Escape sequences */
+Esc ::= '\'
+TextEscape ::= Esc Esc | Esc '{' | Esc '}'
+LiteralEscape ::= Esc Esc | Esc '(' | Esc ')'
+
+/* WhiteSpace */
+WhiteSpace ::= #x9 | #xD | #xA | #x20 /* ws: definition */
