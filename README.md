@@ -6,9 +6,9 @@ Welcome to the home page for the MessageFormat Working Group, a subgroup of the 
 
 The Message Format Working Group (MFWG) is tasked with developing an industry standard for the representation of localizable message strings to be a successor to [ICU MessageFormat](https://unicode-org.github.io/icu/userguide/format_parse/messages/). MFWG will recommend how to remove redundancies, make the syntax more usable, and support more complex features, such as gender, inflections, and speech. MFWG will also consider the integration of the new standard with programming environments, including, but not limited to, ICU, DOM, and ECMAScript, and with localization platform interchange. The output of MFWG will be a specification for the new syntax, which is expected to be on track to become a Unicode Technical Standard.
 
-- [Why ICU MessageFormat Needs a Successor](https://github.com/unicode-org/message-format-wg/blob/main/docs/why_mf_next.md)
+- [Why ICU MessageFormat Needs a Successor](docs/why_mf_next.md)
 - [Goals and Non-Goals](guidelines/goals.md)
-- [Record of Consensus Decisions](https://github.com/unicode-org/message-format-wg/blob/main/docs/consensus_decisions.md)
+- [Record of Consensus Decisions](docs/consensus_decisions.md)
 
 ## MessageFormat 2.0 Draft Syntax
 
@@ -70,7 +70,7 @@ We invite feedback about the current syntax draft, as well as the real-life use-
 - [Decision Making Process](guidelines/decision-process.md)
 - [Contributing to the Meeting Agenda](guidelines/contributing-to-agenda.md)
 - [Chair Group](guidelines/chair-group.md)
-- [Glossary](https://github.com/unicode-org/message-format-wg/blob/main/docs/glossary-and-resources.md)
+- [Glossary](docs/glossary-and-resources.md)
 
 We are open to professionals in the i18n/l10n industry to participate in our working group!  To join:
 
