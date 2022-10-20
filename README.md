@@ -4,7 +4,7 @@ Welcome to the home page for the MessageFormat Working Group, a subgroup of the 
 
 ## Charter
 
-The Message Format Working Group (MFWG) is tasked with developing an industry standard for the representation of localizable message strings to be a successor to [ICU MessageFormat](https://unicode-org.github.io/icu/userguide/format_parse/messages/). MFWG will recommend how to remove redundancies, make the syntax more usable, and support more complex features, such as gender, inflections, and speech. MFWG will also consider the integration of the new standard with programming environments, including, but not limited to, ICU, DOM, and ECMAScript, and with localization platform interchange. The output of MFWG will be a specification for the new syntax, which is expected to be on track to become a Unicode Technical Standard.
+The Message Format Working Group (MFWG) is tasked with developing an industry standard for the representation of localizable message strings to be a successor to [ICU MessageFormat](https://unicode-org.github.io/icu/userguide/format_parse/messages/). MFWG will recommend how to remove redundancies, make the syntax more usable, and support more complex features, such as gender, inflections, and speech. MFWG will also consider the integration of the new standard with programming environments, including, but not limited to, ICU, DOM, and ECMAScript, and with localization platform interchange. The output of MFWG will be a specification for the new syntax.
 
 - [Why ICU MessageFormat Needs a Successor](docs/why_mf_next.md)
 - [Goals and Non-Goals](guidelines/goals.md)
@@ -56,7 +56,7 @@ See more examples and the formal definition of the grammar in [spec/syntax.md](.
 ### Implementations
 
 * Java: [`com.ibm.icu.message2`](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/index.html?com/ibm/icu/message2/package-summary.html), part of ICU 72 released in October 2022, is a _tech preview_ implementation of the MessageFormat 2.0 syntax, together with a formatting API.
-* JavaScript: [`messageformat`](https://github.com/messageformat/messageformat/tree/master/packages/mf2-messageformat) 4.0 implements the MessageFormat 2.0 syntax, together with a polyfill of the runtime API proposed by ECMA-402.
+* JavaScript: [`messageformat`](https://github.com/messageformat/messageformat/tree/master/packages/mf2-messageformat) 4.0 implements the MessageFormat 2.0 syntax, together with a polyfill of the runtime API proposed for ECMA-402.
 
 ## Sharing Feedback
 
