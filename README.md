@@ -10,7 +10,7 @@ The Message Format Working Group (MFWG) is tasked with developing an industry st
 - [Goals and Non-Goals](guidelines/goals.md)
 - [Record of Consensus Decisions](docs/consensus_decisions.md)
 
-## MessageFormat 2.0 Draft Syntax
+## MessageFormat 2 Draft Syntax
 
 The current draft syntax for defining messages can be found in [spec/syntax.md](./spec/syntax.md).
 
@@ -55,8 +55,8 @@ See more examples and the formal definition of the grammar in [spec/syntax.md](.
 
 ### Implementations
 
-* Java: [`com.ibm.icu.message2`](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/index.html?com/ibm/icu/message2/package-summary.html), part of ICU 72 released in October 2022, is a _tech preview_ implementation of the MessageFormat 2.0 syntax, together with a formatting API.
-* JavaScript: [`messageformat`](https://github.com/messageformat/messageformat/tree/master/packages/mf2-messageformat) 4.0 implements the MessageFormat 2.0 syntax, together with a polyfill of the runtime API proposed for ECMA-402.
+* Java: [`com.ibm.icu.message2`](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/index.html?com/ibm/icu/message2/package-summary.html), part of ICU 72 released in October 2022, is a _tech preview_ implementation of the MessageFormat 2 syntax, together with a formatting API.
+* JavaScript: [`messageformat`](https://github.com/messageformat/messageformat/tree/master/packages/mf2-messageformat) 4.0 implements the MessageFormat 2 syntax, together with a polyfill of the runtime API proposed for ECMA-402.
 
 ## Sharing Feedback
 
