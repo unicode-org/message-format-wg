@@ -19,3 +19,29 @@
     - Chair Group or Chair don't have a decision making authority, see [chair-group.md](chair-group.md) and [chair-group-members.md](chair-group-members.md).
 6. In case consensus cannot be found over multiple iterations of arguments and counter arguments, a monthly group meeting MAY reach consensus to mandate the Chair Group to organize a ballot among all group members in good standing. The ballot wording, options, and success criteria SHOULD be explicitely defined in a monthly meeting. The Chair Group only administers and implements the ballot and its results.
 7. Blacklisting procedure is TBD by monthly meeting consensus if and when needed.
+
+## Fast-Tracking PRs
+
+Special exception is made for pull requests seeking to make any of the following
+changes to this repository:
+
+- Errata fixes.
+- Editorial changes.
+- Meeting minutes.
+- Updates to the delegate list.
+- Doc Fixes.
+
+Spec changes cannot be fast-tracked.
+
+To propose fast-tracking a pull request, apply the **_fast-track_** label.
+Then add a comment that group members may upvote.
+
+If someone disagrees with the fast-tracking request, remove the label.
+Do not fast-track the pull request in that case.
+
+The pull request may be fast-tracked if two group members approve the fast-tracking request.
+To land, the pull request itself also needs two approvals from group members.
+
+Group members may request fast-tracking of pull requests they did not author.
+In that case only, the request itself is also one fast-track approval.
+Upvote the comment anyway to avoid any doubt.
