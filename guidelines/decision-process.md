@@ -4,11 +4,11 @@
 ## Definitions
 1. *Consensus* is defined as lack of sustained opposition.
 2. *Good standing* is a characteristic of group members who fullfill their implicit and explicit obligations and hence are allowed to excercise all of their rights within the group without restriction.
-3. *Blacklist* (*blacklisted*, *blacklisting*) is a taxative enumeration of group members who are temporarily excluded from exercising their rights within the group.
+3. *Proscribe* (*proscribe*, *proscribed*, *proscription*) is a taxative enumeration of group members who are temporarily excluded from exercising their rights within the group.
 4. *Normative keywords* as defined in [BCP 14](https://tools.ietf.org/html/bcp14)
 
 ## Rules
-1. Any current group member is deemed to be in good standing unless blacklisted.
+1. Any current group member is deemed to be in good standing unless proscribed.
 2. Any group member in good standing MAY make a proposal to the group via
     - raising an issue,
     - PR (against the repo or wiki), or
@@ -18,7 +18,7 @@
 5. The monthly group meeting has the ultimate decision making authority.
     - Chair Group or Chair don't have a decision making authority, see [chair-group.md](chair-group.md) and [chair-group-members.md](chair-group-members.md).
 6. In case consensus cannot be found over multiple iterations of arguments and counter arguments, a monthly group meeting MAY reach consensus to mandate the Chair Group to organize a ballot among all group members in good standing. The ballot wording, options, and success criteria SHOULD be explicitely defined in a monthly meeting. The Chair Group only administers and implements the ballot and its results.
-7. Blacklisting procedure is TBD by monthly meeting consensus if and when needed.
+7. Proscription procedure is TBD by monthly meeting consensus if and when needed.
 
 ## Fast-Tracking PRs
 
