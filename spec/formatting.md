@@ -28,15 +28,25 @@ These are divided to the following categories:
 - **Syntax errors** occur when the syntax representation of a message is invalid.
 - **Resolution errors** occur when the runtime value of a part of a message
   cannot be determined.
-- **Unresolved variable errors** are a sub-category of resolution errors,
-  and occur when a variable reference cannot be resolved.
-- **Formatting errors** are thrown by expression handlers,
+
+  - **Unresolved Variable** errors occur when a variable reference cannot be resolved.
+
+- **Selection errors** cover failures encountered during selection.
+
+  - **Selector errors** are failures in the matching of a key to a specific selector.
+  - **Missing Fallback** errors occur when no Variant is selected
+    due to the message not including a Variant with only catch-all keys.
+
+- **Formatting errors** occur during the formatting of a resolved value,
   for example when encountering a value with an unsupported type
   or an internally inconsistent set of options.
 
+During selection, an expression handler must only emit Resolution and Selection errors.
+During formatting, an expression handler must only emit Resolution and Formatting errors.
+
 In all cases, when encountering an error,
 a message formatter must provide some representation of the message.
-An informative error must also be separately provided.
+An informative error or errors must also be separately provided.
 
 When an error occurs in the syntax or resolution of an Expression or MarkupStart Option,
 the Expression or MarkupStart in question is processed as if the option was not defined.
@@ -44,7 +54,11 @@ This may allow for the fallback handling described below to be avoided,
 though an error must still be emitted.
 
 When an error occurs within a Selector,
-the selector may only match the catch-all VariantKey `*`.
+the selector must not match any VariantKey other than the catch-all `*`
+and a Selector error is emitted.
+When selection fails to match any Variant,
+an empty string is used as the formatted string representation of the message
+and a Missing Fallback error is emitted.
 
 When an error occurs in a Placeholder that is being formatted,
 the fallback string representation of the Placeholder
