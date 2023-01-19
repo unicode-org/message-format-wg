@@ -17,7 +17,7 @@ This block reserved for scribe rotation.
 To request that the chair add an _issue_ to the agenda, add the label `Agenda+`
 To request that the chair add an agenda item, send email to the message-format-wg group email.
 
-***Agenda for 2023-01-23***
+#### Agenda for 2023-01-23
 
 Notes: [doc](https://docs.google.com/document/d/1AHEfEJvs7Dqies6xY59DrTU6Moey_WQ1nOhkEp0VeEc)
 
@@ -37,13 +37,23 @@ Requested by: chair
 Requested by: EAO
 https://github.com/unicode-org/message-format-wg/pull/320
 
+
+**Topic:** (Discussion) Consider adding an FAQ section to the README
+Requested by: glen-84
+https://github.com/unicode-org/message-format-wg/discussions/321
+
+**Topic:** (Discussion) Guidance needed for dealing with selector explosions
+Requested by: STA
+https://github.com/unicode-org/message-format-wg/discussions/323
+
+#### Proposed for Agenda for 2023-02-06
+
 **Topic:** Function Registry
 Requested by: STA
 
 Discussion of the function registry. Two of the three models had sections on this.
 
 
-**Topic:** (Discussion) Consider adding an FAQ section to the README
-Requested by: glen-84
-https://github.com/unicode-org/message-format-wg/discussions/321
+#### Proposed for Future
+
 
