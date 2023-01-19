@@ -1,7 +1,9 @@
 # MessageFormat Subcommittee Agenda
 
 This is the agenda document for upcoming calls of the MessageFormat subcommittee. We normally meet bi-weekly 
-(every two weeks) on Mondays at 9:30 Pacific (America/Los_Angeles). This is currently UTC+8. 
+(every two weeks) on Mondays at 9:30 Pacific (`America/Los_Angeles`). This is currently UTC+8. 
+
+See [here](https://www.timeanddate.com/worldclock/converter.html?iso=20230123T173000&p1=224&p2=248&p3=136&p4=179&p5=33&p6=101&p7=268) for your local time.
 
 Information on joining calls is found in the calendar.
 
