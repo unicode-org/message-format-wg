@@ -11,13 +11,16 @@ Information on joining calls is found in the calendar invite.
 
 This block reserved for scribe rotation.
 
+Recent scribes:
+* 2023-01-23 STA, ECH
+
 
 ## Agenda
 
 To request that the chair add an _issue_ to the agenda, add the label `Agenda+`
 To request that the chair add an agenda item, send email to the message-format-wg group email.
 
-#### Agenda for 2023-01-23
+#### Agenda for 2023-02-06
 
 Notes: [doc](https://docs.google.com/document/d/1AHEfEJvs7Dqies6xY59DrTU6Moey_WQ1nOhkEp0VeEc)
 
@@ -27,35 +30,24 @@ Notes: [doc](https://docs.google.com/document/d/1AHEfEJvs7Dqies6xY59DrTU6Moey_WQ
 
 **Topic:** Action Item Review
 
-**Topic:** Admin
-* Requested by: chair
-* Changes to labels, agenda structure, note taking.
-* Scribe: will someone volunteer to be the official scribe or do we use a rotation?
-
 **Topic:** Schedule and Goals for 2023
 * Requested by: chair
 * https://github.com/unicode-org/message-format-wg/discussions/328
 
-**Topic:** Error Handling PR
-* Requested by: EAO
-* https://github.com/unicode-org/message-format-wg/pull/320
-
-
-**Topic:** (Discussion) Consider adding an FAQ section to the README
-* Requested by: glen-84
-* https://github.com/unicode-org/message-format-wg/discussions/321
-
-**Topic:** (Discussion) Guidance needed for dealing with selector explosions
-* Requested by: STA
-* https://github.com/unicode-org/message-format-wg/discussions/323
-
-#### Proposed for Agenda for 2023-02-06
 
 **Topic:** Function Registry
 * Requested by: STA
 
 Discussion of the function registry. Two of the three models had sections on this.
 
+**Topic:** Bidi
+* Requested by: EAO
+
+**Topic:** (Discussion) Guidance needed for dealing with selector explosions
+* Requested by: STA
+* https://github.com/unicode-org/message-format-wg/discussions/323
+
+_May be out-of-date, since we had "extra time" at the end of 2023-01-23's call._
 
 #### Proposed for Future
 
