@@ -26,26 +26,123 @@ various errors may be encountered.
 These are divided into the following categories:
 
 - **Syntax errors** occur when the syntax representation of a message is not well-formed.
+
+  Example invalid messages resulting in a Syntax error:
+
+  ```
+  {Missing end brace
+  ```
+
+  ```
+  {Unknown {?placeholder}}
+  ```
+
+  ```
+  let $var = {(no message body)}
+  ```
+
 - **Data Model errors** occur when a message is invalid due to
   violating one of the following semantic requirements on its structure:
 
   - **Variant Key Mismatch errors** occur when the number of keys on a Variant
     does not equal the number of Selectors.
+
+    Example invalid messages resulting in a Variant Key Mismatch error:
+
+    ```
+    match {$one}
+    when 1 2 {Too many}
+    when * {Otherwise}
+    ```
+
+    ```
+    match {$one} {$two}
+    when 1 2 {Two keys}
+    when * {Too few}
+    when * * {Otherwise}
+    ```
+
   - **Missing Fallback Variant errors** occur when the message
     does not include a Variant with only catch-all keys.
+
+    Example invalid messages resulting in a Missing Fallback Variant error:
+
+    ```
+    match {$one}
+    when 1 {Value is one}
+    when 2 {Value is two}
+    ```
+
+    ```
+    match {$one} {$two}
+    when 1 * {First is one}
+    when * 1 {Second is one}
+    ```
 
 - **Resolution errors** occur when the runtime value of a part of a message
   cannot be determined.
 
   - **Unresolved Variable errors** occur when a variable reference cannot be resolved.
 
+    For example, attempting to format either of the following messages
+    must result in an Unresolved Variable error if done within a context that
+    does not provide for the variable reference `$var` to be successfully resolved:
+
+    ```
+    {The value is {$var}.}
+    ```
+
+    ```
+    match {$var}
+    when 1 {The value is one.}
+    when * {The value is not one.}
+    ```
+
 - **Selection errors** occur when message selection fails.
 
   - **Selector errors** are failures in the matching of a key to a specific selector.
 
+    For example, attempting to format either of the following messages
+    may result in a Selector error if done within a context that
+    uses a `:plural` selector function which requires its input to be numeric:
+
+    ```
+    match {(horse) :plural}
+    when 1 {The value is one.}
+    when * {The value is not one.}
+    ```
+
+    ```
+    let $sel = {(horse) :plural}
+    match {$sel}
+    when 1 {The value is one.}
+    when * {The value is not one.}
+    ```
+
 - **Formatting errors** occur during the formatting of a resolved value,
   for example when encountering a value with an unsupported type
   or an internally inconsistent set of options.
+
+  For example, attempting to format any of the following messages
+  may result in a Formatting error if done within a context that
+
+  1. provides for the variable reference `$user` to resolve to
+     an object `{ name: 'Kat', id: 1234 }`, and
+  2. uses a `:get` formatting function which requires its argument to be an object and
+     an option `field` to be provided with a string value,
+
+  ```
+  {Hello, {(horse) :get field=name}!}
+  ```
+
+  ```
+  {Hello, {$user :get}!}
+  ```
+
+  ```
+  let $id = {$user :get field=id}
+  {Hello, {$id :get field=name}!}
+  ```
 
 Syntax and Data Model errors must be emitted as soon as possible.
 
@@ -77,15 +174,31 @@ Between the brackets, the following contents are used:
 - Expression with Literal Operand: U+0028 LEFT PARENTHESIS `(`
   followed by the value of the Literal,
   and then by U+0029 RIGHT PARENTHESIS `)`
+
+  Examples: `{(horse)}`, `{(42)}`
+
 - Expression with Variable Operand: U+0024 DOLLAR SIGN `$`
   followed by the Variable Name of the Operand
+
+  Example: `{$user}`
+
 - Expression with no Operand: U+003A COLON `:` followed by the Expression Name
+
+  Example: `{:platform}`
+
 - Markup start: U+002B PLUS SIGN `+` followed by the MarkupStart Name
+
+  Example: `{+tag}`
+
 - Markup end: U+002D HYPHEN-MINUS `-` followed by the MarkupEnd Name
+
+  Example: `{-tag}`
+
 - Otherwise: The U+FFFD REPLACEMENT CHARACTER `�` character
 
-For example, the formatted string representation of the expression `{$foo :bar}`
-would be `{$foo}` if the variable could not be resolved.
+  Example: `{�}`
+
+Option names and values are not included in the fallback string representations.
 
 The formatted string representation of a message with a Syntax or Data Model error
 is the concatenation of U+007B LEFT CURLY BRACKET `{`,
