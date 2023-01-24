@@ -98,6 +98,23 @@ These are divided into the following categories:
     when * {The value is not one.}
     ```
 
+  - **Unknown Function errors** occur when an Expression includes
+    a reference to a function which cannot be resolved.
+
+    For example, attempting to format either of the following messages
+    must result in an Unknown Function error if done within a context that
+    does not provide for the function `:func` to be successfully resolved:
+
+    ```
+    {The value is {(horse) :func}.}
+    ```
+
+    ```
+    match {(horse) :func}
+    when 1 {The value is one.}
+    when * {The value is not one.}
+    ```
+
 - **Selection errors** occur when message selection fails.
 
   - **Selector errors** are failures in the matching of a key to a specific selector.
@@ -152,6 +169,10 @@ During formatting, an Expression handler must only emit Resolution and Formattin
 In all cases, when encountering an error,
 a message formatter must provide some representation of the message.
 An informative error or errors must also be separately provided.
+When a message contains more than one error,
+or contains some error which leads to further errors,
+an implementation which does not emit all of the errors
+should prioritise Syntax and Data Model errors over others.
 
 When an error occurs in the resolution of an Expression or Markup Option,
 the Expression or Markup in question is processed as if the option were not defined.
@@ -160,10 +181,17 @@ though an error must still be emitted.
 
 When an error occurs within a Selector,
 the selector must not match any VariantKey other than the catch-all `*`
-and a Selector error is emitted.
-When selection fails to match any Variant,
-an empty string is used as the formatted string representation of the message
-and a Missing Fallback error is emitted.
+and a Resolution or Selector error is emitted.
+
+## Fallback String Representations
+
+The formatted string representation of a message with a Syntax or Data Model error
+is the concatenation of U+007B LEFT CURLY BRACKET `{`,
+a fallback string,
+and U+007D RIGHT CURLY BRACKET `}`.
+If a fallback string is not defined,
+the U+FFFD REPLACEMENT CHARACTER `�` character is used,
+resulting in the string `{�}`.
 
 When an error occurs in a Placeholder that is being formatted,
 the fallback string representation of the Placeholder
@@ -199,11 +227,3 @@ Between the brackets, the following contents are used:
   Example: `{�}`
 
 Option names and values are not included in the fallback string representations.
-
-The formatted string representation of a message with a Syntax or Data Model error
-is the concatenation of U+007B LEFT CURLY BRACKET `{`,
-a fallback string,
-and U+007D RIGHT CURLY BRACKET `}`.
-If a fallback string is not defined,
-the U+FFFD REPLACEMENT CHARACTER `�` character is used,
-resulting in the string `{�}`.
