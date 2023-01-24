@@ -227,3 +227,27 @@ Between the brackets, the following contents are used:
   Example: `{�}`
 
 Option names and values are not included in the fallback string representations.
+
+When an error occurs in an Expression with a Variable Operand
+and the Variable refers to a local variable Declaration,
+the fallback string is formatted based on the Expression of the Declaration,
+rather than the Expression of the Placeholder.
+
+For example, attempting to format either of the following messages within a context that
+does not provide for the function `:func` to be successfully resolved:
+
+```
+let $var = {(horse) :func}
+{The value is {$var}.}
+```
+
+```
+let $var = {(horse)}
+{The value is {$var :func}.}
+```
+
+would result in both cases with this formatted string representation:
+
+```
+The value is {(horse)}.
+```
