@@ -58,7 +58,7 @@ These are divided into the following categories:
     ```
     match {$one} {$two}
     when 1 2 {Two keys}
-    when * {Too few}
+    when * {Missing a key}
     when * * {Otherwise}
     ```
 
