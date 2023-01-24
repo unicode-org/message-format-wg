@@ -19,6 +19,112 @@ the local variable takes precedence.
 It is an error for a local variable definition to
 refer to a local variable that's defined after it in the message.
 
+## Pattern Selection
+
+When formatting a message with one or more selectors,
+the Pattern of one of Variants must be selected for formatting.
+
+An implementation may use any pattern selection method,
+as long as its observable behaviour matches the results of the method defined here.
+
+### Setup
+
+To select a Pattern,
+first the resolved values _res_ of the Selector must be determined:
+
+1. Let _res_ be a new empty list of resolved values that support selection.
+2. For each Expression _exp_ of the message's Selector Expressions,
+   1. Let _rv_ be the resolved value of _exp_.
+   2. If selection is supported for _rv_:
+      1. Append _rv_ as the last element of the list _res_.
+   3. Else:
+      1. Emit a Selection Error.
+      2. Let _nomatch_ be a resolved value for which selection always fails.
+      3. Append _nomatch_ as the last element of the list _res_.
+
+The shape of the resolved values must be determined by each implementation,
+along with the manner of determining their support for selection.
+
+### Variant Tests
+
+Using _res_,
+the Variants are iterated in source order and the following test is performed
+to find one with all of its keys matching the Selector Expressions:
+
+1. For each index _i_ in _res_:
+   1. Let _key_ be the VariantKey at position _i_.
+   2. If _key_ is not equal to the catch-all key `'*'`:
+      1. Let _sel_ be the entry in _res_ at position _i_.
+      2. Let _pass_ be the boolean result of testing _key_ against _sel_.
+      3. If _pass_ is False,
+         1. Return False to indicate failure.
+2. Return True to indicate success.
+
+The manner of testing _key_ against _sel_ must be defined by each implementation.
+
+Once a Variant is found for which the test succeeds,
+its Pattern is used for formatting the message.
+As each valid message must have a Variant with keys all equal to the catch-all key,
+this selection will always succeed.
+Variants after one with all catch-all keys will never be selected.
+
+### Examples
+
+Presuming a minimal implementation which only supports string values
+and tests keys by using string comparison,
+and a formatting context in which
+the variable reference `$foo` resolves to the string `'foo'` and
+the variable reference `$bar` resolves to the string `'bar'`,
+pattern selection proceeds as follows for this message:
+
+```
+match {$foo} {$bar}
+when bar bar {All bar}
+when foo foo {All foo}
+when * * {Otherwise}
+```
+
+1. During setup the values of the Selector Expressions
+   are resolved as `'foo'` and `'bar'`.<br>
+   As these are both strings, the list _res_ is determined to be « `'foo'`, `'bar'` ».
+
+2. Testing the first variant `bar bar`:<br>
+   The first key `bar` is compared to the first resolved value `foo`,
+   and the test fails.
+
+3. Testing the second variant `foo foo`:<br>
+   The first key `foo` is compared to the first resolved value `foo`,
+   and as this succeeds the test continues.<br>
+   The second key `foo` is compared to the second resolved value `bar`,
+   and the test fails.
+
+4. Testing the third variant `* *`:<br>
+   The first key `*` is a catch-all key, so the test continues.<br>
+   The second key `*` is a catch-all key, so the test continues and succeeds.
+
+5. The Pattern `{Otherwise}` of the third variant is selected.
+
+Alternatively, with the same implementation and formatting context,
+pattern selection would proceed as follows for this message:
+
+```
+match {$foo} {$bar}
+when foo * {Foo and some}
+when foo bar {Foo and bar}
+when * * {Otherwise}
+```
+
+1. During setup the values of the Selector Expressions
+   are resolved as `'foo'` and `'bar'`.<br>
+   As these are both strings, the list _res_ is determined to be « `'foo'`, `'bar'` ».
+
+2. Testing the first variant `foo *`:<br>
+   The first key `foo` is compared to the first resolved selector value `foo`,
+   and as this succeeds the test continues.<br>
+   The second key `*` is a catch-all key, so the test continues and succeeds.
+
+3. The Pattern `{Foo and some}` of the first variant is selected.
+
 ## Error Handling
 
 Errors in messages and their formatting may occur and be detected
