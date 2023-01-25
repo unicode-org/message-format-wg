@@ -35,6 +35,13 @@ Notes: [doc](https://docs.google.com/document/d/1AHEfEJvs7Dqies6xY59DrTU6Moey_WQ
 * https://github.com/unicode-org/message-format-wg/discussions/328
 
 
+**Topic:** Handling of 2119 keywords and internal terms
+* Requested by: APP, EAO
+
+Discussion of document formatting standards for 2119 keywords (**must**, *should*, etc.). Discussion of terminology handling.
+* https://github.com/unicode-org/message-format-wg/issues/331
+* https://github.com/unicode-org/message-format-wg/discussions/332
+
 **Topic:** Function Registry
 * Requested by: STA
 
