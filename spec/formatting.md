@@ -21,6 +21,12 @@ refer to a local variable that's defined after it in the message.
 
 ## Error Handling
 
+Errors in messages and their formatting may occur and be detected
+at multiple different stages of their processing.
+Where available,
+the use of validation tools is recommended,
+as early detection of errors makes their correction easier.
+
 During the formatting of a message,
 various errors may be encountered.
 These are divided into the following categories:
@@ -144,8 +150,10 @@ These are divided into the following categories:
   may result in a Formatting error if done within a context that
 
   1. provides for the variable reference `$user` to resolve to
-     an object `{ name: 'Kat', id: 1234 }`, and
-  2. uses a `:get` formatting function which requires its argument to be an object and
+     an object `{ name: 'Kat', id: 1234 }`,
+  2. provides for the variable reference `$field` to resolve to
+     a string `'address'`, and
+  3. uses a `:get` formatting function which requires its argument to be an object and
      an option `field` to be provided with a string value,
 
   ```
@@ -159,6 +167,10 @@ These are divided into the following categories:
   ```
   let $id = {$user :get field=id}
   {Hello, {$id :get field=name}!}
+  ```
+
+  ```
+  {Your {$field} is {$id :get field=$field}}
   ```
 
 Syntax and Data Model errors must be emitted as soon as possible.
