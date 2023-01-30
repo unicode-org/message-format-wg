@@ -40,7 +40,7 @@ These are divided into the following categories:
   ```
 
   ```
-  {Unknown {?placeholder}}
+  {Unknown {#placeholder#}}
   ```
 
   ```
@@ -126,7 +126,7 @@ These are divided into the following categories:
   - **Selector errors** are failures in the matching of a key to a specific selector.
 
     For example, attempting to format either of the following messages
-    may result in a Selector error if done within a context that
+    might result in a Selector error if done within a context that
     uses a `:plural` selector function which requires its input to be numeric:
 
     ```
@@ -147,7 +147,7 @@ These are divided into the following categories:
   or an internally inconsistent set of options.
 
   For example, attempting to format any of the following messages
-  may result in a Formatting error if done within a context that
+  might result in a Formatting error if done within a context that
 
   1. provides for the variable reference `$user` to resolve to
      an object `{ name: 'Kat', id: 1234 }`,
