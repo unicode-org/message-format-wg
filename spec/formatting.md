@@ -42,7 +42,7 @@ These are divided into the following categories:
   ```
 
 - **Data Model errors** occur when a message is invalid due to
-  violating one of the following semantic requirements on its structure:
+  violating one of the semantic requirements on its structure:
 
   - **Variant Key Mismatch errors** occur when the number of keys on a Variant
     does not equal the number of Selectors.
