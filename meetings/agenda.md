@@ -56,6 +56,12 @@ Discussion of the function registry. Two of the three models had sections on thi
 
 _May be out-of-date, since we had "extra time" at the end of 2023-01-23's call._
 
+**Topic:** (Pull Request) Add Pattern Selection
+* Requested by: EAO
+* https://github.com/unicode-org/message-format-wg/pull/333
+
+_Addition of pattern selection (matching) rules to the spec. Thanks @eemeli for the PR!_
+
 #### Proposed for Future
 
 
