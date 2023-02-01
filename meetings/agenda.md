@@ -22,7 +22,7 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 #### Agenda for 2023-02-06
 
-Notes: [doc](https://docs.google.com/document/d/1AHEfEJvs7Dqies6xY59DrTU6Moey_WQ1nOhkEp0VeEc)
+[2023-02-06 Notes](https://docs.google.com/document/d/1cJ76HjvBkImqSdPpmkbW133AnO3sFu29TUDrP3nxbrI/edit#)
 
 **Topic:** Agenda Review
 
