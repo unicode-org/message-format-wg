@@ -27,10 +27,9 @@ the Pattern of one of Variants must be selected for formatting.
 An implementation may use any pattern selection method,
 as long as its observable behaviour matches the results of the method defined here.
 
-### Setup
+### Resolve Selectors
 
-To select a Pattern,
-first the resolved values _res_ of the Selector must be determined:
+First, resolve the values of each Selector Expression:
 
 1. Let _res_ be a new empty list of resolved values that support selection.
 2. For each Expression _exp_ of the message's Selector Expressions,
@@ -38,9 +37,9 @@ first the resolved values _res_ of the Selector must be determined:
    2. If selection is supported for _rv_:
       1. Append _rv_ as the last element of the list _res_.
    3. Else:
-      1. Emit a Selection Error.
-      2. Let _nomatch_ be a resolved value for which selection always fails.
-      3. Append _nomatch_ as the last element of the list _res_.
+      1. Let _nomatch_ be a resolved value for which selection always fails.
+      2. Append _nomatch_ as the last element of the list _res_.
+      3. Emit a Selection Error.
 
 The shape of the resolved values must be determined by each implementation,
 along with the manner of determining their support for selection.
