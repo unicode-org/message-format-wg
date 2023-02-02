@@ -44,7 +44,7 @@ First, resolve the values of each Selector Expression:
 The shape of the resolved values must be determined by each implementation,
 along with the manner of determining their support for selection.
 
-### Variant Tests
+### Select Pattern
 
 Using _res_,
 the Variants are iterated in source order and the following test is performed
