@@ -50,6 +50,9 @@ Discussion of the function registry. Two of the three models had sections on thi
 **Topic:** Bidi
 * Requested by: EAO
 
+Discussion of bidirectional text handling. See:
+* https://github.com/unicode-org/message-format-wg/pull/315
+
 **Topic:** (Discussion) Guidance needed for dealing with selector explosions
 * Requested by: STA
 * https://github.com/unicode-org/message-format-wg/discussions/323
