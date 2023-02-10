@@ -39,7 +39,23 @@ including message identifiers, metadata, comments, groups, etc.
 The document is part of the MessageFormat 2.0 specification,
 the successor to ICU MessageFormat, henceforth called ICU MessageFormat 1.0.
 
+### Conformance
+
+Everything in this specification is normative except for: sections marked 
+as non-normative, all authoring guidelines, diagrams, examples, and notes.
+
+The key words `MAY`, `MUST`, `MUST NOT`, `OPTIONAL`, `RECOMMENDED`, 
+`SHOULD`, and `SHOULD NOT` in this document are to be interpreted as 
+described in BCP 14 [RFC2119] [RFC8174]. 
+
+### Terminology and Conventions
+
+When a term is defined in this document, it is marked like ***this***. When
+a term is referenced in this document it is marked like _this_.
+
 ### Design Goals
+
+_This section is non-normative._
 
 The design goals of the syntax specification are as follows:
 
@@ -74,6 +90,8 @@ The design goals of the syntax specification are as follows:
      `\U0000000A`, `&#xA;`, `&NewLine;`, `%0A`, `<LF>`, or something else entirely).
 
 ### Design Restrictions
+
+_This section is non-normative._
 
 The syntax specification takes into account the following design restrictions:
 
@@ -112,7 +130,7 @@ hello.format()
 
 ### Simple Placeholders
 
-Messages may contain placeholders within inner `{…}` delimiters,
+Messages MAY contain ***placeholders*** within inner `{…}` delimiters,
 such as variables that are expected to be passed in as format paramters:
 
     {Hello, {$userName}!}
@@ -218,12 +236,12 @@ A complex message with 2 selectors and 3 local variable definitions:
 
 The specification defines the following grammar productions.
 A message satisfying all rules of the grammar is considered _well-formed_.
-Furthermore, a well-formed message can is considered _valid_
+Furthermore, a well-formed message is considered _valid_
 if it meets additional semantic requirements about its structure, defined below.
 
 ### Message
 
-A single message is either a single pattern, or has a `match` statement
+A single message is either a single _pattern_, or has a `match` statement
 followed by one or more variants which represent the translatable body of the message.
 
 ```ebnf
@@ -232,7 +250,7 @@ Message ::= Declaration* ( Pattern | Selector Variant+ )
 
 ### Variable Declarations
 
-A variable declaration is an expression binding a variable identifier
+A ***variable declaration*** is an expression binding a variable identifier
 within the scope of the message to the value of an expression.
 This local variable may then be used in other expressions within the same message.
 
@@ -242,7 +260,7 @@ Declaration ::= 'let' WhiteSpace Variable '=' '{' Expression '}'
 
 ### Selectors
 
-A selector is a statement containing one or more expressions
+A ***selector*** is a statement containing one or more expressions
 which will be used to choose one of the variants during formatting.
 
 ```ebnf
@@ -266,7 +284,7 @@ when * {{$frac} apples}
 
 ### Variants
 
-A variant is a keyed pattern.
+A ***variant*** is a keyed pattern.
 The keys are used to match against the selectors defined in the `match` statement.
 The key `*` is a "catch-all" key, matching all selector values.
 
@@ -275,26 +293,26 @@ Variant ::= 'when' ( WhiteSpace VariantKey )+ Pattern
 VariantKey ::= Literal | Nmtoken | '*'
 ```
 
-A well-formed message is considered valid if the following requirements are satisfied:
+A _well-formed_ message is considered _valid_ if the following requirements are satisfied:
 
-- The number of keys on each variant must be equal to the number of selectors.
-- At least one variant's keys must all be equal to the catch-all key (`*`).
+- The number of keys on each variant MUST be equal to the number of selectors.
+- At least one variant's keys MUST all be equal to the catch-all key (`*`).
 
 ### Patterns
 
-A pattern is a sequence of translatable elements.
+A ***pattern*** is a sequence of translatable elements.
 Patterns are always delimited with `{` at the start, and `}` at the end.
 This serves 3 purposes:
 
-- The message should be unambiguously embeddable in various container formats
+- The message can be unambiguously embeddable in various container formats
   regardless of the container's whitespace trimming rules.
   E.g. in Java `.properties` files,
   `hello = {Hello}` will unambiguously define the `Hello` message without the space in front of it.
-- The message should be conveniently embeddable in various programming languages
+- The message can be conveniently embeddable in various programming languages
   without the need to escape characters commonly related to strings, e.g. `"` and `'`.
-  Such need may still occur when a single or double quote is
+  Such need might still occur when a single or double quote is
   used in the translatable content.
-- The syntax should make it as clear as possible which parts of the message body
+- The syntax needs to make it as clear as possible which parts of the message body
   are translatable and which ones are part of the formatting logic definition.
 
 ```ebnf
@@ -309,7 +327,7 @@ Examples:
 
 ### Placeholders
 
-Placeholders can contain expressions and markup elements.
+***Placeholders*** can contain expressions and markup elements.
 
 ```ebnf
 Placeholder ::= '{' (Expression | Markup | MarkupEnd) '}'
@@ -317,7 +335,7 @@ Placeholder ::= '{' (Expression | Markup | MarkupEnd) '}'
 
 ### Expressions
 
-Expressions can either start with an operand, or be standalone function calls.
+***Expressions*** can either start with an operand, or be standalone function calls.
 
 The operand is a literal or a variable name.
 The operand can be optionally followed by an _annotation_:
@@ -364,7 +382,7 @@ $when :datetime month=2-digit
 
 ### Markup
 
-Markup elements provide a structured way to mark up parts of the content.
+***Markup elements*** (or just ***markup***) provide a structured way to mark up parts of the content.
 There are two kinds of elements: start (opening) elements and end (closing) elements,
 each with its own syntax.
 They mimic XML elements, but do not require well-formedness.
@@ -392,7 +410,7 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 
 ### Text and literals
 
-Text is the translatable content of a _pattern_, and Literal is used for matching
+_Text_ is the translatable content of a _pattern_, and _Literal_ is used for matching
 variants and providing input to expressions.
 Any Unicode code point is allowed in either, with the exception of
 the relevant delimiters (`{` and `}` for Text, `(` and `)` for Literal),
@@ -422,7 +440,7 @@ The _name_ token is used for variable names (prefixed with `$`),
 function names (prefixed with `:`),
 markup names (prefixed with `+` or `-`),
 as well as option names.
-A name cannot start with an ASCII digit and certain basic combining characters.
+A name MUST NOT start with an ASCII digit and certain basic combining characters.
 Otherwise, the set of characters allowed in names is large.
 
 The _nmtoken_ token doesn't have _name_'s restriction on the first character
@@ -460,9 +478,9 @@ LiteralEscape ::= Esc Esc | Esc '(' | Esc ')'
 
 ### Whitespace
 
-Whitespace is defined as tab, carriage return, line feed, or the space character.
+***Whitespace*** is defined as tab, carriage return, line feed, or the space character.
 
-Inside patterns,
+Inside _patterns_,
 whitespace is part of the translatable content and is recorded and stored verbatim.
 Whitespace is not significant outside translatable text.
 
