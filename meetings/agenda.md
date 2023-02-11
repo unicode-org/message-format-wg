@@ -15,6 +15,13 @@ Recent scribes:
 * 2023-02-06 RGN, ECH
 * 2023-01-23 STA, ECH
 
+## Notes Document for This Call
+
+https://docs.google.com/document/d/1Kf7xj5deR8v_jswvugISDGdBMOIuVTHWu1fZHSdLjII/edit
+
+## NOTE WELL
+
+This call replaces the call of 2023-02-20 and is *one week earlier than normal*
 
 ## Agenda
 
