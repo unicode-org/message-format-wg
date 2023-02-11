@@ -12,6 +12,7 @@ Information on joining calls is found in the calendar invite.
 This block reserved for scribe rotation.
 
 Recent scribes:
+* 2023-02-06 RGN, ECH
 * 2023-01-23 STA, ECH
 
 
@@ -30,19 +31,7 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 **Topic:** Action Item Review
 
-**Topic:** Schedule and Goals for 2023
-* Requested by: chair
-* https://github.com/unicode-org/message-format-wg/discussions/328
-
-
-**Topic:** Handling of 2119 keywords and internal terms
-* Requested by: APP, EAO
-
-Discussion of document formatting standards for 2119 keywords (**must**, *should*, etc.). Discussion of terminology handling.
-* https://github.com/unicode-org/message-format-wg/issues/331
-* https://github.com/unicode-org/message-format-wg/discussions/332
-
-**Topic:** Function Registry
+**Topic:** Function Registry (continued)
 * Requested by: STA
 
 Discussion of the function registry. Two of the three models had sections on this.
@@ -65,6 +54,14 @@ _May be out-of-date, since we had "extra time" at the end of 2023-01-23's call._
 
 _Addition of pattern selection (matching) rules to the spec. Thanks @eemeli for the PR!_
 
-#### Proposed for Future
+#### Proposed for Future (or if time permits)
 
+**Topic:** Whitespace handling in EBNF
+* Requested by: APP
 
+https://github.com/unicode-org/message-format-wg/issues/340
+
+**Topic:** 2119 keyword PR
+* Requested by: APP
+
+https://github.com/unicode-org/message-format-wg/pull/338
