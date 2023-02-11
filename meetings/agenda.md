@@ -61,7 +61,9 @@ _May be out-of-date, since we had "extra time" at the end of 2023-01-23's call._
 
 _Addition of pattern selection (matching) rules to the spec. Thanks @eemeli for the PR!_
 
-#### Proposed for Future (or if time permits)
+---
+
+## Proposed for Future (or if time permits)
 
 **Topic:** Whitespace handling in EBNF
 * Requested by: APP
