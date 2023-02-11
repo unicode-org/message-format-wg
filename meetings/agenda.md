@@ -53,8 +53,6 @@ Discussion of bidirectional text handling. See:
 * Requested by: STA
 * https://github.com/unicode-org/message-format-wg/discussions/323
 
-_May be out-of-date, since we had "extra time" at the end of 2023-01-23's call._
-
 **Topic:** (Pull Request) Add Pattern Selection
 * Requested by: EAO
 * https://github.com/unicode-org/message-format-wg/pull/333
