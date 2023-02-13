@@ -49,7 +49,7 @@ The design goals are listed below.
 
  6. A determination that there are at least two interoperable independent implementations
     compliant with the conformance test suite in order to demonstrate that the 
-    specification(s) are pratical and meet requirements.
+    specification(s) are practical and meet requirements.
 
 
 ## Non-Goals
