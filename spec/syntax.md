@@ -3,6 +3,8 @@
 ## Table of Contents
 
 1. [Introduction](#introduction)
+   1. [Conformance](#conformance)
+   1. [Terminology and Conventions](#terminology-and-conventions)
    1. [Design Goals](#design-goals)
    1. [Design Restrictions](#design-restrictions)
 1. [Overview & Examples](#overview--examples)
@@ -109,6 +111,8 @@ The syntax specification takes into account the following design restrictions:
 
 ## Overview & Examples
 
+_This section is non-normative._
+
 ### Simple Messages
 
 All messages, including simple ones, need `{…}` delimiters:
@@ -130,7 +134,7 @@ hello.format()
 
 ### Simple Placeholders
 
-Messages MAY contain ***placeholders*** within inner `{…}` delimiters,
+Messages can contain ***placeholders*** within inner `{…}` delimiters,
 such as variables that are expected to be passed in as format paramters:
 
     {Hello, {$userName}!}
@@ -235,7 +239,9 @@ A complex message with 2 selectors and 3 local variable definitions:
 ## Productions
 
 The specification defines the following grammar productions.
+
 A message satisfying all rules of the grammar is considered _well-formed_.
+
 Furthermore, a well-formed message is considered _valid_
 if it meets additional semantic requirements about its structure, defined below.
 
