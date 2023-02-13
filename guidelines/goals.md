@@ -47,7 +47,7 @@ The design goals are listed below.
  5. A conformance test suite for parsing and formatting messages sufficient to
     ensure implementations can validate conformance to the specification(s) provided.
 
- 6. Ensure that there are at least two interoperable independent implementations
+ 6. A determination that there are at least two interoperable independent implementations
     compliant with the conformance test suite in order to demonstrate that the 
     specification(s) are pratical and meet requirements.
 
@@ -68,10 +68,6 @@ the scope of the MFWG.
  3. Create an _automated engine_ capable of transforming parts of speech in
     a grammatically-correct fashion. Instead, allow interfacing with such
     automatic and non-automatic engines from within the data model.
-
- ~~4. Create optimized and efficient _implementations of the standard_.  Instead,
-    create specifications, compliance test suites, recommendations and good
-    practices to support implementors.~~
 
  4. Build a _framework for localizing software_. Instead, design the standard
     as a building block to be used by third parties to create localization
