@@ -50,6 +50,3 @@ text-escape = "\" ("\" / "{" / "}")
 literal-escape = "\" ("\" / "(" / ")")
 
 s = 1*(%x09 / %x0D / %x0A / %x20)
-
-ALPHA = %x41-5A / %x61-7A
-DIGIT = %x30-39
