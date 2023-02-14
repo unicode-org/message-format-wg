@@ -1,0 +1,55 @@
+message = [s] *(declaration [s]) body [s]
+
+declaration = "let" s variable [s] "=" [s] "{" [s] expression [s] "}"
+body = pattern
+     / (selectors 1*([s] variant))
+
+pattern = "{" *(text / placeholder) "}"
+selectors = "match" 1*([s] selector)
+selector = "{" [s] expression [s] "}"
+variant = "when" 1*(s key) [s] pattern
+key = nmtoken / literal / "*"
+
+placeholder = "{" [s] (expression / markup / markup-end) [s] "}"
+
+expression = ((literal / variable) [s annotation])
+           / annotation
+annotation = function *(s option)
+option = name [s] "=" [s] (literal / nmtoken / variable)
+
+markup = markup-start *(s option)
+
+any-char = %x0-27 ; omit ( and )
+         / %x2A-5B ; omit \
+		 / %x5D-7A ; omit {
+		 / %x7C ; omit }
+		 / %x7E-D7FF
+		 / %xE000-10FFFF
+
+text = 1*(text-char / text-escape)
+text-char = any-char / "(" / ")"
+
+variable = "$" name
+function = ":" name
+markup-start = "+" name
+markup-end = "-" name
+name = name-start *name-char
+nmtoken = 1*name-char
+name-start = ALPHA / "_"
+           / %xC0-D6 / %xD8-F6 / %xF8-2FF
+           / %x370-37D / %x37F-1FFF / %x200C-200D
+           / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
+           / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
+name-char = name-start / DIGIT / "-" / "." / %xB7
+          / %x0300-036F / %x203F-2040
+
+literal = "(" *(literal-char / literal-escape) ")"
+literal-char = any-char / "{" / "}"
+
+text-escape = "\" ("\" / "{" / "}")
+literal-escape = "\" ("\" / "(" / ")")
+
+s = 1*(%x09 / %x0D / %x0A / %x20)
+
+ALPHA = %x41-5A / %x61-7A
+DIGIT = %x30-39
