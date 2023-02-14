@@ -19,15 +19,14 @@ option = name [s] "=" [s] (literal / nmtoken / variable)
 
 markup = markup-start *(s option)
 
-any-char = %x0-27 ; omit ( and )
-         / %x2A-5B ; omit \
-		 / %x5D-7A ; omit {
-		 / %x7C ; omit }
-		 / %x7E-D7FF
-		 / %xE000-10FFFF
+non-ascii-char = %x80-D7FF / %xE000-10FFFF
 
 text = 1*(text-char / text-escape)
-text-char = any-char / "(" / ")"
+text-char = %x0-5B ; omit \
+          / %x5D-7A ; omit {
+          / %x7C ; omit }
+          / %x7E-7F
+          / non-ascii-char
 
 variable = "$" name
 function = ":" name
@@ -44,7 +43,10 @@ name-char = name-start / DIGIT / "-" / "." / %xB7
           / %x0300-036F / %x203F-2040
 
 literal = "(" *(literal-char / literal-escape) ")"
-literal-char = any-char / "{" / "}"
+literal-char = %x0-27 ; omit ( and )
+             / %x2A-5B ; omit \
+             / %x5D-7F
+             / non-ascii-char
 
 text-escape = "\" ("\" / "{" / "}")
 literal-escape = "\" ("\" / "(" / ")")
