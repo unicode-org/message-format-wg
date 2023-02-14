@@ -31,6 +31,8 @@ In the example message, the _variants_ are in a canonical order, so first-match 
 **Pros**
 + Allows developers to control the order of selection.
 + Allows translators to tailor the order of selection.
++ Can visually inspect match order.
++ May be more efficient when perfoming match (??)
 
 **Cons**
 - Requires developers to specify _variants_ in the correct order.
@@ -54,7 +56,7 @@ Using best-match selection, each _selector_ determines the order of _variants_ f
 
 ## Comparison
 
-Support your user experience designer wanted to introduce a new message for the last remaining wildebeest. This would entail adding a set of messages for the explicit value `$count = 1`:
+Suppose your user experience designer wanted to introduce a new message for the last remaining wildebeest. This would entail adding a set of messages for the explicit value `$count = 1`:
 
 ```
    when 1 * 0     {This is your last remaining free wildebeest}
