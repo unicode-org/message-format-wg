@@ -12,15 +12,15 @@ To fascilitate discussion, I will use this _message_ as an example:
 
 ```
 match :plural($count) :plural($size) :plural($cost)
-   when 0 * *     {You have no wildebeest}
-   when one 0 *   {You have {$count} wildebeest that cost {$cost :number type=currency}}
-   when one one * {You have {$count} {$size} wildebeeet that cost {$cost :number type=currency}}
-   when one * *   {You have {$count} {$size} wildebeest that cost {$cost :number type=currency}}
-   when * 0 0     {You have {$count} {$size} free wildebeest}
-   when * one one {You have {$count} {$size} wildebeeet that cost {$cost :number type=currency}}
-   when * * 0     {You have {$count} {$size} free wildebeest}
-   when * * one   {You have {$count} {$size} wildebeeet that cost {$cost :number type=currency}}
-   when * * *     {You have {$count} {$size} wildebeest that cost {$cost :number type=currency}}
+   when 0 * *     {You have no wildebeest remaining}
+   when one 0 *   {You have {$count} wildebeest remaining that cost {$cost :number type=currency}}
+   when one one * {You have {$count} {$size} wildebeeet remaining that cost {$cost :number type=currency}}
+   when one * *   {You have {$count} {$size} wildebeest remaining that cost {$cost :number type=currency}}
+   when * 0 0     {You have {$count} {$size} remaining free wildebeest}
+   when * one one {You have {$count} {$size} wildebeeet remaining that cost {$cost :number type=currency}}
+   when * * 0     {You have {$count} {$size} remaining free wildebeest}
+   when * * one   {You have {$count} {$size} wildebeeet remaining that cost {$cost :number type=currency}}
+   when * * *     {You have {$count} {$size} wildebeest remaining that cost {$cost :number type=currency}}
 ```
 
 ## First-Match
@@ -51,6 +51,23 @@ Using best-match selection, each _selector_ determines the order of _variants_ f
 **Cons**
 - Developers cannot override the order that the _selector_ provides unless this is exposed as a feature of the given _selector_.
 - More complex matching implementation; may be slower?
+
+## Comparison
+
+Support your user experience designer wanted to introduce a new message for the last remaining wildebeest. This would entail adding a set of messages for the explicit value `$count = 1`:
+
+```
+   when 1 * 0     {This is your last remaining free wildebeest}
+   when 1 0 *     {This is your last wildebeest remaining that cost {$cost :number type=currency}}
+   when 1 one one {This is your last {$size} wildebeeet remaining that cost {$cost :number type=currency}}
+   when 1 one *   {This is your last {$size} wildebeeet remaining that cost {$cost :number type=currency}}
+   when 1 * one   {This is your last {$size} wildebeeet remaining that cost {$cost :number type=currency}}
+   when 1 * *     {This is your last {$size} wildebeest remaining that cost {$cost :number type=currency}}
+```
+
+With first-match, the new messages **must** be inserted just after the `when 0 * *` _variant_. Otherwise the `one` keyword (or `*` value) would capture the match. With best-match, the new messages can be inserted at the end, perhaps with a comment line, even if the best practice would probably be to use the canonical order.
+
+With first-match, the entire message must be sent to translation, in case the translator needs to reorder the values and so that tools "know" what order the values need to be in post translation. Observe that the added lines need to be "exploded" for languages that use a different set of plural keywords (e.g. `zero`, `two`, `few`, or `many`)
 
 ## FAQ
 
