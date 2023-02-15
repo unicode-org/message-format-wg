@@ -1,13 +1,13 @@
 message = [s] *(declaration [s]) body [s]
 
-declaration = "let" s variable [s] "=" [s] "{" [s] expression [s] "}"
+declaration = let s variable [s] "=" [s] "{" [s] expression [s] "}"
 body = pattern
      / (selectors 1*([s] variant))
 
 pattern = "{" *(text / placeholder) "}"
-selectors = "match" 1*([s] selector)
+selectors = match 1*([s] selector)
 selector = "{" [s] expression [s] "}"
-variant = "when" 1*(s key) [s] pattern
+variant = when 1*(s key) [s] pattern
 key = nmtoken / literal / "*"
 
 placeholder = "{" [s] (expression / markup / markup-end) [s] "}"
@@ -18,6 +18,10 @@ annotation = function *(s option)
 option = name [s] "=" [s] (literal / nmtoken / variable)
 
 markup = markup-start *(s option)
+
+let = %x6C.65.74
+match = %x6D.61.74.63.68
+when = %x77.68.65.6E
 
 non-ascii-char = %x80-D7FF / %xE000-10FFFF
 
