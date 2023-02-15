@@ -32,29 +32,6 @@
    1. [Whitespace](#whitespace)
 1. [Complete EBNF](#complete-ebnf)
 
-## Introduction
-
-This document defines the formal grammar describing the syntax of a single message.
-A separate syntax shall be specified to describe collections of messages (_MessageResources_),
-including message identifiers, metadata, comments, groups, etc.
-
-The document is part of the MessageFormat 2.0 specification,
-the successor to ICU MessageFormat, henceforth called ICU MessageFormat 1.0.
-
-### Conformance
-
-Everything in this specification is normative except for: sections marked 
-as non-normative, all authoring guidelines, diagrams, examples, and notes.
-
-The key words `MAY`, `MUST`, `MUST NOT`, `OPTIONAL`, `RECOMMENDED`, 
-`SHOULD`, and `SHOULD NOT` in this document are to be interpreted as 
-described in BCP 14 [RFC2119] [RFC8174]. 
-
-### Terminology and Conventions
-
-When a term is defined in this document, it is marked like ***this***. When
-a term is referenced in this document it is marked like _this_.
-
 ### Design Goals
 
 _This section is non-normative._
