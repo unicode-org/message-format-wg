@@ -67,9 +67,9 @@ We invite feedback about the current syntax draft, as well as the real-life use-
 
 ## Contributing
 
-- [Decision Making Process](internal/decision-process.md)
-- [Contributing to the Meeting Agenda](internal/contributing-to-agenda.md)
-- [Chair Group](internal/chair-group.md)
+- [Decision Making Process](docs/decision-process.md)
+- [Contributing to the Meeting Agenda](docs/contributing-to-agenda.md)
+- [Chair Group](docs/chair-group.md)
 - [Glossary](docs/glossary-and-resources.md)
 
 We are open to professionals in the i18n/l10n industry to participate in our working group!  To join:
