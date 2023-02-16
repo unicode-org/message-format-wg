@@ -2,9 +2,7 @@
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
-   1. [Conformance](#conformance)
-   1. [Terminology and Conventions](#terminology-and-conventions)
+1. [Introduction](#introduction-to-this-section)
    1. [Design Goals](#design-goals)
    1. [Design Restrictions](#design-restrictions)
 1. [Overview & Examples](#overview--examples)
@@ -31,6 +29,10 @@
    1. [Escape Sequences](#escape-sequences)
    1. [Whitespace](#whitespace)
 1. [Complete EBNF](#complete-ebnf)
+
+### Introduction to This Section
+
+This section defines the formal grammar describing the syntax of a single message.
 
 ### Design Goals
 
