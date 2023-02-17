@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-1. [Introduction](#introduction-to-this-section)
+1. [Introduction](#introduction)
    1. [Design Goals](#design-goals)
    1. [Design Restrictions](#design-restrictions)
 1. [Overview & Examples](#overview--examples)
@@ -30,7 +30,7 @@
    1. [Whitespace](#whitespace)
 1. [Complete EBNF](#complete-ebnf)
 
-### Introduction to This Section
+### Introduction
 
 This section defines the formal grammar describing the syntax of a single message.
 
