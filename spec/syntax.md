@@ -247,8 +247,8 @@ if it meets additional semantic requirements about its structure, defined below.
 
 ### Message
 
-A ***message*** is either a single _pattern_, or has a `match` statement
-followed by one or more *variants* which represent the translatable body of the message.
+A ***message*** is a (possibly empty) list of *declarations* followed by either a single _pattern_, 
+or a `match` statement containing one or more *variants* which represent the translatable body of the message.
 
 A *message* MUST be delimited with `{` at the start, and `}` at the end. Whitespace MAY
 appear outside the delimiters; such whitespace is ignored. No other content is permitted
