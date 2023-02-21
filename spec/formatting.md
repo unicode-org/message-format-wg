@@ -121,6 +121,19 @@ These are divided into the following categories:
     when * {The value is not one.}
     ```
 
+  - **Unknown Markup errors** occur when an Expression includes
+    a reference to a markup handler which cannot be resolved.
+    
+    For example, attempting to format the following messages
+    MUST result in an Unknown Markup error if done within a context that
+    does not provide a handler for the markup `{+foo}` or `{-foo}`
+    
+    ```
+    {There are {+foo option=bar}no{-foo} wildebeest here}
+    {There are {+foo option=bar}no wildebeest here}
+    {There are no{-foo} wildebeest here}
+    ```
+
 - **Selection errors** occur when message selection fails.
 
   - **Selector errors** are failures in the matching of a key to a specific selector.
