@@ -126,7 +126,7 @@ These are divided into the following categories:
     
     For example, attempting to format the following messages
     MUST result in an Unknown Markup error if done within a context that
-    does not provide a handler for the markup `{+foo}` or `{-foo}`
+    does not provide a handler for the markup `+foo` or `-foo`
     
     ```
     {There are {+foo option=bar}no{-foo} wildebeest here}
