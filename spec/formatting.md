@@ -130,7 +130,13 @@ These are divided into the following categories:
     
     ```
     {There are {+foo option=bar}no{-foo} wildebeest here}
+    ```
+
+    ```
     {There are {+foo option=bar}no wildebeest here}
+    ```
+
+    ```
     {There are no{-foo} wildebeest here}
     ```
 
