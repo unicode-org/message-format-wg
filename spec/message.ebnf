@@ -8,7 +8,7 @@ Selector ::= 'match' (s? '{' s? Expression s? '}')+
 Variant ::= 'when' (s Key)+ s? Pattern
 Key ::= Nmtoken | Literal | '*'
 
-Placeholder ::= '{' s? (Expression | Markup | MarkupEnd)? s? '}'
+Placeholder ::= '{' s? (Expression | Markup | MarkupEnd) s? '}'
 
 Expression ::= (Literal | Variable) (s Annotation)? | Annotation
 Annotation ::= Function (s Option)*

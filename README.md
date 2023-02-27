@@ -7,7 +7,7 @@ Welcome to the home page for the MessageFormat Working Group, a subgroup of the 
 The Message Format Working Group (MFWG) is tasked with developing an industry standard for the representation of localizable message strings to be a successor to [ICU MessageFormat](https://unicode-org.github.io/icu/userguide/format_parse/messages/). MFWG will recommend how to remove redundancies, make the syntax more usable, and support more complex features, such as gender, inflections, and speech. MFWG will also consider the integration of the new standard with programming environments, including, but not limited to, ICU, DOM, and ECMAScript, and with localization platform interchange. The output of MFWG will be a specification for the new syntax.
 
 - [Why ICU MessageFormat Needs a Successor](docs/why_mf_next.md)
-- [Goals and Non-Goals](guidelines/goals.md)
+- [Goals and Non-Goals](docs/goals.md)
 - [Record of Consensus Decisions](docs/consensus_decisions.md)
 
 ## MessageFormat 2 Draft Syntax
@@ -55,7 +55,7 @@ See more examples and the formal definition of the grammar in [spec/syntax.md](.
 
 ### Implementations
 
-* Java: [`com.ibm.icu.message2`](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/index.html?com/ibm/icu/message2/package-summary.html), part of ICU 72 released in October 2022, is a _tech preview_ implementation of the MessageFormat 2 syntax, together with a formatting API.
+* Java: [`com.ibm.icu.message2`](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/index.html?com/ibm/icu/message2/package-summary.html), part of ICU 72 released in October 2022, is a _tech preview_ implementation of the MessageFormat 2 syntax, together with a formatting API. See the [ICU User Guide](https://unicode-org.github.io/icu/userguide/format_parse/messages/mf2.html) for examples and a quickstart guide.
 * JavaScript: [`messageformat`](https://github.com/messageformat/messageformat/tree/master/packages/mf2-messageformat) 4.0 implements the MessageFormat 2 syntax, together with a polyfill of the runtime API proposed for ECMA-402.
 
 ## Sharing Feedback
@@ -67,9 +67,9 @@ We invite feedback about the current syntax draft, as well as the real-life use-
 
 ## Contributing
 
-- [Decision Making Process](guidelines/decision-process.md)
-- [Contributing to the Meeting Agenda](guidelines/contributing-to-agenda.md)
-- [Chair Group](guidelines/chair-group.md)
+- [Decision Making Process](docs/decision-process.md)
+- [Contributing to the Meeting Agenda](docs/contributing-to-agenda.md)
+- [Chair Group](docs/chair-group.md)
 - [Glossary](docs/glossary-and-resources.md)
 
 We are open to professionals in the i18n/l10n industry to participate in our working group!  To join:

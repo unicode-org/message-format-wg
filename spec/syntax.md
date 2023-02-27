@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
+1. [Introduction](#introduction-to-this-section)
    1. [Design Goals](#design-goals)
    1. [Design Restrictions](#design-restrictions)
 1. [Overview & Examples](#overview--examples)
@@ -30,16 +30,13 @@
    1. [Whitespace](#whitespace)
 1. [Complete EBNF](#complete-ebnf)
 
-## Introduction
+### Introduction to This Section
 
-This document defines the formal grammar describing the syntax of a single message.
-A separate syntax shall be specified to describe collections of messages (_MessageResources_),
-including message identifiers, metadata, comments, groups, etc.
-
-The document is part of the MessageFormat 2.0 specification,
-the successor to ICU MessageFormat, henceforth called ICU MessageFormat 1.0.
+This section defines the formal grammar describing the syntax of a single message.
 
 ### Design Goals
+
+_This section is non-normative._
 
 The design goals of the syntax specification are as follows:
 
@@ -75,6 +72,8 @@ The design goals of the syntax specification are as follows:
 
 ### Design Restrictions
 
+_This section is non-normative._
+
 The syntax specification takes into account the following design restrictions:
 
 1. Whitespace outside the translatable content should be insignificant.
@@ -91,9 +90,11 @@ The syntax specification takes into account the following design restrictions:
 
 ## Overview & Examples
 
-### Simple Messages
+_This section is non-normative._
 
-All messages, including simple ones, need `{…}` delimiters:
+### Messages
+
+All messages, including simple ones, are enclosed in `{…}` delimiters:
 
     {Hello, world!}
 
@@ -110,39 +111,53 @@ let hello = new MessageFormat('{Hello, world!}')
 hello.format()
 ```
 
-### Simple Placeholders
+### Placeholders
 
-Messages may contain placeholders within inner `{…}` delimiters,
-such as variables that are expected to be passed in as format paramters:
+A *placeholder* represents a location in the *pattern* that will be replaced
+in the formatted value (the output).
+
+A *placeholder* appears within `{…}` delimiters. A *placeholder* can only
+appear within a *pattern* and can contain either an *expression* or *markup*. 
+
+A simple *placeholder* is simply a variable name:
 
     {Hello, {$userName}!}
 
 ### Formatting Functions
 
-A message with an interpolated `$date` variable formatted with the `:datetime` function:
+A *function* is named functionality, possibly with *options*, that format,
+process, or operate on a *variable*.
+
+For example, a *message* with an interpolated `$date` *variable* formatted with the `:datetime` *function*:
 
     {Today is {$date :datetime weekday=long}.}
 
-A message with an interpolated `$userName` variable formatted with
-the custom `:person` function capable of
+A *message* with an interpolated `$userName` *variable* formatted with
+the custom `:person` *function* capable of
 declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
 
     {Hello, {$userName :person case=vocative}!}
 
-A message with an interpolated `$userObj` variable formatted with
-the custom `:person` function capable of
+A *message* with an interpolated `$userObj` *variable* formatted with
+the custom `:person` *function* capable of
 plucking the first name from the object representing a person:
 
     {Hello, {$userObj :person firstName=long}!}
 
 ### Markup Elements
 
-A message with two markup-like element placeholders, `button` and `link`,
+*Markup* is a set of *placeholders* that can be replaced by runtime specific
+formatting or attributes applied to the *pattern*.
+
+For example, a message with two markup-like element placeholders, `button` and `link`,
 which the runtime can use to construct a document tree structure for a UI framework.
 
     {{+button}Submit{-button} or {+link}cancel{-link}.}
 
 ### Selection
+
+A *selector* selects a specific *pattern* from a list of available *patterns*
+in a *message* based on the values of *variables* or *expressions*.
 
 A message with a single selector:
 
@@ -175,7 +190,11 @@ A message with 2 selectors:
 
 ### Local Variables
 
-A message defining a local variable `$whom` which is then used twice inside the pattern:
+A *message* can define local variables, such as might be needed for the transforming input or providing
+additional data to a *selector* or *function*. Local variables appear in a *declaration*, which
+defines the value of a named local variable.
+
+A *message* containing a *declaration* defining a local variable `$whom` which is then used twice inside the pattern:
 
     let $whom = {$monster :noun case=accusative}
     {You see {$quality :adjective article=indefinite accord=$whom} {$whom}!}
@@ -190,6 +209,9 @@ A message defining two local variables:
     when * {You bought {$countInt} {$color :adjective accord=$itemAcc} {$itemAcc}.}
 
 ### Complex Messages
+
+The various features can be used to produce arbitrarily complex messages by combining
+*declarations*, *selectors*, *functions*, *markup* and more.
 
 A complex message with 2 selectors and 3 local variable definitions:
 
@@ -217,14 +239,20 @@ A complex message with 2 selectors and 3 local variable definitions:
 ## Productions
 
 The specification defines the following grammar productions.
+
 A message satisfying all rules of the grammar is considered _well-formed_.
-Furthermore, a well-formed message can is considered _valid_
+
+Furthermore, a well-formed message is considered _valid_
 if it meets additional semantic requirements about its structure, defined below.
 
 ### Message
 
-A single message is either a single pattern, or has a `match` statement
-followed by one or more variants which represent the translatable body of the message.
+A ***message*** is a (possibly empty) list of *declarations* followed by either a single _pattern_, 
+or a `match` statement containing one or more *variants* which represent the translatable body of the message.
+
+A *message* MUST be delimited with `{` at the start, and `}` at the end. Whitespace MAY
+appear outside the delimiters; such whitespace is ignored. No other content is permitted
+outside the delimiters.
 
 ```ebnf
 Message ::= Declaration* ( Pattern | Selector Variant+ )
@@ -232,9 +260,9 @@ Message ::= Declaration* ( Pattern | Selector Variant+ )
 
 ### Variable Declarations
 
-A variable declaration is an expression binding a variable identifier
+A ***declaration*** is an expression binding a variable identifier
 within the scope of the message to the value of an expression.
-This local variable may then be used in other expressions within the same message.
+This local variable can then be used in other expressions within the same message.
 
 ```ebnf
 Declaration ::= 'let' WhiteSpace Variable '=' '{' Expression '}'
@@ -242,8 +270,8 @@ Declaration ::= 'let' WhiteSpace Variable '=' '{' Expression '}'
 
 ### Selectors
 
-A selector is a statement containing one or more expressions
-which will be used to choose one of the variants during formatting.
+A ***selector*** is a statement containing one or more expressions
+which will be used to choose one of the *variants* during formatting.
 
 ```ebnf
 Selector ::= 'match' ( '{' Expression '}' )+
@@ -266,8 +294,8 @@ when * {{$frac} apples}
 
 ### Variants
 
-A variant is a keyed pattern.
-The keys are used to match against the selectors defined in the `match` statement.
+A ***variant*** is a keyed *pattern*.
+The keys are used to match against the selector expressions defined in the `match` statement.
 The key `*` is a "catch-all" key, matching all selector values.
 
 ```ebnf
@@ -275,26 +303,26 @@ Variant ::= 'when' ( WhiteSpace VariantKey )+ Pattern
 VariantKey ::= Literal | Nmtoken | '*'
 ```
 
-A well-formed message is considered valid if the following requirements are satisfied:
+A _well-formed_ message is considered _valid_ if the following requirements are satisfied:
 
-- The number of keys on each variant must be equal to the number of selectors.
-- At least one variant's keys must all be equal to the catch-all key (`*`).
+- The number of keys on each variant MUST be equal to the number of selectors.
+- At least one variant's keys MUST all be equal to the catch-all key (`*`).
 
 ### Patterns
 
-A pattern is a sequence of translatable elements.
-Patterns are always delimited with `{` at the start, and `}` at the end.
+A ***pattern*** is a sequence of translatable elements.
+Patterns MUST BE delimited with `{` at the start, and `}` at the end.
 This serves 3 purposes:
 
-- The message should be unambiguously embeddable in various container formats
+- The message can be unambiguously embeddable in various container formats
   regardless of the container's whitespace trimming rules.
   E.g. in Java `.properties` files,
   `hello = {Hello}` will unambiguously define the `Hello` message without the space in front of it.
-- The message should be conveniently embeddable in various programming languages
+- The message can be conveniently embeddable in various programming languages
   without the need to escape characters commonly related to strings, e.g. `"` and `'`.
-  Such need may still occur when a single or double quote is
+  Such need might still occur when a single or double quote is
   used in the translatable content.
-- The syntax should make it as clear as possible which parts of the message body
+- The syntax needs to make it as clear as possible which parts of the message body
   are translatable and which ones are part of the formatting logic definition.
 
 ```ebnf
@@ -307,9 +335,11 @@ Examples:
 {Hello, world!}
 ```
 
+Whitespace within a *pattern* is meaningful and MUST be preserved.
+
 ### Placeholders
 
-Placeholders can contain expressions and markup elements.
+A ***placeholder*** contains either an expression or a markup element.
 
 ```ebnf
 Placeholder ::= '{' (Expression | Markup | MarkupEnd) '}'
@@ -317,7 +347,7 @@ Placeholder ::= '{' (Expression | Markup | MarkupEnd) '}'
 
 ### Expressions
 
-Expressions can either start with an operand, or be standalone function calls.
+***Expressions*** can either start with an operand, or be standalone function calls.
 
 The operand is a literal or a variable name.
 The operand can be optionally followed by an _annotation_:
@@ -364,7 +394,7 @@ $when :datetime month=2-digit
 
 ### Markup
 
-Markup elements provide a structured way to mark up parts of the content.
+***Markup elements*** (or just ***markup***) provide a structured way to mark up parts of the content.
 There are two kinds of elements: start (opening) elements and end (closing) elements,
 each with its own syntax.
 They mimic XML elements, but do not require well-formedness.
@@ -392,7 +422,7 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 
 ### Text and literals
 
-Text is the translatable content of a _pattern_, and Literal is used for matching
+_Text_ is the translatable content of a _pattern_, and _Literal_ is used for matching
 variants and providing input to expressions.
 Any Unicode code point is allowed in either, with the exception of
 the relevant delimiters (`{` and `}` for Text, `(` and `)` for Literal),
@@ -422,7 +452,7 @@ The _name_ token is used for variable names (prefixed with `$`),
 function names (prefixed with `:`),
 markup names (prefixed with `+` or `-`),
 as well as option names.
-A name cannot start with an ASCII digit and certain basic combining characters.
+A name MUST NOT start with an ASCII digit and certain basic combining characters.
 Otherwise, the set of characters allowed in names is large.
 
 The _nmtoken_ token doesn't have _name_'s restriction on the first character
@@ -460,11 +490,11 @@ LiteralEscape ::= Esc Esc | Esc '(' | Esc ')'
 
 ### Whitespace
 
-Whitespace is defined as tab, carriage return, line feed, or the space character.
+***Whitespace*** is defined as tab, carriage return, line feed, or the space character.
 
-Inside patterns,
+Inside _patterns_,
 whitespace is part of the translatable content and is recorded and stored verbatim.
-Whitespace is not significant outside translatable text.
+Whitespace is not significant outside translatable text, except where required by the syntax.
 
 ```ebnf
 WhiteSpace ::= #x9 | #xD | #xA | #x20 /* ws: definition */
