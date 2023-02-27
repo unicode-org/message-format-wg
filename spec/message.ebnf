@@ -10,7 +10,7 @@ VariantKey ::= Literal | Nmtoken | '*'
 Pattern ::= '{' (Text | Placeholder)* '}' /* ws: explicit */
 
 /* Placeholders */
-Placeholder ::= '{' (Expression | Markup | MarkupEnd)? '}'
+Placeholder ::= '{' (Expression | Markup | MarkupEnd) '}'
 
 /* Expressions */
 Expression ::= Operand Annotation? | Annotation
