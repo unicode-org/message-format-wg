@@ -10,7 +10,9 @@ selector = "{" [s] expression [s] "}"
 variant = when 1*(s key) [s] pattern
 key = nmtoken / literal / "*"
 
-placeholder = "{" [s] (expression / markup / markup-end) [s] "}"
+placeholder = "{" [s] expression [s] "}"
+            / "{" [s] markup-start *(s option) [s] "}"
+            / "{" [s] markup-end [s] "}"
 
 expression = ((literal / variable) [s annotation])
            / annotation
