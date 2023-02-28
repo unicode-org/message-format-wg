@@ -43,8 +43,8 @@ function = ":" name
 markup-start = "+" name
 markup-end = "-" name
 
-name = name-start *name-char
-nmtoken = 1*name-char
+name    = name-start *name-char ; matches XML https://www.w3.org/TR/xml/#NT-Name
+nmtoken = 1*name-char           ; matches XML https://www.w3.org/TR/xml/#NT-Nmtokens
 name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
            / %x370-37D / %x37F-1FFF / %x200C-200D
