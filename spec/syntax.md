@@ -501,8 +501,8 @@ Escape sequences are introduced by the backslash character (`\`).
 They are allowed in translatable text as well as in literals.
 
 ```abnf
-text-escape = "\" ("\" / "{" / "}")
-literal-escape = "\" ("\" / "(" / ")")
+text-escape = "\\" / "\{" / "\}"
+literal-escape = "\\" / "\(" / "\)"
 ```
 
 ### Whitespace

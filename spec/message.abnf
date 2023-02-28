@@ -51,7 +51,7 @@ name-start = ALPHA / "_"
 name-char = name-start / DIGIT / "-" / "." / %xB7
           / %x0300-036F / %x203F-2040
 
-text-escape = "\" ("\" / "{" / "}")
-literal-escape = "\" ("\" / "(" / ")")
+text-escape = "\\" / "\{" / "\}"
+literal-escape = "\\" / "\(" / "\)"
 
 s = 1*(%x09 / %x0D / %x0A / %x20)
