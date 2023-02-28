@@ -32,9 +32,9 @@ text-char = %x0-5B         ; omit \
           / %xE000-10FFFF
 
 literal = "(" *(literal-char / literal-escape) ")"
-literal-char = %x0-27         ; omit ( and )
-             / %x2A-5B        ; omit \
-             / %x5D-D7FF      ; omit surrogates
+literal-char = %x0-5B         ; omit \
+             / %x5D-7B        ; omit |
+             / %x7D-D7FF      ; omit surrogates
              / %xE000-10FFFF
 
 variable = "$" name
@@ -53,7 +53,7 @@ name-char = name-start / DIGIT / "-" / "." / %xB7
           / %x0300-036F / %x203F-2040
 
 text-escape    = backslash ( backslash / "{" / "}" )
-literal-escape = backslash ( backslash / "(" / ")" )
+literal-escape = backslash ( backslash / "|" )
 backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 
 s = 1*( SP / HTAB / CR / LF )
