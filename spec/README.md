@@ -39,10 +39,15 @@
 One of the challenges in adapting software to work for users with different languages and cultures is the need for ***dynamic messages***. Whenever a user interface needs to present data as part of a larger string, that data needs to be formatted (and the message may need to be altered) to make it culturally accepted and grammatically correct.
 
 For example, if your US English interface has a message like:
+
 > Your item had 1,023 views on April 3, 2023
+
 You want the translated message to be appropriately formatted into French:
+
 > Votre article a eu 1 023 vues le 3 avril 2023
+
 Or Japanese:
+
 > あなたのアイテムは 2023 年 4 月 3 日に 1,023 回閲覧されました。
 
 This specification defines the data model, syntax, processing, and conformance requirements for the next generation of _dynamic messages_. It is intended for adoption by programming languages and APIs. This will enable the integration of existing internationalization APIs (such as the date and number formats shown above), grammatical matching (such as plurals or genders), as well as user-defined formats and message selectors.
