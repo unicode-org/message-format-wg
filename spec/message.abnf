@@ -24,11 +24,17 @@ match = %x6D.61.74.63.68
 when = %x77.68.65.6E
 
 text = 1*(text-char / text-escape)
-text-char = %x0-5B ; omit \
-          / %x5D-7A ; omit {
-          / %x7C ; omit }
-          / %x7E-D7FF
+text-char = %x0-5B         ; omit \
+          / %x5D-7A        ; omit {
+          / %x7C           ; omit }
+          / %x7E-D7FF      ; omit surrogates
           / %xE000-10FFFF
+
+literal = "(" *(literal-char / literal-escape) ")"
+literal-char = %x0-27         ; omit ( and )
+             / %x2A-5B        ; omit \
+             / %x5D-D7FF      ; omit surrogates
+             / %xE000-10FFFF
 
 variable = "$" name
 function = ":" name
@@ -44,12 +50,6 @@ name-start = ALPHA / "_"
            / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
 name-char = name-start / DIGIT / "-" / "." / %xB7
           / %x0300-036F / %x203F-2040
-
-literal = "(" *(literal-char / literal-escape) ")"
-literal-char = %x0-27 ; omit ( and )
-             / %x2A-5B ; omit \
-             / %x5D-D7FF
-             / %xE000-10FFFF
 
 text-escape = "\" ("\" / "{" / "}")
 literal-escape = "\" ("\" / "(" / ")")
