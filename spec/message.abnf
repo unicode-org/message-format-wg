@@ -23,19 +23,18 @@ let = %x6C.65.74
 match = %x6D.61.74.63.68
 when = %x77.68.65.6E
 
-non-ascii-char = %x80-D7FF / %xE000-10FFFF
-
 text = 1*(text-char / text-escape)
 text-char = %x0-5B ; omit \
           / %x5D-7A ; omit {
           / %x7C ; omit }
-          / %x7E-7F
-          / non-ascii-char
+          / %x7E-D7FF
+          / %xE000-10FFFF
 
 variable = "$" name
 function = ":" name
 markup-start = "+" name
 markup-end = "-" name
+
 name = name-start *name-char
 nmtoken = 1*name-char
 name-start = ALPHA / "_"
@@ -49,8 +48,8 @@ name-char = name-start / DIGIT / "-" / "." / %xB7
 literal = "(" *(literal-char / literal-escape) ")"
 literal-char = %x0-27 ; omit ( and )
              / %x2A-5B ; omit \
-             / %x5D-7F
-             / non-ascii-char
+             / %x5D-D7FF
+             / %xE000-10FFFF
 
 text-escape = "\" ("\" / "{" / "}")
 literal-escape = "\" ("\" / "(" / ")")
