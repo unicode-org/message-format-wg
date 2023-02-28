@@ -1,25 +1,20 @@
-Message ::= Declaration* ( Pattern | Selector Variant+ )
+Message ::= (s? Declaration)* s? Body s?
 
-/* Preamble */
-Declaration ::= 'let' WhiteSpace Variable '=' '{' Expression '}'
-Selector ::= 'match' ( '{' Expression '}' )+
+Declaration ::= 'let' s Variable s? '=' s? '{' s? Expression s? '}'
+Body ::= Pattern | Selector (s? Variant)+
 
-/* Variants and Patterns */
-Variant ::= 'when' ( WhiteSpace VariantKey )+ Pattern
-VariantKey ::= Literal | Nmtoken | '*'
-Pattern ::= '{' (Text | Placeholder)* '}' /* ws: explicit */
+Pattern ::= '{' (Text | Placeholder)* '}'
+Selector ::= 'match' (s? '{' s? Expression s? '}')+
+Variant ::= 'when' (s Key)+ s? Pattern
+Key ::= Nmtoken | Literal | '*'
 
-/* Placeholders */
-Placeholder ::= '{' (Expression | Markup | MarkupEnd) '}'
+Placeholder ::= '{' s? (Expression | Markup | MarkupEnd) s? '}'
 
-/* Expressions */
-Expression ::= Operand Annotation? | Annotation
-Operand ::= Literal | Variable
-Annotation ::= Function Option*
-Option ::= Name '=' (Literal | Nmtoken | Variable)
+Expression ::= (Literal | Variable) (s Annotation)? | Annotation
+Annotation ::= Function (s Option)*
+Option ::= Name s? '=' s? (Literal | Nmtoken | Variable)
 
-/* Markup Tags */
-Markup ::= MarkupStart Option*
+Markup ::= MarkupStart (s Option)*
 
 <?TOKENS?>
 
@@ -29,12 +24,12 @@ TextChar ::= AnyChar - ('{' | '}' | Esc)
 AnyChar ::= [#x0-#x10FFFF] - [#xD800-#xDFFF]
 
 /* Names */
-Variable ::= '$' Name /* ws: explicit */
-Function ::= ':' Name /* ws: explicit */
-MarkupStart ::= '+' Name /* ws: explicit */
-MarkupEnd ::= '-' Name /* ws: explicit */
-Name ::= NameStart NameChar* /* ws: explicit */
-Nmtoken ::= NameChar+ /* ws: explicit */
+Variable ::= '$' Name
+Function ::= ':' Name
+MarkupStart ::= '+' Name
+MarkupEnd ::= '-' Name
+Name ::= NameStart NameChar*
+Nmtoken ::= NameChar+
 NameStart ::= [a-zA-Z] | "_"
             | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
             | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
@@ -44,7 +39,7 @@ NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
            | [#x0300-#x036F] | [#x203F-#x2040]
 
 /* Literals */
-Literal ::= '(' (LiteralChar | LiteralEscape)* ')' /* ws: explicit */
+Literal ::= '(' (LiteralChar | LiteralEscape)* ')'
 LiteralChar ::= AnyChar - ('(' | ')' | Esc)
 
 /* Escape sequences */
@@ -52,5 +47,5 @@ Esc ::= '\'
 TextEscape ::= Esc Esc | Esc '{' | Esc '}'
 LiteralEscape ::= Esc Esc | Esc '(' | Esc ')'
 
-/* WhiteSpace */
-WhiteSpace ::= #x9 | #xD | #xA | #x20 /* ws: definition */
+/* White space */
+s ::= (#x9 | #xD | #xA | #x20)+
