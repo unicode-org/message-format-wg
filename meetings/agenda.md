@@ -25,7 +25,7 @@ https://docs.google.com/document/d/1Yzo_ucR3bHCFEplHn8QbuDVnjnYMED88Drzm8W4L-0k/
 
 ## NOTE WELL
 
-The next call will be 7 March 2023. 
+The next call will be 6 March 2023. 
 
 ***This is an extra call***
 
@@ -34,10 +34,7 @@ The next call will be 7 March 2023.
 To request that the chair add an _issue_ to the agenda, add the label `Agenda+`
 To request that the chair add an agenda item, send email to the message-format-wg group email.
 
-#### Agenda for 2023-03-07
-
-* [2023-02-13 Notes](https://docs.google.com/document/d/1cJ76HjvBkImqSdPpmkbW133AnO3sFu29TUDrP3nxbrI/edit#)
-* [2023-02-13 Official Notes](2023/notes-2023-02-13.md)
+#### Agenda for 2023-03-06
 
 **Topic:** Agenda Review
 
