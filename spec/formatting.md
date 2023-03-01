@@ -44,7 +44,7 @@ These are divided into the following categories:
   ```
 
   ```
-  let $var = {(no message body)}
+  let $var = {|no message body|}
   ```
 
 - **Data Model errors** occur when a message is invalid due to
@@ -112,11 +112,11 @@ These are divided into the following categories:
     does not provide for the function `:func` to be successfully resolved:
 
     ```
-    {The value is {(horse) :func}.}
+    {The value is {|horse| :func}.}
     ```
 
     ```
-    match {(horse) :func}
+    match {|horse| :func}
     when 1 {The value is one.}
     when * {The value is not one.}
     ```
@@ -130,13 +130,13 @@ These are divided into the following categories:
     uses a `:plural` selector function which requires its input to be numeric:
 
     ```
-    match {(horse) :plural}
+    match {|horse| :plural}
     when 1 {The value is one.}
     when * {The value is not one.}
     ```
 
     ```
-    let $sel = {(horse) :plural}
+    let $sel = {|horse| :plural}
     match {$sel}
     when 1 {The value is one.}
     when * {The value is not one.}
@@ -157,7 +157,7 @@ These are divided into the following categories:
      an option `field` to be provided with a string value,
 
   ```
-  {Hello, {(horse) :get field=name}!}
+  {Hello, {|horse| :get field=name}!}
   ```
 
   ```
@@ -211,11 +211,11 @@ always starts with U+007B LEFT CURLY BRACKET `{`
 and ends with U+007D RIGHT CURLY BRACKET `}`.
 Between the brackets, the following contents are used:
 
-- Expression with Literal Operand: U+0028 LEFT PARENTHESIS `(`
+- Expression with Literal Operand: U+007C VERTICAL LINE `|`
   followed by the value of the Literal,
-  and then by U+0029 RIGHT PARENTHESIS `)`
+  and then by U+007C VERTICAL LINE `|`
 
-  Examples: `{(horse)}`, `{(42)}`
+  Examples: `{|horse|}`, `{|42|}`
 
 - Expression with Variable Operand: U+0024 DOLLAR SIGN `$`
   followed by the Variable Name of the Operand
@@ -249,17 +249,17 @@ For example, attempting to format either of the following messages within a cont
 does not provide for the function `:func` to be successfully resolved:
 
 ```
-let $var = {(horse) :func}
+let $var = {|horse| :func}
 {The value is {$var}.}
 ```
 
 ```
-let $var = {(horse)}
+let $var = {|horse|}
 {The value is {$var :func}.}
 ```
 
 would result in both cases with this formatted string representation:
 
 ```
-The value is {(horse)}.
+The value is {|horse|}.
 ```

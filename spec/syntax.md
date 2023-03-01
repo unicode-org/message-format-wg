@@ -372,19 +372,15 @@ option = name [s] "=" [s] (literal / nmtoken / variable)
 Examples:
 
 ```
-(1.23)
+|1.23|
 ```
 
 ```
-(1.23) :number maxFractionDigits=1
+|1.23| :number maxFractionDigits=1
 ```
 
 ```
-(1970-01-01T13:37:00.000Z) :datetime weekday=long
-```
-
-```
-(Thu Jan 01 1970 14:37:00 GMT+0100 \(CET\)) :datetime weekday=long
+|Thu Jan 01 1970 14:37:00 GMT+0100 (CET)| :datetime weekday=long
 ```
 
 ```
@@ -433,7 +429,7 @@ when  = %x77.68.65.6E     ; "when"
 _Text_ is the translatable content of a _pattern_, and _Literal_ is used for matching
 variants and providing input to expressions.
 Any Unicode code point is allowed in either, with the exception of
-the relevant delimiters (`{` and `}` for Text, `(` and `)` for Literal),
+the relevant delimiters (`{` and `}` for Text, `|` for Literal),
 `\` (which starts an escape sequence), and
 surrogate code points U+D800 through U+DBFF (which cannot be encoded into UTF-8).
 
@@ -450,9 +446,9 @@ text-char = %x0-5B         ; omit \
 
 ```abnf
 literal = "(" *(literal-char / literal-escape) ")"
-literal-char = %x0-27         ; omit ( and )
-             / %x2A-5B        ; omit \
-             / %x5D-D7FF      ; omit surrogates
+literal-char = %x0-5B         ; omit \
+             / %x5D-7B        ; omit |
+             / %x7D-D7FF      ; omit surrogates
              / %xE000-10FFFF
 ```
 
@@ -501,7 +497,7 @@ They are allowed in translatable text as well as in literals.
 
 ```abnf
 text-escape    = backslash ( backslash / "{" / "}" )
-literal-escape = backslash ( backslash / "(" / ")" )
+literal-escape = backslash ( backslash / "|" )
 backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 ```
 
