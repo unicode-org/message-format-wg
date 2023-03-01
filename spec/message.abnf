@@ -58,4 +58,4 @@ literal-escape = backslash ( backslash / "(" / ")" )
 
 backslash = %x5C ; U+005C REVERSE SOLIDUS "\"
 
-s = 1*(%x09 / %x0D / %x0A / %x20)
+s = 1*( SP / HTAB / CR / LF )
