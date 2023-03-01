@@ -6,8 +6,8 @@
    1. [Design Goals](#design-goals)
    1. [Design Restrictions](#design-restrictions)
 1. [Overview & Examples](#overview--examples)
-   1. [Simple Messages](#simple-messages)
-   1. [Simple Placeholders](#simple-placeholders)
+   1. [Messages](#messages)
+   1. [Placeholders](#placeholders)
    1. [Formatting Functions](#formatting-functions)
    1. [Markup Elements](#markup-elements)
    1. [Selection](#selection)
@@ -21,14 +21,14 @@
    1. [Patterns](#patterns)
    1. [Placeholders](#placeholders)
    1. [Expressions](#expressions)
-   1. [Markup Elements](#markup-elements)
+   1. [Markup](#markup)
 1. [Tokens](#tokens)
-   1. [Text](#text)
+   1. [Keywords](#keywords)
+   1. [Text and Literals](#text-and-literals)
    1. [Names](#names)
-   1. [Quoted Strings](#quoted-strings)
    1. [Escape Sequences](#escape-sequences)
    1. [Whitespace](#whitespace)
-1. [Complete EBNF](#complete-ebnf)
+1. [Complete ABNF](#complete-abnf)
 
 ### Introduction
 
@@ -254,8 +254,10 @@ A *message* MUST be delimited with `{` at the start, and `}` at the end. Whitesp
 appear outside the delimiters; such whitespace is ignored. No other content is permitted
 outside the delimiters.
 
-```ebnf
-Message ::= Declaration* ( Pattern | Selector Variant+ )
+```abnf
+message = [s] *(declaration [s]) body [s]
+body = pattern
+     / (selectors 1*([s] variant))
 ```
 
 ### Variable Declarations
@@ -264,8 +266,8 @@ A ***declaration*** is an expression binding a variable identifier
 within the scope of the message to the value of an expression.
 This local variable can then be used in other expressions within the same message.
 
-```ebnf
-Declaration ::= 'let' WhiteSpace Variable '=' '{' Expression '}'
+```abnf
+declaration = let s variable [s] "=" [s] "{" [s] expression [s] "}"
 ```
 
 ### Selectors
@@ -273,8 +275,9 @@ Declaration ::= 'let' WhiteSpace Variable '=' '{' Expression '}'
 A ***selector*** is a statement containing one or more expressions
 which will be used to choose one of the *variants* during formatting.
 
-```ebnf
-Selector ::= 'match' ( '{' Expression '}' )+
+```abnf
+selectors = match 1*([s] selector)
+selector = "{" [s] expression [s] "}"
 ```
 
 Examples:
@@ -298,9 +301,9 @@ A ***variant*** is a keyed *pattern*.
 The keys are used to match against the selector expressions defined in the `match` statement.
 The key `*` is a "catch-all" key, matching all selector values.
 
-```ebnf
-Variant ::= 'when' ( WhiteSpace VariantKey )+ Pattern
-VariantKey ::= Literal | Nmtoken | '*'
+```abnf
+variant = when 1*(s key) [s] pattern
+key = nmtoken / literal / "*"
 ```
 
 A _well-formed_ message is considered _valid_ if the following requirements are satisfied:
@@ -325,8 +328,8 @@ This serves 3 purposes:
 - The syntax needs to make it as clear as possible which parts of the message body
   are translatable and which ones are part of the formatting logic definition.
 
-```ebnf
-Pattern ::= '{' (Text | Placeholder)* '}' /* ws: explicit */
+```abnf
+pattern = "{" *(text / placeholder) "}"
 ```
 
 Examples:
@@ -341,8 +344,10 @@ Whitespace within a *pattern* is meaningful and MUST be preserved.
 
 A ***placeholder*** contains either an expression or a markup element.
 
-```ebnf
-Placeholder ::= '{' (Expression | Markup | MarkupEnd) '}'
+```abnf
+placeholder = "{" [s] expression [s] "}"
+            / "{" [s] markup-start *(s option) [s] "}"
+            / "{" [s] markup-end [s] "}"
 ```
 
 ### Expressions
@@ -357,13 +362,11 @@ other than the operand in front of them.
 
 Standalone function calls don't have any operands in front of them.
 
-```ebnf
-Expression ::= Operand Annotation? | Annotation
-Operand ::= Literal | Variable
-Annotation ::= Function Option*
-Option ::= Name '=' (Literal | Nmtoken | Variable)
-Variable ::= '$' Name /* ws: explicit */
-Function ::= ':' Name /* ws: explicit */
+```abnf
+expression = ((literal / variable) [s annotation])
+           / annotation
+annotation = function *(s option)
+option = name [s] "=" [s] (literal / nmtoken / variable)
 ```
 
 Examples:
@@ -400,12 +403,6 @@ each with its own syntax.
 They mimic XML elements, but do not require well-formedness.
 Standalone display elements should be represented as function expressions.
 
-```ebnf
-Markup ::= MarkupStart Option*
-MarkupStart ::= '+' Name /* ws: explicit */
-MarkupEnd ::= '-' Name /* ws: explicit */
-```
-
 Examples:
 
 ```
@@ -420,7 +417,18 @@ Examples:
 
 The grammar defines the following tokens for the purpose of the lexical analysis.
 
-### Text and literals
+### Keywords
+
+The following three keywords are reserved: `let`, `match`, and `when`.
+
+```abnf
+; reserved keywords are always lowercase
+let   = %x6C.65.74        ; "let"
+match = %x6D.61.74.63.68  ; "match"
+when  = %x77.68.65.6E     ; "when"
+```
+
+### Text and Literals
 
 _Text_ is the translatable content of a _pattern_, and _Literal_ is used for matching
 variants and providing input to expressions.
@@ -431,19 +439,21 @@ surrogate code points U+D800 through U+DBFF (which cannot be encoded into UTF-8)
 
 All code points are preserved.
 
-#### Text
-
-```ebnf
-Text ::= (TextChar | TextEscape)+ /* ws: explicit */
-TextChar ::= AnyChar - ('{' | '}' | Esc)
-AnyChar ::= [#x0-#x10FFFF] - [#xD800-#xDBFF]
+```abnf
+text = 1*(text-char / text-escape)
+text-char = %x0-5B         ; omit \
+          / %x5D-7A        ; omit {
+          / %x7C           ; omit }
+          / %x7E-D7FF      ; omit surrogates
+          / %xE000-10FFFF
 ```
 
-#### Literal
-
-```ebnf
-Literal ::= '(' (LiteralChar | LiteralEscape)* ')' /* ws: explicit */
-LiteralChar ::= AnyChar - ('(' | ')' | Esc)
+```abnf
+literal = "(" *(literal-char / literal-escape) ")"
+literal-char = %x0-27         ; omit ( and )
+             / %x2A-5B        ; omit \
+             / %x5D-D7FF      ; omit surrogates
+             / %xE000-10FFFF
 ```
 
 ### Names
@@ -465,16 +475,23 @@ In particular, the grammatical feature data [specified in LDML](https://unicode.
 and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html)
 uses Nmtokens.
 
-```ebnf
-Name ::= NameStart NameChar* /* ws: explicit */
-Nmtoken ::= NameChar+ /* ws: explicit */
-NameStart ::= [a-zA-Z] | "_"
-            | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF]
-            | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D]
-            | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF]
-            | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
-NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
-           | [#x0300-#x036F] | [#x203F-#x2040]
+```abnf
+variable = "$" name
+function = ":" name
+markup-start = "+" name
+markup-end = "-" name
+```
+
+```abnf
+name    = name-start *name-char ; matches XML https://www.w3.org/TR/xml/#NT-Name
+nmtoken = 1*name-char           ; matches XML https://www.w3.org/TR/xml/#NT-Nmtokens
+name-start = ALPHA / "_"
+           / %xC0-D6 / %xD8-F6 / %xF8-2FF
+           / %x370-37D / %x37F-1FFF / %x200C-200D
+           / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
+           / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
+name-char = name-start / DIGIT / "-" / "." / %xB7
+          / %x0300-036F / %x203F-2040
 ```
 
 ### Escape Sequences
@@ -482,10 +499,10 @@ NameChar ::= NameStart | [0-9] | "-" | "." | #xB7
 Escape sequences are introduced by the backslash character (`\`).
 They are allowed in translatable text as well as in literals.
 
-```ebnf
-Esc ::= '\'
-TextEscape ::= Esc Esc | Esc '{' | Esc '}'
-LiteralEscape ::= Esc Esc | Esc '(' | Esc ')'
+```abnf
+text-escape    = backslash ( backslash / "{" / "}" )
+literal-escape = backslash ( backslash / "(" / ")" )
+backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 ```
 
 ### Whitespace
@@ -496,12 +513,12 @@ Inside _patterns_,
 whitespace is part of the translatable content and is recorded and stored verbatim.
 Whitespace is not significant outside translatable text, except where required by the syntax.
 
-```ebnf
-WhiteSpace ::= #x9 | #xD | #xA | #x20 /* ws: definition */
+```abnf
+s = 1*( SP / HTAB / CR / LF )
 ```
 
-## Complete EBNF
+## Complete ABNF
 
-The complete EBNF is available as [`message.ebnf`](./message.ebnf).
-It uses the [W3C flavor](https://www.w3.org/TR/xml/#sec-notation) of the BNF notation.
-The grammar is an LL(1) grammar without backtracking.
+The grammar is formally defined in [`message.abnf`](./message.abnf)
+using the ABNF notation,
+as specified by [RFC 5234](https://datatracker.ietf.org/doc/html/rfc5234).
