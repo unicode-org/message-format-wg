@@ -18,9 +18,11 @@ expression = ((literal / variable) [s annotation])
            / annotation
 annotation = function *(s option)
 option = name [s] "=" [s] (literal / nmtoken / variable)
-let = %x6C.65.74
-match = %x6D.61.74.63.68
-when = %x77.68.65.6E
+
+; reserved keywords are always lowercase
+let   = %x6C.65.74        ; "let"
+match = %x6D.61.74.63.68  ; "match"
+when  = %x77.68.65.6E     ; "when"
 
 text = 1*(text-char / text-escape)
 text-char = %x0-5B         ; omit \

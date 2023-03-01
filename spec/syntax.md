@@ -424,9 +424,10 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 The following three keywords are reserved: `let`, `match`, and `when`.
 
 ```abnf
-let = %x6C.65.74
-match = %x6D.61.74.63.68
-when = %x77.68.65.6E
+; reserved keywords are always lowercase
+let   = %x6C.65.74        ; "let"
+match = %x6D.61.74.63.68  ; "match"
+when  = %x77.68.65.6E     ; "when"
 ```
 
 ### Text and Literals
