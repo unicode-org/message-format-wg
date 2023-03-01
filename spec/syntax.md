@@ -345,7 +345,9 @@ Whitespace within a *pattern* is meaningful and MUST be preserved.
 A ***placeholder*** contains either an expression or a markup element.
 
 ```abnf
-placeholder = "{" [s] (expression / markup / markup-end) [s] "}"
+placeholder = "{" [s] expression [s] "}"
+            / "{" [s] markup-start *(s option) [s] "}"
+            / "{" [s] markup-end [s] "}"
 ```
 
 ### Expressions
@@ -400,10 +402,6 @@ There are two kinds of elements: start (opening) elements and end (closing) elem
 each with its own syntax.
 They mimic XML elements, but do not require well-formedness.
 Standalone display elements should be represented as function expressions.
-
-```abnf
-markup = markup-start *(s option)
-```
 
 Examples:
 
@@ -485,8 +483,8 @@ markup-end = "-" name
 ```
 
 ```abnf
-name = name-start *name-char
-nmtoken = 1*name-char
+name    = name-start *name-char ; matches XML https://www.w3.org/TR/xml/#NT-Name
+nmtoken = 1*name-char           ; matches XML https://www.w3.org/TR/xml/#NT-Nmtokens
 name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
            / %x370-37D / %x37F-1FFF / %x200C-200D
@@ -502,8 +500,9 @@ Escape sequences are introduced by the backslash character (`\`).
 They are allowed in translatable text as well as in literals.
 
 ```abnf
-text-escape = "\\" / "\{" / "\}"
-literal-escape = "\\" / "\(" / "\)"
+text-escape    = backslash ( backslash / "{" / "}" )
+literal-escape = backslash ( backslash / "(" / ")" )
+backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 ```
 
 ### Whitespace
@@ -515,7 +514,7 @@ whitespace is part of the translatable content and is recorded and stored verbat
 Whitespace is not significant outside translatable text, except where required by the syntax.
 
 ```abnf
-s = 1*(%x09 / %x0D / %x0A / %x20)
+s = 1*( SP / HTAB / CR / LF )
 ```
 
 ## Complete ABNF

@@ -54,7 +54,6 @@ name-char = name-start / DIGIT / "-" / "." / %xB7
 
 text-escape    = backslash ( backslash / "{" / "}" )
 literal-escape = backslash ( backslash / "(" / ")" )
-
-backslash = %x5C ; U+005C REVERSE SOLIDUS "\"
+backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 
 s = 1*( SP / HTAB / CR / LF )
