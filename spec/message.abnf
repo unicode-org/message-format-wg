@@ -18,9 +18,6 @@ expression = ((literal / variable) [s annotation])
            / annotation
 annotation = function *(s option)
 option = name [s] "=" [s] (literal / nmtoken / variable)
-
-markup = markup-start *(s option)
-
 let = %x6C.65.74
 match = %x6D.61.74.63.68
 when = %x77.68.65.6E
