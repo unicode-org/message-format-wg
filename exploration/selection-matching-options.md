@@ -243,7 +243,7 @@ Some potential examples (and this is "thinking out loud"):
 
    For example, I built a "product name format" function into Amazon's devices. Each product knew (in each supported locale) its generic, short, medium, long, and full name, and each product's name could vary in gender/count/etc. per language. That is, the generic might be a "tablet" or "TV" (or whatever) and then the e.g. tablet might be called a "Fire", a "Fire 8 HDX", etc. 
    
-   The software doesn't know which device it'll be built into (actually, it's built into all of them), so the formatter needs to select the correct pattern string according to device it is in at runtime. Rather than build separate strings for every device, we generated variations based on the (smaller) set of grammar variations per-locale. A simple message like `The {whatever} is ready` in French might look sort of like the following (in our syntax) in a French locale (and I'm omitting for clarity such things as enclitic handling, e.g. when it's `l'ordinateur` not `le ordinateur`):
+   The software doesn't know which device it'll be built into (actually, it's built into all of them), so the formatter needs to select the correct pattern string according to device it is in at runtime. Rather than build separate strings for every device, we generated variations based on the (smaller) set of grammar variations per-locale. A simple message like `The {whatever} is ready` in English might look sort of like the following (in our syntax) in a French locale (and I'm omitting for clarity such things as enclitic handling, e.g. when it's `l'ordinateur` not `le ordinateur`):
 
 ```
 match {:gender $product}
