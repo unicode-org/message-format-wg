@@ -50,12 +50,12 @@ In the example message, the _variants_ are in a canonical order, so first-match 
 - Translation tools that "explode" the selection matrix to support languages with additional needs (such as the way that the `pl` locale requires keywords `few` and `many` for plurals whereas the `en` locale does not) to order generated _variants_ correctly and to interpolate the developer's intent.
 
 ## Best-Match
-Using best-match selection, each _selector_ determines the order of _variants_ from among this list provided. The most likely means to doing this is by returning a "score" for each value, with values processed from left-to-right. The best matching _variant_ becomes the pattern.
+Using best-match selection, each _selector_ determines the order of _variants_ from among the list provided. The most likely means to doing this is by returning a "score" for each value, with values processed from left-to-right. The best matching _variant_ becomes the pattern.
 
 
 **Pros**
 + Variants can be written in any order and produce a consistent result.
-+ Selector developers can write complex matches that produce different quality matches for the same value. For example, plural(1) matches both the variant `1` and the variant `one`, but prefers the value `1`. The plural _selector_ does not need to communicate with the other _selectors_ in order to arrive at the best matching pattern.
++ Selector developers can write complex matches that produce different quality matches for the same value. For example, `{:plural |1|}` matches both the variant `1` and the variant `one`, but prefers the value `1`. The plural _selector_ does not need to communicate with the other _selectors_ in order to arrive at the best matching pattern.
 + Translators do not need to worry about the order of variants or need to reorder variants (which can be difficult to do when only the translation segment for the pattern is shown or when only a changed or generated _variant_ is exposed to translation.
 + Translation tools do not have to preserve the order of _variants_ and are free to send only the translatable segment (the pattern) for translation.
 
