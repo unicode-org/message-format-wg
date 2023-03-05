@@ -227,9 +227,9 @@ This exposes developers and translators to managing the complexity versus having
 
 Currently there are no other complex rule-based selectors in ICU. However, there are a number of cases where complex matching might come into play. The criteria for it being a complex match are:
 
-* The selector generates different output by locale (the way that plural generates `few` and `many` for e.g. Polish or fails to generate `one` in Japanese). If the states vary according to something other than locale all of the states have to be accounted for in the `root` locale resource and all translations (so it's not "complex" any more); or:
-* The selector can generate more than one match for the same value (compare with plural `=1` and `one`), with varying quality of match.
-* Any combination of the above.
+1. The selector generates different output by locale (the way that plural generates `few` and `many` for e.g. Polish or fails to generate `one` in Japanese). If the states vary according to something other than locale all of the states have to be accounted for in the `root` locale resource and all translations (so it's not "complex" any more); or:
+2. The selector can generate more than one match for the same value (compare with plural `=1` and `one`), with varying quality of match.
+3. Any combination of the above.
 
 The key thing here is that the static text produced by the translator needs to reflect the grammatical needs of the language and depends on knowing something about the (invisible) value being inserted at runtime.
 
@@ -245,14 +245,16 @@ Some potential examples (and this is "thinking out loud"):
    
    The software doesn't know which device it'll be built into (actually, it's built into all of them), so the formatter needs to select the correct pattern string according to device it is in at runtime. Rather than build separate strings for every device, we generated variations based on the (smaller) set of grammar variations per-locale. A simple message like `The {whatever} is ready` in English might look sort of like the following (in our syntax) in a French locale (and I'm omitting for clarity such things as enclitic handling, e.g. when it's `l'ordinateur` not `le ordinateur`):
 
-```
-match {:gender $product}
-when masculine {Le {:product format=generic} est prêt.}  ; le téléphone est prêt
-when feminine {La {:product format=generic} est prête.}  ; la télévision est prête
-when * {L'appareil est prêt.} 
-```
+   ```
+   match {:gender $product}
+   when masculine {Le {:product format=generic} est prêt.}  ; le téléphone est prêt
+   when feminine {La {:product format=generic} est prête.}  ; la télévision est prête
+   when * {L'appareil est prêt.} 
+   ```
 
    Notice that it isn't just the article that changes. And notice that the list of enumerated values changes by language (so German has three noun genders while English mostly has one)
+   
+Some potential examples of (2):
 
 1. **Application specific selection.** Developers may need to write selectors with varying degrees of selection. For example, one might have a message that varies by category and then, for specific items, by sub-category:
 
