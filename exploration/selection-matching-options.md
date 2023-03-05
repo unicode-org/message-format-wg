@@ -225,16 +225,34 @@ This exposes developers and translators to managing the complexity versus having
 
 #### Are there other complex matching cases? Or is `plural` everything?
 
-Currently there are no other complex rule-based selectors in ICU. However, there are a number of cases where complex matching might come into play. Some potential examples:
+Currently there are no other complex rule-based selectors in ICU. However, there are a number of cases where complex matching might come into play. The criteria for it being a complex match are:
+
+* The selector generates different output by locale (the way that plural generates `few` and `many` for e.g. Polish or fails to generate `one` in Japanese). If the states vary according to something other than locale all of the states have to be accounted for in the `root` locale resource and all translations (so it's not "complex" any more); or:
+* The selector can generate more than one match for the same value (compare with plural `=1` and `one`), with varying quality of match.
+* Any combination of the above.
+
+The key thing here is that the static text produced by the translator needs to reflect the grammatical needs of the language and depends on knowing something about the (invisible) value being inserted at runtime.
+
+Some potential examples (and this is "thinking out loud"):
 
 1. **Date/time based selection.** Date/time types, including the newer Temporal types, can present complex matching needs. While _incremental time_ values (such as `java.time.Instant`, `java.util.Date`, or JavaScript's `Date`) can resolve every field and be cast to any time zone, Other types, such as `java.time.ZonedDate`, are incomplete. There are different calendars that can affect presentation and selection as well. Some cases for complex time selection include:
    * **Relative time formats.** The values available (such as `yesterday`, `tomorrow`, `day after tomorrow`) vary by locale. 
-   * **Phrasing variations.** For the time `8:30` an American would say "_eight thirty_", while a Brit might say "_half nine_".
    * **Periodic time formats.** Recurring values might require message selection.
 
-1. **Measurement selection.** Selectors based on unit of measurement sometimes vary--even based on application-specific requirements. For example, turn-by-turn directions in mapping applications will choose between `km` and `m` (or `miles` and `feet`) based on some arbitrary distance, e.g. `0.5 miles` (2640 feet) vs. `1500 feet`
+1. **Gender or part-of-speech selection.** Grammatical gender is strongly linked to language and varies by language--very much like plurals. These types of selection might not have the multiple selection quirks of plurals, but will have varying shape by locale. 
 
-1. **Gender or part-of-speech selection.** Grammatical gender is strongly linked to language and varies by language--very much like plurals. These types of selection might not have the multiple selection quirks of plurals, but will have varying shape by locale.
+   For example, I built a "product name format" function into Amazon's devices. Each product knew (in each supported locale) its generic, short, medium, long, and full name, and each product's name could vary in gender/count/etc. per language. That is, the generic might be a "tablet" or "TV" (or whatever) and then the e.g. tablet might be called a "Fire", a "Fire 8 HDX", etc. 
+   
+   The software doesn't know which device it'll be built into (actually, it's built into all of them), so the formatter needs to select the correct pattern string according to device it is in at runtime. Rather than build separate strings for every device, we generated variations based on the (smaller) set of grammar variations per-locale. A simple message like `The {whatever} is ready` in French might look sort of like the following (in our syntax) in a French locale (and I'm omitting for clarity such things as enclitic handling, e.g. when it's `l'ordinateur` not `le ordinateur`):
+
+```
+match {:gender $product}
+when masculine {Le {:product format=generic} est prêt.}  ; le téléphone est prêt
+when feminine {La {:product format=generic} est prête.}  ; la télévision est prête
+when * {L'appareil est prêt.} 
+```
+
+   Notice that it isn't just the article that changes. And notice that the list of enumerated values changes by language (so German has three noun genders while English mostly has one)
 
 1. **Application specific selection.** Developers may need to write selectors with varying degrees of selection. For example, one might have a message that varies by category and then, for specific items, by sub-category:
 
