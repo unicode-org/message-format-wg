@@ -14,6 +14,7 @@ Information on joining calls is found in the calendar invite.
 This block reserved for scribe rotation.
 
 Recent scribes:
+* 2023-03-06 SCL
 * 2023-02-27 MIH
 * 2023-02-13 MOC, SLC, ECH
 * 2023-02-06 RGN, ECH
@@ -25,7 +26,7 @@ https://docs.google.com/document/d/1Yzo_ucR3bHCFEplHn8QbuDVnjnYMED88Drzm8W4L-0k/
 
 ## NOTE WELL
 
-The next call will be 6 March 2023. 
+The next call will be 13 March 2023. 
 
 ***This is an extra call***
 
@@ -42,17 +43,16 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 **Topic:** Action Item Review
 
+**Topic:** Closing the book on matching
+* Requested by: APP
+* Timebox: 30 minutes
+* https://github.com/unicode-org/message-format-wg/blob/aphillips-issue-351/exploration/selection-matching-options.md
+* https://github.com/unicode-org/message-format-wg/issues/351
+
 **Topic:** Function Registry (continued)
 * Requested by: STA
 
 Discussion of the function registry. Two of the three models had sections on this.
-
-**Topic:** First-match vs. best-match
-* Requested by: APP
-* https://github.com/unicode-org/message-format-wg/issues/351
-
-See also: #271
-
 
 **Topic:** Markup
 * Requested by: APP, MIH
@@ -66,6 +66,10 @@ _@mihnita has called out that our decisions about markup might be premature. Mea
 > * https://github.com/unicode-org/message-format-wg/issues/238
 >
 
+**Topic:** Defining MF1 compatibility
+* Requested by: EAO
+
+_Eemeli requested this in our previous call (2023-03-06) and we have discussed this in various issues._
 
 ---
 
