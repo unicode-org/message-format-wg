@@ -2,7 +2,16 @@
 
 ## Recommendation
 
-I recommend that we adopt a best-match selection scheme rather than the first-match scheme currently in the spec.
+We are discussing whether to change First-Match to another value. Currently voting looks like:
+
+| Person | Supports |
+|---|---|
+| APP | C-F, then B-M, no F-M |
+| STA | F-M, then B-M, the C-F with optional \* |
+| SCL | F-M, then C-F, then optional \* |
+| RGN | C-F optional \*, F-M, CF required \* |
+| MIH | B-M, C-F lexical sort, C-F required \* |
+| EAO | C-F, B-M (distant 2nd), C-F required \* behind that |
 
 ## Background
 
@@ -76,17 +85,71 @@ Each _selector_ receives a list of "available" _keys_. From this list, the _sele
 * Developers cannot override the order that the selector provides unless this is exposed as a feature of the given selector. 
 * Comparison: like B-M, adding a new row is easy and doesn't require that "the entire message must be sent to translation"
 
-Mark suggests that: _"In short C-F shares most of the benefits of B-M. What would be interesting and useful would be to come up with an example where one is clearly better than the other."_
+### Optional vs. Required `*`
 
-I disagree that C-F is different from B-M, except in terms of how the topology of the matrix is traversed (I have not yet found a case where they produce different outputs: the difference is in how the keys are processed?). I have not had time to incorporate this item into the comparison, but document it here for completeness. Please note that the description of "Best Match" is not an algorithm.
+There is a debate over whether to require the value `*` for each/every selector. Currently we require a "catch-all" entry for the entire message (in our example, this is `when * * *`).
+
+Some group members would like to make the value `*` optional for a given selector for cases where the enumerated values of the selector are a closed set. Other group members would like to make the value `*` required (to ensure that there is always a matching value)
 
 ## FAQ
+
+### What happens when I insert a new _variant_?
+
+Suppose your user experience designer wanted to introduce a new message for the last day of the promotion. This would entail adding a set of messages for the explicit value, e.g. `let $days = |1|`:
+
+```
+when 1   one one {This is your last day to purchase {$items} item to earn {$coins} coin}
+when 1   one *   {This is your last day to purchase {$items} item to earn {$coins} coins}
+when 1   *   one {This is your last day to purchase {$items} items to earn {$coins} coin}
+when 1   *   *   {This is your last day to purchase {$items} items to earn {$coins} coins}
+```
+
+With first-match, the new messages **must** be inserted just after the `when 0 * *` _variant_. Otherwise the `one` keyword (or `*` value) would capture the match. With best-match, the new messages can be inserted at the end, perhaps with a comment line, even if the best practice would probably be to use the canonical order.
+
+Note that the above example easily fits at the "top" of the matrix, but the user experience designer might just as easily have made the change to the 2nd or 3rd _selector_. For example:
+
+```
+when one 1   one {You only need one more item in the next {$day} day to earn {$coins} coin}
+when one 1   *   {You only need one more item in the next {$day} day to earn {$coins} coins}
+when *   1   one {You only need one more item in the next {$day} days to earn {$coins} coin}
+when *   1   *   {You only need one more item in the next {$day} days to earn {$coins} coins}
+```
+
+With first-match these items must be inserted into different parts of the matrix.
+
+### If a new _variant_ is created, what happens to the translations?
+
+With first-match, the entire message must be sent to translation, in case the translator needs to reorder the values and so that tools "know" what order the values need to be in post translation. Observe that the added lines need to be "exploded" for languages that use a different set of plural keywords (e.g. `zero`, `two`, `few`, or `many`)
+
+With best-match or column-first, it's possibly only a subset of the message needs to be sent to translation. Translators generally work on "segments", which are the actual pattern strings inside of a given _variant_. They only need to see the segments that are new or changed for B-M or C-F. Using the "one more item" example, here's what the Polish translator might need to create:
+
+```
+when one  1   one  {You only need one more item in the next {$day} day to earn {$coins} coin}
+when one  1   few  {You only need one more item in the next {$day} day to earn {$coins} coins}
+when one  1   many {You only need one more item in the next {$day} day to earn {$coins} coins}
+when one  1   *    {You only need one more item in the next {$day} day to earn {$coins} coins}
+when few  1   one  {You only need one more item in the next {$day} days to earn {$coins} coin}
+when few  1   few  {You only need one more item in the next {$day} days to earn {$coins} coins}
+when few  1   many {You only need one more item in the next {$day} days to earn {$coins} coins}
+when few  1   *    {You only need one more item in the next {$day} days to earn {$coins} coins}
+when many 1   one  {You only need one more item in the next {$day} days to earn {$coins} coin}
+when many 1   few  {You only need one more item in the next {$day} days to earn {$coins} coins}
+when many 1   many {You only need one more item in the next {$day} days to earn {$coins} coins}
+when many 1   *    {You only need one more item in the next {$day} days to earn {$coins} coins}
+when *    1   one  {You only need one more item in the next {$day} days to earn {$coins} coin}
+when *    1   few  {You only need one more item in the next {$day} days to earn {$coins} coins}
+when *    1   many {You only need one more item in the next {$day} days to earn {$coins} coins}
+when *    1   *    {You only need one more item in the next {$day} days to earn {$coins} coins}
+```
+
+In their translation tool, though, they probably are working on only one row at a time, with (for example) XLIFF markup protecting the placeables.
+
 
 ### How could best-match work? How could we specify the pattern match?
 
 The goal of selection is to filter a list of _keys_ down to a single _variant_ that will serve as the pattern. This might be done by filtering the list using a "column first" approach or by ranking the _variants_ (where any _variant_ that produces a "no match" eliminated from the candidate list).
 
-##### Sorting
+#### Sorting
 
 Sorting can either be "best match" (where _selectors_ may reorder the whole matrix) or "column first" (where _selectors can only reorder their column). Let's use the matrix from the example to illustrate. Given this list of _keys_:
 
@@ -107,7 +170,7 @@ one *   *
 *   *   *
 ```
 
-##### Column-First Sorting
+#### Column-First Sorting
 
 Using the value `1` for the first _selector_ matches values `1` and `one` in the `en` locale. The matrix removes other values and sorts the remainder thusly:
 
@@ -282,56 +345,6 @@ Values: `3`/`1`/`3`:
 
 If no _key_ values match, throw an error (this should never happen as it is a syntax error to omit `*`)
 
-### What happens when I insert a new _variant_?
-
-Suppose your user experience designer wanted to introduce a new message for the last day of the promotion. This would entail adding a set of messages for the explicit value, e.g. `let $days = |1|`:
-
-```
-when 1   one one {This is your last day to purchase {$items} item to earn {$coins} coin}
-when 1   one *   {This is your last day to purchase {$items} item to earn {$coins} coins}
-when 1   *   one {This is your last day to purchase {$items} items to earn {$coins} coin}
-when 1   *   *   {This is your last day to purchase {$items} items to earn {$coins} coins}
-```
-
-With first-match, the new messages **must** be inserted just after the `when 0 * *` _variant_. Otherwise the `one` keyword (or `*` value) would capture the match. With best-match, the new messages can be inserted at the end, perhaps with a comment line, even if the best practice would probably be to use the canonical order.
-
-Note that the above example easily fits at the "top" of the matrix, but the user experience designer might just as easily have made the change to the 2nd or 3rd _selector_. For example:
-
-```
-when one 1   one {You only need one more item in the next {$day} day to earn {$coins} coin}
-when one 1   *   {You only need one more item in the next {$day} day to earn {$coins} coins}
-when *   1   one {You only need one more item in the next {$day} days to earn {$coins} coin}
-when *   1   *   {You only need one more item in the next {$day} days to earn {$coins} coins}
-```
-
-With first-match these items must be inserted into different parts of the matrix.
-
-### If a new _variant_ is created, what happens to the translations?
-
-With first-match, the entire message must be sent to translation, in case the translator needs to reorder the values and so that tools "know" what order the values need to be in post translation. Observe that the added lines need to be "exploded" for languages that use a different set of plural keywords (e.g. `zero`, `two`, `few`, or `many`)
-
-With best-match or column-first, it's possibly only a subset of the message needs to be sent to translation. Translators generally work on "segments", which are the actual pattern strings inside of a given _variant_. They only need to see the segments that are new or changed for B-M or C-F. Using the "one more item" example, here's what the Polish translator might need to create:
-
-```
-when one  1   one  {You only need one more item in the next {$day} day to earn {$coins} coin}
-when one  1   few  {You only need one more item in the next {$day} day to earn {$coins} coins}
-when one  1   many {You only need one more item in the next {$day} day to earn {$coins} coins}
-when one  1   *    {You only need one more item in the next {$day} day to earn {$coins} coins}
-when few  1   one  {You only need one more item in the next {$day} days to earn {$coins} coin}
-when few  1   few  {You only need one more item in the next {$day} days to earn {$coins} coins}
-when few  1   many {You only need one more item in the next {$day} days to earn {$coins} coins}
-when few  1   *    {You only need one more item in the next {$day} days to earn {$coins} coins}
-when many 1   one  {You only need one more item in the next {$day} days to earn {$coins} coin}
-when many 1   few  {You only need one more item in the next {$day} days to earn {$coins} coins}
-when many 1   many {You only need one more item in the next {$day} days to earn {$coins} coins}
-when many 1   *    {You only need one more item in the next {$day} days to earn {$coins} coins}
-when *    1   one  {You only need one more item in the next {$day} days to earn {$coins} coin}
-when *    1   few  {You only need one more item in the next {$day} days to earn {$coins} coins}
-when *    1   many {You only need one more item in the next {$day} days to earn {$coins} coins}
-when *    1   *    {You only need one more item in the next {$day} days to earn {$coins} coins}
-```
-
-In their translation tool, though, they probably are working on only one row at a time, with (for example) XLIFF markup protecting the placeables.
 
 
 #### Why isn't matching or reordering an issue in MF1 or other formatting specs?
