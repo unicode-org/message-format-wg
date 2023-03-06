@@ -405,7 +405,7 @@ The key thing here is that the static text produced by the translator needs to r
 Some potential examples of (1) (and this is "thinking out loud"):
 
 1. **Date/time based selection.** Date/time types, including the newer Temporal types, can present complex matching needs. While _incremental time_ values (such as `java.time.Instant`, `java.util.Date`, or JavaScript's `Date`) can resolve every field and be cast to any time zone, Other types, such as `java.time.ZonedDate`, are incomplete. There are different calendars that can affect presentation and selection as well. Some cases for complex time selection include:
-   * **Relative time formats.** The values available (such as `yesterday`, `tomorrow`, `day after tomorrow`) vary by locale. Here's one example in the [German CLDR charts](https://unicode-org.github.io/cldr-staging/charts/latest/summary/de.html#59d8178ec2fe04ae)
+   * **Relative time formats.** The values available (such as `yesterday`, `tomorrow`, `day after tomorrow`) vary by locale. Here's one example in the [German CLDR charts](https://unicode-org.github.io/cldr-staging/charts/latest/summary/de.html#1d45310cbcf1b2e5)
    * **Periodic time formats.** Recurring values might require message selection.
 
 1. **Gender or part-of-speech selection.** Grammatical gender is strongly linked to language and varies by language--very much like plurals. These types of selection might not have the multiple selection quirks of plurals, but will have varying shape by locale. 
