@@ -431,7 +431,7 @@ variants and providing input to expressions.
 Any Unicode code point is allowed in either, with the exception of
 the relevant delimiters (`{` and `}` for Text, `|` for Literal),
 `\` (which starts an escape sequence), and
-surrogate code points U+D800 through U+DBFF (which cannot be encoded into UTF-8).
+surrogate code points U+D800 through U+DFFF (which cannot be encoded into UTF-8).
 
 All code points are preserved.
 
