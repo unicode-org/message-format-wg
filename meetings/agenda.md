@@ -51,6 +51,8 @@ Discussion of the function registry. Two of the three models had sections on thi
 * Requested by: APP
 * https://github.com/unicode-org/message-format-wg/issues/351
 
+See also: #271
+
 
 **Topic:** Markup
 * Requested by: APP, MIH
@@ -78,3 +80,11 @@ Discussion of bidirectional text handling. See:
 **Topic:** (Discussion) Guidance needed for dealing with selector explosions
 * Requested by: STA
 * https://github.com/unicode-org/message-format-wg/discussions/323
+
+**Topic:** Reserve sigals for future use
+* Requested by: APP
+* #360
+
+**Topic:** Allow `name` to start with a digit
+* Requested by: APP
+* #350
