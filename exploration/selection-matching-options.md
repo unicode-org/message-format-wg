@@ -15,21 +15,20 @@ I would like to reopen this discussion because I believe that using first-match 
 To fascilitate discussion, I will use this _message_ as an example:
 
 ```
-match :plural($count) :plural($size) :plural($cost)
-   when 0   *   *   {You have no wildebeest remaining}
-   when one 0   *   {You have {$count} wildebeest remaining that cost {$cost :number type=currency}}
-   when one one *   {You have {$count} {$size :measure unit=kg} 
-                               wildebeeet remaining that cost {$cost :number type=currency}}
-   when one *   *   {You have {$count} {$size :measure unit=kg} 
-                               wildebeest remaining that cost {$cost :number type=currency}}
-   when *   0   0   {You have {$count} {$size :measure unit=kg} remaining free wildebeest}
-   when *   one one {You have {$count} {$size :measure unit=kg} 
-                               wildebeeet remaining that cost {$cost :number type=currency}}
-   when *   *   0   {You have {$count} {$size :measure unit=kg} remaining free wildebeest}
-   when *   *   one {You have {$count} {$size :measure unit=kg} 
-                               wildebeeet remaining that cost {$cost :number type=currency}}
-   when *   *   *   {You have {$count} {$size :measure unit=kg} 
-                               wildebeest remaining that cost {$cost :number type=currency}}
+match :plural($days) :plural($items) :plural($coins)
+when 0   *   *   {This opportunity has ended}
+when one 0   one {Congratulations, you earned {$coins} coin}
+when one 0   *   {Congratulations, you earned {$coins} coins}
+when one one one {You have {$days} day to purchase {$items} item to earn {$coins} coin}
+when one one *   {You have {$days} day to purchase {$items} item to earn {$coins} coins}
+when one *   one {You have {$days} day to purchase {$items} items to earn {$coins} coin}
+when one *   *   {You have {$days} day to purchase {$items} items to earn {$coins} coins}
+when *   0   one {Congratulations, you earned {$coins} coin}
+when *   0   *   {Congratulations, you earned {$coins} coins}
+when *   one one {You have {$days} days to purchase {$items} item to earn {$coins} coin}
+when *   one *   {You have {$days} days to purchase {$items} item to earn {$coins} coins}
+when *   *   one {You have {$days} day to purchase {$items} items to earn {$coins} coin}
+when *   *   *   {You have {$days} days to purchase {$items} items to earn {$coins} coins}
 ```
 
 ## First-Match
@@ -65,15 +64,13 @@ Using best-match selection, each _selector_ determines the order of _variants_ f
 
 ## Comparison
 
-Suppose your user experience designer wanted to introduce a new message for the last remaining wildebeest. This would entail adding a set of messages for the explicit value `$count = 1`:
+Suppose your user experience designer wanted to introduce a new message for the last day of the promotion. This would entail adding a set of messages for the explicit value, e.g. `let $days = |1|`:
 
 ```
-   when 1 *   0   {This is your last remaining free wildebeest}
-   when 1 0   *   {This is your last wildebeest remaining that cost {$cost :number type=currency}}
-   when 1 one one {This is your last {$size} wildebeeet remaining that cost {$cost :number type=currency}}
-   when 1 one *   {This is your last {$size} wildebeeet remaining that cost {$cost :number type=currency}}
-   when 1 *   one {This is your last {$size} wildebeeet remaining that cost {$cost :number type=currency}}
-   when 1 *   *   {This is your last {$size} wildebeest remaining that cost {$cost :number type=currency}}
+when 1   one one {This is your last day to purchase {$items} item to earn {$coins} coin}
+when 1   one *   {This is your last day to purchase {$items} item to earn {$coins} coins}
+when 1   *   one {This is your last day to purchase {$items} items to earn {$coins} coin}
+when 1   *   *   {This is your last day to purchase {$items} items to earn {$coins} coins}
 ```
 
 With first-match, the new messages **must** be inserted just after the `when 0 * *` _variant_. Otherwise the `one` keyword (or `*` value) would capture the match. With best-match, the new messages can be inserted at the end, perhaps with a comment line, even if the best practice would probably be to use the canonical order.
@@ -90,7 +87,7 @@ We could specify that for-each _key_ the _selector_ must produce a ranked value 
 
 Using the example at top, let's consider some values:
 
-| selector | count | size | cost | score | winner? | notes |
+| selector | days | items | coins | score | winner? | notes |
 |---|---|---|---|---|---|---|
 | `when 0 * *` | 0 | any | any | 1.0 + 0.1 + 0.1 = 1.2 | Y | 0 is perfect match |
 | `when one 0 *` | 0 | 0 | 0 | 0.0 + 1.0 + 0.1 = 0.0 (!!) | N | no-match on first item ends processing |
@@ -104,7 +101,7 @@ Note: to actually work through this you'd need to stack rank the matrix, crossin
 
 Now let's consider the same values with the "last remaining wildebeest" keys added:
 
-| selector | count | size | cost | score | winner? | notes |
+| selector | days | items | coins | score | winner? | notes |
 |---|---|---|---|---|---|---|
 | `when 0 * *` | 0 | any | any | 1.0 + 0.1 + 0.1 = 1.2 | Y | 0 is perfect match |
 | `when one 0 *` | 0 | 0 | 0 | 0.0 + 1.0 + 0.1 = 0.0 (!!) | N | no-match on first item ends processing |
@@ -114,7 +111,7 @@ Now let's consider the same values with the "last remaining wildebeest" keys add
 | `when one one *` | 1 | 1 | 0 | 0.5 + 0.5 + 0.1 = 1.1 | N | keyword match on one |
 | `when 1 one *` | 1 | 1 | 0 | 1.0 + 0.5 + 0.1 = 1.6 | Y | value match on count `1`, keyword `one` on size |
 | `when * * *` | 1 | 1 | 0 | 0.1 + 0.1 + 0.1 = 0.3 | N | `*` here is default |
-| `when * * *` | 11 | 11 | 42.0 | 0.5 + 0.5 + 0.5 = 1.5 | Y | `*` here is like `other` |
+| `when * * *` | 11 | 11 | 42.3 | 0.5 + 0.5 + 0.5 = 1.5 | Y | `*` here is like `other` |
 
 
 #### Why isn't this an issue in MF1 or other formatting specs?
@@ -124,34 +121,23 @@ Most existing formatting specs, including MF1, only have single _selector_ match
 This means that each _selector_ always produces a single match when evaluating the list of _variants_ (or produces an error if no match can be found). This also means that the **shape** of subsidiary matches can vary. Here is a pseudo-code example:
 
 ```
-match :plural($count)
-   when 0 {You have no wildebeest}
+match :plural($days)
+   when 0 {You have no no days left}
    when one {
-       match :plural($size)
-          when 0 {You have {$count} invisible wildebeest}
-          when one {You have {$count} {$size :measure unit=kg} wildebeeet}
-          when * {You have {$count} {$size :measure unit=kg} wildebeest}
+       match :plural($items)
+          when 0 {You already earned your reward.}
+          when one {You need {$items} more item}
+          when * {You need {$items} more items}
     }
     when * {
-       match :plural($cost)
-          when 0 {You have {$count} free wildebeest}
-          when one {You have {$count} {$cost :number type=currency} wildebeeet}
-          when * {You have {$count} {$cost :number type=currency} wildebeest}
+       match :plural($coins)
+          when 0 {There are no coins on offer.}
+          when one {You have {$days} days to earn {$coins} coin}
+          when * {You have {$days} days to earn {$coins} coins}
     }
 ```
 
-MF2 is fundamentally different in that **all** _selectors_ must be evaluated to produce the match. In the above example, all three _selectors_ must appear in the `match` statement:
-
-```
-match :plural($count) :plural($size) :plural($cost)
-   when 0 * * {You have no wildebeest}
-   when one 0 * {You have {$count} invisible wildebeest}
-   when one one * {You have {$count} {$size} lb. wildebeeet}
-   when one * * {You have {$count} {$size} lb. wildebeest}
-   when * * 0 {You have {$count} free wildebeest}
-   when * * one {You have {$count} {$cost :number type=currency} wildebeeet}
-   when * * * {You have {$count} {$cost :number type=currency} wildebeest}
-```
+MF2 is fundamentally different in that **all** _selectors_ must be evaluated to produce the match. In the above example, all three _selectors_ must appear in the `match` statement (this is the original example above). The messages might have varying shape, but `items` and `coins` can't be disconnected completely.
 
 #### What is "complex matching"? How does plural exemplify it?
 
@@ -162,10 +148,10 @@ Many types of _selector_ do equality matching. For example, `SelectFormat` is ge
 `PluralFormat`, by contrast, can match multiple variants to a single input value. And example of this would be the following set of _variants_:
 
 ```
-match :plural($count)
-   when 2 { two }
+match :plural($days)
+   when 2   { two }
    when few { few }
-   when * { star }
+   when *   { star }
 ```
 
 In the locale `en`, the value `$count = 2` can match both `2` and `*`. In the `pl` locale, the same value can match _all three_ variants. However, in each case, the "quality" of the match is different. In `en`, the `2` _variant_ has a better quality match than `*`. In `pl`, `2` trumps `few` which is better than `*`.
