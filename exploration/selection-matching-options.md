@@ -62,6 +62,25 @@ Using best-match selection, each _selector_ determines the order of _variants_ f
 - Developers cannot override the order that the _selector_ provides unless this is exposed as a feature of the given _selector_.
 - More complex matching implementation; may be slower?
 
+### Column-First Matching
+
+Mark suggests that there is a third option. Using column-first selection, the first selector picks the best match among the first keys (aka first column), then among the remaining rows, the second selector picks the best match among the remaining second keys, and so on. 
+In the example, with `$days = 0`, the first row is picked. With `$days = 1` => `one`, it picks rows 2,3,4,5,6, and 7. With `$items=0` you get rows 4 and 5. And so on.
+
+**Pros**
+* Same as Best-Match, plus:
+   * Each selector is independent; there is no need to assess different weight strengths among different selectors.
+   * Successive selectors only need to pick among the remaining rows, other keys don't need to be assessed
+   * Easier to port message from MF1.0 — easier for existing translator tooling to migrate to MF2.0
+
+**Cons**
+* Developers cannot override the order that the selector provides unless this is exposed as a feature of the given selector. 
+* Comparison: like B-M, adding a new row is easy and doesn't require that "the entire message must be sent to translation"
+
+Mark suggests that: _"In short C-F shares most of the benefits of B-M. What would be interesting and useful would be to come up with an example where one is clearly better than the other."_
+
+I disagree that C-F is different from B-M, except in terms of how the topology of the matrix is traversed (I have not yet found a case where they produce different outputs: the difference is in how the keys are processed?). I have not had time to incorporate this item into the comparison, but document it here for completeness. Please note that the description of "Best Match" is not an algorithm.
+
 ## Comparison
 
 Suppose your user experience designer wanted to introduce a new message for the last day of the promotion. This would entail adding a set of messages for the explicit value, e.g. `let $days = |1|`:
@@ -81,7 +100,7 @@ With first-match, the entire message must be sent to translation, in case the tr
 
 #### How could best-match work? How could we specify the pattern match?
 
-Because each _selector_ might produce different rankings, the whole list must be stack ranked. Any _variant_ that produces a "no match" can be eliminated from the candidate list.
+The goal of selection is to filter a list of _keys_ down to a single _variant_ that will serve as the pattern. This might be done by filtering the list using a "column first" approach (which, as noted, is not described here) or by ranking the _variants_ (where any _variant_ that produces a "no match" eliminated from the candidate list). This section will consider ranking as the approach.
 
 We could specify that for-each _key_ the _selector_ must produce a ranked value (say between 0 and 1) or `0` for no match. **Non-matching items (that is, any _key_ value that scores `0`) are eliminated.** The value `*` **must** produce at least the minimal non-zero (matching) value, but ***may*** return a higher value. If no _key_ values match, throw an error (this should never happen as it is a syntax error to omit `*`)
 
@@ -90,24 +109,24 @@ Using the example at top, let's consider some values:
 | selector | days | items | coins | score | winner? | notes |
 |---|---|---|---|---|---|---|
 | `when 0 * *` | 0 | any | any | 1.0 + 0.1 + 0.1 = 1.2 | Y | 0 is perfect match |
-| `when one 0 *` | 0 | 0 | 0 | 0.0 + 1.0 + 0.1 = 0.0 (!!) | N | no-match on first item ends processing |
+| `when one 0 *` | 0 | 0 | 0 | **0** + 1.0 + 0.1 = 0.0 (!!) | N | no-match on first item ends processing |
 | `when one 0 *` | 1 | 0 | 0 | 0.5 + 1.0 + 0.1 = 1.6 | Y | keyword match on one |
-| `when one one *` | 1 | 0 | 0 | 0.5 + **0** = 0 | N | no-match on second item ends processing |
+| `when one one *` | 1 | 0 | 0 | 0.5 + **0** + 0.1 = 0.0 (!!) | N | no-match on second item ends processing |
 | `when one one *` | 1 | 1 | 0 | 0.5 + 0.5 + 0.1 = 1.1 | Y | keyword match on one |
 | `when * * *` | 1 | 1 | 0 | 0.1 + 0.1 + 0.1 = 0.3 | N | `*` here is default |
 | `when * * *` | 11 | 11 | 42.0 | 0.5 + 0.5 + 0.5 = 1.5 | Y | `*` here is like `other` |
 
 Note: to actually work through this you'd need to stack rank the matrix, crossing out no-match items, for each example. The trick here is that a lower score first item might be bumped up by a high score item later in the `match`.
 
-Now let's consider the same values with the "last remaining wildebeest" keys added:
+Now let's consider the same values with the "last day" (`1`) keys added:
 
 | selector | days | items | coins | score | winner? | notes |
 |---|---|---|---|---|---|---|
 | `when 0 * *` | 0 | any | any | 1.0 + 0.1 + 0.1 = 1.2 | Y | 0 is perfect match |
-| `when one 0 *` | 0 | 0 | 0 | 0.0 + 1.0 + 0.1 = 0.0 (!!) | N | no-match on first item ends processing |
+| `when one 0 *` | 0 | 0 | 0 | **0.0** + 1.0 + 0.1 = 0.0 (!!) | N | no-match on first item ends processing |
 | `when one 0 *` | 1 | 0 | 0 | 0.5 + 1.0 + 0.1 = 1.6 | N | keyword match on one and value match on size `0` |
 | `when 1 0 *` | 1 | 0 | 0 | 1.0 + 1.0 + 0.1 = 2.1 | Y | value match on count `1` and size `0` |
-| `when one one *` | 1 | 0 | 0 | 0.5 + **0** = 0 | N | no-match on second item ends processing |
+| `when one one *` | 1 | 0 | 0 | 0.5 + **0** + 0.1 = 0.0 (!!) | N | no-match on second item ends processing |
 | `when one one *` | 1 | 1 | 0 | 0.5 + 0.5 + 0.1 = 1.1 | N | keyword match on one |
 | `when 1 one *` | 1 | 1 | 0 | 1.0 + 0.5 + 0.1 = 1.6 | Y | value match on count `1`, keyword `one` on size |
 | `when * * *` | 1 | 1 | 0 | 0.1 + 0.1 + 0.1 = 0.3 | N | `*` here is default |
