@@ -69,7 +69,7 @@ In the example, with `$days = 0`, the first row is picked. With `$days = 1` => `
 
 **Pros**
 * Same as Best-Match, plus:
-   * Each selector is independent; there is no need to assess different weight strengths among different selectors.
+   * Each selector is independent; there is no need to assess different weight strengths among different selectors. _\[APP: Note that selectors are independent in Best-Match also. They do not look at other selector's output to determine their scoring, only at the inputs and list of keys\]_
    * Successive selectors only need to pick among the remaining rows, other keys don't need to be assessed
    * Easier to port message from MF1.0 — easier for existing translator tooling to migrate to MF2.0
 
