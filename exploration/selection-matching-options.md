@@ -49,7 +49,7 @@ In the example message, the _variants_ are in a canonical order, so first-match 
 - Translation tools that "explode" the selection matrix to support languages with additional needs (such as the way that the `pl` locale requires keywords `few` and `many` for plurals whereas the `en` locale does not) to order generated _variants_ correctly and to interpolate the developer's intent.
 
 ## Best-Match
-Using best-match selection, each _selector_ determines the order of _variants_ from among the list provided. The most likely means to doing this is by returning a "score" for each value, with values processed from left-to-right. The best matching _variant_ becomes the pattern.
+Using best-match selection, each _selector_ determines the order of _variants_ from among the list provided. One means to doing this is by returning a "score" for each value, with values processed from left-to-right. Another means might be by sorting the keys. The best matching _variant_ becomes the pattern.
 
 
 **Pros**
@@ -62,10 +62,9 @@ Using best-match selection, each _selector_ determines the order of _variants_ f
 - Developers cannot override the order that the _selector_ provides unless this is exposed as a feature of the given _selector_.
 - More complex matching implementation; may be slower?
 
-### Column-First Matching
+## Column-First
 
-Mark suggests that there is a third option. Using column-first selection, the first selector picks the best match among the first keys (aka first column), then among the remaining rows, the second selector picks the best match among the remaining second keys, and so on. 
-In the example, with `$days = 0`, the first row is picked. With `$days = 1` => `one`, it picks rows 2,3,4,5,6, and 7. With `$items=0` you get rows 4 and 5. And so on.
+Each _selector_ receives a list of "available" _keys_. From this list, the _selector_ eliminates non-matching items and orders the _keys_ according to the preference of the _selector_. When the last _selector_ has finished, the first item in the remaining keys becomes the pattern. Ordering is maintained for preceding columns, that is, _selector_ number 2 can only reorder items whose _selector_ number 1 key match. 
 
 **Pros**
 * Same as Best-Match, plus:
@@ -100,40 +99,205 @@ With first-match, the entire message must be sent to translation, in case the tr
 
 #### How could best-match work? How could we specify the pattern match?
 
-The goal of selection is to filter a list of _keys_ down to a single _variant_ that will serve as the pattern. This might be done by filtering the list using a "column first" approach (which, as noted, is not described here) or by ranking the _variants_ (where any _variant_ that produces a "no match" eliminated from the candidate list). This section will consider ranking as the approach.
+The goal of selection is to filter a list of _keys_ down to a single _variant_ that will serve as the pattern. This might be done by filtering the list using a "column first" approach or by ranking the _variants_ (where any _variant_ that produces a "no match" eliminated from the candidate list).
 
-We could specify that for-each _key_ the _selector_ must produce a ranked value (say between 0 and 1) or `0` for no match. **Non-matching items (that is, any _key_ value that scores `0`) are eliminated.** The value `*` **must** produce at least the minimal non-zero (matching) value, but ***may*** return a higher value. If no _key_ values match, throw an error (this should never happen as it is a syntax error to omit `*`)
+##### Sorting
 
-Using the example at top, let's consider some values:
+Sorting can either be "best match" (where _selectors_ may reorder the whole matrix) or "column first" (where _selectors can only reorder their column). Let's use the matrix from the example to illustrate. Given this list of _keys_:
 
-| selector | days | items | coins | score | winner? | notes |
-|---|---|---|---|---|---|---|
-| `when 0 * *` | 0 | any | any | 1.0 + 0.1 + 0.1 = 1.2 | Y | 0 is perfect match |
-| `when one 0 *` | 0 | 0 | 0 | **0** + 1.0 + 0.1 = 0.0 (!!) | N | no-match on first item ends processing |
-| `when one 0 *` | 1 | 0 | 0 | 0.5 + 1.0 + 0.1 = 1.6 | Y | keyword match on one |
-| `when one one *` | 1 | 0 | 0 | 0.5 + **0** + 0.1 = 0.0 (!!) | N | no-match on second item ends processing |
-| `when one one *` | 1 | 1 | 0 | 0.5 + 0.5 + 0.1 = 1.1 | Y | keyword match on one |
-| `when * * *` | 1 | 1 | 0 | 0.1 + 0.1 + 0.1 = 0.3 | N | `*` here is default |
-| `when * * *` | 11 | 11 | 42.0 | 0.5 + 0.5 + 0.5 = 1.5 | Y | `*` here is like `other` |
+```
+0   *   *
+one one one
+one one *
+one *   one
+one *   *
+*   one one
+*   one *
+*   *   one
+1   one one
+1   one *
+1   *   one
+1   *   *
+*   1   *
+*   *   *
+```
 
-Note: to actually work through this you'd need to stack rank the matrix, crossing out no-match items, for each example. The trick here is that a lower score first item might be bumped up by a high score item later in the `match`.
+###### Column-First Sorting
 
-Now let's consider the same values with the "last day" (`1`) keys added:
+Using the value `1` for the first _selector_ matches values `1` and `one` in the `en` locale. The matrix removes other values and sorts the remainder thusly:
 
-| selector | days | items | coins | score | winner? | notes |
-|---|---|---|---|---|---|---|
-| `when 0 * *` | 0 | any | any | 1.0 + 0.1 + 0.1 = 1.2 | Y | 0 is perfect match |
-| `when one 0 *` | 0 | 0 | 0 | **0.0** + 1.0 + 0.1 = 0.0 (!!) | N | no-match on first item ends processing |
-| `when one 0 *` | 1 | 0 | 0 | 0.5 + 1.0 + 0.1 = 1.6 | N | keyword match on one and value match on size `0` |
-| `when 1 0 *` | 1 | 0 | 0 | 1.0 + 1.0 + 0.1 = 2.1 | Y | value match on count `1` and size `0` |
-| `when one one *` | 1 | 0 | 0 | 0.5 + **0** + 0.1 = 0.0 (!!) | N | no-match on second item ends processing |
-| `when one one *` | 1 | 1 | 0 | 0.5 + 0.5 + 0.1 = 1.1 | N | keyword match on one |
-| `when 1 one *` | 1 | 1 | 0 | 1.0 + 0.5 + 0.1 = 1.6 | Y | value match on count `1`, keyword `one` on size |
-| `when * * *` | 1 | 1 | 0 | 0.1 + 0.1 + 0.1 = 0.3 | N | `*` here is default |
-| `when * * *` | 11 | 11 | 42.3 | 0.5 + 0.5 + 0.5 = 1.5 | Y | `*` here is like `other` |
+```
+1   one one
+1   one *
+1   *   one
+1   *   *
+one one one
+one one *
+one *   one
+one *   *
+```
 
+Using the value `1` for the second _selector_ results in this list:
 
-#### Why isn't this an issue in MF1 or other formatting specs?
+```
+1   one one
+1   one *
+one one one
+one one *
+```
+
+Using the value `1` for the third _selector_ results in this list:
+
+```
+1   one one <-- the winner
+one one one
+```
+
+Using the values `11`, `11`, `1` goes like this:
+
+```
+*   one one
+*   one *
+*   *   one
+*   *   *
+```
+=>
+```
+*   *   one
+*   *   *
+```
+=>
+```
+*   *   one <-- winner
+```
+
+**What about backtracking?**
+
+It is possible to write matrix values that require column-first selection to go back to the larger matrix:
+
+```
+0   *   *
+2   0   0
+one one one
+one one *
+one *   one
+one *   *
+*   one one
+*   one *
+*   *   one
+1   one one
+1   one *
+1   *   one
+1   *   *
+*   1   *
+*   *   *
+```
+
+with values `2`/`1`/`11` goes like this:
+
+```
+2   0   0
+```
+=>
+```
+(empty set) <-- 1 != 0
+```
+
+If the `*` value is retained this isn't a problem:
+
+```
+2   0   0
+*   one one
+*   one *
+*   *   one
+*   1   *
+*   *   *
+```
+=>
+```
+*   1   *
+*   one one
+*   one *
+*   *   one
+```
+=>
+```
+*   1   * <-- winner
+*   one *
+```
+
+##### Ranking/Scoring
+
+Best-match ranking differs from column-first in that it allows non-filtered items to be re-ranked across the whole matrix, not just within a single column. This could allow a _variant_ that initially has a lower score (on the first _selector_, say) to become the winner.
+
+Using the matrix just above:
+
+```
+0   *   *
+2   0   0
+one one one
+one one *
+one *   one
+one *   *
+*   one one
+*   one *
+*   *   one
+1   one one
+1   one *
+1   *   one
+1   *   *
+*   1   *
+*   *   *
+```
+
+Values: `0`/`3`/`3`
+
+```
+0   *   *
+*   one one
+*   one *
+*   *   one
+*   1   *
+*   *   *
+```
+=>
+```
+0   *   *
+*   *   one
+*   *   *
+```
+=>
+```
+0   *   * <-- winner
+*   *   *
+```
+
+Values: `3`/`1`/`3`:
+```
+*   one one
+*   one *
+*   *   one
+*   1   *
+*   *   *
+```
+=>
+```
+*   1   *
+*   one one
+*   one *
+*   *   one
+*   *   *
+```
+=>
+```
+*   1   * <-- winner
+*   one *
+*   *   *
+```
+
+If no _key_ values match, throw an error (this should never happen as it is a syntax error to omit `*`)
+
+#### Why isn't matching or reordering an issue in MF1 or other formatting specs?
 
 Most existing formatting specs, including MF1, only have single _selector_ matching. When a message contains multiple selectors, each one fires indepedently. The best practice is to nest selectors so that the pattern eventually exposed to the formatter is a complete thought/sentence, rather than concatenated.
 
@@ -241,7 +405,7 @@ The key thing here is that the static text produced by the translator needs to r
 Some potential examples of (1) (and this is "thinking out loud"):
 
 1. **Date/time based selection.** Date/time types, including the newer Temporal types, can present complex matching needs. While _incremental time_ values (such as `java.time.Instant`, `java.util.Date`, or JavaScript's `Date`) can resolve every field and be cast to any time zone, Other types, such as `java.time.ZonedDate`, are incomplete. There are different calendars that can affect presentation and selection as well. Some cases for complex time selection include:
-   * **Relative time formats.** The values available (such as `yesterday`, `tomorrow`, `day after tomorrow`) vary by locale. 
+   * **Relative time formats.** The values available (such as `yesterday`, `tomorrow`, `day after tomorrow`) vary by locale. Here's one example in the [German CLDR charts](https://unicode-org.github.io/cldr-staging/charts/latest/summary/de.html#59d8178ec2fe04ae)
    * **Periodic time formats.** Recurring values might require message selection.
 
 1. **Gender or part-of-speech selection.** Grammatical gender is strongly linked to language and varies by language--very much like plurals. These types of selection might not have the multiple selection quirks of plurals, but will have varying shape by locale. 
