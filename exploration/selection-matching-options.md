@@ -142,7 +142,15 @@ when *    1   many {You only need one more item in the next {$day} days to earn 
 when *    1   *    {You only need one more item in the next {$day} days to earn {$coins} coins}
 ```
 
-In their translation tool, though, they probably are working on only one row at a time, with (for example) XLIFF markup protecting the placeables.
+In their translation tool, though, the Polish translator won't work on all of that (or indeed, the entire message) at once. Their tool breaks the message into "segments", presenting values as metadata. So it might be something like:
+
+```
+source: en
+target: pl
+$PH1 = "$day", keyword=few
+$PH2 = "$coins", keyword=many
+segment: "You only need one more item in the next $PH1 days to earn $PH2 coins"
+```
 
 
 ### How could best-match work? How could we specify the pattern match?
