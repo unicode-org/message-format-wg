@@ -24,14 +24,15 @@ I would like to reopen this discussion because I believe that using first-match 
 | Criterion | First-Match | Scored Best-Match | Column-First Best-Match | Column-First req `*` | Notes |
 |---|---|---|---|---|---|
 | MF1 Compat | ? | ? | - | + | some say F-M not compat. |
-| Dev/Trans selection control | +++ | - | - | - | |
-| Dev/Trans req to manage | - | +++ | ++ | +++ | |
+| Devlopers/Translators can control | +++ | - | - | - | D/Ts have the ability to influence or override selection |
+| Developers/Translator must control | - | +++ | ++ | +++ | D/Ts are required to manage selection order |
 | Visual Inspection | +++ | + | + | + | It is possible to order any matrix canonically, enabling visual inspection |
 | Complex matching (varies by locale) | - | +++ | +++ | +++ | Matrix explosion may conflict with manual ordering in FM |
 | Complex matching (multi-value) | - | +++ | ++ | ++ | F-M stops on first match; B-M gives developer full control of matching |
-| Order of strings in trans tools | - | +++ | +++ | +++ | Support currently lacking for managing order |
-| Partial leverage with added keys | - | +++ | +++ | +++ | Changes or additions to matrix only affect some entries |
-| Programmable selection order | +++ | - | - | - | Selector authors have to provide APIs or options to tailor default ordering |
+| Translation tool variant order | - | +++ | +++ | +++ | Translations tools are required to maintain the order and/or provide for reordering that itself is remembers (eg. in the TM) |
+| Partial leverage on added keys | - | +++ | +++ | +++ | Changes or additions to matrix only affect some entries |
+| Programmable selection order | + | + | + | + | Selector authors can provide options for tailoring matches |
+
 
 ### Example
 
@@ -55,7 +56,8 @@ when *   *   *   {You have {$days} days to purchase {$items} items to earn {$coi
 ```
 
 ## First-Match
-Using first-match selection, the order of the _variants_ within a _selector_ determines the match order. Each _variant_ is evaluated by the list of _selectors_ for a boolean match value. The first _variant_ to match all _selectors_ becomes the pattern. 
+
+First-Match selection evaluates the list of _keys_ row-by-row and selects the first _variant_ that matches the list of _selectors_ as the _pattern_.
 
 In the example message, the _variants_ are in a canonical order, so first-match produces the same order as best-match does.
 
@@ -72,8 +74,12 @@ In the example message, the _variants_ are in a canonical order, so first-match 
 - Translation tools that "explode" the selection matrix to support languages with additional needs (such as the way that the `pl` locale requires keywords `few` and `many` for plurals whereas the `en` locale does not) to order generated _variants_ correctly and to interpolate the developer's intent.
 
 ## Best-Match
-Using best-match selection, each _selector_ determines the order of _variants_ from among the list provided. One means to doing this is by returning a "score" for each value, with values processed from left-to-right. Another means might be by sorting the keys. The best matching _variant_ becomes the pattern.
 
+Best-Match selection evaluates the full list of _keys_ and selects the _variant_ that, according to the matching strategy used, "best matches" the list of _selectors_ as the _pattern_. There are three best-match selection strategies in this document:
+
+1. Sorted Matching
+1. Column-First with required default `*`
+1. Column-First without required default `*`
 
 **Pros**
 + Variants can be written in any order and produce a consistent result.
@@ -85,19 +91,99 @@ Using best-match selection, each _selector_ determines the order of _variants_ f
 - Developers cannot override the order that the _selector_ provides unless this is exposed as a feature of the given _selector_.
 - More complex matching implementation; may be slower?
 
-## Column-First
+### Sorted
+
+Sorted Matching evaluates the full list of _keys_ by sorting the matrix. Each _selector_ provides a "comparator" for values in its column (such as computing a weight for the value in its column). Rows that contain a non-matching value for any selector are eliminated as potential matches. The default value `*` always matches. The highest ranking _key_ is returned as the _pattern_. Ties are broken by column. If no matching row is found, returns an error.
+
+**Pros**
+(All of the pros of best match plus:)
++ Allows for better selection in some corner cases. 
+
+**Cons**
+- Complex to evaluate visually
+- More complex to implement
+
+Using the matrix just above:
+
+```
+0   *   *
+2   0   0
+one one one
+one one *
+one *   one
+one *   *
+*   one one
+*   one *
+*   *   one
+1   one one
+1   one *
+1   *   one
+1   *   *
+*   1   *
+*   *   *
+```
+
+Values: `0`/`3`/`3`
+
+```
+0   *   *
+*   one one
+*   one *
+*   *   one
+*   1   *
+*   *   *
+```
+=>
+```
+0   *   *
+*   *   one
+*   *   *
+```
+=>
+```
+0   *   * <-- winner
+*   *   *
+```
+
+Values: `3`/`1`/`3`:
+```
+*   one one
+*   one *
+*   *   one
+*   1   *
+*   *   *
+```
+=>
+```
+*   1   *
+*   one one
+*   one *
+*   *   one
+*   *   *
+```
+=>
+```
+*   1   * <-- winner
+*   one *
+*   *   *
+```
+
+### Column-First
 
 Each _selector_ receives a list of "available" _keys_. From this list, the _selector_ eliminates non-matching items and orders the _keys_ according to the preference of the _selector_. When the last _selector_ has finished, the first item in the remaining keys becomes the pattern. Ordering is maintained for preceding columns, that is, _selector_ number 2 can only reorder items whose _selector_ number 1 key match. 
 
 **Pros**
-* Same as Best-Match, plus:
-   * Each selector is independent; there is no need to assess different weight strengths among different selectors. _\[APP: Note that selectors are independent in Best-Match also. They do not look at other selector's output to determine their scoring, only at the inputs and list of keys\]_
-   * Successive selectors only need to pick among the remaining rows, other keys don't need to be assessed
-   * Easier to port message from MF1.0 — easier for existing translator tooling to migrate to MF2.0
++ Variants can be written in any order and produce a consistent result.
++ Selector developers can write complex matches that produce different quality matches for the same value. For example, `{:plural |1|}` matches both the variant `1` and the variant `one`, but prefers the value `1`. The plural _selector_ does not need to communicate with the other _selectors_ in order to arrive at the best matching pattern.
++ Translators do not need to worry about the order of variants or need to reorder variants (which can be difficult to do when only the translation segment for the pattern is shown or when only a changed or generated _variant_ is exposed to translation.
++ Translation tools do not have to preserve the order of _variants_ and are free to send only the translatable segment (the pattern) for translation.
++ Easier to evaluate visually than sorting strategies.
++ Reduces processing compared to sorting.
 
 **Cons**
-* Developers cannot override the order that the selector provides unless this is exposed as a feature of the given selector. 
-* Comparison: like B-M, adding a new row is easy and doesn't require that "the entire message must be sent to translation"
+- Developers cannot override the order that the _selector_ provides unless this is exposed as a feature of the given _selector_.
+- Can require more processing than F-M
+
 
 ### Optional vs. Required `*`
 
@@ -166,209 +252,6 @@ $PH1 = "$day", keyword=few
 $PH2 = "$coins", keyword=many
 segment: "You only need one more item in the next <ph id=$PH1/> days to earn <ph id=$PH2/> coins"
 ```
-
-
-### How could best-match work? How could we specify the pattern match?
-
-The goal of selection is to filter a list of _keys_ down to a single _variant_ that will serve as the pattern. This might be done by filtering the list using a "column first" approach or by ranking the _variants_ (where any _variant_ that produces a "no match" eliminated from the candidate list).
-
-#### Sorting
-
-Sorting can either be "best match" (where _selectors_ may reorder the whole matrix) or "column first" (where _selectors can only reorder their column). Let's use the matrix from the example to illustrate. Given this list of _keys_:
-
-```
-0   *   *
-one one one
-one one *
-one *   one
-one *   *
-*   one one
-*   one *
-*   *   one
-1   one one
-1   one *
-1   *   one
-1   *   *
-*   1   *
-*   *   *
-```
-
-#### Column-First Sorting
-
-Using the value `1` for the first _selector_ matches values `1` and `one` in the `en` locale. The matrix removes other values and sorts the remainder thusly:
-
-```
-1   one one
-1   one *
-1   *   one
-1   *   *
-one one one
-one one *
-one *   one
-one *   *
-```
-
-Using the value `1` for the second _selector_ results in this list:
-
-```
-1   one one
-1   one *
-one one one
-one one *
-```
-
-Using the value `1` for the third _selector_ results in this list:
-
-```
-1   one one <-- the winner
-one one one
-```
-
-Using the values `11`, `11`, `1` goes like this:
-
-```
-*   one one
-*   one *
-*   *   one
-*   *   *
-```
-=>
-```
-*   *   one
-*   *   *
-```
-=>
-```
-*   *   one <-- winner
-```
-
-**What about backtracking?**
-
-It is possible to write matrix values that require column-first selection to go back to the larger matrix:
-
-```
-0   *   *
-2   0   0
-one one one
-one one *
-one *   one
-one *   *
-*   one one
-*   one *
-*   *   one
-1   one one
-1   one *
-1   *   one
-1   *   *
-*   1   *
-*   *   *
-```
-
-with values `2`/`1`/`11` goes like this:
-
-```
-2   0   0
-```
-=>
-```
-(empty set) <-- 1 != 0
-```
-
-If the `*` value is considered a match (not filtered) this isn't a problem:
-
-```
-2   0   0
-*   one one
-*   one *
-*   *   one
-*   1   *
-*   *   *
-```
-=>
-```
-*   1   *
-*   one one
-*   one *
-*   *   one
-```
-=>
-```
-*   1   * <-- winner
-*   one *
-```
-
-#### Ranking/Scoring
-
-Scored ranking differs from column-first in that it allows non-filtered items to be re-ranked across the whole matrix, not just within a single column. This could allow a _variant_ that initially has a lower score (on the first _selector_, say) to become the winner. (section needs more work)
-
-Using the matrix just above:
-
-```
-0   *   *
-2   0   0
-one one one
-one one *
-one *   one
-one *   *
-*   one one
-*   one *
-*   *   one
-1   one one
-1   one *
-1   *   one
-1   *   *
-*   1   *
-*   *   *
-```
-
-Values: `0`/`3`/`3`
-
-```
-0   *   *
-*   one one
-*   one *
-*   *   one
-*   1   *
-*   *   *
-```
-=>
-```
-0   *   *
-*   *   one
-*   *   *
-```
-=>
-```
-0   *   * <-- winner
-*   *   *
-```
-
-Values: `3`/`1`/`3`:
-```
-*   one one
-*   one *
-*   *   one
-*   1   *
-*   *   *
-```
-=>
-```
-*   1   *
-*   one one
-*   one *
-*   *   one
-*   *   *
-```
-=>
-```
-*   1   * <-- winner
-*   one *
-*   *   *
-```
-
-If no _key_ values match, throw an error (this should never happen as it is a syntax error to omit `*`)
-
-
 
 #### Why isn't matching or reordering an issue in MF1 or other formatting specs?
 
@@ -506,3 +389,112 @@ when categoryElectronics  {There is a sale in electronics today}
 when subcategoryComputers {There is a sale on computers today}
 when *                    {There is a sale in this category today}
 ```
+
+---
+
+(worked examples)
+
+#### Column-First Sorting
+
+Using the value `1` for the first _selector_ matches values `1` and `one` in the `en` locale. The matrix removes other values and sorts the remainder thusly:
+
+```
+1   one one
+1   one *
+1   *   one
+1   *   *
+one one one
+one one *
+one *   one
+one *   *
+```
+
+Using the value `1` for the second _selector_ results in this list:
+
+```
+1   one one
+1   one *
+one one one
+one one *
+```
+
+Using the value `1` for the third _selector_ results in this list:
+
+```
+1   one one <-- the winner
+one one one
+```
+
+Using the values `11`, `11`, `1` goes like this:
+
+```
+*   one one
+*   one *
+*   *   one
+*   *   *
+```
+=>
+```
+*   *   one
+*   *   *
+```
+=>
+```
+*   *   one <-- winner
+```
+
+**What about backtracking?**
+
+It is possible to write matrix values that require column-first selection to go back to the larger matrix:
+
+```
+0   *   *
+2   0   0
+one one one
+one one *
+one *   one
+one *   *
+*   one one
+*   one *
+*   *   one
+1   one one
+1   one *
+1   *   one
+1   *   *
+*   1   *
+*   *   *
+```
+
+with values `2`/`1`/`11` goes like this:
+
+```
+2   0   0
+```
+=>
+```
+(empty set) <-- 1 != 0
+```
+
+If the `*` value is considered a match (not filtered) this isn't a problem:
+
+```
+2   0   0
+*   one one
+*   one *
+*   *   one
+*   1   *
+*   *   *
+```
+=>
+```
+*   1   *
+*   one one
+*   one *
+*   *   one
+```
+=>
+```
+*   1   * <-- winner
+*   one *
+```
+
