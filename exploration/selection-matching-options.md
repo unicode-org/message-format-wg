@@ -193,7 +193,7 @@ Some group members would like to make the value `*` optional for a given selecto
 
 ## FAQ
 
-### What happens when I insert a new _variant_?
+### How do I insert a new _variant_?
 
 Suppose your user experience designer wanted to introduce a new message for the last day of the promotion. This would entail adding a set of messages for the explicit value, e.g. `let $days = |1|`:
 
@@ -222,7 +222,19 @@ With first-match these items must be inserted into different parts of the matrix
 
 With first-match, the entire message must be sent to translation, in case the translator needs to reorder the values and so that tools "know" what order the values need to be in post translation. Observe that the added lines need to be "exploded" for languages that use a different set of plural keywords (e.g. `zero`, `two`, `few`, or `many`)
 
-With best-match or column-first, it's possibly only a subset of the message needs to be sent to translation. Translators generally work on "segments", which are the actual pattern strings inside of a given _variant_. They only need to see the segments that are new or changed for B-M or C-F. Using the "one more item" example, here's what the Polish translator might need to create:
+For First-Match the entire message must be sent through the entire translation system, since the translator might need to reorder _variants_ during the translation process. The translation memory for the existing parts of the message might not be easily applied.
+
+For any of the Best-Match straegies, MF2's design allows tools to treat each _variant_ as a separable _segment_. Each _variant_ can be leveraged against previous iterations in translation memory, while the tool can use the _message_ to group the _variants_ into a related _translation unit_. In the translation editor the translator can still be provided the necessary metadata to perform an accurate translation, so perhaps such segment might look something like:
+
+```
+source: en
+target: pl
+$PH1 = "$day", keyword=few
+$PH2 = "$coins", keyword=many
+segment: "You only need one more item in the next <ph id=$PH1/> days to earn <ph id=$PH2/> coins"
+```
+
+Note that translation systems still need to "explode" the matrix of available values based on the target locale's needs. Using the "one more item" example above, here's what the Polish translator might need to create:
 
 ```
 when one  1   one  {You only need one more item in the next {$days} day to earn {$coins} coin}
@@ -243,15 +255,7 @@ when *    1   many {You only need one more item in the next {$days} days to earn
 when *    1   *    {You only need one more item in the next {$days} days to earn {$coins} coins}
 ```
 
-In their translation tool, though, the Polish translator won't work on all of that (or indeed, the entire message) at once. Their tool breaks the message into "segments", presenting values as metadata. A tool that understand MF2 would not be able to leverage any of the above strings (because their metadata is different from other segments in the TU), but it could leverage the existing matrix values. One such segment might look something like:
-
-```
-source: en
-target: pl
-$PH1 = "$day", keyword=few
-$PH2 = "$coins", keyword=many
-segment: "You only need one more item in the next <ph id=$PH1/> days to earn <ph id=$PH2/> coins"
-```
+Working on 16 separate segments (which will have high internal leverage) is easier than getting the entire message and needing to order it manually. The original example message has 13 _key_ in the `root` locale, but will have 82 _keys_ in the Polish locale--before adding the 16 new _keys_ above (for a total of 98). This will effectively require better tools for translator acceptance.
 
 #### Why isn't matching or reordering an issue in MF1 or other formatting specs?
 
