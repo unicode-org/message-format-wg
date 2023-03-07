@@ -224,7 +224,7 @@ With first-match, the entire message must be sent to translation, in case the tr
 
 For First-Match the entire message must be sent through the entire translation system, since the translator might need to reorder _variants_ during the translation process. The translation memory for the existing parts of the message might not be easily applied.
 
-For any of the Best-Match straegies, MF2's design allows tools to treat each _variant_ as a separable _segment_. Each _variant_ can be leveraged against previous iterations in translation memory, while the tool can use the _message_ to group the _variants_ into a related _translation unit_. In the translation editor the translator can still be provided the necessary metadata to perform an accurate translation, so perhaps such segment might look something like:
+For any of the Best-Match straegies, MF2's design allows tools to treat each _variant_ as a separable _segment_. Each _variant_ can be leveraged against previous iterations in translation memory, while the tool can use the _message_ to group the _variants_ into a related _translation unit_ ("TU"). In the translation editor the translator can still be provided the necessary metadata to perform an accurate translation, so perhaps such segment might look something like:
 
 ```
 source: en
@@ -255,7 +255,7 @@ when *    1   many {You only need one more item in the next {$days} days to earn
 when *    1   *    {You only need one more item in the next {$days} days to earn {$coins} coins}
 ```
 
-Working on 16 separate segments (which will have high internal leverage) is easier than getting the entire message and needing to order it manually. The original example message has 13 _key_ in the `root` locale, but will have 82 _keys_ in the Polish locale--before adding the 16 new _keys_ above (for a total of 98). This will effectively require better tools for translator acceptance.
+Working on 16 separate segments (which will have high internal leverage) is easier than getting the entire message and needing to order it manually. The original example message has 13 _keys_ in the `root` locale, but will have 82 _keys_ in the Polish locale--before adding the 16 new _keys_ above (for a total of 98). This will effectively require better tools for translator acceptance. An alternative would be for First-Match implementations to define a canonical order for the _key_ matrix so that the _segments_ are separable in the TU but can be assembled into a working _message_.
 
 #### Why isn't matching or reordering an issue in MF1 or other formatting specs?
 
