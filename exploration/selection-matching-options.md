@@ -19,6 +19,20 @@ Currently the specification requires first-match pattern selection.
 
 I would like to reopen this discussion because I believe that using first-match places an unfriendly burden on developers, tools, and translators. I particularly am concerned that developers be able to efficiently learn to write messages and trust that the translation process will produce the correct outcome without developer oversight. I am also concerned that we provide for complex format or selector functions, whose output may match several values. `PluralFormat` in ICU is an example of a formatter with complex selector behavior.
 
+## Comparison
+
+| Criterion | First-Match | Scored Best-Match | Column-First Best-Match | Column-First req `*` | Notes |
+|---|---|---|---|---|---|
+| MF1 Compat | ? | ? | - | + | some say F-M not compat. |
+| Dev/Trans selection control | +++ | - | - | - | |
+| Dev/Trans req to manage | - | +++ | ++ | +++ | |
+| Visual Inspection | +++ | + | + | + | It is possible to order any matrix canonically, enabling visual inspection |
+| Complex matching (varies by locale) | - | +++ | +++ | +++ | Matrix explosion may conflict with manual ordering in FM |
+| Complex matching (multi-value) | - | +++ | ++ | ++ | F-M stops on first match; B-M gives developer full control of matching |
+| Order of strings in trans tools | - | +++ | +++ | +++ | Support currently lacking for managing order |
+| Partial leverage with added keys | - | +++ | +++ | +++ | Changes or additions to matrix only affect some entries |
+| Programmable selection order | +++ | - | - | - | Selector authors have to provide APIs or options to tailor default ordering |
+
 ### Example
 
 To fascilitate discussion, I will use this _message_ as an example:
@@ -109,10 +123,11 @@ With first-match, the new messages **must** be inserted just after the `when 0 *
 Note that the above example easily fits at the "top" of the matrix, but the user experience designer might just as easily have made the change to the 2nd or 3rd _selector_. For example:
 
 ```
-when one 1   one {You only need one more item in the next {$day} day to earn {$coins} coin}
-when one 1   *   {You only need one more item in the next {$day} day to earn {$coins} coins}
-when *   1   one {You only need one more item in the next {$day} days to earn {$coins} coin}
-when *   1   *   {You only need one more item in the next {$day} days to earn {$coins} coins}
+; e.g. let $items = |1|
+when one 1   one {You only need one more item in the next {$days} day to earn {$coins} coin}
+when one 1   *   {You only need one more item in the next {$days} day to earn {$coins} coins}
+when *   1   one {You only need one more item in the next {$days} days to earn {$coins} coin}
+when *   1   *   {You only need one more item in the next {$days} days to earn {$coins} coins}
 ```
 
 With first-match these items must be inserted into different parts of the matrix.
@@ -124,32 +139,32 @@ With first-match, the entire message must be sent to translation, in case the tr
 With best-match or column-first, it's possibly only a subset of the message needs to be sent to translation. Translators generally work on "segments", which are the actual pattern strings inside of a given _variant_. They only need to see the segments that are new or changed for B-M or C-F. Using the "one more item" example, here's what the Polish translator might need to create:
 
 ```
-when one  1   one  {You only need one more item in the next {$day} day to earn {$coins} coin}
-when one  1   few  {You only need one more item in the next {$day} day to earn {$coins} coins}
-when one  1   many {You only need one more item in the next {$day} day to earn {$coins} coins}
-when one  1   *    {You only need one more item in the next {$day} day to earn {$coins} coins}
-when few  1   one  {You only need one more item in the next {$day} days to earn {$coins} coin}
-when few  1   few  {You only need one more item in the next {$day} days to earn {$coins} coins}
-when few  1   many {You only need one more item in the next {$day} days to earn {$coins} coins}
-when few  1   *    {You only need one more item in the next {$day} days to earn {$coins} coins}
-when many 1   one  {You only need one more item in the next {$day} days to earn {$coins} coin}
-when many 1   few  {You only need one more item in the next {$day} days to earn {$coins} coins}
-when many 1   many {You only need one more item in the next {$day} days to earn {$coins} coins}
-when many 1   *    {You only need one more item in the next {$day} days to earn {$coins} coins}
-when *    1   one  {You only need one more item in the next {$day} days to earn {$coins} coin}
-when *    1   few  {You only need one more item in the next {$day} days to earn {$coins} coins}
-when *    1   many {You only need one more item in the next {$day} days to earn {$coins} coins}
-when *    1   *    {You only need one more item in the next {$day} days to earn {$coins} coins}
+when one  1   one  {You only need one more item in the next {$days} day to earn {$coins} coin}
+when one  1   few  {You only need one more item in the next {$days} day to earn {$coins} coins}
+when one  1   many {You only need one more item in the next {$days} day to earn {$coins} coins}
+when one  1   *    {You only need one more item in the next {$days} day to earn {$coins} coins}
+when few  1   one  {You only need one more item in the next {$days} days to earn {$coins} coin}
+when few  1   few  {You only need one more item in the next {$days} days to earn {$coins} coins}
+when few  1   many {You only need one more item in the next {$days} days to earn {$coins} coins}
+when few  1   *    {You only need one more item in the next {$days} days to earn {$coins} coins}
+when many 1   one  {You only need one more item in the next {$days} days to earn {$coins} coin}
+when many 1   few  {You only need one more item in the next {$days} days to earn {$coins} coins}
+when many 1   many {You only need one more item in the next {$days} days to earn {$coins} coins}
+when many 1   *    {You only need one more item in the next {$days} days to earn {$coins} coins}
+when *    1   one  {You only need one more item in the next {$days} days to earn {$coins} coin}
+when *    1   few  {You only need one more item in the next {$days} days to earn {$coins} coins}
+when *    1   many {You only need one more item in the next {$days} days to earn {$coins} coins}
+when *    1   *    {You only need one more item in the next {$days} days to earn {$coins} coins}
 ```
 
-In their translation tool, though, the Polish translator won't work on all of that (or indeed, the entire message) at once. Their tool breaks the message into "segments", presenting values as metadata. So it might be something like:
+In their translation tool, though, the Polish translator won't work on all of that (or indeed, the entire message) at once. Their tool breaks the message into "segments", presenting values as metadata. A tool that understand MF2 would not be able to leverage any of the above strings (because their metadata is different from other segments in the TU), but it could leverage the existing matrix values. One such segment might look something like:
 
 ```
 source: en
 target: pl
 $PH1 = "$day", keyword=few
 $PH2 = "$coins", keyword=many
-segment: "You only need one more item in the next $PH1 days to earn $PH2 coins"
+segment: "You only need one more item in the next <ph id=$PH1/> days to earn <ph id=$PH2/> coins"
 ```
 
 
@@ -259,7 +274,7 @@ with values `2`/`1`/`11` goes like this:
 (empty set) <-- 1 != 0
 ```
 
-If the `*` value is retained this isn't a problem:
+If the `*` value is considered a match (not filtered) this isn't a problem:
 
 ```
 2   0   0
@@ -284,7 +299,7 @@ If the `*` value is retained this isn't a problem:
 
 #### Ranking/Scoring
 
-Best-match ranking differs from column-first in that it allows non-filtered items to be re-ranked across the whole matrix, not just within a single column. This could allow a _variant_ that initially has a lower score (on the first _selector_, say) to become the winner.
+Scored ranking differs from column-first in that it allows non-filtered items to be re-ranked across the whole matrix, not just within a single column. This could allow a _variant_ that initially has a lower score (on the first _selector_, say) to become the winner. (section needs more work)
 
 Using the matrix just above:
 
