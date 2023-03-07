@@ -93,7 +93,7 @@ Best-Match selection evaluates the full list of _keys_ and selects the _variant_
 
 ### Sorted
 
-Sorted Matching evaluates the full list of _keys_ by sorting the matrix. Each _selector_ provides a "comparator" for values in its column (such as computing a weight for the value in its column). Rows that contain a non-matching value for any selector are eliminated as potential matches. The default value `*` always matches. The highest ranking _key_ is returned as the _pattern_. Ties are broken by column. If no matching row is found, returns an error.
+Sorted Matching evaluates the full list of _keys_ by sorting the matrix. Each _selector_ provides a "comparator" for values in its column (such as computing a weight for the value in its column). Rows that contain a non-matching value for any selector are eliminated as potential matches. The default value `*` always matches. Ordering is maintained for preceding columns, that is, _selector_ number 2 can only reorder items whose _selector_ number 1 key match. The highest ranking _key_ is returned as the _pattern_. Ties are broken by column. If no matching row is found, returns an error.
 
 **Pros**
 (All of the pros of best match plus:)
@@ -103,49 +103,52 @@ Sorted Matching evaluates the full list of _keys_ by sorting the matrix. Each _s
 - Complex to evaluate visually
 - More complex to implement
 
-Using the matrix just above:
+Let's look at the example's matrix:
+
+```
+when 0   *   *   {This opportunity has ended}
+when one 0   one {Congratulations, you earned {$coins} coin}
+when one 0   *   {Congratulations, you earned {$coins} coins}
+when one one one {You have {$days} day to purchase {$items} item to earn {$coins} coin}
+when one one *   {You have {$days} day to purchase {$items} item to earn {$coins} coins}
+when one *   one {You have {$days} day to purchase {$items} items to earn {$coins} coin}
+when one *   *   {You have {$days} day to purchase {$items} items to earn {$coins} coins}
+when *   0   one {Congratulations, you earned {$coins} coin}
+when *   0   *   {Congratulations, you earned {$coins} coins}
+when *   one one {You have {$days} days to purchase {$items} item to earn {$coins} coin}
+when *   one *   {You have {$days} days to purchase {$items} item to earn {$coins} coins}
+when *   *   one {You have {$days} day to purchase {$items} items to earn {$coins} coin}
+when *   *   *   {You have {$days} days to purchase {$items} items to earn {$coins} coins}
+```
+
+Let's use values `0`/`3`/`3`. The first _selector_, `:plural($days)`, matches the value `0` and the `other` (`*`) rule, producing this matrix:
 
 ```
 0   *   *
-2   0   0
-one one one
-one one *
-one *   one
-one *   *
 *   one one
 *   one *
 *   *   one
-1   one one
-1   one *
-1   *   one
-1   *   *
 *   1   *
 *   *   *
 ```
 
-Values: `0`/`3`/`3`
+The second _selector_ `:plural($items)`, matches the `other` (`*`) rule, producing this matrix:
 
 ```
 0   *   *
-*   one one
-*   one *
-*   *   one
-*   1   *
-*   *   *
-```
-=>
-```
-0   *   *
 *   *   one
 *   *   *
 ```
-=>
+
+The third and final _selector_ `:plural($coins)` matches the `other` (`*`) rule, producing this matrix:
+
 ```
 0   *   * <-- winner
 *   *   *
 ```
 
-Values: `3`/`1`/`3`:
+The value `3`/`1`/`3` produce different matching. The first selector now only matches the `*` rule:
+
 ```
 *   one one
 *   one *
@@ -153,7 +156,9 @@ Values: `3`/`1`/`3`:
 *   1   *
 *   *   *
 ```
-=>
+
+The second _selector_ matches the explicit value `1`, which is prefers to the keyword value `one` and the default value `*` _in that order_:
+
 ```
 *   1   *
 *   one one
@@ -161,7 +166,10 @@ Values: `3`/`1`/`3`:
 *   *   one
 *   *   *
 ```
-=>
+
+The final _selector_ matches the default value `*` but not the keyword `one`, thus producing this matrix:
+
+
 ```
 *   1   * <-- winner
 *   one *
@@ -170,7 +178,7 @@ Values: `3`/`1`/`3`:
 
 ### Column-First
 
-Each _selector_ receives a list of "available" _keys_. From this list, the _selector_ eliminates non-matching items and orders the _keys_ according to the preference of the _selector_. When the last _selector_ has finished, the first item in the remaining keys becomes the pattern. Ordering is maintained for preceding columns, that is, _selector_ number 2 can only reorder items whose _selector_ number 1 key match. 
+Each _selector_ receives a list of "available" _keys_. From this list, the _selector_ eliminates non-matching items and orders the _keys_ according to the preference of the _selector_. When the last _selector_ has finished, the first item in the remaining keys becomes the pattern.  
 
 **Pros**
 + Variants can be written in any order and produce a consistent result.
