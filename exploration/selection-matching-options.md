@@ -11,7 +11,8 @@ We are discussing whether to change First-Match to another value. Currently voti
 | SCL | F-M, then C-F, then optional \* |
 | RGN | C-F optional \*, F-M, CF required \* |
 | MIH | B-M, C-F lexical sort, C-F required \* |
-| EAO | C-F, B-M (distant 2nd), C-F required \* behind that |
+| EAO | C-F optional \*, F-M, C-F required \* |
+| ECH | C-F, B-M (distant 2nd), F-M \* behind that |
 
 ## Background
 
