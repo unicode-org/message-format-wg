@@ -204,7 +204,7 @@ Some group members would like to make the value `*` optional for a given selecto
 
 ### How do I insert a new _variant_?
 
-Suppose your user experience designer wanted to introduce a new message for the last day of the promotion. This would entail adding a set of messages for the explicit value, e.g. `let $days = |1|`:
+Suppose your user experience designer wanted to introduce a new message for the last day of the promotion. This would entail adding a set of messages for the explicit value, e.g. `let $days = {|1|}`:
 
 ```
 when 1   one one {This is your last day to purchase {$items} item to earn {$coins} coin}
