@@ -40,7 +40,7 @@ I would like to reopen this discussion because I believe that using first-match 
 To fascilitate discussion, I will use this _message_ as an example:
 
 ```
-match :plural($days) :plural($items) :plural($coins)
+match {$days :plural} {$items :plural} {$coins :plural}
 when 0   *   *   {This opportunity has ended}
 when one 0   one {Congratulations, you earned {$coins} coin}
 when one 0   *   {Congratulations, you earned {$coins} coins}
