@@ -300,7 +300,7 @@ Many types of _selector_ do equality matching. For example, `SelectFormat` is ge
 `PluralFormat`, by contrast, can match multiple variants to a single input value. And example of this would be the following set of _variants_:
 
 ```
-match {$days :plural}
+match {$count :plural}
    when 2   { two }
    when few { few }
    when *   { star }
@@ -324,8 +324,10 @@ As an aside, how does the above express the `when` clause for the value `2.00`? 
 #### How does this compare to programming language constructs (such as switch)?
 
 It's difficult to say if the MF2 `match` statement should work like familiar selection methods in programming languages. Internationalization APIs, such as resource managers, MF1, and date/number skeletons have tended towards "do what I want", hiding the need for both developers and translators to know about cultural and lingusitic variation and account for it in code. Modern I18N APIs hide most of this complexity. Some of the analogous cases in I18N APIs are:
-* resource fallback with sparse population
-* skeletons for dates, such as (`yyyyMMddjm`) do not require translators to touch "picture strings" (such as `MM/dd/yyyy HH:mm a`) to handle the time or date separators `/` and `:`, the use of 24-hour time vs. 12-hour time, the order of the fields
+* **Resource fallback**, particularly with sparsely populated localized resource files
+* **Skeletons** such as for dates (for example, `yyyyMMddjm`), which do not require translators to touch "picture strings" (such as `MM/dd/yyyy HH:mm a`) to handle the time or date separators `/` and `:`, the use of 24-hour time vs. 12-hour time, the order of the fields. 
+* **Built-in formats** such as `short`/`medium`/`long`/`full` do not guarantee any particular separators, field order, or format and vary widely between locales.
+* **Locale negotiation** matches the best particular locale to a requested language range.
 
 When coding a plural using ICU4J's `PluralFormat`, the developer only needs to worry about _specific value_ messages (`when 1 {This is your last chance.}`) vs. value based messages (`when one {You have {$count} chance remaining.}`).
 
