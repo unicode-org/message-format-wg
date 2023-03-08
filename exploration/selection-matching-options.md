@@ -218,7 +218,7 @@ With first-match, the new messages **must** be inserted just after the `when 0 *
 Note that the above example easily fits at the "top" of the matrix, but the user experience designer might just as easily have made the change to the 2nd or 3rd _selector_. For example:
 
 ```
-; e.g. let $items = |1|
+; e.g. let $items = {|1|}
 when one 1   one {You only need one more item in the next {$days} day to earn {$coins} coin}
 when one 1   *   {You only need one more item in the next {$days} day to earn {$coins} coins}
 when *   1   one {You only need one more item in the next {$days} days to earn {$coins} coin}
