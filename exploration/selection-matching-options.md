@@ -72,7 +72,7 @@ In the example message, the _variants_ are in a canonical order, so first-match 
 - Requires developers to specify _variants_ in the correct order.
 - Requires translators to tailor the order of _variants_ if this is different from the source.
 - Requires all translation tooling and runtime processing to preserve the order of the _variants_
-- Translation tools that "explode" the selection matrix to support languages with additional needs (such as the way that the `pl` locale requires keywords `few` and `many` for plurals whereas the `en` locale does not) to order generated _variants_ correctly and to interpolate the developer's intent.
+- Translation tools that "explode" the selection matrix to support languages with additional needs (such as the way that the `pl` locale requires keywords `few` and `many` for plurals whereas the `en` locale does not) must order the generated _variants_ correctly.
 
 ## Best-Match
 
@@ -122,7 +122,7 @@ when *   *   one {You have {$days} day to purchase {$items} items to earn {$coin
 when *   *   *   {You have {$days} days to purchase {$items} items to earn {$coins} coins}
 ```
 
-Let's use values `0`/`3`/`3`. The first _selector_, `:plural($days)`, matches the value `0` and the `other` (`*`) rule, producing this matrix:
+Let's use values `0`/`3`/`3`. The first _selector_, `{$days :plural}`, matches the value `0` and the `*` rule, producing this matrix:
 
 ```
 0   *   *
@@ -133,7 +133,7 @@ Let's use values `0`/`3`/`3`. The first _selector_, `:plural($days)`, matches th
 *   *   *
 ```
 
-The second _selector_ `:plural($items)`, matches the `other` (`*`) rule, producing this matrix:
+The second _selector_ `{$items :plural}`, matches the `*` rule, producing this matrix:
 
 ```
 0   *   *
@@ -141,7 +141,7 @@ The second _selector_ `:plural($items)`, matches the `other` (`*`) rule, produci
 *   *   *
 ```
 
-The third and final _selector_ `:plural($coins)` matches the `other` (`*`) rule, producing this matrix:
+The third and final _selector_ `{$coins :plural}` matches the `*` rule, producing this matrix:
 
 ```
 0   *   * <-- winner
@@ -183,7 +183,7 @@ Each _selector_ receives a list of "available" _keys_. From this list, the _sele
 
 **Pros**
 + Variants can be written in any order and produce a consistent result.
-+ Selector developers can write complex matches that produce different quality matches for the same value. For example, `{:plural |1|}` matches both the variant `1` and the variant `one`, but prefers the value `1`. The plural _selector_ does not need to communicate with the other _selectors_ in order to arrive at the best matching pattern.
++ Selector developers can write complex matches that produce different quality matches for the same value. For example, `{|1| :plural}` matches both the variant `1` and the variant `one`, but prefers the value `1`. The plural _selector_ does not need to communicate with the other _selectors_ in order to arrive at the best matching pattern.
 + Translators do not need to worry about the order of variants or need to reorder variants (which can be difficult to do when only the translation segment for the pattern is shown or when only a changed or generated _variant_ is exposed to translation.
 + Translation tools do not have to preserve the order of _variants_ and are free to send only the translatable segment (the pattern) for translation.
 + Easier to evaluate visually than sorting strategies.
@@ -300,7 +300,7 @@ Many types of _selector_ do equality matching. For example, `SelectFormat` is ge
 `PluralFormat`, by contrast, can match multiple variants to a single input value. And example of this would be the following set of _variants_:
 
 ```
-match :plural($days)
+match {$days :plural}
    when 2   { two }
    when few { few }
    when *   { star }
@@ -311,7 +311,7 @@ In the locale `en`, the value `$count = 2` can match both `2` and `*`. In the `p
 Elango has pointed out that there can be other considerations, for example:
 
 ```
-match :plural(:number($count numDigits=2)) // produces localized equiv of 2.00
+match {$count :plural numDigits=2} // produces localized equiv of 2.00
    when few { never matches in en or pl }
    when *   { matches because it has a fractional part }
 ```
@@ -345,14 +345,14 @@ Programming constructs like `switch` generally match a single value exactly. Som
 We could model `match` as a switch:
 
 ```
-match ($count)
+match {$count}
 when 1   {This is your last chance}
 when one {You have {$count} chance remaining}
 when *   {...}
 ```
 vs.
 ```
-match ($count)
+match {$count}
 when one {You have {$count} chance remaining}
 when 1   {This message cannot be reached in English, but would be reached in Japanese!!}
 when *   {...}
@@ -366,7 +366,7 @@ This exposes developers and translators to managing the complexity versus having
 Currently there are no other complex rule-based selectors in ICU. However, there are a number of cases where complex matching might come into play. The criteria for it being a complex match are:
 
 1. The selector generates different output by locale (the way that plural generates `few` and `many` for e.g. Polish or fails to generate `one` in Japanese). If the states vary according to something other than locale all of the states have to be accounted for in the `root` locale resource and all translations (so it's not "complex" any more); or:
-2. The selector can generate more than one match for the same value (compare with plural `=1` and `one`), with varying quality of match.
+2. The selector can generate more than one match for the same value (compare with plural `1` and `one`), with varying quality of match.
 3. Any combination of the above.
 
 The key thing here is that the static text produced by the translator needs to reflect the grammatical needs of the language and depends on knowing something about the (invisible) value being inserted at runtime.
@@ -384,7 +384,7 @@ Some potential examples of (1) (and this is "thinking out loud"):
    The software doesn't know which device it'll be built into (actually, it's built into all of them), so the formatter needs to select the correct pattern string according to device it is in at runtime. Rather than build separate strings for every device, we generated variations based on the (smaller) set of grammar variations per-locale. A simple message like `The {whatever} is ready` in English might look sort of like the following (in our syntax) in a French locale (and I'm omitting for clarity such things as enclitic handling, e.g. when it's `l'ordinateur` not `le ordinateur`):
 
    ```
-   match {:gender $product}
+   match {$product :gender}
    when masculine {Le {:product format=generic} est prêt.}  ; le téléphone est prêt
    when feminine {La {:product format=generic} est prête.}  ; la télévision est prête
    when * {L'appareil est prêt.} 
@@ -397,7 +397,7 @@ Some potential examples of (2):
 1. **Application specific selection.** Developers may need to write selectors with varying degrees of selection. For example, one might have a message that varies by category and then, for specific items, by sub-category:
 
 ```
-match :category($itemData)
+match {$itemData :category}
 when categoryElectronics  {There is a sale in electronics today}
 when subcategoryComputers {There is a sale on computers today}
 when *                    {There is a sale in this category today}
