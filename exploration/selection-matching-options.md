@@ -191,7 +191,7 @@ Each _selector_ receives a list of "available" _keys_. From this list, the _sele
 
 **Cons**
 - Developers cannot override the order that the _selector_ provides unless this is exposed as a feature of the given _selector_.
-- Can require more processing than F-M
+- Can require more processing than First-Match
 
 
 ### Optional vs. Required `*`
