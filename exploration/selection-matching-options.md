@@ -177,9 +177,10 @@ The final _selector_ matches the default value `*` but not the keyword `one`, th
 *   *   *
 ```
 
-### Column-First
+### Column-First with Required `*`
 
-Each _selector_ receives a list of "available" _keys_. From this list, the _selector_ eliminates non-matching items and orders the _keys_ according to the preference of the _selector_. When the last _selector_ has finished, the first item in the remaining keys becomes the pattern.  
+This is a "sorted" best match algorithm that works as follows: each _selector_ provides a "comparator" for values in its column (such as computing a weight for the value in its column). Rows that contain a non-matching value for any selector are eliminated as potential matches. The default value `*` always matches. Ordering is maintained for preceding columns, that is, _selector_ number 2 can only reorder items whose _selector_ number 1 key match. The highest ranking _key_ is returned as the _pattern_. Ties are broken by column. If no matching row is found, returns an error.
+
 
 **Pros**
 + Variants can be written in any order and produce a consistent result.
@@ -187,18 +188,24 @@ Each _selector_ receives a list of "available" _keys_. From this list, the _sele
 + Translators do not need to worry about the order of variants or need to reorder variants (which can be difficult to do when only the translation segment for the pattern is shown or when only a changed or generated _variant_ is exposed to translation.
 + Translation tools do not have to preserve the order of _variants_ and are free to send only the translatable segment (the pattern) for translation.
 + Easier to evaluate visually than sorting strategies.
-+ Reduces processing compared to sorting.
 
 **Cons**
 - Developers cannot override the order that the _selector_ provides unless this is exposed as a feature of the given _selector_.
 - Can require more processing than First-Match
 
 
-### Optional vs. Required `*`
+### Column-First with Optional `*`
 
-There is a debate over whether to require the value `*` for each/every selector. Currently we require a "catch-all" entry for the entire message (in our example, this is `when * * *`).
+This is a "sorted" best match algorithm. Unlike other options, this algorithm does not require that the key set contain a default (\*\) message value for a given column combination, including, presumably, the default message with all `*` values. Matching proceeds exactly like column-first-with-required-\*\. If no matching row is found, returns an error.
 
-Some group members would like to make the value `*` optional for a given selector for cases where the enumerated values of the selector are a closed set. Other group members would like to make the value `*` required (to ensure that there is always a matching value)
+**Pros**
++ (all of the "pros" for "with `*`")
++ Avoids having extra rows in cases where the default value and `*` might be distinct, for example `other` vs. `*` in plural.
++ Allows for _selectors_ whose default value varies by locale but for which the set of matching keys remains a closed set, for example, if the default gender were different by locale or if there were something like a default grammatical case.
+
+**Cons**
+- Easier to produce a non-functional message that returns only an error for some set of values.
+- Loses the ability to validate message completeness.
 
 ## FAQ
 
