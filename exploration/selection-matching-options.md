@@ -198,6 +198,15 @@ This is a "sorted" best match algorithm that works as follows: each _selector_ p
 
 This is a "sorted" best match algorithm. Unlike other options, this algorithm does not require that the key set contain a default (\*\) message value for a given column combination, including, presumably, the default message with all `*` values. Matching proceeds exactly like column-first-with-required-\*\. If no matching row is found, returns an error.
 
+A key consideration here is the behavior of the default option in a _selector_. With the existing plural formatter, the value `other` is synonymous with and behaves exactly like `*` in MF2. Thus a row that uses `other` and a row that uses `*` (but are otherwise identical) work the same. However, it is possible to construct closed-set selectors that have a different behavior. For example, consider a "boolean" _selector_ which offers values `true` and `false`:
+
+```
+when true  one {... true and plural one...}
+when false *   {... treating "false" as "other"?...}
+```
+
+Here a value like `true`/`other` falls through and produces an error because `false` does not match like plural's `other`.
+
 **Pros**
 + (all of the "pros" for "with `*`")
 + Avoids having extra rows in cases where the default value and `*` might be distinct, for example `other` vs. `*` in plural.
