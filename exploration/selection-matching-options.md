@@ -207,6 +207,22 @@ This is a "sorted" best match algorithm. Unlike other options, this algorithm do
 - Easier to produce a non-functional message that returns only an error for some set of values.
 - Loses the ability to validate message completeness.
 
+### Scored Best Matching
+
+Computes row order in the `match` statement rather than in each _selector_. Each _selector_ returns a "score" for a given variant (in this example, the values are between 0 and 1, but they could be integers instead). Each _selector's_ score is added together for the row and rows are sorted by score. Tie scores go the highest left-most column. A score of 0 by any _selector_ eliminates the row. A primary difference with scoring is that a later column can boost a row past a higher quality match in an earlier column.
+
+Using the example at top, let's consider some values:
+
+| selector | count | size | cost | score | winner? | notes |
+|---|---|---|---|---|---|---|
+| `when 0 * *` | 0 | any | any | 1.0 + 0.1 + 0.1 = 1.2 | Y | 0 is perfect match |
+| `when one 0 *` | 0 | 0 | 0 | 0.0 + 1.0 + 0.1 = 0.0 (!!) | N | no-match on first item ends processing |
+| `when one 0 *` | 1 | 0 | 0 | 0.5 + 1.0 + 0.1 = 1.6 | Y | keyword match on one |
+| `when one one *` | 1 | 0 | 0 | 0.5 + **0** = 0 | N | no-match on second item ends processing |
+| `when one one *` | 1 | 1 | 0 | 0.5 + 0.5 + 0.1 = 1.1 | Y | keyword match on one |
+| `when * * *` | 1 | 1 | 0 | 0.1 + 0.1 + 0.1 = 0.3 | N | `*` here is default |
+| `when * * *` | 11 | 11 | 42.0 | 0.5 + 0.5 + 0.5 = 1.5 | Y | `*` here is like `other` |
+
 ## FAQ
 
 ### How do I insert a new _variant_?
