@@ -28,7 +28,7 @@ https://docs.google.com/document/d/17X6BPvHdjI_Twuy2vcbtVjxKAYTi5eUTZpJl9qUGzjM/
 
 The next call will be 13 March 2023. 
 
-***This is an extra call***
+***This is a regularly-scheduled call***
 
 ## Agenda
 
