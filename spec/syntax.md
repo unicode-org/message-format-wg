@@ -445,7 +445,7 @@ text-char = %x0-5B         ; omit \
 ```
 
 ```abnf
-literal = "(" *(literal-char / literal-escape) ")"
+literal = "|" *(literal-char / literal-escape) "|"
 literal-char = %x0-5B         ; omit \
              / %x5D-7B        ; omit |
              / %x7D-D7FF      ; omit surrogates
