@@ -47,7 +47,7 @@ A `type="match"` function can only be called inside a selector.
 Signatures with a non-empty `locales` attribute are locale-specific and only available in translations in the given languages.
 
 A signature may define the type of input it accepts with zero or more `<input>` elments.
-In MessageFormat 2.0 functions can only ever accept at most one positional argument.
+Functions can only ever accept at most one positional argument.
 Multiple `<input>` elements can be used to define different validation rules for this single argument input,
 together with appropriate human-readable descriptions.
 
@@ -153,10 +153,10 @@ Messages can now use the `:noun` and the `:adjective` functions.
 The following message references the first signature of `:adjective`,
 which expects the `plural` and `case` options:
 
-    {You see {$color adjective article=indefinite plural=one case=nominative} {$object :noun case=nominative}!}
+    {You see {$color :adjective article=indefinite plural=one case=nominative} {$object :noun case=nominative}!}
 
 The following message references the second signature of `:adjective`,
 which only expects the `accord` option:
 
     let $obj = {$object :noun case=nominative}
-    {You see {$color adjective article=indefinite accord=$obj} {$obj}!}
+    {You see {$color :adjective article=indefinite accord=$obj} {$obj}!}
