@@ -46,11 +46,7 @@ A `type="format"` function can only be called inside a placeholder inside transl
 A `type="match"` function can only be called inside a selector.
 Signatures with a non-empty `locales` attribute are locale-specific and only available in translations in the given languages.
 
-A signature may define the type of input it accepts with zero or more `<input>` elments.
-Functions can only ever accept at most one positional argument.
-Multiple `<input>` elements can be used to define different validation rules for this single argument input,
-together with appropriate human-readable descriptions.
-
+A signature may define the positional argument of the function with the `<input>` element.
 A signature may also define one or more `<param>` elements representing _named options_ to the function.
 Parameters are optional by default,
 unless the `required` attribute is present.
@@ -90,7 +86,7 @@ For the sake of brevity, only `locales="en"` is considered.
         </description>
 
         <signature type="match" locales="en">
-            <input pattern="anyNumber"/>
+            <input title="The number to match." pattern="anyNumber"/>
             <param name="type" values="cardinal ordinal"/>
             <param name="minimumIntegerDigits" pattern="positiveInteger"/>
             <param name="minimumFractionDigits" pattern="positiveInteger"/>
@@ -102,7 +98,7 @@ For the sake of brevity, only `locales="en"` is considered.
         </signature>
 
         <signature type="format" locales="en">
-            <input pattern="anyNumber"/>
+            <input title="The number to format" pattern="anyNumber"/>
             <param name="minimumIntegerDigits" pattern="positiveInteger"/>
             <param name="minimumFractionDigits" pattern="positiveInteger"/>
             <param name="maximumFractionDigits" pattern="positiveInteger"/>

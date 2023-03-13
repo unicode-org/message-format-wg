@@ -9,7 +9,7 @@
 <!ATTLIST pattern id ID #REQUIRED>
 <!ATTLIST pattern regex CDATA #REQUIRED>
 
-<!ELEMENT signature (input*|param*|match*)>
+<!ELEMENT signature (input?|param*|match*)>
 <!ATTLIST signature type (match|format) #REQUIRED>
 <!ATTLIST signature position (open|close|standalone) "standalone">
 <!ATTLIST signature locales NMTOKENS #IMPLIED>
@@ -18,6 +18,7 @@
 <!ATTLIST input title CDATA #IMPLIED>
 <!ATTLIST input values NMTOKENS #IMPLIED>
 <!ATTLIST input pattern NMTOKEN #IMPLIED>
+<!ATTLIST input readonly (true|false) "false">
 
 <!ELEMENT param EMPTY>
 <!ATTLIST param title CDATA #IMPLIED>
