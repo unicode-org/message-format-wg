@@ -14,6 +14,7 @@ Information on joining calls is found in the calendar invite.
 This block reserved for scribe rotation.
 
 Recent scribes:
+* 2023-03-13 ECH
 * 2023-03-06 SCL
 * 2023-02-27 MIH
 * 2023-02-13 MOC, SLC, ECH
@@ -26,7 +27,7 @@ https://docs.google.com/document/d/17X6BPvHdjI_Twuy2vcbtVjxKAYTi5eUTZpJl9qUGzjM/
 
 ## NOTE WELL
 
-The next call will be 13 March 2023. 
+The next call will be 27 March 2023. 
 
 ***This is a regularly-scheduled call***
 
@@ -35,7 +36,7 @@ The next call will be 13 March 2023.
 To request that the chair add an _issue_ to the agenda, add the label `Agenda+`
 To request that the chair add an agenda item, send email to the message-format-wg group email.
 
-#### Agenda for 2023-03-06
+#### Agenda for 2023-03-27
 
 **Topic:** Agenda Review
 
@@ -45,7 +46,7 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 **Topic:** Closing the book on matching
 * Requested by: APP
-* Timebox: 30 minutes
+* Timebox: 20 minutes
 * https://github.com/unicode-org/message-format-wg/blob/aphillips-issue-351/exploration/selection-matching-options.md
 * https://github.com/unicode-org/message-format-wg/issues/351
 
