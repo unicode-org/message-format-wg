@@ -39,11 +39,9 @@ A function defines a human-readable _description_ of its behavior
 and one or more machine-readable _signatures_ of how to call it.
 Named `<pattern>` elements can optionally define regex validation rules for input, option values, and variant keys.
 
-The `<signature>` element defines one particular signature of the custom function,
-i.e. the set of arguments and named options that can be used together in a single call to the function.
-The `type` attribute specifies the calling context of the signature.
-A `type="format"` function can only be called inside a placeholder inside translatable text.
-A `type="match"` function can only be called inside a selector.
+A _signature_ defines one particular set of arguments and named options that can be used together in a single call to the function.
+`<formatSignature>` corresponds to a function call inside a placeholder inside translatable text.
+`<matchSignature>` coresponds to a function call inside a selector.
 Signatures with a non-empty `locales` attribute are locale-specific and only available in translations in the given languages.
 
 A signature may define the positional argument of the function with the `<input>` element.
@@ -70,9 +68,9 @@ For the sake of brevity, only `locales="en"` is considered.
 <registry>
     <function name="platform">
         <description>Match the current OS.</description>
-        <signature type="match">
+        <matchSignature>
             <match values="windows linux macos android ios"/>
-        </signature>
+        </matchSignature>
     </function>
 
     <pattern id="anyNumber" regex="-?[0-9]+(\.[0-9]+)"/>
@@ -85,7 +83,7 @@ For the sake of brevity, only `locales="en"` is considered.
             Match a numerical value against CLDR plural categories or against a number literal.
         </description>
 
-        <signature type="match" locales="en">
+        <matchSignature locales="en">
             <input title="The number to match." pattern="anyNumber"/>
             <option name="type" values="cardinal ordinal"/>
             <option name="minimumIntegerDigits" pattern="positiveInteger"/>
@@ -95,9 +93,9 @@ For the sake of brevity, only `locales="en"` is considered.
             <option name="maximumSignificantDigits" pattern="positiveInteger"/>
             <match values="one other"/>
             <match pattern="anyNumber"/>
-        </signature>
+        </matchSignature>
 
-        <signature type="format" locales="en">
+        <formatSignature locales="en">
             <input title="The number to format" pattern="anyNumber"/>
             <option name="minimumIntegerDigits" pattern="positiveInteger"/>
             <option name="minimumFractionDigits" pattern="positiveInteger"/>
@@ -106,7 +104,7 @@ For the sake of brevity, only `locales="en"` is considered.
             <option name="maximumSignificantDigits" pattern="positiveInteger"/>
             <option name="style" readonly="true" values="decimal currency percent unit" default="decimal"/>
             <option name="currency" readonly="true" pattern="currencyCode"/>
-        </signature>
+        </formatSignature>
     </function>
 </registry>
 ```
@@ -120,27 +118,27 @@ A localization engineer can then extend the registry by defining the following `
 <registry>
     <function name="noun">
         <description>Handle the grammar of a noun.</description>
-        <signature type="format" locales="en">
+        <formatSignature locales="en">
             <input title="Noun id"/>
             <option name="article" values="definite indefinite"/>
             <option name="plural" values="one other"/>
             <option name="case" values="nominative genitive" default="nominative"/>
-        </signature>
+        </formatSignature>
     </function>
 
     <function name="adjective">
         <description>Handle the grammar of an adjective.</description>
-        <signature type="format" locales="en">
+        <formatSignature locales="en">
             <input title="Adjective id"/>
             <option name="article" values="definite indefinite"/>
             <option name="plural" values="one other"/>
             <option name="case" values="nominative genitive" default="nominative"/>
-        </signature>
-        <signature type="format" locales="en">
+        </formatSignature>
+        <formatSignature locales="en">
             <input title="Adjective id"/>
             <option name="article" values="definite indefinite"/>
             <option name="accord"/>
-        </signature>
+        </formatSignature>
     </function>
 </registry>
 ```
