@@ -1,0 +1,59 @@
+message = [s] *(declaration [s]) body [s]
+
+declaration = let s variable [s] "=" [s] "{" [s] expression [s] "}"
+body = pattern
+     / (selectors 1*([s] variant))
+
+pattern = "{" *(text / placeholder) "}"
+selectors = match 1*([s] selector)
+selector = "{" [s] expression [s] "}"
+variant = when 1*(s key) [s] pattern
+key = nmtoken / literal / "*"
+
+placeholder = "{" [s] expression [s] "}"
+            / "{" [s] markup-start *(s option) [s] "}"
+            / "{" [s] markup-end [s] "}"
+
+expression = ((literal / variable) [s annotation])
+           / annotation
+annotation = function *(s option)
+option = name [s] "=" [s] (literal / nmtoken / variable)
+
+; reserved keywords are always lowercase
+let   = %x6C.65.74        ; "let"
+match = %x6D.61.74.63.68  ; "match"
+when  = %x77.68.65.6E     ; "when"
+
+text = 1*(text-char / text-escape)
+text-char = %x0-5B         ; omit \
+          / %x5D-7A        ; omit {
+          / %x7C           ; omit }
+          / %x7E-D7FF      ; omit surrogates
+          / %xE000-10FFFF
+
+literal = "|" *(literal-char / literal-escape) "|"
+literal-char = %x0-5B         ; omit \
+             / %x5D-7B        ; omit |
+             / %x7D-D7FF      ; omit surrogates
+             / %xE000-10FFFF
+
+variable = "$" name
+function = ":" name
+markup-start = "+" name
+markup-end = "-" name
+
+name    = name-start *name-char ; matches XML https://www.w3.org/TR/xml/#NT-Name
+nmtoken = 1*name-char           ; matches XML https://www.w3.org/TR/xml/#NT-Nmtokens
+name-start = ALPHA / "_"
+           / %xC0-D6 / %xD8-F6 / %xF8-2FF
+           / %x370-37D / %x37F-1FFF / %x200C-200D
+           / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
+           / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
+name-char = name-start / DIGIT / "-" / "." / %xB7
+          / %x0300-036F / %x203F-2040
+
+text-escape    = backslash ( backslash / "{" / "}" )
+literal-escape = backslash ( backslash / "|" )
+backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
+
+s = 1*( SP / HTAB / CR / LF )
