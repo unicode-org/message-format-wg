@@ -1,7 +1,7 @@
 // © 2022 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-package com.ibm.icu.message2;
+package com.ibm.icu.message2bm;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,12 +11,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.ibm.icu.message2.Mf2DataModel.Expression;
-import com.ibm.icu.message2.Mf2DataModel.Part;
-import com.ibm.icu.message2.Mf2DataModel.Pattern;
-import com.ibm.icu.message2.Mf2DataModel.SelectorKeys;
-import com.ibm.icu.message2.Mf2DataModel.Text;
-import com.ibm.icu.message2.Mf2DataModel.Value;
+import com.ibm.icu.message2bm.Mf2DataModel.Expression;
+import com.ibm.icu.message2bm.Mf2DataModel.Part;
+import com.ibm.icu.message2bm.Mf2DataModel.Pattern;
+import com.ibm.icu.message2bm.Mf2DataModel.SelectorKeys;
+import com.ibm.icu.message2bm.Mf2DataModel.Text;
+import com.ibm.icu.message2bm.Mf2DataModel.Value;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.CurrencyAmount;
 

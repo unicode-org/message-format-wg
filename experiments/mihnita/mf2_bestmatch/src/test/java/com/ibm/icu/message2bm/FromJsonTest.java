@@ -1,13 +1,11 @@
 // © 2022 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-package com.ibm.icu.dev.test.message2;
+package com.ibm.icu.message2bm;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.ibm.icu.dev.test.TestFmwk;
 
 /**
  * These tests come from the test suite created for the JavaScript implementation of MessageFormat v2.
@@ -17,7 +15,7 @@ import com.ibm.icu.dev.test.TestFmwk;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class FromJsonTest extends TestFmwk {
+public class FromJsonTest {
 
     static final TestCase[] TEST_CASES = {
             new TestCase.Builder()

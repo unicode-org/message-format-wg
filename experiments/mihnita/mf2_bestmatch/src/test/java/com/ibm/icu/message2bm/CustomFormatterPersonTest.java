@@ -1,7 +1,7 @@
 // © 2022 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-package com.ibm.icu.dev.test.message2;
+package com.ibm.icu.message2bm;
 
 import java.util.Locale;
 import java.util.Map;
@@ -11,19 +11,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.message2.FormattedPlaceholder;
-import com.ibm.icu.message2.Formatter;
-import com.ibm.icu.message2.FormatterFactory;
-import com.ibm.icu.message2.Mf2FunctionRegistry;
-import com.ibm.icu.message2.PlainStringFormattedValue;
+import com.ibm.icu.message2bm.FormattedPlaceholder;
+import com.ibm.icu.message2bm.Formatter;
+import com.ibm.icu.message2bm.FormatterFactory;
+import com.ibm.icu.message2bm.Mf2FunctionRegistry;
+import com.ibm.icu.message2bm.PlainStringFormattedValue;
 
 /**
  * Showing a custom formatter for a user defined class.
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class CustomFormatterPersonTest extends TestFmwk {
+public class CustomFormatterPersonTest {
 
     public static class Person {
         final String title;

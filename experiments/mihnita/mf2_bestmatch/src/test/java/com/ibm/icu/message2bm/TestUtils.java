@@ -1,15 +1,15 @@
 // © 2022 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-package com.ibm.icu.dev.test.message2;
+package com.ibm.icu.message2bm;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.junit.Ignore;
 
-import com.ibm.icu.message2.MessageFormatter;
-import com.ibm.icu.message2.Mf2FunctionRegistry;
+import com.ibm.icu.message2bm.MessageFormatter;
+import com.ibm.icu.message2bm.Mf2FunctionRegistry;
 
 @Ignore("Utility class, has no test methods.")
 /** Utility class, has no test methods. */

@@ -1,7 +1,9 @@
 // © 2022 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-package com.ibm.icu.dev.test.message2;
+package com.ibm.icu.message2bm;
+
+import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -13,12 +15,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.message2.FormattedPlaceholder;
-import com.ibm.icu.message2.Formatter;
-import com.ibm.icu.message2.FormatterFactory;
-import com.ibm.icu.message2.MessageFormatter;
-import com.ibm.icu.message2.Mf2FunctionRegistry;
+import com.ibm.icu.message2bm.FormattedPlaceholder;
+import com.ibm.icu.message2bm.Formatter;
+import com.ibm.icu.message2bm.FormatterFactory;
+import com.ibm.icu.message2bm.MessageFormatter;
+import com.ibm.icu.message2bm.Mf2FunctionRegistry;
 import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
@@ -35,7 +36,7 @@ import com.ibm.icu.util.MeasureUnit;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class MessageFormat2Test extends TestFmwk {
+public class MessageFormat2Test {
 
     @Test
     public void test() {

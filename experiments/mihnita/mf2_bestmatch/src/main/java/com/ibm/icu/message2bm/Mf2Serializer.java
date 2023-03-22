@@ -1,18 +1,18 @@
 // © 2022 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-package com.ibm.icu.message2;
+package com.ibm.icu.message2bm;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ibm.icu.message2.Mf2DataModel.Expression;
-import com.ibm.icu.message2.Mf2DataModel.Pattern;
-import com.ibm.icu.message2.Mf2DataModel.SelectorKeys;
-import com.ibm.icu.message2.Mf2DataModel.Text;
-import com.ibm.icu.message2.Mf2DataModel.Value;
-import com.ibm.icu.message2.Mf2Parser.EventHandler;
-import com.ibm.icu.message2.Mf2Serializer.Token.Type;
+import com.ibm.icu.message2bm.Mf2DataModel.Expression;
+import com.ibm.icu.message2bm.Mf2DataModel.Pattern;
+import com.ibm.icu.message2bm.Mf2DataModel.SelectorKeys;
+import com.ibm.icu.message2bm.Mf2DataModel.Text;
+import com.ibm.icu.message2bm.Mf2DataModel.Value;
+import com.ibm.icu.message2bm.Mf2Parser.EventHandler;
+import com.ibm.icu.message2bm.Mf2Serializer.Token.Type;
 
 // TODO: find a better name for this class
 class Mf2Serializer implements EventHandler {

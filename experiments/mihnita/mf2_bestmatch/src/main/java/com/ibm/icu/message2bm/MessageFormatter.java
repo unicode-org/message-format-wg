@@ -1,7 +1,7 @@
 // © 2022 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-package com.ibm.icu.message2;
+package com.ibm.icu.message2bm;
 
 import java.util.Locale;
 import java.util.Map;
@@ -46,7 +46,7 @@ import java.util.Map;
  * import java.util.Locale;
  * import java.util.Map;
  *
- * import com.ibm.icu.message2.MessageFormatter;
+ * import com.ibm.icu.message2bm.MessageFormatter;
  *
  * &#064;Test
  * public void testMf2() {
@@ -129,7 +129,7 @@ import java.util.Map;
  * 
  * <p>The <a target="github" href="https://github.com/unicode-org/icu/tree/main/icu4j/main/tests/core/src/com/ibm/icu/dev/test/message2">ICU test code</a>
  * covers most features, and has examples of how to make custom placeholder formatters;
- * you can look for classes that implement {@code com.ibm.icu.message2.FormatterFactory}
+ * you can look for classes that implement {@code com.ibm.icu.message2bm.FormatterFactory}
  * (they are named {@code Custom*Test.java}).</p>
  * 
  * <h3>Functions currently implemented</h3>

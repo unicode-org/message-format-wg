@@ -1,7 +1,9 @@
 // © 2022 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-package com.ibm.icu.dev.test.message2;
+package com.ibm.icu.message2bm;
+
+import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 import java.util.Locale;
@@ -11,8 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.message2.MessageFormatter;
+import com.ibm.icu.message2bm.MessageFormatter;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
@@ -24,7 +25,7 @@ import com.ibm.icu.util.GregorianCalendar;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class Mf2IcuTest extends TestFmwk {
+public class Mf2IcuTest {
 
     @Test
     public void testSample() {

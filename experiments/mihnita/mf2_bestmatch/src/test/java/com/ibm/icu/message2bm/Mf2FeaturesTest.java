@@ -1,7 +1,7 @@
 // © 2022 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-package com.ibm.icu.dev.test.message2;
+package com.ibm.icu.message2bm;
 
 import java.util.Date;
 import java.util.Locale;
@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
@@ -26,7 +25,7 @@ import com.ibm.icu.util.CurrencyAmount;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class Mf2FeaturesTest extends TestFmwk {
+public class Mf2FeaturesTest {
 
     // November 23, 2022 at 7:42:37.123 PM
     static final Date TEST_DATE = new Date(1669261357123L);
