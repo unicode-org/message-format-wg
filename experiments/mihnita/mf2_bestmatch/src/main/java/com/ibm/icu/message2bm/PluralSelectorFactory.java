@@ -57,12 +57,12 @@ class PluralSelectorFactory implements SelectorFactory {
          * {@inheritDoc}
          */
         @Override
-        public boolean matches(Object value, String key, Map<String, Object> variableOptions) {
+        public int matchScore(Object value, String key, Map<String, Object> variableOptions) {
             if (value == null) {
-                return false;
+                return -1;
             }
             if ("*".equals(key)) {
-                return true;
+                return 0;
             }
 
             Integer offset = OptUtils.getInteger(variableOptions, "offset");
@@ -86,7 +86,7 @@ class PluralSelectorFactory implements SelectorFactory {
             } else if (value instanceof Integer) {
                 valToCheck = (Integer) value;
             } else {
-                return false;
+                return -1;
             }
 
             // If there is nothing "tricky" about the formatter part we compare values directly.
@@ -94,17 +94,19 @@ class PluralSelectorFactory implements SelectorFactory {
             // We need something better.
             if (!fixedOptions.containsKey("skeleton") && !variableOptions.containsKey("skeleton")) {
                 try { // for match exact.
-                    if (Double.parseDouble(key) == valToCheck) {
-                        return true;
-                    }
+                    // We only get to return only if the parse does not fail,
+                    // meaning we have an exact value.
+                    // Otherwise consume the exception and continue in the plural keywords.
+                    return Double.parseDouble(key) == valToCheck ? 100 : -1;
                 } catch (NumberFormatException e) {
                 }
             }
 
+            // We only get here for plural keywords (zero, one, two, few, many)
             String match = formattedValToCheck instanceof FormattedNumber
                     ? rules.select((FormattedNumber) formattedValToCheck)
                     : rules.select(valToCheck - offset);
-            return match.equals(key);
+            return match.equals(key) ? 50 : -1;
         }
     }
 }

@@ -26,11 +26,11 @@ class TextSelectorFactory implements SelectorFactory {
          * {@inheritDoc}
          */
         @Override
-        public boolean matches(Object value, String key, Map<String, Object> variableOptions) {
+        public int matchScore(Object value, String key, Map<String, Object> variableOptions) {
             if ("*".equals(key)) {
-                return true;
+                return 0;
             }
-            return key.equals(value);
+            return key.equals(value) ? 100 : -1;
         }
     }
 }

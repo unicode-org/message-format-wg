@@ -193,7 +193,8 @@ public class FromJsonTest {
                 .patternJs("match {$foo} when one {one} when 1 {=1} when * {other}")
                 .pattern("match {$foo :plural} when one {one} when 1 {=1} when * {other}")
                 .arguments(Args.of("foo", 1))
-                .expected("one")
+                // .expected("one") => this is the result for first match
+                .expected("=1")
                 .build(),
             new TestCase.Builder()
                 .patternJs("match {$foo} {$bar} when one one {one one} when one * {one other} when * * {other}")

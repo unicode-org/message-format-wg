@@ -161,6 +161,7 @@ class Mf2DataModelFormatter {
                     + selectorFunctions.size() + " vs. " + selectors.size());
         }
 
+        int maxMatchScore = -1;
         // Iterate "vertically", through all variants
         for (Entry<SelectorKeys, Pattern> variant : dm.getVariants().entrySet()) {
             int maxCount = selectors.size();
@@ -169,21 +170,25 @@ class Mf2DataModelFormatter {
                 throw new IllegalArgumentException("Mismatch between the number of selectors and the number of keys: "
                         + selectors.size() + " vs. " + keysToCheck.size());
             }
-            boolean matches = true;
+            int lineMatchScore = 0;
             // Iterate "horizontally", through all matching functions and keys
             for (int i = 0; i < maxCount; i++) {
                 Expression selector = selectors.get(i);
                 String valToCheck = keysToCheck.get(i);
                 Selector func = selectorFunctions.get(i);
                 Map<String, Object> options = mf2OptToVariableOptions(selector.getOptions(), arguments);
-                if (!func.matches(variableToObjectEx(selector.getOperand(), arguments), valToCheck, options)) {
-                    matches = false;
+                int score = func.matchScore(variableToObjectEx(selector.getOperand(), arguments), valToCheck, options);
+                if (score < 0) {
+                    // One mismatch is enough to disqualify the whole line
+                    lineMatchScore = -1;
                     break;
                 }
+                // The "real world distance" (squared)
+                lineMatchScore += score * score;
             }
-            if (matches) {
+            if (lineMatchScore > maxMatchScore) {
                 patternToRender = variant.getValue();
-                break;
+                maxMatchScore = lineMatchScore;
             }
         }
 

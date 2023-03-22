@@ -33,5 +33,5 @@ public interface Selector {
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
-    boolean matches(Object value, String key, Map<String, Object> variableOptions);
+    int matchScore(Object value, String key, Map<String, Object> variableOptions);
 }
