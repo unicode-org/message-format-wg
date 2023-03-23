@@ -3,6 +3,9 @@
 
 package com.ibm.icu.message2bm;
 
+import java.util.Locale;
+
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -13,7 +16,19 @@ import org.junit.runners.JUnit4;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class Mf2BestMatchTest {
+public class Mf2ParserBugTest {
+
+    @Test
+    public void testBadMessageEnd() {
+        String message = "{Hello world!";
+
+        Assert.assertThrows("pattern must end with }", IllegalArgumentException.class, () -> {
+            MessageFormatter.builder()
+                    .setPattern(message)
+                    .setLocale(Locale.US)
+                    .build();
+        });
+    }
 
     @Test
     public void testPluralSelection() {

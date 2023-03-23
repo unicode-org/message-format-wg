@@ -8,9 +8,6 @@ import static org.junit.Assert.fail;
 
 import org.junit.Ignore;
 
-import com.ibm.icu.message2bm.MessageFormatter;
-import com.ibm.icu.message2bm.Mf2FunctionRegistry;
-
 @Ignore("Utility class, has no test methods.")
 /** Utility class, has no test methods. */
 public class TestUtils {

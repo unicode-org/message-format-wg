@@ -12,11 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.message2bm.FormattedPlaceholder;
-import com.ibm.icu.message2bm.Formatter;
-import com.ibm.icu.message2bm.FormatterFactory;
-import com.ibm.icu.message2bm.Mf2FunctionRegistry;
-import com.ibm.icu.message2bm.PlainStringFormattedValue;
 import com.ibm.icu.text.ListFormatter;
 import com.ibm.icu.text.ListFormatter.Type;
 import com.ibm.icu.text.ListFormatter.Width;

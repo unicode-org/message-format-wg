@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.message2bm.MessageFormatter;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;

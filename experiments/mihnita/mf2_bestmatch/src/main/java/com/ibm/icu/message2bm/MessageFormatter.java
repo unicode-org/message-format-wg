@@ -223,6 +223,7 @@ public class MessageFormatter {
             this.pattern = Mf2Serializer.dataModelToString(this.dataModel);
         } else {
             this.pattern = builder.pattern;
+            checkBrackets(pattern);
             Mf2Serializer tree = new Mf2Serializer();
             Mf2Parser parser = new Mf2Parser(pattern, tree);
             try {
@@ -236,6 +237,17 @@ public class MessageFormatter {
             }
         }
         modelFormatter = new Mf2DataModelFormatter(dataModel, locale, functionRegistry);
+    }
+
+    // TODO: remove after the grammar is fixed
+    // Without it the parser fails with an StringIndexOutOfBoundsException
+    private static void checkBrackets(String pattern) {
+        if (!pattern.trim().endsWith("}")) {
+            throw new IllegalArgumentException(
+                    "Parse error:\n"
+                    + "Message: <<" + pattern + ">>\n"
+                    + "Error: the pattern must end with }\n");
+        }
     }
 
     /**

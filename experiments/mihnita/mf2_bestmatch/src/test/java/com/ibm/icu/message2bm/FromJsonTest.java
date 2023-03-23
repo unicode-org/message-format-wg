@@ -332,7 +332,7 @@ public class FromJsonTest {
                 .build(),
             new TestCase.Builder()
                 .pattern("{no-equal {(42) :number minimumFractionDigits 2}}")
-                .expected( "no-equal 42.00")
+                .expected("no-equal 42.00")
                 .errors("missing-char")
                 .build(),
             new TestCase.Builder()

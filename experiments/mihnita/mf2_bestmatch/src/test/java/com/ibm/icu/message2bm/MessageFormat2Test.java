@@ -15,11 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.message2bm.FormattedPlaceholder;
-import com.ibm.icu.message2bm.Formatter;
-import com.ibm.icu.message2bm.FormatterFactory;
-import com.ibm.icu.message2bm.MessageFormatter;
-import com.ibm.icu.message2bm.Mf2FunctionRegistry;
 import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
