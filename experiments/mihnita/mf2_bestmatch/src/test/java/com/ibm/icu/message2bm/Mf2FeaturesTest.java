@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -29,6 +31,19 @@ public class Mf2FeaturesTest {
 
     // November 23, 2022 at 7:42:37.123 PM
     static final Date TEST_DATE = new Date(1669261357123L);
+
+    private Locale originalDefault = Locale.getDefault();
+
+    @Before
+    public void init() {
+        originalDefault = Locale.getDefault();
+        Locale.setDefault(Locale.US);
+    }
+
+    @After
+    public void cleanup() {
+        Locale.setDefault(originalDefault);
+    }
 
     @Test
     public void testEmptyMessage() {

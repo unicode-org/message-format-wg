@@ -3,6 +3,10 @@
 
 package com.ibm.icu.message2bm;
 
+import java.util.Locale;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -17,7 +21,21 @@ import org.junit.runners.JUnit4;
 @SuppressWarnings("javadoc")
 public class FromJsonTest {
 
-    static final TestCase[] TEST_CASES = {
+    private static Locale originalDefault = Locale.getDefault();
+
+    // Class level because we want the locale set before the arry of test data is created
+    @BeforeClass
+    static public void init() {
+        originalDefault = Locale.getDefault();
+        Locale.setDefault(Locale.US);
+    }
+
+    @AfterClass
+    static public void cleanup() {
+        Locale.setDefault(originalDefault);
+    }
+
+    private final TestCase[] TEST_CASES = {
             new TestCase.Builder()
                 .pattern("{hello}")
                 .expected("hello")

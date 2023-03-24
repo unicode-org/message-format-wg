@@ -3,6 +3,10 @@
 
 package com.ibm.icu.message2bm;
 
+import java.util.Locale;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -14,6 +18,19 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
 public class Mf2BestMatchTest {
+
+    private Locale originalDefault = Locale.getDefault();
+
+    @Before
+    public void init() {
+        originalDefault = Locale.getDefault();
+        Locale.setDefault(Locale.US);
+    }
+
+    @After
+    public void cleanup() {
+        Locale.setDefault(originalDefault);
+    }
 
     @Test
     public void testPluralSelection() {

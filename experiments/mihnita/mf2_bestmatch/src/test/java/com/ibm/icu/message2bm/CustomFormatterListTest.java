@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -68,6 +70,19 @@ public class CustomFormatterListTest {
     static final Mf2FunctionRegistry REGISTRY = Mf2FunctionRegistry.builder()
             .setFormatter("listformat", new ListFormatterFactory())
             .build();
+
+    private Locale originalDefault = Locale.getDefault();
+
+    @Before
+    public void init() {
+        originalDefault = Locale.getDefault();
+        Locale.setDefault(Locale.US);
+    }
+
+    @After
+    public void cleanup() {
+        Locale.setDefault(originalDefault);
+    }
 
     @Test
     public void test() {

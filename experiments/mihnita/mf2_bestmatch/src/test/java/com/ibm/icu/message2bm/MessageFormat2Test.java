@@ -10,7 +10,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -32,6 +34,19 @@ import com.ibm.icu.util.MeasureUnit;
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
 public class MessageFormat2Test {
+
+    private Locale originalDefault = Locale.getDefault();
+
+    @Before
+    public void init() {
+        originalDefault = Locale.getDefault();
+        Locale.setDefault(Locale.US);
+    }
+
+    @After
+    public void cleanup() {
+        Locale.setDefault(originalDefault);
+    }
 
     @Test
     public void test() {
