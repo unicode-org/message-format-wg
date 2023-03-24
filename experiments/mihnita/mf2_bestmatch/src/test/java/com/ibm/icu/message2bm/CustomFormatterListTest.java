@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.junit.After;
 import org.junit.Before;
@@ -72,16 +73,20 @@ public class CustomFormatterListTest {
             .build();
 
     private Locale originalDefault = Locale.getDefault();
+    private TimeZone originalDefaultTz = TimeZone.getDefault();
 
     @Before
     public void init() {
         originalDefault = Locale.getDefault();
+        originalDefaultTz = TimeZone.getDefault();
         Locale.setDefault(Locale.US);
+        TimeZone.setDefault(TimeZone.getTimeZone("America/Los_Angeles"));
     }
 
     @After
     public void cleanup() {
         Locale.setDefault(originalDefault);
+        TimeZone.setDefault(originalDefaultTz);
     }
 
     @Test

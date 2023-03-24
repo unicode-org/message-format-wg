@@ -6,6 +6,7 @@ package com.ibm.icu.message2bm;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,16 +34,20 @@ public class Mf2FeaturesTest {
     static final Date TEST_DATE = new Date(1669261357123L);
 
     private Locale originalDefault = Locale.getDefault();
+    private TimeZone originalDefaultTz = TimeZone.getDefault();
 
     @Before
     public void init() {
         originalDefault = Locale.getDefault();
+        originalDefaultTz = TimeZone.getDefault();
         Locale.setDefault(Locale.US);
+        TimeZone.setDefault(TimeZone.getTimeZone("America/Los_Angeles"));
     }
 
     @After
     public void cleanup() {
         Locale.setDefault(originalDefault);
+        TimeZone.setDefault(originalDefaultTz);
     }
 
     @Test
