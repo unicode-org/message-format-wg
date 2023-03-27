@@ -9,7 +9,6 @@
    1. [Messages](#messages)
    1. [Placeholders](#placeholders)
    1. [Formatting Functions](#formatting-functions)
-   1. [Markup Elements](#markup-elements)
    1. [Selection](#selection)
    1. [Local Variables](#local-variables)
    1. [Complex Messages](#complex-messages)
@@ -21,7 +20,6 @@
    1. [Patterns](#patterns)
    1. [Placeholders](#placeholders)
    1. [Expressions](#expressions)
-   1. [Markup](#markup)
 1. [Tokens](#tokens)
    1. [Keywords](#keywords)
    1. [Text and Literals](#text-and-literals)
@@ -116,8 +114,8 @@ hello.format()
 A _placeholder_ represents a location in the _pattern_ that will be replaced
 in the formatted value (the output).
 
-A _placeholder_ appears within `{…}` delimiters. A _placeholder_ can only
-appear within a _pattern_ and can contain either an _expression_ or _markup_.
+A _placeholder_ appears within `{…}` delimiters.
+A _placeholder_ can only appear as a local variable value and within a _pattern_ and contains an _expression_.
 
 A simple _placeholder_ is simply a variable name:
 
@@ -144,15 +142,19 @@ plucking the first name from the object representing a person:
 
     {Hello, {$userObj :person firstName=long}!}
 
-### Markup Elements
+Functions use one of the following prefix sigils:
 
-_Markup_ is a set of _placeholders_ that can be replaced by runtime specific
-formatting or attributes applied to the _pattern_.
+- `:` for standalone content
+- `+` for starting or opening elements
+- `-` for ending or closing elements
 
-For example, a message with two markup-like element placeholders, `button` and `link`,
-which the runtime can use to construct a document tree structure for a UI framework.
+A message with two markup-like function placeholders, `button` and `link`,
+which the runtime can use to construct a document tree structure for a UI framework:
 
     {{+button}Submit{-button} or {+link}cancel{-link}.}
+
+An opening element MAY be present in a message without a corresponding closing element,
+and vice versa.
 
 ### Selection
 
@@ -211,7 +213,7 @@ A message defining two local variables:
 ### Complex Messages
 
 The various features can be used to produce arbitrarily complex messages by combining
-_declarations_, _selectors_, _functions_, _markup_ and more.
+_declarations_, _selectors_, _functions_, and more.
 
 A complex message with 2 selectors and 3 local variable definitions:
 
@@ -267,7 +269,7 @@ within the scope of the message to the value of an expression.
 This local variable can then be used in other expressions within the same message.
 
 ```abnf
-declaration = let s variable [s] "=" [s] "{" [s] expression [s] "}"
+declaration = let s variable [s] "=" [s] placeholder
 ```
 
 ### Selectors
@@ -342,12 +344,10 @@ Whitespace within a _pattern_ is meaningful and MUST be preserved.
 
 ### Placeholders
 
-A **_placeholder_** contains either an expression or a markup element.
+A **_placeholder_** contains an expression.
 
 ```abnf
 placeholder = "{" [s] expression [s] "}"
-            / "{" [s] markup-start *(s option) [s] "}"
-            / "{" [s] markup-end [s] "}"
 ```
 
 ### Expressions
@@ -390,16 +390,6 @@ $when :datetime month=2-digit
 ```
 :message id=some_other_message
 ```
-
-### Markup
-
-**_Markup elements_** (or just **_markup_**) provide a structured way to mark up parts of the content.
-There are two kinds of elements: start (opening) elements and end (closing) elements,
-each with its own syntax.
-They mimic XML elements, but do not require well-formedness.
-Standalone display elements should be represented as function expressions.
-
-Examples:
 
 ```
 {This is {+b}bold{-b}.}
@@ -455,8 +445,7 @@ literal-char = %x0-5B         ; omit \
 ### Names
 
 The _name_ token is used for variable names (prefixed with `$`),
-function names (prefixed with `:`),
-markup names (prefixed with `+` or `-`),
+function names (prefixed with `:`, `+` or `-`),
 as well as option names.
 A name MUST NOT start with an ASCII digit and certain basic combining characters.
 Otherwise, the set of characters allowed in names is large.
@@ -473,9 +462,7 @@ uses Nmtokens.
 
 ```abnf
 variable = "$" name
-function = ":" name
-markup-start = "+" name
-markup-end = "-" name
+function = (":" | "+" | "-") name
 ```
 
 ```abnf
