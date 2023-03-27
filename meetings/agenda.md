@@ -14,6 +14,7 @@ Information on joining calls is found in the calendar invite.
 This block reserved for scribe rotation.
 
 Recent scribes:
+* 2023-03-27 STA
 * 2023-03-13 ECH
 * 2023-03-06 SCL
 * 2023-02-27 MIH
@@ -27,33 +28,28 @@ https://docs.google.com/document/d/16rtE087Cl2L79oCn30Jb4DhSu8cuTUFBzRjsGYH9Wy4/
 
 ## NOTE WELL
 
-The next call will be 27 March 2023. 
+The next call will be 31 March 2023. 
 
-***This is a regularly-scheduled call***
+***This is a special session***
+
+## Homework
+
+Read the PR for function registry for the next meetings in April:
+
+* https://github.com/unicode-org/message-format-wg/pull/368 
 
 ## Agenda
 
 To request that the chair add an _issue_ to the agenda, add the label `Agenda+`
 To request that the chair add an agenda item, send email to the message-format-wg group email.
 
-#### Agenda for 2023-03-27
+#### Agenda for 2023-03-31
 
 **Topic:** Agenda Review
 
 **Topic:** Info Share
 
 **Topic:** Action Item Review
-
-**Topic:** Closing the book on matching
-* Requested by: APP
-* Timebox: 20 minutes
-* https://github.com/unicode-org/message-format-wg/blob/aphillips-issue-351/exploration/selection-matching-options.md
-* https://github.com/unicode-org/message-format-wg/issues/351
-
-**Topic:** Function Registry (continued)
-* Requested by: STA
-
-Discussion of the function registry. Two of the three models had sections on this.
 
 **Topic:** Markup
 * Requested by: APP, MIH
@@ -67,14 +63,20 @@ _@mihnita has called out that our decisions about markup might be premature. Mea
 > * https://github.com/unicode-org/message-format-wg/issues/238
 >
 
-**Topic:** Defining MF1 compatibility
-* Requested by: EAO
-
-_Eemeli requested this in our previous call (2023-03-06) and we have discussed this in various issues._
 
 ---
 
 ## Proposed for Future (or if time permits)
+
+**Topic:** Function Registry (continued)
+* Requested by: STA
+
+Discussion of the function registry. Two of the three models had sections on this.
+
+**Topic:** Defining MF1 compatibility
+* Requested by: EAO
+
+_Eemeli requested this in our previous call (2023-03-06) and we have discussed this in various issues._
 
 **Topic:** Bidi
 * Requested by: EAO
