@@ -113,41 +113,41 @@ hello.format()
 
 ### Placeholders
 
-A *placeholder* represents a location in the *pattern* that will be replaced
+A _placeholder_ represents a location in the _pattern_ that will be replaced
 in the formatted value (the output).
 
-A *placeholder* appears within `{…}` delimiters. A *placeholder* can only
-appear within a *pattern* and can contain either an *expression* or *markup*. 
+A _placeholder_ appears within `{…}` delimiters. A _placeholder_ can only
+appear within a _pattern_ and can contain either an _expression_ or _markup_.
 
-A simple *placeholder* is simply a variable name:
+A simple _placeholder_ is simply a variable name:
 
     {Hello, {$userName}!}
 
 ### Formatting Functions
 
-A *function* is named functionality, possibly with *options*, that format,
-process, or operate on a *variable*.
+A _function_ is named functionality, possibly with _options_, that format,
+process, or operate on a _variable_.
 
-For example, a *message* with an interpolated `$date` *variable* formatted with the `:datetime` *function*:
+For example, a _message_ with an interpolated `$date` _variable_ formatted with the `:datetime` _function_:
 
     {Today is {$date :datetime weekday=long}.}
 
-A *message* with an interpolated `$userName` *variable* formatted with
-the custom `:person` *function* capable of
+A _message_ with an interpolated `$userName` _variable_ formatted with
+the custom `:person` _function_ capable of
 declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
 
     {Hello, {$userName :person case=vocative}!}
 
-A *message* with an interpolated `$userObj` *variable* formatted with
-the custom `:person` *function* capable of
+A _message_ with an interpolated `$userObj` _variable_ formatted with
+the custom `:person` _function_ capable of
 plucking the first name from the object representing a person:
 
     {Hello, {$userObj :person firstName=long}!}
 
 ### Markup Elements
 
-*Markup* is a set of *placeholders* that can be replaced by runtime specific
-formatting or attributes applied to the *pattern*.
+_Markup_ is a set of _placeholders_ that can be replaced by runtime specific
+formatting or attributes applied to the _pattern_.
 
 For example, a message with two markup-like element placeholders, `button` and `link`,
 which the runtime can use to construct a document tree structure for a UI framework.
@@ -156,8 +156,8 @@ which the runtime can use to construct a document tree structure for a UI framew
 
 ### Selection
 
-A *selector* selects a specific *pattern* from a list of available *patterns*
-in a *message* based on the values of *variables* or *expressions*.
+A _selector_ selects a specific _pattern_ from a list of available _patterns_
+in a _message_ based on the values of _variables_ or _expressions_.
 
 A message with a single selector:
 
@@ -190,11 +190,11 @@ A message with 2 selectors:
 
 ### Local Variables
 
-A *message* can define local variables, such as might be needed for the transforming input or providing
-additional data to a *selector* or *function*. Local variables appear in a *declaration*, which
+A _message_ can define local variables, such as might be needed for the transforming input or providing
+additional data to a _selector_ or _function_. Local variables appear in a _declaration_, which
 defines the value of a named local variable.
 
-A *message* containing a *declaration* defining a local variable `$whom` which is then used twice inside the pattern:
+A _message_ containing a _declaration_ defining a local variable `$whom` which is then used twice inside the pattern:
 
     let $whom = {$monster :noun case=accusative}
     {You see {$quality :adjective article=indefinite accord=$whom} {$whom}!}
@@ -211,7 +211,7 @@ A message defining two local variables:
 ### Complex Messages
 
 The various features can be used to produce arbitrarily complex messages by combining
-*declarations*, *selectors*, *functions*, *markup* and more.
+_declarations_, _selectors_, _functions_, _markup_ and more.
 
 A complex message with 2 selectors and 3 local variable definitions:
 
@@ -247,10 +247,10 @@ if it meets additional semantic requirements about its structure, defined below.
 
 ### Message
 
-A ***message*** is a (possibly empty) list of *declarations* followed by either a single _pattern_, 
-or a `match` statement containing one or more *variants* which represent the translatable body of the message.
+A **_message_** is a (possibly empty) list of _declarations_ followed by either a single _pattern_,
+or a `match` statement containing one or more _variants_ which represent the translatable body of the message.
 
-A *message* MUST be delimited with `{` at the start, and `}` at the end. Whitespace MAY
+A _message_ MUST be delimited with `{` at the start, and `}` at the end. Whitespace MAY
 appear outside the delimiters; such whitespace is ignored. No other content is permitted
 outside the delimiters.
 
@@ -262,7 +262,7 @@ body = pattern
 
 ### Variable Declarations
 
-A ***declaration*** is an expression binding a variable identifier
+A **_declaration_** is an expression binding a variable identifier
 within the scope of the message to the value of an expression.
 This local variable can then be used in other expressions within the same message.
 
@@ -272,8 +272,8 @@ declaration = let s variable [s] "=" [s] "{" [s] expression [s] "}"
 
 ### Selectors
 
-A ***selector*** is a statement containing one or more expressions
-which will be used to choose one of the *variants* during formatting.
+A **_selector_** is a statement containing one or more expressions
+which will be used to choose one of the _variants_ during formatting.
 
 ```abnf
 selectors = match 1*([s] selector)
@@ -297,7 +297,7 @@ when * {{$frac} apples}
 
 ### Variants
 
-A ***variant*** is a keyed *pattern*.
+A **_variant_** is a keyed _pattern_.
 The keys are used to match against the selector expressions defined in the `match` statement.
 The key `*` is a "catch-all" key, matching all selector values.
 
@@ -313,7 +313,7 @@ A _well-formed_ message is considered _valid_ if the following requirements are 
 
 ### Patterns
 
-A ***pattern*** is a sequence of translatable elements.
+A **_pattern_** is a sequence of translatable elements.
 Patterns MUST BE delimited with `{` at the start, and `}` at the end.
 This serves 3 purposes:
 
@@ -338,11 +338,11 @@ Examples:
 {Hello, world!}
 ```
 
-Whitespace within a *pattern* is meaningful and MUST be preserved.
+Whitespace within a _pattern_ is meaningful and MUST be preserved.
 
 ### Placeholders
 
-A ***placeholder*** contains either an expression or a markup element.
+A **_placeholder_** contains either an expression or a markup element.
 
 ```abnf
 placeholder = "{" [s] expression [s] "}"
@@ -352,7 +352,7 @@ placeholder = "{" [s] expression [s] "}"
 
 ### Expressions
 
-***Expressions*** can either start with an operand, or be standalone function calls.
+**_Expressions_** can either start with an operand, or be standalone function calls.
 
 The operand is a literal or a variable name.
 The operand can be optionally followed by an _annotation_:
@@ -393,7 +393,7 @@ $when :datetime month=2-digit
 
 ### Markup
 
-***Markup elements*** (or just ***markup***) provide a structured way to mark up parts of the content.
+**_Markup elements_** (or just **_markup_**) provide a structured way to mark up parts of the content.
 There are two kinds of elements: start (opening) elements and end (closing) elements,
 each with its own syntax.
 They mimic XML elements, but do not require well-formedness.
@@ -406,7 +406,7 @@ Examples:
 ```
 
 ```
-{{+h1 name=(above-and-beyond)}Above And Beyond{-h1}}
+{{+h1 name=|above-and-beyond|}Above And Beyond{-h1}}
 ```
 
 ## Tokens
@@ -503,7 +503,7 @@ backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 
 ### Whitespace
 
-***Whitespace*** is defined as tab, carriage return, line feed, or the space character.
+**_Whitespace_** is defined as tab, carriage return, line feed, or the space character.
 
 Inside _patterns_,
 whitespace is part of the translatable content and is recorded and stored verbatim.
