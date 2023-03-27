@@ -24,8 +24,10 @@ public class TestUtils {
         // We can call the "complete" constructor with null values, but we want to test that
         // all constructors work properly.
         MessageFormatter.Builder mfBuilder = MessageFormatter.builder()
-                .setPattern(testCase.message)
-                .setLocale(testCase.locale);
+                .setPattern(testCase.message);
+        if (testCase.locale != null) {
+            mfBuilder.setLocale(testCase.locale);
+        }
         if (customFunctionsRegistry != null) {
             mfBuilder.setFunctionRegistry(customFunctionsRegistry);
         }

@@ -25,7 +25,7 @@ class TestCase {
         public String toString() {
             StringJoiner result = new StringJoiner(",\n  ", "TestCase {\n  ", "\n}");
             result.add("message: " + message + "'");
-            result.add("locale: '" + locale.toLanguageTag() + "'");
+            result.add("locale: '" + (locale == null ? "null" : locale.toLanguageTag()) + "'");
             result.add("arguments: " + arguments);
             result.add("expected: '" + expected + "'");
             result.add("ignore: " + ignore);
@@ -38,7 +38,7 @@ class TestCase {
             this.ignore = builder.ignore;
             this.message = builder.pattern == null ? "" : builder.pattern;
             this.locale = (builder.localeId == null)
-                    ? Locale.getDefault(Category.FORMAT)
+                    ? null
                     : Locale.forLanguageTag(builder.localeId);
             this.arguments = builder.arguments == null ? Args.NONE : builder.arguments;
             this.expected = builder.expected == null ? "" : builder.expected;
