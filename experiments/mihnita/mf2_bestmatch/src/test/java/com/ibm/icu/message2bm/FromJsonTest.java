@@ -3,13 +3,16 @@
 
 package com.ibm.icu.message2bm;
 
+import java.util.Arrays;
 import java.util.Locale;
 
+import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 /**
  * These tests come from the test suite created for the JavaScript implementation of MessageFormat v2.
@@ -17,25 +20,13 @@ import org.junit.runners.JUnit4;
  * <p>Original JSON file
  * <a href="https://github.com/messageformat/messageformat/blob/master/packages/mf2-messageformat/src/__fixtures/test-messages.json">here</a>.</p>
  */
-@RunWith(JUnit4.class)
+@RunWith(Parameterized.class)
 @SuppressWarnings("javadoc")
 public class FromJsonTest {
 
-    private static Locale originalDefault = Locale.getDefault();
-
-    // Class level because we want the locale set before the arry of test data is created
-    @BeforeClass
-    static public void init() {
-        originalDefault = Locale.getDefault();
-        Locale.setDefault(Locale.US);
-    }
-
-    @AfterClass
-    static public void cleanup() {
-        Locale.setDefault(originalDefault);
-    }
-
-    private final TestCase[] TEST_CASES = {
+    @Parameters
+    public static Iterable<TestCase> data() {
+        return Arrays.asList(new TestCase[] {
             new TestCase.Builder()
                 .pattern("{hello}")
                 .expected("hello")
@@ -423,17 +414,50 @@ public class FromJsonTest {
                 .expected("foo")
                 .errors("key-mismatch", "missing-var", "missing-var")
                 .build()
-    };
+        });
+    }
+
+    // Used as parameter of the current unit test
+
+    private TestCase testCase;
+
+    public FromJsonTest(TestCase testCase) {
+        this.testCase = testCase;
+    }
+
+    // Save / restore the original default locale
+
+    private Locale originalDefault = Locale.getDefault();
+
+    @Before
+    public void init() {
+        originalDefault = Locale.getDefault();
+        Locale.setDefault(Locale.US);
+    }
+
+    @After
+    public void cleanup() {
+        Locale.setDefault(originalDefault);
+    }
+
+    // Same reporting on skipped test cases
+
+    private static int ignoreCount = 0;
+    private static int totalCount = 0;
+
+    @AfterClass
+    public static void cleanupClass() {
+        System.out.printf("Executed %d test cases out of %d, skipped %d.%n",
+                totalCount - ignoreCount, totalCount, ignoreCount);
+    }
+
+    // The test proper
 
     @Test
     public void test() {
-        int ignoreCount = 0;
-        for (TestCase testCase : TEST_CASES) {
-            if (testCase.ignore)
-                ignoreCount++;
-            TestUtils.runTestCase(testCase);
-        }
-        System.out.printf("Executed %d test cases out of %d, skipped %d%n",
-                TEST_CASES.length - ignoreCount, TEST_CASES.length, ignoreCount);
+        totalCount++;
+        if (testCase.ignore)
+            ignoreCount++;
+        TestUtils.runTestCase(testCase);
     }
 }
