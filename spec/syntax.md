@@ -7,7 +7,7 @@
    1. [Design Restrictions](#design-restrictions)
 1. [Overview & Examples](#overview--examples)
    1. [Messages](#messages)
-   1. [Placeholders](#placeholders)
+   1. [Expressions](#expressions)
    1. [Formatting Functions](#formatting-functions)
    1. [Selection](#selection)
    1. [Local Variables](#local-variables)
@@ -18,7 +18,6 @@
    1. [Selectors](#selectors)
    1. [Variants](#variants)
    1. [Patterns](#patterns)
-   1. [Placeholders](#placeholders)
    1. [Expressions](#expressions)
 1. [Tokens](#tokens)
    1. [Keywords](#keywords)
@@ -47,7 +46,7 @@ The design goals of the syntax specification are as follows:
 
 1. The syntax inside translatable content should be easy to understand for humans.
    This includes making it clear which parts of the message body _are_ translatable content,
-   which parts inside it are placeholders,
+   which parts inside it are placeholders for expressions,
    as well as making the selection logic predictable and easy to reason about.
 
    - _Non-Goal_: Make the syntax intuitive enough for non-technical translators to hand-edit.
@@ -109,15 +108,15 @@ let hello = new MessageFormat('{Hello, world!}')
 hello.format()
 ```
 
-### Placeholders
+### Expressions
 
-A _placeholder_ represents a part of a message that will be determined
+An _expression_ represents a part of a message that will be determined
 during the message's formatting.
 
-A _placeholder_ appears within `{…}` delimiters, and contains an _expression_.
-A _placeholder_ can appear as a local variable value, as a _selector_, and within a _pattern_.
+An _expression_ always uses `{…}` delimiters.
+An _expression_ can appear as a local variable value, as a _selector_, and within a _pattern_.
 
-A simple _placeholder_ is simply a variable name:
+A simple _expression_ is a bare variable name:
 
     {Hello, {$userName}!}
 
@@ -148,7 +147,7 @@ Functions use one of the following prefix sigils:
 - `+` for starting or opening elements
 - `-` for ending or closing elements
 
-A message with two markup-like function placeholders, `button` and `link`,
+A message with two markup-like _functions_, `button` and `link`,
 which the runtime can use to construct a document tree structure for a UI framework:
 
     {{+button}Submit{-button} or {+link}cancel{-link}.}
@@ -272,7 +271,7 @@ within the scope of the message to the value of an expression.
 This local variable can then be used in other expressions within the same message.
 
 ```abnf
-declaration = let s variable [s] "=" [s] placeholder
+declaration = let s variable [s] "=" [s] expression
 ```
 
 ### Selectors
@@ -281,7 +280,7 @@ A `match` statement contains one or more **_selectors_**
 which will be used to choose one of the _variants_ during formatting.
 
 ```abnf
-selectors = match 1*([s] placeholder)
+selectors = match 1*([s] expression)
 ```
 
 Examples:
@@ -333,7 +332,7 @@ This serves 3 purposes:
   are translatable and which ones are part of the formatting logic definition.
 
 ```abnf
-pattern = "{" *(text / placeholder) "}"
+pattern = "{" *(text / expression) "}"
 ```
 
 Examples:
@@ -344,61 +343,59 @@ Examples:
 
 Whitespace within a _pattern_ is meaningful and MUST be preserved.
 
-### Placeholders
-
-A **_placeholder_** contains an expression.
-
-```abnf
-placeholder = "{" [s] expression [s] "}"
-```
-
 ### Expressions
 
-**_Expressions_** can either start with an operand, or be standalone function calls.
+**_Expressions_** can either start with an operand or a function call.
 
 The operand is a literal or a variable name.
 The operand can be optionally followed by an _annotation_:
-a formatting function and its named options.
-Formatting functions do not accept any positional arguments
+a function and its named options.
+Functions do not accept any positional arguments
 other than the operand in front of them.
 
-Standalone function calls don't have any operands in front of them.
+Function calls do not require an operand as an argument,
+but an _expression_ must not be completely empty.
 
 ```abnf
-expression = ((literal / variable) [s annotation])
-           / annotation
+expression = "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
 annotation = function *(s option)
 option = name [s] "=" [s] (literal / nmtoken / variable)
 ```
 
-Examples:
+Expression examples:
 
 ```
-|1.23|
-```
-
-```
-|1.23| :number maxFractionDigits=1
+{|1.23|}
 ```
 
 ```
-|Thu Jan 01 1970 14:37:00 GMT+0100 (CET)| :datetime weekday=long
+{|1.23| :number maxFractionDigits=1}
 ```
 
 ```
-$when :datetime month=2-digit
+{|Thu Jan 01 1970 14:37:00 GMT+0100 (CET)| :datetime weekday=long}
 ```
 
 ```
-:message id=some_other_message
+{$when :datetime month=2-digit}
 ```
+
+```
+{:message id=some_other_message}
+```
+
+```
+{+ssml.emphasis level=strong}
+```
+
+Message examples:
 
 ```
 {This is {+b}bold{-b}.}
 ```
 
 ```
-{{+h1 name=|above-and-beyond|}Above And Beyond{-h1}}
+{{+h1 name=above-and-beyond}Above And Beyond{-h1}}
 ```
 
 ## Tokens

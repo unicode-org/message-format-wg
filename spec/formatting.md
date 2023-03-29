@@ -40,7 +40,7 @@ These are divided into the following categories:
   ```
 
   ```
-  {Unknown {#placeholder#}}
+  {Unknown {#expression#}}
   ```
 
   ```
@@ -205,8 +205,8 @@ If a fallback string is not defined,
 the U+FFFD REPLACEMENT CHARACTER `�` character is used,
 resulting in the string `{�}`.
 
-When an error occurs in a Placeholder that is being formatted,
-the fallback string representation of the Placeholder
+When an error occurs in an Expression that is being formatted,
+the fallback string representation of the Expression
 always starts with U+007B LEFT CURLY BRACKET `{`
 and ends with U+007D RIGHT CURLY BRACKET `}`.
 Between the brackets, the following contents are used:
@@ -243,7 +243,7 @@ Option names and values are not included in the fallback string representations.
 When an error occurs in an Expression with a Variable Operand
 and the Variable refers to a local variable Declaration,
 the fallback string is formatted based on the Expression of the Declaration,
-rather than the Expression of the Placeholder.
+rather than the Expression in the Selector or Pattern.
 
 For example, attempting to format either of the following messages within a context that
 does not provide for the function `:func` to be successfully resolved:

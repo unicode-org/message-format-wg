@@ -1,17 +1,15 @@
 message = [s] *(declaration [s]) body [s]
 
-declaration = let s variable [s] "=" [s] placeholder
+declaration = let s variable [s] "=" [s] expression
 body = pattern
      / (selectors 1*([s] variant))
 
-pattern = "{" *(text / placeholder) "}"
-selectors = match 1*([s] placeholder)
+pattern = "{" *(text / expression) "}"
+selectors = match 1*([s] expression)
 variant = when 1*(s key) [s] pattern
 key = nmtoken / literal / "*"
 
-placeholder = "{" [s] expression [s] "}"
-expression = ((literal / variable) [s annotation])
-           / annotation
+expression = "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
 annotation = function *(s option)
 option = name [s] "=" [s] (literal / nmtoken / variable)
 
