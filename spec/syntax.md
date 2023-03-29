@@ -111,11 +111,11 @@ hello.format()
 
 ### Placeholders
 
-A _placeholder_ represents a location in the _pattern_ that will be replaced
-in the formatted value (the output).
+A _placeholder_ represents a part of a message that will be determined
+during the message's formatting.
 
-A _placeholder_ appears within `{…}` delimiters.
-A _placeholder_ can only appear as a local variable value and within a _pattern_ and contains an _expression_.
+A _placeholder_ appears within `{…}` delimiters, and contains an _expression_.
+A _placeholder_ can appear as a local variable value, as a _selector_, and within a _pattern_.
 
 A simple _placeholder_ is simply a variable name:
 
@@ -159,20 +159,21 @@ and vice versa.
 ### Selection
 
 A _selector_ selects a specific _pattern_ from a list of available _patterns_
-in a _message_ based on the values of _expressions_.
+in a _message_ based on the value of its _expression_.
+A message can have multiple selectors.
 
-A message with a single selector:
+A message with a single _selector_:
 
     match {$count :number}
     when 1 {You have one notification.}
     when * {You have {$count} notifications.}
 
-A message with a single selector which is an invocation of
+A message with a single _selector_ which is an invocation of
 a custom function `:platform`, formatted on a single line:
 
     match {:platform} when windows {Settings} when * {Preferences}
 
-A message with a single selector and a custom `:hasCase` function
+A message with a single _selector_ and a custom `:hasCase` function
 which allows the message to query for presence of grammatical cases required for each variant:
 
     match {$userName :hasCase}
@@ -180,7 +181,7 @@ which allows the message to query for presence of grammatical cases required for
     when accusative {Please welcome {$userName :person case=accusative}!}
     when * {Hello!}
 
-A message with 2 selectors:
+A message with 2 _selectors_:
 
     match {$photoCount :number} {$userGender :equals}
     when 1 masculine {{$userName} added a new photo to his album.}
@@ -192,9 +193,11 @@ A message with 2 selectors:
 
 ### Local Variables
 
-A _message_ can define local variables, such as might be needed for the transforming input or providing
-additional data to a _selector_ or _function_. Local variables appear in a _declaration_, which
-defines the value of a named local variable.
+A _message_ can define local variables,
+such as might be needed for transforming input
+or providing additional data to an _expression_.
+Local variables appear in a _declaration_,
+which defines the value of a named local variable.
 
 A _message_ containing a _declaration_ defining a local variable `$whom` which is then used twice inside the pattern:
 
@@ -215,7 +218,7 @@ A message defining two local variables:
 The various features can be used to produce arbitrarily complex messages by combining
 _declarations_, _selectors_, _functions_, and more.
 
-A complex message with 2 selectors and 3 local variable definitions:
+A complex message with 2 _selectors_ and 3 local variable _declarations_:
 
     let $hostName = {$host :person firstName=long}
     let $guestName = {$guest :person firstName=long}
@@ -250,7 +253,7 @@ if it meets additional semantic requirements about its structure, defined below.
 ### Message
 
 A **_message_** is a (possibly empty) list of _declarations_ followed by either a single _pattern_,
-or a `match` statement containing one or more _variants_ which represent the translatable body of the message.
+or a `match` statement followed by one or more _variants_ which represent the translatable body of the message.
 
 A _message_ MUST be delimited with `{` at the start, and `}` at the end. Whitespace MAY
 appear outside the delimiters; such whitespace is ignored. No other content is permitted
@@ -274,7 +277,7 @@ declaration = let s variable [s] "=" [s] placeholder
 
 ### Selectors
 
-A **_selector_** is a statement containing one or more expressions
+A `match` statement contains one or more **_selectors_**
 which will be used to choose one of the _variants_ during formatting.
 
 ```abnf
@@ -299,7 +302,7 @@ when * {{$frac} apples}
 ### Variants
 
 A **_variant_** is a keyed _pattern_.
-The keys are used to match against the selector expressions defined in the `match` statement.
+The keys are used to match against the _selectors_ defined in the `match` statement.
 The key `*` is a "catch-all" key, matching all selector values.
 
 ```abnf
@@ -309,8 +312,8 @@ key = nmtoken / literal / "*"
 
 A _well-formed_ message is considered _valid_ if the following requirements are satisfied:
 
-- The number of keys on each variant MUST be equal to the number of selectors.
-- At least one variant's keys MUST all be equal to the catch-all key (`*`).
+- The number of keys on each _variant_ MUST be equal to the number of _selectors_.
+- At least one _variant's_ keys MUST all be equal to the catch-all key (`*`).
 
 ### Patterns
 
