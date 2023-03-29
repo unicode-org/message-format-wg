@@ -5,8 +5,7 @@ body = pattern
      / (selectors 1*([s] variant))
 
 pattern = "{" *(text / placeholder) "}"
-selectors = match 1*([s] selector)
-selector = "{" [s] expression [s] "}"
+selectors = match 1*([s] placeholder)
 variant = when 1*(s key) [s] pattern
 key = nmtoken / literal / "*"
 

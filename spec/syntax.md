@@ -159,7 +159,7 @@ and vice versa.
 ### Selection
 
 A _selector_ selects a specific _pattern_ from a list of available _patterns_
-in a _message_ based on the values of _variables_ or _expressions_.
+in a _message_ based on the values of _expressions_.
 
 A message with a single selector:
 
@@ -278,8 +278,7 @@ A **_selector_** is a statement containing one or more expressions
 which will be used to choose one of the _variants_ during formatting.
 
 ```abnf
-selectors = match 1*([s] selector)
-selector = "{" [s] expression [s] "}"
+selectors = match 1*([s] placeholder)
 ```
 
 Examples:
