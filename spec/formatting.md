@@ -186,8 +186,8 @@ or contains some error which leads to further errors,
 an implementation which does not emit all of the errors
 should prioritise Syntax and Data Model errors over others.
 
-When an error occurs in the resolution of an Expression or Markup Option,
-the Expression or Markup in question is processed as if the option were not defined.
+When an error occurs in the resolution of an Expression,
+the Expression in question is processed as if the option were not defined.
 This may allow for the fallback handling described below to be avoided,
 though an error must still be emitted.
 
@@ -222,15 +222,15 @@ Between the brackets, the following contents are used:
 
   Example: `{$user}`
 
-- Expression with no Operand: U+003A COLON `:` followed by the Expression Name
+- Standalone expression with no Operand: U+003A COLON `:` followed by the Expression Name
 
   Example: `{:platform}`
 
-- Markup start: U+002B PLUS SIGN `+` followed by the MarkupStart Name
+- Opening expression with no Operand: U+002B PLUS SIGN `+` followed by the Expression Name
 
   Example: `{+tag}`
 
-- Markup end: U+002D HYPHEN-MINUS `-` followed by the MarkupEnd Name
+- Closing expression with no Operand: U+002D HYPHEN-MINUS `-` followed by the Expression Name
 
   Example: `{-tag}`
 
