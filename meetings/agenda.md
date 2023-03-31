@@ -29,7 +29,7 @@ https://docs.google.com/document/d/1tVsaxT0ciKwKFbkuR72TtL5I7oysrCZ49p-r7pClTXQ/
 
 The next call will be 10 April 2023. 
 
-***This is a special session***
+***This is a regularly scheduled session***
 
 ## Homework
 
