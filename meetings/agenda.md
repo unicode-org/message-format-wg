@@ -23,6 +23,7 @@ Recent scribes:
 
 ## Notes Document for The Upcoming Call
 
+https://docs.google.com/document/d/1tVsaxT0ciKwKFbkuR72TtL5I7oysrCZ49p-r7pClTXQ/edit#
 
 ## NOTE WELL
 
