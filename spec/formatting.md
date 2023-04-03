@@ -141,6 +141,8 @@ and entries that have the same number retain their order.
 
 ### Examples
 
+#### Example 1
+
 Presuming a minimal implementation which only supports string values
 and matches keys by using string comparison,
 and a formatting context in which
@@ -174,7 +176,9 @@ when * * {Otherwise}
 4. As the list `vars` only has one entry, it does not need to be sorted.<br>
    The pattern `{Otherwise}` of the third variant is selected.
 
-Alternatively, with the same implementation and formatting context,
+#### Example 2
+
+Alternatively, with the same implementation and formatting context as in Example 1,
 pattern selection would proceed as follows for this message:
 
 ```
@@ -211,6 +215,42 @@ when * * {Otherwise}
    « ( 0, `foo bar` ), ( 0, `foo *` ), ( 1, `* bar` ), ( 1, `* *` ) ».<br>
 
 5. The pattern `{Foo and bar}` of the most preferred `foo bar` variant is selected.
+
+#### Example 3
+
+Presuming a more powerful implementation which supports selection on numerical values,
+and provides a `:plural` function that matches keys by their exact value
+as well as their plural category (preferring the former, if possible),
+and an Enligh-language formatting context in which
+the variable reference `$count` resolves to the number `1`,
+pattern selection proceeds as follows for this message:
+
+```
+match {$count :plural}
+when one {Category match}
+when 1 {Exact match}
+when * {Other match}
+```
+
+1. For the selector:<br>
+   The value of the selector is resolved to an implementation-defined value
+   that is capable of performing English plural category selection on the value `1`.<br>
+   The available keys « `'one'`, `'1'` » are passed to
+   the implementation's MatchSelectorKeys method,<br>
+   resulting in a list « `'1'`, `'one'` » of matching keys.
+
+2. Creating the list `vars` of variants matching all keys:<br>
+   The keys of all variants are included in the list of matching keys, or use the catch-all key,<br>
+   resulting in a list « `one`, `1`, `*` » of variants.
+
+3. Sorting the variants:<br>
+   The list `sortable` is first set with the variants in their source order
+   and scores determined by the selector key order:<br>
+   « ( 1, `one` ), ( 0, `1` ), ( 2, `*` ) »<br>
+   This is then sorted as:<br>
+   « ( 0, `1` ), ( 1, `one` ), ( 2, `*` ) »<br>
+
+5. The pattern `{Exact match}` of the most preferred `1` variant is selected.
 
 ## Error Handling
 
