@@ -43,7 +43,7 @@ Then, the remaining _variants_ are sorted lexicographically by key preference,
 with earlier _selectors_ having higher priority than later ones.
 Finally, the highest-sorted _variant_ is selected.
 
-This selecion method is defined in more detail below.
+This selection method is defined in more detail below.
 An implementation MAY use any pattern selection method,
 as long as its observable behaviour matches the results of the method defined here.
 
