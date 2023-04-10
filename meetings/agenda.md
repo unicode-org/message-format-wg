@@ -43,7 +43,7 @@ Read the PR for function registry for the next meetings in April:
 To request that the chair add an _issue_ to the agenda, add the label `Agenda+`
 To request that the chair add an agenda item, send email to the message-format-wg group email.
 
-#### Agenda for 2023-04-10
+#### Agenda for 2023-04-24
 
 **Topic:** Agenda Review
 
