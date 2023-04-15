@@ -1,20 +1,17 @@
 message = [s] *(declaration [s]) body [s]
 
-declaration = let s variable [s] "=" [s] "{" [s] expression [s] "}"
+declaration = let s variable [s] "=" [s] expression
 body = pattern
      / (selectors 1*([s] variant))
 
-pattern = "{" *(text / placeholder) "}"
-selectors = match 1*([s] selector)
-selector = "{" [s] expression [s] "}"
+pattern = "{" *(text / expression) "}"
+selectors = match 1*([s] expression)
 variant = when 1*(s key) [s] pattern
 key = nmtoken / literal / "*"
 
-placeholder = "{" [s] expression [s] "}"
+expression = "{" [s] (((literal / variable) [s annotation]) / annotation / reserved) [s] "}"
+annotation = function *(s option)
 
-expression = ((literal / variable) [s annotation])
-           / annotation
-annotation = (function / markup / reserved) *(s option)
 option = name [s] "=" [s] (literal / nmtoken / variable)
 
 ; reserved keywords are always lowercase
@@ -36,9 +33,12 @@ literal-char = %x0-5B         ; omit \
              / %xE000-10FFFF
 
 variable = "$" name
-function = ":" name
-markup = ("+" / "-") name
-reserved = ("!" / "@" / "#" / "$" / "%" / "^" / "&" / "*" / "<" / ">" / "?") name
+
+; reserve additional sigils for future use
+reserved = reserved-start text
+reserved-start = ("!" / "@" / "#" / "%" / "^" / "&" / "*" / "<" / ">" / "?" / "~")
+
+function = (":" | "+" | "-") name
 
 name    = name-start *name-char ; matches XML https://www.w3.org/TR/xml/#NT-Name
 nmtoken = 1*name-char           ; matches XML https://www.w3.org/TR/xml/#NT-Nmtokens

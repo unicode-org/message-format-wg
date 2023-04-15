@@ -40,7 +40,7 @@ These are divided into the following categories:
   ```
 
   ```
-  {Unknown {#placeholder#}}
+  {Unknown {#expression#}}
   ```
 
   ```
@@ -186,8 +186,8 @@ or contains some error which leads to further errors,
 an implementation which does not emit all of the errors
 should prioritise Syntax and Data Model errors over others.
 
-When an error occurs in the resolution of an Expression or Markup Option,
-the Expression or Markup in question is processed as if the option were not defined.
+When an error occurs in the resolution of an Expression,
+the Expression in question is processed as if the option were not defined.
 This may allow for the fallback handling described below to be avoided,
 though an error must still be emitted.
 
@@ -205,8 +205,8 @@ If a fallback string is not defined,
 the U+FFFD REPLACEMENT CHARACTER `�` character is used,
 resulting in the string `{�}`.
 
-When an error occurs in a Placeholder that is being formatted,
-the fallback string representation of the Placeholder
+When an error occurs in an Expression that is being formatted,
+the fallback string representation of the Expression
 always starts with U+007B LEFT CURLY BRACKET `{`
 and ends with U+007D RIGHT CURLY BRACKET `}`.
 Between the brackets, the following contents are used:
@@ -222,15 +222,15 @@ Between the brackets, the following contents are used:
 
   Example: `{$user}`
 
-- Expression with no Operand: U+003A COLON `:` followed by the Expression Name
+- Standalone expression with no Operand: U+003A COLON `:` followed by the Expression Name
 
   Example: `{:platform}`
 
-- Markup start: U+002B PLUS SIGN `+` followed by the MarkupStart Name
+- Opening expression with no Operand: U+002B PLUS SIGN `+` followed by the Expression Name
 
   Example: `{+tag}`
 
-- Markup end: U+002D HYPHEN-MINUS `-` followed by the MarkupEnd Name
+- Closing expression with no Operand: U+002D HYPHEN-MINUS `-` followed by the Expression Name
 
   Example: `{-tag}`
 
@@ -243,7 +243,7 @@ Option names and values are not included in the fallback string representations.
 When an error occurs in an Expression with a Variable Operand
 and the Variable refers to a local variable Declaration,
 the fallback string is formatted based on the Expression of the Declaration,
-rather than the Expression of the Placeholder.
+rather than the Expression in the Selector or Pattern.
 
 For example, attempting to format either of the following messages within a context that
 does not provide for the function `:func` to be successfully resolved:

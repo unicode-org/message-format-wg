@@ -7,9 +7,8 @@
    1. [Design Restrictions](#design-restrictions)
 1. [Overview & Examples](#overview--examples)
    1. [Messages](#messages)
-   1. [Placeholders](#placeholders)
+   1. [Expressions](#expressions)
    1. [Formatting Functions](#formatting-functions)
-   1. [Markup Elements](#markup-elements)
    1. [Selection](#selection)
    1. [Local Variables](#local-variables)
    1. [Complex Messages](#complex-messages)
@@ -19,9 +18,7 @@
    1. [Selectors](#selectors)
    1. [Variants](#variants)
    1. [Patterns](#patterns)
-   1. [Placeholders](#placeholders)
    1. [Expressions](#expressions)
-   1. [Markup](#markup)
 1. [Tokens](#tokens)
    1. [Keywords](#keywords)
    1. [Text and Literals](#text-and-literals)
@@ -49,7 +46,7 @@ The design goals of the syntax specification are as follows:
 
 1. The syntax inside translatable content should be easy to understand for humans.
    This includes making it clear which parts of the message body _are_ translatable content,
-   which parts inside it are placeholders,
+   which parts inside it are placeholders for expressions,
    as well as making the selection logic predictable and easy to reason about.
 
    - _Non-Goal_: Make the syntax intuitive enough for non-technical translators to hand-edit.
@@ -111,15 +108,15 @@ let hello = new MessageFormat('{Hello, world!}')
 hello.format()
 ```
 
-### Placeholders
+### Expressions
 
-A _placeholder_ represents a location in the _pattern_ that will be replaced
-in the formatted value (the output).
+An _expression_ represents a part of a message that will be determined
+during the message's formatting.
 
-A _placeholder_ appears within `{…}` delimiters. A _placeholder_ can only
-appear within a _pattern_ and can contain either an _expression_ or _markup_.
+An _expression_ always uses `{…}` delimiters.
+An _expression_ can appear as a local variable value, as a _selector_, and within a _pattern_.
 
-A simple _placeholder_ is simply a variable name:
+A simple _expression_ is a bare variable name:
 
     {Hello, {$userName}!}
 
@@ -144,33 +141,38 @@ plucking the first name from the object representing a person:
 
     {Hello, {$userObj :person firstName=long}!}
 
-### Markup Elements
+Functions use one of the following prefix sigils:
 
-_Markup_ is a set of _placeholders_ that can be replaced by runtime specific
-formatting or attributes applied to the _pattern_.
+- `:` for standalone content
+- `+` for starting or opening elements
+- `-` for ending or closing elements
 
-For example, a message with two markup-like element placeholders, `button` and `link`,
-which the runtime can use to construct a document tree structure for a UI framework.
+A message with two markup-like _functions_, `button` and `link`,
+which the runtime can use to construct a document tree structure for a UI framework:
 
     {{+button}Submit{-button} or {+link}cancel{-link}.}
+
+An opening element MAY be present in a message without a corresponding closing element,
+and vice versa.
 
 ### Selection
 
 A _selector_ selects a specific _pattern_ from a list of available _patterns_
-in a _message_ based on the values of _variables_ or _expressions_.
+in a _message_ based on the value of its _expression_.
+A message can have multiple selectors.
 
-A message with a single selector:
+A message with a single _selector_:
 
     match {$count :number}
     when 1 {You have one notification.}
     when * {You have {$count} notifications.}
 
-A message with a single selector which is an invocation of
+A message with a single _selector_ which is an invocation of
 a custom function `:platform`, formatted on a single line:
 
     match {:platform} when windows {Settings} when * {Preferences}
 
-A message with a single selector and a custom `:hasCase` function
+A message with a single _selector_ and a custom `:hasCase` function
 which allows the message to query for presence of grammatical cases required for each variant:
 
     match {$userName :hasCase}
@@ -178,7 +180,7 @@ which allows the message to query for presence of grammatical cases required for
     when accusative {Please welcome {$userName :person case=accusative}!}
     when * {Hello!}
 
-A message with 2 selectors:
+A message with 2 _selectors_:
 
     match {$photoCount :number} {$userGender :equals}
     when 1 masculine {{$userName} added a new photo to his album.}
@@ -190,9 +192,11 @@ A message with 2 selectors:
 
 ### Local Variables
 
-A _message_ can define local variables, such as might be needed for the transforming input or providing
-additional data to a _selector_ or _function_. Local variables appear in a _declaration_, which
-defines the value of a named local variable.
+A _message_ can define local variables,
+such as might be needed for transforming input
+or providing additional data to an _expression_.
+Local variables appear in a _declaration_,
+which defines the value of a named local variable.
 
 A _message_ containing a _declaration_ defining a local variable `$whom` which is then used twice inside the pattern:
 
@@ -211,9 +215,9 @@ A message defining two local variables:
 ### Complex Messages
 
 The various features can be used to produce arbitrarily complex messages by combining
-_declarations_, _selectors_, _functions_, _markup_ and more.
+_declarations_, _selectors_, _functions_, and more.
 
-A complex message with 2 selectors and 3 local variable definitions:
+A complex message with 2 _selectors_ and 3 local variable _declarations_:
 
     let $hostName = {$host :person firstName=long}
     let $guestName = {$guest :person firstName=long}
@@ -248,7 +252,7 @@ if it meets additional semantic requirements about its structure, defined below.
 ### Message
 
 A **_message_** is a (possibly empty) list of _declarations_ followed by either a single _pattern_,
-or a `match` statement containing one or more _variants_ which represent the translatable body of the message.
+or a `match` statement followed by one or more _variants_ which represent the translatable body of the message.
 
 A _message_ MUST be delimited with `{` at the start, and `}` at the end. Whitespace MAY
 appear outside the delimiters; such whitespace is ignored. No other content is permitted
@@ -267,17 +271,16 @@ within the scope of the message to the value of an expression.
 This local variable can then be used in other expressions within the same message.
 
 ```abnf
-declaration = let s variable [s] "=" [s] "{" [s] expression [s] "}"
+declaration = let s variable [s] "=" [s] expression
 ```
 
 ### Selectors
 
-A **_selector_** is a statement containing one or more expressions
+A `match` statement contains one or more **_selectors_**
 which will be used to choose one of the _variants_ during formatting.
 
 ```abnf
-selectors = match 1*([s] selector)
-selector = "{" [s] expression [s] "}"
+selectors = match 1*([s] expression)
 ```
 
 Examples:
@@ -298,7 +301,7 @@ when * {{$frac} apples}
 ### Variants
 
 A **_variant_** is a keyed _pattern_.
-The keys are used to match against the selector expressions defined in the `match` statement.
+The keys are used to match against the _selectors_ defined in the `match` statement.
 The key `*` is a "catch-all" key, matching all selector values.
 
 ```abnf
@@ -308,8 +311,8 @@ key = nmtoken / literal / "*"
 
 A _well-formed_ message is considered _valid_ if the following requirements are satisfied:
 
-- The number of keys on each variant MUST be equal to the number of selectors.
-- At least one variant's keys MUST all be equal to the catch-all key (`*`).
+- The number of keys on each _variant_ MUST be equal to the number of _selectors_.
+- At least one _variant's_ keys MUST all be equal to the catch-all key (`*`).
 
 ### Patterns
 
@@ -329,7 +332,7 @@ This serves 3 purposes:
   are translatable and which ones are part of the formatting logic definition.
 
 ```abnf
-pattern = "{" *(text / placeholder) "}"
+pattern = "{" *(text / expression) "}"
 ```
 
 Examples:
@@ -340,73 +343,59 @@ Examples:
 
 Whitespace within a _pattern_ is meaningful and MUST be preserved.
 
-### Placeholders
-
-A **_placeholder_** contains either an expression or a markup element.
-
-```abnf
-placeholder = "{" [s] expression [s] "}"
-            / "{" [s] markup-start *(s option) [s] "}"
-            / "{" [s] markup-end [s] "}"
-```
-
 ### Expressions
 
-**_Expressions_** can either start with an operand, or be standalone function calls.
+**_Expressions_** can either start with an operand or a function call.
 
 The operand is a literal or a variable name.
 The operand can be optionally followed by an _annotation_:
-a formatting function and its named options.
-Formatting functions do not accept any positional arguments
+a function and its named options.
+Functions do not accept any positional arguments
 other than the operand in front of them.
 
-Standalone function calls don't have any operands in front of them.
+Function calls do not require an operand as an argument,
+but an _expression_ must not be completely empty.
 
 ```abnf
-expression = ((literal / variable) [s annotation])
-           / annotation
+expression = "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
 annotation = function *(s option)
 option = name [s] "=" [s] (literal / nmtoken / variable)
 ```
 
-Examples:
+Expression examples:
 
 ```
-|1.23|
-```
-
-```
-|1.23| :number maxFractionDigits=1
+{|1.23|}
 ```
 
 ```
-|Thu Jan 01 1970 14:37:00 GMT+0100 (CET)| :datetime weekday=long
+{|1.23| :number maxFractionDigits=1}
 ```
 
 ```
-$when :datetime month=2-digit
+{|Thu Jan 01 1970 14:37:00 GMT+0100 (CET)| :datetime weekday=long}
 ```
 
 ```
-:message id=some_other_message
+{$when :datetime month=2-digit}
 ```
 
-### Markup
+```
+{:message id=some_other_message}
+```
 
-**_Markup elements_** (or just **_markup_**) provide a structured way to mark up parts of the content.
-There are two kinds of elements: start (opening) elements and end (closing) elements,
-each with its own syntax.
-They mimic XML elements, but do not require well-formedness.
-Standalone display elements should be represented as function expressions.
+```
+{+ssml.emphasis level=strong}
+```
 
-Examples:
+Message examples:
 
 ```
 {This is {+b}bold{-b}.}
 ```
 
 ```
-{{+h1 name=|above-and-beyond|}Above And Beyond{-h1}}
+{{+h1 name=above-and-beyond}Above And Beyond{-h1}}
 ```
 
 ## Tokens
@@ -455,8 +444,7 @@ literal-char = %x0-5B         ; omit \
 ### Names
 
 The _name_ token is used for variable names (prefixed with `$`),
-function names (prefixed with `:`),
-markup names (prefixed with `+` or `-`),
+function names (prefixed with `:`, `+` or `-`),
 as well as option names.
 A name MUST NOT start with an ASCII digit and certain basic combining characters.
 Otherwise, the set of characters allowed in names is large.
@@ -473,9 +461,7 @@ uses Nmtokens.
 
 ```abnf
 variable = "$" name
-function = ":" name
-markup-start = "+" name
-markup-end = "-" name
+function = (":" | "+" | "-") name
 ```
 
 ```abnf
