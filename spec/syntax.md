@@ -345,19 +345,18 @@ Whitespace within a _pattern_ is meaningful and MUST be preserved.
 
 ### Expressions
 
-**_Expressions_** can either start with an operand or a function call.
+_Expressions_ ***must*** start with a _literal_, a _variable_, or an _annotation_, or consist of a _reserved_ string. An _expression_ ***must not*** be empty.
 
-The operand is a literal or a variable name.
-The operand can be optionally followed by an _annotation_:
-a function and its named options.
-Functions do not accept any positional arguments
-other than the operand in front of them.
+A _literal_ or _variable_ ***may*** be optionally followed by an _annotation_. 
 
-Function calls do not require an operand as an argument,
-but an _expression_ must not be completely empty.
+An _annotation_ consists of a _function_ and its named _options_.
+
+_Functions_ do not accept any positional arguments other than the _literal_ or _variable_ in front of them.
+
+_Reserved_ sequences start with a reserved character and are intended for future standardization.
 
 ```abnf
-expression = "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
+expression = "{" [s] (((literal / variable) [s annotation]) / annotation / reserved) [s] "}"
 annotation = function *(s option)
 option = name [s] "=" [s] (literal / nmtoken / variable)
 ```
