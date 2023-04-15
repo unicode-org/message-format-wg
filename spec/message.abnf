@@ -35,8 +35,14 @@ literal-char = %x0-5B         ; omit \
 variable = "$" name
 
 ; reserve additional sigils for future use
-reserved = reserved-start text
-reserved-start = ("!" / "@" / "#" / "%" / "^" / "&" / "*" / "<" / ">" / "?" / "~")
+reserved = reserved-start reserved-body
+reserved-start = "!" / "@" / "#" / "%" / "^" / "&" / "*" / "<" / ">" / "?" / "~"
+reserved-body = *(reserved-char / reserved-escape / literal)
+reserved-char = %x0-5B         ; omit \
+              / %x5D-7A        ; omit { | }
+              / %x7E-D7FF      ; omit surrogates
+              / %xE000-10FFFF
+reserved-escape = backslash ( backslash / "{" / "|" / "}" )
 
 function = (":" | "+" | "-") name
 
