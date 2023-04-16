@@ -317,7 +317,7 @@ A _well-formed_ message is considered _valid_ if the following requirements are 
 ### Patterns
 
 A **_pattern_** is a sequence of translatable elements.
-Patterns MUST BE delimited with `{` at the start, and `}` at the end.
+Patterns MUST be delimited with `{` at the start, and `}` at the end.
 This serves 3 purposes:
 
 - The message can be unambiguously embeddable in various container formats
@@ -356,8 +356,8 @@ _Functions_ do not accept any positional arguments other than the _literal_ or _
 _Reserved_ sequences start with a reserved character and are intended for future standardization.
 
 ```abnf
-expression = "{" [s] (((literal / variable) [s annotation]) / annotation / reserved) [s] "}"
-annotation = function *(s option)
+expression = "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
+annotation = (function *(s option)) / reserved
 option = name [s] "=" [s] (literal / nmtoken / variable)
 ```
 
@@ -477,12 +477,12 @@ name-char = name-start / DIGIT / "-" / "." / %xB7
 
 ### Escape Sequences
 
-Escape sequences are introduced by the backslash character (`\`).
-They are allowed in translatable text as well as in literals.
+Escape sequences are introduced by the backslash character (`\`) and allow the appearance of lexically meaningful characters in the body of `text`, `literal`, or `reserved` sequences respectively:
 
 ```abnf
 text-escape    = backslash ( backslash / "{" / "}" )
 literal-escape = backslash ( backslash / "|" )
+reserve-escape = backslash ( backslash / "{" / "|" / "}" )
 backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 ```
 
@@ -493,6 +493,8 @@ backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 Inside _patterns_,
 whitespace is part of the translatable content and is recorded and stored verbatim.
 Whitespace is not significant outside translatable text, except where required by the syntax.
+
+***NOTE:*** Whitespace **_is_** significant in the `reserved` production and implementations need to be careful not to trim trailing whitespace from reserved sequences.
 
 ```abnf
 s = 1*( SP / HTAB / CR / LF )
