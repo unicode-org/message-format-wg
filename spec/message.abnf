@@ -9,8 +9,8 @@ selectors = match 1*([s] expression)
 variant = when 1*(s key) [s] pattern
 key = nmtoken / literal / "*"
 
-expression = "{" [s] (((literal / variable) [s annotation]) / annotation / reserved) [s] "}"
-annotation = function *(s option)
+expression = "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
+annotation = (function *(s option)) / reserved
 
 option = name [s] "=" [s] (literal / nmtoken / variable)
 
