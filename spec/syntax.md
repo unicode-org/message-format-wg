@@ -7,7 +7,7 @@
    1. [Design Restrictions](#design-restrictions)
 1. [Overview & Examples](#overview--examples)
    1. [Messages](#messages)
-   1. [Expressions](#expressions)
+   1. [Expressions](#placeholder-expressions)
    1. [Formatting Functions](#formatting-functions)
    1. [Selection](#selection)
    1. [Local Variables](#local-variables)
@@ -19,6 +19,7 @@
    1. [Variants](#variants)
    1. [Patterns](#patterns)
    1. [Expressions](#expressions)
+       1. [Reserved Sequences](#reserved)
 1. [Tokens](#tokens)
    1. [Keywords](#keywords)
    1. [Text and Literals](#text-and-literals)
@@ -108,7 +109,7 @@ let hello = new MessageFormat('{Hello, world!}')
 hello.format()
 ```
 
-### Expressions
+### Placeholder Expressions
 
 An _expression_ represents a part of a message that will be determined
 during the message's formatting.
@@ -353,8 +354,6 @@ An _annotation_ consists of a _function_ and its named _options_.
 
 _Functions_ do not accept any positional arguments other than the _literal_ or _variable_ in front of them.
 
-_Reserved_ sequences start with a reserved character and are intended for future standardization.
-
 ```abnf
 expression = "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
 annotation = (function *(s option)) / reserved
@@ -396,6 +395,10 @@ Message examples:
 ```
 {{+h1 name=above-and-beyond}Above And Beyond{-h1}}
 ```
+
+#### Reserved
+
+_Reserved_ sequences start with a reserved character and are intended for future standardization. A reserved sequence can contain arbitrary text in which whitespace _is_ significant. The reserved sequence terminates with the end of the expression in which it appears. While a reserved sequence is technically "well-formed", unrecognized reserved sequences have no meaning and implementations **_may_** emit an error when encountered during formatting.
 
 ## Tokens
 
