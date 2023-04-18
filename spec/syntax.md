@@ -500,7 +500,6 @@ Inside _patterns_,
 whitespace is part of the translatable content and is recorded and stored verbatim.
 Whitespace is not significant outside translatable text, except where required by the syntax.
 
-***NOTE:*** Whitespace **_is_** significant in the `reserved` production and implementations need to be careful not to trim trailing whitespace from reserved sequences.
 
 ```abnf
 s = 1*( SP / HTAB / CR / LF )
