@@ -24,7 +24,7 @@ Recent scribes:
 
 ## Notes Document for The Upcoming Call
 
-https://docs.google.com/document/d/1tVsaxT0ciKwKFbkuR72TtL5I7oysrCZ49p-r7pClTXQ/edit#
+https://docs.google.com/document/d/1zdkdX_bvIk3rbt68FmZH1yOiywFVEmPlf3mqb3wXYbQ/edit#
 
 ## NOTE WELL
 
@@ -57,7 +57,7 @@ To request that the chair add an agenda item, send email to the message-format-w
 Discussion of the function registry. Two of the three models had sections on this.
 
 
-**Topic:** Reserve sigals for future use
+**Topic:** Reserve sigils for future use
 * Requested by: APP
 * #360 #374
 
