@@ -12,6 +12,7 @@ Information on joining calls is found in the calendar invite.
 This block reserved for scribe rotation.
 
 Recent scribes:
+* 2023-04-24 SCL
 * 2023-04-10 TIM
 * 2023-03-31 ECH, APP
 * 2023-03-27 STA
@@ -24,11 +25,11 @@ Recent scribes:
 
 ## Notes Document for The Upcoming Call
 
-https://docs.google.com/document/d/1zdkdX_bvIk3rbt68FmZH1yOiywFVEmPlf3mqb3wXYbQ/edit#
+https://docs.google.com/document/d/1AW1zRk5gpU85b98ewE2bwJV1r8vGASyPog-DK8qnK7k/edit#
 
 ## NOTE WELL
 
-The next call will be 24 April 2023. 
+The next call will be 8 May 2023. 
 
 ***This is a regularly scheduled session***
 
@@ -43,7 +44,7 @@ Read the PR for function registry for the next meetings in April:
 To request that the chair add an _issue_ to the agenda, add the label `Agenda+`
 To request that the chair add an agenda item, send email to the message-format-wg group email.
 
-#### Agenda for 2023-04-24
+#### Agenda for 2023-05-08
 
 **Topic:** Agenda Review
 
@@ -55,12 +56,6 @@ To request that the chair add an agenda item, send email to the message-format-w
 * Requested by: STA
 
 Discussion of the function registry. Two of the three models had sections on this.
-
-
-**Topic:** Reserve sigils for future use
-* Requested by: APP
-* #360 #374
-
 
 **Topic:** Bidi
 * Requested by: EAO
