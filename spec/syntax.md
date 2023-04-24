@@ -7,7 +7,7 @@
    1. [Design Restrictions](#design-restrictions)
 1. [Overview & Examples](#overview--examples)
    1. [Messages](#messages)
-   1. [Expressions](#expressions)
+   1. [Expressions](#expression)
    1. [Formatting Functions](#formatting-functions)
    1. [Selection](#selection)
    1. [Local Variables](#local-variables)
@@ -19,6 +19,7 @@
    1. [Variants](#variants)
    1. [Patterns](#patterns)
    1. [Expressions](#expressions)
+       1. [Reserved Sequences](#reserved)
 1. [Tokens](#tokens)
    1. [Keywords](#keywords)
    1. [Text and Literals](#text-and-literals)
@@ -108,7 +109,7 @@ let hello = new MessageFormat('{Hello, world!}')
 hello.format()
 ```
 
-### Expressions
+### Expression
 
 An _expression_ represents a part of a message that will be determined
 during the message's formatting.
@@ -317,7 +318,7 @@ A _well-formed_ message is considered _valid_ if the following requirements are 
 ### Patterns
 
 A **_pattern_** is a sequence of translatable elements.
-Patterns MUST BE delimited with `{` at the start, and `}` at the end.
+Patterns MUST be delimited with `{` at the start, and `}` at the end.
 This serves 3 purposes:
 
 - The message can be unambiguously embeddable in various container formats
@@ -345,20 +346,17 @@ Whitespace within a _pattern_ is meaningful and MUST be preserved.
 
 ### Expressions
 
-**_Expressions_** can either start with an operand or a function call.
+_Expressions_ ***must*** start with a _literal_, a _variable_, or an _annotation_. An _expression_ ***must not*** be empty.
 
-The operand is a literal or a variable name.
-The operand can be optionally followed by an _annotation_:
-a function and its named options.
-Functions do not accept any positional arguments
-other than the operand in front of them.
+A _literal_ or _variable_ ***may*** be optionally followed by an _annotation_. 
 
-Function calls do not require an operand as an argument,
-but an _expression_ must not be completely empty.
+An _annotation_ consists of a _function_ and its named _options_, or consists of a _reserved_ sequence.
+
+_Functions_ do not accept any positional arguments other than the _literal_ or _variable_ in front of them.
 
 ```abnf
 expression = "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
-annotation = function *(s option)
+annotation = (function *(s option)) / reserved
 option = name [s] "=" [s] (literal / nmtoken / variable)
 ```
 
@@ -397,6 +395,13 @@ Message examples:
 ```
 {{+h1 name=above-and-beyond}Above And Beyond{-h1}}
 ```
+
+#### Reserved
+
+_Reserved_ sequences start with a reserved character and are intended for future standardization. 
+A reserved sequence can be empty or contain arbitrary text. 
+A reserved sequence does not include any trailing whitespace.
+While a reserved sequence is technically "well-formed", unrecognized reserved sequences have no meaning and might result in errors during formatting.
 
 ## Tokens
 
@@ -478,12 +483,12 @@ name-char = name-start / DIGIT / "-" / "." / %xB7
 
 ### Escape Sequences
 
-Escape sequences are introduced by the backslash character (`\`).
-They are allowed in translatable text as well as in literals.
+Escape sequences are introduced by the backslash character (`\`) and allow the appearance of lexically meaningful characters in the body of `text`, `literal`, or `reserved` sequences respectively:
 
 ```abnf
 text-escape    = backslash ( backslash / "{" / "}" )
 literal-escape = backslash ( backslash / "|" )
+reserve-escape = backslash ( backslash / "{" / "|" / "}" )
 backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 ```
 
@@ -494,6 +499,7 @@ backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 Inside _patterns_,
 whitespace is part of the translatable content and is recorded and stored verbatim.
 Whitespace is not significant outside translatable text, except where required by the syntax.
+
 
 ```abnf
 s = 1*( SP / HTAB / CR / LF )
