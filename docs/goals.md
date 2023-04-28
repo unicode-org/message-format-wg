@@ -40,8 +40,10 @@ The design goals are listed below.
     escape sequences, whitespace, markup, as well as parsing errors.
 
  3. A specification for a one-to-one mapping between the data model and XLIFF.
+    _Note that this deliverable is "at risk" and not expected to be part of the
+    2023 fall release._
 
- 4. A specification for resolving translations at runtime, including
+ 4. A specification for resolving messages at runtime, including
     interpolated data types and runtime errors.
 
  5. A conformance test suite for parsing and formatting messages sufficient to
