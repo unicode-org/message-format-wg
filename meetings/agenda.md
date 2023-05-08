@@ -3,7 +3,7 @@
 This is the agenda document for upcoming calls of the MessageFormat subcommittee. We normally meet bi-weekly 
 (every two weeks) on Mondays at 9:30 Pacific (`America/Los_Angeles`). This is currently UTC+7. 
 
-See [here](https://www.timeanddate.com/worldclock/converter.html?iso=20230424T173000&p1=224&p2=248&p3=136&p4=179&p5=33&p6=101&p7=268) for your local time.
+See [here](https://www.timeanddate.com/worldclock/converter.html?iso=20230522T173000&p1=224&p2=248&p3=136&p4=179&p5=33&p6=101&p7=268) for your local time.
 
 Information on joining calls is found in the calendar invite.
 
@@ -12,6 +12,7 @@ Information on joining calls is found in the calendar invite.
 This block reserved for scribe rotation.
 
 Recent scribes:
+* 2023-05-08 MIH
 * 2023-04-24 SCL
 * 2023-04-10 TIM
 * 2023-03-31 ECH, APP
@@ -25,11 +26,11 @@ Recent scribes:
 
 ## Notes Document for The Upcoming Call
 
-https://docs.google.com/document/d/1AW1zRk5gpU85b98ewE2bwJV1r8vGASyPog-DK8qnK7k/edit#
+https://docs.google.com/document/d/178DGq3ZwgcH7sfJsxF7i3N1V1P0NKQ6XHPaSAPvmoTc/edit#
 
 ## NOTE WELL
 
-The next call will be 8 May 2023. 
+The next call will be 22 May 2023. 
 
 ***This is a regularly scheduled session***
 
@@ -57,17 +58,10 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 Discussion of the function registry. Two of the three models had sections on this.
 
-**Topic:** Bidi
+**Topic:** Active PR review
 * Requested by: EAO
 
-Discussion of bidirectional text handling. See:
-* https://github.com/unicode-org/message-format-wg/pull/315
-
-
-**Topic:** Defining MF1 compatibility
-* Requested by: EAO
-
-_Eemeli requested this in our previous call (2023-03-06) and we have discussed this in various issues._
+Discussion of active PRs. We will merge or reject them in the call.
 
 **Topic:** AOB?
 
@@ -80,3 +74,14 @@ _Eemeli requested this in our previous call (2023-03-06) and we have discussed t
 * Requested by: STA
 * https://github.com/unicode-org/message-format-wg/discussions/323
 
+**Topic:** Bidi
+* Requested by: EAO
+
+Discussion of bidirectional text handling. See:
+* https://github.com/unicode-org/message-format-wg/pull/315
+
+
+**Topic:** Defining MF1 compatibility
+* Requested by: EAO
+
+_Eemeli requested this in our previous call (2023-03-06) and we have discussed this in various issues._
