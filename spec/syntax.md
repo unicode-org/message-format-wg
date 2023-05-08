@@ -457,10 +457,9 @@ Otherwise, the set of characters allowed in names is large.
 The _nmtoken_ token doesn't have _name_'s restriction on the first character
 and is used as variant keys and option values.
 
-_Note:_ The Name and Nmtoken symbols are intentionally defined to be
-the same as XML's [Name](https://www.w3.org/TR/xml/#NT-Name) and [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtokens)
+_Note:_ _nmtoken_ is intentionally defined to be the same as XML's [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken)
 in order to increase the interoperability with data defined in XML.
-In particular, the grammatical feature data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features)
+In particular, the grammatical data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features)
 and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html)
 uses Nmtokens.
 
@@ -470,15 +469,15 @@ function = (":" | "+" | "-") name
 ```
 
 ```abnf
-name    = name-start *name-char ; matches XML https://www.w3.org/TR/xml/#NT-Name
-nmtoken = 1*name-char           ; matches XML https://www.w3.org/TR/xml/#NT-Nmtokens
+name    = name-start *name-char ; based on https://www.w3.org/TR/xml/#NT-Name, but cannot start with U+003A COLON ":"
+nmtoken = 1*name-char           ; equal to https://www.w3.org/TR/xml/#NT-Nmtoken
 name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
            / %x370-37D / %x37F-1FFF / %x200C-200D
            / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
            / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
-name-char = name-start / DIGIT / "-" / "." / %xB7
-          / %x0300-036F / %x203F-2040
+name-char = name-start / DIGIT / "-" / "." / ":"
+          / %xB7 / %x0300-036F / %x203F-2040
 ```
 
 ### Escape Sequences
