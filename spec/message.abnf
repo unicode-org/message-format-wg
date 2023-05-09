@@ -33,7 +33,7 @@ literal-char = %x0-5B         ; omit \
              / %xE000-10FFFF
 
 variable = "$" name
-function = (":" | "+" | "-") name
+function = (":" / "+" / "-") name
 
 ; reserve additional sigils for future use
 reserved       = reserved-start reserved-body
