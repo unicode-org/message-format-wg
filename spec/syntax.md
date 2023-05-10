@@ -465,7 +465,7 @@ uses Nmtokens.
 
 ```abnf
 variable = "$" name
-function = (":" | "+" | "-") name
+function = (":" / "+" / "-") name
 ```
 
 ```abnf
