@@ -275,6 +275,20 @@ This local variable can then be used in other expressions within the same messag
 declaration = let s variable [s] "=" [s] expression
 ```
 
+Declaration examples:
+
+```
+let $foo = {|A literal value|}
+```
+
+```
+let $foo = {:func opt=$bar}
+```
+
+```
+let $foo = {$foo :number minimumFractionDigits=2}
+```
+
 ### Selectors
 
 A `match` statement contains one or more **_selectors_**

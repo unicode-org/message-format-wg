@@ -14,9 +14,11 @@ To resolve the value of a Variable,
 its Name is used to identify either a local variable,
 or a variable defined elsewhere.
 If a local variable and an externally defined one use the same name,
-the local variable takes precedence.
+the local variable takes precedence after its variable declaration.
+A variable declaration may refer in its expression
+to a previous or external variable with the same name as the declaration's target.
 
-It is an error for a local variable definition to
+It is an error for a variable declaration to
 refer to a local variable that's defined after it in the message.
 
 ## Error Handling
