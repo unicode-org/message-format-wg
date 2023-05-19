@@ -1,6 +1,6 @@
 <!ELEMENT registry (function*|pattern*)>
 
-<!ELEMENT function (description|signature+)>
+<!ELEMENT function (description|(formatSignature|matchSignature)+)>
 <!ATTLIST function name NMTOKEN #REQUIRED>
 
 <!ELEMENT description (#PCDATA)>
