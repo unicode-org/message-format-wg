@@ -47,12 +47,13 @@ MessageFormat functions can be invoked in two contexts:
 A single _function name_ may be used in both contexts,
 regardless of whether it's implemented as one or multiple functions.
 
-A _signature_ defines one particular set of arguments and named options that can be used together in a single call to the function.
+A _signature_ defines one particular set of at most one argument and any number of named options that can be used together in a single call to the function.
 `<formatSignature>` corresponds to a function call inside a placeholder inside translatable text.
 `<matchSignature>` corresponds to a function call inside a selector.
 Signatures with a non-empty `locales` attribute are locale-specific and only available in translations in the given languages.
 
 A signature may define the positional argument of the function with the `<input>` element.
+If the `<input>` element is not present, the function is defined as a nullary function.
 A signature may also define one or more `<option>` elements representing _named options_ to the function.
 Options are optional by default,
 unless the `required` attribute is present.
