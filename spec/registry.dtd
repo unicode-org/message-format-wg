@@ -17,13 +17,11 @@
 <!ATTLIST matchSignature locales NMTOKENS #IMPLIED>
 
 <!ELEMENT input EMPTY>
-<!ATTLIST input title CDATA #IMPLIED>
 <!ATTLIST input values NMTOKENS #IMPLIED>
 <!ATTLIST input pattern NMTOKEN #IMPLIED>
 <!ATTLIST input readonly (true|false) "false">
 
 <!ELEMENT option EMPTY>
-<!ATTLIST option title CDATA #IMPLIED>
 <!ATTLIST option name NMTOKEN #REQUIRED>
 <!ATTLIST option values NMTOKENS #IMPLIED>
 <!ATTLIST option default NMTOKEN #IMPLIED>

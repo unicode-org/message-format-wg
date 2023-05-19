@@ -93,7 +93,7 @@ For the sake of brevity, only `locales="en"` is considered.
         </description>
 
         <matchSignature locales="en">
-            <input title="The number to match." pattern="anyNumber"/>
+            <input pattern="anyNumber"/>
             <option name="type" values="cardinal ordinal"/>
             <option name="minimumIntegerDigits" pattern="positiveInteger"/>
             <option name="minimumFractionDigits" pattern="positiveInteger"/>
@@ -105,7 +105,7 @@ For the sake of brevity, only `locales="en"` is considered.
         </matchSignature>
 
         <formatSignature locales="en">
-            <input title="The number to format" pattern="anyNumber"/>
+            <input pattern="anyNumber"/>
             <option name="minimumIntegerDigits" pattern="positiveInteger"/>
             <option name="minimumFractionDigits" pattern="positiveInteger"/>
             <option name="maximumFractionDigits" pattern="positiveInteger"/>
@@ -128,7 +128,7 @@ A localization engineer can then extend the registry by defining the following `
     <function name="noun">
         <description>Handle the grammar of a noun.</description>
         <formatSignature locales="en">
-            <input title="Noun id"/>
+            <input/>
             <option name="article" values="definite indefinite"/>
             <option name="plural" values="one other"/>
             <option name="case" values="nominative genitive" default="nominative"/>
@@ -138,13 +138,13 @@ A localization engineer can then extend the registry by defining the following `
     <function name="adjective">
         <description>Handle the grammar of an adjective.</description>
         <formatSignature locales="en">
-            <input title="Adjective id"/>
+            <input/>
             <option name="article" values="definite indefinite"/>
             <option name="plural" values="one other"/>
             <option name="case" values="nominative genitive" default="nominative"/>
         </formatSignature>
         <formatSignature locales="en">
-            <input title="Adjective id"/>
+            <input/>
             <option name="article" values="definite indefinite"/>
             <option name="accord"/>
         </formatSignature>
