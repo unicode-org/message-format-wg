@@ -37,7 +37,7 @@ The main building block of the registry is the `<function>` element.
 It represents an implementation of a custom function available to translation at runtime.
 A function defines a human-readable _description_ of its behavior
 and one or more machine-readable _signatures_ of how to call it.
-Named `<pattern>` elements can optionally define regex validation rules for input, option values, and variant keys.
+Named `<pattern>` elements can optionally define regex validation rules for literals, option values, and variant keys.
 
 MessageFormat functions can be invoked in two contexts:
 * inside placeholders, to produce a part of the message's formatted output;
@@ -55,10 +55,10 @@ Signatures with a non-empty `locales` attribute are locale-specific and only ava
 A signature may define the positional argument of the function with the `<input>` element.
 If the `<input>` element is not present, the function is defined as a nullary function.
 A signature may also define one or more `<option>` elements representing _named options_ to the function.
-Options are optional by default,
+An option can be omitted in a call to the function,
 unless the `required` attribute is present.
 They accept either a finite enumeration of values (the `values` attribute)
-or validate they input with a regular expression (the `pattern` attribute).
+or validate their input with a regular expression (the `pattern` attribute).
 Read-only options (the `readonly` attribute) can be displayed to translators in CAT tools, but may not be edited.
 
 Matching-function signatures additionally include one or more `<match>` elements
