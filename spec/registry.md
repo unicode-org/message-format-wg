@@ -39,9 +39,17 @@ A function defines a human-readable _description_ of its behavior
 and one or more machine-readable _signatures_ of how to call it.
 Named `<pattern>` elements can optionally define regex validation rules for input, option values, and variant keys.
 
+MessageFormat functions can be invoked in two contexts:
+* inside placeholders, to produce a part of the message's formatted output;
+  for example, a raw value of `|1.5|` may be formatted to `1,5` in a language which uses commas as decimal separators,
+* inside selectors, to contribute to selecting the appropriate variant among all given variants.
+
+A single _function name_ may be used in both contexts,
+regardless of whether it's implemented as one or multiple functions.
+
 A _signature_ defines one particular set of arguments and named options that can be used together in a single call to the function.
 `<formatSignature>` corresponds to a function call inside a placeholder inside translatable text.
-`<matchSignature>` coresponds to a function call inside a selector.
+`<matchSignature>` corresponds to a function call inside a selector.
 Signatures with a non-empty `locales` attribute are locale-specific and only available in translations in the given languages.
 
 A signature may define the positional argument of the function with the `<input>` element.
