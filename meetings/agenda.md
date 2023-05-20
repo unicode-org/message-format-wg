@@ -63,6 +63,24 @@ Discussion of the function registry. Two of the three models had sections on thi
 
 Discussion of active PRs. We will merge or reject them in the call.
 
+| PR   | Description | Recommendation |
+|------|-------------|----------------|
+| #197 | Consensus 7 | Discuss (see below) |
+| #278 | Add examples in other resource languages | Abandon |
+| #315 | Bidi support | Discuss (see below) |
+| #318 | Format to Parts | Reject (see below) |
+| #357 | Unknown Markup error | Reject (obsolete) |
+| #364 | Unquoted plain expression arguments | Merge with edits |
+| #368 | Draft of registry | Discuss |
+| #372 | Column-first | Merge |
+| #381 | Variable overrides | Merge with edits |
+| #382 | Literal Resolution | Discuss |
+
+* PR #197 is about an old WG consensus. Let's double-check that consensus quickly and merge in the call.
+* PR #315 about bidi needs another round of edits and should be discussed in a future call. 
+* PR #318 about formatToParts is not written in a way that fits into the spec. A version that is "spec ready" should be produced instead.
+* The recommendation "discuss" is to ensure there is WG consensus before merging. The recommendation "merge with edits" is to merge once existing comments have been addressed.
+
 **Topic:** AOB?
 
 ---
