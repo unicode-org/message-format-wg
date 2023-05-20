@@ -45,20 +45,20 @@ Read the PR for function registry for the next meetings in April:
 To request that the chair add an _issue_ to the agenda, add the label `Agenda+`
 To request that the chair add an agenda item, send email to the message-format-wg group email.
 
-#### Agenda for 2023-05-08
+***Date: 2023-05-22***
 
-**Topic:** Agenda Review
+### Topic: Agenda Review
 
-**Topic:** Info Share
+### Topic: Info Share
 
-**Topic:** Action Item Review
+### Topic: Action Item Review
 
-**Topic:** Function Registry (continued)
+### Topic: Function Registry (continued)
 * Requested by: STA
 
 Discussion of the function registry. Two of the three models had sections on this.
 
-**Topic:** Active PR review
+### Topic: Active PR review
 * Requested by: EAO
 
 Discussion of active PRs. We will merge or reject them in the call.
@@ -81,25 +81,24 @@ Discussion of active PRs. We will merge or reject them in the call.
 * PR #318 about formatToParts is not written in a way that fits into the spec. A version that is "spec ready" should be produced instead.
 * The recommendation "discuss" is to ensure there is WG consensus before merging. The recommendation "merge with edits" is to merge once existing comments have been addressed.
 
-**Topic:** AOB?
+### Topic: AOB?
 
 ---
 
 ## Proposed for Future (or if time permits)
 
 
-**Topic:** (Discussion) Guidance needed for dealing with selector explosions
+### Topic: (Discussion) Guidance needed for dealing with selector explosions
 * Requested by: STA
 * https://github.com/unicode-org/message-format-wg/discussions/323
 
-**Topic:** Bidi
+### Topic: Bidi
 * Requested by: EAO
 
 Discussion of bidirectional text handling. See:
 * https://github.com/unicode-org/message-format-wg/pull/315
 
-
-**Topic:** Defining MF1 compatibility
+### Topic: Defining MF1 compatibility
 * Requested by: EAO
 
 _Eemeli requested this in our previous call (2023-03-06) and we have discussed this in various issues._
