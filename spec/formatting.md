@@ -19,6 +19,239 @@ the local variable takes precedence.
 It is an error for a local variable definition to
 refer to a local variable that's defined after it in the message.
 
+## Pattern Selection
+
+When formatting a message with one or more _selectors_,
+the _pattern_ of one of the _variants_ must be selected for formatting.
+
+When a message has a single _selector_,
+an implementation-defined method compares each key to the _selector_
+and determines which of the keys match, and in what order of preference.
+A catch-all key will always match, but is always the least preferred choice.
+During selection, the _variant_ with the best-matching key is selected.
+
+In a message with more than one _selector_,
+each _variant_ also has a corresponding number of keys.
+These correspond to _selectors_ by position.
+The same implementation-defined method as above is used to compare
+the corresponding key of each _variant_ to its _selector_,
+to determine which of the keys match, and in what order of preference.
+In order to select a single _variant_,
+the full list of _variants_ will need to be filtered and sorted.
+First, each _variant_ with a key that does not match its _selector_ is left out.
+Then, the remaining _variants_ are sorted lexicographically by key preference,
+with earlier _selectors_ having higher priority than later ones.
+Finally, the highest-sorted _variant_ is selected.
+
+This selection method is defined in more detail below.
+An implementation MAY use any pattern selection method,
+as long as its observable behaviour matches the results of the method defined here.
+
+### Resolve Selectors
+
+First, resolve the values of each _selector_:
+
+1. Let `res` be a new empty list of resolved values that support selection.
+1. For each _expression_ `exp` of the message's _selectors_,
+   1. Let `rv` be the resolved value of `exp`.
+   1. If selection is supported for `rv`:
+      1. Append `rv` as the last element of the list `res`.
+   1. Else:
+      1. Let `nomatch` be a resolved value for which selection always fails.
+      1. Append `nomatch` as the last element of the list `res`.
+      1. Emit a Selection Error.
+
+The shape of the resolved values is determined by each implementation,
+along with the manner of determining their support for selection.
+
+### Resolve Preferences
+
+Next, using `res`, resolve the preferential order for all message keys:
+
+1. Let `pref` be a new empty list of lists of strings.
+1. For each index `i` in `res`:
+   1. Let `keys` be a new empty list of strings.
+   1. For each _variant_ `var` of the message:
+      1. Let `key` be the `var` key at position `i`.
+      1. If `key` is not the catch-all key `'*'`:
+         1. Let `ks` be the decoded value of `key`.
+         1. Append `ks` as the last element of the list `keys`.
+   1. Let `rv` be the resolved value at index `i` of `res`.
+   1. Let `matches` be the result of calling the method MatchSelectorKeys(`rv`, `keys`)
+   1. Append `matches` as the last element of the list `pref`.
+
+The method MatchSelectorKeys is determined by the implementation.
+It takes as arguments a resolved _selector_ value `rv` and a list of string keys `keys`,
+and returns a list of string keys in preferential order.
+The returned list must only contain unique elements of the input list `keys`,
+and it may be empty.
+The most preferred key is first, with the rest sorted by decreasing preference.
+
+### Filter Variants
+
+Then, using the preferential key orders `pref`,
+filter the list of _variants_ to the ones that match with some preference:
+
+1. Let `vars` be a new empty list of _variants_.
+1. For each _variant_ `var` of the message:
+   1. For each index `i` in `pref`:
+      1. Let `key` be the `var` key at position `i`.
+      1. If `key` is the catch-all key `'*'`:
+         1. Continue the inner loop on `pref`.
+      1. Let `ks` be the decoded value of `key`.
+      1. Let `matches` be the list of strings at index `i` of `pref`.
+      1. If `matches` includes `ks`:
+         1. Continue the inner loop on `pref`.
+      1. Else:
+         1. Continue the outer loop on message _variants_.
+   1. Append `var` as the last element of the list `vars`.
+
+### Sort Variants
+
+Finally, sort the list of variants `vars` and select the _pattern_:
+
+1. Let `sortable` be a new empty list of (integer, _variant_) tuples.
+1. For each _variant_ `var` of `vars`:
+   1. Let `tuple` be a new tuple (-1, `var`).
+   1. Append `tuple` as the last element of the list `sortable`.
+1. Let `len` be the integer count of items in `pref`.
+1. Let `i` be `len` - 1.
+1. While `i` >= 0:
+   1. Let `matches` be the list of strings at index `i` of `pref`.
+   1. Let `minpref` be the integer count of items in `matches`.
+   1. For each tuple `tuple` of `sortable`:
+      1. Let `matchpref` be an integer with the value `minpref`.
+      1. Let `key` be the `tuple` _variant_ key at position `i`.
+      1. If `key` is not the catch-all key `'*'`:
+         1. Let `ks` be the decoded value of `key`.
+         1. Let `matchpref` be the integer position of `ks` in `matches`.
+      1. Set the `tuple` integer value as `matchpref`.
+   1. Call the method SortVariants(`sortable`).
+   1. Set `i` to be `i` - 1.
+1. Let `var` be the _variant_ element of the first element of `sortable`.
+1. Select the _pattern_ of `var`.
+
+The method SortVariants is determined by the implementation.
+It takes as an argument a `sortable` list of (integer, _variant_) tuples,
+which it modifies in place using some stable sorting algorithm.
+The method does not return anything.
+The list is sorted according to the tuple's first integer element,
+such that a lower number is sorted before a higher one,
+and entries that have the same number retain their order.
+
+### Examples
+
+#### Example 1
+
+Presuming a minimal implementation which only supports string values
+and matches keys by using string comparison,
+and a formatting context in which
+the variable reference `$foo` resolves to the string `'foo'` and
+the variable reference `$bar` resolves to the string `'bar'`,
+pattern selection proceeds as follows for this message:
+
+```
+match {$foo} {$bar}
+when bar bar {All bar}
+when foo foo {All foo}
+when * * {Otherwise}
+```
+
+1. For the first selector:<br>
+   The value of the selector is resolved to be `'foo'`.<br>
+   The available keys « `'bar'`, `'foo'` » are compared to `'foo'`,<br>
+   resulting in a list « `'foo'` » of matching keys.
+
+2. For the second selector:<br>
+   The value of the selector is resolved to be `'bar'`.<br>
+   The available keys « `'bar'`, `'foo'` » are compared to `'bar'`,<br>
+   resulting in a list « `'bar'` » of matching keys.
+
+3. Creating the list `vars` of variants matching all keys:<br>
+   The first variant `bar bar` is discarded as its first key does not match the first selector.<br>
+   The second variant `foo foo` is discarded as its second key does not match the second selector.<br>
+   The catch-all keys of the third variant `* *` always match, and this is added to `vars`,<br>
+   resulting in a list « `* *` » of variants.
+
+4. As the list `vars` only has one entry, it does not need to be sorted.<br>
+   The pattern `{Otherwise}` of the third variant is selected.
+
+#### Example 2
+
+Alternatively, with the same implementation and formatting context as in Example 1,
+pattern selection would proceed as follows for this message:
+
+```
+match {$foo} {$bar}
+when * bar {Any and bar}
+when foo * {Foo and any}
+when foo bar {Foo and bar}
+when * * {Otherwise}
+```
+
+1. For the first selector:<br>
+   The value of the selector is resolved to be `'foo'`.<br>
+   The available keys « `'foo'` » are compared to `'foo'`,<br>
+   resulting in a list « `'foo'` » of matching keys.
+
+2. For the second selector:<br>
+   The value of the selector is resolved to be `'bar'`.<br>
+   The available keys « `'bar'` » are compared to `'bar'`,<br>
+   resulting in a list « `'bar'` » of matching keys.
+
+3. Creating the list `vars` of variants matching all keys:<br>
+   The keys of all variants either match each selector exactly, or via the catch-all key,<br>
+   resulting in a list « `* bar`, `foo *`, `foo bar`, `* *` » of variants.
+
+4. Sorting the variants:<br>
+   The list `sortable` is first set with the variants in their source order
+   and scores determined by the second selector:<br>
+   « ( 0, `* bar` ), ( 1, `foo *` ), ( 0, `foo bar` ), ( 1, `* *` ) »<br>
+   This is then sorted as:<br>
+   « ( 0, `* bar` ), ( 0, `foo bar` ), ( 1, `foo *` ), ( 1, `* *` ) ».<br>
+   To sort according to the first selector, the scores are updated to:<br>
+   « ( 1, `* bar` ), ( 0, `foo bar` ), ( 0, `foo *` ), ( 1, `* *` ) ».<br>
+   This is then sorted as:<br>
+   « ( 0, `foo bar` ), ( 0, `foo *` ), ( 1, `* bar` ), ( 1, `* *` ) ».<br>
+
+5. The pattern `{Foo and bar}` of the most preferred `foo bar` variant is selected.
+
+#### Example 3
+
+Presuming a more powerful implementation which supports selection on numerical values,
+and provides a `:plural` function that matches keys by their exact value
+as well as their plural category (preferring the former, if possible),
+and an Enligh-language formatting context in which
+the variable reference `$count` resolves to the number `1`,
+pattern selection proceeds as follows for this message:
+
+```
+match {$count :plural}
+when one {Category match}
+when 1 {Exact match}
+when * {Other match}
+```
+
+1. For the selector:<br>
+   The value of the selector is resolved to an implementation-defined value
+   that is capable of performing English plural category selection on the value `1`.<br>
+   The available keys « `'one'`, `'1'` » are passed to
+   the implementation's MatchSelectorKeys method,<br>
+   resulting in a list « `'1'`, `'one'` » of matching keys.
+
+2. Creating the list `vars` of variants matching all keys:<br>
+   The keys of all variants are included in the list of matching keys, or use the catch-all key,<br>
+   resulting in a list « `one`, `1`, `*` » of variants.
+
+3. Sorting the variants:<br>
+   The list `sortable` is first set with the variants in their source order
+   and scores determined by the selector key order:<br>
+   « ( 1, `one` ), ( 0, `1` ), ( 2, `*` ) »<br>
+   This is then sorted as:<br>
+   « ( 0, `1` ), ( 1, `one` ), ( 2, `*` ) »<br>
+
+5. The pattern `{Exact match}` of the most preferred `1` variant is selected.
+
 ## Error Handling
 
 Errors in messages and their formatting may occur and be detected
