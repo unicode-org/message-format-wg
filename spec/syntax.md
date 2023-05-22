@@ -22,7 +22,8 @@
        1. [Reserved Sequences](#reserved)
 1. [Tokens](#tokens)
    1. [Keywords](#keywords)
-   1. [Text and Literals](#text-and-literals)
+   1. [Text](#text)
+   1. [Literals](#literals)
    1. [Names](#names)
    1. [Escape Sequences](#escape-sequences)
    1. [Whitespace](#whitespace)
@@ -307,7 +308,7 @@ The key `*` is a "catch-all" key, matching all selector values.
 
 ```abnf
 variant = when 1*(s key) [s] pattern
-key = nmtoken / literal / "*"
+key     = literal / "*"
 ```
 
 A _well-formed_ message is considered _valid_ if the following requirements are satisfied:
@@ -357,21 +358,29 @@ _Functions_ do not accept any positional arguments other than the _literal_ or _
 ```abnf
 expression = "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
 annotation = (function *(s option)) / reserved
-option = name [s] "=" [s] (literal / nmtoken / variable)
+option = name [s] "=" [s] (literal / variable)
 ```
 
 Expression examples:
 
 ```
-{|1.23|}
+{1.23}
 ```
 
 ```
-{|1.23| :number maxFractionDigits=1}
+{|-1.23|}
+```
+
+```
+{1.23 :number maxFractionDigits=1}
 ```
 
 ```
 {|Thu Jan 01 1970 14:37:00 GMT+0100 (CET)| :datetime weekday=long}
+```
+
+```
+{|My Brand Name| :linkify href=|foobar.com|}
 ```
 
 ```
@@ -410,22 +419,20 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 ### Keywords
 
 The following three keywords are reserved: `let`, `match`, and `when`.
+Reserved keywords are always lowercase.
 
 ```abnf
-; reserved keywords are always lowercase
 let   = %x6C.65.74        ; "let"
 match = %x6D.61.74.63.68  ; "match"
 when  = %x77.68.65.6E     ; "when"
 ```
 
-### Text and Literals
+### Text
 
-_Text_ is the translatable content of a _pattern_, and _Literal_ is used for matching
-variants and providing input to expressions.
-Any Unicode code point is allowed in either, with the exception of
-the relevant delimiters (`{` and `}` for Text, `|` for Literal),
-`\` (which starts an escape sequence), and
-surrogate code points U+D800 through U+DFFF (which cannot be encoded into UTF-8).
+_Text_ is the translatable content of a _pattern_.
+Any Unicode code point is allowed,
+except for surrogate code points U+D800 through U+DFFF.
+The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}`.
 
 All code points are preserved.
 
@@ -438,12 +445,31 @@ text-char = %x0-5B         ; omit \
           / %xE000-10FFFF
 ```
 
+### Literals
+
+_Literal_ is used for matching variants and providing input to _expressions_.
+_Quoted_ literals may include content with any Unicode code point,
+except for surrogate code points U+D800 through U+DFFF.
+The characters `\` and `|` MUST be escaped as `\\` and `\|`.
+_Unquoted_ literals have a much more restricted range that
+is intentionally close to the XML's [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken),
+with the restriction that it MUST NOT start with `-` or `:`,
+as those would conflict with _function_ start characters.
+
+All code points are preserved.
+
 ```abnf
-literal = "|" *(literal-char / literal-escape) "|"
-literal-char = %x0-5B         ; omit \
-             / %x5D-7B        ; omit |
-             / %x7D-D7FF      ; omit surrogates
-             / %xE000-10FFFF
+literal = quoted / unquoted
+
+quoted         = "|" *(quoted-char / quoted-escape) "|"
+quoted-char    = %x0-5B         ; omit \
+               / %x5D-7B        ; omit |
+               / %x7D-D7FF      ; omit surrogates
+               / %xE000-10FFFF
+
+unquoted       = unquoted-start *name-char
+unquoted-start = name-start / DIGIT / "."
+               / %xB7 / %x300-36F / %x203F-2040
 ```
 
 ### Names
@@ -451,42 +477,33 @@ literal-char = %x0-5B         ; omit \
 The _name_ token is used for variable names (prefixed with `$`),
 function names (prefixed with `:`, `+` or `-`),
 as well as option names.
-A name MUST NOT start with an ASCII digit and certain basic combining characters.
+It is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name),
+with the restriction that it MUST NOT start with an ASCII digit and certain basic combining characters.
 Otherwise, the set of characters allowed in names is large.
-
-The _nmtoken_ token doesn't have _name_'s restriction on the first character
-and is used as variant keys and option values.
-
-_Note:_ _nmtoken_ is intentionally defined to be the same as XML's [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken)
-in order to increase the interoperability with data defined in XML.
-In particular, the grammatical data [specified in LDML](https://unicode.org/reports/tr35/tr35-general.html#Grammatical_Features)
-and [defined in CLDR](https://unicode-org.github.io/cldr-staging/charts/latest/grammar/index.html)
-uses Nmtokens.
 
 ```abnf
 variable = "$" name
 function = (":" / "+" / "-") name
-```
 
-```abnf
-name    = name-start *name-char ; based on https://www.w3.org/TR/xml/#NT-Name, but cannot start with U+003A COLON ":"
-nmtoken = 1*name-char           ; equal to https://www.w3.org/TR/xml/#NT-Nmtoken
+name = name-start *name-char
 name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
            / %x370-37D / %x37F-1FFF / %x200C-200D
            / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
            / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
-name-char = name-start / DIGIT / "-" / "." / ":"
-          / %xB7 / %x0300-036F / %x203F-2040
+name-char  = name-start / DIGIT / "-" / "." / ":"
+           / %xB7 / %x300-36F / %x203F-2040
 ```
 
 ### Escape Sequences
 
-Escape sequences are introduced by the backslash character (`\`) and allow the appearance of lexically meaningful characters in the body of `text`, `literal`, or `reserved` sequences respectively:
+Escape sequences are introduced by U+005C REVERSE SOLIDUS `\`
+and allow the appearance of lexically meaningful characters
+in the body of `text`, `quoted`, or `reserved` sequences respectively:
 
 ```abnf
 text-escape    = backslash ( backslash / "{" / "}" )
-literal-escape = backslash ( backslash / "|" )
+quoted-escape  = backslash ( backslash / "|" )
 reserve-escape = backslash ( backslash / "{" / "|" / "}" )
 backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 ```

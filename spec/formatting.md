@@ -345,7 +345,7 @@ These are divided into the following categories:
     does not provide for the function `:func` to be successfully resolved:
 
     ```
-    {The value is {|horse| :func}.}
+    {The value is {horse :func}.}
     ```
 
     ```
@@ -363,7 +363,7 @@ These are divided into the following categories:
     uses a `:plural` selector function which requires its input to be numeric:
 
     ```
-    match {|horse| :plural}
+    match {horse :plural}
     when 1 {The value is one.}
     when * {The value is not one.}
     ```
@@ -390,7 +390,7 @@ These are divided into the following categories:
      an option `field` to be provided with a string value,
 
   ```
-  {Hello, {|horse| :get field=name}!}
+  {Hello, {horse :get field=name}!}
   ```
 
   ```
@@ -445,10 +445,10 @@ and ends with U+007D RIGHT CURLY BRACKET `}`.
 Between the brackets, the following contents are used:
 
 - Expression with Literal Operand: U+007C VERTICAL LINE `|`
-  followed by the value of the Literal,
+  followed by the Quoted or Unquoted value,
   and then by U+007C VERTICAL LINE `|`
 
-  Examples: `{|horse|}`, `{|42|}`
+  Examples: `{|your horse|}`, `{|42|}`
 
 - Expression with Variable Operand: U+0024 DOLLAR SIGN `$`
   followed by the Variable Name of the Operand
