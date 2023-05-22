@@ -27,7 +27,7 @@ Recent scribes:
 
 ## Notes Document for The Upcoming Call
 
-https://docs.google.com/document/d/178DGq3ZwgcH7sfJsxF7i3N1V1P0NKQ6XHPaSAPvmoTc/edit#
+https://docs.google.com/document/d/1IBmxze3tGxkH3mMUHovMV9qR8a1lpi4GxoJkG2BNxG0/edit
 
 ## NOTE WELL
 
