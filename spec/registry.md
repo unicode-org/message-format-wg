@@ -7,26 +7,22 @@ The _registry_ is a mechanism for storing such declarations in a portable manner
 
 ## Goals
 
-The goal of the registry is to provide a machine-readable description of MessageFormat extensions (custom functions) in order to:
+The registry provides a machine-readable description of MessageFormat extensions (custom functions),
+in order to support the following goals and use-cases:
 
-* support the localization roundtrip,
-* validate message correctness, and
-* improve the authoring experience.
-
-## Use Cases
-
-The registry enables the following usage scenarios:
-
-* Generate variant keys for a given locale during XLIFF extraction.
-* Verify the exhaustiveness of variant keys given a selector.
-* Type-check values passed into functions.
-* Validate that matching functions are only called in selectors.
-* Validate that formatting functions are only called in placeholders.
-* Forbid edits to certain function options (e.g. currency options).
-* Autocomplete function and option names.
-* Display on-hover tooltips for function signatures with documentation.
-* Display/edit known message metadata.
-* Restrict input in GUI by providing a dropdown with all viable option values.
+* Validate semantic properties of messages. For example:
+    * Type-check values passed into functions.
+    * Validate that matching functions are only called in selectors.
+    * Validate that formatting functions are only called in placeholders.
+    * Verify the exhaustiveness of variant keys given a selector.
+* Support the localization roundtrip. For example:
+    * Generate variant keys for a given locale during XLIFF extraction.
+* Improve the authoring experience. For example:
+    * Forbid edits to certain function options (e.g. currency options).
+    * Autocomplete function and option names.
+    * Display on-hover tooltips for function signatures with documentation.
+    * Display/edit known message metadata.
+    * Restrict input in GUI by providing a dropdown with all viable option values.
 
 ## Data Model
 
