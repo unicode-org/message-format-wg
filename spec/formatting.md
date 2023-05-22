@@ -27,11 +27,14 @@ the _pattern_ of one of the _variants_ must be selected for formatting.
 When a message has a single _selector_,
 an implementation-defined method compares each key to the _selector_
 and determines which of the keys match, and in what order of preference.
-A catch-all key will always match, but is always the least preferred choice.
-During selection, the _variant_ with the best-matching key is selected.
+The list of keys passed to this implementation-defined method
+does not include the catch-all key `*`.
+The formatter treats the catch-all key `*`
+as a match for any _selector_,
+but with the lowest possible preference.
 
 In a message with more than one _selector_,
-each _variant_ also has a corresponding number of keys.
+the number of keys in each _variant_ equals the number of _selectors_.
 These correspond to _selectors_ by position.
 The same implementation-defined method as above is used to compare
 the corresponding key of each _variant_ to its _selector_,
@@ -134,7 +137,7 @@ Finally, sort the list of variants `vars` and select the _pattern_:
 The method SortVariants is determined by the implementation.
 It takes as an argument a `sortable` list of (integer, _variant_) tuples,
 which it modifies in place using some stable sorting algorithm.
-The method does not return anything.
+The method does not return a value: `sortable` is its out-parameter.
 The list is sorted according to the tuple's first integer element,
 such that a lower number is sorted before a higher one,
 and entries that have the same number retain their order.
@@ -221,7 +224,7 @@ when * * {Otherwise}
 Presuming a more powerful implementation which supports selection on numerical values,
 and provides a `:plural` function that matches keys by their exact value
 as well as their plural category (preferring the former, if possible),
-and an Enligh-language formatting context in which
+and an English-language formatting context in which
 the variable reference `$count` resolves to the number `1`,
 pattern selection proceeds as follows for this message:
 
