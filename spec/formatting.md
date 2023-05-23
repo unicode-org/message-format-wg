@@ -29,8 +29,7 @@ an implementation-defined method compares each key to the _selector_
 and determines which of the keys match, and in what order of preference.
 The list of keys passed to this implementation-defined method
 does not include the catch-all key `*`.
-The formatter treats the catch-all key `*`
-as a match for any _selector_,
+The catch-all key `*` is treated as a match for any _selector_,
 but with the lowest possible preference.
 
 In a message with more than one _selector_,
