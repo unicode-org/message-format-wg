@@ -363,7 +363,7 @@ These are divided into the following categories:
     uses a `:plural` selector function which requires its input to be numeric:
 
     ```
-    match {horse :plural}
+    match {|horse| :plural}
     when 1 {The value is one.}
     when * {The value is not one.}
     ```

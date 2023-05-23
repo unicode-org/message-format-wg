@@ -478,7 +478,8 @@ The _name_ token is used for variable names (prefixed with `$`),
 function names (prefixed with `:`, `+` or `-`),
 as well as option names.
 It is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name),
-with the restriction that it MUST NOT start with an ASCII digit and certain basic combining characters.
+with the restriction that it MUST NOT start with `:`,
+as that would conflict with _function_ start characters.
 Otherwise, the set of characters allowed in names is large.
 
 ```abnf
