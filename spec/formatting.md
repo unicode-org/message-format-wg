@@ -46,12 +46,6 @@ with earlier _selectors_ having higher priority than later ones.
 Finally, the highest-sorted _variant_ is selected.
 
 This selection method is defined in more detail below.
-In these definitions, "the resolved value of a key"
-refers to the result of the process
-described in the "Literal Resolution" section.
-(Key resolution is the same as literal resolution
-because the methods below do not apply resolution
-to the catch-all key '*'.)
 An implementation MAY use any pattern selection method,
 as long as its observable behaviour matches the results of the method defined here.
 
@@ -107,6 +101,7 @@ filter the list of _variants_ to the ones that match with some preference:
       1. Let `key` be the `var` key at position `i`.
       1. If `key` is the catch-all key `'*'`:
          1. Continue the inner loop on `pref`.
+      1. Assert that `key` is a _literal_.
       1. Let `ks` be the resolved value of `key`.
       1. Let `matches` be the list of strings at index `i` of `pref`.
       1. If `matches` includes `ks`:
@@ -132,6 +127,7 @@ Finally, sort the list of variants `vars` and select the _pattern_:
       1. Let `matchpref` be an integer with the value `minpref`.
       1. Let `key` be the `tuple` _variant_ key at position `i`.
       1. If `key` is not the catch-all key `'*'`:
+         1. Assert that `key` is a _literal_.
          1. Let `ks` be the resolved value of `key`.
          1. Let `matchpref` be the integer position of `ks` in `matches`.
       1. Set the `tuple` integer value as `matchpref`.
