@@ -82,6 +82,7 @@ Next, using `res`, resolve the preferential order for all message keys:
    1. For each _variant_ `var` of the message:
       1. Let `key` be the `var` key at position `i`.
       1. If `key` is not the catch-all key `'*'`:
+         1. Assert that `key` is a _literal_.
          1. Let `ks` be the resolved value of `key`.
          1. Append `ks` as the last element of the list `keys`.
    1. Let `rv` be the resolved value at index `i` of `res`.
