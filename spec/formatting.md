@@ -445,7 +445,7 @@ and ends with U+007D RIGHT CURLY BRACKET `}`.
 Between the brackets, the following contents are used:
 
 - Expression with Literal Operand: U+007C VERTICAL LINE `|`
-  followed by the Quoted or Unquoted value,
+  followed by the value of the Literal,
   and then by U+007C VERTICAL LINE `|`
 
   Examples: `{|your horse|}`, `{|42|}`
