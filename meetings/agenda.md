@@ -3,7 +3,7 @@
 This is the agenda document for upcoming calls of the MessageFormat subcommittee. We normally meet bi-weekly 
 (every two weeks) on Mondays at 9:30 Pacific (`America/Los_Angeles`). This is currently UTC+7. 
 
-See [here](https://www.timeanddate.com/worldclock/converter.html?iso=20230602T173000&p1=224&p2=248&p3=136&p4=179&p5=33&p6=101&p7=268) for your local time.
+See [here](https://www.timeanddate.com/worldclock/converter.html?iso=20230605T173000&p1=224&p2=248&p3=136&p4=179&p5=33&p6=101&p7=268) for your local time.
 
 Information on joining calls is found in the calendar invite.
 
@@ -31,7 +31,7 @@ https://docs.google.com/document/d/1IBmxze3tGxkH3mMUHovMV9qR8a1lpi4GxoJkG2BNxG0/
 
 ## NOTE WELL
 
-The next call will be 2 June 2023. 
+The next call will be Monday 5 June 2023. 
 
 ***This is a regularly scheduled session***
 
