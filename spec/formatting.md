@@ -131,7 +131,7 @@ Finally, sort the list of variants `vars` and select the _pattern_:
          1. Let `ks` be the resolved value of `key`.
          1. Let `matchpref` be the integer position of `ks` in `matches`.
       1. Set the `tuple` integer value as `matchpref`.
-   1. Set `sortable` to be `SortVariants(sortable)`.
+   1. Set `sortable` to be the result of calling the method `SortVariants(sortable)`.
    1. Set `i` to be `i` - 1.
 1. Let `var` be the _variant_ element of the first element of `sortable`.
 1. Select the _pattern_ of `var`.
