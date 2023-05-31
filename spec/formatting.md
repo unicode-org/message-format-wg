@@ -33,7 +33,7 @@ The catch-all key `*` is treated as a match for any _selector_,
 but with the lowest possible preference.
 
 In a message with more than one _selector_,
-the number of keys in each _variant_ equals the number of _selectors_.
+the number of keys in each _variant_ **_must_** equal the number of _selectors_.
 These correspond to _selectors_ by position.
 The same implementation-defined method as above is used to compare
 the corresponding key of each _variant_ to its _selector_,
