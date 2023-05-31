@@ -131,18 +131,22 @@ Finally, sort the list of variants `vars` and select the _pattern_:
          1. Let `ks` be the resolved value of `key`.
          1. Let `matchpref` be the integer position of `ks` in `matches`.
       1. Set the `tuple` integer value as `matchpref`.
-   1. Call the method SortVariants(`sortable`).
+   1. Set `sortable` to be `SortVariants(sortable)`.
    1. Set `i` to be `i` - 1.
 1. Let `var` be the _variant_ element of the first element of `sortable`.
 1. Select the _pattern_ of `var`.
 
-The method SortVariants is determined by the implementation.
-It takes as an argument a `sortable` list of (integer, _variant_) tuples,
-which it modifies in place using some stable sorting algorithm.
-The method does not return a value: `sortable` is its out-parameter.
-The list is sorted according to the tuple's first integer element,
-such that a lower number is sorted before a higher one,
-and entries that have the same number retain their order.
+`SortVariants` is a method whose single argument is
+a list of (integer, _variant_) tuples.
+It returns a list of (integer, _variant_) tuples.
+Any implementation of `SortVariants` is acceptable
+as long as it satisfies the following requirements:
+1. Let `sortable` be an arbitrary list of (integer, _variant_) tuples.
+1. Let `sorted` be `SortVariants(sortable)`.
+1. `sorted` is the result of sorting `sortable` using the following comparator:
+    1. `(i1, v1)` <= `(i2, v2)` if and only if `i1 <= i2`.
+1. The sort is stable (pairs of tuples from `sortable` that are equal
+   in their first element have the same relative order in `sorted`).
 
 ### Examples
 
