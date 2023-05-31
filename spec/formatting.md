@@ -10,16 +10,18 @@ the successor to ICU MessageFormat, henceforth called ICU MessageFormat 1.0.
 
 ## Variable Resolution
 
-To resolve the value of a Variable,
-its Name is used to identify either a local variable,
+To resolve the value of a _variable_,
+its _name_ is used to identify either a local variable,
 or a variable defined elsewhere.
-If a local variable and an externally defined one use the same name,
-the local variable takes precedence after its variable declaration.
-A variable declaration may refer in its expression
-to a previous or external variable with the same name as the declaration's target.
 
-It is an error for a variable declaration to
-refer to a local variable that's defined after it in the message.
+If more than one _declaration_ binds a value to the same _name_,
+or if an externally defined variable and a _declaration_ use the same _name_,
+the resolved value of the most recent _declaration_ preceding the _variable_ is used.
+
+A _declaration_ MAY overwrite the value of a _variable_ for later parts of the _message_.
+
+Attempting to resolve a _variable_ with no preceding _declaration_ or external definition
+binding a value to its _name_ results in an Unresolved Variable error.
 
 ## Error Handling
 
