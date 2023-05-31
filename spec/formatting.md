@@ -141,6 +141,7 @@ a list of (integer, _variant_) tuples.
 It returns a list of (integer, _variant_) tuples.
 Any implementation of `SortVariants` is acceptable
 as long as it satisfies the following requirements:
+
 1. Let `sortable` be an arbitrary list of (integer, _variant_) tuples.
 1. Let `sorted` be `SortVariants(sortable)`.
 1. `sorted` is the result of sorting `sortable` using the following comparator:
