@@ -18,7 +18,7 @@ If more than one _declaration_ binds a value to the same _name_,
 or if an externally defined variable and a _declaration_ use the same _name_,
 the resolved value of the most recent _declaration_ preceding the _variable_ is used.
 
-A _declaration_ MAY overwrite the value of a _variable_ for later parts of the _message_.
+A _declaration_ MAY override the value of a _variable_ for later parts of the _message_.
 
 Attempting to resolve a _variable_ with no preceding _declaration_ or external definition
 binding a value to its _name_ results in an Unresolved Variable error.
