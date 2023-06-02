@@ -52,6 +52,8 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 ### Topic: Info Share
 
+* Presentation in CLDR "Beyond Locale Data" session on 22 June.
+
 ### Topic: Action Item Review
 
 ### Topic: Function Registry (continued)
