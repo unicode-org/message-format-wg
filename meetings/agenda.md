@@ -56,6 +56,10 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 ### Topic: Action Item Review
 
+[ ] APP to check on license for software, test suite
+[ ] ALL: read function registry PR 
+[ ] STA: cleanup registry PR
+
 ### Topic: Function Registry (continued)
 * Requested by: STA
 
@@ -68,12 +72,21 @@ Discussion of active PRs. We will merge or reject them in the call.
 | PR   | Description | Recommendation |
 |------|-------------|----------------|
 | #315 | Bidi support | Discuss (see below) |
-| #364 | Unquoted plain expression arguments | Merge with edits |
+| #364 | Replace `nmtoken` with `unquoted` | Merge with edits |
 | #368 | Draft of registry | Discuss |
-| #381 | Variable overrides | Merge with edits |
-| #382 | Literal Resolution | Discuss |
+| #381 | Variable overrides | Merge |
+| #382 | Literal Resolution | Merge |
+| #385 | Clarifications to pattern selection | Merge (discussion to follow) |
 
 * The recommendation "discuss" is to ensure there is WG consensus before merging. The recommendation "merge with edits" is to merge once existing comments have been addressed.
+* #364 has a long comment from me with proposed text
+
+
+### Topic: Bidi
+* Requested by: EAO
+
+Discussion of bidirectional text handling. See:
+* https://github.com/unicode-org/message-format-wg/pull/315
 
 ### Topic: AOB?
 
@@ -85,12 +98,6 @@ Discussion of active PRs. We will merge or reject them in the call.
 ### Topic: (Discussion) Guidance needed for dealing with selector explosions
 * Requested by: STA
 * https://github.com/unicode-org/message-format-wg/discussions/323
-
-### Topic: Bidi
-* Requested by: EAO
-
-Discussion of bidirectional text handling. See:
-* https://github.com/unicode-org/message-format-wg/pull/315
 
 ### Topic: Defining MF1 compatibility
 * Requested by: EAO
