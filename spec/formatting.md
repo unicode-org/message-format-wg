@@ -365,7 +365,7 @@ These are divided into the following categories:
     does not provide for the function `:func` to be successfully resolved:
 
     ```
-    {The value is {|horse| :func}.}
+    {The value is {horse :func}.}
     ```
 
     ```
@@ -410,7 +410,7 @@ These are divided into the following categories:
      an option `field` to be provided with a string value,
 
   ```
-  {Hello, {|horse| :get field=name}!}
+  {Hello, {horse :get field=name}!}
   ```
 
   ```
@@ -468,7 +468,7 @@ Between the brackets, the following contents are used:
   followed by the value of the Literal,
   and then by U+007C VERTICAL LINE `|`
 
-  Examples: `{|horse|}`, `{|42|}`
+  Examples: `{|your horse|}`, `{|42|}`
 
 - Expression with Variable Operand: U+0024 DOLLAR SIGN `$`
   followed by the Variable Name of the Operand
