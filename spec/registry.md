@@ -114,6 +114,25 @@ For the sake of brevity, only `locales="en"` is considered.
 </registry>
 ```
 
+Given the above description, the `:number` function is defined to work both in a selector and a placeholder:
+
+    match {$count :number}
+    when 1 {One new message}
+    when other {{$count :number} new messages}
+
+Furthermore,
+`:number`'s `<matchSignature>` contains two `<match>` elements
+which allow to validate the variant keys.
+If at least one `<match>` validation rules passes,
+a variant key is considered valid.
+
+* `<match pattern="anyNumber"/>` can be used to valide the `when 1` variant
+by testing the `1` key against the `anyNumber` regular expression defined in the registry file.
+* `<match values="one other"/>` can be used to valide the `when other` variant
+by verifying that the `other` key is present in the list of enumarated values: `one other`.
+
+----
+
 A localization engineer can then extend the registry by defining the following `customRegistry.xml` file.
 
 ```xml
