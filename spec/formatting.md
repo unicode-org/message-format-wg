@@ -37,11 +37,13 @@ the _pattern_ of one of the _variants_ must be selected for formatting.
 When a message has a single _selector_,
 an implementation-defined method compares each key to the _selector_
 and determines which of the keys match, and in what order of preference.
-A catch-all key will always match, but is always the least preferred choice.
-During selection, the _variant_ with the best-matching key is selected.
+The list of keys passed to this implementation-defined method
+does not include the catch-all key `*`.
+The catch-all key `*` is treated as a match for any _selector_,
+but with the lowest possible preference.
 
 In a message with more than one _selector_,
-each _variant_ also has a corresponding number of keys.
+the number of keys in each _variant_ **_must_** equal the number of _selectors_.
 These correspond to _selectors_ by position.
 The same implementation-defined method as above is used to compare
 the corresponding key of each _variant_ to its _selector_,
@@ -84,7 +86,8 @@ Next, using `res`, resolve the preferential order for all message keys:
    1. For each _variant_ `var` of the message:
       1. Let `key` be the `var` key at position `i`.
       1. If `key` is not the catch-all key `'*'`:
-         1. Let `ks` be the decoded value of `key`.
+         1. Assert that `key` is a _literal_.
+         1. Let `ks` be the resolved value of `key`.
          1. Append `ks` as the last element of the list `keys`.
    1. Let `rv` be the resolved value at index `i` of `res`.
    1. Let `matches` be the result of calling the method MatchSelectorKeys(`rv`, `keys`)
@@ -108,7 +111,8 @@ filter the list of _variants_ to the ones that match with some preference:
       1. Let `key` be the `var` key at position `i`.
       1. If `key` is the catch-all key `'*'`:
          1. Continue the inner loop on `pref`.
-      1. Let `ks` be the decoded value of `key`.
+      1. Assert that `key` is a _literal_.
+      1. Let `ks` be the resolved value of `key`.
       1. Let `matches` be the list of strings at index `i` of `pref`.
       1. If `matches` includes `ks`:
          1. Continue the inner loop on `pref`.
@@ -133,21 +137,27 @@ Finally, sort the list of variants `vars` and select the _pattern_:
       1. Let `matchpref` be an integer with the value `minpref`.
       1. Let `key` be the `tuple` _variant_ key at position `i`.
       1. If `key` is not the catch-all key `'*'`:
-         1. Let `ks` be the decoded value of `key`.
+         1. Assert that `key` is a _literal_.
+         1. Let `ks` be the resolved value of `key`.
          1. Let `matchpref` be the integer position of `ks` in `matches`.
       1. Set the `tuple` integer value as `matchpref`.
-   1. Call the method SortVariants(`sortable`).
+   1. Set `sortable` to be the result of calling the method `SortVariants(sortable)`.
    1. Set `i` to be `i` - 1.
 1. Let `var` be the _variant_ element of the first element of `sortable`.
 1. Select the _pattern_ of `var`.
 
-The method SortVariants is determined by the implementation.
-It takes as an argument a `sortable` list of (integer, _variant_) tuples,
-which it modifies in place using some stable sorting algorithm.
-The method does not return anything.
-The list is sorted according to the tuple's first integer element,
-such that a lower number is sorted before a higher one,
-and entries that have the same number retain their order.
+`SortVariants` is a method whose single argument is
+a list of (integer, _variant_) tuples.
+It returns a list of (integer, _variant_) tuples.
+Any implementation of `SortVariants` is acceptable
+as long as it satisfies the following requirements:
+
+1. Let `sortable` be an arbitrary list of (integer, _variant_) tuples.
+1. Let `sorted` be `SortVariants(sortable)`.
+1. `sorted` is the result of sorting `sortable` using the following comparator:
+    1. `(i1, v1)` <= `(i2, v2)` if and only if `i1 <= i2`.
+1. The sort is stable (pairs of tuples from `sortable` that are equal
+   in their first element have the same relative order in `sorted`).
 
 ### Examples
 
@@ -231,7 +241,7 @@ when * * {Otherwise}
 Presuming a more powerful implementation which supports selection on numerical values,
 and provides a `:plural` function that matches keys by their exact value
 as well as their plural category (preferring the former, if possible),
-and an Enligh-language formatting context in which
+and an English-language formatting context in which
 the variable reference `$count` resolves to the number `1`,
 pattern selection proceeds as follows for this message:
 
