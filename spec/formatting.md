@@ -8,6 +8,16 @@ when formatting a message for display in a user interface, or for some later pro
 The document is part of the MessageFormat 2.0 specification,
 the successor to ICU MessageFormat, henceforth called ICU MessageFormat 1.0.
 
+## Literal Resolution
+
+The resolved value of _text_, _literal_ and _nmtoken_ tokens
+is always a string concatenation of its parts,
+with escape sequences resolving to their escaped characters.
+When a _literal_ or _nmtoken_ is used as an _expression_ argument
+or on the right-hand side of an _option_,
+the formatting function MUST treat their resolved values the same independently of their presentation,
+such that e.g. the options `foo=42` and `foo=|42|` have the same effect.
+
 ## Variable Resolution
 
 To resolve the value of a Variable,
