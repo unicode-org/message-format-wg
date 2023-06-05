@@ -31,33 +31,32 @@ refer to a local variable that's defined after it in the message.
 
 ## Pattern Selection
 
-When formatting a message with one or more _selectors_,
-the _pattern_ of one of the _variants_ must be selected for formatting.
+When a _message_ contains a _match_ statement with one or more _selectors_, it needs to determine
+which _variant_ will be used to provide the _pattern_ for the formatting operation. This is done by
+ordering the available _variant_ statements according to their _key_ values.
 
-When a message has a single _selector_,
-an implementation-defined method compares each key to the _selector_
-and determines which of the keys match, and in what order of preference.
-The list of keys passed to this implementation-defined method
-does not include the catch-all key `*`.
-The catch-all key `*` is treated as a match for any _selector_,
-but with the lowest possible preference.
+In a _message_ with more than one _selector_, the number of _keys_ in each _variant_ **_MUST_** equal the number of _selectors_.
 
-In a message with more than one _selector_,
-the number of keys in each _variant_ **_must_** equal the number of _selectors_.
-These correspond to _selectors_ by position.
-The same implementation-defined method as above is used to compare
-the corresponding key of each _variant_ to its _selector_,
-to determine which of the keys match, and in what order of preference.
-In order to select a single _variant_,
-the full list of _variants_ will need to be filtered and sorted.
-First, each _variant_ with a key that does not match its _selector_ is left out.
-Then, the remaining _variants_ are sorted lexicographically by key preference,
-with earlier _selectors_ having higher priority than later ones.
-Finally, the highest-sorted _variant_ is selected.
+Each _key_ corresponds to the _selector_ in the `match` statement by its position in the _variant_.
+
+> For example, in this message:
+> ```
+> match {:one} {:two} {:three}
+> when  1 2 3 { ... }
+> ```
+> The first _key_ `1` corresponds to the first _selector_ (`:one`),
+> the second _key_ `2` to the second _selector_ (`:two`), and the third
+> _key_ `3` to the third _selector_ (`:three`).
+
+To determine which _variant_ matches a given set of inputs, each _selector_ is used in turn to order and filter the list of _variants_.
+
+Each _variant_ with a _key_ that does not match its corresponding _selector_ is omitted from the list of _variants_. The remaining _variants_ are sorted according to the _selector's_ _key_-ordering preference, with earlier _selectors_ in the list of _selectors_ having a higher priority than later ones. 
+
+When all of the _selectors_ have been processed, the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
 
 This selection method is defined in more detail below.
 An implementation MAY use any pattern selection method,
-as long as its observable behaviour matches the results of the method defined here.
+as long as its observable behavior matches the results of the method defined here.
 
 ### Resolve Selectors
 
