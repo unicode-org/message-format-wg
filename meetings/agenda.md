@@ -3,7 +3,7 @@
 This is the agenda document for upcoming calls of the MessageFormat subcommittee. We normally meet bi-weekly 
 (every two weeks) on Mondays at 9:30 Pacific (`America/Los_Angeles`). This is currently UTC+7. 
 
-See [here](https://www.timeanddate.com/worldclock/converter.html?iso=20230605T163000&p1=224&p2=248&p3=136&p4=179&p5=33&p6=101&p7=268) for your local time.
+See [here](https://www.timeanddate.com/worldclock/converter.html?iso=20230619T163000&p1=224&p2=248&p3=136&p4=179&p5=33&p6=101&p7=268) for your local time.
 
 Information on joining calls is found in the calendar invite.
 
@@ -12,6 +12,7 @@ Information on joining calls is found in the calendar invite.
 This block reserved for scribe rotation.
 
 Recent scribes:
+* 2023-06-05 RGN
 * 2023-05-22 ECH
 * 2023-05-08 MIH
 * 2023-04-24 SCL
@@ -27,19 +28,17 @@ Recent scribes:
 
 ## Notes Document for The Upcoming Call
 
-https://docs.google.com/document/d/1IBmxze3tGxkH3mMUHovMV9qR8a1lpi4GxoJkG2BNxG0/edit
+https://docs.google.com/document/d/1XagOIWNBU3_gJneSvCYzscESyvgs3OJm0DLAuknzWFM/edit#
 
 ## NOTE WELL
 
-The next call will be Monday 5 June 2023. 
+The next call will be Monday 19 June 2023. 
 
 ***This is a regularly scheduled session***
 
 ## Homework
 
-Read the PR for function registry for the next meetings in April:
 
-* https://github.com/unicode-org/message-format-wg/pull/368 
 
 ## Agenda
 
@@ -52,18 +51,9 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 ### Topic: Info Share
 
-* Presentation in CLDR "Beyond Locale Data" session on 22 June.
 
 ### Topic: Action Item Review
 
-[ ] APP to check on license for software, test suite
-[ ] ALL: read function registry PR 
-[ ] STA: cleanup registry PR
-
-### Topic: Function Registry (continued)
-* Requested by: STA
-
-Discussion of the function registry. Two of the three models had sections on this.
 
 ### Topic: Active PR review
 
@@ -72,21 +62,10 @@ Discussion of active PRs. We will merge or reject them in the call.
 | PR   | Description | Recommendation |
 |------|-------------|----------------|
 | #315 | Bidi support | Discuss (see below) |
-| #364 | Replace `nmtoken` with `unquoted` | Merge with edits |
-| #368 | Draft of registry | Discuss |
-| #381 | Variable overrides | Merge |
-| #382 | Literal Resolution | Merge |
-| #385 | Clarifications to pattern selection | Merge (discussion to follow) |
+
 
 * The recommendation "discuss" is to ensure there is WG consensus before merging. The recommendation "merge with edits" is to merge once existing comments have been addressed.
-* #364 has a long comment from me with proposed text
 
-
-### Topic: Bidi
-* Requested by: EAO
-
-Discussion of bidirectional text handling. See:
-* https://github.com/unicode-org/message-format-wg/pull/315
 
 ### Topic: AOB?
 
