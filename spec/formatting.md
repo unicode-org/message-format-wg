@@ -10,13 +10,12 @@ the successor to ICU MessageFormat, henceforth called ICU MessageFormat 1.0.
 
 ## Literal Resolution
 
-The resolved value of _text_, _literal_ and _nmtoken_ tokens
-is always a string concatenation of its parts,
-with escape sequences resolving to their escaped characters.
-When a _literal_ or _nmtoken_ is used as an _expression_ argument
-or on the right-hand side of an _option_,
-the formatting function MUST treat their resolved values the same independently of their presentation,
-such that e.g. the options `foo=42` and `foo=|42|` have the same effect.
+The resolved value of a _text_ or a _literal_ is the character sequence of the _text_
+or _literal_ after any character escape has been converted to the escaped character.
+When a _literal_ is used as an _expression_ argument or on the right-hand side of an _option_,
+the formatting function MUST treat their resolved values the same independently of whether the
+value was originally _quoted_ or _unquoted_. For example, the _option_ `foo=42` and the _option_ `foo=|42|` 
+are treated as identical.
 
 ## Variable Resolution
 
