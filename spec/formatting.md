@@ -14,7 +14,8 @@ The resolved value of a _text_ or a _literal_ is the character sequence of the _
 or _literal_ after any character escape has been converted to the escaped character.
 When a _literal_ is used as an _expression_ argument or on the right-hand side of an _option_,
 the formatting function MUST treat their resolved values the same independently of whether the
-value was originally _quoted_ or _unquoted_. For example, the _option_ `foo=42` and the _option_ `foo=|42|` 
+value was originally _quoted_ or _unquoted_.
+For example, the _option_ `foo=42` and the _option_ `foo=|42|` 
 are treated as identical.
 
 ## Variable Resolution
