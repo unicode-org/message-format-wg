@@ -31,31 +31,32 @@ refer to a local variable that's defined after it in the message.
 
 ## Pattern Selection
 
-When a _message_ contains a _match_ statement with one or more _selectors_, it needs to determine
-which _variant_ will be used to provide the _pattern_ for the formatting operation. This is done by
-ordering the available _variant_ statements according to their _key_ values.
+When a _message_ contains a _match_ statement with one or more _selectors_, the implementation needs to determine which _variant_ will be used to provide the _pattern_ for the formatting operation. 
+This is done by ordering the available _variant_ statements according to their _key_ values.
 
-In a _message_ with more than one _selector_, the number of _keys_ in each _variant_ **_MUST_** equal the number of _selectors_.
+The number of _keys_ in each _variant_ **_MUST_** equal the number of _selectors_ in the _match_ statement.
 
-Each _key_ corresponds to the _selector_ in the `match` statement by its position in the _variant_.
+Each _key_ corresponds to an _expression_ in the _selectors_ by its position in the _variant_.
 
 > For example, in this message:
 > ```
 > match {:one} {:two} {:three}
 > when  1 2 3 { ... }
 > ```
-> The first _key_ `1` corresponds to the first _selector_ (`:one`),
-> the second _key_ `2` to the second _selector_ (`:two`), and the third
-> _key_ `3` to the third _selector_ (`:three`).
+> The first _key_ `1` corresponds to the first _expression_ in the _selectors_ (`{:one}`),
+> the second _key_ `2` to the second _expression_ (`{:two}`), 
+> and the third _key_ `3` to the third _expression_ (`{:three}`).
 
-To determine which _variant_ matches a given set of inputs, each _selector_ is used in turn to order and filter the list of _variants_.
+To determine which _variant_ best matches a given set of inputs, each _selector_ is used in turn to order and filter the list of _variants_.
 
-Each _variant_ with a _key_ that does not match its corresponding _selector_ is omitted from the list of _variants_. The remaining _variants_ are sorted according to the _selector's_ _key_-ordering preference, with earlier _selectors_ in the list of _selectors_ having a higher priority than later ones. 
+Each _variant_ with a _key_ that does not match its corresponding _selector expression_ is omitted from the list of _variants_. 
+The remaining _variants_ are sorted according to the _expression_'s _key_-ordering preference.
+Earlier _expressions_ in the _selector_'s list of _expressions_ having a higher priority than later ones. 
 
-When all of the _selectors_ have been processed, the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
+When all of the _selector expressions_ have been processed, the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
 
 This selection method is defined in more detail below.
-An implementation MAY use any pattern selection method,
+An implementation **_MAY_** use any pattern selection method,
 as long as its observable behavior matches the results of the method defined here.
 
 ### Resolve Selectors
