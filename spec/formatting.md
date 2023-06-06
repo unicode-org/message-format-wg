@@ -34,7 +34,8 @@ refer to a local variable that's defined after it in the message.
 When a _message_ contains a _match_ statement with one or more _expressions_,
 the implementation needs to determine which _variant_ will be used
 to provide the _pattern_ for the formatting operation. 
-This is done by ordering the available _variant_ statements according to their _key_ values.
+This is done by ordering and filtering the available _variant_ statements according to their _key_ values
+and selecting the first one.
 
 The number of _keys_ in each _variant_ **_MUST_** equal the number of _expressions_ in the _selectors_.
 
