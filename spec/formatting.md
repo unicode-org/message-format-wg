@@ -238,8 +238,9 @@ when * * {Otherwise}
 
 #### Example 3
 
-A more-complex example is the matching found in selection APIs such as
-ICU's `PluralFormat`. Suppose that this API is represented by the function `:plural`.
+A more-complex example is the matching found in selection APIs
+such as ICU's `PluralFormat`.
+Suppose that this API is represented here by the function `:plural`.
 This `:plural` function can match a given numeric value to a specific number _literal_
 and **_also_** to a plural category (`zero`, `one`, `two`, `few`, `many`, `other`)
 according to locale rules defined in CLDR.
