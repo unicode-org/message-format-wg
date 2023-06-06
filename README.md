@@ -65,14 +65,16 @@ We invite feedback about the current syntax draft, as well as the real-life use-
 * General questions and thoughts → [post a discussion thread](https://github.com/unicode-org/message-format-wg/discussions).
 * Actionable feedback (bugs, feature requests) → [file a new issue](https://github.com/unicode-org/message-format-wg/issues).
 
-## Contributing
+## Participation
 
-- [Decision Making Process](docs/decision-process.md)
-- [Contributing to the Meeting Agenda](docs/contributing-to-agenda.md)
-- [Chair Group](docs/chair-group.md)
-- [Glossary](docs/glossary-and-resources.md)
-
-We are open to professionals in the i18n/l10n industry to participate in our working group!  To join:
+We are looking for participation from software developers, localization engineers and others with experience in Internationalization (I18N) and Localization (L10N)!  To join in:
 
 1. Apply to join our [mailing list](https://groups.google.com/a/chromium.org/forum/#!forum/message-format-wg)
 2. Watch this repository (use the "Watch" button in the upper right corner)
+
+## License
+
+Please see ./LICENSE
+
+>    Copyright © 2016 and later Unicode, Inc. and others. All Rights Reserved. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries. Terms of Use and License
+
