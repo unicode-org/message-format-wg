@@ -58,7 +58,8 @@ is omitted from the list of _variants_.
 The remaining _variants_ are sorted according to the _expression_'s _key_-ordering preference.
 Earlier _expressions_ in the _selector_'s list of _expressions_ have a higher priority than later ones. 
 
-When all of the _selector expressions_ have been processed, the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
+When all of the _selector expressions_ have been processed,
+the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
 
 This selection method is defined in more detail below.
 An implementation **_MAY_** use any pattern selection method,
