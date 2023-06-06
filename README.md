@@ -13,6 +13,7 @@ The Message Format Working Group (MFWG) is tasked with developing an industry st
 ## MessageFormat 2 Draft Syntax
 
 The current draft syntax for defining messages can be found in [spec/syntax.md](./spec/syntax.md).
+The syntax is formally described in [ABNF](spec/message.abnf).
 
 Messages can be simple strings:
 
@@ -67,10 +68,11 @@ We invite feedback about the current syntax draft, as well as the real-life use-
 
 ## Participation
 
-We are looking for participation from software developers, localization engineers and others with experience in Internationalization (I18N) and Localization (L10N)!  To join in:
+To join in:
 
-1. Apply to join our [mailing list](https://groups.google.com/a/chromium.org/forum/#!forum/message-format-wg)
-2. Watch this repository (use the "Watch" button in the upper right corner)
+1. Review [CONTRIBUTING.md](./CONTRIBUTING.md)
+2. Apply to join our [mailing list](https://groups.google.com/a/chromium.org/forum/#!forum/message-format-wg)
+3. Watch this repository (use the "Watch" button in the upper right corner)
 
 ## Copyright & Licenses
 
