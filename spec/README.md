@@ -31,7 +31,7 @@
    1. [Quoted Strings](syntax.md#quoted-strings)
    1. [Escape Sequences](syntax.md#escape-sequences)
    1. [Whitespace](syntax.md#whitespace)
-1. [Complete EBNF](syntax.md#complete-ebnf)
+1. [Complete ABNF](syntax.md#complete-abnf)
 1. [Formatting](formatting.md)
 
 ## Introduction
