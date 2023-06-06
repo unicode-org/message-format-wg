@@ -53,7 +53,8 @@ Each _key_ corresponds to an _expression_ in the _selectors_ by its position in 
 To determine which _variant_ best matches a given set of inputs,
 each _selector_ is used in turn to order and filter the list of _variants_.
 
-Each _variant_ with a _key_ that does not match its corresponding _selector expression_ is omitted from the list of _variants_. 
+Each _variant_ with a _key_ that does not match its corresponding _selector expression_
+is omitted from the list of _variants_. 
 The remaining _variants_ are sorted according to the _expression_'s _key_-ordering preference.
 Earlier _expressions_ in the _selector_'s list of _expressions_ have a higher priority than later ones. 
 
