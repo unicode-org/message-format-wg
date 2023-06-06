@@ -238,18 +238,20 @@ when * * {Otherwise}
 
 #### Example 3
 
-Presuming a more powerful implementation which supports selection on numerical values,
-and provides a `:plural` function that matches keys by their exact value
-as well as their plural category (preferring the former, if possible),
-and an English-language formatting context in which
-the variable reference `$count` resolves to the number `1`,
-pattern selection proceeds as follows for this message:
+A more-complex example is the matching found in selection APIs such as
+ICU's `PluralFormat`. Suppose that this API is represented by the function `:plural`.
+This `:plural` function can match a given numeric value to a specific number _literal_
+and **_also_** to a plural category (`zero`, `one`, `two`, `few`, `many`, `other`)
+according to locale rules defined in CLDR.
+
+Given a variable reference `$count` whose value resolves to the number `1` and an `en` (English)
+locale, the pattern selection proceeds as follows for this message:
 
 ```
 match {$count :plural}
 when one {Category match}
-when 1 {Exact match}
-when * {Other match}
+when 1   {Exact match}
+when *   {Other match}
 ```
 
 1. For the selector:<br>
