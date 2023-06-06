@@ -245,8 +245,9 @@ This `:plural` function can match a given numeric value to a specific number _li
 and **_also_** to a plural category (`zero`, `one`, `two`, `few`, `many`, `other`)
 according to locale rules defined in CLDR.
 
-Given a variable reference `$count` whose value resolves to the number `1` and an `en` (English)
-locale, the pattern selection proceeds as follows for this message:
+Given a variable reference `$count` whose value resolves to the number `1`
+and an `en` (English) locale,
+the pattern selection proceeds as follows for this message:
 
 ```
 match {$count :plural}
