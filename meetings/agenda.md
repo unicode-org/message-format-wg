@@ -39,7 +39,6 @@ The next call will be Monday 19 June 2023.
 ## Homework
 
 
-
 ## Agenda
 
 To request that the chair add an _issue_ to the agenda, add the label `Agenda+`
@@ -54,6 +53,9 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 ### Topic: Action Item Review
 
+### Topic: Updates to License and README
+
+Following Unicode guidelines, the chair updated the license, contribution page, and readme. This does **_not_** mark a material change to this working group's procedures, practices, or agreements. Let's review briefly.
 
 ### Topic: Active PR review
 
@@ -62,10 +64,17 @@ Discussion of active PRs. We will merge or reject them in the call.
 | PR   | Description | Recommendation |
 |------|-------------|----------------|
 | #315 | Bidi support | Discuss (see below) |
+| #381 | Clarify variable declarations may override previous ones | Merge |
+| #387 | Fix dangling mention of `nmtoken` | Merge |
+| #388 | Change the "pattern selection" text | Discuss |
+| #389 | Make pattern selection example 3 clearer | Discuss |
 
 
 * The recommendation "discuss" is to ensure there is WG consensus before merging. The recommendation "merge with edits" is to merge once existing comments have been addressed.
 
+### Topic: Changes to pattern selection text #388
+
+### Topic: Make pattern selection example 3 clearer #389
 
 ### Topic: AOB?
 
