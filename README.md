@@ -74,7 +74,7 @@ We are looking for participation from software developers, localization engineer
 
 ## License
 
-Please see ./LICENSE
+Please see [./LICENSE](./LICENSE)
 
 >    Copyright © 2016 and later Unicode, Inc. and others. All Rights Reserved. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries. Terms of Use and License
 
