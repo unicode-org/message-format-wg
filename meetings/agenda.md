@@ -44,20 +44,21 @@ The next call will be Monday 19 June 2023.
 To request that the chair add an _issue_ to the agenda, add the label `Agenda+`
 To request that the chair add an agenda item, send email to the message-format-wg group email.
 
-***Date: 2023-06-05***
 
 ### Topic: Agenda Review
 
-### Topic: Info Share
 
+### Topic: Info Share
+* Presentation this week (Thursday) at the Unicode CLDR thingy.
 
 ### Topic: Action Item Review
 
-### Topic: Updates to License and README
 
-Following Unicode guidelines, the chair updated the license, contribution page, and readme. This does **_not_** mark a material change to this working group's procedures, practices, or agreements. Let's review briefly.
+## Topic: Active PR review
 
-### Topic: Active PR review
+Discussion of active PRs. We will merge or reject them in the call.
+
+The recommendation "discuss" is to ensure there is WG consensus before merging. The recommendation "merge with edits" is to merge once existing comments have been addressed.
 
 Discussion of active PRs. We will merge or reject them in the call.
 
@@ -72,22 +73,39 @@ Discussion of active PRs. We will merge or reject them in the call.
 
 * The recommendation "discuss" is to ensure there is WG consensus before merging. The recommendation "merge with edits" is to merge once existing comments have been addressed.
 
-### Topic: Changes to pattern selection text #388
+## Topic: Bidi support
+https://github.com/unicode-org/message-format-wg/pull/315 
+Discussion of bidirectional text support and specifically how to handle auto-isolation of placeables.
 
-### Topic: Make pattern selection example 3 clearer #389
+## Topic: Pattern Selection text
+https://github.com/unicode-org/message-format-wg/pull/388
+The above PR changes the wording related to patterns selection to use a different approach. This is based on a comment Addison made on PR#385.
 
-### Topic: AOB?
+## Topic: Make pattern selection example 3 clearer
+https://github.com/unicode-org/message-format-wg/pull/389
+Editorial changes to make this example easier to understand. (Taken from comments on PR #385)
 
----
+## Topic: Open Issue Review
 
-## Proposed for Future (or if time permits)
+* https://github.com/unicode-org/message-format-wg/issues
+
+Currently we have 90 open.
+
+Here is the "Top 10 List":
+
+| Issue | Status | Description | Chair's Recommendation |
+|-------|--------|-------------|----------------|
+| (#259)[https://github.com/unicode-org/message-format-wg/issues/259] | resolve-candidate | Don't allow whitespace everywhere | close |
+| (#248)[https://github.com/unicode-org/message-format-wg/issues/248] | resolve-candidate | Naming things | close |
+| (#378)[https://github.com/unicode-org/message-format-wg/issues/378] | blocker-candidate | reserve sigils for private use | proceed to PR |
+| (#356)[https://github.com/unicode-org/message-format-wg/issues/356] | blocker-candidate | clarify that standalone markup is permitted | resolve-candidate | close? addressed by ABNF changes |
+| (#351)[https://github.com/unicode-org/message-format-wg/issues/351] | resolve-candidate | replace first-match with best-match | close (accepted) |
+| (#346)[https://github.com/unicode-org/message-format-wg/issues/346] | resolve-candidate | consider escaping by doubling special | close (stale) |
+| (#299)[https://github.com/unicode-org/message-format-wg/issues/299] | blocker-candidate | when do we evaluate the local variables? | discuss (related to other discussions) |
+| (#298)[https://github.com/unicode-org/message-format-wg/issues/298] | blocker-candidate | should custom functions override standard ones? | discuss |
+| (#292)[https://github.com/unicode-org/message-format-wg/issues/292] | resolve-candidate | resolving type when chaining local variables | close (MF doesn't have types or interpret values) |
+| (#272)[https://github.com/unicode-org/message-format-wg/issues/272] | blocker-candidate | decide on formatting to something other than text | discuss (important!) |
 
 
-### Topic: (Discussion) Guidance needed for dealing with selector explosions
-* Requested by: STA
-* https://github.com/unicode-org/message-format-wg/discussions/323
+## Topic: AOB?
 
-### Topic: Defining MF1 compatibility
-* Requested by: EAO
-
-_Eemeli requested this in our previous call (2023-03-06) and we have discussed this in various issues._
