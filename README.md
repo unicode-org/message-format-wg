@@ -13,6 +13,7 @@ The Message Format Working Group (MFWG) is tasked with developing an industry st
 ## MessageFormat 2 Draft Syntax
 
 The current draft syntax for defining messages can be found in [spec/syntax.md](./spec/syntax.md).
+The syntax is formally described in [ABNF](spec/message.abnf).
 
 Messages can be simple strings:
 
@@ -65,14 +66,17 @@ We invite feedback about the current syntax draft, as well as the real-life use-
 * General questions and thoughts → [post a discussion thread](https://github.com/unicode-org/message-format-wg/discussions).
 * Actionable feedback (bugs, feature requests) → [file a new issue](https://github.com/unicode-org/message-format-wg/issues).
 
-## Contributing
+## Participation
 
-- [Decision Making Process](docs/decision-process.md)
-- [Contributing to the Meeting Agenda](docs/contributing-to-agenda.md)
-- [Chair Group](docs/chair-group.md)
-- [Glossary](docs/glossary-and-resources.md)
+To join in:
 
-We are open to professionals in the i18n/l10n industry to participate in our working group!  To join:
+1. Review [CONTRIBUTING.md](./CONTRIBUTING.md)
+2. Apply to join our [mailing list](https://groups.google.com/a/chromium.org/forum/#!forum/message-format-wg)
+3. Watch this repository (use the "Watch" button in the upper right corner)
 
-1. Apply to join our [mailing list](https://groups.google.com/a/chromium.org/forum/#!forum/message-format-wg)
-2. Watch this repository (use the "Watch" button in the upper right corner)
+## Copyright & Licenses
+
+Copyright © 1991-2023 Unicode, Inc. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the United States and other countries.
+
+The project is released under [LICENSE](./LICENSE). A CLA is required to contribute to this project - please refer to the CONTRIBUTING.md file (or start a Pull Request) for more information.
+

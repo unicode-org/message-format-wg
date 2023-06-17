@@ -20,8 +20,8 @@ such that e.g. the options `foo=42` and `foo=|42|` have the same effect.
 
 ## Variable Resolution
 
-To resolve the value of a Variable,
-its Name is used to identify either a local variable,
+To resolve the value of a _variable_,
+its _name_ is used to identify either a local variable,
 or a variable defined elsewhere.
 If a local variable and an externally defined one use the same name,
 the local variable takes precedence.
@@ -155,11 +155,13 @@ as long as it satisfies the following requirements:
 1. Let `sortable` be an arbitrary list of (integer, _variant_) tuples.
 1. Let `sorted` be `SortVariants(sortable)`.
 1. `sorted` is the result of sorting `sortable` using the following comparator:
-    1. `(i1, v1)` <= `(i2, v2)` if and only if `i1 <= i2`.
+   1. `(i1, v1)` <= `(i2, v2)` if and only if `i1 <= i2`.
 1. The sort is stable (pairs of tuples from `sortable` that are equal
    in their first element have the same relative order in `sorted`).
 
 ### Examples
+
+_This section is non-normative._
 
 #### Example 1
 
@@ -274,7 +276,7 @@ when *   {Other match}
    This is then sorted as:<br>
    « ( 0, `1` ), ( 1, `one` ), ( 2, `*` ) »<br>
 
-5. The pattern `{Exact match}` of the most preferred `1` variant is selected.
+4. The pattern `{Exact match}` of the most preferred `1` variant is selected.
 
 ## Error Handling
 
@@ -290,150 +292,150 @@ These are divided into the following categories:
 
 - **Syntax errors** occur when the syntax representation of a message is not well-formed.
 
-  Example invalid messages resulting in a Syntax error:
-
-  ```
-  {Missing end brace
-  ```
-
-  ```
-  {Unknown {#expression#}}
-  ```
-
-  ```
-  let $var = {|no message body|}
-  ```
+  > Example invalid messages resulting in a Syntax error:
+  >
+  > ```
+  > {Missing end brace
+  > ```
+  >
+  > ```
+  > {Unknown {{expression}}}
+  > ```
+  >
+  > ```
+  > let $var = {|no message body|}
+  > ```
 
 - **Data Model errors** occur when a message is invalid due to
   violating one of the semantic requirements on its structure:
 
-  - **Variant Key Mismatch errors** occur when the number of keys on a Variant
-    does not equal the number of Selectors.
+  - **Variant Key Mismatch errors** occur when the number of keys on a _variant_
+    does not equal the number of _selectors_.
 
-    Example invalid messages resulting in a Variant Key Mismatch error:
-
-    ```
-    match {$one}
-    when 1 2 {Too many}
-    when * {Otherwise}
-    ```
-
-    ```
-    match {$one} {$two}
-    when 1 2 {Two keys}
-    when * {Missing a key}
-    when * * {Otherwise}
-    ```
+    > Example invalid messages resulting in a Variant Key Mismatch error:
+    >
+    > ```
+    > match {$one}
+    > when 1 2 {Too many}
+    > when * {Otherwise}
+    > ```
+    >
+    > ```
+    > match {$one} {$two}
+    > when 1 2 {Two keys}
+    > when * {Missing a key}
+    > when * * {Otherwise}
+    > ```
 
   - **Missing Fallback Variant errors** occur when the message
-    does not include a Variant with only catch-all keys.
+    does not include a _variant_ with only catch-all keys.
 
-    Example invalid messages resulting in a Missing Fallback Variant error:
-
-    ```
-    match {$one}
-    when 1 {Value is one}
-    when 2 {Value is two}
-    ```
-
-    ```
-    match {$one} {$two}
-    when 1 * {First is one}
-    when * 1 {Second is one}
-    ```
+    > Example invalid messages resulting in a Missing Fallback Variant error:
+    >
+    > ```
+    > match {$one}
+    > when 1 {Value is one}
+    > when 2 {Value is two}
+    > ```
+    >
+    > ```
+    > match {$one} {$two}
+    > when 1 * {First is one}
+    > when * 1 {Second is one}
+    > ```
 
 - **Resolution errors** occur when the runtime value of a part of a message
   cannot be determined.
 
   - **Unresolved Variable errors** occur when a variable reference cannot be resolved.
 
-    For example, attempting to format either of the following messages
-    must result in an Unresolved Variable error if done within a context that
-    does not provide for the variable reference `$var` to be successfully resolved:
+    > For example, attempting to format either of the following messages
+    > must result in an Unresolved Variable error if done within a context that
+    > does not provide for the variable reference `$var` to be successfully resolved:
+    >
+    > ```
+    > {The value is {$var}.}
+    > ```
+    >
+    > ```
+    > match {$var}
+    > when 1 {The value is one.}
+    > when * {The value is not one.}
+    > ```
 
-    ```
-    {The value is {$var}.}
-    ```
-
-    ```
-    match {$var}
-    when 1 {The value is one.}
-    when * {The value is not one.}
-    ```
-
-  - **Unknown Function errors** occur when an Expression includes
+  - **Unknown Function errors** occur when an _expression_ includes
     a reference to a function which cannot be resolved.
 
-    For example, attempting to format either of the following messages
-    must result in an Unknown Function error if done within a context that
-    does not provide for the function `:func` to be successfully resolved:
-
-    ```
-    {The value is {horse :func}.}
-    ```
-
-    ```
-    match {|horse| :func}
-    when 1 {The value is one.}
-    when * {The value is not one.}
-    ```
+    > For example, attempting to format either of the following messages
+    > must result in an Unknown Function error if done within a context that
+    > does not provide for the function `:func` to be successfully resolved:
+    >
+    > ```
+    > {The value is {horse :func}.}
+    > ```
+    >
+    > ```
+    > match {|horse| :func}
+    > when 1 {The value is one.}
+    > when * {The value is not one.}
+    > ```
 
 - **Selection errors** occur when message selection fails.
 
   - **Selector errors** are failures in the matching of a key to a specific selector.
 
-    For example, attempting to format either of the following messages
-    might result in a Selector error if done within a context that
-    uses a `:plural` selector function which requires its input to be numeric:
-
-    ```
-    match {|horse| :plural}
-    when 1 {The value is one.}
-    when * {The value is not one.}
-    ```
-
-    ```
-    let $sel = {|horse| :plural}
-    match {$sel}
-    when 1 {The value is one.}
-    when * {The value is not one.}
-    ```
+    > For example, attempting to format either of the following messages
+    > might result in a Selector error if done within a context that
+    > uses a `:plural` selector function which requires its input to be numeric:
+    >
+    > ```
+    > match {|horse| :plural}
+    > when 1 {The value is one.}
+    > when * {The value is not one.}
+    > ```
+    >
+    > ```
+    > let $sel = {|horse| :plural}
+    > match {$sel}
+    > when 1 {The value is one.}
+    > when * {The value is not one.}
+    > ```
 
 - **Formatting errors** occur during the formatting of a resolved value,
   for example when encountering a value with an unsupported type
   or an internally inconsistent set of options.
 
-  For example, attempting to format any of the following messages
-  might result in a Formatting error if done within a context that
-
-  1. provides for the variable reference `$user` to resolve to
-     an object `{ name: 'Kat', id: 1234 }`,
-  2. provides for the variable reference `$field` to resolve to
-     a string `'address'`, and
-  3. uses a `:get` formatting function which requires its argument to be an object and
-     an option `field` to be provided with a string value,
-
-  ```
-  {Hello, {horse :get field=name}!}
-  ```
-
-  ```
-  {Hello, {$user :get}!}
-  ```
-
-  ```
-  let $id = {$user :get field=id}
-  {Hello, {$id :get field=name}!}
-  ```
-
-  ```
-  {Your {$field} is {$id :get field=$field}}
-  ```
+  > For example, attempting to format any of the following messages
+  > might result in a Formatting error if done within a context that
+  >
+  > 1. provides for the variable reference `$user` to resolve to
+  >    an object `{ name: 'Kat', id: 1234 }`,
+  > 2. provides for the variable reference `$field` to resolve to
+  >    a string `'address'`, and
+  > 3. uses a `:get` formatting function which requires its argument to be an object and
+  >    an option `field` to be provided with a string value,
+  >
+  > ```
+  > {Hello, {horse :get field=name}!}
+  > ```
+  >
+  > ```
+  > {Hello, {$user :get}!}
+  > ```
+  >
+  > ```
+  > let $id = {$user :get field=id}
+  > {Hello, {$id :get field=name}!}
+  > ```
+  >
+  > ```
+  > {Your {$field} is {$id :get field=$field}}
+  > ```
 
 Syntax and Data Model errors must be emitted as soon as possible.
 
-During selection, an Expression handler must only emit Resolution and Selection errors.
-During formatting, an Expression handler must only emit Resolution and Formatting errors.
+During selection, an _expression_ handler must only emit Resolution and Selection errors.
+During formatting, an _expression_ handler must only emit Resolution and Formatting errors.
 
 In all cases, when encountering an error,
 a message formatter must provide some representation of the message.
@@ -443,13 +445,13 @@ or contains some error which leads to further errors,
 an implementation which does not emit all of the errors
 should prioritise Syntax and Data Model errors over others.
 
-When an error occurs in the resolution of an Expression,
-the Expression in question is processed as if the option were not defined.
+When an error occurs in the resolution of an _expression_,
+the _expression_ in question is processed as if the option were not defined.
 This may allow for the fallback handling described below to be avoided,
 though an error must still be emitted.
 
-When an error occurs within a Selector,
-the selector must not match any VariantKey other than the catch-all `*`
+When an error occurs within a _selector_,
+the _selector_ must not match any _variant_ _key_ other than the catch-all `*`
 and a Resolution or Selector error is emitted.
 
 ## Fallback String Representations
@@ -462,61 +464,64 @@ If a fallback string is not defined,
 the U+FFFD REPLACEMENT CHARACTER `�` character is used,
 resulting in the string `{�}`.
 
-When an error occurs in an Expression that is being formatted,
-the fallback string representation of the Expression
+When an error occurs in an _expression_ that is being formatted,
+the fallback string representation of the _expression_
 always starts with U+007B LEFT CURLY BRACKET `{`
 and ends with U+007D RIGHT CURLY BRACKET `}`.
 Between the brackets, the following contents are used:
 
-- Expression with Literal Operand: U+007C VERTICAL LINE `|`
+- _expression_ with _literal_ operand: U+007C VERTICAL LINE `|`
   followed by the value of the Literal,
   and then by U+007C VERTICAL LINE `|`
 
-  Examples: `{|your horse|}`, `{|42|}`
+  > Examples: `{|your horse|}`, `{|42|}`
 
-- Expression with Variable Operand: U+0024 DOLLAR SIGN `$`
-  followed by the Variable Name of the Operand
+- _expression_ with _variable_ operand: U+0024 DOLLAR SIGN `$`
+  followed by the _variable_ _name_ of the operand
 
-  Example: `{$user}`
+  > Example: `{$user}`
 
-- Standalone expression with no Operand: U+003A COLON `:` followed by the Expression Name
+- Standalone _expression_ with no operand:
+  U+003A COLON `:` followed by the _function_ _name_
 
-  Example: `{:platform}`
+  > Example: `{:platform}`
 
-- Opening expression with no Operand: U+002B PLUS SIGN `+` followed by the Expression Name
+- Opening _expression_ with no operand:
+  U+002B PLUS SIGN `+` followed by the _function_ _name_
 
-  Example: `{+tag}`
+  > Example: `{+tag}`
 
-- Closing expression with no Operand: U+002D HYPHEN-MINUS `-` followed by the Expression Name
+- Closing _expression_ with no operand:
+  U+002D HYPHEN-MINUS `-` followed by the _function_ _name_
 
-  Example: `{-tag}`
+  > Example: `{-tag}`
 
 - Otherwise: The U+FFFD REPLACEMENT CHARACTER `�` character
 
-  Example: `{�}`
+  > Example: `{�}`
 
-Option names and values are not included in the fallback string representations.
+_Option_ names and values are not included in the fallback string representations.
 
-When an error occurs in an Expression with a Variable Operand
-and the Variable refers to a local variable Declaration,
-the fallback string is formatted based on the Expression of the Declaration,
-rather than the Expression in the Selector or Pattern.
+When an error occurs in an _expression_ with a _variable_ operand
+and the _variable_ refers to a local _declaration_,
+the fallback string is formatted based on the _expression_ of the _declaration_,
+rather than the _expression_ in the _selector_ or _pattern_.
 
-For example, attempting to format either of the following messages within a context that
-does not provide for the function `:func` to be successfully resolved:
-
-```
-let $var = {|horse| :func}
-{The value is {$var}.}
-```
-
-```
-let $var = {|horse|}
-{The value is {$var :func}.}
-```
-
-would result in both cases with this formatted string representation:
-
-```
-The value is {|horse|}.
-```
+> For example, attempting to format either of the following messages within a context that
+> does not provide for the function `:func` to be successfully resolved:
+>
+> ```
+> let $var = {|horse| :func}
+> {The value is {$var}.}
+> ```
+>
+> ```
+> let $var = {|horse|}
+> {The value is {$var :func}.}
+> ```
+>
+> would result in both cases with this formatted string representation:
+>
+> ```
+> The value is {|horse|}.
+> ```

@@ -19,7 +19,7 @@
    1. [Variants](#variants)
    1. [Patterns](#patterns)
    1. [Expressions](#expressions)
-       1. [Reserved Sequences](#reserved)
+      1. [Reserved Sequences](#reserved)
 1. [Tokens](#tokens)
    1. [Keywords](#keywords)
    1. [Text](#text)
@@ -52,7 +52,7 @@ The design goals of the syntax specification are as follows:
    as well as making the selection logic predictable and easy to reason about.
 
    - _Non-Goal_: Make the syntax intuitive enough for non-technical translators to hand-edit.
-     Instead, we assume that most translators will work with MessageFormat 2.0
+     Instead, we assume that most translators will work with MessageFormat 2
      by means of GUI tooling, CAT workbenches etc.
 
 1. The syntax surrounding translatable content should be easy to write and edit
@@ -285,20 +285,20 @@ which will be used to choose one of the _variants_ during formatting.
 selectors = match 1*([s] expression)
 ```
 
-Examples:
-
-```
-match {$count :plural}
-when 1 {One apple}
-when * {{$count} apples}
-```
-
-```
-let $frac = {$count: number minFractionDigits=2}
-match {$frac}
-when 1 {One apple}
-when * {{$frac} apples}
-```
+> Examples:
+>
+> ```
+> match {$count :plural}
+> when 1 {One apple}
+> when * {{$count} apples}
+> ```
+>
+> ```
+> let $frac = {$count: number minFractionDigits=2}
+> match {$frac}
+> when 1 {One apple}
+> when * {{$frac} apples}
+> ```
 
 ### Variants
 
@@ -337,23 +337,26 @@ This serves 3 purposes:
 pattern = "{" *(text / expression) "}"
 ```
 
-Examples:
-
-```
-{Hello, world!}
-```
+> Example:
+>
+> ```
+> {Hello, world!}
+> ```
 
 Whitespace within a _pattern_ is meaningful and MUST be preserved.
 
 ### Expressions
 
-_Expressions_ ***must*** start with a _literal_, a _variable_, or an _annotation_. An _expression_ ***must not*** be empty.
+**_Expressions_** MUST start with a _literal_, a _variable_, or an _annotation_.
+An _expression_ MUST NOT be empty.
 
-A _literal_ or _variable_ ***may*** be optionally followed by an _annotation_. 
+A _literal_ or _variable_ MAY be optionally followed by an _annotation_.
 
-An _annotation_ consists of a _function_ and its named _options_, or consists of a _reserved_ sequence.
+An **_annotation_** consists of a _function_ and its named _options_,
+or consists of a _reserved_ sequence.
 
-_Functions_ do not accept any positional arguments other than the _literal_ or _variable_ in front of them.
+_Functions_ do not accept any positional arguments
+other than the _literal_ or _variable_ in front of them.
 
 ```abnf
 expression = "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
@@ -361,56 +364,59 @@ annotation = (function *(s option)) / reserved
 option = name [s] "=" [s] (literal / variable)
 ```
 
-Expression examples:
-
-```
-{1.23}
-```
-
-```
-{|-1.23|}
-```
-
-```
-{1.23 :number maxFractionDigits=1}
-```
-
-```
-{|Thu Jan 01 1970 14:37:00 GMT+0100 (CET)| :datetime weekday=long}
-```
-
-```
-{|My Brand Name| :linkify href=|foobar.com|}
-```
-
-```
-{$when :datetime month=2-digit}
-```
-
-```
-{:message id=some_other_message}
-```
-
-```
-{+ssml.emphasis level=strong}
-```
-
-Message examples:
-
-```
-{This is {+b}bold{-b}.}
-```
-
-```
-{{+h1 name=above-and-beyond}Above And Beyond{-h1}}
-```
+> Expression examples:
+>
+> ```
+> {1.23}
+> ```
+>
+> ```
+> {|-1.23|}
+> ```
+>
+> ```
+> {1.23 :number maxFractionDigits=1}
+> ```
+>
+> ```
+> {|Thu Jan 01 1970 14:37:00 GMT+0100 (CET)| :datetime weekday=long}
+> ```
+>
+> ```
+> {|My Brand Name| :linkify href=|foobar.com|}
+> ```
+>
+> ```
+> {$when :datetime month=2-digit}
+> ```
+>
+> ```
+> {:message id=some_other_message}
+> ```
+>
+> ```
+> {+ssml.emphasis level=strong}
+> ```
+>
+> Message examples:
+>
+> ```
+> {This is {+b}bold{-b}.}
+> ```
+>
+> ```
+> {{+h1 name=above-and-beyond}Above And Beyond{-h1}}
+> ```
 
 #### Reserved
 
-_Reserved_ sequences start with a reserved character and are intended for future standardization. 
-A reserved sequence can be empty or contain arbitrary text. 
+**_Reserved_** sequences start with a reserved character
+and are intended for future standardization.
+A reserved sequence MAY be empty or contain arbitrary text.
 A reserved sequence does not include any trailing whitespace.
-While a reserved sequence is technically "well-formed", unrecognized reserved sequences have no meaning and might result in errors during formatting.
+
+While a reserved sequence is technically "well-formed",
+unrecognized reserved sequences have no meaning and MAY result in errors during formatting.
 
 ## Tokens
 
@@ -429,7 +435,7 @@ when  = %x77.68.65.6E     ; "when"
 
 ### Text
 
-_Text_ is the translatable content of a _pattern_.
+**_text_** is the translatable content of a _pattern_.
 Any Unicode code point is allowed,
 except for surrogate code points U+D800 through U+DFFF.
 The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}`.
@@ -447,11 +453,13 @@ text-char = %x0-5B         ; omit \
 
 ### Literals
 
-_Literal_ is used for matching variants and providing input to _expressions_.
-_Quoted_ literals may include content with any Unicode code point,
+**_Literal_** is used for matching variants and providing input to _expressions_.
+
+**_Quoted_** literals may include content with any Unicode code point,
 except for surrogate code points U+D800 through U+DFFF.
 The characters `\` and `|` MUST be escaped as `\\` and `\|`.
-_Unquoted_ literals have a much more restricted range that
+
+**_Unquoted_** literals have a much more restricted range that
 is intentionally close to the XML's [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken),
 with the restriction that it MUST NOT start with `-` or `:`,
 as those would conflict with _function_ start characters.
@@ -474,7 +482,7 @@ unquoted-start = name-start / DIGIT / "."
 
 ### Names
 
-The _name_ token is used for variable names (prefixed with `$`),
+The **_name_** token is used for variable names (prefixed with `$`),
 function names (prefixed with `:`, `+` or `-`),
 as well as option names.
 It is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name),
@@ -516,7 +524,6 @@ backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 Inside _patterns_,
 whitespace is part of the translatable content and is recorded and stored verbatim.
 Whitespace is not significant outside translatable text, except where required by the syntax.
-
 
 ```abnf
 s = 1*( SP / HTAB / CR / LF )
