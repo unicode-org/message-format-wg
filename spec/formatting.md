@@ -276,8 +276,8 @@ when * {Other match}
 
 ## Handling Bidirectional Text
 
-Formatted messages MAY be bidirectional,
-containing a mixture of left-to-right and right-to-left spans of text.
+_Messages_ contain text which can be bidirectional, that is
+consisting of a mixture of left-to-right and right-to-left spans of text.
 
 When concatenating formatted values,
 the [Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9]
