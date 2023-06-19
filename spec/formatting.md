@@ -483,14 +483,14 @@ Between the brackets, the following contents are used:
   > Example: `{:platform}`
 
 - Opening _expression_ with no operand:
-  U+002B PLUS SIGN `+` followed by the _function_ _name_
+  U+005C REVERSE SOLIDUS `\` followed by the _function_ _name_
 
-  > Example: `{+tag}`
+  > Example: `{\tag}`
 
 - Closing _expression_ with no operand:
-  U+002D HYPHEN-MINUS `-` followed by the _function_ _name_
+  U+002F SOLIDUS `/` followed by the _function_ _name_
 
-  > Example: `{-tag}`
+  > Example: `{/tag}`
 
 - Otherwise: The U+FFFD REPLACEMENT CHARACTER `�` character
 
