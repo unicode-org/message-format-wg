@@ -125,29 +125,23 @@ A simple _expression_ is a bare variable name:
 ### Formatting Functions
 
 A _function_ is named functionality, possibly with _options_, that format,
-process, or operate on a _variable_.
+process, or operate on an _operand_ which may be either a _literal_ or a _variable_.
 
-For example, a _message_ with an interpolated `$date` _variable_ formatted with the `:datetime` _function_:
+For example, a _message_ with a `$date` _variable_ formatted with the `:datetime` _function_:
 
     {Today is {$date :datetime weekday=long}.}
 
-A _message_ with an interpolated `$userName` _variable_ formatted with
+A _message_ with a `$userName` _variable_ formatted with
 the custom `:person` _function_ capable of
 declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
 
     {Hello, {$userName :person case=vocative}!}
 
-A _message_ with an interpolated `$userObj` _variable_ formatted with
+A _message_ with a `$userObj` _variable_ formatted with
 the custom `:person` _function_ capable of
 plucking the first name from the object representing a person:
 
     {Hello, {$userObj :person firstName=long}!}
-
-Functions use one of the following prefix sigils:
-
-- `:` for standalone content
-- `+` for starting or opening elements
-- `-` for ending or closing elements
 
 A message with two markup-like _functions_, `button` and `link`,
 which the runtime can use to construct a document tree structure for a UI framework:
@@ -347,19 +341,27 @@ Whitespace within a _pattern_ is meaningful and MUST be preserved.
 
 ### Expressions
 
-**_Expressions_** MUST start with a _literal_, a _variable_, or an _annotation_.
+**_Expressions_** MUST start with an _operand_ or an _annotation_.
 An _expression_ MUST NOT be empty.
 
-A _literal_ or _variable_ MAY be optionally followed by an _annotation_.
+An **_operand_** is either a _literal_ or a _variable_.
+An _operand_ MAY be optionally followed by an _annotation_.
 
 An **_annotation_** consists of a _function_ and its named _options_,
 or consists of a _reserved_ sequence.
 
 _Functions_ do not accept any positional arguments
-other than the _literal_ or _variable_ in front of them.
+other than the _operand_ in front of them.
+
+_Functions_ use one of the following prefix sigils:
+
+- `:` for standalone content
+- `+` for starting or opening _expressions_
+- `-` for ending or closing _expressions_
 
 ```abnf
-expression = "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
+expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
+operand = literal / variable
 annotation = (function *(s option)) / reserved
 option = name [s] "=" [s] (literal / variable)
 ```
