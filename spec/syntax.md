@@ -462,10 +462,10 @@ except for surrogate code points U+D800 through U+DFFF.
 The characters `\` and `|` MUST be escaped as `\\` and `\|`.
 
 **_Unquoted_** literals have a much more restricted range that
-is intentionally close to the XML's [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken),
-with the restrictions that it MUST NOT start with `:`,
-and when starting with `-`, must be followed by a `.` or a digit.
-These restrictions are required not to conflict with _function_ start characters.
+is intentionally close to XML's [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken).
+To make _unquoted_ literals distinct from _function_ names,
+a literal MUST be quoted if it begins with a `:`
+or if it begins with a `-` that is **not** followed by a `.` or a digit.
 
 All code points are preserved.
 
