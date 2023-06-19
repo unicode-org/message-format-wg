@@ -274,6 +274,65 @@ when * {Other match}
 
 4. The pattern `{Exact match}` of the most preferred `1` variant is selected.
 
+## Handling Bidirectional Text
+
+_Messages_ contain text which can be bidirectional, that is
+consisting of a mixture of left-to-right and right-to-left spans of text.
+
+When concatenating formatted values,
+the [Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9]
+can produce unexpected or undesirable effects, such as "spillover".
+Formatted values SHOULD be bidirectionally isolated
+so that the directionality of a formatted _expression_
+does not negatively affect the presentation of the overall formatted result.
+
+An implementation MUST define methods for
+determining the directionality of the message as a whole as well as each formatted _expression_.
+The method of determining the directionality of a formatted _expression_
+MAY rely on the introspection of its contents, or on other means.
+
+If a formatted _expression_ itself contains spans with differing directionality,
+its formatter SHOULD isolate such parts to avoid
+negatively affecting the presentation of the overall formatted result.
+
+> For example, an implementation could provide a `:number` formatting function
+> which would always produce output matching the message's locale,
+> allowing for its formatted string representation to never need isolation.
+
+Implementations formatting messages as a concatenated string or a sequence of strings
+MUST provide one or more strategies for bidirectional isolation.
+One such strategy MUST behave as follows:
+
+1. Let `msgdir` be the directionality of the whole message,
+   one of « `'LTR'`, `'RTL'`, `'unknown'` ».
+   These correspond to the message having left-to-right directionality,
+   right-to-left directionality, and to the message's directionality not being known.
+1. For each _expression_ `exp` in _pattern_:
+   1. Let `fmt` be the formatted string representation of the resolved value of `exp`.
+   1. Let `dir` be the directionality of `fmt`,
+      one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
+   1. If `dir` is `'unknown'`:
+      1. In the formatted output,
+         prefix `fmt` with U+2068 FIRST STRONG ISOLATE
+         and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
+   1. Else, if `dir` is `'LTR'` and `msgdir` is not `'LTR'`:
+      1. In the formatted output,
+         prefix `fmt` with U+2066 LEFT-TO-RIGHT ISOLATE
+         and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
+   1. Else, if `dir` is `'RTL'` and `msgdir` is not `'RTL'`:
+      1. In the formatted output,
+         prefix `fmt` with U+2067 RIGHT-TO-LEFT ISOLATE
+         and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
+
+Alternatives to this "compatibility" strategy MAY be provided by implementations,
+which MAY also introspect the _pattern_'s _text_ values
+and identify situations where isolate characters are not needed
+or where additional or different isolation would produce better results.
+
+If an implementation provides formatting to non-string targets,
+it SHOULD provide similar strategies for enabling bidirectional isolation,
+where appropriate.
+
 ## Error Handling
 
 Errors in messages and their formatting may occur and be detected
