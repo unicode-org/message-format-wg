@@ -356,8 +356,8 @@ other than the _operand_ in front of them.
 _Functions_ use one of the following prefix sigils:
 
 - `:` for standalone content
-- `+` for starting or opening elements
-- `-` for ending or closing elements
+- `+` for starting or opening _expressions_
+- `-` for ending or closing _expressions_
 
 ```abnf
 expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
