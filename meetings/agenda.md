@@ -73,6 +73,10 @@ Discussion of active PRs. We will merge or reject them in the call.
 
 * The recommendation "discuss" is to ensure there is WG consensus before merging. The recommendation "merge with edits" is to merge once existing comments have been addressed.
 
+## Topic: Function introducers
+
+See #397 and #398 and various comments.
+
 ## Topic: Bidi support
 https://github.com/unicode-org/message-format-wg/pull/315 
 Discussion of bidirectional text support and specifically how to handle auto-isolation of placeables.
