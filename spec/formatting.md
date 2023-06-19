@@ -14,7 +14,7 @@ To resolve the value of a _variable_,
 its _name_ is used to identify either a local variable,
 or a variable defined elsewhere.
 
-If more than one _declaration_ binds a value to the same _name_,
+If the left-hand side _variable_ of more than one _declaration_ uses the same _name_,
 or if an externally defined variable and a _declaration_ use the same _name_,
 the resolved value of the most recent _declaration_ preceding the _variable_ is used.
 
