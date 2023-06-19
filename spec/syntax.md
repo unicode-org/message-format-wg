@@ -463,8 +463,9 @@ The characters `\` and `|` MUST be escaped as `\\` and `\|`.
 
 **_Unquoted_** literals have a much more restricted range that
 is intentionally close to the XML's [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken),
-with the restriction that it MUST NOT start with `-` or `:`,
-as those would conflict with _function_ start characters.
+with the restrictions that it MUST NOT start with `:`,
+and when starting with `-`, must be followed by a `.` or a digit.
+These restrictions are required not to conflict with _function_ start characters.
 
 All code points are preserved.
 
@@ -477,9 +478,10 @@ quoted-char    = %x0-5B         ; omit \
                / %x7D-D7FF      ; omit surrogates
                / %xE000-10FFFF
 
-unquoted       = unquoted-start *name-char
+unquoted       = (unquoted-start / negative-start) *name-char
 unquoted-start = name-start / DIGIT / "."
                / %xB7 / %x300-36F / %x203F-2040
+negative-start = "-" ( DIGIT / "." )
 ```
 
 ### Names
