@@ -3,7 +3,7 @@
 This is the agenda document for upcoming calls of the MessageFormat subcommittee. We normally meet bi-weekly 
 (every two weeks) on Mondays at 9:30 Pacific (`America/Los_Angeles`). This is currently UTC+7. 
 
-See [here](https://www.timeanddate.com/worldclock/converter.html?iso=20230619T163000&p1=224&p2=248&p3=136&p4=179&p5=33&p6=101&p7=268) for your local time.
+See [here](https://www.timeanddate.com/worldclock/converter.html?iso=20230703T163000&p1=224&p2=248&p3=136&p4=179&p5=33&p6=101&p7=268) for your local time.
 
 Information on joining calls is found in the calendar invite.
 
@@ -12,6 +12,7 @@ Information on joining calls is found in the calendar invite.
 This block reserved for scribe rotation.
 
 Recent scribes:
+* 2023-06-19 TIM
 * 2023-06-05 RGN
 * 2023-05-22 ECH
 * 2023-05-08 MIH
@@ -28,16 +29,17 @@ Recent scribes:
 
 ## Notes Document for The Upcoming Call
 
-https://docs.google.com/document/d/1XagOIWNBU3_gJneSvCYzscESyvgs3OJm0DLAuknzWFM/edit#
+https://docs.google.com/document/d/1gJ92S0roqvXYmv7mmKb2ICQsZ5Z5XSn6WLgGFNcq6S0/edit
 
 ## NOTE WELL
 
-The next call will be Monday 19 June 2023. 
+The next call will be Monday 3 July 2023. 
 
 ***This is a regularly scheduled session***
 
 ## Homework
 
+**_Review all `resolve-candidate` issues for closure BEFORE 2023-06-23_**
 
 ## Agenda
 
@@ -53,6 +55,7 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 ### Topic: Action Item Review
 
+[ ] STA: file known issues against function registry
 
 ## Topic: Active PR review
 
@@ -64,30 +67,10 @@ Discussion of active PRs. We will merge or reject them in the call.
 
 | PR   | Description | Recommendation |
 |------|-------------|----------------|
-| #315 | Bidi support | Discuss (see below) |
 | #381 | Clarify variable declarations may override previous ones | Merge |
-| #387 | Fix dangling mention of `nmtoken` | Merge |
-| #388 | Change the "pattern selection" text | Discuss |
-| #389 | Make pattern selection example 3 clearer | Discuss |
 
 
 * The recommendation "discuss" is to ensure there is WG consensus before merging. The recommendation "merge with edits" is to merge once existing comments have been addressed.
-
-## Topic: Function introducers
-
-See #397 and #398 and various comments.
-
-## Topic: Bidi support
-https://github.com/unicode-org/message-format-wg/pull/315 
-Discussion of bidirectional text support and specifically how to handle auto-isolation of placeables.
-
-## Topic: Pattern Selection text
-https://github.com/unicode-org/message-format-wg/pull/388
-The above PR changes the wording related to patterns selection to use a different approach. This is based on a comment Addison made on PR#385.
-
-## Topic: Make pattern selection example 3 clearer
-https://github.com/unicode-org/message-format-wg/pull/389
-Editorial changes to make this example easier to understand. (Taken from comments on PR #385)
 
 ## Topic: Open Issue Review
 
