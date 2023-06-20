@@ -4,6 +4,8 @@ To work with messages defined in other syntaxes than that of MessageFormat 2,
 an equivalent data model representation is also defined.
 Implementations MAY provide interfaces which allow
 for MessageFormat 2 syntax to be parsed into this representation,
+for this representation to be serialized into MessageFormat 2 syntax
+or any other syntax,
 for messages presented in this representation to be formatted,
 or for other operations to be performed on or with messages in this representation.
 
@@ -48,7 +50,7 @@ interface Declaration {
 }
 ```
 
-In a `SelectMessage`, the `keys` and `value` of each _variant_ are kept as an ordered list.
+In a `SelectMessage`, the `keys` and `value` of each _variant_ are represented as an ordered list.
 For the `CatchallKey`, a string `value` may be provided to retain an identifier.
 This is always `'*'` in MessageFormat 2 syntax, but may vary in other formats.
 
@@ -66,8 +68,8 @@ interface CatchallKey {
 
 ## Patterns
 
-Each `Pattern` represents a single linear _pattern_ without selectors,
-with a `body` made up of `Text` and `Expression` shapes.
+Each `Pattern` represents a linear sequence, without selectors.
+Each element of the sequence MUST have either a `Text` or an `Expression` shape.
 `Text` represents literal _text_,
 while `Expression` wraps each of the potential _expression_ shapes.
 The `value` of `Text` is the "cooked" value (i.e. escape sequences are processed).
@@ -124,8 +126,8 @@ the `kind` corresponds to the starting sigil of a _function_:
 `'open'` for `+`, `'close'` for `-`, and `'value'` for `:`.
 The `name` does not include this starting sigil.
 
-If the _expression_ includes a _literal_ or _variable_ before the _annotation_,
-it is included as the `operand`.
+The optional `operand` is the _literal_ or _variable_
+before the _annotation_ in the _expression_, if present.
 Each _option_ is represented by an `Option`.
 
 ```ts
