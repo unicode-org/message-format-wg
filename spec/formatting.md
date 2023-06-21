@@ -111,7 +111,7 @@ after any character escape has been converted to the escaped character.
 When a _literal_ is used as an _operand_
 or on the right-hand side of an _option_,
 the formatting function MUST treat its resolved value the same
-independently of whether the value was originally _quoted_ or _unquoted_.
+whether its value was originally _quoted_ or _unquoted_.
 
 > For example,
 > the _option_ `foo=42` and the _option_ `foo=|42|` are treated as identical.
@@ -136,19 +136,21 @@ this MUST also be considered a failure.
 
 ### Function Resolution
 
-To resolve the value of an _expression_ with a _function_ _annotation_,
+To resolve an _expression_ with a _function_ _annotation_,
 the following steps are taken:
 
 1. If the _expression_ includes an _operand_, resolve its value.
    If this fails, use a _fallback value_ for the _expression_.
 2. Based on the _function_ starting sigil and _name_,
    find the appropriate function implementation from the _function registry_.
-   If this fails, emit an Unknown Function error
+   If the registry does not define an implementation for this _name_,
+   emit an Unknown Function error
    and use a _fallback value_ for the _expression_.
-3. Resolve the _option_ values as a mapping of string identifiers to values.
-   For each _option_, resolve its right-hand side value.
-   If this succeeds, assign it to the mapping with the _name_ of the _option_.
-   If this fails, do not set any value in the resolved mapping for this _option_.
+3. Resolve the _option_ values to a mapping of string identifiers to values.
+   For each _option_:
+     * If its right-hand side successfully resolves to a value,
+       bind the _name_ of the _option_ to the resolved value in the mapping.
+     * Otherwise, do not bind the _name_ of the _option_ to any value in the mapping.
 4. Call the function implementation with the following arguments:
 
    - The current _locale_.
@@ -156,9 +158,9 @@ the following steps are taken:
      an empty value.
    - The resolved mapping of _options_.
 
-   The shapes of the resolved _operand_ and _option_ values is implementation-defined.
+   The shapes of the resolved _operand_ and _option_ values are implementation-defined.
 
-   An implementation MAY include additional arguments for the function call,
+   An implementation MAY pass additional arguments to the function,
    as long as reasonable precautions are taken to keep the function interface
    simple and minimal, and avoid introducing potential security vulnerabilities.
 
@@ -175,11 +177,11 @@ the following steps are taken:
 
 The _resolution_ of an _expression_ may fail in the following cases:
 
-- A failure in the resolution of a _variable_ _operand_.
-- A failure in the resolution of a _function_ _annotation_.
-- The presence of a _reserved_ _annotation_.
+- A _variable_ _operand_ fails to resolve.
+- A _function_ _annotation_ fails to resolve.
+- The _expression_ has a _reserved_ _annotation_.
 
-In each such case, and error MUST be emitted
+In each such case, an error MUST be emitted
 and a **_fallback value_** used for the _expression_.
 This value depends on the shape of the _expression_:
 
@@ -206,12 +208,13 @@ _Option_ names and values are not included in the _fallback value_.
 
 When an error occurs in an _expression_ with a _variable_ _operand_
 and the _variable_ refers to a local _declaration_,
-the _fallback value_ is formatted based on the _expression_ of the _declaration_,
+the _fallback value_ is formatted based on the _expression_
+on the right-hand side of the _declaration_,
 rather than the _expression_ in the _selector_ or _pattern_.
 
 > For example,
-> attempting to format either of the following messages within a context that
-> does not provide for the function `:func` to be successfully resolved:
+> in a context in which the function `:func` fails to resolve,
+> attempting to format either of the following messages:
 >
 > ```
 > let $var = {|horse| :func}
@@ -230,7 +233,7 @@ _Pattern selection_ is not supported for _fallback values_.
 
 ## Pattern Selection
 
-When a _message_ contains a _match_ statement with one or more _expressions_,
+When a _message_ contains a _match_ construct with one or more _expressions_,
 the implementation needs to determine which _variant_ will be used
 to provide the _pattern_ for the formatting operation. 
 This is done by ordering and filtering the available _variant_ statements
@@ -491,14 +494,14 @@ when *   {Other match}
 ## Formatting
 
 After _pattern selection_,
-each _text_ and _expression_ of the selected _pattern_ must be resolved and formatted.
+each _text_ and _expression_ part of the selected _pattern_ must be resolved and formatted.
 
 _Formatting_ is a mostly implementation-defined process,
 as it depends on the implementation's shape for resolved values
 and the target shape of the formatting.
 
 Formatting errors MAY be emitted during _formatting_,
-as the successful _resolution_ of an _expression_ does not guarantee success in its _formatting_.
+as formatting is not defined on every resolved value.
 A formatter MAY provide a value to use in such a case instead of a _fallback value_.
 
 _Formatting_ MAY produce formatted messages in the following shapes,
@@ -653,8 +656,9 @@ These are divided into the following categories:
     > when * 1 {Second is one}
     > ```
 
-  - **Duplicate Option Name errors** occur when the same _name_ is used
-    for more than one _option_ in the same _expression_.
+  - **Duplicate Option Name errors** occur when the same _name_ 
+    appears on the left-hand side
+    of more than one _option_ in the same _expression_.
 
     > Example invalid messages resulting in a Duplicate Option Name error:
     >
@@ -761,8 +765,8 @@ During selection, an _expression_ handler MUST only emit Resolution and Selectio
 During formatting, an _expression_ handler MUST only emit Resolution and Formatting errors.
 
 Resolution and Formatting errors in _expressions_ that are not used
-in _pattern selection_ or _formatting_ MAY be ignored
-as such do not impact the current message's formatting.
+in _pattern selection_ or _formatting_ MAY be ignored,
+as they do not affect the output of the formatter.
 
 In all cases, when encountering an error,
 a message formatter MUST provide some representation of the message.
@@ -775,9 +779,9 @@ SHOULD prioritise Syntax and Data Model errors over others.
 
 When an error occurs in the _resolution_ of an _option_,
 the surrounding _expression_ MUST be processed as if the _option_ were not present.
-This MAY allow for the _expression_ _resolution_ not resulting in a _fallback value_,
+This MAY allow the _expression_ to resolve to a non-fallback _value_,
 though an error MUST still be emitted.
 
 When an error occurs within a _selector_,
 the _selector_ MUST NOT match any _variant_ _key_ other than the catch-all `*`
-and a Resolution or Selector error is emitted.
+and a Resolution or Selector error MUST be emitted.
