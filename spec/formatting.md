@@ -123,11 +123,15 @@ The resolution of a _text_ or _literal_ token MUST always succeed.
 To resolve the value of a _variable_,
 its _name_ is used to identify either a local variable,
 or a variable defined elsewhere.
-If a local variable and an externally defined one use the same name,
-the local variable takes precedence.
 
-It is an error for a local variable definition to
-refer to a local variable that's defined after it in the message.
+It is an error for the right-hand side of a local variable declaration to
+refer to a local variable that's declared after it in the message.
+
+Variable names are required to be globally unique. That is,
+for any local variable declaration of the form `let $v = e`:
+* It is an error if `v` is the left-hand side of a local variable declaration
+that appears before `let $v = e` in the message.
+* It is also an error if `v` is an externally defined variable.
 
 The resolution of a _variable_ MAY fail if no value is identified for its _name_.
 If this happens, an Unresolved Variable error MUST be emitted.
@@ -229,6 +233,24 @@ rather than the _expression_ in the _selector_ or _pattern_.
 > resolving to a _fallback value_ of `|horse|`.
 
 _Pattern selection_ is not supported for _fallback values_.
+
+When there are multiple _declarations_ for the same _variable_,
+the fallback string is formatted based on the _expression_ of
+the first declaration of that _variable_.
+
+> For example, attempting to format the following message:
+>
+> ```
+> let $var = {|cart|}
+> let $var = {|horse|}
+> {The value is {$var}.}
+> ```
+>
+> would result in this formatted string representation:
+>
+> ```
+> The value is {|cart|}.
+> ```
 
 ## Pattern Selection
 
@@ -702,6 +724,32 @@ These are divided into the following categories:
     > match {$var}
     > when 1 {The value is one.}
     > when * {The value is not one.}
+    > ```
+
+  - **Variable Redefinition errors** occur when
+    the left-hand side of a variable declaration is already defined,
+    either by a previous local variable declaration,
+    or by an external definition.
+
+    > For example, attempting to format the following message
+    > must result in a Variable Redefinition error,
+    > because there is another declaration for `var`
+    > that textually precedes
+    > the declaration of `var` to be `{|horse|}`.
+    >
+    > ```
+    > let $var = {|cart|}
+    > let $var = {|horse|}
+    > {The value is {$var}.}
+    > ```
+    >
+    > Attempting to format the following message in a context
+    > where `var` is externally defined
+    > should also result in a Variable Redefinition error.
+    >
+    > ```
+    > let $var = {|horse|}
+    > {The value is {$var}.}
     > ```
 
   - **Unknown Function errors** occur when an _expression_ includes
