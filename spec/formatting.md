@@ -12,8 +12,8 @@ their handling during formatting is specified here as well.
 
 Formatting of a _message_ is defined by the following operations:
 
-- **_Resolution_** determines the value of a part of the message,
-  such as an _expression_, with reference to the current _formatting context_.
+- **_Expression Resolution_** determines the value of an _expression_,
+  with reference to the current _formatting context_.
   This can include multiple steps,
   such as looking up the value of a variable and calling formatting functions.
   The resolved value is not necessarily in the shape it will finally take,
@@ -30,9 +30,12 @@ Formatting of a _message_ is defined by the following operations:
   > The shape of this value is implementation-dependent,
   > and different implementations may choose to perform different levels of resolution.
 
+  The resolution of _text_ is rather straighforward,
+  and is detailed under _literal resolution_.
+
 - **_Pattern Selection_** determines which of a message's _patterns_ is formatted.
   For a message with no _selectors_, this is simple as there is only one _pattern_.
-  With _selectors_, this will depend on their _resolution_.
+  With _selectors_, this will depend on their resolution.
 
 - **_Formatting_** takes the resolved values of the selected _pattern_,
   and formats them in the desired shape.
@@ -44,7 +47,7 @@ Formatting of a _message_ is defined by the following operations:
   > rather than as a representation of its HTML source.
 
 Formatter implementations are not required to expose
-the _resolution_ and _pattern selection_ operations to their users,
+the _expression resolution_ and _pattern selection_ operations to their users,
 or even use them in their internal processing,
 as long as the final _formatting_ result is made available to users
 and the observable behavior of the formatter matches that described here.
@@ -52,7 +55,7 @@ and the observable behavior of the formatter matches that described here.
 ## Formatting Context
 
 A message's **_formatting context_** represents the data and procedures that are required
-for the message's _resolution_, _pattern selection_ and _formatting_.
+for the message's _expression resolution_, _pattern selection_ and _formatting_.
 
 At a minimum, it includes:
 
@@ -75,9 +78,7 @@ At a minimum, it includes:
 
 Implementations MAY include additional fields in their _formatting context_.
 
-## Resolution
-
-### Expression Resolution
+## Expression Resolution
 
 _Expressions_ are used in _declarations_, _selectors_, and _patterns_.
 
@@ -154,9 +155,8 @@ the following steps are taken:
 4. Call the function implementation with the following arguments:
 
    - The current _locale_.
-   - The resolved value of the _operand_, or if there is no _operand_,
-     an empty value.
    - The resolved mapping of _options_.
+   - If the _expression_ includes an _operand_, its resolved value.
 
    The shapes of the resolved _operand_ and _option_ values are implementation-defined.
 
@@ -175,7 +175,7 @@ the following steps are taken:
 
 ### Fallback Resolution
 
-The _resolution_ of an _expression_ may fail in the following cases:
+The resolution of an _expression_ may fail in the following cases:
 
 - A _variable_ _operand_ fails to resolve.
 - A _function_ _annotation_ fails to resolve.
@@ -274,7 +274,7 @@ or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER `�`.
 
 ### Resolve Selectors
 
-First, resolve the values of each _selector_:
+First, resolve the values of each _selector_ _expression_:
 
 1. Let `res` be a new empty list of resolved values that support selection.
 1. For each _expression_ `exp` of the message's _selectors_,
@@ -777,7 +777,7 @@ or contains some error which leads to further errors,
 an implementation which does not emit all of the errors
 SHOULD prioritise Syntax and Data Model errors over others.
 
-When an error occurs in the _resolution_ of an _option_,
+When an error occurs in the resolution of an _option_,
 the surrounding _expression_ MUST be processed as if the _option_ were not present.
 This MAY allow the _expression_ to resolve to a non-fallback _value_,
 though an error MUST still be emitted.
