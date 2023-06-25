@@ -104,7 +104,7 @@
       "items": {
         "type": "object",
         "properties": {
-          "target": { "$ref": "#/$defs/variable" },
+          "name": { "type": "string" },
           "value": { "$ref": "#/$defs/expression" }
         },
         "required": ["target", "value"]

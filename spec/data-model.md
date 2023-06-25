@@ -40,17 +40,19 @@ interface SelectMessage {
 ```
 
 Each message _declaration_ is represented by a `Declaration`,
-which connects the left-hand side `target` _variable_
+which connects the `name` of the left-hand side _variable_
 with its right-hand side `value`.
+The `name` does not include the initial `$` of the _variable_.
 
 ```ts
 interface Declaration {
-  target: VariableRef
+  name: string
   value: Expression
 }
 ```
 
-In a `SelectMessage`, the `keys` and `value` of each _variant_ are represented as an ordered list.
+In a `SelectMessage`,
+the `keys` and `value` of each _variant_ are represented as an array of `Variant`.
 For the `CatchallKey`, a string `value` may be provided to retain an identifier.
 This is always `'*'` in MessageFormat 2 syntax, but may vary in other formats.
 
@@ -167,9 +169,11 @@ interface Reserved {
 
 ## Extensions
 
-Implementations MAY extend this data model with additional fields,
-such as the start and end positions of parsed shapes.
+Implementations MAY extend this data model with additional interfaces,
+as well as adding new fields to existing interfaces.
 When encountering an unfamiliar field, an implementation MUST ignore it.
+For example, an implementation could include a `span` field on all interfaces
+encoding the corresponding start and end positions in its source syntax.
 
 In general,
 implementations MUST NOT extend the sets of values for any defined field or type
