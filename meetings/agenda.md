@@ -51,7 +51,8 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 
 ### Topic: Info Share
-* Presentation this week (Thursday) at the Unicode CLDR thingy.
+* Presentation at CLDR event
+* https://thenewstack.io/whats-next-for-javascript-new-features-to-look-forward-to/ 
 
 ### Topic: Action Item Review
 
@@ -76,23 +77,25 @@ Discussion of active PRs. We will merge or reject them in the call.
 
 * https://github.com/unicode-org/message-format-wg/issues
 
-Currently we have 90 open.
-
-Here is the "Top 10 List":
+Currently we have 73 open.
 
 | Issue | Status | Description | Chair's Recommendation |
 |-------|--------|-------------|----------------|
-| (#259)[https://github.com/unicode-org/message-format-wg/issues/259] | resolve-candidate | Don't allow whitespace everywhere | close |
-| (#248)[https://github.com/unicode-org/message-format-wg/issues/248] | resolve-candidate | Naming things | close |
 | (#378)[https://github.com/unicode-org/message-format-wg/issues/378] | blocker-candidate | reserve sigils for private use | proceed to PR |
-| (#356)[https://github.com/unicode-org/message-format-wg/issues/356] | blocker-candidate | clarify that standalone markup is permitted | resolve-candidate | close? addressed by ABNF changes |
-| (#351)[https://github.com/unicode-org/message-format-wg/issues/351] | resolve-candidate | replace first-match with best-match | close (accepted) |
-| (#346)[https://github.com/unicode-org/message-format-wg/issues/346] | resolve-candidate | consider escaping by doubling special | close (stale) |
 | (#299)[https://github.com/unicode-org/message-format-wg/issues/299] | blocker-candidate | when do we evaluate the local variables? | discuss (related to other discussions) |
 | (#298)[https://github.com/unicode-org/message-format-wg/issues/298] | blocker-candidate | should custom functions override standard ones? | discuss |
-| (#292)[https://github.com/unicode-org/message-format-wg/issues/292] | resolve-candidate | resolving type when chaining local variables | close (MF doesn't have types or interpret values) |
 | (#272)[https://github.com/unicode-org/message-format-wg/issues/272] | blocker-candidate | decide on formatting to something other than text | discuss (important!) |
 
+
+## Topic: Discussion of `Nmtoken` and naming
+
+See thread in #399
+
+## Topic: Discussion of default registry requirements
+
+An open question is whether MFv2 will provide a **_default_** registry of functions/selectors that implementations are **_required_** to implement.
+If such a registry were created, what _should_ go in it (what are the inclusion criteria)?
+If we do not create a default registry, how will we prevent divergence of the syntax between implementations?
 
 ## Topic: AOB?
 
