@@ -37,10 +37,10 @@ quoted-char = %x0-5B         ; omit \
             / %xE000-10FFFF
 
 ; similar to https://www.w3.org/TR/xml/#NT-Nmtoken
-unquoted = (unquoted-start / negative-start) *name-char
+unquoted = unquoted-start *name-char
 unquoted-start = name-start / DIGIT / "."
                / %xB7 / %x300-36F / %x203F-2040
-negative-start = "-" ( DIGIT / "." )
+               / "-" ( DIGIT / "." )
 
 ; reserve additional sigils for future use
 reserved       = reserved-start reserved-body

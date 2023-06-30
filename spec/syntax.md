@@ -478,10 +478,10 @@ quoted-char    = %x0-5B         ; omit \
                / %x7D-D7FF      ; omit surrogates
                / %xE000-10FFFF
 
-unquoted       = (unquoted-start / negative-start) *name-char
+unquoted       = unquoted-start *name-char
 unquoted-start = name-start / DIGIT / "."
                / %xB7 / %x300-36F / %x203F-2040
-negative-start = "-" ( DIGIT / "." )
+               / "-" ( DIGIT / "." )
 ```
 
 ### Names
