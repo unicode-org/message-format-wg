@@ -68,7 +68,15 @@ Discussion of active PRs. We will merge or reject them in the call.
 
 | PR   | Description | Recommendation |
 |------|-------------|----------------|
-| #381 | Clarify variable declarations may override previous ones | Merge |
+| #404 | Reserve `^` and `&` for private use | Merge |
+| #402 | Require variable names to be globally unique | Discuss |
+| #401 | docs: markup feature history | Merge |
+| #400 | docs: add _roundtrip_ to glossary | Merge |
+| #399 | Add negative start rule | Discuss (item below) |
+| #398 | Change the syntax of the \\open /close | Discuss (item below) |
+| #397 | Change the syntax of the ::open :/close | Discuss (item below) |
+| #396 | Add missing formatting sections | Merge with edits |
+| #393 | Add interchange data model description + JSON schema definition | Discuss |
 
 
 * The recommendation "discuss" is to ensure there is WG consensus before merging. The recommendation "merge with edits" is to merge once existing comments have been addressed.
@@ -86,6 +94,15 @@ Currently we have 73 open.
 | (#298)[https://github.com/unicode-org/message-format-wg/issues/298] | blocker-candidate | should custom functions override standard ones? | discuss |
 | (#272)[https://github.com/unicode-org/message-format-wg/issues/272] | blocker-candidate | decide on formatting to something other than text | discuss (important!) |
 
+## Topic: Open/Close functions
+
+We have multiple proposals for open/close function markup, including the current scheme (`+function`/`-function`). Let's resolve how to support open/close functionality.
+
+| PR   | Description |
+|------|-------------|
+| #398 | Use `\\open` and `/close` |
+| #397 | Use `::open` and `:/close` |
+| #399 | Keep `+` and `-`, allow negative literals |
 
 ## Topic: Discussion of `Nmtoken` and naming
 
