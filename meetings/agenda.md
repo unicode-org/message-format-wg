@@ -94,9 +94,11 @@ Currently we have 73 open.
 | (#298)[https://github.com/unicode-org/message-format-wg/issues/298] | blocker-candidate | should custom functions override standard ones? | discuss |
 | (#272)[https://github.com/unicode-org/message-format-wg/issues/272] | blocker-candidate | decide on formatting to something other than text | discuss (important!) |
 
-## Topic: Open/Close functions
+## Topic: Open/Close function syntax, naming, and immutability.
 
-We have multiple proposals for open/close function markup, including the current scheme (`+function`/`-function`). Let's resolve how to support open/close functionality.
+We have multiple proposals for open/close function markup, including the current scheme (`+function`/`-function`). Let's resolve how to support open/close functionality. These proposal partly exist to address the problem of negative literals, given our use of `-function` currently. 
+
+We have also been discussing whether `let` statements should be immutable. If they are immutable, there is a proposal that they use a different sigil from `$` or that they use a two-character sigil (such as `$$localVar`). Note that separating the sigil allows for static analysis of local variables as called out by #403. This can be a separate concern from whether they are immutable.
 
 | PR   | Description |
 |------|-------------|
@@ -104,9 +106,14 @@ We have multiple proposals for open/close function markup, including the current
 | #397 | Use `::open` and `:/close` |
 | #399 | Keep `+` and `-`, allow negative literals |
 
-## Topic: Discussion of `Nmtoken` and naming
+Proposals:
 
-See thread in #399
+[ ] Make local variables use a different sigil
+    [ ] If yes, use one character or two? Which character(s)?
+[ ] Make local variables immutable
+[ ] Change open and close sigils to avoid `-`?
+    [ ] If yes, what sigils or sequences to use?
+[ ] Should `name`, etc. use `Nmtoken` or some other rules?
 
 ## Topic: Discussion of default registry requirements
 
