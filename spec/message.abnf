@@ -42,10 +42,10 @@ unquoted = unquoted-start *name-char
 unquoted-start = name-start / DIGIT / "."
                / %xB7 / %x300-36F / %x203F-2040
 
-; reserve additional sigils for private use by implementations
-; and for future specification versions
-reserved       = ( future-start / private-start ) reserved-body
-future-start   = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "?" / "~"
+; reserve additional sigils for use by future versions of this
+; specification or for private use by implementations
+reserved       = ( reserved-start / private-start ) reserved-body
+reserved-start = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "?" / "~"
 private-start  = "^" / "&"
 reserved-body  = *( [s] 1*(reserved-char / reserved-escape / literal))
 reserved-char  = %x00-08        ; omit HTAB and LF

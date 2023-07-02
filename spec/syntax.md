@@ -415,23 +415,27 @@ option = name [s] "=" [s] (literal / variable)
 **_Reserved_** annotations start with a reserved character
 and are intended for future standardization
 as well as private implementation use.
-A reserved sequence MAY be empty or contain arbitrary text.
-A reserved sequence does not include any trailing whitespace.
+A _reserved_ _annotation_ MAY be empty or contain arbitrary text.
+This allows maximum flexibility in future standardization,
+as future definitions are expected to define additional semantics and constraints
+on the contents of these _annotations_.
+A _reserved_ _annotation_ does not include trailing whitespace.
 
 Implementations MAY define their own meaning and semantics for
 _reserved_ annotations that start with
-the U+0026 AMOERSAND `&` or U+005E CIRCUMFLEX ACCENT `^` characters.
-Implementations MUST NOT define any such meaning or semantics for
-_reserved_ annotations that start with any other character;
-these are reserved for the use of future versions of this specification.
+the U+0026 AMPERSAND `&` or U+005E CIRCUMFLEX ACCENT `^` characters.
+Implementations MUST NOT assign meaning or semantics to
+an _annotation_ starting with `reserved-start`:
+these are reserved for future standardization.
+Implementations MUST NOT remove or alter the contents of a _reserved_ _annotation_.
 
 While a reserved sequence is technically "well-formed",
 unrecognized reserved sequences have no meaning and MAY result in errors during formatting.
 
 ```abnf
-reserved      = ( future-start / private-start ) reserved-body
-future-start  = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "?" / "~"
-private-start = "^" / "&"
+reserved        = ( reserved-start / private-start ) reserved-body
+reserved-start  = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "?" / "~"
+private-start   = "^" / "&"
 reserved-body = *( [s] 1*(reserved-char / reserved-escape / literal))
 reserved-char = %x00-08        ; omit HTAB and LF
               / %x0B-0C        ; omit CR
