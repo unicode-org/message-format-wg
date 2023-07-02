@@ -483,9 +483,9 @@ Between the brackets, the following contents are used:
   > Example: `{:platform}`
 
 - Opening _expression_ with no operand:
-  U+005C REVERSE SOLIDUS `\` followed by the _function_ _name_
+  U+0023 NUMBER SIGN `#` followed by the _function_ _name_
 
-  > Example: `{\tag}`
+  > Example: `{#tag}`
 
 - Closing _expression_ with no operand:
   U+002F SOLIDUS `/` followed by the _function_ _name_

@@ -146,13 +146,13 @@ plucking the first name from the object representing a person:
 Functions use one of the following prefix sigils:
 
 - `:` for standalone content
-- `\` for starting or opening elements
+- `#` for starting or opening elements
 - `/` for ending or closing elements
 
 A message with two markup-like _functions_, `button` and `link`,
 which the runtime can use to construct a document tree structure for a UI framework:
 
-    {{\button}Submit{/button} or {\link}cancel{/link}.}
+    {{#button}Submit{/button} or {#link}cancel{/link}.}
 
 An opening element MAY be present in a message without a corresponding closing element,
 and vice versa.
@@ -395,17 +395,17 @@ option = name [s] "=" [s] (literal / variable)
 > ```
 >
 > ```
-> {\ssml.emphasis level=strong}
+> {#ssml.emphasis level=strong}
 > ```
 >
 > Message examples:
 >
 > ```
-> {This is {\b}bold{/b}.}
+> {This is {#b}bold{/b}.}
 > ```
 >
 > ```
-> {{\h1 name=above-and-beyond}Above And Beyond{/h1}}
+> {{#h1 name=above-and-beyond}Above And Beyond{/h1}}
 > ```
 
 #### Reserved
@@ -483,7 +483,7 @@ unquoted-start = name-start / DIGIT / "."
 ### Names
 
 The **_name_** token is used for variable names (prefixed with `$`),
-function names (prefixed with `:`, `\` or `/`),
+function names (prefixed with `:`, `#` or `/`),
 as well as option names.
 It is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name),
 with the restriction that it MUST NOT start with `:`,
@@ -492,7 +492,7 @@ Otherwise, the set of characters allowed in names is large.
 
 ```abnf
 variable = "$" name
-function = (":" / "\" / "/") name
+function = (":" / "#" / "/") name
 
 name = name-start *name-char
 name-start = ALPHA / "_"
