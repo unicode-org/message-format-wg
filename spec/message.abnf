@@ -9,7 +9,8 @@ selectors = match 1*([s] expression)
 variant = when 1*(s key) [s] pattern
 key = literal / "*"
 
-expression = "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
+expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
+operand = literal / variable
 annotation = (function *(s option)) / reserved
 
 literal = quoted / unquoted

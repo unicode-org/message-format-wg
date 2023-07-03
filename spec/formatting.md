@@ -10,13 +10,13 @@ the successor to ICU MessageFormat, henceforth called ICU MessageFormat 1.0.
 
 ## Literal Resolution
 
-The resolved value of _text_, _literal_ and _nmtoken_ tokens
-is always a string concatenation of its parts,
-with escape sequences resolving to their escaped characters.
-When a _literal_ or _nmtoken_ is used as an _expression_ argument
-or on the right-hand side of an _option_,
-the formatting function MUST treat their resolved values the same independently of their presentation,
-such that e.g. the options `foo=42` and `foo=|42|` have the same effect.
+The resolved value of a _text_ or a _literal_ is the character sequence of the _text_
+or _literal_ after any character escape has been converted to the escaped character.
+When a _literal_ is used as an _expression_ argument or on the right-hand side of an _option_,
+the formatting function MUST treat their resolved values the same independently of whether the
+value was originally _quoted_ or _unquoted_.
+For example, the _option_ `foo=42` and the _option_ `foo=|42|` 
+are treated as identical.
 
 ## Variable Resolution
 
@@ -31,33 +31,39 @@ refer to a local variable that's defined after it in the message.
 
 ## Pattern Selection
 
-When formatting a message with one or more _selectors_,
-the _pattern_ of one of the _variants_ must be selected for formatting.
+When a _message_ contains a _match_ statement with one or more _expressions_,
+the implementation needs to determine which _variant_ will be used
+to provide the _pattern_ for the formatting operation. 
+This is done by ordering and filtering the available _variant_ statements according to their _key_ values
+and selecting the first one.
 
-When a message has a single _selector_,
-an implementation-defined method compares each key to the _selector_
-and determines which of the keys match, and in what order of preference.
-The list of keys passed to this implementation-defined method
-does not include the catch-all key `*`.
-The catch-all key `*` is treated as a match for any _selector_,
-but with the lowest possible preference.
+The number of _keys_ in each _variant_ **_MUST_** equal the number of _expressions_ in the _selectors_.
 
-In a message with more than one _selector_,
-the number of keys in each _variant_ **_must_** equal the number of _selectors_.
-These correspond to _selectors_ by position.
-The same implementation-defined method as above is used to compare
-the corresponding key of each _variant_ to its _selector_,
-to determine which of the keys match, and in what order of preference.
-In order to select a single _variant_,
-the full list of _variants_ will need to be filtered and sorted.
-First, each _variant_ with a key that does not match its _selector_ is left out.
-Then, the remaining _variants_ are sorted lexicographically by key preference,
-with earlier _selectors_ having higher priority than later ones.
-Finally, the highest-sorted _variant_ is selected.
+Each _key_ corresponds to an _expression_ in the _selectors_ by its position in the _variant_.
+
+> For example, in this message:
+> ```
+> match {:one} {:two} {:three}
+> when  1 2 3 { ... }
+> ```
+> The first _key_ `1` corresponds to the first _expression_ in the _selectors_ (`{:one}`),
+> the second _key_ `2` to the second _expression_ (`{:two}`), 
+> and the third _key_ `3` to the third _expression_ (`{:three}`).
+
+To determine which _variant_ best matches a given set of inputs,
+each _selector_ is used in turn to order and filter the list of _variants_.
+
+Each _variant_ with a _key_ that does not match its corresponding _selector expression_
+is omitted from the list of _variants_. 
+The remaining _variants_ are sorted according to the _expression_'s _key_-ordering preference.
+Earlier _expressions_ in the _selector_'s list of _expressions_ have a higher priority than later ones. 
+
+When all of the _selector expressions_ have been processed,
+the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
 
 This selection method is defined in more detail below.
-An implementation MAY use any pattern selection method,
-as long as its observable behaviour matches the results of the method defined here.
+An implementation **_MAY_** use any pattern selection method,
+as long as its observable behavior matches the results of the method defined here.
 
 ### Resolve Selectors
 
@@ -240,18 +246,22 @@ when * * {Otherwise}
 
 #### Example 3
 
-Presuming a more powerful implementation which supports selection on numerical values,
-and provides a `:plural` function that matches keys by their exact value
-as well as their plural category (preferring the former, if possible),
-and an English-language formatting context in which
-the variable reference `$count` resolves to the number `1`,
-pattern selection proceeds as follows for this message:
+A more-complex example is the matching found in selection APIs
+such as ICU's `PluralFormat`.
+Suppose that this API is represented here by the function `:plural`.
+This `:plural` function can match a given numeric value to a specific number _literal_
+and **_also_** to a plural category (`zero`, `one`, `two`, `few`, `many`, `other`)
+according to locale rules defined in CLDR.
+
+Given a variable reference `$count` whose value resolves to the number `1`
+and an `en` (English) locale,
+the pattern selection proceeds as follows for this message:
 
 ```
 match {$count :plural}
 when one {Category match}
-when 1 {Exact match}
-when * {Other match}
+when 1   {Exact match}
+when *   {Other match}
 ```
 
 1. For the selector:<br>
@@ -273,6 +283,65 @@ when * {Other match}
    « ( 0, `1` ), ( 1, `one` ), ( 2, `*` ) »<br>
 
 4. The pattern `{Exact match}` of the most preferred `1` variant is selected.
+
+## Handling Bidirectional Text
+
+_Messages_ contain text which can be bidirectional, that is
+consisting of a mixture of left-to-right and right-to-left spans of text.
+
+When concatenating formatted values,
+the [Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9]
+can produce unexpected or undesirable effects, such as "spillover".
+Formatted values SHOULD be bidirectionally isolated
+so that the directionality of a formatted _expression_
+does not negatively affect the presentation of the overall formatted result.
+
+An implementation MUST define methods for
+determining the directionality of the message as a whole as well as each formatted _expression_.
+The method of determining the directionality of a formatted _expression_
+MAY rely on the introspection of its contents, or on other means.
+
+If a formatted _expression_ itself contains spans with differing directionality,
+its formatter SHOULD isolate such parts to avoid
+negatively affecting the presentation of the overall formatted result.
+
+> For example, an implementation could provide a `:number` formatting function
+> which would always produce output matching the message's locale,
+> allowing for its formatted string representation to never need isolation.
+
+Implementations formatting messages as a concatenated string or a sequence of strings
+MUST provide one or more strategies for bidirectional isolation.
+One such strategy MUST behave as follows:
+
+1. Let `msgdir` be the directionality of the whole message,
+   one of « `'LTR'`, `'RTL'`, `'unknown'` ».
+   These correspond to the message having left-to-right directionality,
+   right-to-left directionality, and to the message's directionality not being known.
+1. For each _expression_ `exp` in _pattern_:
+   1. Let `fmt` be the formatted string representation of the resolved value of `exp`.
+   1. Let `dir` be the directionality of `fmt`,
+      one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
+   1. If `dir` is `'unknown'`:
+      1. In the formatted output,
+         prefix `fmt` with U+2068 FIRST STRONG ISOLATE
+         and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
+   1. Else, if `dir` is `'LTR'` and `msgdir` is not `'LTR'`:
+      1. In the formatted output,
+         prefix `fmt` with U+2066 LEFT-TO-RIGHT ISOLATE
+         and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
+   1. Else, if `dir` is `'RTL'` and `msgdir` is not `'RTL'`:
+      1. In the formatted output,
+         prefix `fmt` with U+2067 RIGHT-TO-LEFT ISOLATE
+         and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
+
+Alternatives to this "compatibility" strategy MAY be provided by implementations,
+which MAY also introspect the _pattern_'s _text_ values
+and identify situations where isolate characters are not needed
+or where additional or different isolation would produce better results.
+
+If an implementation provides formatting to non-string targets,
+it SHOULD provide similar strategies for enabling bidirectional isolation,
+where appropriate.
 
 ## Error Handling
 

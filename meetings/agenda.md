@@ -3,7 +3,7 @@
 This is the agenda document for upcoming calls of the MessageFormat subcommittee. We normally meet bi-weekly 
 (every two weeks) on Mondays at 9:30 Pacific (`America/Los_Angeles`). This is currently UTC+7. 
 
-See [here](https://www.timeanddate.com/worldclock/converter.html?iso=20230619T163000&p1=224&p2=248&p3=136&p4=179&p5=33&p6=101&p7=268) for your local time.
+See [here](https://www.timeanddate.com/worldclock/converter.html?iso=20230703T163000&p1=224&p2=248&p3=136&p4=179&p5=33&p6=101&p7=268) for your local time.
 
 Information on joining calls is found in the calendar invite.
 
@@ -12,6 +12,7 @@ Information on joining calls is found in the calendar invite.
 This block reserved for scribe rotation.
 
 Recent scribes:
+* 2023-06-19 TIM
 * 2023-06-05 RGN
 * 2023-05-22 ECH
 * 2023-05-08 MIH
@@ -28,16 +29,17 @@ Recent scribes:
 
 ## Notes Document for The Upcoming Call
 
-https://docs.google.com/document/d/1XagOIWNBU3_gJneSvCYzscESyvgs3OJm0DLAuknzWFM/edit#
+https://docs.google.com/document/d/1gJ92S0roqvXYmv7mmKb2ICQsZ5Z5XSn6WLgGFNcq6S0/edit
 
 ## NOTE WELL
 
-The next call will be Monday 19 June 2023. 
+The next call will be Monday 3 July 2023. 
 
 ***This is a regularly scheduled session***
 
 ## Homework
 
+**_Review all `resolve-candidate` issues for closure BEFORE 2023-06-23_**
 
 ## Agenda
 
@@ -49,10 +51,12 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 
 ### Topic: Info Share
-* Presentation this week (Thursday) at the Unicode CLDR thingy.
+* Presentation at CLDR event
+* https://thenewstack.io/whats-next-for-javascript-new-features-to-look-forward-to/ 
 
 ### Topic: Action Item Review
 
+[ ] STA: file known issues against function registry
 
 ## Topic: Active PR review
 
@@ -64,48 +68,58 @@ Discussion of active PRs. We will merge or reject them in the call.
 
 | PR   | Description | Recommendation |
 |------|-------------|----------------|
-| #315 | Bidi support | Discuss (see below) |
-| #381 | Clarify variable declarations may override previous ones | Merge |
-| #387 | Fix dangling mention of `nmtoken` | Merge |
-| #388 | Change the "pattern selection" text | Discuss |
-| #389 | Make pattern selection example 3 clearer | Discuss |
+| #404 | Reserve `^` and `&` for private use | Merge |
+| #402 | Require variable names to be globally unique | Discuss |
+| #401 | docs: markup feature history | Merge |
+| #400 | docs: add _roundtrip_ to glossary | Merge |
+| #399 | Add negative start rule | Discuss (item below) |
+| #398 | Change the syntax of the \\open /close | Discuss (item below) |
+| #397 | Change the syntax of the ::open :/close | Discuss (item below) |
+| #396 | Add missing formatting sections | Merge with edits |
+| #393 | Add interchange data model description + JSON schema definition | Discuss |
 
 
 * The recommendation "discuss" is to ensure there is WG consensus before merging. The recommendation "merge with edits" is to merge once existing comments have been addressed.
-
-## Topic: Bidi support
-https://github.com/unicode-org/message-format-wg/pull/315 
-Discussion of bidirectional text support and specifically how to handle auto-isolation of placeables.
-
-## Topic: Pattern Selection text
-https://github.com/unicode-org/message-format-wg/pull/388
-The above PR changes the wording related to patterns selection to use a different approach. This is based on a comment Addison made on PR#385.
-
-## Topic: Make pattern selection example 3 clearer
-https://github.com/unicode-org/message-format-wg/pull/389
-Editorial changes to make this example easier to understand. (Taken from comments on PR #385)
 
 ## Topic: Open Issue Review
 
 * https://github.com/unicode-org/message-format-wg/issues
 
-Currently we have 90 open.
-
-Here is the "Top 10 List":
+Currently we have 73 open.
 
 | Issue | Status | Description | Chair's Recommendation |
 |-------|--------|-------------|----------------|
-| (#259)[https://github.com/unicode-org/message-format-wg/issues/259] | resolve-candidate | Don't allow whitespace everywhere | close |
-| (#248)[https://github.com/unicode-org/message-format-wg/issues/248] | resolve-candidate | Naming things | close |
 | (#378)[https://github.com/unicode-org/message-format-wg/issues/378] | blocker-candidate | reserve sigils for private use | proceed to PR |
-| (#356)[https://github.com/unicode-org/message-format-wg/issues/356] | blocker-candidate | clarify that standalone markup is permitted | resolve-candidate | close? addressed by ABNF changes |
-| (#351)[https://github.com/unicode-org/message-format-wg/issues/351] | resolve-candidate | replace first-match with best-match | close (accepted) |
-| (#346)[https://github.com/unicode-org/message-format-wg/issues/346] | resolve-candidate | consider escaping by doubling special | close (stale) |
 | (#299)[https://github.com/unicode-org/message-format-wg/issues/299] | blocker-candidate | when do we evaluate the local variables? | discuss (related to other discussions) |
 | (#298)[https://github.com/unicode-org/message-format-wg/issues/298] | blocker-candidate | should custom functions override standard ones? | discuss |
-| (#292)[https://github.com/unicode-org/message-format-wg/issues/292] | resolve-candidate | resolving type when chaining local variables | close (MF doesn't have types or interpret values) |
 | (#272)[https://github.com/unicode-org/message-format-wg/issues/272] | blocker-candidate | decide on formatting to something other than text | discuss (important!) |
 
+## Topic: Open/Close function syntax, naming, and immutability.
+
+We have multiple proposals for open/close function markup, including the current scheme (`+function`/`-function`). Let's resolve how to support open/close functionality. These proposal partly exist to address the problem of negative literals, given our use of `-function` currently. 
+
+We have also been discussing whether `let` statements should be immutable. If they are immutable, there is a proposal that they use a different sigil from `$` or that they use a two-character sigil (such as `$$localVar`). Note that separating the sigil allows for static analysis of local variables as called out by #403. This can be a separate concern from whether they are immutable.
+
+| PR   | Description |
+|------|-------------|
+| #398 | Use `\\open` and `/close` |
+| #397 | Use `::open` and `:/close` |
+| #399 | Keep `+` and `-`, allow negative literals |
+
+Proposals:
+
+[ ] Make local variables use a different sigil
+    [ ] If yes, use one character or two? Which character(s)?
+[ ] Make local variables immutable
+[ ] Change open and close sigils to avoid `-`?
+    [ ] If yes, what sigils or sequences to use?
+[ ] Should `name`, etc. use `Nmtoken` or some other rules?
+
+## Topic: Discussion of default registry requirements
+
+An open question is whether MFv2 will provide a **_default_** registry of functions/selectors that implementations are **_required_** to implement.
+If such a registry were created, what _should_ go in it (what are the inclusion criteria)?
+If we do not create a default registry, how will we prevent divergence of the syntax between implementations?
 
 ## Topic: AOB?
 
