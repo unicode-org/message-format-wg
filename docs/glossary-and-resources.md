@@ -35,6 +35,7 @@
 * **locale fallback** - offering a reasonable substitute locale when the requested locale's resources are not available. Results may vary depending on context (ex: audio vs. text vs. video).
 * **locale matching** - computing the locale fallback.
 * **resource** - files bundled with an application that are loaded in by the executable code.  UI strings, etc. and their locale-specific translations are typically stored as resources.
+* **roundtrip** - the process of transforming a message into another format or representation, then transforming it back into the original format.
 * **translation merging** - in l10n TMSes, the document-level interpolation of translated content. In other words, the replacing of translatable units in the source document with their equivalent translated units.  See *interpolate*.
 * **selector** - see *placeholder type*.
 * **specification** - the rules we decide that describe what is passed to the API for message formatting (structure of data, syntax, etc.).
