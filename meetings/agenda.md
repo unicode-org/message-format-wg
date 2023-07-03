@@ -12,6 +12,7 @@ Information on joining calls is found in the calendar invite.
 This block reserved for scribe rotation.
 
 Recent scribes:
+* 2023-07-03 STA
 * 2023-06-19 TIM
 * 2023-06-05 RGN
 * 2023-05-22 ECH
@@ -29,17 +30,18 @@ Recent scribes:
 
 ## Notes Document for The Upcoming Call
 
-https://docs.google.com/document/d/1gJ92S0roqvXYmv7mmKb2ICQsZ5Z5XSn6WLgGFNcq6S0/edit
+https://docs.google.com/document/d/1QPc_qxtqvSl1TwQvFXpt-UiISdGwMezHpx_WgLpGjmg/edit
 
 ## NOTE WELL
 
-The next call will be Monday 3 July 2023. 
+The next call will be Monday 10 July 2023. 
 
 ***This is a regularly scheduled session***
+***The meeting schedule has been adjusted forward by one week***
 
 ## Homework
 
-**_Review all `resolve-candidate` issues for closure BEFORE 2023-06-23_**
+* Read https://github.com/unicode-org/message-format-wg/issues/299
 
 ## Agenda
 
@@ -51,12 +53,13 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 
 ### Topic: Info Share
-* Presentation at CLDR event
-* https://thenewstack.io/whats-next-for-javascript-new-features-to-look-forward-to/ 
+
 
 ### Topic: Action Item Review
 
-[ ] STA: file known issues against function registry
+[ ] MIH: propose text and proposed XML for default registry
+[ ] APP: provide pro/con comparison for immutability/namespacing discussion
+
 
 ## Topic: Active PR review
 
@@ -68,14 +71,10 @@ Discussion of active PRs. We will merge or reject them in the call.
 
 | PR   | Description | Recommendation |
 |------|-------------|----------------|
-| #404 | Reserve `^` and `&` for private use | Merge |
 | #402 | Require variable names to be globally unique | Discuss |
-| #401 | docs: markup feature history | Merge |
-| #400 | docs: add _roundtrip_ to glossary | Merge |
 | #399 | Add negative start rule | Discuss (item below) |
 | #398 | Change the syntax of the \\open /close | Discuss (item below) |
 | #397 | Change the syntax of the ::open :/close | Discuss (item below) |
-| #396 | Add missing formatting sections | Merge with edits |
 | #393 | Add interchange data model description + JSON schema definition | Discuss |
 
 
@@ -116,10 +115,10 @@ Proposals:
 [ ] Should `name`, etc. use `Nmtoken` or some other rules?
 
 ## Topic: Discussion of default registry requirements
+* Follow up on MIH's action to create draft default registry.
 
-An open question is whether MFv2 will provide a **_default_** registry of functions/selectors that implementations are **_required_** to implement.
-If such a registry were created, what _should_ go in it (what are the inclusion criteria)?
-If we do not create a default registry, how will we prevent divergence of the syntax between implementations?
+## Topic: Interchange data model description
+* Requested by: EAO
 
 ## Topic: AOB?
 
