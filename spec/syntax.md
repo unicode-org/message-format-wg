@@ -433,17 +433,17 @@ While a reserved sequence is technically "well-formed",
 unrecognized reserved sequences have no meaning and MAY result in errors during formatting.
 
 ```abnf
-reserved        = ( reserved-start / private-start ) reserved-body
-reserved-start  = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "?" / "~"
-private-start   = "^" / "&"
-reserved-body = *( [s] 1*(reserved-char / reserved-escape / literal))
-reserved-char = %x00-08        ; omit HTAB and LF
-              / %x0B-0C        ; omit CR
-              / %x0E-19        ; omit SP
-              / %x21-5B        ; omit \
-              / %x5D-7A        ; omit { | }
-              / %x7E-D7FF      ; omit surrogates
-              / %xE000-10FFFF
+reserved       = ( reserved-start / private-start ) reserved-body
+reserved-start = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "/" / "?" / "~"
+private-start  = "^" / "&"
+reserved-body  = *( [s] 1*(reserved-char / reserved-escape / literal))
+reserved-char  = %x00-08        ; omit HTAB and LF
+               / %x0B-0C        ; omit CR
+               / %x0E-19        ; omit SP
+               / %x21-5B        ; omit \
+               / %x5D-7A        ; omit { | }
+               / %x7E-D7FF      ; omit surrogates
+               / %xE000-10FFFF
 ```
 
 ## Tokens
