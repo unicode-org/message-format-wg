@@ -412,13 +412,39 @@ option = name [s] "=" [s] (literal / variable)
 
 #### Reserved
 
-**_Reserved_** sequences start with a reserved character
-and are intended for future standardization.
-A reserved sequence MAY be empty or contain arbitrary text.
-A reserved sequence does not include any trailing whitespace.
+**_Reserved_** annotations start with a reserved character
+and are intended for future standardization
+as well as private implementation use.
+A _reserved_ _annotation_ MAY be empty or contain arbitrary text.
+This allows maximum flexibility in future standardization,
+as future definitions are expected to define additional semantics and constraints
+on the contents of these _annotations_.
+A _reserved_ _annotation_ does not include trailing whitespace.
+
+Implementations MAY define their own meaning and semantics for
+_reserved_ annotations that start with
+the U+0026 AMPERSAND `&` or U+005E CIRCUMFLEX ACCENT `^` characters.
+Implementations MUST NOT assign meaning or semantics to
+an _annotation_ starting with `reserved-start`:
+these are reserved for future standardization.
+Implementations MUST NOT remove or alter the contents of a _reserved_ _annotation_.
 
 While a reserved sequence is technically "well-formed",
 unrecognized reserved sequences have no meaning and MAY result in errors during formatting.
+
+```abnf
+reserved       = ( reserved-start / private-start ) reserved-body
+reserved-start = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "/" / "?" / "~"
+private-start  = "^" / "&"
+reserved-body  = *( [s] 1*(reserved-char / reserved-escape / literal))
+reserved-char  = %x00-08        ; omit HTAB and LF
+               / %x0B-0C        ; omit CR
+               / %x0E-19        ; omit SP
+               / %x21-5B        ; omit \
+               / %x5D-7A        ; omit { | }
+               / %x7E-D7FF      ; omit surrogates
+               / %xE000-10FFFF
+```
 
 ## Tokens
 
