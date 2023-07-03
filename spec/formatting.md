@@ -49,10 +49,11 @@ At a minimum, it includes:
   This will be passed on to formatting functions.
 
 - Information on the base directionality of the message and its _text_ tokens.
-  This will be used by strategies for bidirectional isolation.
+  This will be used by strategies for bidirectional isolation,
+  and can be used to set the base direction of the _message_ upon display.
 
 - A mapping of string identifiers to values,
-  defining variable values that may be used during _variable resolution_.
+  defining variable values that are available during _variable resolution_.
   This is often determined by a user-provided argument of a formatting function call.
 
 - The _function registry_,
@@ -68,7 +69,7 @@ Implementations MAY include additional fields in their _formatting context_.
 _Expressions_ are used in _declarations_, _selectors_, and _patterns_.
 
 In a _declaration_, the resolved value of the _expression_ is assigned to a _variable_,
-which may then be used in other _expressions_.
+which is available for use by later _expressions_.
 As such a _variable_ MAY then be referenced in different ways,
 implementations SHOULD NOT immediately fully format the value for output.
 
@@ -99,8 +100,10 @@ one of the following is used to resolve the value of the _expression_:
   depending on the shape of the _operand_.
 - Else, if the _expression_ has a _function_ _annotation_,
   its resolved value is defined by _function resolution_.
-- Else, the _expression_ has a _reserved_ _annotation_,
-  and a fallback value is used as its value.
+- Else, the _expression_ has a _reserved_ _annotation_.
+  If the _annotation_ uses a `private-start` character that the implementation supports,
+  its value is resolved according to the implementation's specification.
+  Otherwise, a fallback value is used as its value.
 
 ### Literal Resolution
 
@@ -174,7 +177,7 @@ the following steps are taken:
 
 ### Fallback Resolution
 
-The resolution of an _expression_ may fail in the following cases:
+The resolution of an _expression_ MAY fail in the following cases:
 
 - A _variable_ _operand_ fails to resolve.
 - A _function_ _annotation_ fails to resolve.
@@ -309,7 +312,7 @@ The method MatchSelectorKeys is determined by the implementation.
 It takes as arguments a resolved _selector_ value `rv` and a list of string keys `keys`,
 and returns a list of string keys in preferential order.
 The returned list must only contain unique elements of the input list `keys`,
-and it may be empty.
+and it MAY be empty.
 The most preferred key is first, with the rest sorted by decreasing preference.
 
 ### Filter Variants
