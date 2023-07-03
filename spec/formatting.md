@@ -19,17 +19,6 @@ Formatting of a _message_ is defined by the following operations:
   The resolved value is not necessarily in the shape it will finally take,
   but is "formattable", i.e. it contains everything required by the eventual formatting.
 
-  > For example, the resolved value of the _expression_ `{|0.40| :number style=percent}`
-  > could be an object such as
-  >
-  > ```
-  > { value: Number('0.40'),
-  >   formatter: NumberFormat(locale, { style: 'percent' }) }
-  > ```
-  >
-  > The shape of this value is implementation-dependent,
-  > and different implementations may choose to perform different levels of resolution.
-
   The resolution of _text_ is rather straighforward,
   and is detailed under _literal resolution_.
 
@@ -38,13 +27,9 @@ Formatting of a _message_ is defined by the following operations:
   With _selectors_, this will depend on their resolution.
 
 - **_Formatting_** takes the resolved values of the selected _pattern_,
-  and formats them in the desired shape.
-  This specification only defines formatting messages as a single concatenated string,
-  but implementations SHOULD provide formatters for additional shapes
-  as appropriate for their setting.
-
-  > For example, a formatter in a web browser could format a message as a DOM fragment
-  > rather than as a representation of its HTML source.
+  and produces the formatted result for the _message_.
+  Depending on the implementation, this result could be a single concatenated string,
+  an array of objects, an attributed string, or some other locally appropriate data type.
 
 Formatter implementations are not required to expose
 the _expression resolution_ and _pattern selection_ operations to their users,
@@ -90,6 +75,20 @@ implementations SHOULD NOT immediately fully format the value for output.
 In _selectors_, the resolved value of an _expression_ is used for _pattern selection_.
 
 In a _pattern_, the resolved value of an _expression_ is used in its _formatting_.
+
+The shapes of resolved values are implementation-dependent,
+and different implementations MAY choose to perform different levels of resolution.
+
+> For example, the resolved value of the _expression_ `{|0.40| :number style=percent}`
+> could be an object such as
+>
+> ```
+> { value: Number('0.40'),
+>   formatter: NumberFormat(locale, { style: 'percent' }) }
+> ```
+>
+> Alternatively, it could be an instance of an ICU4J `FormattedNumber`,
+> or some other locally appropriate value.
 
 Depending on the presence or absence of an _operand_
 and a _function_ or _reserved_ _annotation_,
@@ -498,29 +497,44 @@ each _text_ and _expression_ part of the selected _pattern_ must be resolved and
 
 _Formatting_ is a mostly implementation-defined process,
 as it depends on the implementation's shape for resolved values
-and the target shape of the formatting.
+and the result type of the formatting.
 
 Formatting errors MAY be emitted during _formatting_,
-as formatting is not defined on every resolved value.
+as formatting is not necessarily defined on every resolved value.
 A formatter MAY provide a value to use in such a case instead of a _fallback value_.
 
-_Formatting_ MAY produce formatted messages in the following shapes,
+_Formatting_ MAY produce formatted messages with the following data types,
 as well as any others:
 
 - A single concatenated string.
+- A string with associated attributes for portions of its text.
 - A flat sequence of objects corresponding to each resolved value.
 - A hierarchical structure of objects that group spans of resolved values,
   such as sequences delimited by "open" and "close" _function_ _annotations_.
 
-Implementations SHOULD provide _formatting_ output shapes that match user needs,
-such that e.g. re-parsing a message formatted as a string is not required.
+Implementations SHOULD provide _formatting_ result types that match user needs,
+including situations that require further processing of formatted messages.
 Implementations SHOULD encourage users to consider a formatted localised string
 as an opaque data structure, suitable only for presentation.
+
+### Examples
+
+_This section is non-normative._
+
+1. An implementation might choose to return an interstitial object
+   so that the caller can "decorate" portions of the formatted value.
+   In ICU4J, the `NumberFormatter` class returns a `FormattedNumber` object,
+   so a _pattern_ such as `{This is my number {42 :number}}` might return
+   the character sequence `This is my number `
+   followed by a `FormattedNumber` object representing the value `42` in the current locale.
+
+2. A formatter in a web browser could format a message as a DOM fragment
+   rather than as a representation of its HTML source.
 
 ### Formatting Fallback Values
 
 If the resolved _pattern_ includes any _fallback values_
-and the formatting target is a concatenated string or a sequence of strings,
+and the formatting result is a concatenated string or a sequence of strings,
 the string representation of each _fallback value_ MUST be the concatenation of
 a U+007B LEFT CURLY BRACKET `{`,
 the _fallback value_ as a string,
@@ -586,7 +600,7 @@ which MAY also introspect the _pattern_'s _text_ values
 and identify situations where isolate characters are not needed
 or where additional or different isolation would produce better results.
 
-If an implementation provides formatting to non-string targets,
+If an implementation provides formatting to non-string result types,
 it SHOULD provide similar strategies for enabling bidirectional isolation,
 where appropriate.
 
