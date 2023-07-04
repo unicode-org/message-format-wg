@@ -311,9 +311,10 @@ Next, using `res`, resolve the preferential order for all message keys:
 The method MatchSelectorKeys is determined by the implementation.
 It takes as arguments a resolved _selector_ value `rv` and a list of string keys `keys`,
 and returns a list of string keys in preferential order.
-The returned list must only contain unique elements of the input list `keys`,
-and it MAY be empty.
-The most preferred key is first, with the rest sorted by decreasing preference.
+The returned list MUST contain only unique elements of the input list `keys`.
+The returned list MAY be empty.
+The most-preferred key is first,
+with each successive key appearing in order by decreasing preference.
 
 ### Filter Variants
 
