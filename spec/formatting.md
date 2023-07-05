@@ -141,11 +141,14 @@ because although a _variable_ with _name_ `var` occurs before
 the expression `{$var}`, the entire declaration `let $var = {$var}`
 does not occur before the expression `{$var}`.
 
-Variable names are required to be globally unique. That is,
-for any local variable declaration of the form `let $v = e`:
-* It is an error if `v` is the left-hand side of a local variable declaration
-that appears before `let $v = e` in the message.
-* It is also an error if `v` is an externally defined variable.
+Any _name_ MUST NOT appear as the _name_ of the _variable_
+in more than one _declaration_ within the same message.
+If the _variable_ in a _declaration_ also appears
+as the _variable_ in a previous _declaration_,
+a Variable Redefinition error MUST be emitted.
+If the _variable_ in a declaration is also
+an externally defined variable,
+a Formatting error MUST be emitted.
 
 The resolution of a _variable_ MAY fail if no value is identified for its _name_.
 If this happens, an Unresolved Variable error MUST be emitted.
