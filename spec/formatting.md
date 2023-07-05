@@ -124,8 +124,22 @@ To resolve the value of a _variable_,
 its _name_ is used to identify either a local variable,
 or a variable defined elsewhere.
 
-It is an error for the right-hand side of a local variable declaration to
-refer to a local variable that's declared after it in the message.
+When a _variable_is used as an _operand_,
+the _name_ of this variable MUST either be:
+1. The _name_ of a _variable_ of a _declaration_ that occurs before the
+_operand_, or:
+1. An externally defined variable.
+
+In case 1, the `entire` _declaration_ MUST appear before the _operand_.
+For example, resolution of the following declaration should fail:
+
+```
+let $var = {$var}
+```
+
+because although a _variable_ with _name_ `var` occurs before
+the expression `{$var}`, the entire declaration `let $var = {$var}`
+does not occur before the expression `{$var}`.
 
 Variable names are required to be globally unique. That is,
 for any local variable declaration of the form `let $v = e`:
