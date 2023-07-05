@@ -16,7 +16,7 @@ annotation = (function *(s option)) / reserved
 literal = quoted / unquoted
 variable = "$" name
 function = (":" / "+" / "-") name
-option = name [s] "=" [s] (literal / variable)
+option = name [s] "=" [s] operand
 
 ; reserved keywords are always lowercase
 let   = %x6C.65.74        ; "let"
