@@ -252,8 +252,10 @@ rather than the _expression_ in the _selector_ or _pattern_.
 _Pattern selection_ is not supported for _fallback values_.
 
 When there are multiple _declarations_ for the same _variable_,
+or when a _declaration_ redefines a _variable_
+that is externally defined,
 the fallback string is formatted based on the _expression_ of
-the first declaration of that _variable_.
+the first local declaration of that _variable_.
 
 > For example, attempting to format the following message:
 >
@@ -264,6 +266,19 @@ the first declaration of that _variable_.
 > ```
 >
 > would result in this formatted string representation:
+>
+> ```
+> The value is {|cart|}.
+> ```
+>
+> Also, attempting to format the following message:
+> ```
+> let $var = {|cart|}
+> {The value is {$var}.}
+> ```
+>
+> in a context where `var` is externally defined
+> would result in the same formatted string representation:
 >
 > ```
 > The value is {|cart|}.
