@@ -749,7 +749,7 @@ These are divided into the following categories:
     or by an external definition.
 
     > For example, attempting to format the following message
-    > must result in a Variable Redefinition error,
+    > results in a Variable Redefinition error,
     > because there is another declaration for `var`
     > that textually precedes
     > the declaration of `var` to be `{|horse|}`.
@@ -762,7 +762,7 @@ These are divided into the following categories:
     >
     > Attempting to format the following message in a context
     > where `var` is externally defined
-    > should also result in a Variable Redefinition error.
+    > also results in a Variable Redefinition error.
     >
     > ```
     > let $var = {|horse|}
