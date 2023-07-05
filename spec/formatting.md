@@ -744,7 +744,7 @@ These are divided into the following categories:
     > ```
 
   - **Variable Redefinition errors** occur when
-    the left-hand side of a variable declaration is already defined,
+a `declaration` contains a `variable` that is already defined
     either by a previous local variable declaration,
     or by an external definition.
 
