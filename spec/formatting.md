@@ -103,7 +103,7 @@ one of the following is used to resolve the value of the _expression_:
 - Else, the _expression_ has a _reserved_ _annotation_.
   If the _annotation_ uses a `private-start` character that the implementation supports,
   its value is resolved according to the implementation's specification.
-  Otherwise, a fallback value is used as its value.
+  Else, a Reserved Syntax error is emitted and a fallback value is used as its value.
 
 ### Literal Resolution
 
@@ -177,15 +177,15 @@ the following steps are taken:
 
 ### Fallback Resolution
 
-The resolution of an _expression_ MAY fail in the following cases:
+A **_fallback value_** is the resolved value emitted when an _expression_ cannot be resolved.
+
+An _expression_ fails to resolve when:
 
 - A _variable_ _operand_ fails to resolve.
 - A _function_ _annotation_ fails to resolve.
 - The _expression_ has a _reserved_ _annotation_.
 
-In each such case, an error MUST be emitted
-and a **_fallback value_** used for the _expression_.
-This value depends on the shape of the _expression_:
+The _fallback value_ depends on the contents of the _expression_:
 
 - _expression_ with _literal_ _operand_: U+007C VERTICAL LINE `|`
   followed by the value of the Literal,
@@ -497,7 +497,7 @@ when *   {Other match}
 ## Formatting
 
 After _pattern selection_,
-each _text_ and _expression_ part of the selected _pattern_ must be resolved and formatted.
+each _text_ and _expression_ part of the selected _pattern_ is resolved and formatted.
 
 _Formatting_ is a mostly implementation-defined process,
 as it depends on the implementation's shape for resolved values
@@ -695,7 +695,7 @@ These are divided into the following categories:
   - **Unresolved Variable errors** occur when a variable reference cannot be resolved.
 
     > For example, attempting to format either of the following messages
-    > must result in an Unresolved Variable error if done within a context that
+    > would result in an Unresolved Variable error if done within a context that
     > does not provide for the variable reference `$var` to be successfully resolved:
     >
     > ```
@@ -712,7 +712,7 @@ These are divided into the following categories:
     a reference to a function which cannot be resolved.
 
     > For example, attempting to format either of the following messages
-    > must result in an Unknown Function error if done within a context that
+    > would result in an Unknown Function error if done within a context that
     > does not provide for the function `:func` to be successfully resolved:
     >
     > ```
@@ -721,6 +721,26 @@ These are divided into the following categories:
     >
     > ```
     > match {|horse| :func}
+    > when 1 {The value is one.}
+    > when * {The value is not one.}
+    > ```
+
+  - **Reserved Syntax errors** occur when an expression uses syntax reserved for
+    future standardization,
+    or for private implementation use that is not supported by the current implementation.
+
+    > For example, attempting to format this message
+    > would always result in an Reserved Syntax error:
+    >
+    > ```
+    > {The value is {@horse}.}
+    > ```
+    >
+    > Attempting to format this message would result in an Reserved Syntax error
+    > if done within a context that does not support the `^` private use sigil:
+    >
+    > ```
+    > match {|horse| ^private}
     > when 1 {The value is one.}
     > when * {The value is not one.}
     > ```
