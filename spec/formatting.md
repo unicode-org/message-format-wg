@@ -103,7 +103,7 @@ one of the following is used to resolve the value of the _expression_:
 - Else, the _expression_ has a _reserved_ _annotation_.
   If the _annotation_ uses a `private-start` character that the implementation supports,
   its value is resolved according to the implementation's specification.
-  Else, a Reserved Syntax error is emitted and a fallback value is used as its value.
+  Else, an Unsupported Expression error is emitted and a fallback value is used as its value.
 
 ### Literal Resolution
 
@@ -725,18 +725,18 @@ These are divided into the following categories:
     > when * {The value is not one.}
     > ```
 
-  - **Reserved Syntax errors** occur when an expression uses syntax reserved for
-    future standardization,
+  - **Unsupported Expression errors** occur when an expression uses
+    syntax reserved for future standardization,
     or for private implementation use that is not supported by the current implementation.
 
     > For example, attempting to format this message
-    > would always result in an Reserved Syntax error:
+    > would always result in an Unsupported Expression error:
     >
     > ```
     > {The value is {@horse}.}
     > ```
     >
-    > Attempting to format this message would result in an Reserved Syntax error
+    > Attempting to format this message would result in an Unsupported Expression error
     > if done within a context that does not support the `^` private use sigil:
     >
     > ```
