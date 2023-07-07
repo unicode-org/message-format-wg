@@ -373,7 +373,7 @@ option = name [s] "=" [s] (literal / variable)
 > ```
 >
 > ```
-> {|-1.23|}
+> {'-1.23'}
 > ```
 >
 > ```
@@ -381,11 +381,11 @@ option = name [s] "=" [s] (literal / variable)
 > ```
 >
 > ```
-> {|Thu Jan 01 1970 14:37:00 GMT+0100 (CET)| :datetime weekday=long}
+> {"Thu Jan 01 1970 14:37:00 GMT+0100 (CET)" :datetime weekday=long}
 > ```
 >
 > ```
-> {|My Brand Name| :linkify href=|foobar.com|}
+> {'My Brand Name' :linkify href='foobar.com'}
 > ```
 >
 > ```
@@ -436,12 +436,15 @@ unrecognized reserved sequences have no meaning and MAY result in errors during 
 reserved       = ( reserved-start / private-start ) reserved-body
 reserved-start = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "/" / "?" / "~"
 private-start  = "^" / "&"
-reserved-body  = *( [s] 1*(reserved-char / reserved-escape / literal))
+reserved-body  = *( [s] 1*(reserved-char / reserved-escape / quoted))
 reserved-char  = %x00-08        ; omit HTAB and LF
                / %x0B-0C        ; omit CR
                / %x0E-19        ; omit SP
-               / %x21-5B        ; omit \
-               / %x5D-7A        ; omit { | }
+               / %x21           ; omit "
+               / %x23-26        ; omit '
+               / %x28-5B        ; omit \
+               / %x5D-7A        ; omit {
+               / %x7C           ; omit }
                / %x7E-D7FF      ; omit surrogates
                / %xE000-10FFFF
 ```
@@ -485,7 +488,15 @@ text-char = %x0-5B         ; omit \
 
 **_Quoted_** literals may include content with any Unicode code point,
 except for surrogate code points U+D800 through U+DFFF.
-The characters `\` and `|` MUST be escaped as `\\` and `\|`.
+They are delimited by a matched pair of
+either U+0022 QUOTATION MARK `"` or U+0027 APOSTROPHE `'` characters.
+This choice is intended to make _message_ values easier to embed in other formats,
+and to avoid needing to escape delimiter characters in many cases.
+
+Within a _quoted_ value, the character `\` MUST be escaped as `\\`,
+and the characters `'` and `"` MUST be escaped as `\'` and `\"`
+if they match the delimiters of the _quoted_ value.
+The characters `'` and `"` MAY be escaped if they do not match the delimiters.
 
 **_Unquoted_** literals have a much more restricted range that
 is intentionally close to the XML's [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken),
@@ -497,11 +508,13 @@ All code points are preserved.
 ```abnf
 literal = quoted / unquoted
 
-quoted         = "|" *(quoted-char / quoted-escape) "|"
-quoted-char    = %x0-5B         ; omit \
-               / %x5D-7B        ; omit |
-               / %x7D-D7FF      ; omit surrogates
-               / %xE000-10FFFF
+quoted      = "'" *(quoted-char / DQUOTE / quoted-escape) "'"
+            / DQUOTE *(quoted-char / "'" / quoted-escape) DQUOTE
+quoted-char = %x0-21         ; omit "
+            / %x23-26        ; omit '
+            / %x28-5B        ; omit \
+            / %x5D-D7FF      ; omit surrogates
+            / %xE000-10FFFF
 
 unquoted       = unquoted-start *name-char
 unquoted-start = name-start / DIGIT / "."
@@ -540,8 +553,8 @@ in the body of `text`, `quoted`, or `reserved` sequences respectively:
 
 ```abnf
 text-escape    = backslash ( backslash / "{" / "}" )
-quoted-escape  = backslash ( backslash / "|" )
-reserve-escape = backslash ( backslash / "{" / "|" / "}" )
+quoted-escape  = backslash ( backslash / "'" / DQUOTE )
+reserve-escape = backslash ( backslash / "{" / "'" / DQUOTE / "}" )
 backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 ```
 

@@ -79,7 +79,7 @@ In a _pattern_, the resolved value of an _expression_ is used in its _formatting
 The shapes of resolved values are implementation-dependent,
 and different implementations MAY choose to perform different levels of resolution.
 
-> For example, the resolved value of the _expression_ `{|0.40| :number style=percent}`
+> For example, the resolved value of the _expression_ `{0.40 :number style=percent}`
 > could be an object such as
 >
 > ```
@@ -114,7 +114,7 @@ the formatting function MUST treat its resolved value the same
 whether its value was originally _quoted_ or _unquoted_.
 
 > For example,
-> the _option_ `foo=42` and the _option_ `foo=|42|` are treated as identical.
+> the _option_ `foo=42` and the _option_ `foo='42'` are treated as identical.
 
 The resolution of a _text_ or _literal_ token MUST always succeed.
 
@@ -184,12 +184,12 @@ In each such case, an error MUST be emitted
 and a **_fallback value_** used for the _expression_.
 This value depends on the shape of the _expression_:
 
-- _expression_ with _literal_ _operand_: U+007C VERTICAL LINE `|`
+- _expression_ with _literal_ _operand_: U+0022 QUOTATION MARK `"`
   followed by the value of the Literal,
-  and then by U+007C VERTICAL LINE `|`.
+  and then by U+0022 QUOTATION MARK `"`.
   The same representation is used for both _quoted_ and _unquoted_ values.
 
-  > Examples: `|your horse|`, `|42|`
+  > Examples: `"your horse"`, `"42"`
 
 - _expression_ with _variable_ _operand_: U+0024 DOLLAR SIGN `$`
   followed by the _variable_ _name_ of the _operand_
@@ -216,17 +216,17 @@ rather than the _expression_ in the _selector_ or _pattern_.
 > attempting to format either of the following messages:
 >
 > ```
-> let $var = {|horse| :func}
+> let $var = {"horse" :func}
 > {The value is {$var}.}
 > ```
 >
 > ```
-> let $var = {|horse|}
+> let $var = {'horse'}
 > {The value is {$var :func}.}
 > ```
 >
 > would in both cases result in the _pattern_ _expression_
-> resolving to a _fallback value_ of `|horse|`.
+> resolving to a _fallback value_ of `"horse"`.
 
 _Pattern selection_ is not supported for _fallback values_.
 
@@ -629,7 +629,7 @@ These are divided into the following categories:
   > ```
   >
   > ```
-  > let $var = {|no message body|}
+  > let $var = {"no message body"}
   > ```
 
 - **Data Model errors** occur when a message is invalid due to
@@ -716,7 +716,7 @@ These are divided into the following categories:
     > ```
     >
     > ```
-    > match {|horse| :func}
+    > match {'horse' :func}
     > when 1 {The value is one.}
     > when * {The value is not one.}
     > ```
@@ -730,13 +730,13 @@ These are divided into the following categories:
     > uses a `:plural` selector function which requires its input to be numeric:
     >
     > ```
-    > match {|horse| :plural}
+    > match {'horse' :plural}
     > when 1 {The value is one.}
     > when * {The value is not one.}
     > ```
     >
     > ```
-    > let $sel = {|horse| :plural}
+    > let $sel = {'horse' :plural}
     > match {$sel}
     > when 1 {The value is one.}
     > when * {The value is not one.}

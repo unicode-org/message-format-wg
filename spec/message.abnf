@@ -30,10 +30,12 @@ text-char = %x0-5B         ; omit \
           / %x7E-D7FF      ; omit surrogates
           / %xE000-10FFFF
 
-quoted      = "|" *(quoted-char / quoted-escape) "|"
-quoted-char = %x0-5B         ; omit \
-            / %x5D-7B        ; omit |
-            / %x7D-D7FF      ; omit surrogates
+quoted      = "'" *(quoted-char / DQUOTE / quoted-escape) "'"
+            / DQUOTE *(quoted-char / "'" / quoted-escape) DQUOTE
+quoted-char = %x0-21         ; omit "
+            / %x23-26        ; omit '
+            / %x28-5B        ; omit \
+            / %x5D-D7FF      ; omit surrogates
             / %xE000-10FFFF
 
 ; based on https://www.w3.org/TR/xml/#NT-Nmtoken,
@@ -47,12 +49,15 @@ unquoted-start = name-start / DIGIT / "."
 reserved       = ( reserved-start / private-start ) reserved-body
 reserved-start = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "/" / "?" / "~"
 private-start  = "^" / "&"
-reserved-body  = *( [s] 1*(reserved-char / reserved-escape / literal))
+reserved-body  = *( [s] 1*(reserved-char / reserved-escape / quoted))
 reserved-char  = %x00-08        ; omit HTAB and LF
                / %x0B-0C        ; omit CR
                / %x0E-19        ; omit SP
-               / %x21-5B        ; omit \
-               / %x5D-7A        ; omit { | }
+               / %x21           ; omit "
+               / %x23-26        ; omit '
+               / %x28-5B        ; omit \
+               / %x5D-7A        ; omit {
+               / %x7C           ; omit }
                / %x7E-D7FF      ; omit surrogates
                / %xE000-10FFFF
 
@@ -68,8 +73,8 @@ name-char  = name-start / DIGIT / "-" / "." / ":"
            / %xB7 / %x300-36F / %x203F-2040
 
 text-escape     = backslash ( backslash / "{" / "}" )
-quoted-escape   = backslash ( backslash / "|" )
-reserved-escape = backslash ( backslash / "{" / "|" / "}" )
+quoted-escape  = backslash ( backslash / "'" / DQUOTE )
+reserve-escape = backslash ( backslash / "{" / "'" / DQUOTE / "}" )
 backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
 
 s = 1*( SP / HTAB / CR / LF )
