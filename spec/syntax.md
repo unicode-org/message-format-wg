@@ -436,7 +436,7 @@ unrecognized reserved sequences have no meaning and MAY result in errors during 
 reserved       = ( reserved-start / private-start ) reserved-body
 reserved-start = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "/" / "?" / "~"
 private-start  = "^" / "&"
-reserved-body  = *( [s] 1*(reserved-char / reserved-escape / literal))
+reserved-body  = *( [s] 1*(reserved-char / reserved-escape / quoted))
 reserved-char  = %x00-08        ; omit HTAB and LF
                / %x0B-0C        ; omit CR
                / %x0E-19        ; omit SP
