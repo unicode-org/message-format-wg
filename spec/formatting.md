@@ -49,10 +49,11 @@ At a minimum, it includes:
   This will be passed on to formatting functions.
 
 - Information on the base directionality of the message and its _text_ tokens.
-  This will be used by strategies for bidirectional isolation.
+  This will be used by strategies for bidirectional isolation,
+  and can be used to set the base direction of the _message_ upon display.
 
 - A mapping of string identifiers to values,
-  defining variable values that may be used during _variable resolution_.
+  defining variable values that are available during _variable resolution_.
   This is often determined by a user-provided argument of a formatting function call.
 
 - The _function registry_,
@@ -68,7 +69,7 @@ Implementations MAY include additional fields in their _formatting context_.
 _Expressions_ are used in _declarations_, _selectors_, and _patterns_.
 
 In a _declaration_, the resolved value of the _expression_ is assigned to a _variable_,
-which may then be used in other _expressions_.
+which is available for use by later _expressions_.
 As such a _variable_ MAY then be referenced in different ways,
 implementations SHOULD NOT immediately fully format the value for output.
 
@@ -99,8 +100,10 @@ one of the following is used to resolve the value of the _expression_:
   depending on the shape of the _operand_.
 - Else, if the _expression_ has a _function_ _annotation_,
   its resolved value is defined by _function resolution_.
-- Else, the _expression_ has a _reserved_ _annotation_,
-  and a fallback value is used as its value.
+- Else, the _expression_ has a _reserved_ _annotation_.
+  If the _annotation_ uses a `private-start` character that the implementation supports,
+  its value is resolved according to the implementation's specification.
+  Else, an Unsupported Expression error is emitted and a fallback value is used as its value.
 
 ### Literal Resolution
 
@@ -174,15 +177,15 @@ the following steps are taken:
 
 ### Fallback Resolution
 
-The resolution of an _expression_ may fail in the following cases:
+A **_fallback value_** is the resolved value emitted when an _expression_ cannot be resolved.
+
+An _expression_ fails to resolve when:
 
 - A _variable_ _operand_ fails to resolve.
 - A _function_ _annotation_ fails to resolve.
 - The _expression_ has a _reserved_ _annotation_.
 
-In each such case, an error MUST be emitted
-and a **_fallback value_** used for the _expression_.
-This value depends on the shape of the _expression_:
+The _fallback value_ depends on the contents of the _expression_:
 
 - _expression_ with _literal_ _operand_: U+007C VERTICAL LINE `|`
   followed by the value of the Literal,
@@ -308,9 +311,10 @@ Next, using `res`, resolve the preferential order for all message keys:
 The method MatchSelectorKeys is determined by the implementation.
 It takes as arguments a resolved _selector_ value `rv` and a list of string keys `keys`,
 and returns a list of string keys in preferential order.
-The returned list must only contain unique elements of the input list `keys`,
-and it may be empty.
-The most preferred key is first, with the rest sorted by decreasing preference.
+The returned list MUST contain only unique elements of the input list `keys`.
+The returned list MAY be empty.
+The most-preferred key is first,
+with each successive key appearing in order by decreasing preference.
 
 ### Filter Variants
 
@@ -493,7 +497,7 @@ when *   {Other match}
 ## Formatting
 
 After _pattern selection_,
-each _text_ and _expression_ part of the selected _pattern_ must be resolved and formatted.
+each _text_ and _expression_ part of the selected _pattern_ is resolved and formatted.
 
 _Formatting_ is a mostly implementation-defined process,
 as it depends on the implementation's shape for resolved values
@@ -691,7 +695,7 @@ These are divided into the following categories:
   - **Unresolved Variable errors** occur when a variable reference cannot be resolved.
 
     > For example, attempting to format either of the following messages
-    > must result in an Unresolved Variable error if done within a context that
+    > would result in an Unresolved Variable error if done within a context that
     > does not provide for the variable reference `$var` to be successfully resolved:
     >
     > ```
@@ -708,7 +712,7 @@ These are divided into the following categories:
     a reference to a function which cannot be resolved.
 
     > For example, attempting to format either of the following messages
-    > must result in an Unknown Function error if done within a context that
+    > would result in an Unknown Function error if done within a context that
     > does not provide for the function `:func` to be successfully resolved:
     >
     > ```
@@ -717,6 +721,26 @@ These are divided into the following categories:
     >
     > ```
     > match {|horse| :func}
+    > when 1 {The value is one.}
+    > when * {The value is not one.}
+    > ```
+
+  - **Unsupported Expression errors** occur when an expression uses
+    syntax reserved for future standardization,
+    or for private implementation use that is not supported by the current implementation.
+
+    > For example, attempting to format this message
+    > would always result in an Unsupported Expression error:
+    >
+    > ```
+    > {The value is {@horse}.}
+    > ```
+    >
+    > Attempting to format this message would result in an Unsupported Expression error
+    > if done within a context that does not support the `^` private use sigil:
+    >
+    > ```
+    > match {|horse| ^private}
     > when 1 {The value is one.}
     > when * {The value is not one.}
     > ```
