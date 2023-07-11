@@ -21,17 +21,17 @@ Whenever a user interface needs to present data as part of a larger string,
 that data needs to be formatted (and the message may need to be altered)
 to make it culturally accepted and grammatically correct.
 
-For example, if your US English interface has a message like:
-
-> Your item had 1,023 views on April 3, 2023
-
-You want the translated message to be appropriately formatted into French:
-
-> Votre article a eu 1 023 vues le 3 avril 2023
-
-Or Japanese:
-
-> あなたのアイテムは 2023 年 4 月 3 日に 1,023 回閲覧されました。
+> For example, if your US English (`en-US`) interface has a message like:
+>
+>> Your item had 1,023 views on April 3, 2023
+>
+> You want the translated message to be appropriately formatted into French:
+>
+>> Votre article a eu 1 023 vues le 3 avril 2023
+>
+> Or Japanese:
+>
+>> あなたのアイテムは 2023 年 4 月 3 日に 1,023 回閲覧されました。
 
 This specification defines the
 data model, syntax, processing, and conformance requirements
@@ -53,9 +53,12 @@ all authoring guidelines, diagrams, examples, and notes.
 
 The key words MAY, MUST, MUST NOT, OPTIONAL, RECOMMENDED,
 SHOULD, and SHOULD NOT in this document are to be interpreted as
-described in BCP 14 [RFC2119] [RFC8174].
+described in BCP 14 \[[RFC2119](https://www.ietf.org/rfc/rfc2119.txt)\] \[[RFC8174](https://www.ietf.org/rfc/rfc8174.txt)\].
 
 ### Terminology and Conventions
 
-When a term is defined in this document, it is marked like **_this_**.
-When a term is referenced in this document it is marked like _this_.
+A **_term_** looks like this when it is defined in this specification.
+
+A reference to a _term_ looks like this.
+
+> Examples are non-normative and styled like this.
