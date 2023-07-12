@@ -10,8 +10,8 @@ variant = when 1*(s key) [s] pattern
 key = literal / "*"
 
 expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
-operand = literal / variable
-annotation = (function *(s option)) / reserved
+operand    = literal / variable
+annotation = (function *(s option)) / reserved / private-use
 
 literal = quoted / unquoted
 variable = "$" name
