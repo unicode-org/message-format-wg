@@ -135,7 +135,7 @@ and ends with U+007D RIGHT CURLY BRACKET `}`.
 
 An _expression_ can appear as a local variable value, as a _selector_, and within a _pattern_.
 
-> A simple _expression_ is a bare variable name:
+> A simple _expression_ containing a variable:
 >
 >>```
 >>    {Hello, {$userName}!}
