@@ -240,10 +240,10 @@ A complex message with 2 _selectors_ and 3 local variable _declarations_:
 
 The specification defines the following grammar productions.
 
-A message satisfying all rules of the grammar is considered _well-formed_.
+A **_well-formed_** message satisifies all of the rules of the grammar.
 
-Furthermore, a well-formed message is considered _valid_
-if it meets additional semantic requirements about its structure, defined below.
+A **_valid_** message meets the additional semantic requirements about 
+the structure and functionality defined below.
 
 ### Message
 
@@ -272,8 +272,17 @@ declaration = let s variable [s] "=" [s] expression
 
 ### Selectors
 
-A `match` statement contains one or more **_selectors_**
-which will be used to choose one of the _variants_ during formatting.
+**_Selectors_** are a _match statement_ followed by one or more _variants_.
+_Selectors_ provide the ability for a _message_ to use a _pattern_
+that varies in content or form depending on values determined at runtime.
+
+A **_selector expression_** is an _expression_ that will be used as part 
+of the selection process.
+
+A **_match statement_** signals that the _message_ contains more than one
+_variant_ that can potentially be used to format as output.
+A _match_ statement MUST begin with the keyword `match`.
+A _match_ statement MUST be followed by one or more _selector expressions_.
 
 ```abnf
 selectors = match 1*([s] expression)
@@ -296,8 +305,9 @@ selectors = match 1*([s] expression)
 
 ### Variants
 
-A **_variant_** is a keyed _pattern_.
-The keys are used to match against the _selectors_ defined in the `match` statement.
+A **_variant_** is a _pattern_ associated with a set of _keys_. Each _variant_ 
+MUST begin with the _keyword_ `when`,be followed by a sequence of _keys_, and
+terminate with a valid _pattern_.
 The key `*` is a "catch-all" key, matching all selector values.
 
 ```abnf
@@ -341,14 +351,21 @@ Whitespace within a _pattern_ is meaningful and MUST be preserved.
 
 ### Expressions
 
-**_Expressions_** MUST start with an _operand_ or an _annotation_.
+An **_expression_** is a _selector_ or a placeholder in a _pattern_
+that is evaluated during the formatting process. Each _expression_ MUST 
+start with an _operand_ or an _annotation_.
 An _expression_ MUST NOT be empty.
 
-An **_operand_** is either a _literal_ or a _variable_.
+An **_operand_** is either a _literal_ or a _variable_ that is the "subject"
+of an _expression_, that is, it is the value upon which the _expression_ will
+be evaluated.
 An _operand_ MAY be optionally followed by an _annotation_.
 
 An **_annotation_** consists of a _function_ and its named _options_,
 or consists of a _reserved_ sequence.
+
+A **_function_** is functionality used to evaluate, format, select, or otherwise 
+process an _operand_, or, if lacking an _operand_, its _annotation_. 
 
 _Functions_ do not accept any positional arguments
 other than the _operand_ in front of them.
@@ -412,9 +429,10 @@ option = name [s] "=" [s] (literal / variable)
 
 #### Reserved
 
-**_Reserved_** annotations start with a reserved character
-and are intended for future standardization
-as well as private implementation use.
+A **_reserved_** _annotation_ is an _annotation_ whose syntax is reserved
+for future standardization.
+
+A _reserved_ annotation starts with a reserved character.
 A _reserved_ _annotation_ MAY be empty or contain arbitrary text.
 This allows maximum flexibility in future standardization,
 as future definitions are expected to define additional semantics and constraints
@@ -446,11 +464,27 @@ reserved-char  = %x00-08        ; omit HTAB and LF
                / %xE000-10FFFF
 ```
 
+#### Private-Use
+
+A **_private-use_** _annotation_ is an _annotation_ whose syntax is reserved
+for use by a specific implementation or by private agreement between multiple
+implementations.
+
+A _private-use_ _annotation_ starts with a `private-start` character. A _private-use_
+_annotation_ MAY be empty. The meaning and semantics of a _private-use_ _annotation_ 
+depend on the implementation. 
+
+**NOTE:** Users are cautioned that _private-use_ sequences cannot be reliably exchanged
+and can result in errors during formatting. It is generally a better idea to use
+the function registry to define additional formatting or annotation options.
+
 ## Tokens
 
 The grammar defines the following tokens for the purpose of the lexical analysis.
 
 ### Keywords
+
+A **_keyword_** is a reserved token that is part of the _message_ syntax.
 
 The following three keywords are reserved: `let`, `match`, and `when`.
 Reserved keywords are always lowercase.
@@ -481,18 +515,31 @@ text-char = %x0-5B         ; omit \
 
 ### Literals
 
-**_Literal_** is used for matching variants and providing input to _expressions_.
-
-**_Quoted_** literals may include content with any Unicode code point,
+A **_literal_** is a character sequence that appears outside
+of _text_ in various parts of a _message_.
+A _literal_ can appear in a _declaration_, as a _key_ value,
+as an _operand_, or in the value of an _option_. A _literal_ MAY
+include any Unicode code point
 except for surrogate code points U+D800 through U+DFFF.
-The characters `\` and `|` MUST be escaped as `\\` and `\|`.
 
-**_Unquoted_** literals have a much more restricted range that
+All code points are preserved.
+
+A **_quoted_** literal begins and ends with U+005E VERTICAL BAR.
+The characters `\` and `|` within a _quoted_ literal MUST be 
+escaped as `\\` and `\|`.
+
+An **_unquoted_** literal is a _literal_ that does not require the `|`
+quotes around it to be distinct from the rest of the _message_ syntax.
+An _unquoted_ MAY be used when the content of the _literal_
+contains no whitespace and otherwise matches the `unquoted` production.
+Any _unquoted_ literal MAY be _quoted_. Implementations MUST NOT distinguish
+between _quoted_ and _unquoted_ literals that have the same sequence of 
+code points.
+
+_Unquoted_ literals have a much more restricted range that
 is intentionally close to the XML's [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken),
 with the restriction that it MUST NOT start with `-` or `:`,
 as those would conflict with _function_ start characters.
-
-All code points are preserved.
 
 ```abnf
 literal = quoted / unquoted
@@ -534,8 +581,10 @@ name-char  = name-start / DIGIT / "-" / "." / ":"
 
 ### Escape Sequences
 
-Escape sequences are introduced by U+005C REVERSE SOLIDUS `\`
-and allow the appearance of lexically meaningful characters
+An **_escape sequence_** is a two-character sequence starting with
+`\` U+005C REVERSE SOLIDUS. 
+
+An _escape sequence_ allows the appearance of lexically meaningful characters
 in the body of `text`, `quoted`, or `reserved` sequences respectively:
 
 ```abnf
@@ -549,8 +598,8 @@ backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 
 **_Whitespace_** is defined as tab, carriage return, line feed, or the space character.
 
-Inside _patterns_,
-whitespace is part of the translatable content and is recorded and stored verbatim.
+Inside _patterns_ and _quoted literals_,
+whitespace is part of the content and is recorded and stored verbatim.
 Whitespace is not significant outside translatable text, except where required by the syntax.
 
 ```abnf
