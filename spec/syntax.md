@@ -6,7 +6,7 @@
    1. [Design Goals](#design-goals)
    1. [Design Restrictions](#design-restrictions)
 1. [Overview & Examples](#overview--examples)
-   1. [Messages](#message)
+   1. [Messages and Patterns](#messages-and-patterns)
    1. [Expressions](#expression)
    1. [Formatting Functions](#function)
    1. [Selection](#selection)
@@ -91,11 +91,17 @@ The syntax specification takes into account the following design restrictions:
 
 _This section is non-normative._
 
-### Message
+### Messages and Patterns
 
 A **_message_** is the complete template for a specific message formatting request.
 
-All _messages_, including simple ones, begin with U+007B LEFT CURLY BRACKET `{` 
+All _messages_ MUST contain either a _pattern_ or _selectors_. 
+A _message_ MAY contain zero or more _declarations_.
+(Implication: the empty string is not a valid message)
+
+A **_pattern_** is a combination of _text_ and _placeholders_ 
+to be formatted as a unit.
+All _patterns_, including simple ones, begin with U+007B LEFT CURLY BRACKET `{` 
 and end with U+007D RIGHT CURLY BRACKET `}`.
 
 >    {Hello, world!}
