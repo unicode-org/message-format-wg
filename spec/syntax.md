@@ -534,9 +534,9 @@ An **_unquoted_** literal is a _literal_ that does not require the `|`
 quotes around it to be distinct from the rest of the _message_ syntax.
 An _unquoted_ MAY be used when the content of the _literal_
 contains no whitespace and otherwise matches the `unquoted` production.
-Any _unquoted_ literal MAY be _quoted_. Implementations MUST NOT distinguish
-between _quoted_ and _unquoted_ literals that have the same sequence of 
-code points.
+Any _unquoted_ literal MAY be _quoted_.
+Implementations MUST NOT distinguish between _quoted_ and _unquoted_ literals
+that have the same sequence of code points.
 
 _Unquoted_ literals have a much more restricted range that
 is intentionally close to the XML's [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken),
