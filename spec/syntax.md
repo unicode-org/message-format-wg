@@ -520,8 +520,8 @@ text-char = %x0-5B         ; omit \
 A **_literal_** is a character sequence that appears outside
 of _text_ in various parts of a _message_.
 A _literal_ can appear in a _declaration_, as a _key_ value,
-as an _operand_, or in the value of an _option_. A _literal_ MAY
-include any Unicode code point
+as an _operand_, or in the value of an _option_.
+A _literal_ MAY include any Unicode code point
 except for surrogate code points U+D800 through U+DFFF.
 
 All code points are preserved.
