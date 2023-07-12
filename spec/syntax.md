@@ -6,9 +6,9 @@
    1. [Design Goals](#design-goals)
    1. [Design Restrictions](#design-restrictions)
 1. [Overview & Examples](#overview--examples)
-   1. [Messages](#messages)
+   1. [Messages](#message)
    1. [Expressions](#expression)
-   1. [Formatting Functions](#formatting-functions)
+   1. [Formatting Functions](#function)
    1. [Selection](#selection)
    1. [Local Variables](#local-variables)
    1. [Complex Messages](#complex-messages)
@@ -91,150 +91,189 @@ The syntax specification takes into account the following design restrictions:
 
 _This section is non-normative._
 
-### Messages
+### Message
 
-All messages, including simple ones, are enclosed in `{…}` delimiters:
+A **_message_** is the complete template for a specific message formatting request.
 
-    {Hello, world!}
+All _messages_, including simple ones, begin with U+007B LEFT CURLY BRACKET `{` 
+and end with U+007D RIGHT CURLY BRACKET `}`.
 
-The same message defined in a `.properties` file:
+>    {Hello, world!}
 
-```properties
-app.greetings.hello = {Hello, world!}
-```
+>The same message defined in a `.properties` file:
+>
+>>```properties
+>>app.greetings.hello = {Hello, world!}
+>>```
 
-The same message defined inline in JavaScript:
-
-```js
-let hello = new MessageFormat('{Hello, world!}')
-hello.format()
-```
+>The same message defined inline in JavaScript:
+>
+>>```js
+>>let hello = new MessageFormat('{Hello, world!}')
+>>hello.format()
+>>```
 
 ### Expression
 
-An _expression_ represents a part of a message that will be determined
-during the message's formatting.
+An **_expression_** is a part of a _message_ that will be determined
+during the _message_'s formatting.
 
-An _expression_ always uses `{…}` delimiters.
+A **_placeholder_** is an _expression_ that appears inside of a _pattern_
+and which will be replaced during the formatting of the _message_.
+
+An _expression_ begins with U+007B LEFT CURLY BRACKET `{` 
+and ends with U+007D RIGHT CURLY BRACKET `}`.
+
 An _expression_ can appear as a local variable value, as a _selector_, and within a _pattern_.
 
-A simple _expression_ is a bare variable name:
+> A simple _expression_ is a bare variable name:
+>
+>>```
+>>    {Hello, {$userName}!}
+>>```
 
-    {Hello, {$userName}!}
+### Function
 
-### Formatting Functions
+A **_function_** is a named modifier in an _expression_.
+A _function_ MAY be followed by zero or more _options_
 
-A _function_ is named functionality, possibly with _options_, that format,
-process, or operate on an _operand_ which may be either a _literal_ or a _variable_.
+>For example, a _message_ with a `$date` _variable_ formatted with the `:datetime` _function_:
+>
+>>```
+>>    {Today is {$date :datetime weekday=long}.}
+>>```
 
-For example, a _message_ with a `$date` _variable_ formatted with the `:datetime` _function_:
+>A _message_ with a `$userName` _variable_ formatted with
+>the custom `:person` _function_ capable of
+>declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
+>
+>>```
+>>    {Hello, {$userName :person case=vocative}!}
+>>```
 
-    {Today is {$date :datetime weekday=long}.}
+>A _message_ with a `$userObj` _variable_ formatted with
+>the custom `:person` _function_ capable of
+>plucking the first name from the object representing a person:
+>
+>>```
+>>    {Hello, {$userObj :person firstName=long}!}
+>>```
 
-A _message_ with a `$userName` _variable_ formatted with
-the custom `:person` _function_ capable of
-declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
+_Functions_ can be _standalone_, or can be an _opening element_ or _closing element_.
 
-    {Hello, {$userName :person case=vocative}!}
+A **_standalone_** _function_ is not expected to be paired with another _function_.
+An **_opening element_** is a _function_ that SHOULD be paired with a _closing function_.
+A **_closing element_** is a _function_ that SHOULD be paired with an _opening function_.
 
-A _message_ with a `$userObj` _variable_ formatted with
-the custom `:person` _function_ capable of
-plucking the first name from the object representing a person:
-
-    {Hello, {$userObj :person firstName=long}!}
-
-A message with two markup-like _functions_, `button` and `link`,
-which the runtime can use to construct a document tree structure for a UI framework:
-
-    {{+button}Submit{-button} or {+link}cancel{-link}.}
-
-An opening element MAY be present in a message without a corresponding closing element,
+An _opening element_ MAY be present in a message without a corresponding _closing element_,
 and vice versa.
+
+>A message with two markup-like _functions_, `button` and `link`,
+>which the runtime can use to construct a document tree structure for a UI framework:
+>
+>>```
+>>    {{+button}Submit{-button} or {+link}cancel{-link}.}
+>>```
+
 
 ### Selection
 
-A _selector_ selects a specific _pattern_ from a list of available _patterns_
+A **_selector_** selects a specific _pattern_ from a list of available _patterns_
 in a _message_ based on the value of its _expression_.
 A message can have multiple selectors.
 
-A message with a single _selector_:
+>A message with a single _selector_:
+>
+>>```
+>>    match {$count :number}
+>>    when 1 {You have one notification.}
+>>    when * {You have {$count} notifications.}
+>>```
 
-    match {$count :number}
-    when 1 {You have one notification.}
-    when * {You have {$count} notifications.}
+>A message with a single _selector_ which is an invocation of
+>a custom function `:platform`, formatted on a single line:
+>
+>>```
+>>    match {:platform} when windows {Settings} when * {Preferences}
+>>```
 
-A message with a single _selector_ which is an invocation of
-a custom function `:platform`, formatted on a single line:
+>A message with a single _selector_ and a custom `:hasCase` function
+>which allows the message to query for presence of grammatical cases required for each variant:
+>
+>>```
+>>    match {$userName :hasCase}
+>>    when vocative {Hello, {$userName :person case=vocative}!}
+>>    when accusative {Please welcome {$userName :person case=accusative}!}
+>>    when * {Hello!}
+>>```
 
-    match {:platform} when windows {Settings} when * {Preferences}
-
-A message with a single _selector_ and a custom `:hasCase` function
-which allows the message to query for presence of grammatical cases required for each variant:
-
-    match {$userName :hasCase}
-    when vocative {Hello, {$userName :person case=vocative}!}
-    when accusative {Please welcome {$userName :person case=accusative}!}
-    when * {Hello!}
-
-A message with 2 _selectors_:
-
-    match {$photoCount :number} {$userGender :equals}
-    when 1 masculine {{$userName} added a new photo to his album.}
-    when 1 feminine {{$userName} added a new photo to her album.}
-    when 1 * {{$userName} added a new photo to their album.}
-    when * masculine {{$userName} added {$photoCount} photos to his album.}
-    when * feminine {{$userName} added {$photoCount} photos to her album.}
-    when * * {{$userName} added {$photoCount} photos to their album.}
+>A message with two _selectors_:
+>
+>>```
+>>    match {$photoCount :number} {$userGender :equals}
+>>    when 1 masculine {{$userName} added a new photo to his album.}
+>>    when 1 feminine {{$userName} added a new photo to her album.}
+>>    when 1 * {{$userName} added a new photo to their album.}
+>>    when * masculine {{$userName} added {$photoCount} photos to his album.}
+>>    when * feminine {{$userName} added {$photoCount} photos to her album.}
+>>    when * * {{$userName} added {$photoCount} photos to their album.}
+>>```
 
 ### Local Variables
 
-A _message_ can define local variables,
-such as might be needed for transforming input
+A _message_ can define local variables using a _declaration_.
+A local variable might be needed for transforming input
 or providing additional data to an _expression_.
 Local variables appear in a _declaration_,
 which defines the value of a named local variable.
 
-A _message_ containing a _declaration_ defining a local variable `$whom` which is then used twice inside the pattern:
+>A _message_ containing a _declaration_ defining a local variable `$whom` which is then used twice inside the pattern:
+>
+>>```
+>>    let $whom = {$monster :noun case=accusative}
+>>    {You see {$quality :adjective article=indefinite accord=$whom} {$whom}!}
+>>```
 
-    let $whom = {$monster :noun case=accusative}
-    {You see {$quality :adjective article=indefinite accord=$whom} {$whom}!}
-
-A message defining two local variables:
-`$itemAcc` and `$countInt`, and using `$countInt` as a selector:
-
-    let $countInt = {$count :number maximumFractionDigits=0}
-    let $itemAcc = {$item :noun count=$count case=accusative}
-    match {$countInt}
-    when one {You bought {$color :adjective article=indefinite accord=$itemAcc} {$itemAcc}.}
-    when * {You bought {$countInt} {$color :adjective accord=$itemAcc} {$itemAcc}.}
+>A _message_ defining two local variables:
+>`$itemAcc` and `$countInt`, and using `$countInt` as a selector:
+>
+>>```
+>>    let $countInt = {$count :number maximumFractionDigits=0}
+>>    let $itemAcc = {$item :noun count=$count case=accusative}
+>>    match {$countInt}
+>>    when one {You bought {$color :adjective article=indefinite accord=$itemAcc} {$itemAcc}.}
+>>    when * {You bought {$countInt} {$color :adjective accord=$itemAcc} {$itemAcc}.}
+>>```
 
 ### Complex Messages
 
-The various features can be used to produce arbitrarily complex messages by combining
+The various features can be used to produce arbitrarily complex _messages_ by combining
 _declarations_, _selectors_, _functions_, and more.
 
-A complex message with 2 _selectors_ and 3 local variable _declarations_:
-
-    let $hostName = {$host :person firstName=long}
-    let $guestName = {$guest :person firstName=long}
-    let $guestsOther = {$guestCount :number offset=1}
-
-    match {$host :gender} {$guestOther :number}
-
-    when female 0 {{$hostName} does not give a party.}
-    when female 1 {{$hostName} invites {$guestName} to her party.}
-    when female 2 {{$hostName} invites {$guestName} and one other person to her party.}
-    when female * {{$hostName} invites {$guestName} and {$guestsOther} other people to her party.}
-
-    when male 0 {{$hostName} does not give a party.}
-    when male 1 {{$hostName} invites {$guestName} to his party.}
-    when male 2 {{$hostName} invites {$guestName} and one other person to his party.}
-    when male * {{$hostName} invites {$guestName} and {$guestsOther} other people to his party.}
-
-    when * 0 {{$hostName} does not give a party.}
-    when * 1 {{$hostName} invites {$guestName} to their party.}
-    when * 2 {{$hostName} invites {$guestName} and one other person to their party.}
-    when * * {{$hostName} invites {$guestName} and {$guestsOther} other people to their party.}
+>A complex message with 2 _selectors_ and 3 local variable _declarations_:
+>
+>>```
+>>    let $hostName = {$host :person firstName=long}
+>>    let $guestName = {$guest :person firstName=long}
+>>    let $guestsOther = {$guestCount :number offset=1}
+>>
+>>    match {$host :gender} {$guestOther :number}
+>>
+>>    when female 0 {{$hostName} does not give a party.}
+>>    when female 1 {{$hostName} invites {$guestName} to her party.}
+>>    when female 2 {{$hostName} invites {$guestName} and one other person to her party.}
+>>    when female * {{$hostName} invites {$guestName} and {$guestsOther} other people to her party.}
+>>
+>>    when male 0 {{$hostName} does not give a party.}
+>>    when male 1 {{$hostName} invites {$guestName} to his party.}
+>>    when male 2 {{$hostName} invites {$guestName} and one other person to his party.}
+>>    when male * {{$hostName} invites {$guestName} and {$guestsOther} other people to his party.}
+>>
+>>    when * 0 {{$hostName} does not give a party.}
+>>    when * 1 {{$hostName} invites {$guestName} to their party.}
+>>    when * 2 {{$hostName} invites {$guestName} and one other person to their party.}
+>>    when * * {{$hostName} invites {$guestName} and {$guestsOther} other people to their party.}
+>>```
 
 ## Productions
 
@@ -353,14 +392,12 @@ Whitespace within a _pattern_ is meaningful and MUST be preserved.
 
 ### Expressions
 
-An **_expression_** is a _selector_ or a placeholder in a _pattern_
+An **_expression_** is a _selector_ or a _placeholder_ in a _pattern_
 that is evaluated during the formatting process.
 Each _expression_ MUST start with an _operand_ or an _annotation_.
 An _expression_ MUST NOT be empty.
 
-An **_operand_** is either a _literal_ or a _variable_ that is the "subject"
-of an _expression_, that is, it is the value upon which the _expression_ will
-be evaluated.
+An **_operand_** is a _literal_ or a _variable_ to be evaluated in a _placeholder_.
 An _operand_ MAY be optionally followed by an _annotation_.
 
 An **_annotation_** consists of a _function_ and its named _options_,
@@ -465,20 +502,6 @@ reserved-char  = %x00-08        ; omit HTAB and LF
                / %x7E-D7FF      ; omit surrogates
                / %xE000-10FFFF
 ```
-
-#### Private-Use
-
-A **_private-use_** _annotation_ is an _annotation_ whose syntax is reserved
-for use by a specific implementation or by private agreement between multiple
-implementations.
-
-A _private-use_ _annotation_ starts with a `private-start` character. A _private-use_
-_annotation_ MAY be empty. The meaning and semantics of a _private-use_ _annotation_ 
-depend on the implementation. 
-
-**NOTE:** Users are cautioned that _private-use_ sequences cannot be reliably exchanged
-and can result in errors during formatting. It is generally a better idea to use
-the function registry to define additional formatting or annotation options.
 
 ## Tokens
 
