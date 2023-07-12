@@ -354,8 +354,8 @@ Whitespace within a _pattern_ is meaningful and MUST be preserved.
 ### Expressions
 
 An **_expression_** is a _selector_ or a placeholder in a _pattern_
-that is evaluated during the formatting process. Each _expression_ MUST 
-start with an _operand_ or an _annotation_.
+that is evaluated during the formatting process.
+Each _expression_ MUST start with an _operand_ or an _annotation_.
 An _expression_ MUST NOT be empty.
 
 An **_operand_** is either a _literal_ or a _variable_ that is the "subject"
