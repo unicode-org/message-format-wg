@@ -104,15 +104,18 @@ to be formatted as a unit.
 All _patterns_, including simple ones, begin with U+007B LEFT CURLY BRACKET `{` 
 and end with U+007D RIGHT CURLY BRACKET `}`.
 
->    {Hello, world!}
+> A _message_ consisting of a simple _pattern_:
+>>```
+>>{Hello, world!}
+>>```
 
->The same message defined in a `.properties` file:
+>The same _message_ defined in a `.properties` file:
 >
 >>```properties
 >>app.greetings.hello = {Hello, world!}
 >>```
 
->The same message defined inline in JavaScript:
+>The same _message_ defined inline in JavaScript:
 >
 >>```js
 >>let hello = new MessageFormat('{Hello, world!}')
