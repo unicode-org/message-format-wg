@@ -584,7 +584,7 @@ name-char  = name-start / DIGIT / "-" / "." / ":"
 ### Escape Sequences
 
 An **_escape sequence_** is a two-character sequence starting with
-`\` U+005C REVERSE SOLIDUS. 
+U+005C REVERSE SOLIDUS `\`.
 
 An _escape sequence_ allows the appearance of lexically meaningful characters
 in the body of `text`, `quoted`, or `reserved` sequences respectively:
