@@ -471,8 +471,8 @@ option = name [s] "=" [s] (literal / variable)
 A **_reserved_** _annotation_ is an _annotation_ whose syntax is reserved
 for future standardization.
 
-A _reserved_ annotation starts with a reserved character.
-A _reserved_ _annotation_ MAY be empty or contain arbitrary text.
+A _reserved_ _annotation_ starts with a reserved character.
+A _reserved_ _annotation_ MAY be empty or contain arbitrary text after its first character.
 This allows maximum flexibility in future standardization,
 as future definitions are expected to define additional semantics and constraints
 on the contents of these _annotations_.
