@@ -281,8 +281,9 @@ of the selection process.
 
 A **_match statement_** signals that the _message_ contains more than one
 _variant_ that can potentially be used to format as output.
-A _match_ statement MUST begin with the keyword `match`.
-A _match_ statement MUST be followed by one or more _selector expressions_.
+A _match statement_ MUST begin with the keyword `match`.
+A _match statement_ MUST contain one or more _selector expressions_.
+A _match statement_ MUST be followed by at least one _variant_.
 
 ```abnf
 selectors = match 1*([s] expression)
