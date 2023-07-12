@@ -101,7 +101,8 @@ For the sake of brevity, only `locales="en"` is considered.
             <option name="maximumFractionDigits" pattern="positiveInteger"/>
             <option name="minimumSignificantDigits" pattern="positiveInteger"/>
             <option name="maximumSignificantDigits" pattern="positiveInteger"/>
-            <match values="one other"/>
+            <!-- Since this applies to both cardinal and ordinal, all plural options are valid. -->
+            <match values="zero one two few many"/>
             <match pattern="anyNumber"/>
         </matchSignature>
 
