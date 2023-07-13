@@ -454,7 +454,7 @@ The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}` when th
 appear as part of a _private-use_ annotation. 
  
 All other characters, including whitespace, are assigned meaning by the implementation.
-A _private-use_ _annotation_ MAY be empty. 
+A _private-use_ _annotation_ MAY be empty after its first character.
 
 **NOTE:** Users are cautioned that _private-use_ sequences cannot be reliably exchanged
 and can result in errors during formatting. It is generally a better idea to use
