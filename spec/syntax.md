@@ -402,8 +402,7 @@ Whitespace within a _pattern_ is meaningful and MUST be preserved.
 
 ### Expressions
 
-An **_expression_** is a _selector_ or a _placeholder_ in a _pattern_
-that is evaluated during the formatting process.
+An _expression_ can appear as a local variable value, as a _selector_, and within a _pattern_.
 Each _expression_ MUST start with an _operand_ or an _annotation_.
 An _expression_ MUST NOT be empty.
 
