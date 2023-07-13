@@ -90,7 +90,7 @@ For the sake of brevity, only `locales="en"` is considered.
     <function name="number">
         <description>
             Format a number.
-            Match a numerical value against CLDR plural categories or against a number literal.
+            Match a **formatted** numerical value against CLDR plural categories or against a number literal.
         </description>
 
         <matchSignature locales="en">

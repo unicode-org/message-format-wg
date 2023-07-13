@@ -1,32 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="registry.dtd" type="application/xml-dtd"?>
 <registry>
+  <!-- All regex here are to be seen as provisory. See issue #422. -->
   <pattern id="anyNumber" regex="-?[0-9]+(\.[0-9]+)"/>
   <pattern id="positiveInteger" regex="[0-9]+"/>
   <pattern id="currencyCode" regex="[A-Z]{3}"/>
   <pattern id="timeZoneId" regex="[a-zA-Z/]+"/>
   <pattern id="anythingNotEmpty" regex=".+"/>
-
-  <!-- I don't think that regexp is powerfull enough to
-    describe all things we might want, especially for input.
-    ISO 8601 is one example.
-    https://en.wikipedia.org/wiki/ISO_8601
-    So for now this is a very "sketchy" regexp.
-
-    One can also imagine phone numbers, emails, url, etc.
-
-    Even the regex for anyNumber (from the .md) is not OK:
-      .3  : Invalid (no digit before dot)
-      3   : Invalid (no dot + one digit after)
-            Brackets in regexp means grouping, not optional.
-      002 : Valid (OK to start with zero)
-      000 : Valid (OK to start with zero)
-  -->
   <pattern id="iso8601" regex="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}\d{2}"/>
 
   <function name="datetime">
     <!-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat -->
-    <description>Language-sensitive date and time formatting</description>
+    <description>Locale-sensitive date and time formatting</description>
 
     <formatSignature>
       <input pattern="iso8601"/>
@@ -90,25 +75,11 @@
       <option name="timeZoneName" values="long short shortOffset longOffset shortGeneric longGeneric"/>
     </formatSignature>
 
-    <!-- TODO: IGNORED for now. To discuss. -->
-    <!-- The locale matching algorithm to use. -->
-    <!--
-    <option name="localeMatcher" values="lookup best-fit" default="best-fit"/>
-    -->
-    <!-- The format matching algorithm to use. -->
-    <!--
-    <option name="formatMatcher" values="basic best-fit" default="best-fit"/>
-    -->
-    <!-- Whether to use 12-hour time (as opposed to 24-hour time). -->
-    <!-- I think it overlaps with "hourCycle"?
-    <option name="hour12" values="true false"/>
-    -->
-
   </function>
 
   <function name="number">
     <!-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat -->
-    <description>Language-sensitive number formatting</description>
+    <description>Locale-sensitive number formatting</description>
 
     <formatSignature>
       <input pattern="anyNumber"/>
@@ -172,17 +143,16 @@
 
     </formatSignature>
 
-    <!-- TODO: IGNORED for now are the "Experimental" options. To discuss?
-      signDisplay@negative, useGrouping, roundingMode, roundingPriority, roundingIncrement, trailingZeroDisplay
-    -->
-
   </function>
 
   <function name="plural">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules/PluralRules
+    <!--
+      https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules/PluralRules
       https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/com/ibm/icu/text/MessageFormat.html
     -->
-    <description>Language-sensitive plural selection</description>
+    <description>Locale-sensitive plural selection.
+      It matches a **formatted** numerical value against CLDR plural categories or against a number literal.
+    </description>
     <matchSignature>
       <option name="type" values="cardinal ordinal" default="cardinal"/>
       <!--
@@ -229,22 +199,4 @@
     </matchSignature>
   </function>
 
-  <!-- ICU does not have this, and one might argue it is just syntactic sugar on top of "select".
-    ICU rejected this a few times.
-  -->
-  <function name="gender">
-    <description>Gender selection</description>
-    <matchSignature>
-      <match values="feminine masculine"/>
-    </matchSignature>
-  </function>
-
-  <!-- TODO: IGNORED for now are the functions that are ICU only or ECMAScript only. To discuss?
-    list : ECMAScripy only
-      https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat
-    relativeTime : ECMAScripy only
-      https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat
-    spellout : ICU only
-    duration : ICU only
-  -->
 </registry>
