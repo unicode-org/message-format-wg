@@ -445,8 +445,7 @@ reserved-char  = %x00-08        ; omit HTAB and LF
 #### Private-Use
 
 A **_private-use_** _annotation_ is an _annotation_ whose syntax is reserved
-for use by a specific implementation or by private agreement between multiple
-implementations. 
+for use by a specific implementation or by private agreement between multiple implementations. 
 Implementations MAY define their own meaning and semantics for _private-use_ annotations.
 
 A _private-use_ annotation starts with either U+0026 AMPERSAND `&` or U+005E CIRCUMFLEX ACCENT `^`.
