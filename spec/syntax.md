@@ -105,22 +105,22 @@ All _patterns_, including simple ones, begin with U+007B LEFT CURLY BRACKET `{`
 and end with U+007D RIGHT CURLY BRACKET `}`.
 
 > A _message_ consisting of a simple _pattern_:
->>```
->>{Hello, world!}
->>```
+>```
+>{Hello, world!}
+>```
 
 >The same _message_ defined in a `.properties` file:
 >
->>```properties
->>app.greetings.hello = {Hello, world!}
->>```
+>```properties
+>app.greetings.hello = {Hello, world!}
+>```
 
 >The same _message_ defined inline in JavaScript:
 >
->>```js
->>let hello = new MessageFormat('{Hello, world!}')
->>hello.format()
->>```
+>```js
+>let hello = new MessageFormat('{Hello, world!}')
+>hello.format()
+>```
 
 ### Expression
 
@@ -137,9 +137,9 @@ An _expression_ can appear as a local variable value, as a _selector_, and withi
 
 > A simple _expression_ containing a variable:
 >
->>```
->>    {Hello, {$userName}!}
->>```
+>```
+>{Hello, {$userName}!}
+>```
 
 ### Function
 
@@ -148,25 +148,25 @@ A _function_ MAY be followed by zero or more _options_
 
 >For example, a _message_ with a `$date` _variable_ formatted with the `:datetime` _function_:
 >
->>```
->>    {Today is {$date :datetime weekday=long}.}
->>```
+>```
+>{Today is {$date :datetime weekday=long}.}
+>```
 
 >A _message_ with a `$userName` _variable_ formatted with
 >the custom `:person` _function_ capable of
 >declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
 >
->>```
->>    {Hello, {$userName :person case=vocative}!}
->>```
+>```
+>{Hello, {$userName :person case=vocative}!}
+>```
 
 >A _message_ with a `$userObj` _variable_ formatted with
 >the custom `:person` _function_ capable of
 >plucking the first name from the object representing a person:
 >
->>```
->>    {Hello, {$userObj :person firstName=long}!}
->>```
+>```
+>{Hello, {$userObj :person firstName=long}!}
+>```
 
 _Functions_ can be _standalone_, or can be an _opening element_ or _closing element_.
 
@@ -180,9 +180,9 @@ and vice versa.
 >A message with two markup-like _functions_, `button` and `link`,
 >which the runtime can use to construct a document tree structure for a UI framework:
 >
->>```
->>    {{+button}Submit{-button} or {+link}cancel{-link}.}
->>```
+>```
+>{{+button}Submit{-button} or {+link}cancel{-link}.}
+>```
 
 
 ### Selection
@@ -193,40 +193,40 @@ A message can have multiple selectors.
 
 >A message with a single _selector_:
 >
->>```
->>    match {$count :number}
->>    when 1 {You have one notification.}
->>    when * {You have {$count} notifications.}
->>```
+>```
+>match {$count :number}
+>when 1 {You have one notification.}
+>when * {You have {$count} notifications.}
+>```
 
 >A message with a single _selector_ which is an invocation of
 >a custom function `:platform`, formatted on a single line:
 >
->>```
->>    match {:platform} when windows {Settings} when * {Preferences}
->>```
+>```
+>match {:platform} when windows {Settings} when * {Preferences}
+>```
 
 >A message with a single _selector_ and a custom `:hasCase` function
 >which allows the message to query for presence of grammatical cases required for each variant:
 >
->>```
->>    match {$userName :hasCase}
->>    when vocative {Hello, {$userName :person case=vocative}!}
->>    when accusative {Please welcome {$userName :person case=accusative}!}
->>    when * {Hello!}
->>```
+>```
+>match {$userName :hasCase}
+>when vocative {Hello, {$userName :person case=vocative}!}
+>when accusative {Please welcome {$userName :person case=accusative}!}
+>when * {Hello!}
+>```
 
 >A message with two _selectors_:
 >
->>```
->>    match {$photoCount :number} {$userGender :equals}
->>    when 1 masculine {{$userName} added a new photo to his album.}
->>    when 1 feminine {{$userName} added a new photo to her album.}
->>    when 1 * {{$userName} added a new photo to their album.}
->>    when * masculine {{$userName} added {$photoCount} photos to his album.}
->>    when * feminine {{$userName} added {$photoCount} photos to her album.}
->>    when * * {{$userName} added {$photoCount} photos to their album.}
->>```
+>```
+>match {$photoCount :number} {$userGender :equals}
+>when 1 masculine {{$userName} added a new photo to his album.}
+>when 1 feminine  {{$userName} added a new photo to her album.}
+>when 1 *         {{$userName} added a new photo to their album.}
+>when * masculine {{$userName} added {$photoCount} photos to his album.}
+>when * feminine  {{$userName} added {$photoCount} photos to her album.}
+>when * *         {{$userName} added {$photoCount} photos to their album.}
+>```
 
 ### Local Variables
 
@@ -239,21 +239,21 @@ which defines the value of a named local variable.
 >A _message_ containing a _declaration_ defining a local variable `$whom`
 >which is then used twice inside the pattern:
 >
->>```
->>    let $whom = {$monster :noun case=accusative}
->>    {You see {$quality :adjective article=indefinite accord=$whom} {$whom}!}
->>```
+>```
+>let $whom = {$monster :noun case=accusative}
+>{You see {$quality :adjective article=indefinite accord=$whom} {$whom}!}
+>```
 
 >A _message_ defining two local variables:
 >`$itemAcc` and `$countInt`, and using `$countInt` as a selector:
 >
->>```
->>    let $countInt = {$count :number maximumFractionDigits=0}
->>    let $itemAcc = {$item :noun count=$count case=accusative}
->>    match {$countInt}
->>    when one {You bought {$color :adjective article=indefinite accord=$itemAcc} {$itemAcc}.}
->>    when * {You bought {$countInt} {$color :adjective accord=$itemAcc} {$itemAcc}.}
->>```
+>```
+>let $countInt = {$count :number maximumFractionDigits=0}
+>let $itemAcc = {$item :noun count=$count case=accusative}
+>match {$countInt}
+>when one {You bought {$color :adjective article=indefinite accord=$itemAcc} {$itemAcc}.}
+>when * {You bought {$countInt} {$color :adjective accord=$itemAcc} {$itemAcc}.}
+>```
 
 ### Complex Messages
 
@@ -262,28 +262,28 @@ _declarations_, _selectors_, _functions_, and more.
 
 >A complex message with 2 _selectors_ and 3 local variable _declarations_:
 >
->>```
->>    let $hostName = {$host :person firstName=long}
->>    let $guestName = {$guest :person firstName=long}
->>    let $guestsOther = {$guestCount :number offset=1}
->>
->>    match {$host :gender} {$guestOther :number}
->>
->>    when female 0 {{$hostName} does not give a party.}
->>    when female 1 {{$hostName} invites {$guestName} to her party.}
->>    when female 2 {{$hostName} invites {$guestName} and one other person to her party.}
->>    when female * {{$hostName} invites {$guestName} and {$guestsOther} other people to her party.}
->>
->>    when male 0 {{$hostName} does not give a party.}
->>    when male 1 {{$hostName} invites {$guestName} to his party.}
->>    when male 2 {{$hostName} invites {$guestName} and one other person to his party.}
->>    when male * {{$hostName} invites {$guestName} and {$guestsOther} other people to his party.}
->>
->>    when * 0 {{$hostName} does not give a party.}
->>    when * 1 {{$hostName} invites {$guestName} to their party.}
->>    when * 2 {{$hostName} invites {$guestName} and one other person to their party.}
->>    when * * {{$hostName} invites {$guestName} and {$guestsOther} other people to their party.}
->>```
+>```
+>let $hostName = {$host :person firstName=long}
+>let $guestName = {$guest :person firstName=long}
+>let $guestsOther = {$guestCount :number offset=1}
+>
+>match {$host :gender} {$guestOther :number}
+>
+>when female 0 {{$hostName} does not give a party.}
+>when female 1 {{$hostName} invites {$guestName} to her party.}
+>when female 2 {{$hostName} invites {$guestName} and one other person to her party.}
+>when female * {{$hostName} invites {$guestName} and {$guestsOther} other people to her party.}
+>
+>when male 0 {{$hostName} does not give a party.}
+>when male 1 {{$hostName} invites {$guestName} to his party.}
+>when male 2 {{$hostName} invites {$guestName} and one other person to his party.}
+>when male * {{$hostName} invites {$guestName} and {$guestsOther} other people to his party.}
+>
+>when * 0 {{$hostName} does not give a party.}
+>when * 1 {{$hostName} invites {$guestName} to their party.}
+>when * 2 {{$hostName} invites {$guestName} and one other person to their party.}
+>when * * {{$hostName} invites {$guestName} and {$guestsOther} other people to their party.}
+>```
 
 ## Productions
 
