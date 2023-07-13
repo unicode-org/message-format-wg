@@ -236,7 +236,8 @@ or providing additional data to an _expression_.
 Local variables appear in a _declaration_,
 which defines the value of a named local variable.
 
->A _message_ containing a _declaration_ defining a local variable `$whom` which is then used twice inside the pattern:
+>A _message_ containing a _declaration_ defining a local variable `$whom`
+>which is then used twice inside the pattern:
 >
 >>```
 >>    let $whom = {$monster :noun case=accusative}
