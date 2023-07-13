@@ -467,8 +467,8 @@ private-start = "&" / "^"
 
 > Here are some examples of what _private-use_ sequences might look like:
 >> ```
->> {Here's private use with an operand: {$foo &function}}
->> {Here's a placeholder that is entirely private-use: {&function anything here}}
+>> {Here's private use with an operand: {$foo &bar}}
+>> {Here's a placeholder that is entirely private-use: {&anything here}}
 >> {Stop {& "translate 'stop' as a verb" might be a translator instruction or comment }}
 >> {Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}}
 >>```
