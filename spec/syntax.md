@@ -407,7 +407,7 @@ that is evaluated during the formatting process.
 Each _expression_ MUST start with an _operand_ or an _annotation_.
 An _expression_ MUST NOT be empty.
 
-An **_operand_** is a _literal_ or a _variable_ to be evaluated in a _placeholder_.
+An **_operand_** is a _literal_ or a _variable_ to be evaluated in an _expression_.
 An _operand_ MAY be optionally followed by an _annotation_.
 
 An **_annotation_** consists of a _function_ and its named _options_,
