@@ -457,8 +457,9 @@ All other characters, including whitespace, are assigned meaning by the implemen
 A _private-use_ _annotation_ MAY be empty after its first character.
 
 **NOTE:** Users are cautioned that _private-use_ sequences cannot be reliably exchanged
-and can result in errors during formatting. It is generally a better idea to use
-the function registry to define additional formatting or annotation options.
+and can result in errors during formatting.
+It is generally a better idea to use the function registry
+to define additional formatting or annotation options.
 
 ```abnf
 private-use   = private-start 1*(text)
