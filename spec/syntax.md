@@ -97,7 +97,7 @@ A **_message_** is the complete template for a specific message formatting reque
 
 All _messages_ MUST contain either a _pattern_ or _selectors_. 
 A _message_ MAY contain zero or more _declarations_.
-(Implication: the empty string is not a valid message)
+An empty string is not a valid _message_.
 
 A **_pattern_** is a combination of _text_ and _placeholders_ 
 to be formatted as a unit.
