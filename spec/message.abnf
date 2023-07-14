@@ -44,7 +44,7 @@ unquoted-start = name-start / DIGIT / "."
 
 
 ; reserve sigils for private-use by implementations
-private-use    = private-start 1*(text)
+private-use    = private-start reserved-body
 private-start  = "^" / "&"
 
 ; reserve additional sigils for use by 
