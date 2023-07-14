@@ -19,8 +19,8 @@
    1. [Variants](#variants)
    1. [Patterns](#patterns)
    1. [Expressions](#expressions)
-      1. [Reserved Sequences](#reserved)
-      2. [Private-Use Sequences](#private-use)
+      1. [Private-Use Sequences](#private-use)
+      2. [Reserved Sequences](#reserved)
 1. [Tokens](#tokens)
    1. [Keywords](#keywords)
    1. [Text](#text)
@@ -420,14 +420,15 @@ Implementations MAY define their own meaning and semantics for _private-use_ ann
 A _private-use_ annotation starts with either U+0026 AMPERSAND `&` or U+005E CIRCUMFLEX ACCENT `^`.
  
 Characters, including whitespace, are assigned meaning by the implementation.
-The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}` respectively
+The definition of escapes in the `reserved-body` production, used for the body of
+a _private-use_ annotation is an affordance to implementations that 
+wish to use a syntax exactly like other functions. Specifically:
+* The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}` respectively
 when they appear in the body of a _private-use_ annotation. 
-The character `|` is special: it SHOULD be escaped as `\|` in a _private-use_ annotation,
+* The character `|` is special: it SHOULD be escaped as `\|` in a _private-use_ annotation,
 but can appear unescaped as long as it is paired with another `|`. This is an affordance to
 allow _literals_ to appear in the private use syntax.
-The definition of escapes in the `reserved-body` production is an affordance to
-implementations that want to use a syntax exactly like other functions, in that it makes
-_quoted_ _literals_.
+
 A _private-use_ _annotation_ MAY be empty after its introducing sigil.
 
 **NOTE:** Users are cautioned that _private-use_ sequences cannot be reliably exchanged
@@ -445,7 +446,7 @@ private-start = "&" / "^"
 >> {Here's private use with an operand: {$foo &bar}}
 >> {Here's a placeholder that is entirely private-use: {&anything here}}
 >> {Here's a private-use function that uses normal function syntax: {$operand ^foo option=|literal|}}
->> {The character \| has to be paired or escaped: {&private ||  \| }}
+>> {The character \| has to be paired or escaped: {&private || |something between| or isolated: \| }}
 >> {Stop {& "translate 'stop' as a verb" might be a translator instruction or comment }}
 >> {Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}}
 >>```
