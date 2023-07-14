@@ -411,6 +411,45 @@ option = name [s] "=" [s] (literal / variable)
 > {{+h1 name=above-and-beyond}Above And Beyond{-h1}}
 > ```
 
+#### Private-Use
+
+A **_private-use_** _annotation_ is an _annotation_ whose syntax is reserved
+for use by a specific implementation or by private agreement between multiple implementations. 
+Implementations MAY define their own meaning and semantics for _private-use_ annotations.
+
+A _private-use_ annotation starts with either U+0026 AMPERSAND `&` or U+005E CIRCUMFLEX ACCENT `^`.
+ 
+Characters, including whitespace, are assigned meaning by the implementation.
+The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}` respectively
+when they appear in the body of a _private-use_ annotation. 
+The character `|` is special: it SHOULD be escaped as `\|` in a _private-use_ annotation,
+but can appear unescaped as long as it is paired with another `|`. This is an affordance to
+allow _literals_ to appear in the private use syntax.
+The definition of escapes in the `reserved-body` production is an affordance to
+implementations that want to use a syntax exactly like other functions, in that it makes
+_quoted_ _literals_.
+A _private-use_ _annotation_ MAY be empty after its introducing sigil.
+
+**NOTE:** Users are cautioned that _private-use_ sequences cannot be reliably exchanged
+and can result in errors during formatting.
+It is generally a better idea to use the function registry
+to define additional formatting or annotation options.
+
+```abnf
+private-use   = private-start reserved-body
+private-start = "&" / "^"
+```
+
+> Here are some examples of what _private-use_ sequences might look like:
+>> ```
+>> {Here's private use with an operand: {$foo &bar}}
+>> {Here's a placeholder that is entirely private-use: {&anything here}}
+>> {Here's a private-use function that uses normal function syntax: {$operand ^foo option=|literal|}}
+>> {The character \| has to be paired or escaped: {&private ||  \| }}
+>> {Stop {& "translate 'stop' as a verb" might be a translator instruction or comment }}
+>> {Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}}
+>>```
+
 #### Reserved
 
 **_Reserved_** annotations start with a reserved character
@@ -441,37 +480,6 @@ reserved-char  = %x00-08        ; omit HTAB and LF
                / %x7E-D7FF      ; omit surrogates
                / %xE000-10FFFF
 ```
-
-#### Private-Use
-
-A **_private-use_** _annotation_ is an _annotation_ whose syntax is reserved
-for use by a specific implementation or by private agreement between multiple implementations. 
-Implementations MAY define their own meaning and semantics for _private-use_ annotations.
-
-A _private-use_ annotation starts with either U+0026 AMPERSAND `&` or U+005E CIRCUMFLEX ACCENT `^`.
-The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}` when they 
-appear as part of a _private-use_ annotation. 
- 
-All other characters, including whitespace, are assigned meaning by the implementation.
-A _private-use_ _annotation_ MAY be empty after its first character.
-
-**NOTE:** Users are cautioned that _private-use_ sequences cannot be reliably exchanged
-and can result in errors during formatting.
-It is generally a better idea to use the function registry
-to define additional formatting or annotation options.
-
-```abnf
-private-use   = private-start 1*(text)
-private-start = "&" / "^"
-```
-
-> Here are some examples of what _private-use_ sequences might look like:
->> ```
->> {Here's private use with an operand: {$foo &bar}}
->> {Here's a placeholder that is entirely private-use: {&anything here}}
->> {Stop {& "translate 'stop' as a verb" might be a translator instruction or comment }}
->> {Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}}
->>```
 
 ## Tokens
 
