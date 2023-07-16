@@ -97,7 +97,7 @@ All _messages_ MUST contain a _body_.
 The _body_ of a _message_ consists of either a _pattern_ or of _selectors_. 
 An empty string is not a valid _message_.
 
-A _message_ MAY also contain zero or more _declarations_ before the _body_.
+A _message_ MAY also contain one or more _declarations_ before the _body_.
 
 A **_pattern_** is a combination of _text_ and _placeholders_ 
 to be formatted as a unit.
