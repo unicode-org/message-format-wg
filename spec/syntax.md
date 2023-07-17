@@ -374,6 +374,7 @@ A _well-formed_ message is considered _valid_ if the following requirements are 
 ### Patterns
 
 A **_pattern_** is a sequence of translatable elements.
+A _pattern_ MAY be empty.
 Patterns MUST be delimited with `{` at the start, and `}` at the end.
 This serves 3 purposes:
 
