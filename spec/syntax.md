@@ -156,7 +156,7 @@ if it meets additional semantic requirements about its structure, defined below.
 
 ### Declarations
 
-A **_declaration_** is binds a variable identifier
+A **_declaration_** binds a variable identifier
 to the value of an _expression_ within the scope of a _message_.
 This local variable can then be used in other _expressions_ within the same _message_.
 
