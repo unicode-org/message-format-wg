@@ -103,7 +103,27 @@ The complete syntax of a _message_ is described by the ABNF.
 > and formats. As such, it avoids constructs, such as character escapes, that are
 > specific to a given file format or processor. In particular, it avoids using 
 > quote characters common to many file formats and programming languages, such that 
-> these do not need to be escaped in the body of a _message_
+> these do not need to be escaped in the body of a _message_.
+
+> **Note**
+>
+> In general (and except where required by the syntax), whitespace carries no meaning
+> in the structure of a _message_. While many of the examples in this spec are written
+> on multiple lines, the formatting shown in this spec is primarily for readability.
+>
+>> Example.
+>> This _message_:
+>> ```
+>> let $foo = {|horse|}
+>> {You have a {$foo}!}
+>>```
+>> 
+>> Can also be written as:
+>> ```
+>> let $foo={|horse|}{You have a {$foo}!}
+>> ```
+>
+> An exception to this is: whitespace inside a _pattern_ is _always_ significant.
 
 A _message_ consists of two parts:
 1. an optional list of _declarations_, followed by
@@ -134,11 +154,11 @@ A _message_ satisfying all rules of the grammar is considered _well-formed_.
 Furthermore, a _well-formed_ _message_ is considered _valid_
 if it meets additional semantic requirements about its structure, defined below.
 
-### Variable Declarations
+### Declarations
 
-A **_declaration_** is an expression binding a variable identifier
-within the scope of the _message_ to the value of an _expression_.
-This local variable can then be used in other expressions within the same _message_.
+A **_declaration_** is binds a variable identifier
+to the value of an _expression_ within the scope of a _message_.
+This local variable can then be used in other _expressions_ within the same _message_.
 
 ```abnf
 declaration = let s variable [s] "=" [s] expression
@@ -158,6 +178,9 @@ A _pattern_ MAY be empty.
 
 A _pattern_ MAY contain an arbitrary number of _expressions_ to be evaluated
 during the formatting process.
+
+Whitespace in a _pattern_, including tabs, spaces, and newlines, is significant and 
+MUST be preserved during formatting.
 
 ```abnf
 pattern = "{" *(text / expression) "}"
@@ -184,7 +207,7 @@ A _message_ can only be considered _well-formed_ if the following requirements a
 selector = match_statment 1*(variant)
 ```
 
->A message with a _selector_:
+>A _message_ containing a _selector_:
 >
 >```
 >match {$count :number}
@@ -192,7 +215,7 @@ selector = match_statment 1*(variant)
 >when * {You have {$count} notifications.}
 >```
 
->A message with a _selector_ formatted on a single line:
+>A _message_ containing a _selector_ formatted on a single line:
 >
 >```
 >match {:platform} when windows {Settings} when * {Preferences}
@@ -254,28 +277,11 @@ variant = when 1*(s key) [s] pattern
 key = literal / "*"
 ```
 
-#### Keys
+### Key
 
-A **_key_** is a value used by a _selector_ when selecting the _pattern_
-at runtime in a given _message_.
+A **_key_** is a value in a _variant_ for use by a _selector_ when selecting the _pattern_
+at runtime.
 A _key_ can be either a _literal_ value or the catch-all key `*`.
-
-
-### Expression
-
-An **_expression_** is a part of a _message_ that will be determined
-during the _message_'s formatting.
-
-An _expression_ begins with U+007B LEFT CURLY BRACKET `{` 
-and ends with U+007D RIGHT CURLY BRACKET `}`.
-
-An _expression_ can appear as a local variable value, as a _selector_, and within a _pattern_.
-
-> A simple _expression_ containing a variable:
->
->```
->{Hello, {$userName}!}
->```
 
 
 ### Placeholder
@@ -283,66 +289,25 @@ An _expression_ can appear as a local variable value, as a _selector_, and withi
 A **_placeholder_** is an _expression_ that appears inside of a _pattern_
 and which will be replaced during the formatting of the _message_.
 
-### Formatting Functions
+### Expression
 
-A _function_ is named functionality, possibly with _options_, that format,
-process, or operate on an _operand_ which may be either a _literal_ or a _variable_.
+An **_expression_** is a part of a _message_ that will be determined
+during the _message_'s formatting.
 
-For example, a _message_ with a `$date` _variable_ formatted with the `:datetime` _function_:
-
-    {Today is {$date :datetime weekday=long}.}
-
-A _message_ with a `$userName` _variable_ formatted with
-the custom `:person` _function_ capable of
-declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
-
-    {Hello, {$userName :person case=vocative}!}
-
-A _message_ with a `$userObj` _variable_ formatted with
-the custom `:person` _function_ capable of
-plucking the first name from the object representing a person:
-
-    {Hello, {$userObj :person firstName=long}!}
-
-A message with two markup-like _functions_, `button` and `link`,
-which the runtime can use to construct a document tree structure for a UI framework:
-
-    {{+button}Submit{-button} or {+link}cancel{-link}.}
-
-An opening element MAY be present in a message without a corresponding closing element,
-and vice versa.
-
-
-### Expressions
-
-An _expression_ can appear as a local variable value, as a _selector_, and within a _pattern_.
-Each _expression_ MUST start with an _operand_ or an _annotation_.
+An _expression_ MUST being with a U+007B LEFT CURLY BRACKET `{` 
+and end with a U+007D RIGHT CURLY BRACKET `}`. 
 An _expression_ MUST NOT be empty.
+An _expression_ can contain an _operand_, an _annotation_, or an _operand_ followed by
+an _annotation_.
 
-An **_operand_** is a _literal_ or a _variable_ to be evaluated in an _expression_.
-An _operand_ MAY be optionally followed by an _annotation_.
-
-An **_annotation_** consists of a _function_ and its named _options_,
-or consists of a _reserved_ sequence.
-
-A **_function_** is functionality used to evaluate, format, select, or otherwise 
-process an _operand_, or, if lacking an _operand_, its _annotation_. 
-
-_Functions_ do not accept any positional arguments
-other than the _operand_ in front of them.
-
-_Functions_ use one of the following prefix sigils:
-
-- `:` for standalone content
-- `+` for starting or opening _expressions_
-- `-` for ending or closing _expressions_
+An _expression_ can appear as the value portion of a _declaration_, as a _selector_, and within a _pattern_.
 
 ```abnf
 expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
 operand = literal / variable
 annotation = (function *(s option)) / reserved
-option = name [s] "=" [s] (literal / variable)
 ```
+
 
 > Expression examples:
 >
@@ -388,7 +353,79 @@ option = name [s] "=" [s] (literal / variable)
 > {{+h1 name=above-and-beyond}Above And Beyond{-h1}}
 > ```
 
-#### Reserved
+### Operand
+
+An **_operand_** is a _literal_ or a _variable_ to be evaluated in an _expression_.
+An _operand_ MAY be optionally followed by an _annotation_.
+
+### Annotation
+
+An **_annotation_** consists of either a _function_ plus any optional named _options_,
+or it consists of a _reserved_ sequence.
+
+### Function
+
+A **_function_** is functionality used to evaluate, format, select, or otherwise 
+process an _operand_, or, if lacking an _operand_, its _annotation_. 
+
+_Functions_ do not accept any positional arguments
+other than the _operand_ in front of them.
+
+_Functions_ use one of the following prefix sigils:
+
+- `:` for standalone content
+- `+` for starting or opening _expressions_
+- `-` for ending or closing _expressions_
+
+```abnf
+expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
+operand = literal / variable
+annotation = (function *(s option)) / reserved
+option = name [s] "=" [s] (literal / variable)
+```
+
+A **_function_** is a named modifier in an _expression_.
+A _function_ MAY be followed by one or more _options_.
+
+>For example, a _message_ with a `$date` _variable_ formatted with the `:datetime` _function_:
+>
+>```
+>{Today is {$date :datetime weekday=long}.}
+>```
+
+>A _message_ with a `$userName` _variable_ formatted with
+>the custom `:person` _function_ capable of
+>declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
+>
+>```
+>{Hello, {$userName :person case=vocative}!}
+>```
+
+>A _message_ with a `$userObj` _variable_ formatted with
+>the custom `:person` _function_ capable of
+>plucking the first name from the object representing a person:
+>
+>```
+>{Hello, {$userObj :person firstName=long}!}
+>```
+
+_Functions_ can be _standalone_, or can be an _opening element_ or _closing element_.
+
+A **_standalone_** _function_ is not expected to be paired with another _function_.
+An **_opening element_** is a _function_ that SHOULD be paired with a _closing function_.
+A **_closing element_** is a _function_ that SHOULD be paired with an _opening function_.
+
+An _opening element_ MAY be present in a message without a corresponding _closing element_,
+and vice versa.
+
+>A message with two markup-like _functions_, `button` and `link`,
+>which the runtime can use to construct a document tree structure for a UI framework:
+>
+>```
+>{{+button}Submit{-button} or {+link}cancel{-link}.}
+>```
+
+### Reserved
 
 A **_reserved_** _annotation_ is an _annotation_ whose syntax is reserved
 for future standardization.
@@ -562,10 +599,6 @@ reserved-char  = %x00-08        ; omit HTAB and LF
                / %xE000-10FFFF
 ```
 
-## Tokens
-
-The grammar defines the following tokens for the purpose of the lexical analysis.
-
 ### Keywords
 
 The following three keywords are reserved: `let`, `match`, and `when`.
@@ -584,7 +617,7 @@ Any Unicode code point is allowed,
 except for surrogate code points U+D800 through U+DFFF.
 The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}`.
 
-All code points are preserved.
+All code points are preserved. Whitespace in text is significant.
 
 ```abnf
 text = 1*(text-char / text-escape)
@@ -597,7 +630,8 @@ text-char = %x0-5B         ; omit \
 
 ### Literals
 
-**_Literal_** is used for matching variants and providing input to _expressions_.
+A **_literal_** is a discrete value in a _message_. 
+_Literals_ can appear as _operands_, _keys_, or the value of an _option_.
 
 **_Quoted_** literals may include content with any Unicode code point,
 except for surrogate code points U+D800 through U+DFFF.
@@ -626,13 +660,20 @@ unquoted-start = name-start / DIGIT / "."
 
 ### Names
 
-The **_name_** token is used for variable names (prefixed with `$`),
-function names (prefixed with `:`, `+` or `-`),
-as well as option names.
-It is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name),
-with the restriction that it MUST NOT start with `:`,
-as that would conflict with _function_ start characters.
-Otherwise, the set of characters allowed in names is large.
+A **_name_** is the identifier of an external variable, declared local variable,
+_function_, or _option_.
+When used for variable names it is prefixed with `$`.
+When used for a _function_ name it is prefixed with `:`, `+` or `-`.
+When used for an _option_ the _name_ has no prefix.
+
+A _name_ MUST start with a `name-start` character, which MAY be followed by additional
+`name-char` characters. The permitted characters in these productions are based on XML's 
+[Name](https://www.w3.org/TR/xml/#NT-Name), with the additional restriction that a _name_ MUST NOT start with `:`.
+The character `:` is reserved as an identifier for _functions_ in the syntax.
+
+> **Note**
+>
+> Names are sensitive to the character sequence used to encode them.
 
 ```abnf
 variable = "$" name
