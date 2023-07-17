@@ -186,6 +186,40 @@ MUST be preserved during formatting.
 pattern = "{" *(text / expression) "}"
 ```
 
+Embedding a _pattern_ in brackets ensures that simple _messages_ can be embedded into
+various formats regardless of the container's whitespace trimming rules.
+
+> Example. In a Java `.properties` file, the message `hello` has exactly three spaces before and after
+> the word "Hello":
+> ```properties
+> hello = {  Hello  }
+> ```
+
+#### Parts of a Pattern
+
+##### Text
+
+**_text_** is the translatable content of a _pattern_.
+Any Unicode code point is allowed,
+except for surrogate code points U+D800 through U+DFFF.
+The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}`.
+
+All code points are preserved. Whitespace in text is significant.
+
+```abnf
+text = 1*(text-char / text-escape)
+text-char = %x0-5B         ; omit \
+          / %x5D-7A        ; omit {
+          / %x7C           ; omit }
+          / %x7E-D7FF      ; omit surrogates
+          / %xE000-10FFFF
+```
+
+##### Placeholder
+
+A **_placeholder_** is another word for an _expression_ that appears inside of a _pattern_
+and which will be replaced during the formatting of the _message_.
+
 ### Selector
 
 A **_selector_** selects a specific _pattern_ from a list of available
@@ -222,9 +256,9 @@ selector = match_statment 1*(variant)
 >```
 
 
-### Match
+### Match Statement
 
-A **_match statement_** or just `match` is the portion of a _selector_ that
+A **_match statement_** is the portion of a _selector_ that
 determines how a given _message_ will select the most appropriate _pattern_.
 
 The _match_ consists of the keyword `match` followed by a list of one or more
@@ -270,8 +304,6 @@ The key `*` is a "catch-all" key, matching all values from an _expression_.
 The number of _keys_ in the _variant_ MUST match the number of _expressions_ in the 
 _match statement_.
 
-A _variant_ consists of the keyword `when` followed by a list of one or more _keys_.
-
 ```abnf
 variant = when 1*(s key) [s] pattern
 key = literal / "*"
@@ -283,11 +315,6 @@ A **_key_** is a value in a _variant_ for use by a _selector_ when selecting the
 at runtime.
 A _key_ can be either a _literal_ value or the catch-all key `*`.
 
-
-### Placeholder
-
-A **_placeholder_** is an _expression_ that appears inside of a _pattern_
-and which will be replaced during the formatting of the _message_.
 
 ### Expression
 
@@ -466,19 +493,7 @@ reserved-char  = %x00-08        ; omit HTAB and LF
 ### Patterns
 
 A **_pattern_** is a sequence of translatable elements.
-Patterns MUST be delimited with `{` at the start, and `}` at the end.
-This serves 3 purposes:
 
-- The message can be unambiguously embeddable in various container formats
-  regardless of the container's whitespace trimming rules.
-  E.g. in Java `.properties` files,
-  `hello = {Hello}` will unambiguously define the `Hello` message without the space in front of it.
-- The message can be conveniently embeddable in various programming languages
-  without the need to escape characters commonly related to strings, e.g. `"` and `'`.
-  Such need might still occur when a single or double quote is
-  used in the translatable content.
-- The syntax needs to make it as clear as possible which parts of the message body
-  are translatable and which ones are part of the formatting logic definition.
 
 ```abnf
 pattern = "{" *(text / expression) "}"
@@ -608,24 +623,6 @@ Reserved keywords are always lowercase.
 let   = %x6C.65.74        ; "let"
 match = %x6D.61.74.63.68  ; "match"
 when  = %x77.68.65.6E     ; "when"
-```
-
-### Text
-
-**_text_** is the translatable content of a _pattern_.
-Any Unicode code point is allowed,
-except for surrogate code points U+D800 through U+DFFF.
-The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}`.
-
-All code points are preserved. Whitespace in text is significant.
-
-```abnf
-text = 1*(text-char / text-escape)
-text-char = %x0-5B         ; omit \
-          / %x5D-7A        ; omit {
-          / %x7C           ; omit }
-          / %x7E-D7FF      ; omit surrogates
-          / %xE000-10FFFF
 ```
 
 ### Literals
