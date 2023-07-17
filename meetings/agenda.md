@@ -56,9 +56,9 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 ### Topic: Action Item Review
 
-[ ] MIH: propose text and proposed XML for default registry
-[ ] APP: provide pro/con comparison for immutability/namespacing discussion
-[ ] APP: provide EAO feedback on text for data model
+* [ ] MIH: propose text and proposed XML for default registry
+* [ ] APP: provide pro/con comparison for immutability/namespacing discussion
+* [ ] APP: provide EAO feedback on text for data model
 
 
 ## Topic: Active PR review
@@ -84,13 +84,13 @@ Discussion of active PRs. We will merge or reject them in the call.
 
 * https://github.com/unicode-org/message-format-wg/issues
 
-Currently we have 73 open.
+Currently we have 81 open (was 73 last time).
+* 13 are `resolved-candidate` and proposed for close.
+* 5 are `Agenda+` and proposed for discussion.
+* New labels added for `formatting` and `registry`
 
 | Issue | Status | Description | Chair's Recommendation |
 |-------|--------|-------------|----------------|
-| (#378)[https://github.com/unicode-org/message-format-wg/issues/378] | blocker-candidate | reserve sigils for private use | proceed to PR |
-| (#299)[https://github.com/unicode-org/message-format-wg/issues/299] | blocker-candidate | when do we evaluate the local variables? | discuss (related to other discussions) |
-| (#298)[https://github.com/unicode-org/message-format-wg/issues/298] | blocker-candidate | should custom functions override standard ones? | discuss |
 | (#272)[https://github.com/unicode-org/message-format-wg/issues/272] | blocker-candidate | decide on formatting to something other than text | discuss (important!) |
 
 ## Topic: Open/Close function syntax, naming, and immutability.
