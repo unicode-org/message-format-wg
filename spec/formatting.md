@@ -102,9 +102,7 @@ one of the following is used to resolve the value of the _expression_:
   its resolved value is defined by _function resolution_.
 - Else, if the _expression_ has a _private-use_ _annotation_,
   its resolved value is defined according to the implementations's specification.
-- Else, if the _expression_ has a _reserved_ _annotation_,
-  an Unsupported Expression error is emitted and a fallback value is used as its value.
-  Else the contents are syntactically invalid and
+- Else, the _expression_ has a _reserved_ _annotation_,
   an Unsupported Expression error is emitted and a fallback value is used as its value.
 
 ### Literal Resolution
