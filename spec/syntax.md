@@ -442,14 +442,14 @@ private-start = "&" / "^"
 ```
 
 > Here are some examples of what _private-use_ sequences might look like:
->> ```
->> {Here's private use with an operand: {$foo &bar}}
->> {Here's a placeholder that is entirely private-use: {&anything here}}
->> {Here's a private-use function that uses normal function syntax: {$operand ^foo option=|literal|}}
->> {The character \| has to be paired or escaped: {&private || |something between| or isolated: \| }}
->> {Stop {& "translate 'stop' as a verb" might be a translator instruction or comment }}
->> {Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}}
->>```
+> ```
+> {Here's private use with an operand: {$foo &bar}}
+> {Here's a placeholder that is entirely private-use: {&anything here}}
+> {Here's a private-use function that uses normal function syntax: {$operand ^foo option=|literal|}}
+> {The character \| has to be paired or escaped: {&private || |something between| or isolated: \| }}
+> {Stop {& "translate 'stop' as a verb" might be a translator instruction or comment }}
+> {Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}}
+>```
 
 #### Reserved
 
