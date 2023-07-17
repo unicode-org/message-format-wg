@@ -319,7 +319,7 @@ A _key_ can be either a _literal_ value or the catch-all key `*`.
 An **_expression_** is a part of a _message_ that will be determined
 during the _message_'s formatting.
 
-An _expression_ MUST being with a U+007B LEFT CURLY BRACKET `{` 
+An _expression_ MUST begin with a U+007B LEFT CURLY BRACKET `{` 
 and end with a U+007D RIGHT CURLY BRACKET `}`. 
 An _expression_ MUST NOT be empty.
 An _expression_ can contain an _operand_, an _annotation_, or an _operand_ followed by
@@ -488,129 +488,6 @@ reserved-char  = %x00-08        ; omit HTAB and LF
 ```
 
 
-### Patterns
-
-A **_pattern_** is a sequence of translatable elements.
-
-
-```abnf
-pattern = "{" *(text / expression) "}"
-```
-
-> Example:
->
-> ```
-> {Hello, world!}
-> ```
-
-Whitespace within a _pattern_ is meaningful and MUST be preserved.
-
-### Expressions
-
-**_Expressions_** MUST start with an _operand_ or an _annotation_.
-An _expression_ MUST NOT be empty.
-
-An **_operand_** is either a _literal_ or a _variable_.
-An _operand_ MAY be optionally followed by an _annotation_.
-
-An **_annotation_** consists of a _function_ and its named _options_,
-or consists of a _reserved_ sequence.
-
-_Functions_ do not accept any positional arguments
-other than the _operand_ in front of them.
-
-_Functions_ use one of the following prefix sigils:
-
-- `:` for standalone content
-- `+` for starting or opening _expressions_
-- `-` for ending or closing _expressions_
-
-```abnf
-expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
-operand = literal / variable
-annotation = (function *(s option)) / reserved
-option = name [s] "=" [s] (literal / variable)
-```
-
-> Expression examples:
->
-> ```
-> {1.23}
-> ```
->
-> ```
-> {|-1.23|}
-> ```
->
-> ```
-> {1.23 :number maxFractionDigits=1}
-> ```
->
-> ```
-> {|Thu Jan 01 1970 14:37:00 GMT+0100 (CET)| :datetime weekday=long}
-> ```
->
-> ```
-> {|My Brand Name| :linkify href=|foobar.com|}
-> ```
->
-> ```
-> {$when :datetime month=2-digit}
-> ```
->
-> ```
-> {:message id=some_other_message}
-> ```
->
-> ```
-> {+ssml.emphasis level=strong}
-> ```
->
-> Message examples:
->
-> ```
-> {This is {+b}bold{-b}.}
-> ```
->
-> ```
-> {{+h1 name=above-and-beyond}Above And Beyond{-h1}}
-> ```
-
-#### Reserved
-
-**_Reserved_** annotations start with a reserved character
-and are intended for future standardization
-as well as private implementation use.
-A _reserved_ _annotation_ MAY be empty or contain arbitrary text.
-This allows maximum flexibility in future standardization,
-as future definitions are expected to define additional semantics and constraints
-on the contents of these _annotations_.
-A _reserved_ _annotation_ does not include trailing whitespace.
-
-Implementations MAY define their own meaning and semantics for
-_reserved_ annotations that start with
-the U+0026 AMPERSAND `&` or U+005E CIRCUMFLEX ACCENT `^` characters.
-Implementations MUST NOT assign meaning or semantics to
-an _annotation_ starting with `reserved-start`:
-these are reserved for future standardization.
-Implementations MUST NOT remove or alter the contents of a _reserved_ _annotation_.
-
-While a reserved sequence is technically "well-formed",
-unrecognized reserved sequences have no meaning and MAY result in errors during formatting.
-
-```abnf
-reserved       = ( reserved-start / private-start ) reserved-body
-reserved-start = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "/" / "?" / "~"
-private-start  = "^" / "&"
-reserved-body  = *( [s] 1*(reserved-char / reserved-escape / literal))
-reserved-char  = %x00-08        ; omit HTAB and LF
-               / %x0B-0C        ; omit CR
-               / %x0E-19        ; omit SP
-               / %x21-5B        ; omit \
-               / %x5D-7A        ; omit { | }
-               / %x7E-D7FF      ; omit surrogates
-               / %xE000-10FFFF
-```
 
 ### Keywords
 
