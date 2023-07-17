@@ -89,6 +89,8 @@ The syntax specification takes into account the following design restrictions:
 
 ## Messages and Syntax
 
+
+
 ### Messages
 
 A **_message_** is the complete template for a specific message formatting request.
@@ -126,6 +128,11 @@ An empty string is not a valid _message_.
 >let hello = new MessageFormat('{Hello, world!}')
 >hello.format()
 >```
+
+A _message_ satisfying all rules of the grammar is considered _well-formed_.
+
+Furthermore, a _well-formed_ _message_ is considered _valid_
+if it meets additional semantic requirements about its structure, defined below.
 
 ### Variable Declarations
 
@@ -177,6 +184,21 @@ A _message_ can only be considered _well-formed_ if the following requirements a
 selector = match_statment 1*(variant)
 ```
 
+>A message with a _selector_:
+>
+>```
+>match {$count :number}
+>when 1 {You have one notification.}
+>when * {You have {$count} notifications.}
+>```
+
+>A message with a _selector_ formatted on a single line:
+>
+>```
+>match {:platform} when windows {Settings} when * {Preferences}
+>```
+
+
 ### Match
 
 A **_match statement_** or just `match` is the portion of a _selector_ that
@@ -185,7 +207,7 @@ determines how a given _message_ will select the most appropriate _pattern_.
 The _match_ consists of the keyword `match` followed by a list of one or more
 _expressions_.
 There MUST be at least one _expression_.
-There MAY be any number of _expressions_.
+There MAY be any number of additional _expressions_.
 An _implementation_ MAY limit the total number of _expressions_: when it does so 
 it MUST support at least 5 _expressions_ to be considered conformant.
 Limiting the number of _expressions_ is NOT RECOMMENDED.
@@ -194,26 +216,72 @@ Limiting the number of _expressions_ is NOT RECOMMENDED.
 match_statement = match 1*([s] expression)
 ```
 
+>A _match statement_ with a single _expression_ that uses a custom `:hasCase` _function_
+>which allows the _selector_ to choose a _pattern_ based on grammatical case:
+>
+>```
+>match {$userName :hasCase}
+>when vocative {Hello, {$userName :person case=vocative}!}
+>when accusative {Please welcome {$userName :person case=accusative}!}
+>when * {Hello!}
+>```
+
+>A _match statement with two _expressions_:
+>
+>```
+>match {$photoCount :number} {$userGender :equals}
+>when 1 masculine {{$userName} added a new photo to his album.}
+>when 1 feminine  {{$userName} added a new photo to her album.}
+>when 1 *         {{$userName} added a new photo to their album.}
+>when * masculine {{$userName} added {$photoCount} photos to his album.}
+>when * feminine  {{$userName} added {$photoCount} photos to her album.}
+>when * *         {{$userName} added {$photoCount} photos to their album.}
+>```
+
 ### Variant
 
 A **_variant_** is a _pattern_ associated with a set of _keys_. 
 Each _variant_ MUST begin with the keyword `when`, be followed by a sequence of _keys_,
 and terminate with a valid _pattern_. 
 The key `*` is a "catch-all" key, matching all values from an _expression_.
+The number of _keys_ in the _variant_ MUST match the number of _expressions_ in the 
+_match statement_.
 
+A _variant_ consists of the keyword `when` followed by a list of one or more _keys_.
+
+```abnf
+variant = when 1*(s key) [s] pattern
+key = literal / "*"
+```
+
+#### Keys
+
+A **_key_** is a value used by a _selector_ when selecting the _pattern_
+at runtime in a given _message_.
+A _key_ can be either a _literal_ value or the catch-all key `*`.
 
 
 ### Expression
 
-An **_expression_** represents a part of a message that will be determined
-during the message's formatting.
+An **_expression_** is a part of a _message_ that will be determined
+during the _message_'s formatting.
 
-An _expression_ always uses `{…}` delimiters.
+An _expression_ begins with U+007B LEFT CURLY BRACKET `{` 
+and ends with U+007D RIGHT CURLY BRACKET `}`.
+
 An _expression_ can appear as a local variable value, as a _selector_, and within a _pattern_.
 
-A simple _expression_ is a bare variable name:
+> A simple _expression_ containing a variable:
+>
+>```
+>{Hello, {$userName}!}
+>```
 
-    {Hello, {$userName}!}
+
+### Placeholder
+
+A **_placeholder_** is an _expression_ that appears inside of a _pattern_
+and which will be replaced during the formatting of the _message_.
 
 ### Formatting Functions
 
@@ -244,156 +312,119 @@ which the runtime can use to construct a document tree structure for a UI framew
 An opening element MAY be present in a message without a corresponding closing element,
 and vice versa.
 
-### Selection
 
-A _selector_ selects a specific _pattern_ from a list of available _patterns_
-in a _message_ based on the value of its _expression_.
-A message can have multiple selectors.
+### Expressions
 
-A message with a single _selector_:
+An _expression_ can appear as a local variable value, as a _selector_, and within a _pattern_.
+Each _expression_ MUST start with an _operand_ or an _annotation_.
+An _expression_ MUST NOT be empty.
 
-    match {$count :number}
-    when 1 {You have one notification.}
-    when * {You have {$count} notifications.}
+An **_operand_** is a _literal_ or a _variable_ to be evaluated in an _expression_.
+An _operand_ MAY be optionally followed by an _annotation_.
 
-A message with a single _selector_ which is an invocation of
-a custom function `:platform`, formatted on a single line:
+An **_annotation_** consists of a _function_ and its named _options_,
+or consists of a _reserved_ sequence.
 
-    match {:platform} when windows {Settings} when * {Preferences}
+A **_function_** is functionality used to evaluate, format, select, or otherwise 
+process an _operand_, or, if lacking an _operand_, its _annotation_. 
 
-A message with a single _selector_ and a custom `:hasCase` function
-which allows the message to query for presence of grammatical cases required for each variant:
+_Functions_ do not accept any positional arguments
+other than the _operand_ in front of them.
 
-    match {$userName :hasCase}
-    when vocative {Hello, {$userName :person case=vocative}!}
-    when accusative {Please welcome {$userName :person case=accusative}!}
-    when * {Hello!}
+_Functions_ use one of the following prefix sigils:
 
-A message with 2 _selectors_:
-
-    match {$photoCount :number} {$userGender :equals}
-    when 1 masculine {{$userName} added a new photo to his album.}
-    when 1 feminine {{$userName} added a new photo to her album.}
-    when 1 * {{$userName} added a new photo to their album.}
-    when * masculine {{$userName} added {$photoCount} photos to his album.}
-    when * feminine {{$userName} added {$photoCount} photos to her album.}
-    when * * {{$userName} added {$photoCount} photos to their album.}
-
-### Local Variables
-
-A _message_ can define local variables,
-such as might be needed for transforming input
-or providing additional data to an _expression_.
-Local variables appear in a _declaration_,
-which defines the value of a named local variable.
-
-A _message_ containing a _declaration_ defining a local variable `$whom` which is then used twice inside the pattern:
-
-    let $whom = {$monster :noun case=accusative}
-    {You see {$quality :adjective article=indefinite accord=$whom} {$whom}!}
-
-A message defining two local variables:
-`$itemAcc` and `$countInt`, and using `$countInt` as a selector:
-
-    let $countInt = {$count :number maximumFractionDigits=0}
-    let $itemAcc = {$item :noun count=$count case=accusative}
-    match {$countInt}
-    when one {You bought {$color :adjective article=indefinite accord=$itemAcc} {$itemAcc}.}
-    when * {You bought {$countInt} {$color :adjective accord=$itemAcc} {$itemAcc}.}
-
-### Complex Messages
-
-The various features can be used to produce arbitrarily complex messages by combining
-_declarations_, _selectors_, _functions_, and more.
-
-A complex message with 2 _selectors_ and 3 local variable _declarations_:
-
-    let $hostName = {$host :person firstName=long}
-    let $guestName = {$guest :person firstName=long}
-    let $guestsOther = {$guestCount :number offset=1}
-
-    match {$host :gender} {$guestOther :number}
-
-    when female 0 {{$hostName} does not give a party.}
-    when female 1 {{$hostName} invites {$guestName} to her party.}
-    when female 2 {{$hostName} invites {$guestName} and one other person to her party.}
-    when female * {{$hostName} invites {$guestName} and {$guestsOther} other people to her party.}
-
-    when male 0 {{$hostName} does not give a party.}
-    when male 1 {{$hostName} invites {$guestName} to his party.}
-    when male 2 {{$hostName} invites {$guestName} and one other person to his party.}
-    when male * {{$hostName} invites {$guestName} and {$guestsOther} other people to his party.}
-
-    when * 0 {{$hostName} does not give a party.}
-    when * 1 {{$hostName} invites {$guestName} to their party.}
-    when * 2 {{$hostName} invites {$guestName} and one other person to their party.}
-    when * * {{$hostName} invites {$guestName} and {$guestsOther} other people to their party.}
-
-## Productions
-
-The specification defines the following grammar productions.
-
-A message satisfying all rules of the grammar is considered _well-formed_.
-
-Furthermore, a well-formed message is considered _valid_
-if it meets additional semantic requirements about its structure, defined below.
-
-### Message
-
-A **_message_** is a (possibly empty) list of _declarations_ followed by either a single _pattern_,
-or a `match` statement followed by one or more _variants_ which represent the translatable body of the message.
-
-A _message_ MUST be delimited with `{` at the start, and `}` at the end. Whitespace MAY
-appear outside the delimiters; such whitespace is ignored. No other content is permitted
-outside the delimiters.
+- `:` for standalone content
+- `+` for starting or opening _expressions_
+- `-` for ending or closing _expressions_
 
 ```abnf
-message = [s] *(declaration [s]) body [s]
-body = pattern
-     / (selectors 1*([s] variant))
+expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
+operand = literal / variable
+annotation = (function *(s option)) / reserved
+option = name [s] "=" [s] (literal / variable)
 ```
 
-
-
-### Selectors
-
-A `match` statement contains one or more **_selectors_**
-which will be used to choose one of the _variants_ during formatting.
-
-```abnf
-selectors = match 1*([s] expression)
-```
-
-> Examples:
+> Expression examples:
 >
 > ```
-> match {$count :plural}
-> when 1 {One apple}
-> when * {{$count} apples}
+> {1.23}
 > ```
 >
 > ```
-> let $frac = {$count: number minFractionDigits=2}
-> match {$frac}
-> when 1 {One apple}
-> when * {{$frac} apples}
+> {|-1.23|}
+> ```
+>
+> ```
+> {1.23 :number maxFractionDigits=1}
+> ```
+>
+> ```
+> {|Thu Jan 01 1970 14:37:00 GMT+0100 (CET)| :datetime weekday=long}
+> ```
+>
+> ```
+> {|My Brand Name| :linkify href=|foobar.com|}
+> ```
+>
+> ```
+> {$when :datetime month=2-digit}
+> ```
+>
+> ```
+> {:message id=some_other_message}
+> ```
+>
+> ```
+> {+ssml.emphasis level=strong}
+> ```
+>
+> Message examples:
+>
+> ```
+> {This is {+b}bold{-b}.}
+> ```
+>
+> ```
+> {{+h1 name=above-and-beyond}Above And Beyond{-h1}}
 > ```
 
-### Variants
+#### Reserved
 
-A **_variant_** is a keyed _pattern_.
-The keys are used to match against the _selectors_ defined in the `match` statement.
-The key `*` is a "catch-all" key, matching all selector values.
+A **_reserved_** _annotation_ is an _annotation_ whose syntax is reserved
+for future standardization.
+
+A _reserved_ _annotation_ starts with a reserved character.
+A _reserved_ _annotation_ MAY be empty or contain arbitrary text after its first character.
+This allows maximum flexibility in future standardization,
+as future definitions are expected to define additional semantics and constraints
+on the contents of these _annotations_.
+A _reserved_ _annotation_ does not include trailing whitespace.
+
+Implementations MAY define their own meaning and semantics for
+_reserved_ annotations that start with
+the U+0026 AMPERSAND `&` or U+005E CIRCUMFLEX ACCENT `^` characters.
+Implementations MUST NOT assign meaning or semantics to
+an _annotation_ starting with `reserved-start`:
+these are reserved for future standardization.
+Implementations MUST NOT remove or alter the contents of a _reserved_ _annotation_.
+
+While a reserved sequence is technically "well-formed",
+unrecognized reserved sequences have no meaning and MAY result in errors during formatting.
 
 ```abnf
-variant = when 1*(s key) [s] pattern
-key     = literal / "*"
+reserved       = ( reserved-start / private-start ) reserved-body
+reserved-start = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "/" / "?" / "~"
+private-start  = "^" / "&"
+reserved-body  = *( [s] 1*(reserved-char / reserved-escape / literal))
+reserved-char  = %x00-08        ; omit HTAB and LF
+               / %x0B-0C        ; omit CR
+               / %x0E-19        ; omit SP
+               / %x21-5B        ; omit \
+               / %x5D-7A        ; omit { | }
+               / %x7E-D7FF      ; omit surrogates
+               / %xE000-10FFFF
 ```
 
-A _well-formed_ message is considered _valid_ if the following requirements are satisfied:
-
-- The number of keys on each _variant_ MUST be equal to the number of _selectors_.
-- At least one _variant's_ keys MUST all be equal to the catch-all key (`*`).
 
 ### Patterns
 
