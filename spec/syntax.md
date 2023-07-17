@@ -87,32 +87,125 @@ The syntax specification takes into account the following design restrictions:
    private-use code points (U+E000 through U+F8FF, U+F0000 through U+FFFFD, and
    U+100000 through U+10FFFD), unassigned code points, and other potentially confusing content.
 
-## Overview & Examples
-
-_This section is non-normative._
+## Messages and Syntax
 
 ### Messages
 
-All messages, including simple ones, are enclosed in `{…}` delimiters:
+A **_message_** is the complete template for a specific message formatting request.
 
-    {Hello, world!}
+The complete syntax of a _message_ is described by the ABNF.
 
-The same message defined in a `.properties` file:
+> **Note**
+> 
+> This syntax is designed to be embeddable into many different programming langauges
+> and formats. As such, it avoids constructs, such as character escapes, that are
+> specific to a given file format or processor. In particular, it avoids using 
+> quote characters common to many file formats and programming languages, such that 
+> these do not need to be escaped in the body of a _message_
 
-```properties
-app.greetings.hello = {Hello, world!}
+A _message_ consists of two parts:
+1. an optional list of _declarations_, followed by
+2. a _body_
+
+All _messages_ MUST contain a _body_. 
+An empty string is not a valid _message_.
+
+> A simple message:
+>```
+>{Hello, world!}
+>```
+>The same message defined in a `.properties` file:
+>
+>```properties
+>app.greetings.hello = {Hello, world!}
+>```
+>
+>The same message defined inline in JavaScript:
+>
+>```js
+>let hello = new MessageFormat('{Hello, world!}')
+>hello.format()
+>```
+
+### Variable Declarations
+
+A **_declaration_** is an expression binding a variable identifier
+within the scope of the _message_ to the value of an _expression_.
+This local variable can then be used in other expressions within the same _message_.
+
+```abnf
+declaration = let s variable [s] "=" [s] expression
 ```
 
-The same message defined inline in JavaScript:
+### Body
 
-```js
-let hello = new MessageFormat('{Hello, world!}')
-hello.format()
+The **_body_** of a message consists of either a _pattern_ or a _selector_.
+
+### Pattern
+
+A **_pattern_** is a combination of _text_ and _placeholders_ 
+to be formatted as a unit. All _patterns_, including simple ones, begin with U+007B LEFT CURLY BRACKET `{`
+and end with U+007D RIGHT CURLY BRACKET `}`.
+
+A _pattern_ MAY be empty.
+
+A _pattern_ MAY contain an arbitrary number of _expressions_ to be evaluated
+during the formatting process.
+
+```abnf
+pattern = "{" *(text / expression) "}"
 ```
+
+### Selector
+
+A **_selector_** selects a specific _pattern_ from a list of available
+_variants_ in a _message_.
+_Selectors_ provide the ability for a _message_ to use a _pattern_ that 
+varies in content or form depending on values determined at runtime.
+
+A _selector_ consists of a _match_ statement followed by at least one _variant_.
+
+When the _selector_ is processed, the result will be a single _pattern_ that serves
+as the template for the formatting process.
+
+A _message_ can only be considered _well-formed_ if the following requirements are satisfied:
+
+*   The number of _keys_ on each _variant_ MUST be equal to the number of _expressions_ in the _match statement_.
+*   At least one _variant_'s MUST exist whose _keys_ are all equal to the catch-all key (`*`).
+
+```abnf
+selector = match_statment 1*(variant)
+```
+
+### Match
+
+A **_match statement_** or just `match` is the portion of a _selector_ that
+determines how a given _message_ will select the most appropriate _pattern_.
+
+The _match_ consists of the keyword `match` followed by a list of one or more
+_expressions_.
+There MUST be at least one _expression_.
+There MAY be any number of _expressions_.
+An _implementation_ MAY limit the total number of _expressions_: when it does so 
+it MUST support at least 5 _expressions_ to be considered conformant.
+Limiting the number of _expressions_ is NOT RECOMMENDED.
+
+```abnf
+match_statement = match 1*([s] expression)
+```
+
+### Variant
+
+A **_variant_** is a _pattern_ associated with a set of _keys_. 
+Each _variant_ MUST begin with the keyword `when`, be followed by a sequence of _keys_,
+and terminate with a valid _pattern_. 
+The key `*` is a "catch-all" key, matching all values from an _expression_.
+
+
 
 ### Expression
 
-An _expression_ represents a part of a message that will be determined
+An **_expression_** represents a part of a message that will be determined
 during the message's formatting.
 
 An _expression_ always uses `{…}` delimiters.
@@ -260,15 +353,7 @@ body = pattern
      / (selectors 1*([s] variant))
 ```
 
-### Variable Declarations
 
-A **_declaration_** is an expression binding a variable identifier
-within the scope of the message to the value of an expression.
-This local variable can then be used in other expressions within the same message.
-
-```abnf
-declaration = let s variable [s] "=" [s] expression
-```
 
 ### Selectors
 
