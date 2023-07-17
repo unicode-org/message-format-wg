@@ -195,9 +195,7 @@ various formats regardless of the container's whitespace trimming rules.
 > hello = {  Hello  }
 > ```
 
-#### Parts of a Pattern
-
-##### Text
+### Text
 
 **_text_** is the translatable content of a _pattern_.
 Any Unicode code point is allowed,
@@ -215,7 +213,7 @@ text-char = %x0-5B         ; omit \
           / %xE000-10FFFF
 ```
 
-##### Placeholder
+### Placeholder
 
 A **_placeholder_** is another word for an _expression_ that appears inside of a _pattern_
 and which will be replaced during the formatting of the _message_.
