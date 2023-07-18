@@ -559,7 +559,7 @@ except for surrogate code points U+D800 through U+DFFF.
 
 All code points are preserved.
 
-A **_quoted_** literal begins and ends with U+005E VERTICAL BAR.
+A **_quoted_** literal begins and ends with U+005E VERTICAL BAR `|`.
 The characters `\` and `|` within a _quoted_ literal MUST be 
 escaped as `\\` and `\|`.
 
