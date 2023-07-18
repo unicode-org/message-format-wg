@@ -159,7 +159,7 @@ it is included as the `operand`.
 ```ts
 interface Reserved {
   type: 'reserved'
-  sigil: '!' | '@' | '#' | '%' | '^' | '&' | '*' | '<' | '>' | '?' | '~'
+  sigil: '!' | '@' | '#' | '%' | '^' | '&' | '*' | '<' | '>' | '/' | '?' | '~'
   source: string
   operand?: Literal | VariableRef
 }
