@@ -12,10 +12,8 @@ or for other operations to be performed on or with messages in this representati
 Implementations are not required to use this data model for their internal representation of messages.
 
 To ensure compatibility across all platforms,
-this interchange data model is defined in terms of JSON-compatible values.
-While this document uses TypeScript syntax for their definition,
-the canonical and authoritative source is the `message.json`
-[JSON Schema](https://json-schema.org/) definition.
+this interchange data model is defined in terms of JSON-compatible values
+using TypeScript syntax for their definition.
 
 ## Messages
 
