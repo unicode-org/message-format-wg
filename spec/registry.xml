@@ -151,7 +151,7 @@
       https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/com/ibm/icu/text/MessageFormat.html
     -->
     <description>Locale-sensitive plural selection.
-      It matches a **formatted** numerical value against CLDR plural categories or against a number literal.
+Evaluates the operand as a numerical value, including, where appropriate, any associated formatting options, to determine the most appropriate matching CLDR plural category or numeric literal value.
     </description>
     <matchSignature>
       <option name="type" values="cardinal ordinal" default="cardinal"/>
