@@ -374,8 +374,9 @@ A _well-formed_ message is considered _valid_ if the following requirements are 
 ### Patterns
 
 A **_pattern_** is a sequence of translatable elements.
-A _pattern_ MAY be empty.
 Patterns MUST be delimited with `{` at the start, and `}` at the end.
+A _pattern_'s contents MAY be empty.
+Whitespace within a _pattern_ is meaningful and MUST be preserved.
 This serves 3 purposes:
 
 - The message can be unambiguously embeddable in various container formats
@@ -393,13 +394,29 @@ This serves 3 purposes:
 pattern = "{" *(text / expression) "}"
 ```
 
-> Example:
->
+> **Example**
+> 
+> A simple _pattern_ containing _text_:
 > ```
 > {Hello, world!}
 > ```
-
-Whitespace within a _pattern_ is meaningful and MUST be preserved.
+>
+> An empty _pattern_:
+> ```
+> {}
+> ```
+>
+> Some _patterns_ with _expressions_:
+> ```
+> {{$foo}}
+> {Hello {$user}!}
+> {You sent {$count :number maxFractionDigits=0} notifications to {$numFriends :number type=spellout} friends.}
+> ```
+>
+> A _pattern_ containing three spaces:
+> ```
+> {   }
+> ```
 
 ### Expressions
 
