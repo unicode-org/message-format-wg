@@ -381,15 +381,15 @@ _This section is non-normative._
 
 #### Example 1
 
-Presuming a minimal implementation which only supports string values
-and matches keys by using string comparison,
+Presuming a minimal implementation which only supports `:string` annotation
+which matches keys by using string comparison,
 and a formatting context in which
 the variable reference `$foo` resolves to the string `'foo'` and
 the variable reference `$bar` resolves to the string `'bar'`,
 pattern selection proceeds as follows for this message:
 
 ```
-match {$foo} {$bar}
+match {$foo :string} {$bar :string}
 when bar bar {All bar}
 when foo foo {All foo}
 when * * {Otherwise}
@@ -420,7 +420,7 @@ Alternatively, with the same implementation and formatting context as in Example
 pattern selection would proceed as follows for this message:
 
 ```
-match {$foo} {$bar}
+match {$foo :string} {$bar :string}
 when * bar {Any and bar}
 when foo * {Foo and any}
 when foo bar {Foo and bar}
@@ -645,13 +645,13 @@ These are divided into the following categories:
     > Example invalid messages resulting in a Variant Key Mismatch error:
     >
     > ```
-    > match {$one}
+    > match {$one :func}
     > when 1 2 {Too many}
     > when * {Otherwise}
     > ```
     >
     > ```
-    > match {$one} {$two}
+    > match {$one :func} {$two :func}
     > when 1 2 {Two keys}
     > when * {Missing a key}
     > when * * {Otherwise}
@@ -663,15 +663,42 @@ These are divided into the following categories:
     > Example invalid messages resulting in a Missing Fallback Variant error:
     >
     > ```
-    > match {$one}
+    > match {$one :func}
     > when 1 {Value is one}
     > when 2 {Value is two}
     > ```
     >
     > ```
-    > match {$one} {$two}
+    > match {$one :func} {$two :func}
     > when 1 * {First is one}
     > when * 1 {Second is one}
+    > ```
+
+  - **Missing Selector Annotation errors** occur when the message
+    contains a _selector_ that does not have an _annotation_,
+    or contains a _variable_ that does not reference a _declaration_ with an _annotation_.
+
+    > Example invalid messages resulting in a Missing Selector Annotation error:
+    >
+    > ```
+    > match {$one}
+    > when 1 {Value is one}
+    > when * {Value is not one}
+    > ```
+    >
+    > ```
+    > let $one = {|The one|}
+    > match {$one}
+    > when 1 {Value is one}
+    > when * {Value is not one}
+    > ```
+    >
+    > ```
+    > let $one = {|The one| :func}
+    > let $two = {$one}
+    > match {$two}
+    > when 1 {Value is one}
+    > when * {Value is not one}
     > ```
 
   - **Duplicate Option Name errors** occur when the same _name_ 
@@ -703,7 +730,7 @@ These are divided into the following categories:
     > ```
     >
     > ```
-    > match {$var}
+    > match {$var :func}
     > when 1 {The value is one.}
     > when * {The value is not one.}
     > ```
