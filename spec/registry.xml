@@ -122,7 +122,7 @@
         A value with a smaller number of integer digits than this number will be
         left-padded with zeros (to the specified length) when formatted.
       -->
-      <option name="minimumIntegerDigits" values="positiveInteger positiveInteger" default="1"/>
+      <option name="minimumIntegerDigits" values="positiveInteger" default="1"/>
       <!-- The minimum number of fraction digits to use.
         The default for plain number and percent formatting is 0;
         the default for currency formatting is the number of minor unit digits provided by
