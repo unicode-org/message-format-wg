@@ -7,7 +7,7 @@
   <pattern id="currencyCode" regex="[A-Z]{3}"/>
   <pattern id="timeZoneId" regex="[a-zA-Z/]+"/>
   <pattern id="anythingNotEmpty" regex=".+"/>
-  <pattern id="iso8601" regex="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}\d{2}"/>
+  <pattern id="iso8601" regex="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}"/>
 
   <function name="datetime">
     <!-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat -->
