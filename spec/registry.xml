@@ -122,24 +122,24 @@
         A value with a smaller number of integer digits than this number will be
         left-padded with zeros (to the specified length) when formatted.
       -->
-      <option name="minimumIntegerDigits" values="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21" default="1"/>
+      <option name="minimumIntegerDigits" values="positiveInteger positiveInteger" default="1"/>
       <!-- The minimum number of fraction digits to use.
         The default for plain number and percent formatting is 0;
         the default for currency formatting is the number of minor unit digits provided by
         the ISO 4217 currency code list (2 if the list doesn't provide that information).
       -->
-      <option name="minimumFractionDigits" values="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"/>
+      <option name="minimumFractionDigits" values="positiveInteger"/>
       <!-- The maximum number of fraction digits to use.
         The default for plain number formatting is the larger of minimumFractionDigits and 3;
         the default for currency formatting is the larger of minimumFractionDigits and the number of minor
         unit digits provided by the ISO 4217 currency code list (2 if the list doesn't provide that information);
         the default for percent formatting is the larger of minimumFractionDigits and 0.
       -->
-      <option name="maximumFractionDigits" values="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"/>
+      <option name="maximumFractionDigits" values="positiveInteger"/>
       <!-- The minimum number of significant digits to use. -->
-      <option name="minimumSignificantDigits" values="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21" default="1"/>
+      <option name="minimumSignificantDigits" values="positiveInteger" default="1"/>
       <!-- The maximum number of significant digits to use. -->
-      <option name="maximumSignificantDigits" values="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21" default="21"/>
+      <option name="maximumSignificantDigits" values="positiveInteger" default="21"/>
 
     </formatSignature>
 
@@ -167,24 +167,24 @@ Evaluates the operand as a numerical value, including, where appropriate, any as
         A value with a smaller number of integer digits than this number will be
         left-padded with zeros (to the specified length) when formatted.
       -->
-      <option name="minimumIntegerDigits" values="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21" default="1"/>
+      <option name="minimumIntegerDigits" values="positiveInteger" default="1"/>
       <!-- The minimum number of fraction digits to use.
         The default for plain number and percent formatting is 0;
         the default for currency formatting is the number of minor unit digits provided by
         the ISO 4217 currency code list (2 if the list doesn't provide that information).
       -->
-      <option name="minimumFractionDigits" values="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"/>
+      <option name="minimumFractionDigits" values="positiveInteger"/>
       <!-- The maximum number of fraction digits to use.
         The default for plain number formatting is the larger of minimumFractionDigits and 3;
         the default for currency formatting is the larger of minimumFractionDigits and the number of minor
         unit digits provided by the ISO 4217 currency code list (2 if the list doesn't provide that information);
         the default for percent formatting is the larger of minimumFractionDigits and 0.
       -->
-      <option name="maximumFractionDigits" values="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"/>
+      <option name="maximumFractionDigits" values="positiveInteger"/>
       <!-- The minimum number of significant digits to use. -->
-      <option name="minimumSignificantDigits" values="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21" default="1"/>
+      <option name="minimumSignificantDigits" values="positiveInteger" default="1"/>
       <!-- The maximum number of significant digits to use. -->
-      <option name="maximumSignificantDigits" values="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21" default="21"/>
+      <option name="maximumSignificantDigits" values="positiveInteger" default="21"/>
 
       <match pattern="anyNumber"/>
       <match values="zero one two few many"/>
