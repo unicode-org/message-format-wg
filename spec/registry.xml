@@ -3,7 +3,7 @@
 <registry>
   <!-- All regex here are to be seen as provisory. See issue #422. -->
   <pattern id="anyNumber" regex="-?[0-9]+(\.[0-9]+)"/>
-  <pattern id="positiveInteger" regex="[0-9]+"/>
+  <pattern id="positiveInteger" regex="0|([1-9]\d*)"/>
   <pattern id="currencyCode" regex="[A-Z]{3}"/>
   <pattern id="timeZoneId" regex="[a-zA-Z/]+"/>
   <pattern id="anythingNotEmpty" regex=".+"/>
