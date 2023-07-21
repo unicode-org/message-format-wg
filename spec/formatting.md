@@ -676,7 +676,7 @@ These are divided into the following categories:
 
   - **Missing Selector Annotation errors** occur when the message
     contains a _selector_ that does not have an _annotation_,
-    or contains a _variable_ that does not reference a _declaration_ with an _annotation_.
+    or contains a _variable_ that does not directly or indirectly reference a _declaration_ with an _annotation_.
 
     > Example invalid messages resulting in a Missing Selector Annotation error:
     >
