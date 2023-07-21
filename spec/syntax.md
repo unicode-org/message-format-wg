@@ -192,7 +192,7 @@ various formats regardless of the container's whitespace trimming rules.
 > Example. In a Java `.properties` file, the message `hello` has exactly three spaces before and after
 > the word "Hello":
 > ```properties
-> hello = {  Hello  }
+> hello = {   Hello   }
 > ```
 
 ### Text
