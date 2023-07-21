@@ -2,13 +2,13 @@ message = [s] *(declaration [s]) body [s]
 
 declaration = let s variable [s] "=" [s] expression
 body = pattern
-     / (selector)
+     / (matcher)
 
 pattern  = "{" *(text / expression) "}"
-selector = match_statement 1*([s] variant))
 
-match_statement = match 1*([s] expression)
-variant         = when 1*(s key) [s] pattern
+matcher  = match 1*([s] selector) 1*([s] variant)
+selector = expression
+variant  = when 1*(s key) [s] pattern
 
 key = literal / "*"
 
