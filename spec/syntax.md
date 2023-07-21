@@ -166,7 +166,7 @@ declaration = let s variable [s] "=" [s] expression
 
 ### Body
 
-The **_body_** of a message consists of either a _pattern_ or a _selector_.
+The **_body_** of a message consists of either a _pattern_ or a _match statement_.
 
 ### Pattern
 
