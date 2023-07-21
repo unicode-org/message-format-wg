@@ -297,21 +297,28 @@ Next, using `res`, resolve the preferential order for all message keys:
 
 1. Let `pref` be a new empty list of lists of strings.
 1. For each index `i` in `res`:
-   1. Let `keys` be a new empty list of strings.
+   1. Let `keys` be a new empty set of strings.
    1. For each _variant_ `var` of the message:
       1. Let `key` be the `var` key at position `i`.
       1. If `key` is not the catch-all key `'*'`:
          1. Assert that `key` is a _literal_.
          1. Let `ks` be the resolved value of `key`.
-         1. Append `ks` as the last element of the list `keys`.
+         1. Add `ks` as to the set `keys`.
+   1. Let `matches` be a new empty list of strings.
    1. Let `rv` be the resolved value at index `i` of `res`.
-   1. Let `matches` be the result of calling the method MatchSelectorKeys(`rv`, `keys`)
+   1. Let `selpref` be the result of calling the method MatchSelectorKeys(`rv`).
+   1. If the call succeeds and `selpref` is a list of strings:
+      1. For each string `ks` of `selpref`:
+         1. If `ks` is in `keys`:
+            1. Append `ks` as the last element of the list `matches`.
+   1. Else:
+      1. Emit a Selection Error.
    1. Append `matches` as the last element of the list `pref`.
 
 The method MatchSelectorKeys is determined by the implementation.
-It takes as arguments a resolved _selector_ value `rv` and a list of string keys `keys`,
+It takes as an argument a resolved _selector_ value `rv`,
 and returns a list of string keys in preferential order.
-The returned list MUST contain only unique elements of the input list `keys`.
+The returned list MUST contain only unique elements.
 The returned list MAY be empty.
 The most-preferred key is first,
 with each successive key appearing in order by decreasing preference.
