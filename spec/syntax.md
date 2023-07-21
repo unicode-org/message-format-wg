@@ -218,25 +218,26 @@ text-char = %x0-5B         ; omit \
 A **_placeholder_** is another word for an _expression_ that appears inside of a _pattern_
 and which will be replaced during the formatting of the _message_.
 
-### Selector
+### Matcher
 
-A **_selector_** selects a specific _pattern_ from a list of available
+A **_matcher_** is a _message_ _body_ that allows the _pattern_ to vary
+in content or form depending on values determined at runtime.
+A _matcher_ selects a specific _pattern_ from a list of available
 _variants_ in a _message_.
-_Selectors_ provide the ability for a _message_ to use a _pattern_ that 
-varies in content or form depending on values determined at runtime.
 
-A _selector_ consists of a _match_ statement followed by at least one _variant_.
+A _matcher_ consists of the keyword `match` followed by at least one _selector_ and
+at least one _variant_.
 
-When the _selector_ is processed, the result will be a single _pattern_ that serves
+When the _matcher_ is processed, the result will be a single _pattern_ that serves
 as the template for the formatting process.
 
 A _message_ can only be considered _well-formed_ if the following requirements are satisfied:
 
-*   The number of _keys_ on each _variant_ MUST be equal to the number of _expressions_ in the _match statement_.
+*   The number of _keys_ on each _variant_ MUST be equal to the number of _selectors_.
 *   At least one _variant_'s MUST exist whose _keys_ are all equal to the catch-all key (`*`).
 
 ```abnf
-selector = match_statment 1*(variant)
+matcher = match 1*(selector) 1*(variant)
 ```
 
 >A _message_ containing a _selector_:
@@ -254,24 +255,23 @@ selector = match_statment 1*(variant)
 >```
 
 
-### Match Statement
+### Selector
 
-A **_match statement_** is the portion of a _selector_ that
+
+A **_selector_** is an _expression_ that
 determines how a given _message_ will select the most appropriate _pattern_.
 
-The _match_ consists of the keyword `match` followed by a list of one or more
-_expressions_.
-There MUST be at least one _expression_.
-There MAY be any number of additional _expressions_.
-An _implementation_ MAY limit the total number of _expressions_: when it does so 
-it MUST support at least 5 _expressions_ to be considered conformant.
-Limiting the number of _expressions_ is NOT RECOMMENDED.
+There MUST be at least one _selector_ in a _matcher_.
+There MAY be any number of additional _selectors_.
+An _implementation_ MAY limit the total number of _selectors_: when it does so 
+it MUST support at least 5 _selectors_ to be considered conformant.
+Limiting the number of _selectors_ is NOT RECOMMENDED.
 
 ```abnf
-match_statement = match 1*([s] expression)
+selector = expression
 ```
 
->A _match statement_ with a single _expression_ that uses a custom `:hasCase` _function_
+>A _matcher_ with a single _selector_ that uses a custom `:hasCase` _function_
 >which allows the _selector_ to choose a _pattern_ based on grammatical case:
 >
 >```
@@ -281,7 +281,7 @@ match_statement = match 1*([s] expression)
 >when * {Hello!}
 >```
 
->A _match statement with two _expressions_:
+>A _matcher_ with two _selectors_:
 >
 >```
 >match {$photoCount :number} {$userGender :equals}
@@ -298,9 +298,9 @@ match_statement = match 1*([s] expression)
 A **_variant_** is a _pattern_ associated with a set of _keys_. 
 Each _variant_ MUST begin with the keyword `when`, be followed by a sequence of _keys_,
 and terminate with a valid _pattern_. 
-The key `*` is a "catch-all" key, matching all values from an _expression_.
-The number of _keys_ in the _variant_ MUST match the number of _expressions_ in the 
-_match statement_.
+The key `*` is a "catch-all" key, matching all values from a _selector_.
+The number of _keys_ in the _variant_ MUST match the number of _selectors_ in the 
+_matcher_.
 
 ```abnf
 variant = when 1*(s key) [s] pattern
