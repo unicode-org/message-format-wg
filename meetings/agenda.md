@@ -71,12 +71,19 @@ Discussion of active PRs. We will merge or reject them in the call.
 
 | PR   | Description | Recommendation |
 |------|-------------|----------------|
+| #412 | Replace (literal / variable) with operand in definition of option | Discuss |
 | #402 | Require variable names to be globally unique | Discuss |
-| #399 | Add negative start rule | Discuss (item below) |
-| #398 | Change the syntax of the \\open /close | Discuss (item below) |
-| #397 | Change the syntax of the ::open :/close | Discuss (item below) |
-| #393 | Add interchange data model description + JSON schema definition | Discuss |
-
+| #399 | Add negative-start rule | Merge (but see discussion) |
+| #398 #397 | (two proposals for changing the open/close sigils) | Discuss |
+| #393 | Add interchange data model | Merge |
+| #432 | Simplify MatchSelectorKeys() arguments | Merge |
+| #431 | Add “Missing Selector annotation” error | Merge |
+| #429 | Refactoring sped.md (speculative) | Discuss (see also #419) |
+| #421 | Implement `private-use` separately from `reserved` | Merge |
+| #420 | First draft of some registry functions | Discuss |
+| #419 | Styling and structural changes to spec.md | Merge |
+| #415 | Fix reserved-body to use quoted rather than literal | Merge |
+| #414 | Use `”` or `’` instead of `|` for literals (This is a change to WG consensus) | Discuss |
 
 * The recommendation "discuss" is to ensure there is WG consensus before merging. The recommendation "merge with edits" is to merge once existing comments have been addressed.
 
