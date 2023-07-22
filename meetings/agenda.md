@@ -31,7 +31,7 @@ Recent scribes:
 
 ## Notes Document for The Upcoming Call
 
-https://docs.google.com/document/d/1QxLAwQHGivzOamnFDS8ZFc9CGCMocOkMW5VQGysSYjU/edit
+https://docs.google.com/document/d/13JVPTuhs_SJXWcsSpjFWNIVk3o-T1DQI30RX0qyeK5k/edit
 
 ## NOTE WELL
 
@@ -84,14 +84,22 @@ Discussion of active PRs. We will merge or reject them in the call.
 
 * https://github.com/unicode-org/message-format-wg/issues
 
-Currently we have 81 open (was 73 last time).
-* 13 are `resolved-candidate` and proposed for close.
+Currently we have 83 open (was 73 last time).
+* 17 are `resolved-candidate` and proposed for close.
 * 5 are `Agenda+` and proposed for discussion.
-* New labels added for `formatting` and `registry`
+
 
 | Issue | Status | Description | Chair's Recommendation |
 |-------|--------|-------------|----------------|
 | (#272)[https://github.com/unicode-org/message-format-wg/issues/272] | blocker-candidate | decide on formatting to something other than text | discuss (important!) |
+
+## Topic: Summary of ad-hoc of 2023-07-21
+
+A small group (@mihnita, @stasm, @eemeli, @macchiato, @aphillips) met on Friday to discuss #425, primarily the problem of "default" selectors. Let's discuss the results of that call.
+
+## Topic: Discuss whether to refactor spec.md
+
+See #429
 
 ## Topic: Open/Close function syntax, naming, and immutability.
 
@@ -114,8 +122,6 @@ Proposals:
     [ ] If yes, what sigils or sequences to use?
 [ ] Should `name`, etc. use `Nmtoken` or some other rules?
 
-## Topic: Discussion of default registry requirements
-* Follow up on MIH's action to create draft default registry.
 
 ## Topic: AOB?
 
