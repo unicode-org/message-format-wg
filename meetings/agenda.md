@@ -83,7 +83,7 @@ Discussion of active PRs. We will merge or reject them in the call.
 | #420 | First draft of some registry functions | Discuss |
 | #419 | Styling and structural changes to spec.md | Merge |
 | #415 | Fix reserved-body to use quoted rather than literal | Merge |
-| #414 | Use `”` or `’` instead of `|` for literals (This is a change to WG consensus) | Discuss |
+| #414 | Use `”` or `’` instead of `\|` for literals (This is a change to WG consensus) | Discuss |
 
 * The recommendation "discuss" is to ensure there is WG consensus before merging. The recommendation "merge with edits" is to merge once existing comments have been addressed.
 
