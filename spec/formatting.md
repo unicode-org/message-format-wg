@@ -678,7 +678,7 @@ These are divided into the following categories:
     contains a _selector_ that does not have an _annotation_,
     or contains a _variable_ that does not directly or indirectly reference a _declaration_ with an _annotation_.
 
-    > Example invalid messages resulting in a Missing Selector Annotation error:
+    > Example invalid messages resulting in a _Missing Selector Annotation error_:
     >
     > ```
     > match {$one}
