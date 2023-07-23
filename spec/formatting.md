@@ -674,7 +674,7 @@ These are divided into the following categories:
     > when * 1 {Second is one}
     > ```
 
-A **_Missing Selection Annotation error_** is an error that occurs when the _message_
+  - A **_Missing Selector Annotation error_** is an error that occurs when the _message_
     contains a _selector_ that does not have an _annotation_,
     or contains a _variable_ that does not directly or indirectly reference a _declaration_ with an _annotation_.
 
