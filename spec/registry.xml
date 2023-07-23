@@ -2,19 +2,19 @@
 <?xml-model href="registry.dtd" type="application/xml-dtd"?>
 <registry>
   <!-- All regex here are to be seen as provisory. See issue #422. -->
-  <pattern id="anyNumber" regex="-?(0|([1-9]\d*))(\.\d*)?([eE][-+]?\d+)?"/>
-  <pattern id="positiveInteger" regex="0|([1-9]\d*)"/>
-  <pattern id="currencyCode" regex="[A-Z]{3}"/>
-  <pattern id="timeZoneId" regex="[a-zA-Z/]+"/>
-  <pattern id="anythingNotEmpty" regex=".+"/>
-  <pattern id="iso8601" regex="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}"/>
+  <validationRule id="anyNumber" regex="-?(0|([1-9]\d*))(\.\d*)?([eE][-+]?\d+)?"/>
+  <validationRule id="positiveInteger" regex="0|([1-9]\d*)"/>
+  <validationRule id="currencyCode" regex="[A-Z]{3}"/>
+  <validationRule id="timeZoneId" regex="[a-zA-Z/]+"/>
+  <validationRule id="anythingNotEmpty" regex=".+"/>
+  <validationRule id="iso8601" regex="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}"/>
 
   <function name="datetime">
     <!-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat -->
     <description>Locale-sensitive date and time formatting</description>
 
     <formatSignature>
-      <input pattern="iso8601"/>
+      <input validationRule="iso8601"/>
       <!-- The predefined date formatting style to use. -->
       <option name="dateStyle" values="full long medium short"/>
       <!-- The predefined time formatting style to use. -->
@@ -29,7 +29,7 @@
          time zone database, such as "Asia/Shanghai", "Asia/Kolkata",
          "America/New_York".
       -->
-      <option name="timeZone" pattern="timeZoneId"/>
+      <option name="timeZone" validationRule="timeZoneId"/>
     </formatSignature>
 
     <!-- TODO: clarify if this is OK or if it is an abuse.
@@ -37,7 +37,7 @@
       options are conflicting, you can use either / or, but not both.
     -->
     <formatSignature>
-      <input pattern="iso8601"/>
+      <input validationRule="iso8601"/>
       <!-- Calendar to use. -->
       <option name="calendar" values="buddhist chinese coptic dangi ethioaa ethiopic gregory hebrew indian islamic islamic-umalqura islamic-tbla islamic-civil islamic-rgsa iso8601 japanese persian roc"/>
       <!-- The formatting style used for day periods like "in the morning", "am", "noon", "n" etc. -->
@@ -49,7 +49,7 @@
          Implementations may also recognize the time zone names of the IANA time zone
          database, such as "Asia/Shanghai", "Asia/Kolkata", "America/New_York".
       -->
-      <option name="timeZone" pattern="timeZoneId"/>
+      <option name="timeZone" validationRule="timeZoneId"/>
       <!-- The hour cycle to use. -->
       <option name="hourCycle" values="h11 h12 h23 h24"/>
       <!-- The representation of the weekday. -->
@@ -82,7 +82,7 @@
     <description>Locale-sensitive number formatting</description>
 
     <formatSignature>
-      <input pattern="anyNumber"/>
+      <input validationRule="anyNumber"/>
       <!-- Only used when notation is "compact". -->
       <option name="compactDisplay" values="short long" default="short"/>
       <!-- The currency to use in currency formatting.
@@ -92,7 +92,7 @@
         (https://www.six-group.com/en/products-services/financial-information/data-standards.html#scrollTo=currency-codes).
         There is no default value; if the style is "currency", the currency property must be provided.
       -->
-      <option name="currency" pattern="currencyCode"/>
+      <option name="currency" validationRule="currencyCode"/>
       <!-- How to display the currency in currency formatting. -->
       <option name="currencyDisplay" values="symbol narrowSymbol code name" default="symbol"/>
       <!-- In many locales, accounting format means to wrap the number with parentheses
@@ -115,7 +115,7 @@
         Pairs of simple units can be concatenated with "-per-" to make a compound unit.
         There is no default value; if the style is "unit", the unit property must be provided.
       -->
-      <option name="unit" pattern="anythingNotEmpty"/>
+      <option name="unit" validationRule="anythingNotEmpty"/>
       <!-- The unit formatting style to use in unit formatting. -->
       <option name="unitDisplay" values="long short narrow" default="short"/>
       <!-- The minimum number of integer digits to use.
