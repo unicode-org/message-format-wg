@@ -329,7 +329,7 @@ that varies in content or form depending on values determined at runtime.
 A **_selector expression_** is an _expression_ that will be used as part 
 of the selection process.
 
-A **_match statement_** indicates that the _message_ contains more than one
+A **_match statement_** indicates that the _message_ contains at least one
 _variant_ that can potentially be used to format as output.
 A _match statement_ MUST begin with the keyword `match`.
 A _match statement_ MUST contain one or more _selector expressions_.
