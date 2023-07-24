@@ -92,7 +92,7 @@ and different implementations MAY choose to perform different levels of resoluti
 > or some other locally appropriate value.
 
 Depending on the presence or absence of an _operand_
-and a _function_ or _reserved_ _annotation_,
+and a _function_, _private-use_, or _reserved_ _annotation_,
 one of the following is used to resolve the value of the _expression_:
 
 - If the _expression_ contains no _annotation_,
@@ -100,10 +100,10 @@ one of the following is used to resolve the value of the _expression_:
   depending on the shape of the _operand_.
 - Else, if the _expression_ has a _function_ _annotation_,
   its resolved value is defined by _function resolution_.
-- Else, the _expression_ has a _reserved_ _annotation_.
-  If the _annotation_ uses a `private-start` character that the implementation supports,
-  its value is resolved according to the implementation's specification.
-  Else, an Unsupported Expression error is emitted and a fallback value is used as its value.
+- Else, if the _expression_ has a _private-use_ _annotation_,
+  its resolved value is defined according to the implementations's specification.
+- Else, the _expression_ has a _reserved_ _annotation_,
+  an Unsupported Expression error is emitted and a fallback value is used as its value.
 
 ### Literal Resolution
 
@@ -183,6 +183,8 @@ An _expression_ fails to resolve when:
 
 - A _variable_ _operand_ fails to resolve.
 - A _function_ _annotation_ fails to resolve.
+- A _private-use_ _annotation_ is unsupported by the implementation or if
+  a _private-use_ _annotation_ fails to resolve.
 - The _expression_ has a _reserved_ _annotation_.
 
 The _fallback value_ depends on the contents of the _expression_:
