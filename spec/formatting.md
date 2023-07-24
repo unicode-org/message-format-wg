@@ -695,7 +695,7 @@ These are divided into the following categories:
     > when * {Value is not one}
     > ```
     >
-    > Example **valid** messages that do _not_ result in a _Missing Selector Annotation error_:
+    > Example valid messages that do not result in a _Missing Selector Annotation error_:
     >
     >
     > ```
@@ -711,9 +711,6 @@ These are divided into the following categories:
     > when 1 {Value is one}
     > when * {Value is not one}
     > ```
-    >
-    > The second message is valid because `$two` refers to the expression `$one`,
-    > and `$one` refers to the expression ` {|The one| :func}`, which has an annotation.
     
   - **Duplicate Option Name errors** occur when the same _name_ 
     appears on the left-hand side
