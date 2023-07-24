@@ -424,7 +424,7 @@ pattern = "{" *(text / expression) "}"
 ### Expressions
 
 An _expression_ can appear as a local variable value, as a _selector_, and within a _pattern_.
-Each _expression_ MUST start with an _operand_ or an _annotation_.
+The contents of each _expression_ MUST start with an _operand_ or an _annotation_.
 An _expression_ MUST NOT be empty.
 
 An **_operand_** is a _literal_ or a _variable_ to be evaluated in an _expression_.
