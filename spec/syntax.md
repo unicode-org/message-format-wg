@@ -310,6 +310,8 @@ A _well-formed_ message is considered _valid_ if the following requirements are 
 
 - The number of keys on each _variant_ MUST be equal to the number of _selectors_.
 - At least one _variant's_ keys MUST all be equal to the catch-all key (`*`).
+- Each _selector_ MUST have an _annotation_,
+  or contain a _variable_ that directly or indirectly references a _declaration_ with an _annotation_.
 
 ### Patterns
 
