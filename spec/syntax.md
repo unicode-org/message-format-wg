@@ -192,7 +192,7 @@ A **_selector_** selects a specific _pattern_ from a list of available _patterns
 in a _message_ based on the value of its _expression_.
 A message can have multiple selectors.
 
->A message with a single _selector_:
+>A message with a single _selector_, `{$count :number}`. `:number` is a built-in function. 
 >
 >```
 >match {$count :number}
