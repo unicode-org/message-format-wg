@@ -1,6 +1,6 @@
-<!ELEMENT registry (function*|pattern*)>
+<!ELEMENT registry (function,pattern)*>
 
-<!ELEMENT function (description|(formatSignature|matchSignature)+)>
+<!ELEMENT function (description,(formatSignature|matchSignature)+)>
 <!ATTLIST function name NMTOKEN #REQUIRED>
 
 <!ELEMENT description (#PCDATA)>
@@ -9,11 +9,11 @@
 <!ATTLIST pattern id ID #REQUIRED>
 <!ATTLIST pattern regex CDATA #REQUIRED>
 
-<!ELEMENT formatSignature (input?|option*)>
+<!ELEMENT formatSignature (input?,option*)>
 <!ATTLIST formatSignature position (open|close|standalone) "standalone">
 <!ATTLIST formatSignature locales NMTOKENS #IMPLIED>
 
-<!ELEMENT matchSignature (input?|option*|match*)>
+<!ELEMENT matchSignature (input?,option*,match*)>
 <!ATTLIST matchSignature locales NMTOKENS #IMPLIED>
 
 <!ELEMENT input EMPTY>
