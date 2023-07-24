@@ -576,7 +576,7 @@ The grammar defines the following tokens for the purpose of the lexical analysis
 
 ### Keywords
 
-A **_keyword_** is a reserved token that is part of the _message_ syntax.
+A **_keyword_** is a reserved token that has a unique meaning in the _message_ syntax.
 
 The following three keywords are reserved: `let`, `match`, and `when`.
 Reserved keywords are always lowercase.
