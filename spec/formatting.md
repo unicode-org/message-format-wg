@@ -695,24 +695,8 @@ These are divided into the following categories:
     > when * {Value is not one}
     > ```
     >
-    > Example valid messages that do not result in a _Missing Selector Annotation error_:
-    >
-    >
-    > ```
-    > match {$two :func}
-    > when 1 {Value is one}
-    > when * {Value is not one}
-    > ```
-    >
-    > ```
-    > let $one = {|The one| :func}
-    > let $two = {$one}
-    > match {$two}
-    > when 1 {Value is one}
-    > when * {Value is not one}
-    > ```
-    
-  - **Duplicate Option Name errors** occur when the same _name_ 
+
+- **Duplicate Option Name errors** occur when the same _name_ 
     appears on the left-hand side
     of more than one _option_ in the same _expression_.
 
