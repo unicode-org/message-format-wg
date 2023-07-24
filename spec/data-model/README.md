@@ -12,8 +12,12 @@ or for other operations to be performed on or with messages in this representati
 Implementations are not required to use this data model for their internal representation of messages.
 
 To ensure compatibility across all platforms,
-this interchange data model is defined in terms of JSON-compatible values
-using TypeScript syntax for their definition.
+this interchange data model is defined here using TypeScript notation.
+Two equivalent definitions of the data model are also provided:
+- [`message.json`](./message.json) is a JSON Schema definition,
+  for use with message data encoded as JSON or compatible formats, such as YAML.
+- [`message.dtd`](./message.dtd) is a document type definition (DTD),
+  for use with message data encoded as XML.
 
 ## Messages
 
