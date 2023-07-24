@@ -31,7 +31,7 @@ Recent scribes:
 
 ## Notes Document for The Upcoming Call
 
-https://docs.google.com/document/d/1QxLAwQHGivzOamnFDS8ZFc9CGCMocOkMW5VQGysSYjU/edit
+https://docs.google.com/document/d/13JVPTuhs_SJXWcsSpjFWNIVk3o-T1DQI30RX0qyeK5k/edit
 
 ## NOTE WELL
 
@@ -56,9 +56,9 @@ To request that the chair add an agenda item, send email to the message-format-w
 
 ### Topic: Action Item Review
 
-[ ] MIH: propose text and proposed XML for default registry
-[ ] APP: provide pro/con comparison for immutability/namespacing discussion
-[ ] APP: provide EAO feedback on text for data model
+* [ ] MIH: propose text and proposed XML for default registry
+* [ ] APP: provide pro/con comparison for immutability/namespacing discussion
+* [ ] APP: provide EAO feedback on text for data model
 
 
 ## Topic: Active PR review
@@ -71,12 +71,19 @@ Discussion of active PRs. We will merge or reject them in the call.
 
 | PR   | Description | Recommendation |
 |------|-------------|----------------|
+| #412 | Replace (literal / variable) with operand in definition of option | Discuss |
 | #402 | Require variable names to be globally unique | Discuss |
-| #399 | Add negative start rule | Discuss (item below) |
-| #398 | Change the syntax of the \\open /close | Discuss (item below) |
-| #397 | Change the syntax of the ::open :/close | Discuss (item below) |
-| #393 | Add interchange data model description + JSON schema definition | Discuss |
-
+| #399 | Add negative-start rule | Merge (but see discussion) |
+| #398 #397 | (two proposals for changing the open/close sigils) | Discuss |
+| #393 | Add interchange data model | Merge |
+| #432 | Simplify MatchSelectorKeys() arguments | Merge |
+| #431 | Add “Missing Selector annotation” error | Merge |
+| #429 | Refactoring sped.md (speculative) | Discuss (see also #419) |
+| #421 | Implement `private-use` separately from `reserved` | Merge |
+| #420 | First draft of some registry functions | Discuss |
+| #419 | Styling and structural changes to spec.md | Merge |
+| #415 | Fix reserved-body to use quoted rather than literal | Merge |
+| #414 | Use `”` or `’` instead of `\|` for literals (This is a change to WG consensus) | Discuss |
 
 * The recommendation "discuss" is to ensure there is WG consensus before merging. The recommendation "merge with edits" is to merge once existing comments have been addressed.
 
@@ -84,14 +91,22 @@ Discussion of active PRs. We will merge or reject them in the call.
 
 * https://github.com/unicode-org/message-format-wg/issues
 
-Currently we have 73 open.
+Currently we have 83 open (was 73 last time).
+* 17 are `resolved-candidate` and proposed for close.
+* 5 are `Agenda+` and proposed for discussion.
+
 
 | Issue | Status | Description | Chair's Recommendation |
 |-------|--------|-------------|----------------|
-| (#378)[https://github.com/unicode-org/message-format-wg/issues/378] | blocker-candidate | reserve sigils for private use | proceed to PR |
-| (#299)[https://github.com/unicode-org/message-format-wg/issues/299] | blocker-candidate | when do we evaluate the local variables? | discuss (related to other discussions) |
-| (#298)[https://github.com/unicode-org/message-format-wg/issues/298] | blocker-candidate | should custom functions override standard ones? | discuss |
 | (#272)[https://github.com/unicode-org/message-format-wg/issues/272] | blocker-candidate | decide on formatting to something other than text | discuss (important!) |
+
+## Topic: Summary of ad-hoc of 2023-07-21
+
+A small group (@mihnita, @stasm, @eemeli, @macchiato, @aphillips) met on Friday to discuss #425, primarily the problem of "default" selectors. Let's discuss the results of that call.
+
+## Topic: Discuss whether to refactor spec.md
+
+See #429
 
 ## Topic: Open/Close function syntax, naming, and immutability.
 
@@ -114,8 +129,6 @@ Proposals:
     [ ] If yes, what sigils or sequences to use?
 [ ] Should `name`, etc. use `Nmtoken` or some other rules?
 
-## Topic: Discussion of default registry requirements
-* Follow up on MIH's action to create draft default registry.
 
 ## Topic: AOB?
 

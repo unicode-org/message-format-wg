@@ -90,7 +90,7 @@ For the sake of brevity, only `locales="en"` is considered.
     <function name="number">
         <description>
             Format a number.
-            Match a numerical value against CLDR plural categories or against a number literal.
+            Match a **formatted** numerical value against CLDR plural categories or against a number literal.
         </description>
 
         <matchSignature locales="en">
@@ -101,7 +101,8 @@ For the sake of brevity, only `locales="en"` is considered.
             <option name="maximumFractionDigits" pattern="positiveInteger"/>
             <option name="minimumSignificantDigits" pattern="positiveInteger"/>
             <option name="maximumSignificantDigits" pattern="positiveInteger"/>
-            <match values="one other"/>
+            <!-- Since this applies to both cardinal and ordinal, all plural options are valid. -->
+            <match values="zero one two few many"/>
             <match pattern="anyNumber"/>
         </matchSignature>
 
