@@ -96,11 +96,11 @@ A **_message_** is the complete template for a specific message formatting reque
 
 All _messages_ MUST contain a _body_.
 The _body_ of a _message_ consists of either a _pattern_ or of _selectors_. 
-An empty string is not a valid _message_.
+An empty string is not a _well-formed_ _message_.
 
 A _message_ MAY also contain one or more _declarations_ before the _body_.
 
-A **_pattern_** is a combination of _text_ and _placeholders_ 
+A **_pattern_** is a sequence of _text_ and _placeholders_ 
 to be formatted as a unit.
 All _patterns_, including simple ones, begin with U+007B LEFT CURLY BRACKET `{` 
 and end with U+007D RIGHT CURLY BRACKET `}`.
