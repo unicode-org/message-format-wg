@@ -677,8 +677,8 @@ These are divided into the following categories:
     > ```
 
   - A **_Missing Selector Annotation error_** is an error that occurs when the _message_
-    contains a _selector_ that does not have an _annotation_,
-    or contains a _variable_ that does not directly or indirectly reference a _declaration_ with an _annotation_.
+    contains a _selector_ that does not directly or indirectly reference
+    an _expression_ with an _annotation_.
 
     > Example invalid messages resulting in a _Missing Selector Annotation error_:
     >
@@ -695,6 +695,15 @@ These are divided into the following categories:
     > when * {Value is not one}
     > ```
     >
+    > Example **valid** messages that do _not_ result in a _Missing Selector Annotation error_:
+    >
+    >
+    > ```
+    > match {$two :func}
+    > when 1 {Value is one}
+    > when * {Value is not one}
+    > ```
+    >
     > ```
     > let $one = {|The one| :func}
     > let $two = {$one}
@@ -702,7 +711,10 @@ These are divided into the following categories:
     > when 1 {Value is one}
     > when * {Value is not one}
     > ```
-
+    >
+    > The second message is valid because `$two` refers to the expression `$one`,
+    > and `$one` refers to the expression ` {|The one| :func}`, which has an annotation.
+    
   - **Duplicate Option Name errors** occur when the same _name_ 
     appears on the left-hand side
     of more than one _option_ in the same _expression_.
