@@ -358,7 +358,7 @@ selectors = match 1*([s] expression)
 
 A **_variant_** is a _pattern_ associated with a set of _keys_.
 Each _variant_ MUST begin with the _keyword_ `when`,
-be followed by a sequence of _keys_,
+be followed by a non-empty sequence of _keys_,
 and terminate with a valid _pattern_.
 The key `*` is a "catch-all" key, matching all selector values.
 
