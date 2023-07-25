@@ -88,34 +88,52 @@ The syntax specification takes into account the following design restrictions:
    private-use code points (U+E000 through U+F8FF, U+F0000 through U+FFFFD, and
    U+100000 through U+10FFFD), unassigned code points, and other potentially confusing content.
 
-## Overview & Examples
+## Messages and their Syntax
 
-### Messages and Patterns
+### Messages
 
 A **_message_** is the complete template for a specific message formatting request.
 
+The complete syntax of a _message_ is described by the ABNF.
+
+> **Note**
+> This syntax is designed to be embeddable into many different programming languages and formats.
+> As such, it avoids constructs, such as character escapes, that are specific to any given file
+> format or processor.
+> In particular, it avoids using quote characters common to many file formats and formal languages
+> so that these do not need to be escaped in the body of a _message_.
+
+> **Note**
+> In general (and except where required by the syntax), whitespace carries no meaning in the structure
+> of a _message_. While many of the examples in this spec are written on multiple lines, the formatting
+> shown is primarily for readability.
+>> **Example** This _message_:
+>>```
+>>let $foo   =   { |horse| }
+>>{You have a {$foo}!}
+>>```
+>> Can also be written as:
+>>```
+>>let $foo={|horse|}{You have a {$foo}!}
+>>```
+> An exception to this is: whitespace inside a _pattern_ is **always** significant.
+
+A _message_ consists of two parts:
+1. an optional list of _declarations_, followed by
+2. a _body_
+
 All _messages_ MUST contain a _body_.
-The _body_ of a _message_ consists of either a _pattern_ or of _selectors_. 
 An empty string is not a _well-formed_ _message_.
 
-A _message_ MAY also contain one or more _declarations_ before the _body_.
-
-A **_pattern_** is a sequence of _text_ and _placeholders_ 
-to be formatted as a unit.
-All _patterns_, including simple ones, begin with U+007B LEFT CURLY BRACKET `{` 
-and end with U+007D RIGHT CURLY BRACKET `}`.
-
-> A _message_ consisting of a simple _pattern_:
->```
->{Hello, world!}
->```
-
+> A simple _message_ containing only a _body_:
+> ```
+> {Hello world!}
+> ```
 >The same _message_ defined in a `.properties` file:
 >
 >```properties
 >app.greetings.hello = {Hello, world!}
 >```
-
 >The same _message_ defined inline in JavaScript:
 >
 >```js
@@ -123,24 +141,204 @@ and end with U+007D RIGHT CURLY BRACKET `}`.
 >hello.format()
 >```
 
+#### Well-formed vs. Valid Messages
+
+A _message_ is **_well-formed_** if it satisfies all the rules of the grammar.
+
+A _message_ is **_valid_** if it is _well-formed_ and **also** meets the additional content restrictions
+and semantic requirements about its structure defined below.
+
+## Declarations
+
+A **_declaration_** binds a _variable_ identifier to the value of an _expression_ within the scope of a _message_.
+This local variable can then be used in other _expressions_ within the same _message_.
+
+```
+declaration = let s variable [s] "=" [s] expression
+```
+
+## Body
+
+The **_body_** of a _message_ is the part that will be formatted.
+The _body_ consists of either a _pattern_ or a _matcher_.
+
+## Pattern
+
+A **_pattern_** is a sequence of _text_ and _placeholders_ to be formatted as a unit.
+All _patterns_ begin with U+007B LEFT CURLY BRACKET `{` and end with U+007D RIGHT CURLY BRACKET `}`.
+Unless there is an error, resolving a _message_ always results in the formatting
+of a single _pattern_.
+
+```abnf
+pattern = "{" *(text / expression) "}"
+```
+
+A _pattern_ MAY be empty.
+
+> An empty _pattern_:
+> ```
+> {}
+> ```
+
+A _pattern_ MAY contain an arbitrary number of _expressions_ to be evaluated 
+during the formatting process.
+
+Whitespace in a _pattern_, including tabs, spaces, and newlines is significant and MUST
+be preserved during formatting.
+Embedding a _pattern_ in curly brackets ensures that _messages_ can be embedded into
+various formats regardless of the container's whitespace trimming rules.
+
+> **Example**
+> In a Java `.properties` file, the _message_ `hello` has exactly three spaces
+> before and after the word "Hello":
+> ```properties
+> hello = {   Hello   }
+> ```
+
+### Text
+
+**_text_** is the translateable content of a _pattern_.
+Any Unicode code point is allowed, except for surrogate code points U+D800
+through U+DFFF inclusive.
+The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}`
+respectively.
+
+All code points in _text_ are preserved. Whitespace in _text_ is significant.
+
+```
+text = 1*(text-char / text-escape)
+text-char = %x0-5B         ; omit \
+          / %x5D-7A        ; omit {
+          / %x7C           ; omit }
+          / %x7E-D7FF      ; omit surrogates
+          / %xE000-10FFFF
+```
+
+### Placeholder
+
+A **_placeholder_** is an _expression_ that appears inside of a _pattern_
+and which will be replaced during the formatting of a _message_.
+
+```abnf
+placeholder = expression
+```
+
+## Matcher
+
+A **_matcher_** is the _body_ of a _message_ that allows runtime selection
+of the _pattern_ to use for formatting.
+This allows the form or content of a _message_ to vary based on values
+determined at runtime.
+
+A _matcher_ consists of the keyword `match` followed by at least one _selector_
+and at least one _variant_.
+
+When the _matcher_ is processed, the result will be a single _pattern_ that serves 
+as the template for the formatting process.
+
+A _message_ can only be considered _valid_ if the following requirements are
+satisfied:
+* The number of _keys_ on each _variant_ MUST be equal to the number of _selectors_.
+* At least one _variant_ MUST exist whose _keys_ are all equal to the "catch-all" key `*`.
+
+```
+matcher = match 1*(selector) 1*(variant)
+```
+
+> A _message_ with a _matcher_:
+> ```
+> match {$count :number}
+> when 1 {You have one notification.}
+> when * {You have {$count} notifications.}
+> ```
+
+> A _message_ containing a _matcher_ formatted on a single line:
+> ```
+> match {:platform} when windows {Settings} when * {Preferences}
+> ```
+
+### Selector
+
+A **_selector_** is an _expression_ that ranks or excludes the
+ _keys_ from the available _variants_ in a _message_.
+The combination of _selectors_ in a _matcher_ thus determines 
+which _pattern_ will be used during formatting.
+
+```
+selector = expression
+```
+
+There MUST be at least one _selector_ in a _matcher_.
+There MAY be any number of additional _selectors_.
+
+>A _message_ with a single _selector_ that uses a custom `:hasCase` _function_,
+>allowing the _message_ to choose a _pattern_ based on grammatical case:
+>
+>```
+>match {$userName :hasCase}
+>when vocative {Hello, {$userName :person case=vocative}!}
+>when accusative {Please welcome {$userName :person case=accusative}!}
+>when * {Hello!}
+>```
+
+>A message with two _selectors_:
+>
+>```
+>match {$photoCount :number} {$userGender :equals}
+>when 1 masculine {{$userName} added a new photo to his album.}
+>when 1 feminine  {{$userName} added a new photo to her album.}
+>when 1 *         {{$userName} added a new photo to their album.}
+>when * masculine {{$userName} added {$photoCount} photos to his album.}
+>when * feminine  {{$userName} added {$photoCount} photos to her album.}
+>when * *         {{$userName} added {$photoCount} photos to their album.}
+>```
+
+### Variant
+
+A **_variant_** is a _pattern_ associated with a set of _keys_ in a _matcher_.
+Each _variant_ MUST begin with the keyword `when`,
+be followed by a sequence of _keys_,
+and terminate with a valid _pattern_.
+The number of _keys_ in each _variant_ MUST match the number of _selectors_ in the _matcher_.
+
+_Keys_ are separated from the keyword `when` and from each other by whitespace.
+
+```
+variant = when 1*(s key) [s] pattern
+key = literal / "*"
+```
+
+## Key
+
+A **_key_** is a value in a _variant_ for use by a _selector_ when ranking
+or excluding _variants_ during the _matcher_ process. 
+A _key_ can be either a _literal_ value or the "catch-all" key `*`.
+
+### Catch-all Key
+
+The **_catch-all key_** is a special key that matches all values for a given _selector_.
+
 ### Expression
 
 An **_expression_** is a part of a _message_ that will be determined
 during the _message_'s formatting.
 
-A **_placeholder_** is an _expression_ that appears inside of a _pattern_
-and which will be replaced during the formatting of the _message_.
+An _expression_ MUST begin with U+007B LEFT CURLY BRACKET `{` 
+and end with U+007D RIGHT CURLY BRACKET `}`.
+An _expression_ MUST NOT be empty.
+An _expression_ can contain an _operand_, 
+an _annotation_, 
+or an _operand_ followed by an _annotation_.
 
-An _expression_ begins with U+007B LEFT CURLY BRACKET `{` 
-and ends with U+007D RIGHT CURLY BRACKET `}`.
+An _expression_ can appear as the value portion of a _declaration_,
+as a _selector_,
+or as a _placeholder_ within a _pattern_.
 
-An _expression_ can appear as a local variable value, as a _selector_, and within a _pattern_.
-
-> A simple _expression_ containing a variable:
->
->```
->{Hello, {$userName}!}
->```
+```
+expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
+operand = literal / variable
+annotation = (function *(s option)) / quoted
+```
 
 ### Function
 
