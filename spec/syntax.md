@@ -127,12 +127,12 @@ A _message_ consists of two parts:
 
 ### Declarations
 
-A **_<dfn>declaration</dfn>_** binds a _variable_ identifier to the value of an _expression_ within the scope of a _message_.
-This local variable can then be used in other _expressions_ within the same _message_.
+A **_<dfn>declaration</dfn>_** binds a _name_ to the value of an _expression_ within the scope of a _message_.
+This _name_ can then be used in _variables_ within the same _message_.
 _Declarations_ are optional: many messages will not contain any _declarations_.
 
 ```abnf
-declaration = let s variable [s] "=" [s] expression
+declaration = let s "$" name [s] "=" [s] expression
 ```
 
 ### Body

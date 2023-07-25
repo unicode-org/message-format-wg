@@ -1,6 +1,6 @@
 message = [s] *(declaration [s]) body [s]
 
-declaration = let s variable [s] "=" [s] expression
+declaration = let s "$" name [s] "=" [s] expression
 body = pattern
      / (selectors 1*([s] variant))
 
