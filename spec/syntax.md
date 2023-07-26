@@ -184,20 +184,8 @@ A _pattern_ MAY be empty.
 > {}
 > ```
 
-A _pattern_ MAY contain an arbitrary number of _expressions_ to be evaluated 
+A _pattern_ MAY contain an arbitrary number of _placeholders_ to be evaluated 
 during the formatting process.
-
-Whitespace in a _pattern_, including tabs, spaces, and newlines is significant and MUST
-be preserved during formatting.
-Embedding a _pattern_ in curly brackets ensures that _messages_ can be embedded into
-various formats regardless of the container's whitespace trimming rules.
-
-> **Example**
-> In a Java `.properties` file, the _message_ `hello` has exactly three spaces
-> before and after the word "Hello":
-> ```properties
-> hello = {   Hello   }
-> ```
 
 ### Text
 
@@ -207,9 +195,21 @@ through U+DFFF inclusive.
 The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}`
 respectively.
 
-All code points in _text_ are preserved. Whitespace in _text_ is significant.
+Whitespace in _text_, including tabs, spaces, and newlines is significant and MUST
+be preserved during formatting.
+Embedding a _pattern_ in curly brackets ensures that _messages_ can be embedded into
+various formats regardless of the container's whitespace trimming rules.
 
-```
+> **Example**
+> In a Java `.properties` file, the values `hello` and `hello2` both contain
+> an identical _message_ which consists of a single _pattern_.
+> This _pattern_ consists of _text_ with exactly three spaces before and after the word "Hello":
+> ```properties
+> hello = {   Hello   }
+> hello2={   Hello   }
+> ```
+
+```abnf
 text = 1*(text-char / text-escape)
 text-char = %x0-5B         ; omit \
           / %x5D-7A        ; omit {
