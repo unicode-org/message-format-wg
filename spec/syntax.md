@@ -264,7 +264,7 @@ matcher = match 1*(selector) 1*(variant)
 ### Selector
 
 A **_selector_** is an _expression_ that ranks or excludes the
- _keys_ from the available _variants_ in a _message_.
+_variants_ based on the value of its corresponding _key_ in each _variant_.
 The combination of _selectors_ in a _matcher_ thus determines 
 which _pattern_ will be used during formatting.
 
@@ -305,8 +305,8 @@ be followed by a sequence of _keys_,
 and terminate with a valid _pattern_.
 The number of _keys_ in each _variant_ MUST match the number of _selectors_ in the _matcher_.
 
-_Keys_ are separated from the keyword `when` and from each other by whitespace.
-Whitespace is not required between the last _key_ and the _pattern_.
+Each _key_ is separated from the keyword `when` and from each other by whitespace.
+Whitespace is permitted but not required between the last _key_ and the _pattern_.
 
 ```abnf
 variant = when 1*(s key) [s] pattern
@@ -322,7 +322,7 @@ A _key_ can be either a _literal_ value or the "catch-all" key `*`.
 The **_catch-all key_** is a special key, represented by `*`,
 that matches all values for a given _selector_.
 
-### Expression
+## Expressions
 
 An **_expression_** is a part of a _message_ that will be determined
 during the _message_'s formatting.
@@ -335,14 +335,35 @@ an _annotation_,
 or an _operand_ followed by an _annotation_;
 or it can consist of a _private-use_ or _reserved_ sequence.
 
-A _selector_ or a _placeholder_ are both _expressions_.
-The value portion of a _declaration_ is also an expression.
-
 ```abnf
 expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
 operand = literal / variable
 annotation = (function *(s option)) / private-use / reserved
 ```
+
+There are several types of _expression_ that can appear in a _message_.
+All _expressions_ share a common syntax. The types of _expression_ are:
+1. The value of a _declaration_
+2. A _selector_
+3. A _placeholder_ in a _pattern_
+
+> Examples of different types of _expression_
+>
+> Declarations:
+> ```
+> let $x = {|This is an expression|}
+> let $y = {$operand :function option=operand}
+> ```
+> Selectors:
+> ```
+> match {$selector :functionRequired}
+> ```
+> Placeholders:
+> ```
+> {This contains an {|expression|}}
+> {This references an {$operand}}
+> {This expression calls a {$operand :function with=options}}
+> ```
 
 ### Operand
 
