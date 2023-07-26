@@ -162,6 +162,10 @@ declaration = let s variable [s] "=" [s] expression
 The **_body_** of a _message_ is the part that will be formatted.
 The _body_ consists of either a _pattern_ or a _matcher_.
 
+```abnf
+body = pattern / matcher
+```
+
 ## Pattern
 
 A **_pattern_** is a sequence of _text_ and _placeholders_ to be formatted as a unit.
@@ -241,7 +245,7 @@ satisfied:
 * The number of _keys_ on each _variant_ MUST be equal to the number of _selectors_.
 * At least one _variant_ MUST exist whose _keys_ are all equal to the "catch-all" key `*`.
 
-```
+```abnf
 matcher = match 1*(selector) 1*(variant)
 ```
 
@@ -264,7 +268,7 @@ A **_selector_** is an _expression_ that ranks or excludes the
 The combination of _selectors_ in a _matcher_ thus determines 
 which _pattern_ will be used during formatting.
 
-```
+```abnf
 selector = expression
 ```
 
@@ -302,8 +306,9 @@ and terminate with a valid _pattern_.
 The number of _keys_ in each _variant_ MUST match the number of _selectors_ in the _matcher_.
 
 _Keys_ are separated from the keyword `when` and from each other by whitespace.
+Whitespace is not required between the last _key_ and the _pattern_.
 
-```
+```abnf
 variant = when 1*(s key) [s] pattern
 key = literal / "*"
 ```
@@ -314,9 +319,8 @@ A **_key_** is a value in a _variant_ for use by a _selector_ when ranking
 or excluding _variants_ during the _matcher_ process. 
 A _key_ can be either a _literal_ value or the "catch-all" key `*`.
 
-### Catch-all Key
-
-The **_catch-all key_** is a special key that matches all values for a given _selector_.
+The **_catch-all key_** is a special key, represented by `*`,
+that matches all values for a given _selector_.
 
 ### Expression
 
@@ -328,16 +332,16 @@ and end with U+007D RIGHT CURLY BRACKET `}`.
 An _expression_ MUST NOT be empty.
 An _expression_ can contain an _operand_, 
 an _annotation_, 
-or an _operand_ followed by an _annotation_.
+or an _operand_ followed by an _annotation_;
+or it can consist of a _private-use_ or _reserved_ sequence.
 
-An _expression_ can appear as the value portion of a _declaration_,
-as a _selector_,
-or as a _placeholder_ within a _pattern_.
+A _selector_ or a _placeholder_ are both _expressions_.
+The value portion of a _declaration_ is also an expression.
 
 ```abnf
 expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
 operand = literal / variable
-annotation = (function *(s option)) / quoted
+annotation = (function *(s option)) / private-use / reserved
 ```
 
 ### Operand
