@@ -334,16 +334,45 @@ An _expression_ can appear as the value portion of a _declaration_,
 as a _selector_,
 or as a _placeholder_ within a _pattern_.
 
-```
+```abnf
 expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
 operand = literal / variable
 annotation = (function *(s option)) / quoted
 ```
 
+### Operand
+
+An **_operand_** is a _literal_ or a _variable_ to be evaluated in an _expression_.
+An _operand_ MAY optionally be followed by an _annotation_.
+
+```abnf
+operand    = literal / variable
+```
+
+### Annotation
+
+An **_annotation_** is part of an _expression_ containing either 
+a _function_ together with its associated _options_, or
+a _private-use_ or _reserved_ sequence.
+
+```abnf
+annotation = (function *(s option)) / reserved / private-use
+```
+
 ### Function
 
-A **_function_** is a named modifier in an _expression_.
-A _function_ MAY be followed by zero or more _options_
+A **_function_** is a used to evaluate, format, select, or otherwise process an _operand_,
+or, if lacking an _operand_, its _options_.
+A _function_ accepts only an _operand_ as a positional argument.
+
+A _function_ consists of a prefix sigil followed by a _name_.
+The following sigils are used for _functions_:
+* `:` for standalone content
+* `+` for starting or opening _expressions_
+* `-` for ending or closing _expressions_
+
+A _function_ MAY be followed by one or more _options_.
+_Options_ are not required.
 
 >For example, a _message_ with a `$date` _variable_ formatted with the `:datetime` _function_:
 >
@@ -382,317 +411,6 @@ and vice versa.
 >```
 >{{+button}Submit{-button} or {+link}cancel{-link}.}
 >```
-
-
-### Selection
-
-A **_selector_** selects a specific _pattern_ from a list of available _patterns_
-in a _message_ based on the value of its _expression_.
-A message can have multiple selectors.
-
->A message with a single _selector_, `{$count :number}`. `:number` is a built-in function. 
->
->```
->match {$count :number}
->when 1 {You have one notification.}
->when * {You have {$count} notifications.}
->```
-
->A message with a single _selector_ which is an invocation of
->a custom function `:platform`, formatted on a single line:
->
->```
->match {:platform} when windows {Settings} when * {Preferences}
->```
-
->A message with a single _selector_ and a custom `:hasCase` function
->which allows the message to query for presence of grammatical cases required for each variant:
->
->```
->match {$userName :hasCase}
->when vocative {Hello, {$userName :person case=vocative}!}
->when accusative {Please welcome {$userName :person case=accusative}!}
->when * {Hello!}
->```
-
->A message with two _selectors_:
->
->```
->match {$photoCount :number} {$userGender :equals}
->when 1 masculine {{$userName} added a new photo to his album.}
->when 1 feminine  {{$userName} added a new photo to her album.}
->when 1 *         {{$userName} added a new photo to their album.}
->when * masculine {{$userName} added {$photoCount} photos to his album.}
->when * feminine  {{$userName} added {$photoCount} photos to her album.}
->when * *         {{$userName} added {$photoCount} photos to their album.}
->```
-
-### Local Variables
-
-A _message_ can define local variables using a _declaration_.
-A local variable might be needed for transforming input
-or providing additional data to an _expression_.
-Local variables appear in a _declaration_,
-which defines the value of a named local variable.
-
->A _message_ containing a _declaration_ defining a local variable `$whom`
->which is then used twice inside the pattern:
->
->```
->let $whom = {$monster :noun case=accusative}
->{You see {$quality :adjective article=indefinite accord=$whom} {$whom}!}
->```
-
->A _message_ defining two local variables:
->`$itemAcc` and `$countInt`, and using `$countInt` as a selector:
->
->```
->let $countInt = {$count :number maximumFractionDigits=0}
->let $itemAcc = {$item :noun count=$count case=accusative}
->match {$countInt}
->when one {You bought {$color :adjective article=indefinite accord=$itemAcc} {$itemAcc}.}
->when * {You bought {$countInt} {$color :adjective accord=$itemAcc} {$itemAcc}.}
->```
-
-### Complex Messages
-
-The various features can be used to produce arbitrarily complex _messages_ by combining
-_declarations_, _selectors_, _functions_, and more.
-
->A complex message with 2 _selectors_ and 3 local variable _declarations_:
->
->```
->let $hostName = {$host :person firstName=long}
->let $guestName = {$guest :person firstName=long}
->let $guestsOther = {$guestCount :number offset=1}
->
->match {$host :gender} {$guestOther :number}
->
->when female 0 {{$hostName} does not give a party.}
->when female 1 {{$hostName} invites {$guestName} to her party.}
->when female 2 {{$hostName} invites {$guestName} and one other person to her party.}
->when female * {{$hostName} invites {$guestName} and {$guestsOther} other people to her party.}
->
->when male 0 {{$hostName} does not give a party.}
->when male 1 {{$hostName} invites {$guestName} to his party.}
->when male 2 {{$hostName} invites {$guestName} and one other person to his party.}
->when male * {{$hostName} invites {$guestName} and {$guestsOther} other people to his party.}
->
->when * 0 {{$hostName} does not give a party.}
->when * 1 {{$hostName} invites {$guestName} to their party.}
->when * 2 {{$hostName} invites {$guestName} and one other person to their party.}
->when * * {{$hostName} invites {$guestName} and {$guestsOther} other people to their party.}
->```
-
-## Productions
-
-The specification defines the following grammar productions.
-
-A **_well-formed_** message satisifies all of the rules of the grammar.
-
-A **_valid_** message meets the additional semantic requirements about 
-the structure and functionality defined below.
-
-### Message
-
-A **_message_** is a (possibly empty) list of _declarations_ followed by either a single _pattern_,
-or a `match` statement followed by one or more _variants_ which represent the translatable body of the message.
-
-A _message_ MUST be delimited with `{` at the start, and `}` at the end. Whitespace MAY
-appear outside the delimiters; such whitespace is ignored. No other content is permitted
-outside the delimiters.
-
-```abnf
-message = [s] *(declaration [s]) body [s]
-body = pattern
-     / (selectors 1*([s] variant))
-```
-
-### Variable Declarations
-
-A **_declaration_** is an expression binding a variable identifier
-within the scope of the message to the value of an expression.
-This local variable can then be used in other expressions within the same message.
-
-```abnf
-declaration = let s variable [s] "=" [s] expression
-```
-
-### Selectors
-
-**_Selectors_** are a _match statement_ followed by one or more _variants_.
-_Selectors_ provide the ability for a _message_ to use a _pattern_
-that varies in content or form depending on values determined at runtime.
-
-A **_selector expression_** is an _expression_ that will be used as part 
-of the selection process.
-
-A **_match statement_** indicates that the _message_ contains at least one
-_variant_ that can potentially be used to format as output.
-A _match statement_ MUST begin with the keyword `match`.
-A _match statement_ MUST contain one or more _selector expressions_.
-A _match statement_ MUST be followed by at least one _variant_.
-
-```abnf
-selectors = match 1*([s] expression)
-```
-
-> Examples:
->
-> ```
-> match {$count :plural}
-> when 1 {One apple}
-> when * {{$count} apples}
-> ```
->
-> ```
-> let $frac = {$count: number minFractionDigits=2}
-> match {$frac}
-> when 1 {One apple}
-> when * {{$frac} apples}
-> ```
-
-### Variants
-
-A **_variant_** is a _pattern_ associated with a set of _keys_.
-Each _variant_ MUST begin with the _keyword_ `when`,
-be followed by a non-empty sequence of _keys_,
-and terminate with a valid _pattern_.
-The key `*` is a "catch-all" key, matching all selector values.
-
-```abnf
-variant = when 1*(s key) [s] pattern
-key     = literal / "*"
-```
-
-A _well-formed_ message is considered _valid_ if the following requirements are satisfied:
-
-- The number of keys on each _variant_ MUST be equal to the number of _selectors_.
-- At least one _variant's_ keys MUST all be equal to the catch-all key (`*`).
-- Each _selector_ MUST have an _annotation_,
-  or contain a _variable_ that directly or indirectly references a _declaration_ with an _annotation_.
-
-### Patterns
-
-A **_pattern_** is a sequence of translatable elements.
-Patterns MUST be delimited with `{` at the start, and `}` at the end.
-A _pattern_'s contents MAY be empty.
-Whitespace within a _pattern_ is meaningful and MUST be preserved.
-This serves 3 purposes:
-
-- The message can be unambiguously embeddable in various container formats
-  regardless of the container's whitespace trimming rules.
-  E.g. in Java `.properties` files,
-  `hello = {Hello}` will unambiguously define the `Hello` message without the space in front of it.
-- The message can be conveniently embeddable in various programming languages
-  without the need to escape characters commonly related to strings, e.g. `"` and `'`.
-  Such need might still occur when a single or double quote is
-  used in the translatable content.
-- The syntax needs to make it as clear as possible which parts of the message body
-  are translatable and which ones are part of the formatting logic definition.
-
-```abnf
-pattern = "{" *(text / expression) "}"
-```
-
-> **Example**
-> 
-> A simple _pattern_ containing _text_:
-> ```
-> {Hello, world!}
-> ```
->
-> An empty _pattern_:
-> ```
-> {}
-> ```
->
-> Some _patterns_ with _expressions_:
-> ```
-> {{$foo}}
-> {Hello {$user}!}
-> {You sent {$count :number maxFractionDigits=0} notifications to {$numFriends :number type=spellout} friends.}
-> ```
->
-> A _pattern_ containing three spaces:
-> ```
-> {   }
-> ```
-
-### Expressions
-
-An _expression_ can appear as a local variable value, as a _selector_, and within a _pattern_.
-The contents of each _expression_ MUST start with an _operand_ or an _annotation_.
-An _expression_ MUST NOT be empty.
-
-An **_operand_** is a _literal_ or a _variable_ to be evaluated in an _expression_.
-An _operand_ MAY be optionally followed by an _annotation_.
-
-An **_annotation_** consists of a _function_ and its named _options_,
-or consists of a _reserved_ sequence.
-
-A **_function_** is functionality used to evaluate, format, select, or otherwise 
-process an _operand_, or, if lacking an _operand_, its _annotation_. 
-
-_Functions_ do not accept any positional arguments
-other than the _operand_ in front of them.
-
-_Functions_ use one of the following prefix sigils:
-
-- `:` for standalone content
-- `+` for starting or opening _expressions_
-- `-` for ending or closing _expressions_
-
-```abnf
-expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
-operand = literal / variable
-annotation = (function *(s option)) / reserved
-option = name [s] "=" [s] (literal / variable)
-```
-
-> Expression examples:
->
-> ```
-> {1.23}
-> ```
->
-> ```
-> {|-1.23|}
-> ```
->
-> ```
-> {1.23 :number maxFractionDigits=1}
-> ```
->
-> ```
-> {|Thu Jan 01 1970 14:37:00 GMT+0100 (CET)| :datetime weekday=long}
-> ```
->
-> ```
-> {|My Brand Name| :linkify href=|foobar.com|}
-> ```
->
-> ```
-> {$when :datetime month=2-digit}
-> ```
->
-> ```
-> {:message id=some_other_message}
-> ```
->
-> ```
-> {+ssml.emphasis level=strong}
-> ```
->
-> Message examples:
->
-> ```
-> {This is {+b}bold{-b}.}
-> ```
->
-> ```
-> {{+h1 name=above-and-beyond}Above And Beyond{-h1}}
-> ```
 
 #### Private-Use
 
@@ -769,6 +487,83 @@ reserved-char  = %x00-08        ; omit HTAB and LF
                / %xE000-10FFFF
 ```
 
+
+### Complex Messages
+
+The various features can be used to produce arbitrarily complex _messages_ by combining
+_declarations_, _selectors_, _functions_, and more.
+
+>A complex message with 2 _selectors_ and 3 local variable _declarations_:
+>
+>```
+>let $hostName = {$host :person firstName=long}
+>let $guestName = {$guest :person firstName=long}
+>let $guestsOther = {$guestCount :number offset=1}
+>
+>match {$host :gender} {$guestOther :number}
+>
+>when female 0 {{$hostName} does not give a party.}
+>when female 1 {{$hostName} invites {$guestName} to her party.}
+>when female 2 {{$hostName} invites {$guestName} and one other person to her party.}
+>when female * {{$hostName} invites {$guestName} and {$guestsOther} other people to her party.}
+>
+>when male 0 {{$hostName} does not give a party.}
+>when male 1 {{$hostName} invites {$guestName} to his party.}
+>when male 2 {{$hostName} invites {$guestName} and one other person to his party.}
+>when male * {{$hostName} invites {$guestName} and {$guestsOther} other people to his party.}
+>
+>when * 0 {{$hostName} does not give a party.}
+>when * 1 {{$hostName} invites {$guestName} to their party.}
+>when * 2 {{$hostName} invites {$guestName} and one other person to their party.}
+>when * * {{$hostName} invites {$guestName} and {$guestsOther} other people to their party.}
+>```
+
+
+> Expression examples:
+>
+> ```
+> {1.23}
+> ```
+>
+> ```
+> {|-1.23|}
+> ```
+>
+> ```
+> {1.23 :number maxFractionDigits=1}
+> ```
+>
+> ```
+> {|Thu Jan 01 1970 14:37:00 GMT+0100 (CET)| :datetime weekday=long}
+> ```
+>
+> ```
+> {|My Brand Name| :linkify href=|foobar.com|}
+> ```
+>
+> ```
+> {$when :datetime month=2-digit}
+> ```
+>
+> ```
+> {:message id=some_other_message}
+> ```
+>
+> ```
+> {+ssml.emphasis level=strong}
+> ```
+>
+> Message examples:
+>
+> ```
+> {This is {+b}bold{-b}.}
+> ```
+>
+> ```
+> {{+h1 name=above-and-beyond}Above And Beyond{-h1}}
+> ```
+
+
 ## Tokens
 
 The grammar defines the following tokens for the purpose of the lexical analysis.
@@ -784,24 +579,6 @@ Reserved keywords are always lowercase.
 let   = %x6C.65.74        ; "let"
 match = %x6D.61.74.63.68  ; "match"
 when  = %x77.68.65.6E     ; "when"
-```
-
-### Text
-
-**_text_** is the translatable content of a _pattern_.
-Any Unicode code point is allowed,
-except for surrogate code points U+D800 through U+DFFF.
-The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}`.
-
-All code points are preserved.
-
-```abnf
-text = 1*(text-char / text-escape)
-text-char = %x0-5B         ; omit \
-          / %x5D-7A        ; omit {
-          / %x7C           ; omit }
-          / %x7E-D7FF      ; omit surrogates
-          / %xE000-10FFFF
 ```
 
 ### Literals
