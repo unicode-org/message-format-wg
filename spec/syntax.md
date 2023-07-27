@@ -339,7 +339,7 @@ variant = when 1*(s key) [s] pattern
 key = literal / "*"
 ```
 
-## Key
+#### Key
 
 A **_key_** is a value in a _variant_ for use by a _selector_ when ranking
 or excluding _variants_ during the _matcher_ process. 
