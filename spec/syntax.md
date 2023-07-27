@@ -530,6 +530,126 @@ reserved-char  = %x00-08        ; omit HTAB and LF
 ```
 
 
+### Keywords
+
+A **_keyword_** is a reserved token that has a unique meaning in the _message_ syntax.
+
+The following three keywords are reserved: `let`, `match`, and `when`.
+Reserved keywords are always lowercase.
+
+```abnf
+let   = %x6C.65.74        ; "let"
+match = %x6D.61.74.63.68  ; "match"
+when  = %x77.68.65.6E     ; "when"
+```
+
+### Literals
+
+A **_literal_** is a character sequence that appears outside
+of _text_ in various parts of a _message_.
+A _literal_ can appear in a _declaration_, 
+as a _key_ value,
+as an _operand_, 
+or in the value of an _option_.
+A _literal_ MAY include any Unicode code point
+except for surrogate code points U+D800 through U+DFFF.
+
+All code points are preserved.
+
+A **_quoted_** literal begins and ends with U+005E VERTICAL BAR `|`.
+The characters `\` and `|` within a _quoted_ literal MUST be 
+escaped as `\\` and `\|`.
+
+An **_unquoted_** literal is a _literal_ that does not require the `|`
+quotes around it to be distinct from the rest of the _message_ syntax.
+An _unquoted_ MAY be used when the content of the _literal_
+contains no whitespace and otherwise matches the `unquoted` production.
+Any _unquoted_ literal MAY be _quoted_.
+Implementations MUST NOT distinguish between _quoted_ and _unquoted_ literals
+that have the same sequence of code points.
+
+_Unquoted_ literals have a much more restricted range that
+is intentionally close to the XML's [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken),
+with the restriction that it MUST NOT start with `-` or `:`,
+as those would conflict with _function_ start characters.
+
+```abnf
+literal = quoted / unquoted
+
+quoted         = "|" *(quoted-char / quoted-escape) "|"
+quoted-char    = %x0-5B         ; omit \
+               / %x5D-7B        ; omit |
+               / %x7D-D7FF      ; omit surrogates
+               / %xE000-10FFFF
+
+unquoted       = unquoted-start *name-char
+unquoted-start = name-start / DIGIT / "."
+               / %xB7 / %x300-36F / %x203F-2040
+```
+
+### Names
+
+A <dfn>**_name_**</dfn> is an identifier for a _variable_ (prefixed with `$`),
+for a _function_ (prefixed with `:`, `+` or `-`),
+or for an _option_ (these have no prefix).
+The namespace for _names_ is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name),
+with the restriction that it MUST NOT start with `:`,
+as that would conflict with the _function_ start character.
+Otherwise, the set of characters allowed in names is large.
+
+```abnf
+variable = "$" name
+function = (":" / "+" / "-") name
+
+name = name-start *name-char
+name-start = ALPHA / "_"
+           / %xC0-D6 / %xD8-F6 / %xF8-2FF
+           / %x370-37D / %x37F-1FFF / %x200C-200D
+           / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
+           / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
+name-char  = name-start / DIGIT / "-" / "." / ":"
+           / %xB7 / %x300-36F / %x203F-2040
+```
+
+> **Note**
+> _External variables_ names are constrained by this namespace.
+
+### Escape Sequences
+
+An **_escape sequence_** is a two-character sequence starting with
+U+005C REVERSE SOLIDUS `\`.
+
+An _escape sequence_ allows the appearance of lexically meaningful characters
+in the body of _text_, _quoted_, or _reserved_ (which includes, in this case,
+_private-use_) sequences respectively:
+
+```abnf
+text-escape    = backslash ( backslash / "{" / "}" )
+quoted-escape  = backslash ( backslash / "|" )
+reserve-escape = backslash ( backslash / "{" / "|" / "}" )
+backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
+```
+
+### Whitespace
+
+**_Whitespace_** is defined as tab, carriage return, line feed, or the space character.
+
+Inside _patterns_ and _quoted literals_,
+whitespace is part of the content and is recorded and stored verbatim.
+Whitespace is not significant outside translatable text, except where required by the syntax.
+
+```abnf
+s = 1*( SP / HTAB / CR / LF )
+```
+
+## Complete ABNF
+
+The grammar is formally defined in [`message.abnf`](./message.abnf)
+using the ABNF notation,
+as specified by [RFC 5234](https://datatracker.ietf.org/doc/html/rfc5234).
+
+
+
 ### Complex Messages
 
 The various features can be used to produce arbitrarily complex _messages_ by combining
@@ -604,120 +724,3 @@ _declarations_, _selectors_, _functions_, and more.
 > ```
 > {{+h1 name=above-and-beyond}Above And Beyond{-h1}}
 > ```
-
-
-## Tokens
-
-The grammar defines the following tokens for the purpose of the lexical analysis.
-
-### Keywords
-
-A **_keyword_** is a reserved token that has a unique meaning in the _message_ syntax.
-
-The following three keywords are reserved: `let`, `match`, and `when`.
-Reserved keywords are always lowercase.
-
-```abnf
-let   = %x6C.65.74        ; "let"
-match = %x6D.61.74.63.68  ; "match"
-when  = %x77.68.65.6E     ; "when"
-```
-
-### Literals
-
-A **_literal_** is a character sequence that appears outside
-of _text_ in various parts of a _message_.
-A _literal_ can appear in a _declaration_, as a _key_ value,
-as an _operand_, or in the value of an _option_.
-A _literal_ MAY include any Unicode code point
-except for surrogate code points U+D800 through U+DFFF.
-
-All code points are preserved.
-
-A **_quoted_** literal begins and ends with U+005E VERTICAL BAR `|`.
-The characters `\` and `|` within a _quoted_ literal MUST be 
-escaped as `\\` and `\|`.
-
-An **_unquoted_** literal is a _literal_ that does not require the `|`
-quotes around it to be distinct from the rest of the _message_ syntax.
-An _unquoted_ MAY be used when the content of the _literal_
-contains no whitespace and otherwise matches the `unquoted` production.
-Any _unquoted_ literal MAY be _quoted_.
-Implementations MUST NOT distinguish between _quoted_ and _unquoted_ literals
-that have the same sequence of code points.
-
-_Unquoted_ literals have a much more restricted range that
-is intentionally close to the XML's [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken),
-with the restriction that it MUST NOT start with `-` or `:`,
-as those would conflict with _function_ start characters.
-
-```abnf
-literal = quoted / unquoted
-
-quoted         = "|" *(quoted-char / quoted-escape) "|"
-quoted-char    = %x0-5B         ; omit \
-               / %x5D-7B        ; omit |
-               / %x7D-D7FF      ; omit surrogates
-               / %xE000-10FFFF
-
-unquoted       = unquoted-start *name-char
-unquoted-start = name-start / DIGIT / "."
-               / %xB7 / %x300-36F / %x203F-2040
-```
-
-### Names
-
-The **_name_** token is used for variable names (prefixed with `$`),
-function names (prefixed with `:`, `+` or `-`),
-as well as option names.
-It is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name),
-with the restriction that it MUST NOT start with `:`,
-as that would conflict with _function_ start characters.
-Otherwise, the set of characters allowed in names is large.
-
-```abnf
-variable = "$" name
-function = (":" / "+" / "-") name
-
-name = name-start *name-char
-name-start = ALPHA / "_"
-           / %xC0-D6 / %xD8-F6 / %xF8-2FF
-           / %x370-37D / %x37F-1FFF / %x200C-200D
-           / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
-           / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
-name-char  = name-start / DIGIT / "-" / "." / ":"
-           / %xB7 / %x300-36F / %x203F-2040
-```
-
-### Escape Sequences
-
-An **_escape sequence_** is a two-character sequence starting with
-U+005C REVERSE SOLIDUS `\`.
-
-An _escape sequence_ allows the appearance of lexically meaningful characters
-in the body of `text`, `quoted`, or `reserved` sequences respectively:
-
-```abnf
-text-escape    = backslash ( backslash / "{" / "}" )
-quoted-escape  = backslash ( backslash / "|" )
-reserve-escape = backslash ( backslash / "{" / "|" / "}" )
-backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
-```
-
-### Whitespace
-
-**_Whitespace_** is defined as tab, carriage return, line feed, or the space character.
-
-Inside _patterns_ and _quoted literals_,
-whitespace is part of the content and is recorded and stored verbatim.
-Whitespace is not significant outside translatable text, except where required by the syntax.
-
-```abnf
-s = 1*( SP / HTAB / CR / LF )
-```
-
-## Complete ABNF
-
-The grammar is formally defined in [`message.abnf`](./message.abnf)
-using the ABNF notation,
-as specified by [RFC 5234](https://datatracker.ietf.org/doc/html/rfc5234).
