@@ -88,6 +88,32 @@ The syntax specification takes into account the following design restrictions:
    private-use code points (U+E000 through U+F8FF, U+F0000 through U+FFFFD, and
    U+100000 through U+10FFFD), unassigned code points, and other potentially confusing content.
 
+## Core Concepts
+
+The purpose of MessageFormat is the allow content to vary at runtime.
+This variation might be due to placing a value into the content
+or it might be due to selecting a different bit of content based on some data value
+or it might be due to a combination of the two.
+
+MessageFormat calls the template for a given formatting operation a _message_.
+
+The values passed in at runtime (which are to be place into the content or used
+to select between different content items) are called _external variables_.
+The author of a _message_ can also assign _local variables_, including
+variables that modify _external variables_.
+
+Values are operated on using _functions_.
+_Functions_ described by the function registry. 
+Some functions are used for _formatting_, that is, preparing a data value for display.
+Other functions are used for _selection_, that is, choosing between different 
+content items.
+Some functions can be used for both.
+
+
+
+
+
+
 ## Messages and their Syntax
 
 ### Messages
@@ -360,9 +386,9 @@ All _expressions_ share a common syntax. The types of _expression_ are:
 > ```
 > Placeholders:
 > ```
-> {This contains an {|expression|}}
-> {This references an {$operand}}
-> {This expression calls a {$operand :function with=options}}
+> {This placeholder contains an {|expression with a literal|}}
+> {This placeholder references a {$variable}}
+> {This placeholder references a function on a variable: {$variable :function with=options}}
 > ```
 
 ### Operand
