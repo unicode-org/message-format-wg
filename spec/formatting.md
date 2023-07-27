@@ -677,8 +677,14 @@ These are divided into the following categories:
     > ```
 
   - A **_Missing Selector Annotation error_** is an error that occurs when the _message_
-    contains a _selector_ that does not directly or indirectly reference
-    an _expression_ with an _annotation_.
+    contains a _selector_ without an _annotation_.
+
+    An implementation MUST NOT emit this error for a _selector_ _expression_
+    that would have an _annotation_
+    if each local _variable_ in it were replaced
+    with the _expression_ of its binding _declaration_,
+    repeating this process until the _expression_
+    contains no local _variable_s.
 
     > Example invalid messages resulting in a _Missing Selector Annotation error_:
     >
