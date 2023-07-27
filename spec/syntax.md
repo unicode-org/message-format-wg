@@ -88,7 +88,7 @@ The syntax specification takes into account the following design restrictions:
    private-use code points (U+E000 through U+F8FF, U+F0000 through U+FFFFD, and
    U+100000 through U+10FFFD), unassigned code points, and other potentially confusing content.
 
-## Core Concepts
+## Messages and their Syntax
 
 The purpose of MessageFormat is the allow content to vary at runtime.
 This variation might be due to placing a value into the content
@@ -102,25 +102,22 @@ to select between different content items) are called _external variables_.
 The author of a _message_ can also assign _local variables_, including
 variables that modify _external variables_.
 
-Values are operated on using _functions_.
-_Functions_ described by the function registry. 
-Some functions are used for _formatting_, that is, preparing a data value for display.
-Other functions are used for _selection_, that is, choosing between different 
-content items.
-Some functions can be used for both.
+This part of the MessageFormat specification defines the syntax for a _message_,
+along with the concepts and terminology needed when processing a _message_ 
+during the [formatting](./formatting.md) of a _message_ at runtime.
 
+The complete formal syntax of a _message_ is described by the [ABNF](./message.abnf).
 
+### Well-formed vs. Valid Messages
 
+A _message_ is **_well-formed_** if it satisfies all the rules of the grammar.
 
+A _message_ is **_valid_** if it is _well-formed_ and **also** meets the additional content restrictions
+and semantic requirements about its structure defined below.
 
+## The Message
 
-## Messages and their Syntax
-
-### Messages
-
-A **_message_** is the complete template for a specific message formatting request.
-
-The complete syntax of a _message_ is described by the ABNF.
+A <dfn>**_message_**</dfn> is the complete template for a specific message formatting request.
 
 > **Note**
 > This syntax is designed to be embeddable into many different programming languages and formats.
@@ -148,6 +145,25 @@ A _message_ consists of two parts:
 1. an optional list of _declarations_, followed by
 2. a _body_
 
+### Declarations
+
+A **_declaration_** binds a _variable_ identifier to the value of an _expression_ within the scope of a _message_.
+This local variable can then be used in other _expressions_ within the same _message_.
+_Declarations_ are optional: many messages will not contain any _declarations_.
+
+```
+declaration = let s variable [s] "=" [s] expression
+```
+
+### Body
+
+The **_body_** of a _message_ is the part that will be formatted.
+The _body_ consists of either a _pattern_ or a _matcher_.
+
+```abnf
+body = pattern / matcher
+```
+
 All _messages_ MUST contain a _body_.
 An empty string is not a _well-formed_ _message_.
 
@@ -166,31 +182,6 @@ An empty string is not a _well-formed_ _message_.
 >let hello = new MessageFormat('{Hello, world!}')
 >hello.format()
 >```
-
-#### Well-formed vs. Valid Messages
-
-A _message_ is **_well-formed_** if it satisfies all the rules of the grammar.
-
-A _message_ is **_valid_** if it is _well-formed_ and **also** meets the additional content restrictions
-and semantic requirements about its structure defined below.
-
-## Declarations
-
-A **_declaration_** binds a _variable_ identifier to the value of an _expression_ within the scope of a _message_.
-This local variable can then be used in other _expressions_ within the same _message_.
-
-```
-declaration = let s variable [s] "=" [s] expression
-```
-
-## Body
-
-The **_body_** of a _message_ is the part that will be formatted.
-The _body_ consists of either a _pattern_ or a _matcher_.
-
-```abnf
-body = pattern / matcher
-```
 
 ## Pattern
 
