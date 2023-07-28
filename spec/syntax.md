@@ -21,13 +21,14 @@
    1. [Operand](#operand)
    2. [Annotation](#annotation)
    3. [Function](#function)
+      1. [Options](#options)
       1. [Private-Use](#private-use)
       2. [Reserved](#reserved)
-   4. [Keywords](#keywords)
-   5. [Literals](#literals)
-   6. [Names](#names)
-   7. [Escape Sequences](#escape-sequences)
-   8. [Whitespace](#whitespace)
+   5. [Keywords](#keywords)
+   6. [Literals](#literals)
+   7. [Names](#names)
+   8. [Escape Sequences](#escape-sequences)
+   9. [Whitespace](#whitespace)
 1. [Complete ABNF](#complete-abnf)
 
 ### Introduction
@@ -418,6 +419,26 @@ See [function registry](./) for more information.
 A _function_ MAY accept an _operand_.
 No other positional arguments are possible.
 
+_Functions_ can be _standalone_, or can be an _opening element_ or _closing element_.
+
+A **_<dfn>standalone</dfn>_** _function_ is not expected to be paired with another _function_.
+An **_<dfn>opening element</dfn>_** is a _function_ that SHOULD be paired with a _closing function_.
+A **_<dfn>closing element</dfn>_** is a _function_ that SHOULD be paired with an _opening function_.
+
+An _opening element_ MAY be present in a message without a corresponding _closing element_,
+and vice versa.
+
+>A _message_ with a _standalone_ _function_ operating on the _variable_ `$now`:
+>```
+>{{$now :datetime}}
+>```
+>A _message_ with two markup-like _functions_, `button` and `link`,
+>which the runtime can use to construct a document tree structure for a UI framework:
+>
+>```
+>{{+button}Submit{-button} or {+link}cancel{-link}.}
+>```
+
 A _function_ consists of a prefix sigil followed by a _name_.
 The following sigils are used for _functions_:
 - `:` for a _standalone_ function
@@ -427,7 +448,25 @@ The following sigils are used for _functions_:
 A _function_ MAY be followed by one or more _options_.
 _Options_ are not required.
 
->For example, a _message_ with a `$date` _variable_ formatted with the `:datetime` _function_:
+#### Options
+
+An **_<dfn>option</dfn>_** is a key-value pair containing arguments passed to a _function_.
+
+An _option_ has a _name_ and a _value_.
+The _name_ is separated from the _value_ by an U+003D EQUALS SIGN `=` along with
+optional whitespace.
+The value of an _option_ can be either a _literal_ or a _variable_.
+
+Multiple _options_ are permitted in an _annotation_.
+Each _option_ is separated by whitespace.
+
+```abnf
+option = name [s] "=" [s] (literal / variable)
+```
+
+> Examples of _functions_ with _options_
+>
+> A _message_ with a `$date` _variable_ formatted with the `:datetime` _function_:
 >
 >```
 >{Today is {$date :datetime weekday=long}.}
@@ -449,21 +488,6 @@ _Options_ are not required.
 >{Hello, {$userObj :person firstName=long}!}
 >```
 
-_Functions_ can be _standalone_, or can be an _opening element_ or _closing element_.
-
-A **_<dfn>standalone</dfn>_** _function_ is not expected to be paired with another _function_.
-An **_<dfn>opening element</dfn>_** is a _function_ that SHOULD be paired with a _closing function_.
-A **_<dfn>closing element</dfn>_** is a _function_ that SHOULD be paired with an _opening function_.
-
-An _opening element_ MAY be present in a message without a corresponding _closing element_,
-and vice versa.
-
->A message with two markup-like _functions_, `button` and `link`,
->which the runtime can use to construct a document tree structure for a UI framework:
->
->```
->{{+button}Submit{-button} or {+link}cancel{-link}.}
->```
 
 #### Private-Use
 
