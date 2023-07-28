@@ -25,11 +25,11 @@
       2. [Private-Use](#private-use)
       3. [Reserved](#reserved)
 1. [Other Syntax Elements](#other-syntax-elements)
-   6. [Keywords](#keywords)
-   7. [Literals](#literals)
-   8. [Names](#names)
-   9. [Escape Sequences](#escape-sequences)
-   10. [Whitespace](#whitespace)
+   1. [Keywords](#keywords)
+   1. [Literals](#literals)
+   1. [Names](#names)
+   1. [Escape Sequences](#escape-sequences)
+   1. [Whitespace](#whitespace)
 1. [Complete ABNF](#complete-abnf)
 
 ### Introduction
