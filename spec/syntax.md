@@ -567,7 +567,7 @@ reserved-char  = %x00-08        ; omit HTAB and LF
 
 ## Other Syntax Elements
 
-This section defines some of the comment elements used to construct _messages_.
+This section defines common elements used to construct _messages_.
 
 ### Keywords
 
