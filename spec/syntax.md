@@ -349,8 +349,7 @@ and end with U+007D RIGHT CURLY BRACKET `}`.
 An _expression_ MUST NOT be empty.
 An _expression_ can contain an _operand_, 
 an _annotation_, 
-or an _operand_ followed by an _annotation_;
-or it can consist of a _private-use_ or _reserved_ sequence.
+or an _operand_ followed by an _annotation_.
 
 ```abnf
 expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
