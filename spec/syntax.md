@@ -185,7 +185,7 @@ An empty string is not a _well-formed_ _message_.
 
 ## Pattern
 
-A **_pattern_** is a sequence of _text_ and _placeholders_ to be formatted as a unit.
+A **_pattern_** contains a sequence of _text_ and _placeholders_ to be formatted as a unit.
 All _patterns_ begin with U+007B LEFT CURLY BRACKET `{` and end with U+007D RIGHT CURLY BRACKET `}`.
 Unless there is an error, resolving a _message_ always results in the formatting
 of a single _pattern_.
