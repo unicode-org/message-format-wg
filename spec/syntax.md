@@ -20,10 +20,10 @@
 1. [Expressions](#expressions)
    1. [Operand](#operand)
    2. [Annotation](#annotation)
-   3. [Function](#function)
-      1. [Options](#options)
-      1. [Private-Use](#private-use)
-      2. [Reserved](#reserved)
+      1. [Function](#function)
+         1. [Options](#options)
+      2. [Private-Use](#private-use)
+      3. [Reserved](#reserved)
    5. [Keywords](#keywords)
    6. [Literals](#literals)
    7. [Names](#names)
@@ -401,7 +401,7 @@ a _private-use_ or _reserved_ sequence.
 annotation = (function *(s option)) / reserved / private-use
 ```
 
-### Function
+#### Function
 
 A **_<dfn>function</dfn>_** is named functionality in an _annotation_.
 _Functions_ are used to evaluate, format, select, or otherwise process data
@@ -448,7 +448,7 @@ The following sigils are used for _functions_:
 A _function_ MAY be followed by one or more _options_.
 _Options_ are not required.
 
-#### Options
+##### Options
 
 An **_<dfn>option</dfn>_** is a key-value pair containing arguments passed to a _function_.
 
