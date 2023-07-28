@@ -4,30 +4,30 @@
 
 1. [Introduction](#introduction)
    1. [Design Goals](#design-goals)
-   1. [Design Restrictions](#design-restrictions)
-1. [Overview & Examples](#overview--examples)
-   1. [Messages and Patterns](#messages-and-patterns)
-   1. [Expressions](#expression)
-   1. [Formatting Functions](#function)
-   1. [Selection](#selection)
-   1. [Local Variables](#local-variables)
-   1. [Complex Messages](#complex-messages)
-1. [Productions](#productions)
-   1. [Message](#message)
-   1. [Variable Declarations](#variable-declarations)
-   1. [Selectors](#selectors)
-   1. [Variants](#variants)
-   1. [Patterns](#patterns)
-   1. [Expressions](#expressions)
-      1. [Private-Use Sequences](#private-use)
-      2. [Reserved Sequences](#reserved)
-1. [Tokens](#tokens)
-   1. [Keywords](#keywords)
+   2. [Design Restrictions](#design-restrictions)
+1. [Messages and their Syntax](#messages-and-their-syntax)
+   1. [Well-formed vs. Valid Messages](#well-formed-vs-valid-messages)
+1. [The Message](#the-message)
+   1. [Declarations](#declarations)
+   2. [Body](#body)
+1. [Pattern](#pattern)
    1. [Text](#text)
-   1. [Literals](#literals)
-   1. [Names](#names)
-   1. [Escape Sequences](#escape-sequences)
-   1. [Whitespace](#whitespace)
+   1. [Placeholder](#placeholder)
+1. [Matcher](#matcher)
+   1. [Selector](#selector)
+   2. [Variant](#variant)
+      1. [Key](#key)
+1. [Expressions](#expressions)
+   1. [Operand](#operand)
+   2. [Annotation](#annotation)
+   3. [Function](#function)
+      1. [Private-Use](#private-use)
+      2. [Reserved](#reserved)
+   4. [Keywords](#keywords)
+   5. [Literals](#literals)
+   6. [Names](#names)
+   7. [Escape Sequences](#escape-sequences)
+   8. [Whitespace](#whitespace)
 1. [Complete ABNF](#complete-abnf)
 
 ### Introduction
@@ -402,15 +402,27 @@ annotation = (function *(s option)) / reserved / private-use
 
 ### Function
 
-A **_<dfn>function</dfn>_** is a used to evaluate, format, select, or otherwise process an _operand_,
-or, if lacking an _operand_, its _options_.
-A _function_ accepts only an _operand_ as a positional argument.
+A **_<dfn>function</dfn>_** is named functionality in an _annotation_.
+_Functions_ are used to evaluate, format, select, or otherwise process data
+values during formatting.
+
+Each _function_ is defined by the runtime's _function registry_. 
+A _function_'s entry in the _function registry_ will define 
+whether the _function_ is a _selector_ or formatter (or both),
+whether an _operand_ is required, 
+what form the values of an _operand_ can take,
+what _options_ and _option_ values are valid, 
+and what outputs might result. 
+See [function registry](./) for more information.
+
+A _function_ MAY accept an _operand_.
+No other positional arguments are possible.
 
 A _function_ consists of a prefix sigil followed by a _name_.
 The following sigils are used for _functions_:
-- `:` for standalone content
-- `+` for starting or opening _expressions_
-- `-` for ending or closing _expressions_
+- `:` for a _standalone_ function
+- `+` for an _opening element_
+- `-` for a _closing element_
 
 A _function_ MAY be followed by one or more _options_.
 _Options_ are not required.
@@ -611,7 +623,9 @@ name-char  = name-start / DIGIT / "-" / "." / ":"
 ```
 
 > **Note**
-> _External variables_ names are constrained by this namespace.
+> _External variables_ can be passed in that are not valid _names_.
+> Such variables cannot be referenced in a _message_, but are not otherwise
+> errors.
 
 ### Escape Sequences
 
@@ -646,50 +660,3 @@ s = 1*( SP / HTAB / CR / LF )
 The grammar is formally defined in [`message.abnf`](./message.abnf)
 using the ABNF notation,
 as specified by [RFC 5234](https://datatracker.ietf.org/doc/html/rfc5234).
-
-
-
-
-> Expression examples:
->
-> ```
-> {1.23}
-> ```
->
-> ```
-> {|-1.23|}
-> ```
->
-> ```
-> {1.23 :number maxFractionDigits=1}
-> ```
->
-> ```
-> {|Thu Jan 01 1970 14:37:00 GMT+0100 (CET)| :datetime weekday=long}
-> ```
->
-> ```
-> {|My Brand Name| :linkify href=|foobar.com|}
-> ```
->
-> ```
-> {$when :datetime month=2-digit}
-> ```
->
-> ```
-> {:message id=some_other_message}
-> ```
->
-> ```
-> {+ssml.emphasis level=strong}
-> ```
->
-> Message examples:
->
-> ```
-> {This is {+b}bold{-b}.}
-> ```
->
-> ```
-> {{+h1 name=above-and-beyond}Above And Beyond{-h1}}
-> ```
