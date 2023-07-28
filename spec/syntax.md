@@ -110,14 +110,14 @@ The complete formal syntax of a _message_ is described by the [ABNF](./message.a
 
 ### Well-formed vs. Valid Messages
 
-A _message_ is **_well-formed_** if it satisfies all the rules of the grammar.
+A _message_ is **_<dfn>well-formed</dfn>_** if it satisfies all the rules of the grammar.
 
-A _message_ is **_valid_** if it is _well-formed_ and **also** meets the additional content restrictions
+A _message_ is **_<dfn>valid</dfn>_** if it is _well-formed_ and **also** meets the additional content restrictions
 and semantic requirements about its structure defined below.
 
 ## The Message
 
-A <dfn>**_message_**</dfn> is the complete template for a specific message formatting request.
+A **_<dfn>message</dfn>_** is the complete template for a specific message formatting request.
 
 > **Note**
 > This syntax is designed to be embeddable into many different programming languages and formats.
@@ -147,7 +147,7 @@ A _message_ consists of two parts:
 
 ### Declarations
 
-A **_declaration_** binds a _variable_ identifier to the value of an _expression_ within the scope of a _message_.
+A **_<dfn>declaration</dfn>_** binds a _variable_ identifier to the value of an _expression_ within the scope of a _message_.
 This local variable can then be used in other _expressions_ within the same _message_.
 _Declarations_ are optional: many messages will not contain any _declarations_.
 
@@ -157,7 +157,7 @@ declaration = let s variable [s] "=" [s] expression
 
 ### Body
 
-The **_body_** of a _message_ is the part that will be formatted.
+The **_body</dfn>_** of a _message_ is the part that will be formatted.
 The _body_ consists of either a _pattern_ or a _matcher_.
 
 ```abnf
@@ -185,7 +185,7 @@ An empty string is not a _well-formed_ _message_.
 
 ## Pattern
 
-A **_pattern_** contains a sequence of _text_ and _placeholders_ to be formatted as a unit.
+A **_<dfn>pattern</dfn>_** contains a sequence of _text_ and _placeholders_ to be formatted as a unit.
 All _patterns_ begin with U+007B LEFT CURLY BRACKET `{` and end with U+007D RIGHT CURLY BRACKET `}`.
 Unless there is an error, resolving a _message_ always results in the formatting
 of a single _pattern_.
@@ -206,7 +206,7 @@ during the formatting process.
 
 ### Text
 
-**_text_** is the translateable content of a _pattern_.
+**_<dfn>text</dfn>_** is the translateable content of a _pattern_.
 Any Unicode code point is allowed, except for surrogate code points U+D800
 through U+DFFF inclusive.
 The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}`
@@ -237,7 +237,7 @@ text-char = %x0-5B         ; omit \
 
 ### Placeholder
 
-A **_placeholder_** is an _expression_ that appears inside of a _pattern_
+A **_<dfn>placeholder</dfn>_** is an _expression_ that appears inside of a _pattern_
 and which will be replaced during the formatting of a _message_.
 
 ```abnf
@@ -246,7 +246,7 @@ placeholder = expression
 
 ## Matcher
 
-A **_matcher_** is the _body_ of a _message_ that allows runtime selection
+A **_<dfn>matcher</dfn>_** is the _body_ of a _message_ that allows runtime selection
 of the _pattern_ to use for formatting.
 This allows the form or content of a _message_ to vary based on values
 determined at runtime.
@@ -280,7 +280,7 @@ matcher = match 1*(selector) 1*(variant)
 
 ### Selector
 
-A **_selector_** is an _expression_ that ranks or excludes the
+A **_<dfn>selector</dfn>_** is an _expression_ that ranks or excludes the
 _variants_ based on the value of its corresponding _key_ in each _variant_.
 The combination of _selectors_ in a _matcher_ thus determines 
 which _pattern_ will be used during formatting.
@@ -316,7 +316,7 @@ There MAY be any number of additional _selectors_.
 
 ### Variant
 
-A **_variant_** is a _pattern_ associated with a set of _keys_ in a _matcher_.
+A **_<dfn>variant</dfn>_** is a _pattern_ associated with a set of _keys_ in a _matcher_.
 Each _variant_ MUST begin with the keyword `when`,
 be followed by a sequence of _keys_,
 and terminate with a valid _pattern_.
@@ -332,16 +332,16 @@ key = literal / "*"
 
 #### Key
 
-A **_key_** is a value in a _variant_ for use by a _selector_ when ranking
+A **_<dfn>key</dfn>_** is a value in a _variant_ for use by a _selector_ when ranking
 or excluding _variants_ during the _matcher_ process. 
 A _key_ can be either a _literal_ value or the "catch-all" key `*`.
 
-The **_catch-all key_** is a special key, represented by `*`,
+The **_<dfn>catch-all key</dfn>_** is a special key, represented by `*`,
 that matches all values for a given _selector_.
 
 ## Expressions
 
-An **_expression_** is a part of a _message_ that will be determined
+An **_<dfn>expression</dfn>_** is a part of a _message_ that will be determined
 during the _message_'s formatting.
 
 An _expression_ MUST begin with U+007B LEFT CURLY BRACKET `{` 
@@ -383,7 +383,7 @@ All _expressions_ share a common syntax. The types of _expression_ are:
 
 ### Operand
 
-An **_operand_** is a _literal_ or a _variable_ to be evaluated in an _expression_.
+An **_<dfn>operand</dfn>_** is a _literal_ or a _variable_ to be evaluated in an _expression_.
 An _operand_ MAY optionally be followed by an _annotation_.
 
 ```abnf
@@ -392,7 +392,7 @@ operand    = literal / variable
 
 ### Annotation
 
-An **_annotation_** is part of an _expression_ containing either 
+An **_<dfn>annotation</dfn>_** is part of an _expression_ containing either 
 a _function_ together with its associated _options_, or
 a _private-use_ or _reserved_ sequence.
 
@@ -402,7 +402,7 @@ annotation = (function *(s option)) / reserved / private-use
 
 ### Function
 
-A **_function_** is a used to evaluate, format, select, or otherwise process an _operand_,
+A **_<dfn>function</dfn>_** is a used to evaluate, format, select, or otherwise process an _operand_,
 or, if lacking an _operand_, its _options_.
 A _function_ accepts only an _operand_ as a positional argument.
 
@@ -439,9 +439,9 @@ _Options_ are not required.
 
 _Functions_ can be _standalone_, or can be an _opening element_ or _closing element_.
 
-A **_standalone_** _function_ is not expected to be paired with another _function_.
-An **_opening element_** is a _function_ that SHOULD be paired with a _closing function_.
-A **_closing element_** is a _function_ that SHOULD be paired with an _opening function_.
+A **_<dfn>standalone</dfn>_** _function_ is not expected to be paired with another _function_.
+An **_<dfn>opening element</dfn>_** is a _function_ that SHOULD be paired with a _closing function_.
+A **_<dfn>closing element</dfn>_** is a _function_ that SHOULD be paired with an _opening function_.
 
 An _opening element_ MAY be present in a message without a corresponding _closing element_,
 and vice versa.
@@ -455,7 +455,7 @@ and vice versa.
 
 #### Private-Use
 
-A **_private-use_** _annotation_ is an _annotation_ whose syntax is reserved
+A **_<dfn>private-use</dfn>_** _annotation_ is an _annotation_ whose syntax is reserved
 for use by a specific implementation or by private agreement between multiple implementations. 
 Implementations MAY define their own meaning and semantics for _private-use_ annotations.
 
@@ -495,7 +495,7 @@ private-start = "&" / "^"
 
 #### Reserved
 
-A **_reserved_** _annotation_ is an _annotation_ whose syntax is reserved
+A **_<dfn>reserved</dfn>_** _annotation_ is an _annotation_ whose syntax is reserved
 for future standardization.
 
 A _reserved_ _annotation_ starts with a reserved character.
@@ -531,7 +531,7 @@ reserved-char  = %x00-08        ; omit HTAB and LF
 
 ### Keywords
 
-A **_keyword_** is a reserved token that has a unique meaning in the _message_ syntax.
+A **_<dfn>keyword</dfn>_** is a reserved token that has a unique meaning in the _message_ syntax.
 
 The following three keywords are reserved: `let`, `match`, and `when`.
 Reserved keywords are always lowercase.
@@ -544,7 +544,7 @@ when  = %x77.68.65.6E     ; "when"
 
 ### Literals
 
-A **_literal_** is a character sequence that appears outside
+A **_<dfn>literal</dfn>_** is a character sequence that appears outside
 of _text_ in various parts of a _message_.
 A _literal_ can appear in a _declaration_, 
 as a _key_ value,
@@ -555,11 +555,11 @@ except for surrogate code points U+D800 through U+DFFF.
 
 All code points are preserved.
 
-A **_quoted_** literal begins and ends with U+005E VERTICAL BAR `|`.
+A **_<dfn>quoted</dfn>_** literal begins and ends with U+005E VERTICAL BAR `|`.
 The characters `\` and `|` within a _quoted_ literal MUST be 
 escaped as `\\` and `\|`.
 
-An **_unquoted_** literal is a _literal_ that does not require the `|`
+An **_<dfn>unquoted</dfn>_** literal is a _literal_ that does not require the `|`
 quotes around it to be distinct from the rest of the _message_ syntax.
 An _unquoted_ MAY be used when the content of the _literal_
 contains no whitespace and otherwise matches the `unquoted` production.
@@ -588,7 +588,7 @@ unquoted-start = name-start / DIGIT / "."
 
 ### Names
 
-A <dfn>**_name_**</dfn> is an identifier for a _variable_ (prefixed with `$`),
+A **_<dfn>name</dfn>_**</dfn> is an identifier for a _variable_ (prefixed with `$`),
 for a _function_ (prefixed with `:`, `+` or `-`),
 or for an _option_ (these have no prefix).
 The namespace for _names_ is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name),
@@ -615,7 +615,7 @@ name-char  = name-start / DIGIT / "-" / "." / ":"
 
 ### Escape Sequences
 
-An **_escape sequence_** is a two-character sequence starting with
+An **_<dfn>escape sequence</dfn>_** is a two-character sequence starting with
 U+005C REVERSE SOLIDUS `\`.
 
 An _escape sequence_ allows the appearance of lexically meaningful characters
@@ -631,7 +631,7 @@ backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 
 ### Whitespace
 
-**_Whitespace_** is defined as tab, carriage return, line feed, or the space character.
+**_<dfn>Whitespace</dfn>_** is defined as tab, carriage return, line feed, or the space character.
 
 Inside _patterns_ and _quoted literals_,
 whitespace is part of the content and is recorded and stored verbatim.
