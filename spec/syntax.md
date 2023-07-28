@@ -151,7 +151,7 @@ A **_declaration_** binds a _variable_ identifier to the value of an _expression
 This local variable can then be used in other _expressions_ within the same _message_.
 _Declarations_ are optional: many messages will not contain any _declarations_.
 
-```
+```abnf
 declaration = let s variable [s] "=" [s] expression
 ```
 
