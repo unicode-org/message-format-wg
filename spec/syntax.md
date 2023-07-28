@@ -24,11 +24,12 @@
          1. [Options](#options)
       2. [Private-Use](#private-use)
       3. [Reserved](#reserved)
-   5. [Keywords](#keywords)
-   6. [Literals](#literals)
-   7. [Names](#names)
-   8. [Escape Sequences](#escape-sequences)
-   9. [Whitespace](#whitespace)
+1. [Other Syntax Elements](#other-syntax-elements)
+   6. [Keywords](#keywords)
+   7. [Literals](#literals)
+   8. [Names](#names)
+   9. [Escape Sequences](#escape-sequences)
+   10. [Whitespace](#whitespace)
 1. [Complete ABNF](#complete-abnf)
 
 ### Introduction
@@ -564,6 +565,9 @@ reserved-char  = %x00-08        ; omit HTAB and LF
                / %xE000-10FFFF
 ```
 
+## Other Syntax Elements
+
+This section defines some of the comment elements used to construct _messages_.
 
 ### Keywords
 
