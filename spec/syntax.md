@@ -259,8 +259,8 @@ as the template for the formatting process.
 
 A _message_ can only be considered _valid_ if the following requirements are
 satisfied:
-* The number of _keys_ on each _variant_ MUST be equal to the number of _selectors_.
-* At least one _variant_ MUST exist whose _keys_ are all equal to the "catch-all" key `*`.
+- The number of _keys_ on each _variant_ MUST be equal to the number of _selectors_.
+- At least one _variant_ MUST exist whose _keys_ are all equal to the "catch-all" key `*`.
 
 ```abnf
 matcher = match 1*(selector) 1*(variant)
@@ -408,9 +408,9 @@ A _function_ accepts only an _operand_ as a positional argument.
 
 A _function_ consists of a prefix sigil followed by a _name_.
 The following sigils are used for _functions_:
-* `:` for standalone content
-* `+` for starting or opening _expressions_
-* `-` for ending or closing _expressions_
+- `:` for standalone content
+- `+` for starting or opening _expressions_
+- `-` for ending or closing _expressions_
 
 A _function_ MAY be followed by one or more _options_.
 _Options_ are not required.
@@ -465,9 +465,9 @@ Characters, including whitespace, are assigned meaning by the implementation.
 The definition of escapes in the `reserved-body` production, used for the body of
 a _private-use_ annotation is an affordance to implementations that 
 wish to use a syntax exactly like other functions. Specifically:
-* The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}` respectively
+- The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}` respectively
 when they appear in the body of a _private-use_ annotation. 
-* The character `|` is special: it SHOULD be escaped as `\|` in a _private-use_ annotation,
+- The character `|` is special: it SHOULD be escaped as `\|` in a _private-use_ annotation,
 but can appear unescaped as long as it is paired with another `|`. This is an affordance to
 allow _literals_ to appear in the private use syntax.
 
@@ -648,36 +648,6 @@ using the ABNF notation,
 as specified by [RFC 5234](https://datatracker.ietf.org/doc/html/rfc5234).
 
 
-
-### Complex Messages
-
-The various features can be used to produce arbitrarily complex _messages_ by combining
-_declarations_, _selectors_, _functions_, and more.
-
->A complex message with 2 _selectors_ and 3 local variable _declarations_:
->
->```
->let $hostName = {$host :person firstName=long}
->let $guestName = {$guest :person firstName=long}
->let $guestsOther = {$guestCount :number offset=1}
->
->match {$host :gender} {$guestOther :number}
->
->when female 0 {{$hostName} does not give a party.}
->when female 1 {{$hostName} invites {$guestName} to her party.}
->when female 2 {{$hostName} invites {$guestName} and one other person to her party.}
->when female * {{$hostName} invites {$guestName} and {$guestsOther} other people to her party.}
->
->when male 0 {{$hostName} does not give a party.}
->when male 1 {{$hostName} invites {$guestName} to his party.}
->when male 2 {{$hostName} invites {$guestName} and one other person to his party.}
->when male * {{$hostName} invites {$guestName} and {$guestsOther} other people to his party.}
->
->when * 0 {{$hostName} does not give a party.}
->when * 1 {{$hostName} invites {$guestName} to their party.}
->when * 2 {{$hostName} invites {$guestName} and one other person to their party.}
->when * * {{$hostName} invites {$guestName} and {$guestsOther} other people to their party.}
->```
 
 
 > Expression examples:
