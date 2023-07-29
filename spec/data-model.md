@@ -145,16 +145,21 @@ interface Option {
 }
 ```
 
-A `Reserved` represents an _expression_ with a _reserved_ _annotation_.
-The `sigil` corresponds to the starting sigil of the _reserved_.
+A `Reserved` represents an _expression_ with a _reserved_ or _private-use_ _annotation_.
+The `sigil` corresponds to the starting sigil of the _annotation_.
 The `source` is the "raw" value (i.e. escape sequences are not processed)
-and includes the starting `sigil`.
+and does not include the starting `sigil`.
 
 Implementations MUST NOT rely on the set of `sigil` values remaining constant,
 as future versions of this specification MAY assign other meanings to such sigils.
 
 If the _expression_ includes a _literal_ or _variable_ before the _annotation_,
 it is included as the `operand`.
+
+When parsing the syntax of a _message_ that includes a _private-use_ _annotation_
+supported by the implementation,
+the implemenation MAY represent it in the data model using a different interface
+as appropriate for the semantics and meaning that it attaches to that _annotation_.
 
 ```ts
 interface Reserved {
