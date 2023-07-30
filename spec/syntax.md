@@ -159,7 +159,7 @@ declaration = let s variable [s] "=" [s] expression
 
 ### Body
 
-The **_body</dfn>_** of a _message_ is the part that will be formatted.
+The **_<dfn>body</dfn>_** of a _message_ is the part that will be formatted.
 The _body_ consists of either a _pattern_ or a _matcher_.
 
 ```abnf
