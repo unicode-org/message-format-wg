@@ -423,8 +423,8 @@ No other positional arguments are possible.
 _Functions_ can be _standalone_, or can be an _opening element_ or _closing element_.
 
 A **_<dfn>standalone</dfn>_** _function_ is not expected to be paired with another _function_.
-An **_<dfn>opening element</dfn>_** is a _function_ that SHOULD be paired with a _closing function_.
-A **_<dfn>closing element</dfn>_** is a _function_ that SHOULD be paired with an _opening function_.
+An **_<dfn>opening element</dfn>_** is a _function_ that SHOULD be paired with a _closing element_.
+A **_<dfn>closing element</dfn>_** is a _function_ that SHOULD be paired with an _opening element_.
 
 An _opening element_ MAY be present in a message without a corresponding _closing element_,
 and vice versa.
