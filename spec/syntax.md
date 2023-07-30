@@ -629,7 +629,7 @@ unquoted-start = name-start / DIGIT / "."
 
 ### Names
 
-A **_<dfn>name</dfn>_**</dfn> is an identifier for a _variable_ (prefixed with `$`),
+A **_<dfn>name</dfn>_** is an identifier for a _variable_ (prefixed with `$`),
 for a _function_ (prefixed with `:`, `+` or `-`),
 or for an _option_ (these have no prefix).
 The namespace for _names_ is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name),
