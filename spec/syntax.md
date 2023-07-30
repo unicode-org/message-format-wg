@@ -451,7 +451,8 @@ _Options_ are not required.
 
 ##### Options
 
-An **_<dfn>option</dfn>_** is a key-value pair containing arguments passed to a _function_.
+An **_<dfn>option</dfn>_** is a key-value pair
+containing a named argument that is passed to a _function_.
 
 An _option_ has a _name_ and a _value_.
 The _name_ is separated from the _value_ by an U+003D EQUALS SIGN `=` along with
