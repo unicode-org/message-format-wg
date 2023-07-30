@@ -653,8 +653,8 @@ name-char  = name-start / DIGIT / "-" / "." / ":"
 
 > **Note**
 > _External variables_ can be passed in that are not valid _names_.
-> Such variables cannot be referenced in a _message_, but are not otherwise
-> errors.
+> Such variables cannot be referenced in a _message_,
+> but are not otherwise errors.
 
 ### Escape Sequences
 
