@@ -150,8 +150,10 @@ The `sigil` corresponds to the starting sigil of the _annotation_.
 The `source` is the "raw" value (i.e. escape sequences are not processed)
 and does not include the starting `sigil`.
 
-Implementations MUST NOT rely on the set of `sigil` values remaining constant,
-as future versions of this specification MAY assign other meanings to such sigils.
+> **Note**
+> Implementers should be aware that future versions of this specification
+> might assign meaning to _reserved_ `sigil` values
+> and add new interfaces to this data model.
 
 If the _expression_ includes a _literal_ or _variable_ before the _annotation_,
 it is included as the `operand`.
