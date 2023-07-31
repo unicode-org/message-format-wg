@@ -2,35 +2,7 @@
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
-   1. [Design Goals](#design-goals)
-   2. [Design Restrictions](#design-restrictions)
-1. [Messages and their Syntax](#messages-and-their-syntax)
-   1. [Well-formed vs. Valid Messages](#well-formed-vs-valid-messages)
-1. [The Message](#the-message)
-   1. [Declarations](#declarations)
-   2. [Body](#body)
-1. [Pattern](#pattern)
-   1. [Text](#text)
-   1. [Placeholder](#placeholder)
-1. [Matcher](#matcher)
-   1. [Selector](#selector)
-   2. [Variant](#variant)
-      1. [Key](#key)
-1. [Expressions](#expressions)
-   1. [Operand](#operand)
-   2. [Annotation](#annotation)
-      1. [Function](#function)
-         1. [Options](#options)
-      2. [Private-Use](#private-use)
-      3. [Reserved](#reserved)
-1. [Other Syntax Elements](#other-syntax-elements)
-   1. [Keywords](#keywords)
-   1. [Literals](#literals)
-   1. [Names](#names)
-   1. [Escape Sequences](#escape-sequences)
-   1. [Whitespace](#whitespace)
-1. [Complete ABNF](#complete-abnf)
+\[TBD\]
 
 ### Introduction
 
@@ -402,6 +374,9 @@ a _private-use_ or _reserved_ sequence.
 annotation = (function *(s option)) / reserved / private-use
 ```
 
+An _annotation_ can appear in an _expression_ by itself or following a single _operand_.
+When following an _operand_, the _operand_ serves as input to the _annotation_.
+
 #### Function
 
 A **_<dfn>function</dfn>_** is named functionality in an _annotation_.
@@ -416,9 +391,6 @@ what form the values of an _operand_ can take,
 what _options_ and _option_ values are valid, 
 and what outputs might result. 
 See [function registry](./) for more information.
-
-A _function_ MAY accept an _operand_.
-No other positional arguments are possible.
 
 _Functions_ can be _standalone_, or can be an _opening element_ or _closing element_.
 
