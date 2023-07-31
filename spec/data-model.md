@@ -101,9 +101,8 @@ The `Literal` and `VariableRef` correspond to the the _literal_ and _variable_ s
 When they are used as the `body` of an `Expression`,
 they represent _expression_ values with no _annotation_.
 
-Both _quoted_ and _unquoted_ values are represented by `Literal`,
-as the use or lack of quotation is a presentation detail
-which has no effect on the meaning of the _literal_.
+`Literal` represents all literal values, both _quoted_ and _unquoted_.
+The presence or absence of quotes is not preserved by the data model.
 The `value` of `Literal` is the "cooked" value (i.e. escape sequences are processed).
 
 In a `VariableRef`, the `name` does not include the initial `$` of the _variable_.
