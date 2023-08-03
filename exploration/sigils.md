@@ -17,258 +17,259 @@ I've attempted to present some possible approaches in the final part of the docu
 
 Already established decisions which impose limitations on the design, sometimes in a good way.
 
-* **C01** `|` is the delimiter for quoted literals.
+### C01: `|` is the delimiter for quoted literals.
 
-* **C02** Unquoted literals are `nmtokens`, but they cannot start with `:` and `-`.
+### C02: Unquoted literals are `nmtokens`, but they cannot start with `:` and `-`.
 
-* **C03** `*` is the catch-all variant key.
+### C03: `*` is the catch-all variant key.
 
-* **C04** `$` is the sigil for variables.
+### C04: `$` is the sigil for variables.
 
-	In contrast to ICU MessageFormat (1.0), we want ot decorate variables with a sigil to make them stand out visually, and to make it clearer that their names are "code" and should not be translated.
+In contrast to ICU MessageFormat (1.0), we want ot decorate variables with a sigil to make them stand out visually, and to make it clearer that their names are "code" and should not be translated.
 
-* **C05** The operand in annotated expressions comes before the annotation.
+### C05: The operand in annotated expressions comes before the annotation.
 
-	However, due to R06, we can't assume all expressions start with the operand.
+However, due to R06, we can't assume all expressions start with the operand.
 
-* **C06** Expressions are not allowed to nest.
+### C06: Expressions are not allowed to nest.
 
-	It's safe to assume that expression operands, option values, and variant keys are scalar values, and that they are not nested expressions.
+It's safe to assume that expression operands, option values, and variant keys are scalar values, and that they are not nested expressions.
 
-* **C07** Functions cannot be passed by name to other functions as operands or option values.
+### C07: Functions cannot be passed by name to other functions as operands or option values.
 
-	For example, we don't support something like `{$amounts :map fn=:number}`.
+For example, we don't support something like `{$amounts :map fn=:number}`.
 
-* **C08** We recognize the cost of adding new sigils to the syntax.
+### C08: We recognize the cost of adding new sigils to the syntax.
 
-	We should attempt to have as few sigils as possible, due to the high cognitive cost and the visual burden of each new sigil.
-	Sigils are inherently not intuitive and require external documentation to imbue meaning into them.
-	They are not discoverable and difficult to search for.
-	Some of them also have cryptic names.
+We should attempt to have as few sigils as possible, due to the high cognitive cost and the visual burden of each new sigil.
+Sigils are inherently not intuitive and require external documentation to imbue meaning into them.
+They are not discoverable and difficult to search for.
+Some of them also have cryptic names.
 
 ## Proposed Constraints
 
 These are hopefully reasonable decisions which impose limitations to anchor other decision making.
 They have benefits but they don't address any particular requirements.
 
-* **A01** Use XML's Name and Nmtoken.
+### A01: Use XML's Name and Nmtoken.
 
-	XML is a well-established standard and already defines convenient and flexible productions for names and nmtokens.
-	There's already guidance about using the colon for namespaces.
+XML is a well-established standard and already defines convenient and flexible productions for names and nmtokens.
+There's already guidance about using the colon for namespaces.
 
-	Technically, the current syntax is compatible with XML to the extent that it's possible to encode all valid MessageFormat 2.0 names and nmtokens inside a registry defined in XML.
-	That's because our definitions are strictly *narrower* than XML's.
+Technically, the current syntax is compatible with XML to the extent that it's possible to encode all valid MessageFormat 2.0 names and nmtokens inside a registry defined in XML.
+That's because our definitions are strictly *narrower* than XML's.
 
-	> [!IMPORTANT]
-	> Implication: no sigils can be valid first characters of `nmtoken`, including `:` and `-`.
+> [!IMPORTANT]
+> Implication: no sigils can be valid first characters of `nmtoken`, including `:` and `-`.
 
-	> [!WARNING]
-	> This contradicts the current design of the function sigils: `:` for standalone and `-` for closing.
+> [!WARNING]
+> This contradicts the current design of the function sigils: `:` for standalone and `-` for closing.
 
 ## Agreed Requirements
 
 The following requirements are the result of the previous consensus.
 Some of them may seem obvious, but I'm listing them regardless so that we're able to lean on them if we need to step back.
 
-* **R01** Sigils must uniquely identify the parts of the syntax they correspond to, regardless of where they are used, even if such use was unambiguous grammatically.
+### R01: Sigils must uniquely identify the parts of the syntax they correspond to, regardless of where they are used, even if such use was unambiguous grammatically.
 
-	Since our syntax is small, we can take advantage of the many special characters available on most keyboards.
-	If we pick a particular sigil to denote a specific production in the syntax, the same sigil should not be allowed to mean something else in other parts of the syntax — outside literal text, of course.
-	For example, when we choose `$` as the variable sigil, it should consistently be used to introduce variables, and variables only, everywhere in the message body.
-	It should not be used to introduce, let's say, annotations, even if doing so would not cause parsing ambiguities.
+Since our syntax is small, we can take advantage of the many special characters available on most keyboards.
+If we pick a particular sigil to denote a specific production in the syntax, the same sigil should not be allowed to mean something else in other parts of the syntax — outside literal text, of course.
+For example, when we choose `$` as the variable sigil, it should consistently be used to introduce variables, and variables only, everywhere in the message body.
+It should not be used to introduce, let's say, annotations, even if doing so would not cause parsing ambiguities.
 	
-	> [!IMPORTANT]
-	> * We must not reuse sigils.
+> [!IMPORTANT]
+> * We must not reuse sigils.
 
-* **R02** Both quoted and unquoted literals must be allowed as expression operands, option values, and variant keys. There must be no difference between them with regards to where they can be used.
+### R02: Both quoted and unquoted literals must be allowed as expression operands, option values, and variant keys. There must be no difference between them with regards to where they can be used.
 
-	We expect literals to be the most common values of function options and variant keys.
-	Less so for expression operands.
-	In all use-cases,
-	we want unquoted literals for convenience -- because option values and variant keys are likely to come from a closed set,
-	and we want quoted literals for completeness -- to allow any text input if needed.
+We expect literals to be the most common values of function options and variant keys.
+Less so for expression operands.
+In all use-cases,
+we want unquoted literals for convenience -- because option values and variant keys are likely to come from a closed set,
+and we want quoted literals for completeness -- to allow any text input if needed.
 
-	> [!IMPORTANT]
-	> * `|` must uniquely identify the start of a quoted literal.
-	> * Variable and function sigils must come from outside the set of allowed start characters for unquoted literals.
+> [!IMPORTANT]
+> * `|` must uniquely identify the start of a quoted literal.
+> * Variable and function sigils must come from outside the set of allowed start characters for unquoted literals.
 
-* **R03** Variables must be allowed as expression operands.
+### R03: Variables must be allowed as expression operands.
 
-	Both input and local variables must be allowed as operands inside placeholders for the purpose of formatting them and interpolating into the message.
-	They must also be allowed as operands inside selectors for the purpose of selecting a variant based on the value of the variable.
+Both input and local variables must be allowed as operands inside placeholders for the purpose of formatting them and interpolating into the message.
+They must also be allowed as operands inside selectors for the purpose of selecting a variant based on the value of the variable.
 
-	> [!IMPORTANT]
-	> * Variable names must not collide with quoted nor unquoted literals.
+> [!IMPORTANT]
+> * Variable names must not collide with quoted nor unquoted literals.
 
-* **R04** Variables must be allowed as option values.
+### R04: Variables must be allowed as option values.
 
-	Both input and local variables must be allowed as option values in order to allow passing complex dynamic data into annotations.
-	Examples: `{$color :adjective accord=$item}`, `{:range begin=$a end=$b}`.
+Both input and local variables must be allowed as option values in order to allow passing complex dynamic data into annotations.
+Examples: `{$color :adjective accord=$item}`, `{:range begin=$a end=$b}`.
 
-	> [!IMPORTANT]
-	> * Variable names must not collide with quoted nor unquoted literals.
+> [!IMPORTANT]
+> * Variable names must not collide with quoted nor unquoted literals.
 
-* **R05** The syntax must reserve a number of _private use_ annotation sigils without attributing any meaning to them.
+### R05: The syntax must reserve a number of _private use_ annotation sigils without attributing any meaning to them.
 
-	Private-use annotations can be used by a specific implementation or by private agreement between multiple implementations to define their own meaning.
-	Messages with private-use syntax must be considered well-formed and valid.
+Private-use annotations can be used by a specific implementation or by private agreement between multiple implementations to define their own meaning.
+Messages with private-use syntax must be considered well-formed and valid.
 
-	> [!IMPORTANT]
-	> * Private-use sigils must not conflict with other function sigils.
-	> * Private-use sigils must not conflict with variable sigils.
-	> * Private-use sigils must not conflict with quoted and unquoted literals.
+> [!IMPORTANT]
+> * Private-use sigils must not conflict with other function sigils.
+> * Private-use sigils must not conflict with variable sigils.
+> * Private-use sigils must not conflict with quoted and unquoted literals.
 
-* **R06** Functions must be allowed to accept zero arguments.
+### R06: Functions must be allowed to accept zero arguments.
 
-	We want to be able to use nullary functions for procedures, i.e. functions which do something else than strictly format an operand:
+We want to be able to use nullary functions for procedures, i.e. functions which do something else than strictly format an operand:
 
-	    {:embed msgid=brand-name}
-	
-	Or to select variants based on the environment:
+	{:embed msgid=brand-name}
 
-		match {:platform} ...
-	
-	Or for functions which require more than one argument:
+Or to select variants based on the environment:
 
-		{:range begin=$x end=$y}
+	match {:platform} ...
 
-	> [!IMPORTANT]
-	> * Function names must not collide with quoted nor unquoted literals.
+Or for functions which require more than one argument:
 
-	> [!NOTE]
-	> The procedure use-case can also be satisfied by making one of the options an operand, e.g. `{brand-name :embed}`.
+	{:range begin=$x end=$y}
 
-	> [!NOTE]
-	> The environment use-case can also be satisfied by always-available variables, e.g. `match {$_PLATFORM :equals} ...`.
+> [!IMPORTANT]
+> * Function names must not collide with quoted nor unquoted literals.
 
-	> [!NOTE]
-	> The more-than-one-argument can also be satisfied by using container objects as operands, e.g. `{$xy :range}`.
+> [!NOTE]
+> The procedure use-case can also be satisfied by making one of the options an operand, e.g. `{brand-name :embed}`.
 
-* **R07** The syntax must be able to represent spans in the translated content.
+> [!NOTE]
+> The environment use-case can also be satisfied by always-available variables, e.g. `match {$_PLATFORM :equals} ...`.
 
-	This requirement is intentionally phrased in a more general manner; I'll attempt to be more specific below.
-	We have previously established that we want to be able to express the *open* and *close* concepts in the syntax.
+> [!NOTE]
+> The more-than-one-argument can also be satisfied by using container objects as operands, e.g. `{$xy :range}`.
 
-	* Spans don't need to be well-formed in the XML sense (i.e. properly nested and always closed).
-	* Spans can overlap and may be left unpaired.
-	* Spans are meant to aid formatting; using them in selectors is invalid.
+### R07: The syntax must be able to represent spans in the translated content.
 
-	> [!IMPORTANT]
-	> * We need a way to represent the open and close properties in syntax. In today's syntax this is done through the `+` and `-` function introducers.
-	> More generally, we can consider open and close as a property of functions, annotations, expressions, or placeholders. See below.
-	> * Standalone can probably be the default, i.e. the "regular" syntax represents standalone.
+This requirement is intentionally phrased in a more general manner; I'll attempt to be more specific below.
+We have previously established that we want to be able to express the *open* and *close* concepts in the syntax.
 
-* **R08** It should be possible to reject during parsing a message with a span used as selector as invalid, rather than produce a runtime error only when it's formatted.
+* Spans don't need to be well-formed in the XML sense (i.e. properly nested and always closed).
+* Spans can overlap and may be left unpaired.
+* Spans are meant to aid formatting; using them in selectors is invalid.
 
-	In today's design, this can be achieved by tracing annotations of selectors and verifying that none of them is an open or close annotation.
-	However, such approach would increase the complexity of the spec (e.g. what about option values which reference local variables with open/close annotations?), as well as the complexity of implementations.
+> [!IMPORTANT]
+> * We need a way to represent the open and close properties in syntax. In today's syntax this is done through the `+` and `-` function introducers.
+> More generally, we can consider open and close as a property of functions, annotations, expressions, or placeholders. See below.
+> * Standalone can probably be the default, i.e. the "regular" syntax represents standalone.
 
-	This would also be satisifed if we made open/close a property of placeholders rather than expressions.
+### R08: It should be possible to reject during parsing a message with a span used as selector as invalid, rather than produce a runtime error only when it's formatted.
 
-	> [!IMPORTANT]
-	> * Standalone, open, and close must be encoded in the syntax, rather than in names or in registry.
+In today's design, this can be achieved by tracing annotations of selectors and verifying that none of them is an open or close annotation.
+However, such approach would increase the complexity of the spec (e.g. what about option values which reference local variables with open/close annotations?), as well as the complexity of implementations.
 
-* **R09** Tooling should be able to recognize standalone, open, and close properties to offer visual and authoring support.
+This would also be satisifed if we made open/close a property of placeholders rather than expressions.
 
-* **R10** Parts formatted at runtime must carry the information about whether they were produced by a standalone, open, or close placeholder.
+> [!IMPORTANT]
+> * Standalone, open, and close must be encoded in the syntax, rather than in names or in registry.
 
-* **R11** It should be possible to define a single function in the registry and then specify its various possible signatures for formatting or matching.
+### R09: Tooling should be able to recognize standalone, open, and close properties to offer visual and authoring support.
 
-* **R12** Open and close functions must be able to specify different option baskets.
+### R10: Parts formatted at runtime must carry the information about whether they were produced by a standalone, open, or close placeholder.
 
-	Even if open and close functions share the name, we want to be able to require different options for open signatures and close signatures.
-	In particular, close signatures may want to define no options at all, under the assumption that they merely close a span opened and configured by the corresponding open signature.
-	However, it may also be useful to allow options on close signatures, e.g. `id` to help match the close placeholder with an open one with the same identifier.
+### R11: It should be possible to define a single function in the registry and then specify its various possible signatures for formatting or matching.
 
-	> [!IMPORTANT]
-	> This requirement has consequences for the identity of what we call "a function". Are open and close *different* functions, or are they different *signatures* of the same function, i.e. when invoked as "open", accept the following options?
+### R12: Open and close functions must be able to specify different option baskets.
+
+Even if open and close functions share the name, we want to be able to require different options for open signatures and close signatures.
+In particular, close signatures may want to define no options at all, under the assumption that they merely close a span opened and configured by the corresponding open signature.
+However, it may also be useful to allow options on close signatures, e.g. `id` to help match the close placeholder with an open one with the same identifier.
+
+> [!IMPORTANT]
+> This requirement has consequences for the identity of what we call "a function". Are open and close *different* functions, or are they different *signatures* of the same function, i.e. when invoked as "open", accept the following options?
 
 ## Proposed Requirements
 
-* **P01** The formatting signatures should define whether they're for standalone, open, or close uses.
+### P01: The formatting signatures should define whether they're for standalone, open, or close uses.
 
-	They already do in the current design of the registry.
-	I'm listing this as an open question because I'm not sure if the current design was deliberate or accidental.
+They already do in the current design of the registry.
+I'm listing this as an open question because I'm not sure if the current design was deliberate or accidental.
 
-	> [!IMPORTANT]
-	> Open/close is not a property of the function. It is at most the property of the annotation, i.e. the function's invocation, i.e. its signature.
-	> Alternative framing: it's a property of an expression in which a given signature of a function is allowed.
+> [!IMPORTANT]
+> Open/close is not a property of the function. It is at most the property of the annotation, i.e. the function's invocation, i.e. its signature.
+> Alternative framing: it's a property of an expression in which a given signature of a function is allowed.
 
-	> [!WARNING]
-	> The current design of using different sigils for standalone, open, and close annotations suggests that open/close is, in fact, a property of the function. `+html` looks like a different function than `-html` and `:html`.
+> [!WARNING]
+> The current design of using different sigils for standalone, open, and close annotations suggests that open/close is, in fact, a property of the function. `+html` looks like a different function than `-html` and `:html`.
 
-* **P02** It should be possible to avoid repetition of open/close palceholders in the message body by assigning them to local variables.
+### P02: It should be possible to avoid repetition of open/close palceholders in the message body by assigning them to local variables.
 
-	We can already do this for standalone placeholders.
+We can already do this for standalone placeholders.
 
-		// now
-		let $x = {+html opt=val}
-		{{$x}Hello{-html}}
+	// now
+	let $x = {+html opt=val}
+	{{$x}Hello{-html}}
 
-		// better?
-		let $x = {:html opt=val}
-		{{+ $x}Hello{-html}}
+	// better?
+	let $x = {:html opt=val}
+	{{+ $x}Hello{-html}}
 
-		// better? But: what about opt=val being passed to "close"?
-		let $x = {:html opt=val}
-		{{+ $x}Hello{- $x}}
-
-
-* (I'd like to add more proposed requirements here.)
+	// better? But: what about opt=val being passed to "close"?
+	let $x = {:html opt=val}
+	{{+ $x}Hello{- $x}}
 
 ## Open Questions
 
-* **Q01** Should it be possible to specify open and close properties on *placeholders* without annotations?
+### Q01: Should it be possible to specify open and close properties on *placeholders* without annotations?
 
-	This follows from P02 above:
+This follows from P02 above:
 
-		let $x = {:html opt=val}
-		{{+ $x}Hello{-html}}
+	let $x = {:html opt=val}
+	{{+ $x}Hello{-html}}
 	
-	Is it also useful to allow open/close literals?
-	If formatted parts carry the open/close information, they could still be used by higher abstraction layers.
-	However, it would impair tooling.
+Is it also useful to allow open/close literals?
+If formatted parts carry the open/close information, they could still be used by higher abstraction layers.
+However, it would impair tooling.
 
-		// without annotations, tooling doesn't know anything about "a"
-		{{+ a}text{- a}}
+	// without annotations, tooling doesn't know anything about "a"
+	{{+ a}text{- a}}
 
-	> [!IMPORTANT]
-	> If so:
-	> Open/close is not a property of the annotation.
-	> It is at most a property of the expression, which can comprise just the operand.
-	> Or perhaps even a property of the placeholder (see below).
+> [!IMPORTANT]
+> If so:
+> Open/close is not a property of the annotation.
+> It is at most a property of the expression, which can comprise just the operand.
+> Or perhaps even a property of the placeholder (see below).
 
-* **Q02** Should it be possible to specify open/close on expressions used in local variable declarations?
+### Q02: Should it be possible to specify open/close on expressions used in local variable declarations?
 
-	R08 is about making open/close invalid in selectors.
-	Perhaps also forbid open/close in local variable declarations and only allow them in placeholders inside patterns?
+R08 is about making open/close invalid in selectors.
+Perhaps also forbid open/close in local variable declarations and only allow them in placeholders inside patterns?
 
-		// Local variables must be standalone annotations.
-		let $x = {:html opt=val}
+	// Local variables must be standalone annotations.
+	let $x = {:html opt=val}
 
-		// Syntax TBD; assuming open/close is a property of the placeholder.
-		{{+ $x}Hello{- $x}}
+	// Syntax TBD; assuming open/close is a property of the placeholder.
+	{{+ $x}Hello{- $x}}
 
-		// Or perhaps repeat the annotation?
-		{{$x +html}Hello{$x -html}}
+	// Or perhaps repeat the annotation?
+	{{$x +html}Hello{$x -html}}
 
-	> [!IMPORTANT]
-	> If so:
-	> Open/close is not a property of the annotation.
-	> It is at most a property of the expression, which can comprise just the operand.
-	> Or perhaps even a property of the placeholder (see below).
+> [!IMPORTANT]
+> If so:
+> Open/close is not a property of the annotation.
+> It is at most a property of the expression, which can comprise just the operand.
+> Or perhaps even a property of the placeholder (see below).
 
-* **Q03** Should it be possible to change the open/close role once assigned?
+### Q03: Should it be possible to change the open/close role once assigned?
 
-	Assuming we allow Q02 above.
-	We can require a data model error be emitted when this happens.
+Assuming we allow Q02 above.
+We can require a data model error be emitted when this happens.
 
-		let $x = {em +html}
-		{{$x -html}}
+	let $x = {em +html}
+	{{$x -html}}
 
-* **[#260](https://github.com/unicode-org/message-format-wg/issues/260)** Should formatting and selectors annotations have different syntax?
+### Q04: Should formatting and selectors annotations have different syntax?
 
-* **[#403](https://github.com/unicode-org/message-format-wg/issues/403)** Do we need namespaced local variables?
+	See [#260](https://github.com/unicode-org/message-format-wg/issues/260).
+
+### Q05: Do we need namespaced local variables?
+
+	See [#403](https://github.com/unicode-org/message-format-wg/issues/403).
 
 ## Alternatives for the syntax
 
