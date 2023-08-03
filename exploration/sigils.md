@@ -265,11 +265,11 @@ We can require a data model error be emitted when this happens.
 
 ### Q04: Should formatting and selectors annotations have different syntax?
 
-	See [#260](https://github.com/unicode-org/message-format-wg/issues/260).
+See [#260](https://github.com/unicode-org/message-format-wg/issues/260).
 
 ### Q05: Do we need namespaced local variables?
 
-	See [#403](https://github.com/unicode-org/message-format-wg/issues/403).
+See [#403](https://github.com/unicode-org/message-format-wg/issues/403).
 
 ## Alternatives for the syntax
 
@@ -358,7 +358,19 @@ Using paired square brackets:
 * new special characters: `[` and `]`
 * can use `{[foo]}` for standalone placeholders
 
-### Separate expression syntax
+### Extra placeholder-only syntax
+
+This is the same as above, but applied only to placeholders.
+Possible with the following change to our ABNF:
+
+```diff
+-expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
++expression = (operand [s annotation]) / annotation
++selector = "{" [s] expression [s] "}"
++placeholder = "{" [s] expression [s] "}"
+```
+
+### Separate expression and placehodler syntax
 
 Delimit expressions with one pair of curly braces and then embed them into placeholders which use another pair of curly braces as delimiters.
 
@@ -373,6 +385,7 @@ Delimit expressions with one pair of curly braces and then embed them into place
 		{% {$x}} ... {/ {$x}}
 
 * can forbid open/close in local declarations and selectors on the syntax level
+* a large depature from the current syntax
 * visually noisy, especially near the edges of a pattern: `{{{$username}}}` may be considered a bit excessive
 * another meaning for `{` and `}`
 
@@ -404,6 +417,7 @@ Delimit expressions with square brackets, placeholders with curly braces.
 
 * can forbid open/close in local declarations and selectors on the syntax level
 * may be combined with the brackets-as-the-function-call approach detailed above: `let $foo = [$count :number]` but `let $foo = $count`.
+* a very large depature from the current syntax
 * visually noisy
 * new special chars: `[` and `]`
 
