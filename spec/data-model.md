@@ -101,8 +101,8 @@ The `Literal` and `VariableRef` correspond to the the _literal_ and _variable_ s
 When they are used as the `body` of an `Expression`,
 they represent _expression_ values with no _annotation_.
 
-An _unquoted_ value is represented by a `Literal` with `quoted: false`,
-while a _quoted_ value would have `quoted: true`.
+`Literal` represents all literal values, both _quoted_ and _unquoted_.
+The presence or absence of quotes is not preserved by the data model.
 The `value` of `Literal` is the "cooked" value (i.e. escape sequences are processed).
 
 In a `VariableRef`, the `name` does not include the initial `$` of the _variable_.
@@ -110,7 +110,6 @@ In a `VariableRef`, the `name` does not include the initial `$` of the _variable
 ```ts
 interface Literal {
   type: 'literal'
-  quoted: boolean
   value: string
 }
 
