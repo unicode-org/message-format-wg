@@ -148,23 +148,27 @@ interface Option {
 }
 ```
 
-An `Unsupported` represents an _expression_ with a _reserved_ or _private-use_ _annotation_.
+An `Unsupported` represents an _expression_ with a
+_reserved_ _annotation_ or a _private-use_ _annotation_ not supported
+by the implementation.
 The `sigil` corresponds to the starting sigil of the _annotation_.
 The `source` is the "raw" value (i.e. escape sequences are not processed)
 and does not include the starting `sigil`.
 
 > **Note**
-> Implementers should be aware that future versions of this specification
-> might assign meaning to _reserved_ `sigil` values
-> and add new interfaces to this data model.
+> Be aware that future versions of this specification
+> might assign meaning to _reserved_ `sigil` values.
+> This would result in new interfaces being added to
+> this data model.
 
 If the _expression_ includes a _literal_ or _variable_ before the _annotation_,
 it is included as the `operand`.
 
 When parsing the syntax of a _message_ that includes a _private-use_ _annotation_
 supported by the implementation,
-the implemenation MAY represent it in the data model using a different interface
-as appropriate for the semantics and meaning that it attaches to that _annotation_.
+the implementation SHOULD represent it in the data model
+using an interface appropriate for the semantics and meaning
+that the implementation attaches to that _annotation_.
 
 ```ts
 interface Unsupported {
