@@ -47,10 +47,10 @@
       },
       "required": ["type", "kind", "name"]
     },
-    "reserved": {
+    "unsupported": {
       "type": "object",
       "properties": {
-        "type": { "const": "reserved" },
+        "type": { "const": "unsupported" },
         "sigil": {
           "enum": ["!", "@", "#", "%", "^", "&", "*", "<", ">", "?", "~"]
         },
@@ -77,7 +77,7 @@
             { "$ref": "#/$defs/literal" },
             { "$ref": "#/$defs/variable" },
             { "$ref": "#/$defs/function" },
-            { "$ref": "#/$defs/reserved" }
+            { "$ref": "#/$defs/unsupported" }
           ]
         }
       },

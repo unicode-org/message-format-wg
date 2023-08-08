@@ -81,7 +81,7 @@ The `value` of `Text` is the "cooked" value (i.e. escape sequences are processed
 Implementations MUST NOT rely on the set of `Expression` `body` values being exhaustive,
 as future versions of this specification MAY define additional expressions.
 If encountering a `body` with an unrecognised value,
-an implementation SHOULD treat it as it would a `Reserved` value.
+an implementation SHOULD treat it as it would an `Unsupported` value.
 
 ```ts
 interface Pattern {
@@ -95,7 +95,7 @@ interface Text {
 
 interface Expression {
   type: 'expression'
-  body: Literal | VariableRef | FunctionRef | Reserved
+  body: Literal | VariableRef | FunctionRef | Unsupported
 }
 ```
 
@@ -148,7 +148,7 @@ interface Option {
 }
 ```
 
-A `Reserved` represents an _expression_ with a _reserved_ or _private-use_ _annotation_.
+An `Unsupported` represents an _expression_ with a _reserved_ or _private-use_ _annotation_.
 The `sigil` corresponds to the starting sigil of the _annotation_.
 The `source` is the "raw" value (i.e. escape sequences are not processed)
 and does not include the starting `sigil`.
@@ -167,8 +167,8 @@ the implemenation MAY represent it in the data model using a different interface
 as appropriate for the semantics and meaning that it attaches to that _annotation_.
 
 ```ts
-interface Reserved {
-  type: 'reserved'
+interface Unsupported {
+  type: 'unsupported'
   sigil: '!' | '@' | '#' | '%' | '^' | '&' | '*' | '<' | '>' | '/' | '?' | '~'
   source: string
   operand?: Literal | VariableRef
