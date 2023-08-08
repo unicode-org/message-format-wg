@@ -80,8 +80,7 @@ The `value` of `Text` is the "cooked" value (i.e. escape sequences are processed
 
 Implementations MUST NOT rely on the set of `Expression` `body` values being exhaustive,
 as future versions of this specification MAY define additional expressions.
-If encountering a `body` with an unrecognised value,
-an implementation SHOULD treat it as it would a `Reserved` value.
+A `body` with an unrecognized value SHOULD be treated as an `Unsupported` value.
 
 ```ts
 interface Pattern {
@@ -95,7 +94,7 @@ interface Text {
 
 interface Expression {
   type: 'expression'
-  body: Literal | VariableRef | FunctionRef | Reserved
+  body: Literal | VariableRef | FunctionRef | Unsupported
 }
 ```
 
@@ -148,20 +147,31 @@ interface Option {
 }
 ```
 
-A `Reserved` represents an _expression_ with a _reserved_ _annotation_.
-The `sigil` corresponds to the starting sigil of the _reserved_.
+An `Unsupported` represents an _expression_ with a
+_reserved_ _annotation_ or a _private-use_ _annotation_ not supported
+by the implementation.
+The `sigil` corresponds to the starting sigil of the _annotation_.
 The `source` is the "raw" value (i.e. escape sequences are not processed)
-and includes the starting `sigil`.
+and does not include the starting `sigil`.
 
-Implementations MUST NOT rely on the set of `sigil` values remaining constant,
-as future versions of this specification MAY assign other meanings to such sigils.
+> **Note**
+> Be aware that future versions of this specification
+> might assign meaning to _reserved_ `sigil` values.
+> This would result in new interfaces being added to
+> this data model.
 
 If the _expression_ includes a _literal_ or _variable_ before the _annotation_,
 it is included as the `operand`.
 
+When parsing the syntax of a _message_ that includes a _private-use_ _annotation_
+supported by the implementation,
+the implementation SHOULD represent it in the data model
+using an interface appropriate for the semantics and meaning
+that the implementation attaches to that _annotation_.
+
 ```ts
-interface Reserved {
-  type: 'reserved'
+interface Unsupported {
+  type: 'unsupported'
   sigil: '!' | '@' | '#' | '%' | '^' | '&' | '*' | '<' | '>' | '/' | '?' | '~'
   source: string
   operand?: Literal | VariableRef

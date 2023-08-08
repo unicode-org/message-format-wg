@@ -9,7 +9,7 @@
 <!ATTLIST key default (true | false) "false">
 
 <!ELEMENT pattern (#PCDATA | expression)*>
-<!ELEMENT expression (literal | variable | function | reserved)>
+<!ELEMENT expression (literal | variable | function | unsupported)>
 
 <!ELEMENT literal (#PCDATA)>
 <!ATTLIST literal quoted (true | false) #REQUIRED>
@@ -26,6 +26,6 @@
 <!ELEMENT option (literal | variable)>
 <!ATTLIST option name NMTOKEN #REQUIRED>
 
-<!ELEMENT reserved (operand?,source)>
-<!ATTLIST reserved sigil CDATA #REQUIRED>
+<!ELEMENT unsupported (operand?,source)>
+<!ATTLIST unsupported sigil CDATA #REQUIRED>
 <!ELEMENT source (#PCDATA)>
