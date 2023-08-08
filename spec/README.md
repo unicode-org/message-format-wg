@@ -12,6 +12,7 @@
 1. [Registry](registry.md)
    1. [`registry.dtd`](registry.dtd)
 1. [Formatting](formatting.md)
+1. [Interchange data model](data-model/README.md)
 
 ## Introduction
 

@@ -12,8 +12,12 @@ or for other operations to be performed on or with messages in this representati
 Implementations are not required to use this data model for their internal representation of messages.
 
 To ensure compatibility across all platforms,
-this interchange data model is defined in terms of JSON-compatible values
-using TypeScript syntax for their definition.
+this interchange data model is defined here using TypeScript notation.
+Two equivalent definitions of the data model are also provided:
+- [`message.json`](./message.json) is a JSON Schema definition,
+  for use with message data encoded as JSON or compatible formats, such as YAML.
+- [`message.dtd`](./message.dtd) is a document type definition (DTD),
+  for use with message data encoded as XML.
 
 ## Messages
 
@@ -101,8 +105,8 @@ The `Literal` and `VariableRef` correspond to the the _literal_ and _variable_ s
 When they are used as the `body` of an `Expression`,
 they represent _expression_ values with no _annotation_.
 
-An _unquoted_ value is represented by a `Literal` with `quoted: false`,
-while a _quoted_ value would have `quoted: true`.
+`Literal` represents all literal values, both _quoted_ and _unquoted_.
+The presence or absence of quotes is not preserved by the data model.
 The `value` of `Literal` is the "cooked" value (i.e. escape sequences are processed).
 
 In a `VariableRef`, the `name` does not include the initial `$` of the _variable_.
@@ -110,7 +114,6 @@ In a `VariableRef`, the `name` does not include the initial `$` of the _variable
 ```ts
 interface Literal {
   type: 'literal'
-  quoted: boolean
   value: string
 }
 
