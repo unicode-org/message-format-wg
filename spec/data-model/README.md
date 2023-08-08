@@ -80,8 +80,7 @@ The `value` of `Text` is the "cooked" value (i.e. escape sequences are processed
 
 Implementations MUST NOT rely on the set of `Expression` `body` values being exhaustive,
 as future versions of this specification MAY define additional expressions.
-If encountering a `body` with an unrecognised value,
-an implementation SHOULD treat it as it would an `Unsupported` value.
+A `body` with an unrecognized value SHOULD be treated as an `Unsupported` value.
 
 ```ts
 interface Pattern {
