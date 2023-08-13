@@ -92,7 +92,7 @@ and different implementations MAY choose to perform different levels of resoluti
 > or some other locally appropriate value.
 
 Depending on the presence or absence of an _operand_
-and a _function_ or _reserved_ _annotation_,
+and a _function_, _private-use_, or _reserved_ _annotation_,
 one of the following is used to resolve the value of the _expression_:
 
 - If the _expression_ contains no _annotation_,
@@ -100,10 +100,10 @@ one of the following is used to resolve the value of the _expression_:
   depending on the shape of the _operand_.
 - Else, if the _expression_ has a _function_ _annotation_,
   its resolved value is defined by _function resolution_.
-- Else, the _expression_ has a _reserved_ _annotation_.
-  If the _annotation_ uses a `private-start` character that the implementation supports,
-  its value is resolved according to the implementation's specification.
-  Else, an Unsupported Expression error is emitted and a fallback value is used as its value.
+- Else, if the _expression_ has a _private-use_ _annotation_,
+  its resolved value is defined according to the implementations's specification.
+- Else, the _expression_ has a _reserved_ _annotation_,
+  an Unsupported Expression error is emitted and a fallback value is used as its value.
 
 ### Literal Resolution
 
@@ -183,6 +183,8 @@ An _expression_ fails to resolve when:
 
 - A _variable_ _operand_ fails to resolve.
 - A _function_ _annotation_ fails to resolve.
+- A _private-use_ _annotation_ is unsupported by the implementation or if
+  a _private-use_ _annotation_ fails to resolve.
 - The _expression_ has a _reserved_ _annotation_.
 
 The _fallback value_ depends on the contents of the _expression_:
@@ -381,15 +383,15 @@ _This section is non-normative._
 
 #### Example 1
 
-Presuming a minimal implementation which only supports string values
-and matches keys by using string comparison,
+Presuming a minimal implementation which only supports `:string` annotation
+which matches keys by using string comparison,
 and a formatting context in which
 the variable reference `$foo` resolves to the string `'foo'` and
 the variable reference `$bar` resolves to the string `'bar'`,
 pattern selection proceeds as follows for this message:
 
 ```
-match {$foo} {$bar}
+match {$foo :string} {$bar :string}
 when bar bar {All bar}
 when foo foo {All foo}
 when * * {Otherwise}
@@ -420,7 +422,7 @@ Alternatively, with the same implementation and formatting context as in Example
 pattern selection would proceed as follows for this message:
 
 ```
-match {$foo} {$bar}
+match {$foo :string} {$bar :string}
 when * bar {Any and bar}
 when foo * {Foo and any}
 when foo bar {Foo and bar}
@@ -645,13 +647,13 @@ These are divided into the following categories:
     > Example invalid messages resulting in a Variant Key Mismatch error:
     >
     > ```
-    > match {$one}
+    > match {$one :func}
     > when 1 2 {Too many}
     > when * {Otherwise}
     > ```
     >
     > ```
-    > match {$one} {$two}
+    > match {$one :func} {$two :func}
     > when 1 2 {Two keys}
     > when * {Missing a key}
     > when * * {Otherwise}
@@ -663,15 +665,42 @@ These are divided into the following categories:
     > Example invalid messages resulting in a Missing Fallback Variant error:
     >
     > ```
-    > match {$one}
+    > match {$one :func}
     > when 1 {Value is one}
     > when 2 {Value is two}
     > ```
     >
     > ```
-    > match {$one} {$two}
+    > match {$one :func} {$two :func}
     > when 1 * {First is one}
     > when * 1 {Second is one}
+    > ```
+
+  - A **_Missing Selector Annotation error_** is an error that occurs when the _message_
+    contains a _selector_ that does not have an _annotation_,
+    or contains a _variable_ that does not directly or indirectly reference a _declaration_ with an _annotation_.
+
+    > Example invalid messages resulting in a _Missing Selector Annotation error_:
+    >
+    > ```
+    > match {$one}
+    > when 1 {Value is one}
+    > when * {Value is not one}
+    > ```
+    >
+    > ```
+    > let $one = {|The one|}
+    > match {$one}
+    > when 1 {Value is one}
+    > when * {Value is not one}
+    > ```
+    >
+    > ```
+    > let $one = {|The one| :func}
+    > let $two = {$one}
+    > match {$two}
+    > when 1 {Value is one}
+    > when * {Value is not one}
     > ```
 
   - **Duplicate Option Name errors** occur when the same _name_ 
@@ -703,7 +732,7 @@ These are divided into the following categories:
     > ```
     >
     > ```
-    > match {$var}
+    > match {$var :func}
     > when 1 {The value is one.}
     > when * {The value is not one.}
     > ```

@@ -1,4 +1,4 @@
-<!ELEMENT registry (function|pattern)*>
+<!ELEMENT registry (function,pattern)*>
 
 <!ELEMENT function (description,(formatSignature|matchSignature)+)>
 <!ATTLIST function name NMTOKEN #REQUIRED>
