@@ -105,6 +105,9 @@ one of the following is used to resolve the value of the _expression_:
 - Else, the _expression_ has a _reserved_ _annotation_,
   an Unsupported Expression error is emitted and a fallback value is used as its value.
 
+_Expression attribute resolution_ defines the handling of _expression attributes_
+that have an impact on _message_ formatting.
+
 ### Literal Resolution
 
 The resolved value of a _text_ or a _literal_ is
@@ -151,12 +154,16 @@ the following steps are taken:
    and use a _fallback value_ for the _expression_.
 3. Resolve the _option_ values to a mapping of string identifiers to values.
    For each _option_:
-     * If its right-hand side successfully resolves to a value,
-       bind the _name_ of the _option_ to the resolved value in the mapping.
-     * Otherwise, do not bind the _name_ of the _option_ to any value in the mapping.
-4. Call the function implementation with the following arguments:
+   - If its right-hand side successfully resolves to a value,
+     bind the _name_ of the _option_ to the resolved value in the mapping.
+   - Otherwise, do not bind the _name_ of the _option_ to any value in the mapping.
+4. Determine the _expression_ _locale_.
+   If the _expression_ has a valid `@locale` _expression attribute_,
+   use its resolved value as the _expression_ _locale_.
+   Otherwise, look up the _message_ _locale_ from the _formatting context_.
+5. Call the function implementation with the following arguments:
 
-   - The current _locale_.
+   - The _expression_ _locale_.
    - The resolved mapping of _options_.
    - If the _expression_ includes an _operand_, its resolved value.
 
@@ -170,7 +177,7 @@ the following steps are taken:
    their access to the _formatting context_ SHOULD be minimal and read-only,
    and their execution time SHOULD be limited.
 
-5. If the call succeeds,
+6. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
    If the call fails or does not return a valid value,
    emit a Resolution error and use a _fallback value_ for the _expression_.
@@ -234,6 +241,24 @@ rather than the _expression_ in the _selector_ or _pattern_.
 > resolving to a _fallback value_ of `|horse|`.
 
 _Pattern selection_ is not supported for _fallback values_.
+
+### Expression Attribute Resolution
+
+The only _expression attribute_ that MUST be supported is `@locale`.
+If its value is set by a _literal_,
+it MUST be a comma-delimited sequence of IETF BCP 47 language tags.
+If its value is set by a _variable_,
+it MUST be either a single IETF BCP 47 language tag,
+or a sequence of IETF BCP 47 language tags.
+
+The resolved value of a valid `@locale` _expression attribute_
+is a sequence of IETF BCP 47 language tags.
+If a `@locale` has an invalid value,
+emit a Resolution error and ignore the _expression attribute_ in further processing.
+
+Implementations MAY ignore all other _expression attributes_ during formatting.
+Implementations MAY assign meaning during formatting to other _expression attributes_
+which use a _name_ that contains at least one U+002D HYPHEN-MINUS `-` character.
 
 ## Pattern Selection
 

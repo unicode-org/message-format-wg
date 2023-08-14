@@ -318,15 +318,17 @@ that matches all values for a given _selector_.
 An **_<dfn>expression</dfn>_** is a part of a _message_ that will be determined
 during the _message_'s formatting.
 
-An _expression_ MUST begin with U+007B LEFT CURLY BRACKET `{` 
+An _expression_ MUST begin with U+007B LEFT CURLY BRACKET `{`
 and end with U+007D RIGHT CURLY BRACKET `}`.
 An _expression_ MUST NOT be empty.
-An _expression_ can contain an _operand_, 
-an _annotation_, 
+An _expression_ can contain an _operand_,
+an _annotation_,
 or an _operand_ followed by an _annotation_.
+This MAY be followed by one or more _expression attributes_.
 
 ```abnf
-expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
+expression = "{" [s] expression-body *(s expression-attribute) [s] "}"
+expression-body = (operand [s annotation]) / annotation
 operand = literal / variable
 annotation = (function *(s option)) / private-use / reserved
 ```
@@ -526,17 +528,72 @@ unrecognized reserved sequences have no meaning and MAY result in errors during 
 
 ```abnf
 reserved       = reserved-start reserved-body
-reserved-start = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "/" / "?" / "~"
+reserved-start = "!" / "#" / "%" / "*" / "<" / ">" / "/" / "?" / "~"
 
 reserved-body  = *( [s] 1*(reserved-char / reserved-escape / quoted))
 reserved-char  = %x00-08        ; omit HTAB and LF
                / %x0B-0C        ; omit CR
                / %x0E-19        ; omit SP
-               / %x21-5B        ; omit \
+               / %x21-3F        ; omit @
+               / %x41-5B        ; omit \
                / %x5D-7A        ; omit { | }
                / %x7E-D7FF      ; omit surrogates
                / %xE000-10FFFF
 ```
+
+### Expression Attributes
+
+An **_<dfn>expression attribute</dfn>_** is a key-value pair
+containing a named argument that is attached to the _expression_ as a whole.
+They are intended to convey information about the _expression_
+that is not necessarily applicable as a _function_ _option_.
+For example, the `@locale` attribute overrides the locale of the _message_ for its _expression_.
+Attributes like `@can-delete` and `@translate` might not have any impact on formatting,
+acting instead as instructions to translators.
+
+_Expression attributes_ are prefixed by a U+0040 COMMERCIAL AT `@` sign,
+but otherwise use the same syntax as _options_.
+
+The _name_ of an _expression attribute_ MUST either be one of the following,
+or it MUST contain at least one U+002D HYPHEN-MINUS `-` character:
+
+- `language`: SHOULD resolve to a sequence of IETF BCP 47 language tags;
+  see _expression attribute resolution_.
+- `translate`: SHOULD have a literal value of either `yes` or `no`.
+
+To ensure future extensibility of this specification,
+all other _expression attributes_ with a _name_ not containing `-` MUST be ignored.
+
+Multiple _expression attributes_ are permitted in an _expression_.
+Each _expression attribute_ is separated by whitespace.
+If present, _expression attributes_ MUST be the last non-whitespace content in an _expression_,
+and MUST NOT be followed by any _function_ _options_.
+
+```abnf
+expression-attribute = "@" option
+```
+
+> Examples of _expressions_ with _expression attributes_
+>
+> A _message_ in English including a French _literal_ that should not be translated:
+>
+> ```
+> {In French, "{|bonjour| @locale=fr @translate=no}" is a greeting}
+> ```
+>
+> A _message_ with a `$date` _variable_ formatted with the `:datetime` _function_
+> using the root "und" locale:
+>
+> ```
+> {Today is {$date :datetime weekday=long @locale=und}.}
+> ```
+>
+> A _message_ with a `$start` _variable_ that should in translations
+> be kept as the first element of the message.
+>
+> ```
+> {{$start @can-reorder=no} is the beginning.}
+> ```
 
 ## Other Syntax Elements
 

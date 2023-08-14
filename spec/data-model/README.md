@@ -95,6 +95,7 @@ interface Text {
 interface Expression {
   type: 'expression'
   body: Literal | VariableRef | FunctionRef | Unsupported
+  attributes: Option[]
 }
 ```
 
@@ -103,6 +104,9 @@ interface Expression {
 The `Literal` and `VariableRef` correspond to the the _literal_ and _variable_ syntax rules.
 When they are used as the `body` of an `Expression`,
 they represent _expression_ values with no _annotation_.
+
+The `attributes` of an `Expression` primarily represent translator hints,
+but could include ones such as `locale` that do have an impact on _message_ formatting.
 
 `Literal` represents all literal values, both _quoted_ and _unquoted_.
 The presence or absence of quotes is not preserved by the data model.

@@ -33,19 +33,20 @@
         "kind": { "enum": ["open", "close", "value"] },
         "name": { "type": "string" },
         "operand": { "$ref": "#/$defs/value" },
-        "options": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": { "type": "string" },
-              "value": { "$ref": "#/$defs/value" }
-            },
-            "required": ["name", "value"]
-          }
-        }
+        "options": { "$ref": "#/$defs/options" }
       },
       "required": ["type", "kind", "name"]
+    },
+    "options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "value": { "$ref": "#/$defs/value" }
+        },
+        "required": ["name", "value"]
+      }
     },
     "unsupported": {
       "type": "object",
@@ -79,7 +80,8 @@
             { "$ref": "#/$defs/function" },
             { "$ref": "#/$defs/unsupported" }
           ]
-        }
+        },
+        "attributes": { "$ref": "#/$defs/options" }
       },
       "required": ["type", "body"]
     },
