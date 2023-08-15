@@ -244,7 +244,7 @@ _Pattern selection_ is not supported for _fallback values_.
 
 ### Expression Attribute Resolution
 
-The only _expression attribute_ that MUST be supported is `@locale`.
+Implementations MUST support the _expression attribute_ `@locale`.
 If its value is set by a _literal_,
 it MUST be a comma-delimited sequence of IETF BCP 47 language tags.
 If its value is set by a _variable_,

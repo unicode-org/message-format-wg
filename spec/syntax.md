@@ -545,8 +545,11 @@ reserved-char  = %x00-08        ; omit HTAB and LF
 
 An **_<dfn>expression attribute</dfn>_** is a key-value pair
 containing a named argument that is attached to the _expression_ as a whole.
-They are intended to convey information about the _expression_
-that is not necessarily applicable as a _function_ _option_.
+These might be used to convey information about the _expression_
+that are not necessarily applicable as _function_ _options_,
+such as attributes related to handling during the translation process.
+They might also be used to override contextual or implementation-specific values
+used by a _function_ during formatting, such as the locale.
 For example, the `@locale` attribute overrides the locale of the _message_ for its _expression_.
 Attributes like `@can-delete` and `@translate` might not have any impact on formatting,
 acting instead as instructions to translators.
@@ -557,17 +560,16 @@ but otherwise use the same syntax as _options_.
 The _name_ of an _expression attribute_ MUST either be one of the following,
 or it MUST contain at least one U+002D HYPHEN-MINUS `-` character:
 
-- `language`: SHOULD resolve to a sequence of IETF BCP 47 language tags;
+- `locale`: a sequence of well-formed IETF BCP47 language tags
   see _expression attribute resolution_.
-- `translate`: SHOULD have a literal value of either `yes` or `no`.
+- `translate`: a literal value of either `yes` or `no`
 
 To ensure future extensibility of this specification,
 all other _expression attributes_ with a _name_ not containing `-` MUST be ignored.
 
 Multiple _expression attributes_ are permitted in an _expression_.
 Each _expression attribute_ is separated by whitespace.
-If present, _expression attributes_ MUST be the last non-whitespace content in an _expression_,
-and MUST NOT be followed by any _function_ _options_.
+If present, _expression attributes_ MUST be the last non-whitespace content in an _expression_.
 
 ```abnf
 expression-attribute = "@" option
@@ -581,15 +583,14 @@ expression-attribute = "@" option
 > {In French, "{|bonjour| @locale=fr @translate=no}" is a greeting}
 > ```
 >
-> A _message_ with a `$date` _variable_ formatted with the `:datetime` _function_
-> using the root "und" locale:
->
+> A _message_ with a `$date` _variable_ formatted using the `:datetime` _function_
+> and overriding the locale to use French formatting:
+>```
+>{The date would be displayed in French as {$date :datetime @locale=fr}.}
 > ```
-> {Today is {$date :datetime weekday=long @locale=und}.}
-> ```
 >
-> A _message_ with a `$start` _variable_ that should in translations
-> be kept as the first element of the message.
+> A _message_ with a `$start` _variable_ that should be kept in translations
+> as the first element of the message.
 >
 > ```
 > {{$start @can-reorder=no} is the beginning.}
