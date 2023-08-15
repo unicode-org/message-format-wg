@@ -321,7 +321,7 @@ during the _message_'s formatting.
 An _expression_ MUST begin with U+007B LEFT CURLY BRACKET `{`
 and end with U+007D RIGHT CURLY BRACKET `}`.
 An _expression_ MUST NOT be empty.
-An _expression_ can contain an _operand_,
+An _expression_ MUST contain an _operand_,
 an _annotation_,
 or an _operand_ followed by an _annotation_.
 This MAY be followed by one or more _expression attributes_.

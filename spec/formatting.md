@@ -245,11 +245,11 @@ _Pattern selection_ is not supported for _fallback values_.
 ### Expression Attribute Resolution
 
 Implementations MUST support the _expression attribute_ `@locale`.
-If its value is set by a _literal_,
-it MUST be a comma-delimited sequence of IETF BCP 47 language tags.
-If its value is set by a _variable_,
-it MUST be either a single IETF BCP 47 language tag,
-or a sequence of IETF BCP 47 language tags.
+The value of `@locale` MUST be a sequence of
+one or more well-formed IETF BCP47 language tags.
+If the value is set by a _literal_,
+the _literal_ MUST consist of a comma-delimited sequence of
+well-formed IETF BCP47 language tags.
 
 The resolved value of a valid `@locale` _expression attribute_
 is a sequence of IETF BCP 47 language tags.
