@@ -28,13 +28,13 @@ Messages can define variants which correspond to the grammatical (or other) requ
     match {$count :number}
     when 1 {You have one notification.}
     when * {You have {$count} notifications.}
-    
+
 The message syntax is also capable of expressing more complex translation, for example:
 
     let $hostName = {$host :person firstName=long}
     let $guestName = {$guest :person firstName=long}
     let $guestsOther = {$guestCount :number offset=1}
-    
+
     match {$host :gender} {$guestOther :number}
 
     when female 0 {{$hostName} does not give a party.}
@@ -74,9 +74,10 @@ To join in:
 2. Apply to join our [mailing list](https://groups.google.com/a/chromium.org/forum/#!forum/message-format-wg)
 3. Watch this repository (use the "Watch" button in the upper right corner)
 
-## Copyright & Licenses
+### Copyright & Licenses
 
-Copyright © 1991-2023 Unicode, Inc. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the United States and other countries.
+Copyright © 2019-2023 Unicode, Inc. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the United States and other countries.
 
-The project is released under [LICENSE](./LICENSE). A CLA is required to contribute to this project - please refer to the CONTRIBUTING.md file (or start a Pull Request) for more information.
+The project is released under [LICENSE](./LICENSE).
 
+A CLA is required to contribute to this project - please refer to the [CONTRIBUTING.md](./CONTRIBUTING.md) file (or start a Pull Request) for more information.
