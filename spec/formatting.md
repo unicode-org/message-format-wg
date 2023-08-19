@@ -505,14 +505,17 @@ _Formatting_ is a mostly implementation-defined process,
 as it depends on the implementation's shape for resolved values
 and the result type of the formatting.
 
-Formatting errors MAY be emitted during _formatting_,
-as formatting is not necessarily defined on every resolved value.
-A formatter MAY provide a value to use in such a case instead of a _fallback value_.
+Formatting is not necessarily defined on every resolved value.
+An implementation SHOULD emit formatting errors during _formatting_,
+but MAY provide a value to use in such a case instead of a _falback value_.
 
-_Formatting_ MAY produce formatted messages with the following data types,
-as well as any others:
+An implementation MAY use the value of an _expression_'s _operand_
+to choose a _formatting function_ and default _options_ if no
+_annotation_ is supplied by the _expression_.
 
-- A single concatenated string.
+Implementations MAY represent the result of _formatting_ using the most
+appropriate data type or structure. Some examples of these include:
+- A single string concatenated from the resolved _pattern_ and its parts.
 - A string with associated attributes for portions of its text.
 - A flat sequence of objects corresponding to each resolved value.
 - A hierarchical structure of objects that group spans of resolved values,
