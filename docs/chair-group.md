@@ -13,10 +13,9 @@ The Chair Group is a representative body of the Message Format WG that collectiv
 - Manage and accept WG applications.
 
 - Manage and organize all WG communication channels, email, mail group, boards and Github repositories.
-  
 - Prioritize, label and organize the tasks of the WG.
 
-- Use the possibility of e-mail or  synchronization meetings to discuss issues or organize WG work.
+- Use the possibility of e-mail or synchronization meetings to discuss issues or organize WG work.
 
 - Create and update events and agenda.
 
@@ -25,7 +24,6 @@ The Chair Group is a representative body of the Message Format WG that collectiv
 - Take care of the minutes of the meetings, including recording of all decisions. The minutes and presentations given in WG should be available in the WG Drive.
 
 - Prepare technical drafts and documentation.
-  
 - Formulate concrete questions that the WG can answer in their monthly meetings.
 
 #### Participate

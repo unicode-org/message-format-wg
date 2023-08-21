@@ -24,15 +24,15 @@ to make it culturally accepted and grammatically correct.
 
 > For example, if your US English (`en-US`) interface has a message like:
 >
->> Your item had 1,023 views on April 3, 2023
+> > Your item had 1,023 views on April 3, 2023
 >
 > You want the translated message to be appropriately formatted into French:
 >
->> Votre article a eu 1 023 vues le 3 avril 2023
+> > Votre article a eu 1 023 vues le 3 avril 2023
 >
 > Or Japanese:
 >
->> あなたのアイテムは 2023 年 4 月 3 日に 1,023 回閲覧されました。
+> > あなたのアイテムは 2023 年 4 月 3 日に 1,023 回閲覧されました。
 
 This specification defines the
 data model, syntax, processing, and conformance requirements

@@ -77,7 +77,7 @@ The author of a _message_ can also assign _local variables_, including
 variables that modify _external variables_.
 
 This part of the MessageFormat specification defines the syntax for a _message_,
-along with the concepts and terminology needed when processing a _message_ 
+along with the concepts and terminology needed when processing a _message_
 during the [formatting](./formatting.md) of a _message_ at runtime.
 
 The complete formal syntax of a _message_ is described by the [ABNF](./message.abnf).
@@ -104,18 +104,24 @@ A **_<dfn>message</dfn>_** is the complete template for a specific message forma
 > In general (and except where required by the syntax), whitespace carries no meaning in the structure
 > of a _message_. While many of the examples in this spec are written on multiple lines, the formatting
 > shown is primarily for readability.
->> **Example** This _message_:
->>```
->>let $foo   =   { |horse| }
->>{You have a {$foo}!}
->>```
->> Can also be written as:
->>```
->>let $foo={|horse|}{You have a {$foo}!}
->>```
-> An exception to this is: whitespace inside a _pattern_ is **always** significant.
+>
+> > **Example** This _message_:
+> >
+> > ```
+> > let $foo   =   { |horse| }
+> > {You have a {$foo}!}
+> > ```
+> >
+> > Can also be written as:
+> >
+> > ```
+> > let $foo={|horse|}{You have a {$foo}!}
+> > ```
+> >
+> > An exception to this is: whitespace inside a _pattern_ is **always** significant.
 
 A _message_ consists of two parts:
+
 1. an optional list of _declarations_, followed by
 2. a _body_
 
@@ -142,20 +148,23 @@ All _messages_ MUST contain a _body_.
 An empty string is not a _well-formed_ _message_.
 
 > A simple _message_ containing only a _body_:
+>
 > ```
 > {Hello world!}
 > ```
->The same _message_ defined in a `.properties` file:
 >
->```properties
->app.greetings.hello = {Hello, world!}
->```
->The same _message_ defined inline in JavaScript:
+> The same _message_ defined in a `.properties` file:
 >
->```js
->let hello = new MessageFormat('{Hello, world!}')
->hello.format()
->```
+> ```properties
+> app.greetings.hello = {Hello, world!}
+> ```
+>
+> The same _message_ defined inline in JavaScript:
+>
+> ```js
+> let hello = new MessageFormat("{Hello, world!}");
+> hello.format();
+> ```
 
 ## Pattern
 
@@ -171,11 +180,12 @@ pattern = "{" *(text / expression) "}"
 A _pattern_ MAY be empty.
 
 > An empty _pattern_:
+>
 > ```
 > {}
 > ```
 
-A _pattern_ MAY contain an arbitrary number of _placeholders_ to be evaluated 
+A _pattern_ MAY contain an arbitrary number of _placeholders_ to be evaluated
 during the formatting process.
 
 ### Text
@@ -195,6 +205,7 @@ various formats regardless of the container's whitespace trimming rules.
 > In a Java `.properties` file, the values `hello` and `hello2` both contain
 > an identical _message_ which consists of a single _pattern_.
 > This _pattern_ consists of _text_ with exactly three spaces before and after the word "Hello":
+>
 > ```properties
 > hello = {   Hello   }
 > hello2={   Hello   }
@@ -228,11 +239,12 @@ determined at runtime.
 A _matcher_ consists of the keyword `match` followed by at least one _selector_
 and at least one _variant_.
 
-When the _matcher_ is processed, the result will be a single _pattern_ that serves 
+When the _matcher_ is processed, the result will be a single _pattern_ that serves
 as the template for the formatting process.
 
 A _message_ can only be considered _valid_ if the following requirements are
 satisfied:
+
 - The number of _keys_ on each _variant_ MUST be equal to the number of _selectors_.
 - At least one _variant_ MUST exist whose _keys_ are all equal to the "catch-all" key `*`.
 
@@ -241,6 +253,7 @@ matcher = match 1*(selector) 1*(variant)
 ```
 
 > A _message_ with a _matcher_:
+>
 > ```
 > match {$count :number}
 > when 1 {You have one notification.}
@@ -248,6 +261,7 @@ matcher = match 1*(selector) 1*(variant)
 > ```
 
 > A _message_ containing a _matcher_ formatted on a single line:
+>
 > ```
 > match {:platform} when windows {Settings} when * {Preferences}
 > ```
@@ -256,7 +270,7 @@ matcher = match 1*(selector) 1*(variant)
 
 A **_<dfn>selector</dfn>_** is an _expression_ that ranks or excludes the
 _variants_ based on the value of its corresponding _key_ in each _variant_.
-The combination of _selectors_ in a _matcher_ thus determines 
+The combination of _selectors_ in a _matcher_ thus determines
 which _pattern_ will be used during formatting.
 
 ```abnf
@@ -266,27 +280,27 @@ selector = expression
 There MUST be at least one _selector_ in a _matcher_.
 There MAY be any number of additional _selectors_.
 
->A _message_ with a single _selector_ that uses a custom `:hasCase` _function_,
->allowing the _message_ to choose a _pattern_ based on grammatical case:
+> A _message_ with a single _selector_ that uses a custom `:hasCase` _function_,
+> allowing the _message_ to choose a _pattern_ based on grammatical case:
 >
->```
->match {$userName :hasCase}
->when vocative {Hello, {$userName :person case=vocative}!}
->when accusative {Please welcome {$userName :person case=accusative}!}
->when * {Hello!}
->```
+> ```
+> match {$userName :hasCase}
+> when vocative {Hello, {$userName :person case=vocative}!}
+> when accusative {Please welcome {$userName :person case=accusative}!}
+> when * {Hello!}
+> ```
 
->A message with two _selectors_:
+> A message with two _selectors_:
 >
->```
->match {$photoCount :number} {$userGender :equals}
->when 1 masculine {{$userName} added a new photo to his album.}
->when 1 feminine  {{$userName} added a new photo to her album.}
->when 1 *         {{$userName} added a new photo to their album.}
->when * masculine {{$userName} added {$photoCount} photos to his album.}
->when * feminine  {{$userName} added {$photoCount} photos to her album.}
->when * *         {{$userName} added {$photoCount} photos to their album.}
->```
+> ```
+> match {$photoCount :number} {$userGender :equals}
+> when 1 masculine {{$userName} added a new photo to his album.}
+> when 1 feminine  {{$userName} added a new photo to her album.}
+> when 1 *         {{$userName} added a new photo to their album.}
+> when * masculine {{$userName} added {$photoCount} photos to his album.}
+> when * feminine  {{$userName} added {$photoCount} photos to her album.}
+> when * *         {{$userName} added {$photoCount} photos to their album.}
+> ```
 
 ### Variant
 
@@ -307,7 +321,7 @@ key = literal / "*"
 #### Key
 
 A **_<dfn>key</dfn>_** is a value in a _variant_ for use by a _selector_ when ranking
-or excluding _variants_ during the _matcher_ process. 
+or excluding _variants_ during the _matcher_ process.
 A _key_ can be either a _literal_ value or the "catch-all" key `*`.
 
 The **_<dfn>catch-all key</dfn>_** is a special key, represented by `*`,
@@ -318,11 +332,11 @@ that matches all values for a given _selector_.
 An **_<dfn>expression</dfn>_** is a part of a _message_ that will be determined
 during the _message_'s formatting.
 
-An _expression_ MUST begin with U+007B LEFT CURLY BRACKET `{` 
+An _expression_ MUST begin with U+007B LEFT CURLY BRACKET `{`
 and end with U+007D RIGHT CURLY BRACKET `}`.
 An _expression_ MUST NOT be empty.
-An _expression_ can contain an _operand_, 
-an _annotation_, 
+An _expression_ can contain an _operand_,
+an _annotation_,
 or an _operand_ followed by an _annotation_.
 
 ```abnf
@@ -333,6 +347,7 @@ annotation = (function *(s option)) / private-use / reserved
 
 There are several types of _expression_ that can appear in a _message_.
 All _expressions_ share a common syntax. The types of _expression_ are:
+
 1. The value of a _declaration_
 2. A _selector_
 3. A _placeholder_ in a _pattern_
@@ -340,15 +355,20 @@ All _expressions_ share a common syntax. The types of _expression_ are:
 > Examples of different types of _expression_
 >
 > Declarations:
+>
 > ```
 > let $x = {|This is an expression|}
 > let $y = {$operand :function option=operand}
 > ```
+>
 > Selectors:
+>
 > ```
 > match {$selector :functionRequired}
 > ```
+>
 > Placeholders:
+>
 > ```
 > {This placeholder contains an {|expression with a literal|}}
 > {This placeholder references a {$variable}}
@@ -366,7 +386,7 @@ operand    = literal / variable
 
 ### Annotation
 
-An **_<dfn>annotation</dfn>_** is part of an _expression_ containing either 
+An **_<dfn>annotation</dfn>_** is part of an _expression_ containing either
 a _function_ together with its associated _options_, or
 a _private-use_ or _reserved_ sequence.
 
@@ -383,13 +403,13 @@ A **_<dfn>function</dfn>_** is named functionality in an _annotation_.
 _Functions_ are used to evaluate, format, select, or otherwise process data
 values during formatting.
 
-Each _function_ is defined by the runtime's _function registry_. 
-A _function_'s entry in the _function registry_ will define 
+Each _function_ is defined by the runtime's _function registry_.
+A _function_'s entry in the _function registry_ will define
 whether the _function_ is a _selector_ or formatter (or both),
-whether an _operand_ is required, 
+whether an _operand_ is required,
 what form the values of an _operand_ can take,
-what _options_ and _option_ values are valid, 
-and what outputs might result. 
+what _options_ and _option_ values are valid,
+and what outputs might result.
 See [function registry](./) for more information.
 
 _Functions_ can be _standalone_, or can be an _opening element_ or _closing element_.
@@ -401,19 +421,22 @@ A **_<dfn>closing element</dfn>_** is a _function_ that SHOULD be paired with an
 An _opening element_ MAY be present in a message without a corresponding _closing element_,
 and vice versa.
 
->A _message_ with a _standalone_ _function_ operating on the _variable_ `$now`:
->```
->{{$now :datetime}}
->```
->A _message_ with two markup-like _functions_, `button` and `link`,
->which the runtime can use to construct a document tree structure for a UI framework:
+> A _message_ with a _standalone_ _function_ operating on the _variable_ `$now`:
 >
->```
->{{+button}Submit{-button} or {+link}cancel{-link}.}
->```
+> ```
+> {{$now :datetime}}
+> ```
+>
+> A _message_ with two markup-like _functions_, `button` and `link`,
+> which the runtime can use to construct a document tree structure for a UI framework:
+>
+> ```
+> {{+button}Submit{-button} or {+link}cancel{-link}.}
+> ```
 
 A _function_ consists of a prefix sigil followed by a _name_.
 The following sigils are used for _functions_:
+
 - `:` for a _standalone_ function
 - `+` for an _opening element_
 - `-` for a _closing element_
@@ -442,44 +465,44 @@ option = name [s] "=" [s] (literal / variable)
 >
 > A _message_ with a `$date` _variable_ formatted with the `:datetime` _function_:
 >
->```
->{Today is {$date :datetime weekday=long}.}
->```
+> ```
+> {Today is {$date :datetime weekday=long}.}
+> ```
 
->A _message_ with a `$userName` _variable_ formatted with
->the custom `:person` _function_ capable of
->declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
+> A _message_ with a `$userName` _variable_ formatted with
+> the custom `:person` _function_ capable of
+> declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
 >
->```
->{Hello, {$userName :person case=vocative}!}
->```
+> ```
+> {Hello, {$userName :person case=vocative}!}
+> ```
 
->A _message_ with a `$userObj` _variable_ formatted with
->the custom `:person` _function_ capable of
->plucking the first name from the object representing a person:
+> A _message_ with a `$userObj` _variable_ formatted with
+> the custom `:person` _function_ capable of
+> plucking the first name from the object representing a person:
 >
->```
->{Hello, {$userObj :person firstName=long}!}
->```
-
+> ```
+> {Hello, {$userObj :person firstName=long}!}
+> ```
 
 #### Private-Use
 
 A **_<dfn>private-use</dfn>_** _annotation_ is an _annotation_ whose syntax is reserved
-for use by a specific implementation or by private agreement between multiple implementations. 
+for use by a specific implementation or by private agreement between multiple implementations.
 Implementations MAY define their own meaning and semantics for _private-use_ annotations.
 
 A _private-use_ annotation starts with either U+0026 AMPERSAND `&` or U+005E CIRCUMFLEX ACCENT `^`.
- 
+
 Characters, including whitespace, are assigned meaning by the implementation.
 The definition of escapes in the `reserved-body` production, used for the body of
-a _private-use_ annotation is an affordance to implementations that 
+a _private-use_ annotation is an affordance to implementations that
 wish to use a syntax exactly like other functions. Specifically:
+
 - The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}` respectively
-when they appear in the body of a _private-use_ annotation. 
+  when they appear in the body of a _private-use_ annotation.
 - The character `|` is special: it SHOULD be escaped as `\|` in a _private-use_ annotation,
-but can appear unescaped as long as it is paired with another `|`. This is an affordance to
-allow _literals_ to appear in the private use syntax.
+  but can appear unescaped as long as it is paired with another `|`. This is an affordance to
+  allow _literals_ to appear in the private use syntax.
 
 A _private-use_ _annotation_ MAY be empty after its introducing sigil.
 
@@ -494,6 +517,7 @@ private-start = "&" / "^"
 ```
 
 > Here are some examples of what _private-use_ sequences might look like:
+>
 > ```
 > {Here's private use with an operand: {$foo &bar}}
 > {Here's a placeholder that is entirely private-use: {&anything here}}
@@ -501,7 +525,7 @@ private-start = "&" / "^"
 > {The character \| has to be paired or escaped: {&private || |something between| or isolated: \| }}
 > {Stop {& "translate 'stop' as a verb" might be a translator instruction or comment }}
 > {Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}}
->```
+> ```
 
 #### Reserved
 
@@ -559,9 +583,9 @@ when  = %x77.68.65.6E     ; "when"
 
 A **_<dfn>literal</dfn>_** is a character sequence that appears outside
 of _text_ in various parts of a _message_.
-A _literal_ can appear in a _declaration_, 
+A _literal_ can appear in a _declaration_,
 as a _key_ value,
-as an _operand_, 
+as an _operand_,
 or in the value of an _option_.
 A _literal_ MAY include any Unicode code point
 except for surrogate code points U+D800 through U+DFFF.
@@ -569,7 +593,7 @@ except for surrogate code points U+D800 through U+DFFF.
 All code points are preserved.
 
 A **_<dfn>quoted</dfn>_** literal begins and ends with U+005E VERTICAL BAR `|`.
-The characters `\` and `|` within a _quoted_ literal MUST be 
+The characters `\` and `|` within a _quoted_ literal MUST be
 escaped as `\\` and `\|`.
 
 An **_<dfn>unquoted</dfn>_** literal is a _literal_ that does not require the `|`

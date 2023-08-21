@@ -4,15 +4,15 @@
 
 We are discussing whether to change First-Match to another value. Currently voting looks like:
 
-| Person | Supports |
-|---|---|
-| APP | C-F, then B-M, no F-M |
-| STA | F-M, then B-M, the C-F with optional \* |
-| SCL | F-M, then C-F, then optional \* |
-| RGN | C-F optional \*, F-M, CF required \* |
-| MIH | B-M, C-F lexical sort, C-F required \* |
-| EAO | C-F optional \*, F-M, C-F required \* |
-| ECH | C-F, B-M (distant 2nd), F-M \* behind that |
+| Person | Supports                                   |
+| ------ | ------------------------------------------ |
+| APP    | C-F, then B-M, no F-M                      |
+| STA    | F-M, then B-M, the C-F with optional \*    |
+| SCL    | F-M, then C-F, then optional \*            |
+| RGN    | C-F optional \*, F-M, CF required \*       |
+| MIH    | B-M, C-F lexical sort, C-F required \*     |
+| EAO    | C-F optional \*, F-M, C-F required \*      |
+| ECH    | C-F, B-M (distant 2nd), F-M \* behind that |
 
 ## Background
 
@@ -22,18 +22,17 @@ I would like to reopen this discussion because I believe that using first-match 
 
 ## Comparison
 
-| Criterion | First-Match | Scored Best-Match | Column-First Best-Match | Column-First req `*` | Notes |
-|---|---|---|---|---|---|
-| MF1 Compat | ? | ? | - | + | some say F-M not compat. |
-| Devlopers/Translators can control | +++ | - | - | - | D/Ts have the ability to influence or override selection |
-| Developers/Translator must control | - | +++ | ++ | +++ | D/Ts are required to manage selection order |
-| Visual Inspection | +++ | + | + | + | It is possible to order any matrix canonically, enabling visual inspection |
-| Complex matching (varies by locale) | - | +++ | +++ | +++ | Matrix explosion may conflict with manual ordering in FM |
-| Complex matching (multi-value) | - | +++ | ++ | ++ | F-M stops on first match; B-M gives developer full control of matching |
-| Translation tool variant order | - | +++ | +++ | +++ | Translations tools are required to maintain the order and/or provide for reordering that itself is remembers (eg. in the TM) |
-| Partial leverage on added keys | - | +++ | +++ | +++ | Changes or additions to matrix only affect some entries |
-| Programmable selection order | + | + | + | + | Selector authors can provide options for tailoring matches |
-
+| Criterion                           | First-Match | Scored Best-Match | Column-First Best-Match | Column-First req `*` | Notes                                                                                                                        |
+| ----------------------------------- | ----------- | ----------------- | ----------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| MF1 Compat                          | ?           | ?                 | -                       | +                    | some say F-M not compat.                                                                                                     |
+| Devlopers/Translators can control   | +++         | -                 | -                       | -                    | D/Ts have the ability to influence or override selection                                                                     |
+| Developers/Translator must control  | -           | +++               | ++                      | +++                  | D/Ts are required to manage selection order                                                                                  |
+| Visual Inspection                   | +++         | +                 | +                       | +                    | It is possible to order any matrix canonically, enabling visual inspection                                                   |
+| Complex matching (varies by locale) | -           | +++               | +++                     | +++                  | Matrix explosion may conflict with manual ordering in FM                                                                     |
+| Complex matching (multi-value)      | -           | +++               | ++                      | ++                   | F-M stops on first match; B-M gives developer full control of matching                                                       |
+| Translation tool variant order      | -           | +++               | +++                     | +++                  | Translations tools are required to maintain the order and/or provide for reordering that itself is remembers (eg. in the TM) |
+| Partial leverage on added keys      | -           | +++               | +++                     | +++                  | Changes or additions to matrix only affect some entries                                                                      |
+| Programmable selection order        | +           | +                 | +                       | +                    | Selector authors can provide options for tailoring matches                                                                   |
 
 ### Example
 
@@ -63,12 +62,14 @@ First-Match selection evaluates the list of _keys_ row-by-row and selects the fi
 In the example message, the _variants_ are in a canonical order, so first-match produces the same order as best-match does.
 
 **Pros**
-+ Allows developers to control the order of selection.
-+ Allows translators to tailor the order of selection.
-+ Can visually inspect match order.
-+ May be more efficient when perfoming match (??)
+
+- Allows developers to control the order of selection.
+- Allows translators to tailor the order of selection.
+- Can visually inspect match order.
+- May be more efficient when perfoming match (??)
 
 **Cons**
+
 - Requires developers to specify _variants_ in the correct order.
 - Requires translators to tailor the order of _variants_ if this is different from the source.
 - Requires all translation tooling and runtime processing to preserve the order of the _variants_
@@ -83,12 +84,14 @@ Best-Match selection evaluates the full list of _keys_ and selects the _variant_
 1. Column-First without required default `*`
 
 **Pros**
-+ Variants can be written in any order and produce a consistent result.
-+ Selector developers can write complex matches that produce different quality matches for the same value. For example, `{|1| :plural}` matches both the variant `1` and the variant `one`, but prefers the value `1`. The plural _selector_ does not need to communicate with the other _selectors_ in order to arrive at the best matching pattern.
-+ Translators do not need to worry about the order of variants or need to reorder variants (which can be difficult to do when only the translation segment for the pattern is shown or when only a changed or generated _variant_ is exposed to translation.
-+ Translation tools do not have to preserve the order of _variants_ and are free to send only the translatable segment (the pattern) for translation.
+
+- Variants can be written in any order and produce a consistent result.
+- Selector developers can write complex matches that produce different quality matches for the same value. For example, `{|1| :plural}` matches both the variant `1` and the variant `one`, but prefers the value `1`. The plural _selector_ does not need to communicate with the other _selectors_ in order to arrive at the best matching pattern.
+- Translators do not need to worry about the order of variants or need to reorder variants (which can be difficult to do when only the translation segment for the pattern is shown or when only a changed or generated _variant_ is exposed to translation.
+- Translation tools do not have to preserve the order of _variants_ and are free to send only the translatable segment (the pattern) for translation.
 
 **Cons**
+
 - Developers cannot override the order that the _selector_ provides unless this is exposed as a feature of the given _selector_.
 - More complex matching implementation; may be slower?
 
@@ -98,9 +101,11 @@ Sorted Matching evaluates the full list of _keys_ by sorting the matrix. Each _s
 
 **Pros**
 (All of the pros of best match plus:)
-+ Allows for better selection in some corner cases. 
+
+- Allows for better selection in some corner cases.
 
 **Cons**
+
 - Complex to evaluate visually
 - More complex to implement
 
@@ -170,7 +175,6 @@ The second _selector_ matches the explicit value `1`, which is prefers to the ke
 
 The final _selector_ matches the default value `*` but not the keyword `one`, thus producing this matrix:
 
-
 ```
 *   1   * <-- winner
 *   one *
@@ -181,18 +185,18 @@ The final _selector_ matches the default value `*` but not the keyword `one`, th
 
 This is a "sorted" best match algorithm that works as follows: each _selector_ provides a "comparator" for values in its column (such as computing a weight for the value in its column). Rows that contain a non-matching value for any selector are eliminated as potential matches. The default value `*` always matches. Ordering is maintained for preceding columns, that is, _selector_ number 2 can only reorder items whose _selector_ number 1 key match. The highest ranking _key_ is returned as the _pattern_. Ties are broken by column. If no matching row is found, returns an error.
 
-
 **Pros**
-+ Variants can be written in any order and produce a consistent result.
-+ Selector developers can write complex matches that produce different quality matches for the same value. For example, `{|1| :plural}` matches both the variant `1` and the variant `one`, but prefers the value `1`. The plural _selector_ does not need to communicate with the other _selectors_ in order to arrive at the best matching pattern.
-+ Translators do not need to worry about the order of variants or need to reorder variants (which can be difficult to do when only the translation segment for the pattern is shown or when only a changed or generated _variant_ is exposed to translation.
-+ Translation tools do not have to preserve the order of _variants_ and are free to send only the translatable segment (the pattern) for translation.
-+ Easier to evaluate visually than sorting strategies.
+
+- Variants can be written in any order and produce a consistent result.
+- Selector developers can write complex matches that produce different quality matches for the same value. For example, `{|1| :plural}` matches both the variant `1` and the variant `one`, but prefers the value `1`. The plural _selector_ does not need to communicate with the other _selectors_ in order to arrive at the best matching pattern.
+- Translators do not need to worry about the order of variants or need to reorder variants (which can be difficult to do when only the translation segment for the pattern is shown or when only a changed or generated _variant_ is exposed to translation.
+- Translation tools do not have to preserve the order of _variants_ and are free to send only the translatable segment (the pattern) for translation.
+- Easier to evaluate visually than sorting strategies.
 
 **Cons**
+
 - Developers cannot override the order that the _selector_ provides unless this is exposed as a feature of the given _selector_.
 - Can require more processing than First-Match
-
 
 ### Column-First with Optional `*`
 
@@ -208,11 +212,13 @@ when false *   {... treating "false" as "other"?...}
 Here a value like `true`/`other` falls through and produces an error because `false` does not match like plural's `other`.
 
 **Pros**
-+ (all of the "pros" for "with `*`")
-+ Avoids having extra rows in cases where the default value and `*` might be distinct, for example `other` vs. `*` in plural.
-+ Allows for _selectors_ whose default value varies by locale but for which the set of matching keys remains a closed set, for example, if the default gender were different by locale or if there were something like a default grammatical case.
+
+- (all of the "pros" for "with `*`")
+- Avoids having extra rows in cases where the default value and `*` might be distinct, for example `other` vs. `*` in plural.
+- Allows for _selectors_ whose default value varies by locale but for which the set of matching keys remains a closed set, for example, if the default gender were different by locale or if there were something like a default grammatical case.
 
 **Cons**
+
 - Easier to produce a non-functional message that returns only an error for some set of values.
 - Loses the ability to validate message completeness.
 
@@ -222,15 +228,15 @@ Computes row order in the `match` statement rather than in each _selector_. Each
 
 Using the example at top, let's consider some values:
 
-| selector | count | size | cost | score | winner? | notes |
-|---|---|---|---|---|---|---|
-| `when 0 * *` | 0 | any | any | 1.0 + 0.1 + 0.1 = 1.2 | Y | 0 is perfect match |
-| `when one 0 *` | 0 | 0 | 0 | 0.0 + 1.0 + 0.1 = 0.0 (!!) | N | no-match on first item ends processing |
-| `when one 0 *` | 1 | 0 | 0 | 0.5 + 1.0 + 0.1 = 1.6 | Y | keyword match on one |
-| `when one one *` | 1 | 0 | 0 | 0.5 + **0** = 0 | N | no-match on second item ends processing |
-| `when one one *` | 1 | 1 | 0 | 0.5 + 0.5 + 0.1 = 1.1 | Y | keyword match on one |
-| `when * * *` | 1 | 1 | 0 | 0.1 + 0.1 + 0.1 = 0.3 | N | `*` here is default |
-| `when * * *` | 11 | 11 | 42.0 | 0.5 + 0.5 + 0.5 = 1.5 | Y | `*` here is like `other` |
+| selector         | count | size | cost | score                      | winner? | notes                                   |
+| ---------------- | ----- | ---- | ---- | -------------------------- | ------- | --------------------------------------- |
+| `when 0 * *`     | 0     | any  | any  | 1.0 + 0.1 + 0.1 = 1.2      | Y       | 0 is perfect match                      |
+| `when one 0 *`   | 0     | 0    | 0    | 0.0 + 1.0 + 0.1 = 0.0 (!!) | N       | no-match on first item ends processing  |
+| `when one 0 *`   | 1     | 0    | 0    | 0.5 + 1.0 + 0.1 = 1.6      | Y       | keyword match on one                    |
+| `when one one *` | 1     | 0    | 0    | 0.5 + **0** = 0            | N       | no-match on second item ends processing |
+| `when one one *` | 1     | 1    | 0    | 0.5 + 0.5 + 0.1 = 1.1      | Y       | keyword match on one                    |
+| `when * * *`     | 1     | 1    | 0    | 0.1 + 0.1 + 0.1 = 0.3      | N       | `*` here is default                     |
+| `when * * *`     | 11    | 11   | 42.0 | 0.5 + 0.5 + 0.5 = 1.5      | Y       | `*` here is like `other`                |
 
 ## FAQ
 
@@ -325,7 +331,7 @@ MF2 is fundamentally different in that **all** _selectors_ must be evaluated to 
 
 #### What is "complex matching"? How does plural exemplify it?
 
-Complex matching is when a _selector_ can match multiple different _variants_ to a single value. 
+Complex matching is when a _selector_ can match multiple different _variants_ to a single value.
 
 Many types of _selector_ do equality matching. For example, `SelectFormat` is generally matching a variable's value against a static literal.
 
@@ -350,16 +356,16 @@ match {$count :plural numDigits=2} // produces localized equiv of 2.00
 
 By letting the _selector_ decide how to process the input and range of _variants_, we can allow for complex matching without burdening our specification with a lot of details.
 
-
 As an aside, how does the above express the `when` clause for the value `2.00`? It can't use a literal (what if the decimal separator were `,`!!) and the _nmtoken_ `2.00` could be complicated to handle? Also, does `2` match?
 
 #### How does this compare to programming language constructs (such as switch)?
 
 It's difficult to say if the MF2 `match` statement should work like familiar selection methods in programming languages. Internationalization APIs, such as resource managers, MF1, and date/number skeletons have tended towards "do what I want", hiding the need for both developers and translators to know about cultural and lingusitic variation and account for it in code. Modern I18N APIs hide most of this complexity. Some of the analogous cases in I18N APIs are:
-* **Resource fallback**, particularly with sparsely populated localized resource files
-* **Skeletons** such as for dates (for example, `yyyyMMddjm`), which do not require translators to touch "picture strings" (such as `MM/dd/yyyy HH:mm a`) to handle the time or date separators `/` and `:`, the use of 24-hour time vs. 12-hour time, the order of the fields. 
-* **Built-in formats** such as `short`/`medium`/`long`/`full` do not guarantee any particular separators, field order, or format and vary widely between locales.
-* **Locale negotiation** matches the best particular locale to a requested language range.
+
+- **Resource fallback**, particularly with sparsely populated localized resource files
+- **Skeletons** such as for dates (for example, `yyyyMMddjm`), which do not require translators to touch "picture strings" (such as `MM/dd/yyyy HH:mm a`) to handle the time or date separators `/` and `:`, the use of 24-hour time vs. 12-hour time, the order of the fields.
+- **Built-in formats** such as `short`/`medium`/`long`/`full` do not guarantee any particular separators, field order, or format and vary widely between locales.
+- **Locale negotiation** matches the best particular locale to a requested language range.
 
 When coding a plural using ICU4J's `PluralFormat`, the developer only needs to worry about _specific value_ messages (`when 1 {This is your last chance.}`) vs. value based messages (`when one {You have {$count} chance remaining.}`).
 
@@ -384,7 +390,9 @@ when 1   {This is your last chance}
 when one {You have {$count} chance remaining}
 when *   {...}
 ```
+
 vs.
+
 ```
 match {$count}
 when one {You have {$count} chance remaining}
@@ -393,7 +401,6 @@ when *   {...}
 ```
 
 This exposes developers and translators to managing the complexity versus having the API take care of it.
-
 
 #### Are there other complex matching cases? Or is `plural` everything?
 
@@ -408,24 +415,25 @@ The key thing here is that the static text produced by the translator needs to r
 Some potential examples of (1) (and this is "thinking out loud"):
 
 1. **Date/time based selection.** Date/time types, including the newer Temporal types, can present complex matching needs. While _incremental time_ values (such as `java.time.Instant`, `java.util.Date`, or JavaScript's `Date`) can resolve every field and be cast to any time zone, Other types, such as `java.time.ZonedDate`, are incomplete. There are different calendars that can affect presentation and selection as well. Some cases for complex time selection include:
-   * **Relative time formats.** The values available (such as `yesterday`, `tomorrow`, `day after tomorrow`) vary by locale. Here's one example in the [German CLDR charts](https://unicode-org.github.io/cldr-staging/charts/latest/summary/de.html#1d45310cbcf1b2e5)
-   * **Periodic time formats.** Recurring values might require message selection.
 
-1. **Gender or part-of-speech selection.** Grammatical gender is strongly linked to language and varies by language--very much like plurals. These types of selection might not have the multiple selection quirks of plurals, but will have varying shape by locale. 
+   - **Relative time formats.** The values available (such as `yesterday`, `tomorrow`, `day after tomorrow`) vary by locale. Here's one example in the [German CLDR charts](https://unicode-org.github.io/cldr-staging/charts/latest/summary/de.html#1d45310cbcf1b2e5)
+   - **Periodic time formats.** Recurring values might require message selection.
 
-   For example, I built a "product name format" function into Amazon's devices. Each product knew (in each supported locale) its generic, short, medium, long, and full name, and each product's name could vary in gender/count/etc. per language. That is, the generic might be a "tablet" or "TV" (or whatever) and then the e.g. tablet might be called a "Fire", a "Fire 8 HDX", etc. 
-   
+1. **Gender or part-of-speech selection.** Grammatical gender is strongly linked to language and varies by language--very much like plurals. These types of selection might not have the multiple selection quirks of plurals, but will have varying shape by locale.
+
+   For example, I built a "product name format" function into Amazon's devices. Each product knew (in each supported locale) its generic, short, medium, long, and full name, and each product's name could vary in gender/count/etc. per language. That is, the generic might be a "tablet" or "TV" (or whatever) and then the e.g. tablet might be called a "Fire", a "Fire 8 HDX", etc.
+
    The software doesn't know which device it'll be built into (actually, it's built into all of them), so the formatter needs to select the correct pattern string according to device it is in at runtime. Rather than build separate strings for every device, we generated variations based on the (smaller) set of grammar variations per-locale. A simple message like `The {whatever} is ready` in English might look sort of like the following (in our syntax) in a French locale (and I'm omitting for clarity such things as enclitic handling, e.g. when it's `l'ordinateur` not `le ordinateur`):
 
    ```
    match {$product :gender}
    when masculine {Le {:product format=generic} est prêt.}  ; le téléphone est prêt
    when feminine {La {:product format=generic} est prête.}  ; la télévision est prête
-   when * {L'appareil est prêt.} 
+   when * {L'appareil est prêt.}
    ```
 
    Notice that it isn't just the article that changes. And notice that the list of enumerated values changes by language (so German has three noun genders while English mostly has one)
-   
+
 Some potential examples of (2):
 
 1. **Application specific selection.** Developers may need to write selectors with varying degrees of selection. For example, one might have a message that varies by category and then, for specific items, by sub-category:
@@ -480,12 +488,16 @@ Using the values `11`, `11`, `1` goes like this:
 *   *   one
 *   *   *
 ```
+
 =>
+
 ```
 *   *   one
 *   *   *
 ```
+
 =>
+
 ```
 *   *   one <-- winner
 ```
@@ -517,7 +529,9 @@ with values `2`/`1`/`11` goes like this:
 ```
 2   0   0
 ```
+
 =>
+
 ```
 (empty set) <-- 1 != 0
 ```
@@ -532,16 +546,19 @@ If the `*` value is considered a match (not filtered) this isn't a problem:
 *   1   *
 *   *   *
 ```
+
 =>
+
 ```
 *   1   *
 *   one one
 *   one *
 *   *   one
 ```
+
 =>
+
 ```
 *   1   * <-- winner
 *   one *
 ```
-
