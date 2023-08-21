@@ -151,9 +151,9 @@ the following steps are taken:
    and use a _fallback value_ for the _expression_.
 3. Resolve the _option_ values to a mapping of string identifiers to values.
    For each _option_:
-     * If its right-hand side successfully resolves to a value,
-       bind the _name_ of the _option_ to the resolved value in the mapping.
-     * Otherwise, do not bind the _name_ of the _option_ to any value in the mapping.
+   - If its right-hand side successfully resolves to a value,
+     bind the _name_ of the _option_ to the resolved value in the mapping.
+   - Otherwise, do not bind the _name_ of the _option_ to any value in the mapping.
 4. Call the function implementation with the following arguments:
 
    - The current _locale_.
@@ -239,7 +239,7 @@ _Pattern selection_ is not supported for _fallback values_.
 
 When a _message_ contains a _match_ construct with one or more _expressions_,
 the implementation needs to determine which _variant_ will be used
-to provide the _pattern_ for the formatting operation. 
+to provide the _pattern_ for the formatting operation.
 This is done by ordering and filtering the available _variant_ statements
 according to their _key_ values and selecting the first one.
 
@@ -248,21 +248,23 @@ The number of _keys_ in each _variant_ MUST equal the number of _expressions_ in
 Each _key_ corresponds to an _expression_ in the _selectors_ by its position in the _variant_.
 
 > For example, in this message:
+>
 > ```
 > match {:one} {:two} {:three}
 > when  1 2 3 { ... }
 > ```
+>
 > The first _key_ `1` corresponds to the first _expression_ in the _selectors_ (`{:one}`),
-> the second _key_ `2` to the second _expression_ (`{:two}`), 
+> the second _key_ `2` to the second _expression_ (`{:two}`),
 > and the third _key_ `3` to the third _expression_ (`{:three}`).
 
 To determine which _variant_ best matches a given set of inputs,
 each _selector_ is used in turn to order and filter the list of _variants_.
 
 Each _variant_ with a _key_ that does not match its corresponding _selector expression_
-is omitted from the list of _variants_. 
+is omitted from the list of _variants_.
 The remaining _variants_ are sorted according to the _expression_'s _key_-ordering preference.
-Earlier _expressions_ in the _selector_'s list of _expressions_ have a higher priority than later ones. 
+Earlier _expressions_ in the _selector_'s list of _expressions_ have a higher priority than later ones.
 
 When all of the _selector expressions_ have been processed,
 the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
@@ -703,7 +705,7 @@ These are divided into the following categories:
     > when * {Value is not one}
     > ```
 
-  - **Duplicate Option Name errors** occur when the same _name_ 
+  - **Duplicate Option Name errors** occur when the same _name_
     appears on the left-hand side
     of more than one _option_ in the same _expression_.
 
