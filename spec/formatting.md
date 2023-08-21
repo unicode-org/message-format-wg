@@ -505,9 +505,11 @@ _Formatting_ is a mostly implementation-defined process,
 as it depends on the implementation's shape for resolved values
 and the result type of the formatting.
 
-Formatting is not necessarily defined on every resolved value.
-An implementation SHOULD emit formatting errors during _formatting_,
-but MAY provide a value to use in such a case instead of a _falback value_.
+Resolved values cannot always be formatted by a given implementation.
+When such an error occurs during _formatting_, 
+an implementation SHOULD emit a _formatting error_ and produce a 
+_formatting fallback value_ for the _placeholder_ that produced the error.
+An implementation MAY substitute a value to use instead of a _falback value_.
 
 An implementation MAY use the value of an _expression_'s _operand_
 to choose a _formatting function_ and default _options_ if no
