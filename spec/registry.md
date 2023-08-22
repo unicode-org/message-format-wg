@@ -186,3 +186,17 @@ which only expects the `accord` option:
 
     let $obj = {$object :noun case=nominative}
     {You see {$color :adjective article=indefinite accord=$obj} {$obj}!}
+
+## Built-in Registry
+
+As hinted in the example above, implementations may <!-- FIXME: may vs should --> provide built-in functions to their users in order to perform common operations in a standardized manner instead of having to rely on custom functions for everything. The working group agrees that these builtins provided by implementations should expose the following capabilities to their users:
+
+* Ability to format the following types of data in a locale-sensitive manner:
+    * Dates and times
+    * Numbers
+    * Lists
+* Ability to select for the following types of information in a locale-sensitive manner:
+    * Plural rules
+    * Gender
+
+The co-located `registry.xml` file aims to define such a set of built-in functions, inspired by the design of the ICU4X and JavaScript's ECMA-402 APIs.
