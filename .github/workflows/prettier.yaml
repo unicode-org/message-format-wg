@@ -1,9 +1,18 @@
 name: Apply Prettier style
 
 on:
-  push:
+  pull_request:
     paths:
-      - "**.md"
+      - "docs/**"
+      - "exploration/**"
+      - "spec/**"
+  push:
+    branches-ignore:
+      - main
+    paths:
+      - "docs/**"
+      - "exploration/**"
+      - "spec/**"
 
 permissions:
   contents: write
@@ -19,7 +28,7 @@ jobs:
         with:
           node-version: "20.x"
       - run: npm install --no-save prettier@3
-      - run: npx prettier --write .
+      - run: npx prettier --write docs/ exploration/ spec/
       - name: git config
         run: |
           git config user.name "github-actions[bot]"
