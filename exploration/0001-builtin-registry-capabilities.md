@@ -8,13 +8,13 @@
 		<dt>First proposed</dt>
 		<dd>2023-08-22</dd>
 		<dt>Pull Request</dt>
-		<dd>#457</dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/457">#457</a></dd>
 	</dl>
 </details>
 
 ## Objective
 
-Document the capabilities that the set of built-in functions would expose to the user in order to ensure it can be designed in the most minimalistic way that would still cater to the most pressing requirements, partly inspired by ICU4X anbd JavaScript's Intl API and backwards-compatible with MF1 in ICU4J.
+Document the capabilities that the set of built-in functions would expose to the user in order to ensure it can be designed in the most minimalistic way that would still cater to the most pressing requirements, partly inspired by ICU4X and JavaScript's Intl API and backwards-compatible with MF1 in ICU4J.
 
 ## Background
 
