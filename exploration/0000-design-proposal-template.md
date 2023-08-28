@@ -1,5 +1,11 @@
 # Design Proposal Template
 
+Status: **Accepted**
+
+_Use either **Proposed** or **Accepted** as the status._
+_This is intended to allow new design documents to be first proposed and then iterated over time,_
+_rather than needing to have all their details agreed in a single PR._
+
 <details>
 	<summary>Metadata</summary>
 	<dl>
