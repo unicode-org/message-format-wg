@@ -62,11 +62,11 @@ or set any of the other possible metadata fields.
 ```ts
 type MessageParts = Iterable<
   MessageTextPart | MessageExpressionPart | MessageBiDiIsolationPart
->
+>;
 
 interface MessageTextPart {
-  type: "text"
-  value: string
+  type: "text";
+  value: string;
 }
 ```
 
@@ -77,12 +77,12 @@ some may have none.
 
 ```ts
 interface MessageExpressionPart {
-  type: string
-  source: string
-  parts?: Iterable<{ type: string; value: unknown }>
-  value?: unknown
-  dir?: "ltr" | "rtl" | "auto"
-  locale?: string
+  type: string;
+  source: string;
+  parts?: Iterable<{ type: string; value: unknown }>;
+  value?: unknown;
+  dir?: "ltr" | "rtl" | "auto";
+  locale?: string;
 }
 ```
 
@@ -91,8 +91,8 @@ the insertion of MessageBiDiIsolationParts in the formatted-parts output.
 
 ```ts
 interface MessageBiDiIsolationPart {
-  type: "bidiIsolation"
-  value: "\u2066" | "\u2067" | "\u2068" | "\u2069" // LRI | RLI | FSI | PDI
+  type: "bidiIsolation";
+  value: "\u2066" | "\u2067" | "\u2068" | "\u2069"; // LRI | RLI | FSI | PDI
 }
 ```
 
@@ -106,11 +106,11 @@ the `value` of MessageStringPart is always a string.
 
 ```ts
 interface MessageStringPart {
-  type: "string"
-  source: string
-  value: string
-  dir?: "ltr" | "rtl" | "auto"
-  locale?: string
+  type: "string";
+  source: string;
+  value: string;
+  dir?: "ltr" | "rtl" | "auto";
+  locale?: string;
 }
 ```
 
@@ -120,9 +120,9 @@ are represented by MessageUnknownPart.
 
 ```ts
 interface MessageUnknownPart {
-  type: "unknown"
-  source: string
-  value: unknown
+  type: "unknown";
+  source: string;
+  value: unknown;
 }
 ```
 
@@ -133,8 +133,8 @@ the part's representation would be `'{' + source + '}'`.
 
 ```ts
 interface MessageFallbackPart {
-  type: "fallback"
-  source: string
+  type: "fallback";
+  source: string;
 }
 ```
 
@@ -147,19 +147,19 @@ and in most cases it's presumed that the sub-part `value` would be a string.
 
 ```ts
 interface MessageDateTimePart {
-  type: "datetime"
-  source: string
-  parts: Iterable<{ type: string; value: unknown }>
-  dir?: "ltr" | "rtl" | "auto"
-  locale?: string
+  type: "datetime";
+  source: string;
+  parts: Iterable<{ type: string; value: unknown }>;
+  dir?: "ltr" | "rtl" | "auto";
+  locale?: string;
 }
 
 interface MessageNumberPart {
-  type: "number"
-  source: string
-  parts: Iterable<{ type: string; value: unknown }>
-  dir?: "ltr" | "rtl" | "auto"
-  locale?: string
+  type: "number";
+  source: string;
+  parts: Iterable<{ type: string; value: unknown }>;
+  dir?: "ltr" | "rtl" | "auto";
+  locale?: string;
 }
 ```
 
