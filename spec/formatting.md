@@ -237,6 +237,21 @@ _Pattern selection_ is not supported for _fallback values_.
 
 ## Pattern Selection
 
+### Messages without Selectors
+
+When a _message_ does not contain a _match_ construct,
+and does not begin with a U+007B LEFT CURLY BRACKET `{`,
+the result of pattern selection MUST be the concatenation of
+a U+007B LEFT CURLY BRACKET `{`,
+the contents of the message as a string,
+and a U+007D RIGHT CURLY BRACKET `}`.
+
+> For example, the following message:
+> `no braces`
+> would format to a string as `{no braces}`.
+
+### Messages with Selectors
+
 When a _message_ contains a _match_ construct with one or more _expressions_,
 the implementation needs to determine which _variant_ will be used
 to provide the _pattern_ for the formatting operation.
@@ -278,7 +293,7 @@ the result of pattern selection MUST be a pattern resolving to a single _fallbac
 using the message's fallback string defined in the _formatting context_
 or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER `�`.
 
-### Resolve Selectors
+#### Resolve Selectors
 
 First, resolve the values of each _selector_ _expression_:
 
@@ -295,7 +310,7 @@ First, resolve the values of each _selector_ _expression_:
 The shape of the resolved values is determined by each implementation,
 along with the manner of determining their support for selection.
 
-### Resolve Preferences
+#### Resolve Preferences
 
 Next, using `res`, resolve the preferential order for all message keys:
 
@@ -320,7 +335,7 @@ The returned list MAY be empty.
 The most-preferred key is first,
 with each successive key appearing in order by decreasing preference.
 
-### Filter Variants
+#### Filter Variants
 
 Then, using the preferential key orders `pref`,
 filter the list of _variants_ to the ones that match with some preference:
@@ -340,7 +355,7 @@ filter the list of _variants_ to the ones that match with some preference:
          1. Continue the outer loop on message _variants_.
    1. Append `var` as the last element of the list `vars`.
 
-### Sort Variants
+#### Sort Variants
 
 Finally, sort the list of variants `vars` and select the _pattern_:
 
