@@ -1,5 +1,7 @@
 # Capabilities for built-ins
 
+Status: **Proposed**
+
 <details>
 	<summary>Metadata</summary>
 	<dl>
