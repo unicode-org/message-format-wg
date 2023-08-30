@@ -528,7 +528,7 @@ A formatting function MAY substitute a value to use instead of a _fallback value
 
 Implementations MAY represent the result of _formatting_ using the most
 appropriate data type or structure. Some examples of these include:
-- A single string concatenated from the resolved _pattern_ and its parts.
+- A single string concatenated from the parts of the resolved _pattern_.
 - A string with associated attributes for portions of its text.
 - A flat sequence of objects corresponding to each resolved value.
 - A hierarchical structure of objects that group spans of resolved values,
