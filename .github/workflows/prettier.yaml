@@ -37,8 +37,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "20.x"
-      - run: npm install --no-save prettier@3
-      - run: npx prettier --write docs/ exploration/ spec/
+      - run: npm install
+      - run: npm run prettier
       - name: git config
         run: |
           git config user.name "github-actions[bot]"
