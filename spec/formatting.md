@@ -115,10 +115,18 @@ to further perform _function resolution_.
 
 Else, if the _expression_ consists of a _literal_,
 its resolved value is defined by _literal resolution_.
-If the _literal_ appears in a _declaration_, no further resolution is permitted.
-Otherwise, an implementation MAY use the contents of the _literal_
-to choose a _function_ and _options_ to attempt to perform _function resolution_.
-If such a _function resolution_ fails, the _literal_ value MUST be the resolved value.
+
+> **Note**
+> This means that a _literal_ value with no _annotation_ is always treated
+> as a string.
+> To represent values that are not strings as a _literal_,
+> an _annotation_ needs to be provided:
+>```
+>let $aNumber = {1234 :number}
+>let $aDate = {|2023-08-30| :datetime}
+>let $aFoo = {|some foo| :foo}
+>{You have {42 :number}}
+>```
 
 ### Literal Resolution
 
