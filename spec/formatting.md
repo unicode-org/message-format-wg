@@ -113,8 +113,8 @@ An implementation MAY perform additional processing
 when resolving the value of the _expression_.
 For example, it could apply _function resolution_ using a _function_
 and a set of _options_ chosen based on the value or type of the _variable_.
-> **Example**
-> Given a _message_ like this:
+
+> For example, given a _message_ like this:
 >```
 >{Today is {$date}}
 >```
