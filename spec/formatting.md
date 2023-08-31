@@ -99,7 +99,7 @@ If the _expression_ contains a _reserved_ _annotation_,
 an `Unsupported Expression` error is emitted and a fallback value is used as its value.
 
 Else, if the _expression_ contains a _private-use_ _annotation_,
-its resolved value is defined according to the implementation's specification;
+its resolved value is defined according to the implementation's specification.
 
 Else, if the _expression_ contains an _annotation_,
 its resolved value is defined by _function resolution_;
