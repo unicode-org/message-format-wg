@@ -109,9 +109,20 @@ which consists of either a _literal_ or a _variable_.
 
 If the _expression_ consists of a _variable_,
 its resolved value is defined by _variable resolution_.
-An implementation MAY use the value of the _variable_ or
-its resolved value to choose a _function_ and _options_
-to further perform _function resolution_.
+An implementation MAY perform additional processing
+when resolving the value of the _expression_.
+For example, it could apply _function resolution_ using a _function_
+and a set of _options_ chosen based on the value or type of the _variable_.
+> **Example**
+> Given a _message_ like this:
+>```
+>{Today is {$date}}
+>```
+>If the value passed in the _variable_ were a date object, such as a
+> JavaScript `Date` or a Java `java.util.Date` or `java.time.Temporal`,
+> the implementation could interpret the _placeholder_ `{$date}` as if
+> the pattern included the function `:datetime` with some set of default
+> options.
 
 Else, if the _expression_ consists of a _literal_,
 its resolved value is defined by _literal resolution_.
