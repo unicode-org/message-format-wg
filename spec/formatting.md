@@ -102,7 +102,7 @@ Else, if the _expression_ contains a _private-use_ _annotation_,
 its resolved value is defined according to the implementation's specification.
 
 Else, if the _expression_ contains an _annotation_,
-its resolved value is defined by _function resolution_;
+its resolved value is defined by _function resolution_.
 
 Else, the _expression_ will contain only an _operand_,
 which consists of either a _literal_ or a _variable_.
