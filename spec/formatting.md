@@ -111,10 +111,10 @@ If the _expression_ consists of a _variable_,
 its resolved value is defined by _variable resolution_.
 An implementation MAY perform additional processing
 when resolving the value of the _expression_.
-For example, it could apply _function resolution_ using a _function_
-and a set of _options_ chosen based on the value or type of the _variable_.
 
-> For example, given a _message_ like this:
+> For example, it could apply _function resolution_ using a _function_
+> and a set of _options_ chosen based on the value or type of the _variable_.
+> So, given a _message_ like this:
 >```
 >{Today is {$date}}
 >```
