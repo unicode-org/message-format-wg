@@ -16,10 +16,12 @@ Status: **Proposed**
 
 ## Objective
 
-Messages often include structures and values
-that are not necessarily best represented by a plain concatenated string.
+Messages often include placeholders that,
+when formatted, contain internal structure ("parts")
+that the caller might want access to
+for the purposes of styling, presentation, or manipulation.
 
-It would be useful to define a formatted-parts target for MessageFormat 2.
+This proposal defines a formatted-parts target for MessageFormat 2.
 
 ## Background
 
@@ -31,6 +33,15 @@ the string output will be re-parsed and re-processed by users.
 - Markup elements
 - Non-string values
 - Message post-processors
+- Decoration of placeholder interior parts.
+  For example, identifying the separate fields in these two currency values
+  (notice that the symbol, number, and fraction fields
+  are not in the same order and that the separator has been omitted):
+  ![image](https://github.com/unicode-org/message-format-wg/assets/69082/cb68c87f-9c0c-4bc6-b9a0-b1f97b2b789a)
+  ![image](https://github.com/unicode-org/message-format-wg/assets/69082/aedd4e66-7d47-4026-8b93-4ba061bb4d84)
+- Supplying bidirectional isolation of placeholders,
+  such as by using HTML's `span` element with a `dir` attribute
+  based on the direction of the placeholder.
 
 ## Requirements
 
@@ -71,7 +82,10 @@ interface MessageTextPart {
 ```
 
 For MessageExpressionPart, the `source` corresponds to the expression's fallback value.
-The parts' `dir` and `locale` may be defined if overridden by an expression attribute or set otherwise.
+The `dir` and `locale` attributes of a part may be inherited from the message
+or from the operand (if present),
+or overridden by an expression attribute or formatting function,
+or otherwise set by the implementation.
 Each part should have at most one of `value` or `parts` defined;
 some may have none.
 
@@ -115,7 +129,8 @@ interface MessageStringPart {
 ```
 
 Unannotated expressions with a _variable_ operand
-that is not formatted according to its type
+whose type is not recognized by the implementation
+or for which no default formatter is available
 are represented by MessageUnknownPart.
 
 ```ts
@@ -139,7 +154,10 @@ interface MessageFallbackPart {
 ```
 
 Formatting functions defined in the registry
-will need accompanying formatted-parts representations.
+Each function defined in the registry MUST define its "formatted-parts" representation.
+A function can define either a unitary string `value` or a `parts` representation.
+Where possible, a function SHOULD provide a `parts` representation
+if its output might reasonably consist of multiple fields.
 Where available, such a formatted value should itself be represented by `parts`
 rather than a unitary string `value`.
 These sub-parts should not need fields beyond their `type` and `value`,
