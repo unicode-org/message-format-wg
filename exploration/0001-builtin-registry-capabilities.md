@@ -40,14 +40,14 @@ TBD
 
 All conforming implementations of this specification MUST provide a set of <dfn>built-in functions</dfn>, which allows the developers to perform the following operations:
 
--   Formatting the following types of data in a locale-sensitive manner:
-    -   Dates and times
-    -   Numbers
-    -   Lists
--   Selecting between pattern strings in a locale-sensitive manner based on:
-    -   String equality
-        -   Plural rules
-        -   Ordinality
+- Formatting the following types of data in a locale-sensitive manner:
+  - Dates and times
+  - Numbers
+  - Lists
+- Selecting between pattern strings in a locale-sensitive manner based on:
+  - String equality
+    - Plural rules
+    - Ordinality
 
 ## Alternatives Considered
 
