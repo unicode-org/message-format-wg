@@ -129,8 +129,8 @@ Else, if the _expression_ consists of a _literal_,
 its resolved value is defined by _literal resolution_.
 
 > **Note**
-> This means that a _literal_ value with no _annotation_ is always treated
-> as a string.
+> This means that a _literal_ value with no _annotation_
+> is always treated as a string.
 > To represent values that are not strings as a _literal_,
 > an _annotation_ needs to be provided:
 >
