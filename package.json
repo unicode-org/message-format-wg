@@ -1,0 +1,11 @@
+{
+  "name": "messageformat-wg",
+  "private": true,
+  "license": "Unicode-DFS-2016",
+  "dependencies": {
+    "prettier": "^3.0.1"
+  },
+  "scripts": {
+    "prettier": "prettier --write docs/ exploration/ spec/"
+  }
+}

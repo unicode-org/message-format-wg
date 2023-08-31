@@ -19,7 +19,7 @@ For more details on the process that lead to these decisions, please refer to th
 - **Consensus 5 & 6:**
   The solution for [issue #127](https://github.com/unicode-org/message-format-wg/issues/127).
   Codified in [issue #137](https://github.com/unicode-org/message-format-wg/issues/137) during the [January 2021 meeting](https://github.com/unicode-org/message-format-wg/issues/146) of the working group.
-  Discussed and accepted at the  [February 2021 meeting](https://github.com/unicode-org/message-format-wg/blob/HEAD/meetings/2021/notes-2021-02-15.md) of the working group.
+  Discussed and accepted at the [February 2021 meeting](https://github.com/unicode-org/message-format-wg/blob/HEAD/meetings/2021/notes-2021-02-15.md) of the working group.
 - **Consensus 7:**
   Discussed at the [22 September 2021 meeting](https://github.com/unicode-org/message-format-wg/issues/196) of the working group.
 

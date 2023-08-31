@@ -1,11 +1,10 @@
-MessageFormat Working Group Delegates
-=====================================
+# MessageFormat Working Group Delegates
 
 MessageFormat Working Group uses the standard TC39 note-taking procedures, including unique abbreviations for all delegates.
 
 ## Acronym Conventions
 
-With the exception of certain grandfathered delegates, all delegates should have three-letter abbreviations.  The following scheme is recommended:
+With the exception of certain grandfathered delegates, all delegates should have three-letter abbreviations. The following scheme is recommended:
 
 - Suggestion 1: First letter of given name, First letter of surname, Last letter of surname.
   - Example: Gordon Moore → GME
@@ -27,7 +26,7 @@ Please include your primary affiliation (e.g., the company you represent or wher
 - Eemeli Aro - OpenJSF & Vincit (EAO)
 - Elango Cheran - Google (ECH)
 - George Rhoten - Apple (GWR)
-- Jan Mühlemann  - Locize (JMU)
+- Jan Mühlemann - Locize (JMU)
 - Janne Tynkkynen - PayPal (JMT)
 - Jeff Genovy - Microsoft (JMG)
 - John Watson - Facebook (JRW)
