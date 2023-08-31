@@ -115,10 +115,12 @@ when resolving the value of the _expression_.
 > For example, it could apply _function resolution_ using a _function_
 > and a set of _options_ chosen based on the value or type of the _variable_.
 > So, given a _message_ like this:
->```
->{Today is {$date}}
->```
->If the value passed in the _variable_ were a date object, such as a
+>
+> ```
+> {Today is {$date}}
+> ```
+>
+> If the value passed in the _variable_ were a date object, such as a
 > JavaScript `Date` or a Java `java.util.Date` or `java.time.Temporal`,
 > the implementation could interpret the _placeholder_ `{$date}` as if
 > the pattern included the function `:datetime` with some set of default
@@ -132,12 +134,13 @@ its resolved value is defined by _literal resolution_.
 > as a string.
 > To represent values that are not strings as a _literal_,
 > an _annotation_ needs to be provided:
->```
->let $aNumber = {1234 :number}
->let $aDate = {|2023-08-30| :datetime}
->let $aFoo = {|some foo| :foo}
->{You have {42 :number}}
->```
+>
+> ```
+> let $aNumber = {1234 :number}
+> let $aDate = {|2023-08-30| :datetime}
+> let $aFoo = {|some foo| :foo}
+> {You have {42 :number}}
+> ```
 
 ### Literal Resolution
 
@@ -542,13 +545,14 @@ as it depends on the implementation's shape for resolved values
 and the result type of the formatting.
 
 Resolved values cannot always be formatted by a given implementation.
-When such an error occurs during _formatting_, 
-an implementation SHOULD emit a _formatting error_ and produce a 
+When such an error occurs during _formatting_,
+an implementation SHOULD emit a _formatting error_ and produce a
 _fallback value_ for the _placeholder_ that produced the error.
 A formatting function MAY substitute a value to use instead of a _fallback value_.
 
 Implementations MAY represent the result of _formatting_ using the most
 appropriate data type or structure. Some examples of these include:
+
 - A single string concatenated from the parts of the resolved _pattern_.
 - A string with associated attributes for portions of its text.
 - A flat sequence of objects corresponding to each resolved value.
