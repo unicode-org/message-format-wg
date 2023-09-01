@@ -46,8 +46,8 @@ All conforming implementations of this specification MUST provide a set of <dfn>
   - Lists
 - Selecting between pattern strings in a locale-sensitive manner based on:
   - String equality
-    - Plural rules
-    - Ordinality
+  - Plural rules
+  - Ordinality
 
 ## Alternatives Considered
 
