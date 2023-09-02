@@ -596,6 +596,15 @@ A **_<dfn>quoted</dfn>_** literal begins and ends with U+005E VERTICAL BAR `|`.
 The characters `\` and `|` within a _quoted_ literal MUST be
 escaped as `\\` and `\|`.
 
+The `|` is used as a quote delimiter
+because it is not commonly used as a quote delimiter.
+Using something more ordinary like `'` or `"`
+would mean that they would need to be escaped
+if MessageFormat 2 syntax needed to be included in a resource format
+that used the same quote delimiter.
+Supporting both `'` and `"` as quote delimiters would potentially require
+the delimiters to be manually escaped when copying them between resource formats.
+
 An **_<dfn>unquoted</dfn>_** literal is a _literal_ that does not require the `|`
 quotes around it to be distinct from the rest of the _message_ syntax.
 An _unquoted_ MAY be used when the content of the _literal_
