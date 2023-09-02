@@ -1,34 +1,34 @@
-<!ELEMENT registry (function*|pattern*)>
+<!ELEMENT registry (function|validationRule)*>
 
-<!ELEMENT function (description|(formatSignature|matchSignature)+)>
+<!ELEMENT function (description,(formatSignature|matchSignature)+)>
 <!ATTLIST function name NMTOKEN #REQUIRED>
 
 <!ELEMENT description (#PCDATA)>
 
-<!ELEMENT pattern EMPTY>
-<!ATTLIST pattern id ID #REQUIRED>
-<!ATTLIST pattern regex CDATA #REQUIRED>
+<!ELEMENT validationRule EMPTY>
+<!ATTLIST validationRule id ID #REQUIRED>
+<!ATTLIST validationRule regex CDATA #REQUIRED>
 
-<!ELEMENT formatSignature (input?|option*)>
+<!ELEMENT formatSignature (input?,option*)>
 <!ATTLIST formatSignature position (open|close|standalone) "standalone">
 <!ATTLIST formatSignature locales NMTOKENS #IMPLIED>
 
-<!ELEMENT matchSignature (input?|option*|match*)>
+<!ELEMENT matchSignature (input?,option*,match*)>
 <!ATTLIST matchSignature locales NMTOKENS #IMPLIED>
 
 <!ELEMENT input EMPTY>
 <!ATTLIST input values NMTOKENS #IMPLIED>
-<!ATTLIST input pattern NMTOKEN #IMPLIED>
+<!ATTLIST input validationRule IDREF #IMPLIED>
 <!ATTLIST input readonly (true|false) "false">
 
 <!ELEMENT option EMPTY>
 <!ATTLIST option name NMTOKEN #REQUIRED>
 <!ATTLIST option values NMTOKENS #IMPLIED>
 <!ATTLIST option default NMTOKEN #IMPLIED>
-<!ATTLIST option pattern IDREF #IMPLIED>
+<!ATTLIST option validationRule IDREF #IMPLIED>
 <!ATTLIST option required (true|false) "false">
 <!ATTLIST option readonly (true|false) "false">
 
 <!ELEMENT match EMPTY>
 <!ATTLIST match values NMTOKENS #IMPLIED>
-<!ATTLIST match pattern NMTOKEN #IMPLIED>
+<!ATTLIST match validationRule IDREF #IMPLIED>

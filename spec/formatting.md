@@ -1,24 +1,127 @@
-# WIP DRAFT MessageFormat 2.0 Formatting Behaviour
+# DRAFT MessageFormat 2.0 Formatting
 
 ## Introduction
 
 This document defines the behaviour of a MessageFormat 2.0 implementation
 when formatting a message for display in a user interface, or for some later processing.
 
-The document is part of the MessageFormat 2.0 specification,
-the successor to ICU MessageFormat, henceforth called ICU MessageFormat 1.0.
+To start, we presume that a _message_ has either been parsed from its syntax
+or created from a data model description.
+If this construction has encountered any Syntax or Data Model errors,
+their handling during formatting is specified here as well.
 
-## Literal Resolution
+Formatting of a _message_ is defined by the following operations:
 
-The resolved value of a _text_ or a _literal_ is the character sequence of the _text_
-or _literal_ after any character escape has been converted to the escaped character.
-When a _literal_ is used as an _expression_ argument or on the right-hand side of an _option_,
-the formatting function MUST treat their resolved values the same independently of whether the
-value was originally _quoted_ or _unquoted_.
-For example, the _option_ `foo=42` and the _option_ `foo=|42|` 
-are treated as identical.
+- **_Expression Resolution_** determines the value of an _expression_,
+  with reference to the current _formatting context_.
+  This can include multiple steps,
+  such as looking up the value of a variable and calling formatting functions.
+  The resolved value is not necessarily in the shape it will finally take,
+  but is "formattable", i.e. it contains everything required by the eventual formatting.
 
-## Variable Resolution
+  The resolution of _text_ is rather straighforward,
+  and is detailed under _literal resolution_.
+
+- **_Pattern Selection_** determines which of a message's _patterns_ is formatted.
+  For a message with no _selectors_, this is simple as there is only one _pattern_.
+  With _selectors_, this will depend on their resolution.
+
+- **_Formatting_** takes the resolved values of the selected _pattern_,
+  and produces the formatted result for the _message_.
+  Depending on the implementation, this result could be a single concatenated string,
+  an array of objects, an attributed string, or some other locally appropriate data type.
+
+Formatter implementations are not required to expose
+the _expression resolution_ and _pattern selection_ operations to their users,
+or even use them in their internal processing,
+as long as the final _formatting_ result is made available to users
+and the observable behavior of the formatter matches that described here.
+
+## Formatting Context
+
+A message's **_formatting context_** represents the data and procedures that are required
+for the message's _expression resolution_, _pattern selection_ and _formatting_.
+
+At a minimum, it includes:
+
+- Information on the current **_locale_**,
+  potentially including a fallback chain of locales.
+  This will be passed on to formatting functions.
+
+- Information on the base directionality of the message and its _text_ tokens.
+  This will be used by strategies for bidirectional isolation,
+  and can be used to set the base direction of the _message_ upon display.
+
+- A mapping of string identifiers to values,
+  defining variable values that are available during _variable resolution_.
+  This is often determined by a user-provided argument of a formatting function call.
+
+- The _function registry_,
+  providing the implementations of the functions referred to by message _functions_.
+
+- Optionally, a fallback string to use for the message
+  if it contains any Syntax or Data Model errors.
+
+Implementations MAY include additional fields in their _formatting context_.
+
+## Expression Resolution
+
+_Expressions_ are used in _declarations_, _selectors_, and _patterns_.
+
+In a _declaration_, the resolved value of the _expression_ is assigned to a _variable_,
+which is available for use by later _expressions_.
+As such a _variable_ MAY then be referenced in different ways,
+implementations SHOULD NOT immediately fully format the value for output.
+
+In _selectors_, the resolved value of an _expression_ is used for _pattern selection_.
+
+In a _pattern_, the resolved value of an _expression_ is used in its _formatting_.
+
+The shapes of resolved values are implementation-dependent,
+and different implementations MAY choose to perform different levels of resolution.
+
+> For example, the resolved value of the _expression_ `{|0.40| :number style=percent}`
+> could be an object such as
+>
+> ```
+> { value: Number('0.40'),
+>   formatter: NumberFormat(locale, { style: 'percent' }) }
+> ```
+>
+> Alternatively, it could be an instance of an ICU4J `FormattedNumber`,
+> or some other locally appropriate value.
+
+Depending on the presence or absence of an _operand_
+and a _function_, _private-use_, or _reserved_ _annotation_,
+one of the following is used to resolve the value of the _expression_:
+
+- If the _expression_ contains no _annotation_,
+  its resolved value is determined by _literal resolution_ or _variable resolution_,
+  depending on the shape of the _operand_.
+- Else, if the _expression_ has a _function_ _annotation_,
+  its resolved value is defined by _function resolution_.
+- Else, if the _expression_ has a _private-use_ _annotation_,
+  its resolved value is defined according to the implementations's specification.
+- Else, the _expression_ has a _reserved_ _annotation_,
+  an Unsupported Expression error is emitted and a fallback value is used as its value.
+
+### Literal Resolution
+
+The resolved value of a _text_ or a _literal_ is
+the character sequence of the _text_ or _literal_
+after any character escape has been converted to the escaped character.
+
+When a _literal_ is used as an _operand_
+or on the right-hand side of an _option_,
+the formatting function MUST treat its resolved value the same
+whether its value was originally _quoted_ or _unquoted_.
+
+> For example,
+> the _option_ `foo=42` and the _option_ `foo=|42|` are treated as identical.
+
+The resolution of a _text_ or _literal_ token MUST always succeed.
+
+### Variable Resolution
 
 To resolve the value of a _variable_,
 its _name_ is used to identify either a local variable,
@@ -29,45 +132,155 @@ the local variable takes precedence.
 It is an error for a local variable definition to
 refer to a local variable that's defined after it in the message.
 
+The resolution of a _variable_ MAY fail if no value is identified for its _name_.
+If this happens, an Unresolved Variable error MUST be emitted.
+If a _variable_ would resolve to a _fallback value_,
+this MUST also be considered a failure.
+
+### Function Resolution
+
+To resolve an _expression_ with a _function_ _annotation_,
+the following steps are taken:
+
+1. If the _expression_ includes an _operand_, resolve its value.
+   If this fails, use a _fallback value_ for the _expression_.
+2. Based on the _function_ starting sigil and _name_,
+   find the appropriate function implementation from the _function registry_.
+   If the registry does not define an implementation for this _name_,
+   emit an Unknown Function error
+   and use a _fallback value_ for the _expression_.
+3. Resolve the _option_ values to a mapping of string identifiers to values.
+   For each _option_:
+   - If its right-hand side successfully resolves to a value,
+     bind the _name_ of the _option_ to the resolved value in the mapping.
+   - Otherwise, do not bind the _name_ of the _option_ to any value in the mapping.
+4. Call the function implementation with the following arguments:
+
+   - The current _locale_.
+   - The resolved mapping of _options_.
+   - If the _expression_ includes an _operand_, its resolved value.
+
+   The shapes of the resolved _operand_ and _option_ values are implementation-defined.
+
+   An implementation MAY pass additional arguments to the function,
+   as long as reasonable precautions are taken to keep the function interface
+   simple and minimal, and avoid introducing potential security vulnerabilities.
+
+   As implementations MAY allow custom functions to be defined by users,
+   their access to the _formatting context_ SHOULD be minimal and read-only,
+   and their execution time SHOULD be limited.
+
+5. If the call succeeds,
+   resolve the value of the _expression_ as the result of that function call.
+   If the call fails or does not return a valid value,
+   emit a Resolution error and use a _fallback value_ for the _expression_.
+
+### Fallback Resolution
+
+A **_fallback value_** is the resolved value emitted when an _expression_ cannot be resolved.
+
+An _expression_ fails to resolve when:
+
+- A _variable_ _operand_ fails to resolve.
+- A _function_ _annotation_ fails to resolve.
+- A _private-use_ _annotation_ is unsupported by the implementation or if
+  a _private-use_ _annotation_ fails to resolve.
+- The _expression_ has a _reserved_ _annotation_.
+
+The _fallback value_ depends on the contents of the _expression_:
+
+- _expression_ with _literal_ _operand_: U+007C VERTICAL LINE `|`
+  followed by the value of the Literal,
+  and then by U+007C VERTICAL LINE `|`.
+  The same representation is used for both _quoted_ and _unquoted_ values.
+
+  > Examples: `|your horse|`, `|42|`
+
+- _expression_ with _variable_ _operand_: U+0024 DOLLAR SIGN `$`
+  followed by the _variable_ _name_ of the _operand_
+
+  > Example: `$user`
+
+- _expression_ with no _operand_:
+  the _function_ starting sigil followed by its _name_
+
+  > Examples: `:platform`, `+tag`, `-tag`
+
+- Otherwise: The U+FFFD REPLACEMENT CHARACTER `�` character
+
+_Option_ names and values are not included in the _fallback value_.
+
+When an error occurs in an _expression_ with a _variable_ _operand_
+and the _variable_ refers to a local _declaration_,
+the _fallback value_ is formatted based on the _expression_
+on the right-hand side of the _declaration_,
+rather than the _expression_ in the _selector_ or _pattern_.
+
+> For example,
+> in a context in which the function `:func` fails to resolve,
+> attempting to format either of the following messages:
+>
+> ```
+> let $var = {|horse| :func}
+> {The value is {$var}.}
+> ```
+>
+> ```
+> let $var = {|horse|}
+> {The value is {$var :func}.}
+> ```
+>
+> would in both cases result in the _pattern_ _expression_
+> resolving to a _fallback value_ of `|horse|`.
+
+_Pattern selection_ is not supported for _fallback values_.
+
 ## Pattern Selection
 
-When a _message_ contains a _match_ statement with one or more _expressions_,
+When a _message_ contains a _match_ construct with one or more _expressions_,
 the implementation needs to determine which _variant_ will be used
-to provide the _pattern_ for the formatting operation. 
-This is done by ordering and filtering the available _variant_ statements according to their _key_ values
-and selecting the first one.
+to provide the _pattern_ for the formatting operation.
+This is done by ordering and filtering the available _variant_ statements
+according to their _key_ values and selecting the first one.
 
-The number of _keys_ in each _variant_ **_MUST_** equal the number of _expressions_ in the _selectors_.
+The number of _keys_ in each _variant_ MUST equal the number of _expressions_ in the _selectors_.
 
 Each _key_ corresponds to an _expression_ in the _selectors_ by its position in the _variant_.
 
 > For example, in this message:
+>
 > ```
 > match {:one} {:two} {:three}
 > when  1 2 3 { ... }
 > ```
+>
 > The first _key_ `1` corresponds to the first _expression_ in the _selectors_ (`{:one}`),
-> the second _key_ `2` to the second _expression_ (`{:two}`), 
+> the second _key_ `2` to the second _expression_ (`{:two}`),
 > and the third _key_ `3` to the third _expression_ (`{:three}`).
 
 To determine which _variant_ best matches a given set of inputs,
 each _selector_ is used in turn to order and filter the list of _variants_.
 
 Each _variant_ with a _key_ that does not match its corresponding _selector expression_
-is omitted from the list of _variants_. 
+is omitted from the list of _variants_.
 The remaining _variants_ are sorted according to the _expression_'s _key_-ordering preference.
-Earlier _expressions_ in the _selector_'s list of _expressions_ have a higher priority than later ones. 
+Earlier _expressions_ in the _selector_'s list of _expressions_ have a higher priority than later ones.
 
 When all of the _selector expressions_ have been processed,
 the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
 
 This selection method is defined in more detail below.
-An implementation **_MAY_** use any pattern selection method,
+An implementation MAY use any pattern selection method,
 as long as its observable behavior matches the results of the method defined here.
+
+If the message being formatted has any Syntax or Data Model errors,
+the result of pattern selection MUST be a pattern resolving to a single _fallback value_
+using the message's fallback string defined in the _formatting context_
+or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER `�`.
 
 ### Resolve Selectors
 
-First, resolve the values of each _selector_:
+First, resolve the values of each _selector_ _expression_:
 
 1. Let `res` be a new empty list of resolved values that support selection.
 1. For each _expression_ `exp` of the message's _selectors_,
@@ -102,9 +315,10 @@ Next, using `res`, resolve the preferential order for all message keys:
 The method MatchSelectorKeys is determined by the implementation.
 It takes as arguments a resolved _selector_ value `rv` and a list of string keys `keys`,
 and returns a list of string keys in preferential order.
-The returned list must only contain unique elements of the input list `keys`,
-and it may be empty.
-The most preferred key is first, with the rest sorted by decreasing preference.
+The returned list MUST contain only unique elements of the input list `keys`.
+The returned list MAY be empty.
+The most-preferred key is first,
+with each successive key appearing in order by decreasing preference.
 
 ### Filter Variants
 
@@ -171,15 +385,15 @@ _This section is non-normative._
 
 #### Example 1
 
-Presuming a minimal implementation which only supports string values
-and matches keys by using string comparison,
+Presuming a minimal implementation which only supports `:string` annotation
+which matches keys by using string comparison,
 and a formatting context in which
 the variable reference `$foo` resolves to the string `'foo'` and
 the variable reference `$bar` resolves to the string `'bar'`,
 pattern selection proceeds as follows for this message:
 
 ```
-match {$foo} {$bar}
+match {$foo :string} {$bar :string}
 when bar bar {All bar}
 when foo foo {All foo}
 when * * {Otherwise}
@@ -210,7 +424,7 @@ Alternatively, with the same implementation and formatting context as in Example
 pattern selection would proceed as follows for this message:
 
 ```
-match {$foo} {$bar}
+match {$foo :string} {$bar :string}
 when * bar {Any and bar}
 when foo * {Foo and any}
 when foo bar {Foo and bar}
@@ -284,9 +498,63 @@ when *   {Other match}
 
 4. The pattern `{Exact match}` of the most preferred `1` variant is selected.
 
-## Handling Bidirectional Text
+## Formatting
 
-_Messages_ contain text which can be bidirectional, that is
+After _pattern selection_,
+each _text_ and _expression_ part of the selected _pattern_ is resolved and formatted.
+
+_Formatting_ is a mostly implementation-defined process,
+as it depends on the implementation's shape for resolved values
+and the result type of the formatting.
+
+Formatting errors MAY be emitted during _formatting_,
+as formatting is not necessarily defined on every resolved value.
+A formatter MAY provide a value to use in such a case instead of a _fallback value_.
+
+_Formatting_ MAY produce formatted messages with the following data types,
+as well as any others:
+
+- A single concatenated string.
+- A string with associated attributes for portions of its text.
+- A flat sequence of objects corresponding to each resolved value.
+- A hierarchical structure of objects that group spans of resolved values,
+  such as sequences delimited by "open" and "close" _function_ _annotations_.
+
+Implementations SHOULD provide _formatting_ result types that match user needs,
+including situations that require further processing of formatted messages.
+Implementations SHOULD encourage users to consider a formatted localised string
+as an opaque data structure, suitable only for presentation.
+
+### Examples
+
+_This section is non-normative._
+
+1. An implementation might choose to return an interstitial object
+   so that the caller can "decorate" portions of the formatted value.
+   In ICU4J, the `NumberFormatter` class returns a `FormattedNumber` object,
+   so a _pattern_ such as `{This is my number {42 :number}}` might return
+   the character sequence `This is my number `
+   followed by a `FormattedNumber` object representing the value `42` in the current locale.
+
+2. A formatter in a web browser could format a message as a DOM fragment
+   rather than as a representation of its HTML source.
+
+### Formatting Fallback Values
+
+If the resolved _pattern_ includes any _fallback values_
+and the formatting result is a concatenated string or a sequence of strings,
+the string representation of each _fallback value_ MUST be the concatenation of
+a U+007B LEFT CURLY BRACKET `{`,
+the _fallback value_ as a string,
+and a U+007D RIGHT CURLY BRACKET `}`.
+
+> For example,
+> a message with a Syntax Error and no fallback string
+> defined in the _formatting context_ would format to a string as `{�}`.
+
+### Handling Bidirectional Text
+
+_Messages_ contain text which can be bidirectional,
 consisting of a mixture of left-to-right and right-to-left spans of text.
 
 When concatenating formatted values,
@@ -297,9 +565,10 @@ so that the directionality of a formatted _expression_
 does not negatively affect the presentation of the overall formatted result.
 
 An implementation MUST define methods for
-determining the directionality of the message as a whole as well as each formatted _expression_.
+determining the directionality of each formatted _expression_.
 The method of determining the directionality of a formatted _expression_
 MAY rely on the introspection of its contents, or on other means.
+The directionality of the message as a whole is provided by the _formatting context_.
 
 If a formatted _expression_ itself contains spans with differing directionality,
 its formatter SHOULD isolate such parts to avoid
@@ -339,20 +608,20 @@ which MAY also introspect the _pattern_'s _text_ values
 and identify situations where isolate characters are not needed
 or where additional or different isolation would produce better results.
 
-If an implementation provides formatting to non-string targets,
+If an implementation provides formatting to non-string result types,
 it SHOULD provide similar strategies for enabling bidirectional isolation,
 where appropriate.
 
 ## Error Handling
 
-Errors in messages and their formatting may occur and be detected
+Errors in messages and their formatting MAY occur and be detected
 at multiple different stages of their processing.
 Where available,
 the use of validation tools is recommended,
 as early detection of errors makes their correction easier.
 
 During the formatting of a message,
-various errors may be encountered.
+various errors MAY be encountered.
 These are divided into the following categories:
 
 - **Syntax errors** occur when the syntax representation of a message is not well-formed.
@@ -380,13 +649,13 @@ These are divided into the following categories:
     > Example invalid messages resulting in a Variant Key Mismatch error:
     >
     > ```
-    > match {$one}
+    > match {$one :func}
     > when 1 2 {Too many}
     > when * {Otherwise}
     > ```
     >
     > ```
-    > match {$one} {$two}
+    > match {$one :func} {$two :func}
     > when 1 2 {Two keys}
     > when * {Missing a key}
     > when * * {Otherwise}
@@ -398,15 +667,57 @@ These are divided into the following categories:
     > Example invalid messages resulting in a Missing Fallback Variant error:
     >
     > ```
-    > match {$one}
+    > match {$one :func}
     > when 1 {Value is one}
     > when 2 {Value is two}
     > ```
     >
     > ```
-    > match {$one} {$two}
+    > match {$one :func} {$two :func}
     > when 1 * {First is one}
     > when * 1 {Second is one}
+    > ```
+
+  - A **_Missing Selector Annotation error_** is an error that occurs when the _message_
+    contains a _selector_ that does not have an _annotation_,
+    or contains a _variable_ that does not directly or indirectly reference a _declaration_ with an _annotation_.
+
+    > Example invalid messages resulting in a _Missing Selector Annotation error_:
+    >
+    > ```
+    > match {$one}
+    > when 1 {Value is one}
+    > when * {Value is not one}
+    > ```
+    >
+    > ```
+    > let $one = {|The one|}
+    > match {$one}
+    > when 1 {Value is one}
+    > when * {Value is not one}
+    > ```
+    >
+    > ```
+    > let $one = {|The one| :func}
+    > let $two = {$one}
+    > match {$two}
+    > when 1 {Value is one}
+    > when * {Value is not one}
+    > ```
+
+  - **Duplicate Option Name errors** occur when the same _name_
+    appears on the left-hand side
+    of more than one _option_ in the same _expression_.
+
+    > Example invalid messages resulting in a Duplicate Option Name error:
+    >
+    > ```
+    > {Value is {42 :number style=percent style=decimal}}
+    > ```
+    >
+    > ```
+    > let $foo = {horse :func one=1 two=2 one=1}
+    > {This is {$foo}}
     > ```
 
 - **Resolution errors** occur when the runtime value of a part of a message
@@ -415,7 +726,7 @@ These are divided into the following categories:
   - **Unresolved Variable errors** occur when a variable reference cannot be resolved.
 
     > For example, attempting to format either of the following messages
-    > must result in an Unresolved Variable error if done within a context that
+    > would result in an Unresolved Variable error if done within a context that
     > does not provide for the variable reference `$var` to be successfully resolved:
     >
     > ```
@@ -423,7 +734,7 @@ These are divided into the following categories:
     > ```
     >
     > ```
-    > match {$var}
+    > match {$var :func}
     > when 1 {The value is one.}
     > when * {The value is not one.}
     > ```
@@ -432,7 +743,7 @@ These are divided into the following categories:
     a reference to a function which cannot be resolved.
 
     > For example, attempting to format either of the following messages
-    > must result in an Unknown Function error if done within a context that
+    > would result in an Unknown Function error if done within a context that
     > does not provide for the function `:func` to be successfully resolved:
     >
     > ```
@@ -441,6 +752,26 @@ These are divided into the following categories:
     >
     > ```
     > match {|horse| :func}
+    > when 1 {The value is one.}
+    > when * {The value is not one.}
+    > ```
+
+  - **Unsupported Expression errors** occur when an expression uses
+    syntax reserved for future standardization,
+    or for private implementation use that is not supported by the current implementation.
+
+    > For example, attempting to format this message
+    > would always result in an Unsupported Expression error:
+    >
+    > ```
+    > {The value is {@horse}.}
+    > ```
+    >
+    > Attempting to format this message would result in an Unsupported Expression error
+    > if done within a context that does not support the `^` private use sigil:
+    >
+    > ```
+    > match {|horse| ^private}
     > when 1 {The value is one.}
     > when * {The value is not one.}
     > ```
@@ -497,96 +828,29 @@ These are divided into the following categories:
   > {Your {$field} is {$id :get field=$field}}
   > ```
 
-Syntax and Data Model errors must be emitted as soon as possible.
+Syntax and Data Model errors MUST be emitted as soon as possible.
 
-During selection, an _expression_ handler must only emit Resolution and Selection errors.
-During formatting, an _expression_ handler must only emit Resolution and Formatting errors.
+During selection, an _expression_ handler MUST only emit Resolution and Selection errors.
+During formatting, an _expression_ handler MUST only emit Resolution and Formatting errors.
+
+Resolution and Formatting errors in _expressions_ that are not used
+in _pattern selection_ or _formatting_ MAY be ignored,
+as they do not affect the output of the formatter.
 
 In all cases, when encountering an error,
-a message formatter must provide some representation of the message.
-An informative error or errors must also be separately provided.
+a message formatter MUST provide some representation of the message.
+An informative error or errors MUST also be separately provided.
+
 When a message contains more than one error,
 or contains some error which leads to further errors,
 an implementation which does not emit all of the errors
-should prioritise Syntax and Data Model errors over others.
+SHOULD prioritise Syntax and Data Model errors over others.
 
-When an error occurs in the resolution of an _expression_,
-the _expression_ in question is processed as if the option were not defined.
-This may allow for the fallback handling described below to be avoided,
-though an error must still be emitted.
+When an error occurs in the resolution of an _option_,
+the surrounding _expression_ MUST be processed as if the _option_ were not present.
+This MAY allow the _expression_ to resolve to a non-fallback _value_,
+though an error MUST still be emitted.
 
 When an error occurs within a _selector_,
-the _selector_ must not match any _variant_ _key_ other than the catch-all `*`
-and a Resolution or Selector error is emitted.
-
-## Fallback String Representations
-
-The formatted string representation of a message with a Syntax or Data Model error
-is the concatenation of U+007B LEFT CURLY BRACKET `{`,
-a fallback string,
-and U+007D RIGHT CURLY BRACKET `}`.
-If a fallback string is not defined,
-the U+FFFD REPLACEMENT CHARACTER `�` character is used,
-resulting in the string `{�}`.
-
-When an error occurs in an _expression_ that is being formatted,
-the fallback string representation of the _expression_
-always starts with U+007B LEFT CURLY BRACKET `{`
-and ends with U+007D RIGHT CURLY BRACKET `}`.
-Between the brackets, the following contents are used:
-
-- _expression_ with _literal_ operand: U+007C VERTICAL LINE `|`
-  followed by the value of the Literal,
-  and then by U+007C VERTICAL LINE `|`
-
-  > Examples: `{|your horse|}`, `{|42|}`
-
-- _expression_ with _variable_ operand: U+0024 DOLLAR SIGN `$`
-  followed by the _variable_ _name_ of the operand
-
-  > Example: `{$user}`
-
-- Standalone _expression_ with no operand:
-  U+003A COLON `:` followed by the _function_ _name_
-
-  > Example: `{:platform}`
-
-- Opening _expression_ with no operand:
-  U+002B PLUS SIGN `+` followed by the _function_ _name_
-
-  > Example: `{+tag}`
-
-- Closing _expression_ with no operand:
-  U+002D HYPHEN-MINUS `-` followed by the _function_ _name_
-
-  > Example: `{-tag}`
-
-- Otherwise: The U+FFFD REPLACEMENT CHARACTER `�` character
-
-  > Example: `{�}`
-
-_Option_ names and values are not included in the fallback string representations.
-
-When an error occurs in an _expression_ with a _variable_ operand
-and the _variable_ refers to a local _declaration_,
-the fallback string is formatted based on the _expression_ of the _declaration_,
-rather than the _expression_ in the _selector_ or _pattern_.
-
-> For example, attempting to format either of the following messages within a context that
-> does not provide for the function `:func` to be successfully resolved:
->
-> ```
-> let $var = {|horse| :func}
-> {The value is {$var}.}
-> ```
->
-> ```
-> let $var = {|horse|}
-> {The value is {$var :func}.}
-> ```
->
-> would result in both cases with this formatted string representation:
->
-> ```
-> The value is {|horse|}.
-> ```
+the _selector_ MUST NOT match any _variant_ _key_ other than the catch-all `*`
+and a Resolution or Selector error MUST be emitted.

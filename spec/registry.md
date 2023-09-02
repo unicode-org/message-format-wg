@@ -34,7 +34,7 @@ The main building block of the registry is the `<function>` element.
 It represents an implementation of a custom function available to translation at runtime.
 A function defines a human-readable _description_ of its behavior
 and one or more machine-readable _signatures_ of how to call it.
-Named `<pattern>` elements can optionally define regex validation rules for
+Named `<validationRule>` elements can optionally define regex validation rules for
 literals, option values, and variant keys.
 
 MessageFormat 2 functions can be invoked in two contexts:
@@ -59,7 +59,7 @@ A signature may also define one or more `<option>` elements representing _named 
 An option can be omitted in a call to the function,
 unless the `required` attribute is present.
 They accept either a finite enumeration of values (the `values` attribute)
-or validate their input with a regular expression (the `pattern` attribute).
+or validate their input with a regular expression (the `validationRule` attribute).
 Read-only options (the `readonly` attribute) can be displayed to translators in CAT tools, but may not be edited.
 
 Matching-function signatures additionally include one or more `<match>` elements
@@ -83,37 +83,38 @@ For the sake of brevity, only `locales="en"` is considered.
         </matchSignature>
     </function>
 
-    <pattern id="anyNumber" regex="-?[0-9]+(\.[0-9]+)"/>
-    <pattern id="positiveInteger" regex="[0-9]+"/>
-    <pattern id="currencyCode" regex="[A-Z]{3}"/>
+    <validationRule id="anyNumber" regex="-?[0-9]+(\.[0-9]+)"/>
+    <validationRule id="positiveInteger" regex="[0-9]+"/>
+    <validationRule id="currencyCode" regex="[A-Z]{3}"/>
 
     <function name="number">
         <description>
             Format a number.
-            Match a numerical value against CLDR plural categories or against a number literal.
+            Match a **formatted** numerical value against CLDR plural categories or against a number literal.
         </description>
 
         <matchSignature locales="en">
-            <input pattern="anyNumber"/>
+            <input validationRule="anyNumber"/>
             <option name="type" values="cardinal ordinal"/>
-            <option name="minimumIntegerDigits" pattern="positiveInteger"/>
-            <option name="minimumFractionDigits" pattern="positiveInteger"/>
-            <option name="maximumFractionDigits" pattern="positiveInteger"/>
-            <option name="minimumSignificantDigits" pattern="positiveInteger"/>
-            <option name="maximumSignificantDigits" pattern="positiveInteger"/>
-            <match values="one other"/>
-            <match pattern="anyNumber"/>
+            <option name="minimumIntegerDigits" validationRule="positiveInteger"/>
+            <option name="minimumFractionDigits" validationRule="positiveInteger"/>
+            <option name="maximumFractionDigits" validationRule="positiveInteger"/>
+            <option name="minimumSignificantDigits" validationRule="positiveInteger"/>
+            <option name="maximumSignificantDigits" validationRule="positiveInteger"/>
+            <!-- Since this applies to both cardinal and ordinal, all plural options are valid. -->
+            <match values="zero one two few many"/>
+            <match validationRule="anyNumber"/>
         </matchSignature>
 
         <formatSignature locales="en">
-            <input pattern="anyNumber"/>
-            <option name="minimumIntegerDigits" pattern="positiveInteger"/>
-            <option name="minimumFractionDigits" pattern="positiveInteger"/>
-            <option name="maximumFractionDigits" pattern="positiveInteger"/>
-            <option name="minimumSignificantDigits" pattern="positiveInteger"/>
-            <option name="maximumSignificantDigits" pattern="positiveInteger"/>
+            <input validationRule="anyNumber"/>
+            <option name="minimumIntegerDigits" validationRule="positiveInteger"/>
+            <option name="minimumFractionDigits" validationRule="positiveInteger"/>
+            <option name="maximumFractionDigits" validationRule="positiveInteger"/>
+            <option name="minimumSignificantDigits" validationRule="positiveInteger"/>
+            <option name="maximumSignificantDigits" validationRule="positiveInteger"/>
             <option name="style" readonly="true" values="decimal currency percent unit" default="decimal"/>
-            <option name="currency" readonly="true" pattern="currencyCode"/>
+            <option name="currency" readonly="true" validationRule="currencyCode"/>
         </formatSignature>
     </function>
 </registry>
@@ -133,7 +134,7 @@ which allow to validate the variant keys.
 If at least one `<match>` validation rules passes,
 a variant key is considered valid.
 
-- `<match pattern="anyNumber"/>` can be used to valide the `when 1` variant
+- `<match validationRule="anyNumber"/>` can be used to valide the `when 1` variant
   by testing the `1` key against the `anyNumber` regular expression defined in the registry file.
 - `<match values="one other"/>` can be used to valide the `when other` variant
   by verifying that the `other` key is present in the list of enumarated values: `one other`.

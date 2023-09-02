@@ -5,10 +5,11 @@
 The `MessageFormat` API and syntax have been around for a long time.
 
 Intro
-* `MessageFormat` is the Unicode API for software localization
-* It is 20 years old, well designed, proven solution
-* Its design is optimized for the software development model of 20y ago and its
-shortcomings result in mixed reception and adoption by the industry.
+
+- `MessageFormat` is the Unicode API for software localization
+- It is 20 years old, well designed, proven solution
+- Its design is optimized for the software development model of 20y ago and its
+  shortcomings result in mixed reception and adoption by the industry.
 
 The current wave of software development uses dynamic languages, modern UI
 frameworks and new forms of user interactions (voice, VR etc.).
@@ -23,8 +24,8 @@ Other efforts: [Fluent](https://projectfluent.org/),
 ## Core problems with the current `MessageFormat`
 
 1. The design is not modular enough
-    * Does not have any “extension points”
-    * Can't deprecate anything, even if now we know better
+   - Does not have any “extension points”
+   - Can't deprecate anything, even if now we know better
 2. Some existing problems
 3. Hard to map to the existing localization core structures
 4. Designed to be API only, plain text, UI, “imperative style”
@@ -65,21 +66,22 @@ date/time parameters were added).
 But the stability requirements prevent any major cleanup.
 
 ### 2. Some existing problems
-* ICU added new formatters, but MessageFormat does not support them
-* Combined selectors (select + plural) results in unreadable and error
-prone nesting
-* Select and plurals inside the message are difficult to translate because of 
-grammatical agreement requires words outside select / plural to change.
-See https://en.wikipedia.org/wiki/Agreement_(linguistics)
-* Patterns in the date / time / number placeholders are bad i18n, should use skeletons
-* No official support for gender. It can be done with `select`, but it
-is not the same thing (same as the difference between an `enum` and integer/strings). Developers can use masculine/feminine, masc/fem, male/female, etc.
-* Formatting for “parameters” known at compile time
-* Escaping with apostrophe is error prone. There is no reliable way to tell if
-it has to be doubled or not.
-* The # is used in plural format instead of {...}, but does not work for nesting unless the plural is the innermost selector. But named placeholders don't work
-properly for plurals with offset. So there are 2 ways to do the same thing that work in 98% of cases, but in special situations only one of the ways works. 
-* Does not support inflections, and it would be hard to add without breaking existing tools.
+
+- ICU added new formatters, but MessageFormat does not support them
+- Combined selectors (select + plural) results in unreadable and error
+  prone nesting
+- Select and plurals inside the message are difficult to translate because of
+  grammatical agreement requires words outside select / plural to change.
+  See https://en.wikipedia.org/wiki/Agreement_(linguistics)
+- Patterns in the date / time / number placeholders are bad i18n, should use skeletons
+- No official support for gender. It can be done with `select`, but it
+  is not the same thing (same as the difference between an `enum` and integer/strings). Developers can use masculine/feminine, masc/fem, male/female, etc.
+- Formatting for “parameters” known at compile time
+- Escaping with apostrophe is error prone. There is no reliable way to tell if
+  it has to be doubled or not.
+- The # is used in plural format instead of {...}, but does not work for nesting unless the plural is the innermost selector. But named placeholders don't work
+  properly for plurals with offset. So there are 2 ways to do the same thing that work in 98% of cases, but in special situations only one of the ways works.
+- Does not support inflections, and it would be hard to add without breaking existing tools.
 
 ### 3. Hard to map to the existing localization core structures
 
@@ -97,11 +99,12 @@ and return 4 message variants for Russian, for example.
 
 This is not a superficial problem. It affects most steps in the normal
 localization flow:
-* leveraging (the same string “X files” must be translated
-in 2/3 different ways)
-* validation (placeholders, length, terminology, etc.)
-* word count and payment
-* alignment (the process of creating a TM from source + translated documents)
+
+- leveraging (the same string “X files” must be translated
+  in 2/3 different ways)
+- validation (placeholders, length, terminology, etc.)
+- word count and payment
+- alignment (the process of creating a TM from source + translated documents)
 
 ### 4. Designed to be API only, plain text, UI, “imperative style”
 
@@ -110,7 +113,7 @@ replace placeholders, and return the string result with placeholders replaced. \
 An i18n-aware `printf`, basically.
 
 It does not play well with binding, formatting tags (think `html`),
-or  “document-like” content (for example templating systems like
+or “document-like” content (for example templating systems like
 [freemarker](https://freemarker.apache.org/),
 [mustache](https://mustache.github.io/), even JSP, PHP, etc.)
 
