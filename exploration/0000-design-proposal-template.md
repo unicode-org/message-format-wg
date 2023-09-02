@@ -1,5 +1,13 @@
 # Design Proposal Template
 
+Status: **Accepted**
+
+_Use the status **Proposed** when creating a design proposal._
+_The status will be changed to **Accepted** when the design proposal is accepted as working group consensus._
+_The status will be changed to **Rejected** if the design proposal ultimately is not adopted by the working group._
+_This is intended to allow new design documents to be first proposed and then iterated over time,_
+_rather than needing to have all their details agreed in a single PR._
+
 <details>
 	<summary>Metadata</summary>
 	<dl>
