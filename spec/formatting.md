@@ -70,7 +70,7 @@ _Expressions_ are used in _declarations_, _selectors_, and _patterns_.
 
 In a _declaration_, the resolved value of the _expression_ is assigned to a _variable_,
 which is available for use by later _expressions_.
-As such a _variable_ MAY then be referenced in different ways,
+Since a _variable_ can be referenced in different ways later,
 implementations SHOULD NOT immediately fully format the value for output.
 
 In _selectors_, the resolved value of an _expression_ is used for _pattern selection_.
@@ -93,17 +93,53 @@ and different implementations MAY choose to perform different levels of resoluti
 
 Depending on the presence or absence of an _operand_
 and a _function_, _private-use_, or _reserved_ _annotation_,
-one of the following is used to resolve the value of the _expression_:
+the resolved value of the _expression_ is determined as follows:
 
-- If the _expression_ contains no _annotation_,
-  its resolved value is determined by _literal resolution_ or _variable resolution_,
-  depending on the shape of the _operand_.
-- Else, if the _expression_ has a _function_ _annotation_,
-  its resolved value is defined by _function resolution_.
-- Else, if the _expression_ has a _private-use_ _annotation_,
-  its resolved value is defined according to the implementations's specification.
-- Else, the _expression_ has a _reserved_ _annotation_,
-  an Unsupported Expression error is emitted and a fallback value is used as its value.
+If the _expression_ contains a _reserved_ _annotation_,
+an `Unsupported Expression` error is emitted and a fallback value is used as its value.
+
+Else, if the _expression_ contains a _private-use_ _annotation_,
+its resolved value is defined according to the implementation's specification.
+
+Else, if the _expression_ contains an _annotation_,
+its resolved value is defined by _function resolution_.
+
+Else, the _expression_ will contain only an _operand_,
+which consists of either a _literal_ or a _variable_.
+
+If the _expression_ consists of a _variable_,
+its resolved value is defined by _variable resolution_.
+An implementation MAY perform additional processing
+when resolving the value of the _expression_.
+
+> For example, it could apply _function resolution_ using a _function_
+> and a set of _options_ chosen based on the value or type of the _variable_.
+> So, given a _message_ like this:
+>
+> ```
+> {Today is {$date}}
+> ```
+>
+> If the value passed in the _variable_ were a date object,
+> such as a JavaScript `Date` or a Java `java.util.Date` or `java.time.Temporal`,
+> the implementation could interpret the _placeholder_ `{$date}` as if
+> the pattern included the function `:datetime` with some set of default options.
+
+Else, if the _expression_ consists of a _literal_,
+its resolved value is defined by _literal resolution_.
+
+> **Note**
+> This means that a _literal_ value with no _annotation_
+> is always treated as a string.
+> To represent values that are not strings as a _literal_,
+> an _annotation_ needs to be provided:
+>
+> ```
+> let $aNumber = {1234 :number}
+> let $aDate = {|2023-08-30| :datetime}
+> let $aFoo = {|some foo| :foo}
+> {You have {42 :number}}
+> ```
 
 ### Literal Resolution
 
@@ -507,14 +543,16 @@ _Formatting_ is a mostly implementation-defined process,
 as it depends on the implementation's shape for resolved values
 and the result type of the formatting.
 
-Formatting errors MAY be emitted during _formatting_,
-as formatting is not necessarily defined on every resolved value.
-A formatter MAY provide a value to use in such a case instead of a _fallback value_.
+Resolved values cannot always be formatted by a given implementation.
+When such an error occurs during _formatting_,
+an implementation SHOULD emit a _formatting error_ and produce a
+_fallback value_ for the _placeholder_ that produced the error.
+A formatting function MAY substitute a value to use instead of a _fallback value_.
 
-_Formatting_ MAY produce formatted messages with the following data types,
-as well as any others:
+Implementations MAY represent the result of _formatting_ using the most
+appropriate data type or structure. Some examples of these include:
 
-- A single concatenated string.
+- A single string concatenated from the parts of the resolved _pattern_.
 - A string with associated attributes for portions of its text.
 - A flat sequence of objects corresponding to each resolved value.
 - A hierarchical structure of objects that group spans of resolved values,
