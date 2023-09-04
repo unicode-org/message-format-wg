@@ -30,11 +30,13 @@ From formatting date and time values to performing selection based on plural rul
 
 ## Requirements
 
-TBD
+Implementations are not required to implement and expose all the built-in functions that would result from this initiative. However, they are required to strictly stick to the standardized interface for the functions they do expose.
 
 ## Constraints
 
-TBD
+Like many standardized APIs out there, the biggest constraint on the resulting set of built-in functions would be that until we decide to make another major update to MessageFormat, we'd not be able to make breaking changes to the function interfaces since that would invalidate the promise of a consistent API across implementations and versions.
+
+Another constraint is that since MessageFormat would be used alongside other internationalization features in many programming environments, the final interface should be somewhat consistent to reduce developer confusion.
 
 ## Proposed Design
 
@@ -51,4 +53,4 @@ All conforming implementations of this specification MUST provide a set of <dfn>
 
 ## Alternatives Considered
 
-TBD
+The alternative would be to not include any built-in functions, essentially outsourcing the task of curating and maintaining commonly used functions to the ecosystem. The details of how this could work out in practice are unclear.
