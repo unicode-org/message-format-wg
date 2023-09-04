@@ -43,9 +43,14 @@ _What use-cases do we see? Ideally, quote concrete examples._
   > let $foo = {$bar :uppercase}
   > let $baz = {$someNumber :number groupingUsed=false}
   > ```
+
 - Users, such as translators, want to annotate a variable
   (either local or external) without invalidating
-  existing use of the variable in pattern strings. For example:
+  existing use of the variable in pattern strings.
+  This saves the effort of finding and fixing all occurences
+  in the various pattern strings, as well as issues that could arise from
+  (for example) translation memory systems recalling the old expression.
+  For example:
   > ```
   > let $foo = {$foo :transform}
   > match {$a :plural} {$b :plural}
@@ -59,6 +64,7 @@ _What use-cases do we see? Ideally, quote concrete examples._
   > when *   one {...{$foo}...}
   > when *   *   {...{$foo}...}
   > ```
+
 - Users want to perform multiple transforms on a value.
   Since our syntax does not permit embedding or chaining, this requires multiple declarations.
   > ```
@@ -74,14 +80,14 @@ _What use-cases do we see? Ideally, quote concrete examples._
   > let $foo2 = {$foo1 :trim}
   > let $foo3 = {$foo2 :sanitize target=html}
   > ```
-- Users want to impose typing on (we say "annotate") external variables
-  or literals:
+
+- Users want to annotate external variables or literals:
   > ```
   > let $fooAsNumber = {$foo :number}
   > let $anotherNumber = {42 :number}
   > ```
-- Users may wish to provide complex annotations which are reused across mulitple patterns
 
+- Users may wish to provide complex annotations which are reused across mulitple patterns
   > ```
   > let $count = {$count :number}
   > let $date = {$date :datetime dateStyle=long}
@@ -92,10 +98,19 @@ _What use-cases do we see? Ideally, quote concrete examples._
 
 - Implementers need to know what value is associated with a named variable, see #299.
 
+- Users would like their tooling to identify, perhaps via static analysis, when
+  they have mistyped or used an undeclared local variable.
+
+- Users would like to be able to create local variables without accidentially
+  overwriting external values. (The inverse of this, in which the declaration
+  overwrites an external value, can be difficult to debug if it occurs in,
+  for example, just one of many different localized string variations.)
+
 ## Requirements
 
 _What properties does the solution have to manifest to enable the use-cases above?_
 
+These were taken from a comment by @stasm in #310:
 - Be able to re-annotate variables without having to rename them in the message body
 - Allow static analysis to detect mistakes when referencing an undefined local variable
 - Be able to re-annotate variables multiple times (because we do not allow nesting)
@@ -122,15 +137,15 @@ and by using a visually distinctive pattern for local names
 
 ```abnf
 variable     = local_var / external_var
-local_var    = "@_" name
+local_var    = "#_" name
 external_var = "$" name
 ```
 
 > _Example_
 >
 > ```
-> let @_local = {$external :transform}
-> let @_anotherLocalVar = {|Some literal| :annotated}
+> let #_local = {$external :transform}
+> let #_anotherLocalVar = {|Some literal| :annotated}
 > ```
 
 To allow users to perform multiple annotations on a value,
@@ -152,8 +167,8 @@ on an external variable that does not exist.
 > _Example_
 >
 > ```
-> let @_local = {$external :transform}
-> modify @_local = {@_local :modification with=options}
+> let #_local = {$external :transform}
+> modify #_local = {#_local :modification with=options}
 > modify $external = {$external :transform adding=annotation}
 > ```
 
@@ -169,19 +184,23 @@ or in a placeholder.
 
 #### Sigil Choice for Local Variables
 
-The choice here of `@_` as the local variable sigil is probably not distinctive enough.
+The choice here of `#_` as the local variable sigil is probably not distinctive enough.
 It is probably okay to be a little inconvenient with local variable naming
 as these are less common than external variables.
 Alternatives to consider:
 
-- `@@foo`
-- `@foo@`
-- `@!foo`
-- `@ONLY_UPPER_ASCII_SNAKE`
+- `##foo`
+- `#foo#`
+- `#!foo`
+- `#ONLY_UPPER_ASCII_SNAKE`
 
 Note: if we have separate namespaces then local variables don't
 require Unicode names because their namespace is not subject
 to external data requirements.
+
+A different option is to say: it is up to the user to avoid using 
+declared names that would confuse translators and others.
+This would mean that we provide no defense on the syntax level.
 
 ## Alternatives Considered
 
