@@ -1,5 +1,7 @@
 # Expression Attributes
 
+Status: **Proposed**
+
 <details>
 	<summary>Metadata</summary>
 	<dl>
