@@ -81,6 +81,7 @@ _What use-cases do we see? Ideally, quote concrete examples._
   > let $anotherNumber = {42 :number}
   > ```
 - Users may wish to provide complex annotations which are reused across mulitple patterns
+
   > ```
   > let $count = {$count :number}
   > let $date = {$date :datetime dateStyle=long}
@@ -158,11 +159,11 @@ on an external variable that does not exist.
 
 When more than one `modify` declaration applies to the same named variable,
 or when a `modify` declaration is applied to a local variable
-defined in a `let` declaration, 
+defined in a `let` declaration,
 the named variable behaves as if each declaration were called
 in the sequence in which they appear in the message.
 Implementations are not required (by this design, anyway)
-to resolve values in a greedy manner. 
+to resolve values in a greedy manner.
 They might not resolve a value unless it is actually used in a selector
 or in a placeholder.
 
