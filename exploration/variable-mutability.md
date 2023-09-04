@@ -89,6 +89,8 @@ _What use-cases do we see? Ideally, quote concrete examples._
   > when * {You received {$count} messages on {$date}}
   > ```
 
+- Implementers need to know what value is associated with a named variable, see #299.
+
 ## Requirements
 
 _What properties does the solution have to manifest to enable the use-cases above?_
@@ -153,6 +155,18 @@ on an external variable that does not exist.
 > modify @_local = {@_local :modification with=options}
 > modify $external = {$external :transform adding=annotation}
 > ```
+
+When more than one `modify` declaration applies to the same named variable,
+or when a `modify` declaration is applied to a local variable
+defined in a `let` declaration, 
+the named variable behaves as if each declaration were called
+in the sequence in which they appear in the message.
+Implementations are not required (by this design, anyway)
+to resolve values in a greedy manner. 
+They might not resolve a value unless it is actually used in a selector
+or in a placeholder.
+
+#### Sigil Choice for Local Variables
 
 The choice here of `@_` as the local variable sigil is probably not distinctive enough.
 It is probably okay to be a little inconvenient with local variable naming
