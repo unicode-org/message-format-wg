@@ -412,32 +412,32 @@ what _options_ and _option_ values are valid,
 and what outputs might result.
 See [function registry](./) for more information.
 
-_Functions_ can be _standalone_, or can be an _opening element_ or _closing element_.
+_Expressions_ can be _standalone_, or can be an _opening element_ or _closing element_.
 
-A **_<dfn>standalone</dfn>_** _function_ is not expected to be paired with another _function_.
-An **_<dfn>opening element</dfn>_** is a _function_ that SHOULD be paired with a _closing element_.
-A **_<dfn>closing element</dfn>_** is a _function_ that SHOULD be paired with an _opening element_.
+A **_<dfn>standalone</dfn>_** _expression_ is not expected to be paired with another _expression_.
+An **_<dfn>opening element</dfn>_** is a _expression_ that SHOULD be paired with a _closing element_.
+A **_<dfn>closing element</dfn>_** is a _expression_ that SHOULD be paired with an _opening element_.
 
 An _opening element_ MAY be present in a message without a corresponding _closing element_,
 and vice versa.
 
-> A _message_ with a _standalone_ _function_ operating on the _variable_ `$now`:
+> A _message_ with a _standalone_ _expression_ operating on the _variable_ `$now`:
 >
 > ```
 > {{$now :datetime}}
 > ```
 >
-> A _message_ with two markup-like _functions_, `button` and `link`,
+> A _message_ with two markup-like _expressions_, `button` and `link`,
 > which the runtime can use to construct a document tree structure for a UI framework:
 >
 > ```
-> {{+button}Submit{-button} or {+link}cancel{-link}.}
+> {{button +html}Submit{button -html} or {link +html}cancel{link -html}.}
 > ```
 
 A _function_ consists of a prefix sigil followed by a _name_.
 The following sigils are used for _functions_:
 
-- `:` for a _standalone_ function
+- `:` for a _standalone_ expression
 - `+` for an _opening element_
 - `-` for a _closing element_
 
