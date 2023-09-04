@@ -39,6 +39,7 @@ _What use-cases do we see? Ideally, quote concrete examples._
 - Users want to reference external variables in expressions.
 - Users can modify external variables using declarations.
   For example, they can perform a text transformation or assign reusable formatting options.
+
   > ```
   > let $foo = {$bar :uppercase}
   > let $baz = {$someNumber :number groupingUsed=false}
@@ -51,6 +52,7 @@ _What use-cases do we see? Ideally, quote concrete examples._
   in the various pattern strings, as well as issues that could arise from
   (for example) translation memory systems recalling the old expression.
   For example:
+
   > ```
   > let $foo = {$foo :transform}
   > match {$a :plural} {$b :plural}
@@ -67,6 +69,7 @@ _What use-cases do we see? Ideally, quote concrete examples._
 
 - Users want to perform multiple transforms on a value.
   Since our syntax does not permit embedding or chaining, this requires multiple declarations.
+
   > ```
   > let $foo = {$foo :text-transform transform=uppercase}
   > let $foo = {$foo :trim}
@@ -82,12 +85,14 @@ _What use-cases do we see? Ideally, quote concrete examples._
   > ```
 
 - Users want to annotate external variables or literals:
+
   > ```
   > let $fooAsNumber = {$foo :number}
   > let $anotherNumber = {42 :number}
   > ```
 
 - Users may wish to provide complex annotations which are reused across mulitple patterns
+
   > ```
   > let $count = {$count :number}
   > let $date = {$date :datetime dateStyle=long}
@@ -111,6 +116,7 @@ _What use-cases do we see? Ideally, quote concrete examples._
 _What properties does the solution have to manifest to enable the use-cases above?_
 
 These were taken from a comment by @stasm in #310:
+
 - Be able to re-annotate variables without having to rename them in the message body
 - Allow static analysis to detect mistakes when referencing an undefined local variable
 - Be able to re-annotate variables multiple times (because we do not allow nesting)
@@ -198,7 +204,7 @@ Note: if we have separate namespaces then local variables don't
 require Unicode names because their namespace is not subject
 to external data requirements.
 
-A different option is to say: it is up to the user to avoid using 
+A different option is to say: it is up to the user to avoid using
 declared names that would confuse translators and others.
 This would mean that we provide no defense on the syntax level.
 
