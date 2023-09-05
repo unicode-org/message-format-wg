@@ -11,7 +11,7 @@ Status: **Proposed**
 		<dt>First proposed</dt>
 		<dd>2023-09-05</dd>
 		<dt>Pull Request</dt>
-		<dd>#000</dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/470">#470</a></dd>
 	</dl>
 </details>
 
@@ -105,7 +105,7 @@ markup expressions format to an empty string by default.
 An implementation may customize this behaviour,
 e.g. emitting XML-ish tags for each start/end expression.
 
-When formatting to parts (as proposed in #463),
+When formatting to parts (as proposed in <a href="https://github.com/unicode-org/message-format-wg/pull/463">#463</a>),
 markup expressions format to an object including the following properties:
 
 - The `type` of the markup: `"start" | "end"`
