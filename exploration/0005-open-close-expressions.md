@@ -7,6 +7,7 @@ Status: **Proposed**
 	<dl>
 		<dt>Contributors</dt>
 		<dd>@eemeli</dd>
+		<dd>@aphillips</dd>
 		<dt>First proposed</dt>
 		<dd>2023-09-05</dd>
 		<dt>Pull Request</dt>
@@ -18,13 +19,30 @@ Status: **Proposed**
 
 _What is this proposal trying to achieve?_
 
+Describe the use cases and requirements for _expressions_
+that enclose parts of a pattern
+and develop a design that satisfies these needs.
+
 ## Background
 
 _What context is helpful to understand this proposal?_
 
 ## Use-Cases
 
-- Representing markup, such as HTML
+- Representing markup, such as HTML, as expressions in a pattern
+  rather than as plain character sequences embedded in the _text_
+  of a pattern. This also allows parts of a markup sequence to be
+  programmable.
+
+**_Non-markup use cases to consider (which are not addressed by the design)_**
+
+- Represent templating language constructs so that they can pass through
+  the translation process and are not exposed to translation. For example,
+  Mustache templates.
+
+- Represent translation metadata, such as XLIFF placeholders, so that
+  portions of a message are "protected" or otherwise hinted in the
+  translation process.
 
 ## Requirements
 
