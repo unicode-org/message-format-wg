@@ -34,7 +34,7 @@ _What context is helpful to understand this proposal?_
   of a pattern. This also allows parts of a markup sequence to be
   programmable.
 
-**_Non-markup use cases to consider (which are not addressed by the design)_**
+**_Non-markup use cases to consider (which may or may not be addressed by the design)_**
 
 - Represent templating language constructs so that they can pass through
   the translation process and are not exposed to translation. For example,
