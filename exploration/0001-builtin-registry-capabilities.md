@@ -42,7 +42,8 @@ Another constraint is that since MessageFormat would be used alongside other int
 ## Proposed Design
 
 The **_<dfn>built-in registry</dfn>_** is the set of _functions_, together with their options, that are present in every implementation.
-Implementations MUST provide each of the built-in functions defined in the _built-in registry_, including all of the options.
+Implementations MUST provide each of the _built-in functions_ defined in the _built-in registry_, including all of the options.
+Note that the final output of these functions is still implementation-defined.
 They MAY include additional options, although implementers are cautioned to avoid options which might conflict with future standardization.
 These include the following capabilities:
 
@@ -58,3 +59,4 @@ These include the following capabilities:
 ## Alternatives Considered
 
 The alternative would be to not include any _built-in functions_, essentially outsourcing the task of curating and maintaining commonly used functions to the ecosystem.
+Another alternative would be to specify the signatures of the functions in a default registry for interoperability between implementations but not require implementations to implement all of them.
