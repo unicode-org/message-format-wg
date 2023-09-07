@@ -27,7 +27,7 @@ it would be good for both plural and non-plural match selection to be supported 
 MF1 supported selection on either cardinal plurals or ordinal numbers,
 via the `plural` and `selectordinal` selectors.
 It also customized this selection beyond the capabilities of `com.ibm.icu.text.PluralRules`
-by allowing for an `offset` parameter.
+by allowing for explicit value matching and an `offset` parameter.
 
 As pointed out by <a href="https://github.com/mihnita">@mihnita</a> in particular,
 category selection is not always appropriate for selection on a number:
@@ -36,8 +36,13 @@ such as a four-digit year or the integer value of an enumerator.
 
 Furthermore, as pointed out by <a href="https://github.com/ryzokuken">@ryzokuken</a>
 in <a href="https://github.com/unicode-org/message-format-wg/pull/457#discussion_r1307443288">#457 (comment)</a>,
-ordinal values are not truly "plural",
-even if they use categories with similar names and are determined by similar rules.
+ordinal selection is similar to plural selection, but not identical.
+
+Additionally,
+MF1 provides `ChoiceFormat` selection based on whether a number is within a range,
+and both JS and ICU PluralRules implementations provide for determining the plural category
+of a range based on its start and end values.
+These range-based selectors are not initially considered here.
 
 ## Use-Cases
 
@@ -46,7 +51,7 @@ we would like to support on numeric values:
 
 - cardinal plural selection
 - ordinal selection
-- exact match selection
+- exact value match selection
 
 ## Requirements
 
@@ -54,7 +59,8 @@ we would like to support on numeric values:
 - Enable ordinal number selection.
 - Enable exact match selection.
 - Support relevant formatting options, such as `minimumFractionDigits`.
-- Encourage developers to use the same options for formatting and selection.
+- Encourage developers to provide the formatting options used in patterns to the selector
+  so that proper selection can be done.
 
 ## Constraints
 
@@ -69,7 +75,7 @@ it makes sense to add a `<matchSignature>` to it with an option
 <option name="type" values="plural ordinal exact" default="plural" />
 ```
 
-The default `plural` value is presuming that to be the most common use case,
+The default `plural` value is presumed to be the most common use case,
 and it affords the least bad fallback when used incorrectly:
 Using "plural" for "exact" still selects exactly matching cases,
 whereas using "exact" for "plural" will not select LDML category matches.
