@@ -73,8 +73,9 @@ These include the following capabilities:
 The working group has considered a number of ways to address core functionality. These include:
 
 **No default registry** Each implementation would be free to define its own set of functions and options for each.
+
 - (+) Each implementation would be able to define functions and options according to existing I18N APIs which would be
-familiar to users in that language or runtime
+  familiar to users in that language or runtime
 - (-) Messages would not be portable between implementations
 - (-) Users would have to learn the variations between implementations
 - (-) Tooling would have to be adjusted for each variation
