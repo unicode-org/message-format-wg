@@ -70,6 +70,18 @@ These include the following capabilities:
 
 ## Alternatives Considered
 
-The alternative would be to not include a _built-in registry_, essentially outsourcing the task of curating and
-maintaining commonly used functions to the ecosystem.
-Another alternative would be to specify the signatures of the functions in a default registry for interoperability between implementations but not require implementations to implement all of them.
+The working group has considered a number of ways to address core functionality. These include:
+
+**No default registry** Each implementation would be free to define its own set of functions and options for each.
+- (+) Each implementation would be able to define functions and options according to existing I18N APIs which would be
+familiar to users in that language or runtime
+- (-) Messages would not be portable between implementations
+- (-) Users would have to learn the variations between implementations
+- (-) Tooling would have to be adjusted for each variation
+
+**Informative registry** The default registry could be made informative with implementations allowed to pick-and-choose
+(or ignore) entries.
+This would provide better interoperability for implementations claiming to implement the default registry, while
+allowing platform-specific variation.
+
+**Non-extensible registry entries** Like this design, but not allowing implementation specific options.
