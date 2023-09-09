@@ -267,3 +267,22 @@ this problem goes away. However, a local variable cannot be used to augment or a
 let #arg1 = {$arg1 :number maxFractionDigits=2}
 {Now I have to change {$arg} to {#arg}...}
 ```
+
+### All Variables are Immutable; Externals are Annotatable; Shared Namespace
+
+_This is @eemelie's proposal from the PR thread_
+
+If we add a new reserved keyword (the proposal says `input`) to
+allow annotation of external variables, and allow `let` to mask
+external values.
+
+```
+[ {"arg1": "37"},
+  {"arg2": "42"}
+]
+...
+input {$arg1 :number minFractionDigits=2}
+let $arg2 = {|wildebeest|}
+{{$arg1} prints 37.00 and {$arg2} prints wildebeest, no errors}
+...
+```
