@@ -270,7 +270,7 @@ let #arg1 = {$arg1 :number maxFractionDigits=2}
 
 ### All Variables are Immutable; Externals are Annotatable; Shared Namespace
 
-_This is @eemelie's proposal from the PR thread_
+_This is @eemeli's proposal from the PR thread_
 
 If we add a new reserved keyword (the proposal says `input`) to
 allow annotation of external variables, and allow `let` to mask
