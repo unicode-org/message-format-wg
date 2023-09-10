@@ -37,33 +37,33 @@ _What context is helpful to understand this proposal?_
 - As an app author, I want to be able to use minimal markup for formatting.
   On runtime, I expect these markup elements to produce live UI elements.
 
-	> ```
-	> {Click {+link}here{-link}.}
-	> ```
+  > ```
+  > {Click {+link}here{-link}.}
+  > ```
 
 - I want to be able to use minimal markup to inform XLIFF interchange.
 
-	> ```
-	> {Click {+ph}<a href="">here</a>{-ph}.}
-	> ```
+  > ```
+  > {Click {+ph}<a href="">here</a>{-ph}.}
+  > ```
 
 - As an app author, I want to be able to pass certain attributes to markup elements, including dynamic values, such as coming from varriables.
 
-	> ```
-	> {Click {+link href=$url}here{-link}.}
-	> ```
+  > ```
+  > {Click {+link href=$url}here{-link}.}
+  > ```
 
 - As a translator, I want to be able to translate content around and between markup elements.
 
-	> ```
-	> {Kliknij {+link}tutaj{-link}.}
-	> ```
+  > ```
+  > {Kliknij {+link}tutaj{-link}.}
+  > ```
 
 - As a translator, I want to be able to translate certain markup attributes.
 
-	> ```
-	> {Click {+link title=|Hey you!|}here{-link}}
-	> ```
+  > ```
+  > {Click {+link title=|Hey you!|}here{-link}}
+  > ```
 
 - As developers and translators, I want to protect placeholders from modification and deletion.
 
