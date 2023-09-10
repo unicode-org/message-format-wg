@@ -153,13 +153,15 @@ pattern = "{" *(text / placeholder) "}"
 placeholder = expression / markup
 
 markup       = "{" [s] markup-body [s] "}"
-markup-body  = (markup-start *(s option))
-             / markup-end
-markup-start = "+" name
-markup-end   = "-" name
+markup-body  = (markup-standalone *(s option))
+             / (markup-open *(s option))
+             / markup-close
+markup-standalone = "#" name
+markup-open       = "+" name
+markup-close      = "-" name
 ```
 
-This allows for placeholders like `{+b}`, `{-i}`, and `{+a title=|Link tooltip|}`.
+This allows for placeholders like `{+b}`, `{#img}`, and `{+a title=|Link tooltip|}`.
 Unlike annotations, markup expressions may not have operands.
 
 Markup is not valid in _declarations_ or _selectors_.
@@ -167,14 +169,15 @@ Markup is not valid in _declarations_ or _selectors_.
 When formatting to a string,
 markup placholders format to an empty string by default.
 An implementation may customize this behaviour,
-e.g. emitting XML-ish tags for each start/end placeholder.
+e.g. emitting XML-ish tags for each open/close placeholder.
 
 When formatting to parts (as proposed in <a href="https://github.com/unicode-org/message-format-wg/pull/463">#463</a>),
 markup placeholders format to an object including the following properties:
 
-- The `type` of the markup: `"start" | "end"`
+- The `type` of the markup: `"open" | "close" | "stnadalone"`
 - The `name` of the markup, e.g. `"b"` for `{+b}`
-- For _markup-start_, the `options` with the resolved key-value pairs of the expression options
+- For _markup-open_ and _markup-standalone_,
+  the `options` with the resolved key-value pairs of the expression options
 
 To make use of _markup_,
 the message should be formatted to parts or to some other target supported by the implementation,
@@ -190,9 +193,9 @@ would format to parts as
 ```coffee
 [
   { type: "text", value: "Click " },
-  { type: "start", name: "a", options: { title: "Link tooltip" } },
+  { type: "open", name: "a", options: { title: "Link tooltip" } },
   { type: "text", value: "here" },
-  { type: "end", name: "a" },
+  { type: "close", name: "a" },
   { type: "text", value: " to continue" }
 ]
 ```
