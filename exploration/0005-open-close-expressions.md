@@ -34,6 +34,49 @@ _What context is helpful to understand this proposal?_
   of a pattern. This also allows parts of a markup sequence to be
   programmable.
 
+- As an app author, I want to be able to use minimal markup for formatting.
+  On runtime, I expect these markup elements to produce live UI elements.
+
+	> ```
+	> {Click {+link}here{-link}.}
+	> ```
+
+- I want to be able to use minimal markup to inform XLIFF interchange.
+
+	> ```
+	> {Click {+ph}<a href="">here</a>{-ph}.}
+	> ```
+
+- As an app author, I want to be able to pass certain attributes to markup elements, including dynamic values, such as coming from varriables.
+
+	> ```
+	> {Click {+link href=$url}here{-link}.}
+	> ```
+
+- As a translator, I want to be able to translate content around and between markup elements.
+
+	> ```
+	> {Kliknij {+link}tutaj{-link}.}
+	> ```
+
+- As a translator, I want to be able to translate certain markup attributes.
+
+	> ```
+	> {Click {+link title=|Hey you!|}here{-link}}
+	> ```
+
+- As developers and translators, I want to protect placeholders from modification and deletion.
+
+- Paired markup elements should be protected from reordering, i.e. an open element must always come before the close element (if they are both present in the message).
+
+- Use TTS annotations.
+
+- Attributed strings (overlapping, enclosing).
+
+- TTY formatting escapes (?!)
+
+- Segmented markup.
+
 **_Non-markup use cases to consider (which may or may not be addressed by the design)_**
 
 - Represent templating language constructs so that they can pass through
