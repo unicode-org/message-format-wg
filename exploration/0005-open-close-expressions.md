@@ -92,14 +92,17 @@ _What context is helpful to understand this proposal?_
 
 - As a developer, I want to sanitize translations without removing the markup important to the message.
 
-	> Source HTML:
-	> ```
-	> <popup-info img="img/alt.png" data-text="Your card validation code (CVC) is an extra security feature — it is the last 3 or 4 numbers on the back of your card."></popup-info>
-	> ```
-	> Message:
-	> ```
-	> {+popup-info img=|img/alt.png| data-text=|Your card validation code (CVC) is an extra security feature — it is the last 3 or 4 numbers on the back of your card.|}{-popup-info}
-	> ```
+  > Source HTML:
+  >
+  > ```
+  > <popup-info img="img/alt.png" data-text="Your card validation code (CVC) is an extra security feature — it is the last 3 or 4 numbers on the back of your card."></popup-info>
+  > ```
+  >
+  > Message:
+  >
+  > ```
+  > {+popup-info img=|img/alt.png| data-text=|Your card validation code (CVC) is an extra security feature — it is the last 3 or 4 numbers on the back of your card.|}{-popup-info}
+  > ```
 
 **_Non-markup use cases to consider (which may or may not be addressed by the design)_**
 
