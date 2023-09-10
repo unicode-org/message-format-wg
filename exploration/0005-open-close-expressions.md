@@ -75,38 +75,32 @@ without access to the other parts of the selected pattern.
 This design relies on the recognition that the formatted output of MF2
 may be further processed by other tools before presentation to a user.
 
-Let us add _markup_ as a new type of _expression_,
-in parallel with _annotation_:
+Let us add _markup_ as a new type of _placeholder_,
+in parallel with _expression_:
 
 ```abnf
-expression      = "{" [s] expression-body [s] "}"
-expression-body = (operand [s annotation])
-                / annotation
-                / markup
+pattern = "{" *(text / placeholder) "}"
+placeholder = expression / markup
 
-annotation = (function *(s option))
-           / reserved
-           / private-use
-markup     = (markup-start *(s option))
-           / markup-end
-
-function     = ":" name
+markup       = "{" [s] markup-body [s] "}"
+markup-body  = (markup-start *(s option))
+             / markup-end
 markup-start = "+" name
 markup-end   = "-" name
 ```
 
-This allows for expressions like `{+b}`, `{-i}`, and `{+a title=|Link tooltip|}`.
+This allows for placeholders like `{+b}`, `{-i}`, and `{+a title=|Link tooltip|}`.
 Unlike annotations, markup expressions may not have operands.
 
-Markup expressions do not support selection.
+Markup is not valid in _declarations_ or _selectors_.
 
 When formatting to a string,
-markup expressions format to an empty string by default.
+markup placholders format to an empty string by default.
 An implementation may customize this behaviour,
-e.g. emitting XML-ish tags for each start/end expression.
+e.g. emitting XML-ish tags for each start/end placeholder.
 
 When formatting to parts (as proposed in <a href="https://github.com/unicode-org/message-format-wg/pull/463">#463</a>),
-markup expressions format to an object including the following properties:
+markup placeholders format to an object including the following properties:
 
 - The `type` of the markup: `"start" | "end"`
 - The `name` of the markup, e.g. `"b"` for `{+b}`
