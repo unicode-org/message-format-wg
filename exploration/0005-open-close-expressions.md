@@ -174,7 +174,7 @@ e.g. emitting XML-ish tags for each open/close placeholder.
 When formatting to parts (as proposed in <a href="https://github.com/unicode-org/message-format-wg/pull/463">#463</a>),
 markup placeholders format to an object including the following properties:
 
-- The `type` of the markup: `"open" | "close" | "stnadalone"`
+- The `type` of the markup: `"open" | "close" | "standalone"`
 - The `name` of the markup, e.g. `"b"` for `{+b}`
 - For _markup-open_ and _markup-standalone_,
   the `options` with the resolved key-value pairs of the expression options
