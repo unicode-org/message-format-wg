@@ -45,16 +45,16 @@ _What context is helpful to understand this proposal?_
   On runtime, I expect these markup elements to produce live UI elements.
 
   > ```
-  > {This is a giraffe: {:img src=giraffe.gif}.}
+  > {This is a giraffe: {#img src=giraffe.gif}.}
   > ```
 
 - I want to be able to use minimal markup to inform XLIFF interchange.
 
   > ```
-  > {Click {+ph}<a href="">here</a>{-ph}.}
+  > {Click {+ph}<a href="">{-ph}here{+ph}</a>{-ph}.}
   > ```
 
-- As an app author, I want to be able to pass certain attributes to markup elements, including dynamic values, such as coming from varriables.
+- As an app author, I want to be able to pass certain attributes to markup elements, including dynamic values, such as coming from variables.
 
   > ```
   > {Click {+link href=$url}here{-link}.}
@@ -72,21 +72,26 @@ _What context is helpful to understand this proposal?_
   > {Click {+link title=|Hey you!|}here{-link}}
   > ```
 
-- As developers and translators, I want to protect placeholders from modification and deletion.
+- As a developer or as a translator, I want to protect placeholders from modification and deletion.
 
 - Paired markup elements should be protected from reordering, i.e. an open element must always come before the close element (if they are both present in the message).
 
-- Use TTS annotations.
+- As a developer working in certain domains, I want to be able to use markup such as TTML or SSML.
 
-- Attributed strings (overlapping, enclosing).
+- As a developer, I want to be able to produce "attributed strings" appropriate for my environment, which may include features such as overlapping or enclosing properties.
 
-- TTY formatting escapes (?!)
+- As a developer in certain environments, I want to be able to include TTY formatting escapes (?!) in my strings.
 
-- Segmented markup.
+- As a developer, I want to be able to split up text between strings, such as open or close elements are in separate strings.
+- As a translator or tool, I want to be able to segment larger messages or process messages "segmented" from larger blocs of text, such that markup is split between messages or segments.
 
-- Leveraging.
+- As a translator, I want my tools to be able to leverage translations where the text differs only in markup, e.g.:
+  >```
+  >{This is {+b}sure{-b} good.}
+  >{This is {+i}sure{-i}good.}
+  >```
 
-- CAT tools support the concepts of open, close, and standalone, to provide certain functionalities above.
+- As a CAT tool, I want to use the concepts of open, close, and standalone that I am already familiar with, to provide certain functionalities above.
 
 - As a developer, I want to connect message markup with existing element instances in the UI.
 
