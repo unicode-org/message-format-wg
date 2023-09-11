@@ -5,6 +5,7 @@
 1. [Introduction](#introduction)
    1. [Conformance](#conformance)
    1. [Terminology and Conventions](#terminology-and-conventions)
+   1. [Stability Policy](#stability-policy)
 1. [Syntax](syntax.md)
    1. [Productions](syntax.md#productions)
    1. [Tokens](syntax.md#tokens)
@@ -66,3 +67,23 @@ A **_term_** looks like this when it is defined in this specification.
 A reference to a _term_ looks like this.
 
 > Examples are non-normative and styled like this.
+
+### Stability Policy
+
+Updates to this specification MUST NOT change the formatting or other behaviour
+of valid messages written for earlier versions of this specification
+that only use functions and expression attributes defined in this specification.
+Later specification versions MAY make previously invalid messages valid.
+
+Updates to this specification MUST NOT introduce message syntax that,
+when parsed according to earlier versions of this specification,
+would produce syntax or data model errors.
+Such messages MAY produce errors when formatted
+according to an earlier version of this specification.
+
+Later versions of this specification MAY define new function names,
+function option names, and expression attribute names with new meanings.
+Such names defined in this specification MUST consist only of
+characters in the ranges a-z, A-Z, and 0-9.
+Users defining custom names SHOULD include at least one character outside these ranges
+to ensure that they will be compatible with future versions of this specification.
