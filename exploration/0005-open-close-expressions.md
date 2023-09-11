@@ -86,10 +86,11 @@ _What context is helpful to understand this proposal?_
 - As a translator or tool, I want to be able to segment larger messages or process messages "segmented" from larger blocs of text, such that markup is split between messages or segments.
 
 - As a translator, I want my tools to be able to leverage translations where the text differs only in markup, e.g.:
-  >```
-  >{This is {+b}sure{-b} good.}
-  >{This is {+i}sure{-i}good.}
-  >```
+
+  > ```
+  > {This is {+b}sure{-b} good.}
+  > {This is {+i}sure{-i}good.}
+  > ```
 
 - As a CAT tool, I want to use the concepts of open, close, and standalone that I am already familiar with, to provide certain functionalities above.
 
