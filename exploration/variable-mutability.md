@@ -188,7 +188,7 @@ local $bar = {42 :number}
 
 An _input-declaration_ is not required for each external variable.
 A _local-declaration_ takes precedence and does not cause an error
-if a similarly named external variable is passed to the formatter
+if an identically named external variable is passed to the formatter
 _without_ a corresponding _input-declaration_ in the message.
 
 The use case of chaining operations on a variable with a single name is not supported here,
