@@ -135,7 +135,108 @@ _What prior decisions and existing conditions limit the possible design?_
 
 ## Proposed Design
 
-_Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
+Let us introduce a new keyword `input` that allows for the annotation of external variables.
+It works like this:
+
+```
+input {$count :number}
+input {$date :datetime dateStyle=long}
+match {$count}
+when 1 {You received one message on {$date}}
+when * {You received {$count} messages on {$date}}
+```
+
+This effectively replaces the current "hack" of saying `let $foo = {$foo ...}`,
+and provides a way to explicitly declare that a variable is non-local:
+`input {$bar}` doesn't require an annotation.
+
+To correspond with "input",
+let us also change the local variable declaration keyword to be `local` rather than `let`.
+
+At the syntax/data model level,
+`input` or `local` declarations would not be required for all selectors and placeholders,
+but a user-configured validator could of course be stricter.
+
+In the ABNF the change would look like this:
+
+```abnf
+message = [s] *(declaration [s]) body [s]
+declaration = input-declaration / local-declaration
+
+input-declaration = input [s] "{" [s] variable [s annotation] [s] "}"
+input = %x69.6E.70.75.74  ; "input"
+
+local-declaration = local s variable [s] "=" [s] expression
+local = %x6C.6F.63.61.6C  ; "local"
+```
+
+The _expression_ rule can't be used directly in _input-declaration_ because the _variable_ is required.
+
+With this approach, variables are immutable,
+so each may be defined by only one _declaration_.
+The order of declarations does not matter,
+to allow for e.g. `input` annotations to refer to `local` variables.
+
+References to later declarations are not allowed,
+so this is considered an error:
+
+```
+local $foo = {$bar :number}
+local $bar = {42 :number}
+{The answer is {$foo}}
+```
+
+An _input-declaration_ is not required for each external variable.
+A _local-declaration_ takes precedence and does not cause an error
+if a similarly named external variable is passed to the formatter
+_without_ a corresponding _input-declaration_ in the message.
+
+The use case of chaining operations on a variable with a single name is not supported here,
+and the `$foo1`, `$foo2` `$foo3` sorts of names would be required for that.
+
+> The examples given above would be written as follows:
+>
+> ```
+> local $foo = {$bar :uppercase}
+> local $baz = {$someNumber :number groupingUsed=false}
+> ```
+>
+> ```
+> input {$foo :transform}
+> match {$a :plural} {$b :plural}
+> when 0   0   {...{$foo}...}
+> when 0   one {...{$foo}...}
+> when 0   *   {...{$foo}...}
+> when one 0   {...{$foo}...}
+> when one one {...{$foo}...}
+> when one *   {...{$foo}...}
+> when *   0   {...{$foo}...}
+> when *   one {...{$foo}...}
+> when *   *   {...{$foo}...}
+> ```
+>
+> ```
+> input {$foo :text-transform transform=uppercase}
+> local $foo2 = {$foo :trim}
+> local $foo3 = {$foo2 :sanitize target=html}
+> ```
+>
+> ```
+> local $fooAsNumber = {$foo :number}
+> local $anotherNumber = {42 :number}
+> ```
+>
+> ```
+> input {$count :number}
+> input {$date :datetime dateStyle=long}
+> match {$count}
+> when 1 {You received one message on {$date}}
+> when * {You received {$count} messages on {$date}}
+> ```
+
+## Alternatives Considered
+
+### Original Proposal
 
 Separate local variables from externally passed values by altering the sigil
 and by using a visually distinctive pattern for local names
@@ -208,12 +309,6 @@ A different option is to say: it is up to the user to avoid using
 declared names that would confuse translators and others.
 This would mean that we provide no defense on the syntax level.
 
-## Alternatives Considered
-
-_What other solutions are available?_
-_How do they compare against the requirements?_
-_What other properties they have?_
-
 ### All Variables are Mutable; Shared Namespace
 
 **This is the current design.**
@@ -266,23 +361,4 @@ this problem goes away. However, a local variable cannot be used to augment or a
 ...
 let #arg1 = {$arg1 :number maxFractionDigits=2}
 {Now I have to change {$arg} to {#arg}...}
-```
-
-### All Variables are Immutable; Externals are Annotatable; Shared Namespace
-
-_This is @eemeli's proposal from the PR thread_
-
-If we add a new reserved keyword (the proposal says `input`) to
-allow annotation of external variables, and allow `let` to mask
-external values.
-
-```
-[ {"arg1": "37"},
-  {"arg2": "42"}
-]
-...
-input {$arg1 :number minFractionDigits=2}
-let $arg2 = {|wildebeest|}
-{{$arg1} prints 37.00 and {$arg2} prints wildebeest, no errors}
-...
 ```
