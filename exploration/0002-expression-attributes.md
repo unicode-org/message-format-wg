@@ -45,6 +45,17 @@ At least the following expression attributes should be considered:
     > {Hello {$place @fallback=world}}
     > ```
 
+  - `id` — An identifier for the expression.
+    This is included in the formatted part,
+    and allows the parts of an expression to be explicitly addressed.
+
+    > Example identifying two formatted numbers
+    > in a message with badly named input variables:
+    >
+    > ```
+    > {You received {$_0 :number @id=count} messages in {$_1 :number @id=time} hours.}
+    > ```
+
   - `locale` — An override for the locale used to format the expression.
     Should be expressed as a non-empty sequence of BCP 47 language codes.
 
