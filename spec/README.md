@@ -85,5 +85,7 @@ Later versions of this specification MAY define new function names,
 function option names, and expression attribute names with new meanings.
 Such names defined in this specification MUST consist only of
 characters in the ranges a-z, A-Z, and 0-9.
-Users defining custom names SHOULD include at least one character outside these ranges
-to ensure that they will be compatible with future versions of this specification.
+
+> [!NOTE]
+> Users defining custom names SHOULD include at least one character outside these ranges
+> to ensure that they will be compatible with future versions of this specification.
