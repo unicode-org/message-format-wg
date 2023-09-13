@@ -325,24 +325,31 @@ input {$dist :number unit=km}
 ```
 #input {$dist :number unit=km}The distance is {$dist}.
 ```
+
 ```
 #input {$dist :number unit=km}
 {$dist} is the distance.
 ```
+
 ```
 #input {$dist :number unit=km}
 {:number foo=bar} is the distance.
 ```
+
 ```
 #input {$dist :number unit=km}
 {42 :number} is the distance.
 ```
+
 quote the pattern to get starting whitespace:
+
 ```
 #input {$dist :number unit=km}
 { {42 :number} is the distance.}
 ```
+
 **Evil experiments with literal quoting**
+
 ```
 This horse is a {fast camel digits=foo}
 This horse is a {fast :camel}
@@ -392,24 +399,22 @@ While editing, notice the "single line" format of the above:
 
 > input {$count :number minFracDigits=2} match {$count} when 1 {One apple.} when \* {{$count} apples.}
 
-
 ---
+
 [x] spannable and standalone non-placeholders
-   [?] proposed syntax with three sigils +/-/#
+[?] proposed syntax with three sigils +/-/#
 [x] non mutable shared namespace using input and local keywords
 [x] start in text mode for messages with no declarations and match
-    [x] need to write set of core example messages
+[x] need to write set of core example messages
 [x] format to parts
-   [?] design for shape of formatted parts for embedded 
+[?] design for shape of formatted parts for embedded
 [x] expression attributes use cases
-   [ ] design
+[ ] design
 [X!!] logo
 [ ] Nmtoken
 [ ] Overriding functions, extending functions, potentially namespacing
 [x] have a stability policy
-    [?] actual stability policy (in progress)
-[x] lazy/eager evaluation - we will not prescribe it and will attempt to avoid forcing eager
-    - annotations are available post declaration
+[?] actual stability policy (in progress)
+[x] lazy/eager evaluation - we will not prescribe it and will attempt to avoid forcing eager - annotations are available post declaration
 [x] TAG review is a goal for ~November
 [x] Received valuable external input and actually listened to it
-
