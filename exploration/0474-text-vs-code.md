@@ -173,6 +173,9 @@ and all "text" is outside them.
 Simple messages are not surrounded by any delimiters
 other that what may be required by the resource format.
 
+Depending on the details of the syntax of code inside the `{...}`,
+unquoted non-numeric literals may need to be removed from the syntax.
+
 Examples using either "minimal" or "all" trimming:
 
 ```
