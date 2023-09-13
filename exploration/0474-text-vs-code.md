@@ -400,4 +400,3 @@ While editing, notice the "single line" format of the above:
 > input {$count :number minFracDigits=2} match {$count} when 1 {One apple.} when \* {{$count} apples.}
 
 ---
-
