@@ -20,7 +20,7 @@ _What is this proposal trying to achieve?_
 
 Implementations will provide the functions and function options
 mandated by the default registry.
-We expect that these functions and their options will serve many of the 
+We expect that these functions and their options will serve many of the
 core needs for MF2 developers.
 However, there are many capabilities available in formatting libraries
 or operating environments that could be useful to developers and translators.
@@ -40,8 +40,6 @@ and what, if any, affects this has the on the namespace.
 ## Background
 
 _What context is helpful to understand this proposal?_
-
-
 
 ## Use-Cases
 
