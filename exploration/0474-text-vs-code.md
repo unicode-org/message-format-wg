@@ -246,8 +246,7 @@ when 1 masculine {You received one message on {$date}}
 when * masculine {You received {$count} messages on {$date}}
 ```
 
-_Permuations_
-
+**_Permuations_**
 ```
 #input {$count :number}
 #local $date1 = {$date   :datetime  dateStyle=long}
@@ -267,7 +266,10 @@ when * masculine {You received {$count} messages on {$date}}
 #match {$gender}
 1 masculine {You received one message on {$date}}
 * masculine {You received {$count} messages on {$date}}
+```
 
+**Remove most {} except to delimit placeholders and patterns**
+```
 #input $count:number(dateStyle=long foo=bar)
 #local $date1 = $date:datetime(dateStyle=long)
 #match [$count:number(minFracDigits=2) $gender]
@@ -332,13 +334,15 @@ input {$dist :number unit=km}
 ```
 
 -- current syntax
+```
 input {$count :number minFracDigits=2}
 match {$count}
 when 1 {One apple.}
 when \* {{$count} apples.}
+```
 
 ===============================================================================
-
+```
 #input {$item :noun case=accusative}
 #input {$color :adjective accord=$item}
 {You bought a {$color} {$item}.}
@@ -347,7 +351,12 @@ when \* {{$count} apples.}
 
 #input {$item :noun case=accusative}
 {You bought a {$color :adjective agree=$item} {$item}.}
-
 ```
 
-```
+While editing, notice the "single line" format of the above:
+
+> #input {$item :noun case=accusative}#input {$color :adjective accord=$item}{You bought a {$color} {$item}.}
+
+> #input {$item :noun case=accusative}{You bought a {$color :adjective agree=$item} {$item}.}
+
+> input {$count :number minFracDigits=2} match {$count} when 1 {One apple.} when \* {{$count} apples.}
