@@ -401,20 +401,20 @@ While editing, notice the "single line" format of the above:
 
 ---
 
-[x] spannable and standalone non-placeholders
-[?] proposed syntax with three sigils +/-/#
-[x] non mutable shared namespace using input and local keywords
-[x] start in text mode for messages with no declarations and match
-[x] need to write set of core example messages
-[x] format to parts
-[?] design for shape of formatted parts for embedded
-[x] expression attributes use cases
-[ ] design
-[X!!] logo
-[ ] Nmtoken
-[ ] Overriding functions, extending functions, potentially namespacing
-[x] have a stability policy
-[?] actual stability policy (in progress)
-[x] lazy/eager evaluation - we will not prescribe it and will attempt to avoid forcing eager - annotations are available post declaration
-[x] TAG review is a goal for ~November
-[x] Received valuable external input and actually listened to it
+- [x] spannable and standalone non-placeholders
+- [?] proposed syntax with three sigils +/-/#
+- [x] non mutable shared namespace using input and local keywords
+- [x] start in text mode for messages with no declarations and match
+- [x] need to write set of core example messages
+- [x] format to parts
+   - [?] design for shape of formatted parts for embedded
+- [x] expression attributes use cases
+   - [ ] design
+- [X!!] logo
+- [ ] Nmtoken
+- [ ] Overriding functions, extending functions, potentially namespacing
+- [x] have a stability policy
+   - [?] actual stability policy (in progress)
+- [x] lazy/eager evaluation - we will not prescribe it and will attempt to avoid forcing eager - annotations are available post declaration
+- [x] TAG review is a goal for ~November
+- [x] Received valuable external input and actually listened to it
