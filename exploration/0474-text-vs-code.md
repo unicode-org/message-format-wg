@@ -97,6 +97,10 @@ such as `:number`, `$var`, `|literal|`, `+bold`, and `@attr`.
 
 The current syntax supports unquoted literal values as operands.
 
+Messages themselves are "simple strings" and must be considered to be a single
+line of text. In many containing formats, newlines will be represented as the local
+equivalent of `\n`.
+
 ## Proposed Design
 
 TBD
@@ -201,4 +205,130 @@ You have eaten {$count} apples
 
 ```
 {| |}and some more
+```
+
+### Start with text, formalize for code
+
+_(From an exercise we did 2023-09-12 with @stasm, @mihnita, @aphillips. 
+This section is highly experimental, was produced with the help of beer and tapas,
+and is preserving a conversation from Slack)_
+
+This approach assumes that most users want any string message to be
+a valid message format pattern with the minimal amount of special decoration.
+"Code" elements can be accessed with a minimum of special decoration.
+
+**Make the keywords start with a distinct character**
+```
+#input $count :number
+#local $date1 = $date   :datetime  dateStyle=long
+#match $count :number minFracDigits=2, $gender
+#when 1, masculine {You received one message on {$date}}
+#when *, masculine {You received {$count} messages on {$date}}
+```
+
+**Make the block-start keywords start with a distinct character**
+```
+#input $count :number minFracDigits=2 #local $date1 = $date   :datetime  dateStyle=long
+#match $count :number minFracDigits=2, $gender
+when 1, masculine {You received one message on {$date}}
+when *, masculine {You received {$count} messages on {$date}}
+```
+
+**Have a "message starts in code mode" sigil**
+```
+#input {$count :number}
+local $date1 = {$date   :datetime  dateStyle=long}
+match {$count :number minFracDigits=2} {$gender}
+when 1 masculine {You received one message on {$date}}
+when * masculine {You received {$count} messages on {$date}}
+```
+
+_Permuations_
+```
+#input {$count :number}
+#local $date1 = {$date   :datetime  dateStyle=long}
+#match {$count :number minFracDigits=2} $gender $foo
+when 1 masculine {You received one message on {$date}}
+when * masculine {You received {$count} messages on {$date}}
+
+#input {$count :number dateStyle=long foo=bar}
+#local $date1 = {$date   :datetime  dateStyle=long}
+#match {$count :number minFracDigits=2} {$gender}
+1 masculine {You received one message on {$date}}
+* masculine {You received {$count} messages on {$date}}
+
+#input {$count :number dateStyle=long foo=bar}
+#local $date1 = {$date   :datetime  dateStyle=long}
+#match {$count :number minFracDigits=2}
+#match {$gender}
+1 masculine {You received one message on {$date}}
+* masculine {You received {$count} messages on {$date}}
+
+#input $count:number(dateStyle=long foo=bar)
+#local $date1 = $date:datetime(dateStyle=long)
+#match [$count:number(minFracDigits=2) $gender]
+[1 masculine] {You received one message on {$date}}
+[* masculine] {You received {$count:number()} messages on {$date}}
+```
+**Avoid keywords, use the sigils to signal code mode**
+```
+$count:number(dateStyle=long, foo=bar,)
+$count :number
+$date1 = {$date   :datetime  dateStyle=long}
+?? {$count :number minFracDigits=2} $gender $foo
+[1 masculine] {You received one message on {$date}}
+[* masculine] {You received {$count} messages on {$date}}
+```
+
+**Exploration of options side-by-side**
+...or really _one above the other_...
+
+-- current syntax
+```
+{Hello, {$username}!}
+```
+-- start in text mode
+```
+Hello, {$username}!
+{$username}, welcome!
+```
+-- current syntax
+```
+input {$dist :number unit=km}
+{The distance is {$dist}.}
+```
+-- start in text mode, switch to code, stay until end of input
+```
+#input {$dist :number unit=km}
+{The distance is {$dist}.}
+```
+-- or, start in text mode, switch to code, exit back into text (makes newline meaningful)
+```
+#input {$dist :number unit=km}The distance is {$dist}.
+```
+
+
+-- start in text mode
+```
+#input {$count :number minFracDigits=2}
+#match {$count}
+1 {One apple.}
+* {{$count} apples.}
+```
+-- current syntax
+input {$count :number minFracDigits=2}
+match {$count}
+when 1 {One apple.}
+when * {{$count} apples.}
+
+===============================================================================
+
+#input {$item :noun case=accusative}
+#input {$color :adjective accord=$item}
+{You bought a {$color} {$item}.}
+
+{You bought a {$color :adjective gender=$item.gender case=accusative} {$item :noun case=accusative}.}
+
+#input {$item :noun case=accusative}
+{You bought a {$color :adjective agree=$item} {$item}.}
 ```
