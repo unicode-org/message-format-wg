@@ -83,14 +83,9 @@ Such messages MAY produce errors when formatted
 according to an earlier version of this specification.
 
 From version 2.0, MessageFormat will only reserve, define, or require
-function names,
-function option names,
-or expression attribute names
+function names or function option names
 consisting of characters in the ranges a-z, A-Z, and 0-9.
 All other names in these categories are reserved for the use of implementations or users.
-function option names, and expression attribute names with new meanings.
-Such names defined in this specification MUST consist only of
-characters in the ranges a-z, A-Z, and 0-9.
 
 > [!NOTE]
 > Users defining custom names SHOULD include at least one character outside these ranges
