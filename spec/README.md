@@ -71,7 +71,7 @@ A reference to a _term_ looks like this.
 ### Stability Policy
 
 Updates to this specification MUST NOT change
-the syntactical meaning, the formatting, or other behaviour
+the syntactical meaning, the runtime output, or other behaviour
 of valid messages written for earlier versions of this specification
 that only use functions and expression attributes defined in this specification.
 Later specification versions MAY make previously invalid messages valid.
