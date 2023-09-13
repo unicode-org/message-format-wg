@@ -247,6 +247,7 @@ when * masculine {You received {$count} messages on {$date}}
 ```
 
 **_Permuations_**
+
 ```
 #input {$count :number}
 #local $date1 = {$date   :datetime  dateStyle=long}
@@ -269,6 +270,7 @@ when * masculine {You received {$count} messages on {$date}}
 ```
 
 **Remove most {} except to delimit placeholders and patterns**
+
 ```
 #input $count:number(dateStyle=long foo=bar)
 #local $date1 = $date:datetime(dateStyle=long)
@@ -334,6 +336,7 @@ input {$dist :number unit=km}
 ```
 
 -- current syntax
+
 ```
 input {$count :number minFracDigits=2}
 match {$count}
@@ -342,6 +345,7 @@ when \* {{$count} apples.}
 ```
 
 ===============================================================================
+
 ```
 #input {$item :noun case=accusative}
 #input {$color :adjective accord=$item}
