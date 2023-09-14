@@ -23,10 +23,10 @@ Formatting of a _message_ is defined by the following operations:
   and is detailed under _literal resolution_.
 
 > **Note**
-> 
+>
 > **This specification does not require either eager or lazy _expression resolution_ of _message_
 > parts; do not construe any requirement in this document as requiring either.**
-> 
+>
 > Implementations are not required to evaluate all parts of a _message_ when
 > parsing, processing, or formatting.
 > In particular, an implementation MAY choose not to evaluate or resolve the
