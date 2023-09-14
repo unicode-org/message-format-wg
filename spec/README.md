@@ -76,6 +76,12 @@ of valid messages written for earlier versions of this specification
 that only use functions and expression attributes defined in this specification.
 Later specification versions MAY make previously invalid messages valid.
 
+> [!NOTE]
+> This does not guarantee that the results of formatting will never change.
+> Even when the specification doesn't change,
+> the functions for date formatting, number formatting and so on
+> will change their results over time.
+
 Updates to this specification MUST NOT introduce message syntax that,
 when parsed according to earlier versions of this specification,
 would produce syntax or data model errors.
