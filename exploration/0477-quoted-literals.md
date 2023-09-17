@@ -1,5 +1,15 @@
 # Quoted Literals
 
+Status: **Accepted**
+
+<details>
+	<summary>Metadata</summary>
+	<dl>
+		<dt>Pull Request</dt>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/477">#477</a></dd>
+	</dl>
+</details>
+
 ## Objective
 
 Document the rationale for including quoted literals in MessageFormat and for delimiting them with the vertical line character, `|`.
