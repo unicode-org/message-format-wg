@@ -22,6 +22,21 @@ Formatting of a _message_ is defined by the following operations:
   The resolution of _text_ is rather straighforward,
   and is detailed under _literal resolution_.
 
+  > **Note**
+  >
+  > **This specification does not require either eager or lazy _expression resolution_ of _message_
+  > parts; do not construe any requirement in this document as requiring either.**
+  >
+  > Implementations are not required to evaluate all parts of a _message_ when
+  > parsing, processing, or formatting.
+  > In particular, an implementation MAY choose not to evaluate or resolve the
+  > value of a given _expression_ until it is actually used by a
+  > selection or formatting process.
+  > However, when an _expression_ is resolved, it MUST behave as if all preceding
+  > _declarations_ and _selectors_ affecting _variables_ referenced by that _expression_
+  > have already been evaluated in the order in which the relevant _declarations_
+  > and _selectors_ appear in the _message_.
+
 - **_Pattern Selection_** determines which of a message's _patterns_ is formatted.
   For a message with no _selectors_, this is simple as there is only one _pattern_.
   With _selectors_, this will depend on their resolution.
