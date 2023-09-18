@@ -102,7 +102,7 @@ _What properties does the solution have to manifest to enable the use-cases abov
 
 - **[r1; high priority]** Minimize the need to escape characters inside literals. In particular, choose a delimiter that isn't frequently used in translation content. Having to escape characters inside literals is inconvenient and error-prone when done by hand, and it also introduces the backslash into the message, `\`, which is the escape introducer. The backslash then needs to be escaped too, when the message is embedded in code or containers. (This is how some syntaxes produce the gnarly `\\\`.)
 - **[r2; high priority]** Minimize the need to escape characters when embedding messages in code or containers. In particular, choose a delimiter that isn't frequently used as a string delimiter in programming languages and container formats. However, note that many programming languages also provide alternative ways of delimiting strings, e.g. _raw strings_ or triple-quoted literals.
-- **[r3; high priority]** Minimize the need to change the message in other ways than to escape some of its characters (e.g. rephrase content or change syntax).
+- **[r3; medium priority]** Minimize the need to change the message in other ways than to escape some of its characters (e.g. rephrase content, use typographic apostrophes, or switch to using a second set of delimtiers).
 - **[r4; medium priority]** Don't surprise users with syntax that's too exotic. We expect quoted literals to be rare, which means fewer opportunities to get used to their syntax and remember it.
 - **[r5; low priority]** Be able to pair the opening and the closing delimiter, to aid parsers recover from syntax errors, and to leverage IDE's ability to highlight matching pairs of delimiters, to visually indicate to the user editing a message the bounds of the literal under caret. However, quoted literals are usually short and already enclosed in a placeholder (which has its own delimiters) or are outside patterns (when used as variant keys).
 
@@ -139,7 +139,7 @@ By being both uncommon in text content and uncommon as a string delimiter in oth
 - [r1 GOOD] Writing `"` and `'` in literals doesn't require escaping them via `\`. This means no extra `\` that need escaping.
 - [r2 GOOD] Embedding messages in most code or containers doesn't require escaping the literal delimiters.
 - [r3 GOOD] Message don't have to be modified otherwise before embedding them.
-- [r4 FAIR] Vertical lines are not commonly used as string delimiters and thus can be harder to learn for beginners. There's prior art in a practice of using vertical lines as delimiters for inline code literals.
+- [r4 FAIR] Vertical lines are not commonly used as string delimiters and thus can be harder to learn for beginners. There's prior art in a practice of using vertical lines as delimiters for inline code literals in email and chat. Vertical bars can also be used to delimit [regular expressions in `sed`](https://en.wikipedia.org/wiki/Vertical_bar#Delimiter), and as a separator in [delimiter-separated data formats](http://www.catb.org/~esr/writings/taoup/html/ch05s02.html).
 - [r5 POOR] Vertical lines cannot be paired by parsers nor IDEs.
 
 ## Alternatives Considered
@@ -156,12 +156,13 @@ Early drafts of the syntax specification used double quotes to delimit literals.
 - [r2 FAIR] Embedding messages in certain programming languages and containers requires escaping the literal delimiters. Most notably, storing MF2 messages in JSON suffers from this. In many programming languages, however, alternatives to quotation marks exist, which could be used to allow unescaped quotes in messages. See [comment on #263](https://github.com/unicode-org/message-format-wg/issues/263#issuecomment-1430929542).
 - [r3 FAIR] One of the suggestions proposed to allow for both single and double quotation marks, and make them interchangeable in case one set was used by the inner content or surrounding code. This, however, requires directed modification of the message's body.
 - [r4 GOOD] Quotation marks are universally recognized as string delimiters.
-- [r5 POOR] Quotation marks cannot be paired by parsers nor IDEs.
+- [r5 FAIR] Quotation marks cannot be paired by parsers nor IDEs, but many text editors provide features to make working with and around quotes easier.
 
 ### Use round or angle brackets
 
-- Round parentheses are very uncommon as string delimiters [r2 GOOD], and thus may be surprising [r4 POOR]. Furthermore, they are relatively common in text, where they'd require escaping [r1 POOR].
+- Round parentheses are very uncommon as string delimiters [r2 GOOD], and thus may be surprising, especially given the well-established meaning in prose [r4 POOR]. That said, there's prior art in using them for [delimiting strings in PostScript](https://en.wikipedia.org/wiki/PostScript#%22Hello_world%22). Furthermore, they are relatively common in text, where they'd require escaping [r1 POOR].
 - Angle brackets require escaping in XML-based storage formats [r2 POOR].
+- All brackets can be easily paired by parsers and IDEs [r5 GOOD].
 
 ### Change escape introducer
 
