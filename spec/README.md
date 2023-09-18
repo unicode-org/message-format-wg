@@ -79,7 +79,7 @@ in this version. Future versions MAY add additional structure or meaning
 to existing syntax.
 
 Updates to this specification will not remove any reserved keywords
-or sigils. 
+or sigils.
 
 > Note: future versions may defined new keywords
 
