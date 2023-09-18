@@ -74,7 +74,22 @@ Updates to this specification MUST NOT change
 the syntactical meaning, the runtime output, or other behaviour
 of valid messages written for earlier versions of this specification
 that only use functions and expression attributes defined in this specification.
-Later specification versions MAY make previously invalid messages valid.
+Updates to this specification will not remove any syntax provided
+in this version. Future versions MAY add additional structure or meaning
+to existing syntax.
+
+Updates to this specification will not remove any reserved keywords
+or sigils. 
+
+> Note: future versions may defined new keywords
+
+Updates to this specification will not reserve or assign meaning to any
+character "sigils" except for those in the `reserved` production.
+
+Updates to this specification will not remove any functions
+defined in the default registry nor will they remove any options
+or option values. Additional options or option values MAY be
+defined.
 
 > [!NOTE]
 > This does not guarantee that the results of formatting will never change.
