@@ -85,7 +85,7 @@ More specifically:
 - Developers may want to embed messages with quoted literals in code written in another programming language which uses single or double quotes to delimit strings.
 
   > ```js
-  > let message = new MessageFormat("en", "{A message with {|a literal|}.}");
+  > let message = new MessageFormat('en', '{A message with {|a literal|}.}');
   > ```
 
 - Developers and localization engineers may want to embed messages with quoted literals in a container format, such as JSON.
@@ -102,7 +102,7 @@ _What properties does the solution have to manifest to enable the use-cases abov
 
 - **[r1; high priority]** Minimize the need to escape characters inside literals. In particular, choose a delimiter that isn't frequently used in translation content. Having to escape characters inside literals is inconvenient and error-prone when done by hand, and it also introduces the backslash into the message, `\`, which is the escape introducer. The backslash then needs to be escaped too, when the message is embedded in code or containers. (This is how some syntaxes produce the gnarly `\\\`.)
 - **[r2; high priority]** Minimize the need to escape characters when embedding messages in code or containers. In particular, choose a delimiter that isn't frequently used as a string delimiter in programming languages and container formats. However, note that many programming languages also provide alternative ways of delimiting strings, e.g. _raw strings_ or triple-quoted literals.
-- **[r3; medium priority]** Minimize the need to change the message in other ways than to escape some of its characters (e.g. rephrase content, use typographic apostrophes, or switch to using a second set of delimtiers).
+- **[r3; medium priority]** Minimize the incentive to avoid escaping by changing messages (e.g. rephrasing content, using typographic apostrophes, or switching outer delimiters).
 - **[r4; medium priority]** Don't surprise users with syntax that's too exotic. We expect quoted literals to be rare, which means fewer opportunities to get used to their syntax and remember it.
 - **[r5; low priority]** Be able to pair the opening and the closing delimiter, to aid parsers recover from syntax errors, and to leverage IDE's ability to highlight matching pairs of delimiters, to visually indicate to the user editing a message the bounds of the literal under caret. However, quoted literals are usually short and already enclosed in a placeholder (which has its own delimiters) or are outside patterns (when used as variant keys).
 
