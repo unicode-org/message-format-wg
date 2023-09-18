@@ -150,13 +150,32 @@ _What other properties they have?_
 
 ### Use quotation marks
 
-Early drafts of the syntax specification used double quotes to delimit literals. This changed in [#263](https://github.com/unicode-org/message-format-wg/issues/263#issue-1233590015), and was later proposed back in [#414](https://github.com/unicode-org/message-format-wg/pull/414).
+Early drafts of the syntax specification used double quotes to delimit literals.
+This changed in [#263](https://github.com/unicode-org/message-format-wg/issues/263#issue-1233590015).
 
 - [r1 POOR] Writing `"` and `'` in literals requires escaping them via `\`, which then needs to be escaped itself in code which uses `\` as the escape character (which is common).
 - [r2 FAIR] Embedding messages in certain programming languages and containers requires escaping the literal delimiters. Most notably, storing MF2 messages in JSON suffers from this. In many programming languages, however, alternatives to quotation marks exist, which could be used to allow unescaped quotes in messages. See [comment on #263](https://github.com/unicode-org/message-format-wg/issues/263#issuecomment-1430929542).
-- [r3 FAIR] One of the suggestions proposed to allow for both single and double quotation marks, and make them interchangeable in case one set was used by the inner content or surrounding code. This, however, requires directed modification of the message's body.
+- [r3 ???]
 - [r4 GOOD] Quotation marks are universally recognized as string delimiters.
 - [r5 FAIR] Quotation marks cannot be paired by parsers nor IDEs, but many text editors provide features to make working with and around quotes easier.
+
+### Dual quoting
+
+PR [#414](https://github.com/unicode-org/message-format-wg/pull/414) proposes to
+allow either single quotes `'` or double quotes `"` as literal delimiters,
+a variant of the "Use quotation marks" solution.
+
+- [r1 FAIR] Writing `"` and `'` in literals doesn't require escaping them via `\`,
+  as long as they do not match the literal's delimiter.
+  Literals containing both `'` and `"` will need to have at least one of those characters
+  escaped via `\`, which may itself need escaping in the container format.
+- [r2 GOOD] Embedding messages in certain container formats requires escaping the literal delimiters.
+  If the container format does not itself support dual quoting,
+  the embedded message's quotes may be adjusted to avoid their escaping.
+- [r3 ???]
+- [r4 GOOD] Quotation marks are universally recognized as string delimiters.
+- [r5 FAIR] Quotation marks cannot be paired by parsers nor IDEs,
+  but many text editors provide features to make working with and around quotes easier.
 
 ### Use round or angle brackets
 
