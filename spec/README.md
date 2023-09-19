@@ -95,6 +95,8 @@ Additional options or option values MAY be defined.
 > the functions for date formatting, number formatting and so on
 > will change their results over time.
 
+Later specification versions MAY make previously invalid messages valid.
+
 Updates to this specification will not introduce message syntax that,
 when parsed according to earlier versions of this specification,
 would produce syntax or data model errors.
