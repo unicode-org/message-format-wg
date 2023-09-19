@@ -5,6 +5,9 @@
   "dependencies": {
     "prettier": "^3.0.1"
   },
+  "prettier": {
+    "singleQuote": true
+  },
   "scripts": {
     "prettier": "prettier --write docs/ exploration/ spec/"
   }

@@ -29,13 +29,13 @@ A message without _selectors_ and with a single _pattern_ is represented by a `P
 type Message = PatternMessage | SelectMessage;
 
 interface PatternMessage {
-  type: "message";
+  type: 'message';
   declarations: Declaration[];
   pattern: Pattern;
 }
 
 interface SelectMessage {
-  type: "select";
+  type: 'select';
   declarations: Declaration[];
   selectors: Expression[];
   variants: Variant[];
@@ -66,7 +66,7 @@ interface Variant {
 }
 
 interface CatchallKey {
-  type: "*";
+  type: '*';
   value?: string;
 }
 ```
@@ -89,12 +89,12 @@ interface Pattern {
 }
 
 interface Text {
-  type: "text";
+  type: 'text';
   value: string;
 }
 
 interface Expression {
-  type: "expression";
+  type: 'expression';
   body: Literal | VariableRef | FunctionRef | Unsupported;
 }
 ```
@@ -113,12 +113,12 @@ In a `VariableRef`, the `name` does not include the initial `$` of the _variable
 
 ```ts
 interface Literal {
-  type: "literal";
+  type: 'literal';
   value: string;
 }
 
 interface VariableRef {
-  type: "variable";
+  type: 'variable';
   name: string;
 }
 ```
@@ -135,8 +135,8 @@ Each _option_ is represented by an `Option`.
 
 ```ts
 interface FunctionRef {
-  type: "function";
-  kind: "open" | "close" | "value";
+  type: 'function';
+  kind: 'open' | 'close' | 'value';
   name: string;
   operand?: Literal | VariableRef;
   options?: Option[];
@@ -172,8 +172,8 @@ that the implementation attaches to that _annotation_.
 
 ```ts
 interface Unsupported {
-  type: "unsupported";
-  sigil: "!" | "@" | "#" | "%" | "^" | "&" | "*" | "<" | ">" | "/" | "?" | "~";
+  type: 'unsupported';
+  sigil: '!' | '@' | '#' | '%' | '^' | '&' | '*' | '<' | '>' | '/' | '?' | '~';
   source: string;
   operand?: Literal | VariableRef;
 }

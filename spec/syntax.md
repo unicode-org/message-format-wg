@@ -162,7 +162,7 @@ An empty string is not a _well-formed_ _message_.
 > The same _message_ defined inline in JavaScript:
 >
 > ```js
-> let hello = new MessageFormat("{Hello, world!}");
+> let hello = new MessageFormat('{Hello, world!}');
 > hello.format();
 > ```
 
