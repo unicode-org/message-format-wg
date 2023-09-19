@@ -49,13 +49,14 @@ The JavaScript `Intl.DateTimeFormat` API provides for the customization of date 
 through the use of "option bags". For example:
 
 ```js
-new Intl.DateTimeFormat('en-GB', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric' })
+new Intl.DateTimeFormat("en-GB", {
+  weekday: "long",
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+});
 ```
 
 This might be expressed in MessageFormat as:
@@ -75,7 +76,6 @@ Today is {$today :datetime skeleton=EEEEyMdjm}
 Skeletons are not proposed for inclusion in the default registry
 because they are not universally available in all datetime formatting
 libraries.
-
 
 ## Use-Cases
 
@@ -107,7 +107,7 @@ _What properties does the solution have to manifest to enable the use-cases abov
 - Users should be able to tell visually when an add-on feature has been used vs. a built-in
 - Users should be able to resolve conflicts between add-on packages that use the same
   function names without altering add-on packages
-- 
+-
 
 ## Constraints
 
@@ -131,23 +131,26 @@ function = name-start *name-char
 
 Examples:
 
->Add-on function:
->```
->Today is {$today :icu:datetime skeleton=EEEEyMdjm}
->```
->>Add on option:
->```
->Today is {$today :datetime icu:skeleton=EEEEyMdjm}
->```
->Add-on markup:
->```
->Today is {+html:a}{$today}{-html:a}
->```
+> Add-on function:
+>
+> ```
+> Today is {$today :icu:datetime skeleton=EEEEyMdjm}
+> ```
+>
+> > Add on option:
+>
+> ```
+> Today is {$today :datetime icu:skeleton=EEEEyMdjm}
+> ```
+>
+> Add-on markup:
+>
+> ```
+> Today is {+html:a}{$today}{-html:a}
+> ```
 
 ## Alternatives Considered
 
 _What other solutions are available?_
 _How do they compare against the requirements?_
 _What other properties they have?_
-
-
