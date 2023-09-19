@@ -59,12 +59,19 @@ More specifically:
   > {{+button title=|Goodbye, {$userName}!|}Sign out{-button}}
   > ```
 
-- Selector function implementers may want to support exotic characters in variant keys to effectively create "mini-DSLs" for the matching logic:
+- Selector function implementers may want to support multi-word variant keys or exotic characters in variant keys to effectively create "mini-DSLs" for the matching logic:
 
   > ```
-  > match {$count :myNumber}
+  > match ($count :choice}
   > when |<10| {A handful.}
+  > when |11..19| {Umpteen.}
   > when * {Lots.}
+  >
+  > match {$arbitraryString}
+  > when |can't resolve| {Can't resolve!}
+  > when |11'233.44| {Locale formatted number}
+  > when |New York| {A multi-word proper name}
+  > when * {Imagine more...}
   > ```
 
 - Message authors may want to protect untranslatable strings:
