@@ -50,8 +50,9 @@ More specifically:
   > ```
   > {{+button title=|Click here!|}Submit{-button}}
   > ```
-  >
-  > Note that quoted literals cannot contain placeholders, making interpolating data into them impossible.
+
+  > [!NOTE]
+  > Quoted literals cannot contain placeholders, making interpolating data into them impossible.
   >
   > ```
   > -- This is impossible in MessageFormat 2.0.
