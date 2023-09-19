@@ -39,10 +39,10 @@ More specifically:
   > {…{|New Year's Eve|}…}
   > ```
 
-- Message authors may want to use literals to define locale-aware dates as literals in the RFC 7231 format:
+- Message authors may want to use literals to define locale-aware dates as literals in a modified RFC 3339 format:
 
   > ```
-  > {The Unix epoch is defined as {|Thu, 01 Jan 1970 00:00:00 GMT| :datetime}.}
+  > {The Unix epoch is defined as {|1970-01-01 00:00:00Z| :datetime}.}
   > ```
 
 - Message authors may want to use multiple words as values of certain options passed to custom functions and markup elements:
