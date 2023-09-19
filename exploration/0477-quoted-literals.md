@@ -148,7 +148,7 @@ By being both uncommon in text content and uncommon as a string delimiter in oth
 - [r2 GOOD] Embedding messages in most code or containers doesn't require escaping the literal delimiters.
 - [r3 GOOD] Message don't have to be modified otherwise before embedding them.
 - [r4 FAIR] Vertical lines are not commonly used as string delimiters and thus can be harder to learn for beginners. There's prior art in a practice of using vertical lines as delimiters for inline code literals in email and chat. Vertical bars can also be used to delimit [regular expressions in `sed`](https://en.wikipedia.org/wiki/Vertical_bar#Delimiter), and as a separator in [delimiter-separated data formats](http://www.catb.org/~esr/writings/taoup/html/ch05s02.html).
-- [r5 POOR] Vertical lines cannot be paired by parsers nor IDEs.
+- [r5 POOR] Vertical lines are not automatically paired by parsers nor IDEs.
 
 ## Alternatives Considered
 
@@ -165,7 +165,7 @@ This changed in [#263](https://github.com/unicode-org/message-format-wg/issues/2
 - [r2 FAIR] Embedding messages in certain programming languages and containers requires escaping the literal delimiters. Most notably, storing MF2 messages in JSON suffers from this. In many programming languages, however, alternatives to quotation marks exist, which could be used to allow unescaped quotes in messages. See [comment on #263](https://github.com/unicode-org/message-format-wg/issues/263#issuecomment-1430929542).
 - [r3 ???]
 - [r4 GOOD] Quotation marks are universally recognized as string delimiters.
-- [r5 FAIR] Quotation marks cannot be paired by parsers nor IDEs, but many text editors provide features to make working with and around quotes easier.
+- [r5 FAIR] Quotation marks are not automatically paired by parsers nor IDEs, but many text editors provide features to make working with and around quotes easier.
 
 ### Dual quoting
 
