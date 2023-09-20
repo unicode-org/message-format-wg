@@ -124,7 +124,7 @@ Implementations are not required to read the registry format defined by MFv2
 or use it for any particular purpose.
 
 > For example, a Java implementation might use the `ServiceProvider` interface to load
-> functionality, while a Node application might use `requires`.
+> functionality, while a Node application might use `import`.
 
 If an implementation supports user-installed formatters, selectors, function options,
 or expression annotations, it must also support providing "namespace" prefixes for
