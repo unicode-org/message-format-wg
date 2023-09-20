@@ -12,15 +12,26 @@ Status: **Accepted**
 
 ## Objective
 
-Document the rationale for including quoted literals in MessageFormat and for delimiting them with the vertical line character, `|`.
+Document the rationale for including quoted literals in MessageFormat
+and for delimiting them with the vertical line character, `|`.
 
 ## Background
 
-MessageFormat allows both quoted and unquoted literals. Unquoted literals satisfy many common use-cases for literals: they are sufficient to represent numbers and single-word option values and variant keys. Quoted literals are helpful in exotic use-cases.
+MessageFormat allows both quoted and unquoted literals.
+Unquoted literals satisfy many common use-cases for literals:
+they are sufficient to represent numbers
+and single-word option values and variant keys.
+Quoted literals are helpful in exotic use-cases.
 
-In early drafts of the MessageFormat syntax, quoted literals used to be delimited first with quotation marks (`"foo bar"`), and then with round parentheses, e.g. `(foo bar)`. See [#263](https://github.com/unicode-org/message-format-wg/issues/263).
+In early drafts of the MessageFormat syntax,
+quoted literals used to be delimited first with quotation marks (`"foo bar"`),
+and then with round parentheses, e.g. `(foo bar)`.
+See [#263](https://github.com/unicode-org/message-format-wg/issues/263).
 
-In [#414](https://github.com/unicode-org/message-format-wg/pull/414) proposed to revert these changes and go back to using single and/or double quotes as delimiters. The propsal was rejected. This document is an artifact of that rejection.
+[#414](https://github.com/unicode-org/message-format-wg/pull/414) proposed to revert these changes
+and go back to using single and/or double quotes as delimiters.
+The propsal was rejected.
+This document is an artifact of that rejection.
 
 ## Use-Cases
 
@@ -33,7 +44,9 @@ In general, quoted literals are useful for:
 
 More specifically:
 
-- Message authors and translators need to be able to use the apostrophe in the message content, and may want to use the single quote character to represent it instead of the typograhic (curly) apostrophe.
+- Message authors and translators need to be able to use the apostrophe in the message content,
+  and may want to use the single quote character
+  to represent it instead of the typograhic (curly) apostrophe.
 
   > ```
   > {…{|New Year's Eve|}…}
@@ -59,7 +72,9 @@ More specifically:
   > {{+button title=|Goodbye, {$userName}!|}Sign out{-button}}
   > ```
 
-- Selector function implementers may want to support multi-word variant keys or exotic characters in variant keys to effectively create "mini-DSLs" for the matching logic:
+- Selector function implementers may want to support multi-word variant keys
+  or exotic characters in variant keys
+  to effectively create "mini-DSLs" for the matching logic:
 
   > ```
   > match ($count :choice}
@@ -82,7 +97,9 @@ More specifically:
   >
   > See [design proposal 0002](https://github.com/unicode-org/message-format-wg/blob/main/exploration/0002-expression-attributes.md).
 
-- Message authors may want to decorate substrings as being written in a particular language, different from the message's language, for the purpose of accessibility, text-to-speech, and semantic correctness.
+- Message authors may want to decorate substrings as being written in a particular language,
+  different from the message's language,
+  for the purpose of accessibility, text-to-speech, and semantic correctness.
 
   > ```
   > {The official native name of the Republic of Poland is {|Rzeczpospolita Polska| @lang=pl}.}
@@ -90,7 +107,8 @@ More specifically:
   >
   > See [design proposal 0002](https://github.com/unicode-org/message-format-wg/blob/main/exploration/0002-expression-attributes.md).
 
-- Developers may want to embed messages with quoted literals in code written in another programming language which uses single or double quotes to delimit strings.
+- Developers may want to embed messages with quoted literals in code written in another programming language
+  which uses single or double quotes to delimit strings.
 
   > ```js
   > let message = new MessageFormat("en", "{A message with {|a literal|}.}");
@@ -108,19 +126,46 @@ More specifically:
 
 _What properties does the solution have to manifest to enable the use-cases above?_
 
-- **[r1; high priority]** Minimize the need to escape characters inside literals. In particular, choose a delimiter that isn't frequently used in translation content. Having to escape characters inside literals is inconvenient and error-prone when done by hand, and it also introduces the backslash into the message, `\`, which is the escape introducer. The backslash then needs to be escaped too, when the message is embedded in code or containers. (This is how some syntaxes produce the gnarly `\\\`.)
-- **[r2; high priority]** Minimize the need to escape characters when embedding messages in code or containers. In particular, choose a delimiter that isn't frequently used as a string delimiter in programming languages and container formats. However, note that many programming languages also provide alternative ways of delimiting strings, e.g. _raw strings_ or triple-quoted literals.
-- **[r3; medium priority]** Minimize the incentive to avoid escaping by changing messages (e.g. rephrasing content, using typographic apostrophes, or switching outer delimiters).
-- **[r4; medium priority]** Don't surprise users with syntax that's too exotic. We expect quoted literals to be rare, which means fewer opportunities to get used to their syntax and remember it.
-- **[r5; low priority]** Be able to pair the opening and the closing delimiter, to aid parsers recover from syntax errors, and to leverage IDE's ability to highlight matching pairs of delimiters, to visually indicate to the user editing a message the bounds of the literal under caret. However, quoted literals are usually short and already enclosed in a placeholder (which has its own delimiters) or are outside patterns (when used as variant keys).
+- **[r1; high priority]** Minimize the need to escape characters inside literals.
+  In particular, choose a delimiter that isn't frequently used in translation content.
+  Having to escape characters inside literals is inconvenient and error-prone when done by hand,
+  and it also introduces the backslash into the message, `\`,
+  which is the escape introducer.
+  The backslash then needs to be escaped too,
+  when the message is embedded in code or containers.
+  (This is how some syntaxes produce the gnarly `\\\`.)
+
+- **[r2; high priority]** Minimize the need to escape characters when embedding messages in code or containers.
+  In particular, choose a delimiter that isn't frequently used as a string delimiter in programming languages and container formats.
+  However, note that many programming languages also provide alternative ways of delimiting strings, e.g. _raw strings_ or triple-quoted literals.
+
+- **[r3; medium priority]** Minimize the incentive to avoid escaping by changing messages
+  (e.g. rephrasing content, using typographic apostrophes, or switching outer delimiters).
+
+- **[r4; medium priority]** Don't surprise users with syntax that's too exotic.
+  We expect quoted literals to be rare,
+  which means fewer opportunities to get used to their syntax and remember it.
+
+- **[r5; low priority]** Be able to pair the opening and the closing delimiter,
+  to aid parsers recover from syntax errors,
+  and to leverage IDE's ability to highlight matching pairs of delimiters,
+  to visually indicate to the user editing a message the bounds of the literal under caret.
+  However, quoted literals are usually short and already enclosed in a placeholder (which has its own delimiters)
+  or are outside patterns (when used as variant keys).
 
 ## Constraints
 
 _What prior decisions and existing conditions limit the possible design?_
 
-- **[c1]** MessageFormat uses the backslash, `\`, as the escape sequence introducer.
-- **[c2]** Straight quotation marks, `'` and `"`, are common in content across many languages, even if other Unicode codepoints should be used in well-formatted text.
-- **[c3]** Straight quotation marks, `'` and `"`, are common as string delimiters in many programming languages.
+- **[c1]** MessageFormat uses the backslash, `\`,
+  as the escape sequence introducer.
+
+- **[c2]** Straight quotation marks, `'` and `"`,
+  are common in content across many languages,
+  even if other Unicode codepoints should be used in well-formatted text.
+
+- **[c3]** Straight quotation marks, `'` and `"`,
+  are common as string delimiters in many programming languages.
 
 ## Proposed Design
 
@@ -142,12 +187,19 @@ quoted-char   = %x0-5B         ; omit \
 quoted-escape = backslash ( backslash / "|" )
 ```
 
-By being both uncommon in text content and uncommon as a string delimiter in other programming languages, the vertical line sidesteps the "inwards" and "outwards" problems of escaping.
+By being both uncommon in text content
+and uncommon as a string delimiter in other programming languages,
+the vertical line sidesteps the "inwards" and "outwards" problems of escaping.
 
-- [r1 GOOD] Writing `"` and `'` in literals doesn't require escaping them via `\`. This means no extra `\` that need escaping.
+- [r1 GOOD] Writing `"` and `'` in literals doesn't require escaping them via `\`.
+  This means no extra `\` that need escaping.
 - [r2 GOOD] Embedding messages in most code or containers doesn't require escaping the literal delimiters.
 - [r3 GOOD] Message don't have to be modified otherwise before embedding them.
-- [r4 FAIR] Vertical lines are not commonly used as string delimiters and thus can be harder to learn for beginners. There's prior art in a practice of using vertical lines as delimiters for inline code literals in email and chat. Vertical bars can also be used to delimit [regular expressions in `sed`](https://en.wikipedia.org/wiki/Vertical_bar#Delimiter), and as a separator in [delimiter-separated data formats](http://www.catb.org/~esr/writings/taoup/html/ch05s02.html).
+- [r4 FAIR] Vertical lines are not commonly used as string delimiters
+  and thus can be harder to learn for beginners.
+  There's prior art in a practice of using vertical lines as delimiters for inline code literals in email and chat.
+  Vertical bars can also be used to delimit [regular expressions in `sed`](https://en.wikipedia.org/wiki/Vertical_bar#Delimiter),
+  and as a separator in [delimiter-separated data formats](http://www.catb.org/~esr/writings/taoup/html/ch05s02.html).
 - [r5 POOR] Vertical lines are not automatically paired by parsers nor IDEs.
 
 ## Alternatives Considered
@@ -161,11 +213,18 @@ _What other properties they have?_
 Early drafts of the syntax specification used double quotes to delimit literals.
 This changed in [#263](https://github.com/unicode-org/message-format-wg/issues/263#issue-1233590015).
 
-- [r1 POOR] Writing `"` and `'` in literals requires escaping them via `\`, which then needs to be escaped itself in code which uses `\` as the escape character (which is common).
-- [r2 FAIR] Embedding messages in certain programming languages and containers requires escaping the literal delimiters. Most notably, storing MF2 messages in JSON suffers from this. In many programming languages, however, alternatives to quotation marks exist, which could be used to allow unescaped quotes in messages. See [comment on #263](https://github.com/unicode-org/message-format-wg/issues/263#issuecomment-1430929542).
+- [r1 POOR] Writing `"` and `'` in literals requires escaping them via `\`,
+  which then needs to be escaped itself in code
+  which uses `\` as the escape character (which is common).
+- [r2 FAIR] Embedding messages in certain programming languages and containers requires escaping the literal delimiters.
+  Most notably, storing MF2 messages in JSON suffers from this.
+  In many programming languages, however, alternatives to quotation marks exist,
+  which could be used to allow unescaped quotes in messages.
+  See [comment on #263](https://github.com/unicode-org/message-format-wg/issues/263#issuecomment-1430929542).
 - [r3 ???]
 - [r4 GOOD] Quotation marks are universally recognized as string delimiters.
-- [r5 FAIR] Quotation marks are not automatically paired by parsers nor IDEs, but many text editors provide features to make working with and around quotes easier.
+- [r5 FAIR] Quotation marks are not automatically paired by parsers nor IDEs,
+  but many text editors provide features to make working with and around quotes easier.
 
 ### Dual quoting
 
@@ -187,14 +246,23 @@ a variant of the "Use quotation marks" solution.
 
 ### Use round or angle brackets
 
-- Round parentheses are very uncommon as string delimiters [r2 GOOD], and thus may be surprising, especially given the well-established meaning in prose [r4 POOR]. That said, there's prior art in using them for [delimiting strings in PostScript](https://en.wikipedia.org/wiki/PostScript#%22Hello_world%22). Furthermore, they are relatively common in text, where they'd require escaping [r1 POOR].
+- Round parentheses are very uncommon as string delimiters [r2 GOOD],
+  and thus may be surprising,
+  especially given the well-established meaning in prose [r4 POOR].
+  That said, there's prior art in using them for [delimiting strings in PostScript](https://en.wikipedia.org/wiki/PostScript#%22Hello_world%22).
+  Furthermore, they are relatively common in text, where they'd require escaping [r1 POOR].
 - Angle brackets require escaping in XML-based storage formats [r2 POOR].
 - All brackets can be easily paired by parsers and IDEs [r5 GOOD].
 
 ### Change escape introducer
 
-Changing the escape sequence introducer from backslash [c1] to another character could help partially mitigate the burden of first escaping literal delimiters and then escaping the escapes themselves [r1]. However, it wouldn't address other requirements and use-cases.
+Changing the escape sequence introducer from backslash [c1] to another character
+could help partially mitigate the burden of first escaping literal delimiters
+and then escaping the escapes themselves [r1].
+However, it wouldn't address other requirements and use-cases.
 
 ### Double delimiters to escape them
 
-This is the approach taken by ICU MessageFormat 1.0 for quotes. It allows literals to contain quotes [r1 GOOD] at the expense of doubling the amount of escaping required when embedding messages in code [r2 POOR].
+This is the approach taken by ICU MessageFormat 1.0 for quotes.
+It allows literals to contain quotes [r1 GOOD]
+at the expense of doubling the amount of escaping required when embedding messages in code [r2 POOR].
