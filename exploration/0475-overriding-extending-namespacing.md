@@ -90,10 +90,13 @@ _What use-cases do we see? Ideally, quote concrete examples._
 - Developers want to import 3rd party formatting packages and use the package's
   features from within messages.
 
-- Developers wish to import two or more formatting packages
+- Users want to import two or more formatting packages
   and these might have the same-named functions.
   For example, there might be both an HTML `p` and TTS `p`
   function.
+
+- Users want to control how extensions are referenced in their messages.
+  For example, they might wish to make a long namespace name shorter.
 
 - Translators and tools would like a machine-readable way to find out the names
   and option values for add-on packages.
@@ -113,7 +116,10 @@ _What properties does the solution have to manifest to enable the use-cases abov
 
 _What prior decisions and existing conditions limit the possible design?_
 
-- A syntactical prefix must not collide with `nmtoken`, to avoid parsing ambiguities with unquoted literals...
+- A syntactical prefix or its separator(s) must not collide with characters valid in either
+  the prefix or in any of the name productions.
+
+- A prefix must not collide with unquoted literal values.
 
 ## Proposed Design
 
@@ -143,17 +149,34 @@ nor validate the contents in general or against the actual functionality install
 > with many different keyboards need to be able to enter the prefix.
 
 The namespace prefix is part of the `name` production.
-The prefix is limited to eight characters in length and MUST be at least two characters
-in length.
+The prefix must be at least one character in length.
+It may be as long as desired, although users are cautioned that brevity
+is desirable.
 The prefix is separated from the name by a colon (U+003A COLON).
+
+The choice of a `:` is intentional, as it already used for function identification
+and might be familiar from similar usage in XML namespaces
+as well as slightly similar to C++, e.g. `ns::function`.
+This design leverages these sorts of "application familiarity"
+as well as the current syntax's use of colon as the function sigil.
+
 The namespace prefix `std` is reserved and refers to the default registry.
+The default registry will have a well-known URL under `unicode.org`
+but this URL is not yet specified.
 
 ```abnf
 name      = [namespace] name-body
-namespace = name-start *7(name-char) namespace-sep
+namespace = name-start *name-char namespace-sep
 namespace-sep = ":"
 name-body = name-start *name-char
 ```
+> [!NOTE]
+> The `name-start` and `name-char` productions will have to be altered to
+> **_not_** permit U+003A COLON in a name and to otherwise address
+> naming concerns.
+> This design document does not show the naming changes because there are
+> other issues in play for these names.
+> For now, just consider that `name-char` will have no colon.
 
 The `name` production as defined here applies to:
 
@@ -210,6 +233,33 @@ the prefix being present.
 > Today is {$today :icu:datetime skeleton=EEEEMd}
 > Today is {$today :icu:datetime icu:skeleton=EEEEMd}
 > ```
+
+### Changes Required by This Design
+
+Implementation of this design will require the following changes:
+
+- Update the ABNF syntax and corresponding text in the syntax.md spec
+- Changes to the `name`/`name-char` productions and related naming productions
+- Additions to the formatting.md spec regarding namespace resolution
+  to ensure that the correct function is called
+- Additional error type for namespace resolution failure; alternatively
+  this might take the form of the existing resolution error
+- Addition of namespace to the data model for all relative items
+
+It is possible that the registry description will need to include slots for URL
+and default namespace name.
+
+### Potential Negatives
+
+This design is based on the assertion that implementors will provide an
+extension mechanism and that users will want to use that mechanism to install formatting
+or selection functionality.
+Any non-standard functions, options, option values, or expressions have the potential
+to be disruptive or fragmenting to the overall tooling or localization space.
+Any extension that is widely adopted would thus be better off in the default registry
+if at all possible.
+On the other hand, language- or platform-specific extensions can make MFv2 feel
+more "fluent" or consistent for users in a given environment.
 
 ## Alternatives Considered
 
