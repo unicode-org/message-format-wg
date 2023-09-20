@@ -145,13 +145,14 @@ nor validate the contents in general or against the actual functionality install
 The namespace prefix is part of the `name` production.
 The prefix is limited to eight characters in length and MUST be at least two characters
 in length.
+The prefix is separated from the name by a colon (U+003A COLON).
 The namespace prefix `std` is reserved and refers to the default registry.
 
 ```abnf
-name    = prefix function-sigil function
-prefix  = name-start *7(name-char)
-function-sigil = ":"
-function = name-start *name-char
+name      = [namespace] name-body
+namespace = name-start *7(name-char) namespace-sep
+namespace-sep = ":"
+name-body = name-start *name-char
 ```
 
 The `name` production as defined here applies to:
