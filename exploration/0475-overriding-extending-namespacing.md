@@ -127,7 +127,7 @@ or use it for any particular purpose.
 > functionality, while a Node application might use `requires`.
 
 If an implementation supports user-installed formatters, selectors, function options,
-or expression annotations, it must also support providing "namespace" prefixes for 
+or expression annotations, it must also support providing "namespace" prefixes for
 each installed set of functionality.
 
 In this design, each namespace prefix is a short string and is associated with a URL.
@@ -155,6 +155,7 @@ function = name-start *name-char
 ```
 
 The `name` production as defined here applies to:
+
 - function (selector/formatting) names
 - option names
 - spanable names
@@ -181,12 +182,14 @@ Examples:
 > ```
 >
 > Add-on expression annotation:
+>
 > ```
 > Today is {$today :datetime @my:annotation}
 > ```
 >
 > Everything altogether all at once. This probably does not work
 > correctly, since `std:datetime` may not understand `icu:skeleton`:
+>
 > ```
 > Today is {+html:a}{$today :std:datetime icu:skeleton=EEEEyMdjm @my:annotation}{-html:a}
 > ```
@@ -199,6 +202,7 @@ the prefix being present.
 
 > For example, if an implementation is using the ICU4J library, any of the
 > following messages might be acceptable alternatives:
+>
 > ```
 > Today is {$today :datetime skeleton=EEEEMd}
 > Today is {$today :datetime icu:skeleton=EEEEMd}
@@ -226,12 +230,10 @@ Users will have to RTFM.
 
 Use `com.foo.bar.baz.Function` type naming for functions, options, or expressions.
 
->```
->Today is {$today :com.example.foo.datetime dateStyle=short}
->Today is {$today :datetime com.example.foo.skeleton=EEEEMd}
->```
+> ```
+> Today is {$today :com.example.foo.datetime dateStyle=short}
+> Today is {$today :datetime com.example.foo.skeleton=EEEEMd}
+> ```
 
 - **+** Familiarity. This is a familiar structure for developers.
 - **-** Verbose. The resulting names are long and difficult to parse visually
-
-
