@@ -170,6 +170,7 @@ namespace = name-start *name-char namespace-sep
 namespace-sep = ":"
 name-body = name-start *name-char
 ```
+
 > [!NOTE]
 > The `name-start` and `name-char` productions will have to be altered to
 > **_not_** permit U+003A COLON in a name and to otherwise address
