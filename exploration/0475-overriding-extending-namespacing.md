@@ -119,8 +119,33 @@ _What prior decisions and existing conditions limit the possible design?_
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
 
-Define a namespacing prefix as part of the `name` production.
-Each prefix is associated with a URL that points to the add-on's registry.
+The actual addition and provisioning of features to an implementation is implementation specific.
+Implementations are not required to read the registry format defined by MFv2
+or use it for any particular purpose.
+
+> For example, a Java implementation might use the `ServiceProvider` interface to load
+> functionality, while a Node application might use `requires`.
+
+If an implementation supports user-installed formatters, selectors, function options,
+or expression annotations, it must also support providing "namespace" prefixes for 
+each installed set of functionality.
+
+In this design, each namespace prefix is a short string and is associated with a URL.
+The URL is intended to point to some publically-available copy of the add-on library's
+registry description, for use by tooling and as a reference to users such as translators.
+
+There is no requirement that an implementation read the document at the end of the URL,
+nor validate the contents in general or against the actual functionality installed.
+
+> [!NOTE]
+> It is a good idea to use ASCII strings for namespace identifiers.
+> Remember that translators (and others) in many different languages and
+> with many different keyboards need to be able to enter the prefix.
+
+The namespace prefix is part of the `name` production.
+The prefix is limited to eight characters in length and MUST be at least two characters
+in length.
+The namespace prefix `std` is reserved and refers to the default registry.
 
 ```abnf
 name    = prefix function-sigil function
@@ -128,6 +153,12 @@ prefix  = name-start *7(name-char)
 function-sigil = ":"
 function = name-start *name-char
 ```
+
+The `name` production as defined here applies to:
+- function (selector/formatting) names
+- option names
+- spanable names
+- expression annotation names (if approved)
 
 Examples:
 
@@ -137,16 +168,42 @@ Examples:
 > Today is {$today :icu:datetime skeleton=EEEEyMdjm}
 > ```
 >
-> > Add on option:
+> Add on option:
 >
 > ```
 > Today is {$today :datetime icu:skeleton=EEEEyMdjm}
 > ```
 >
-> Add-on markup:
+> Add-on spannables (such as markup):
 >
 > ```
 > Today is {+html:a}{$today}{-html:a}
+> ```
+>
+> Add-on expression annotation:
+> ```
+> Today is {$today :datetime @my:annotation}
+> ```
+>
+> Everything altogether all at once. This probably does not work
+> correctly, since `std:datetime` may not understand `icu:skeleton`:
+> ```
+> Today is {+html:a}{$today :std:datetime icu:skeleton=EEEEyMdjm @my:annotation}{-html:a}
+> ```
+
+Users, such as developers writing messages or translators creating translations,
+are not required to type the namespace prefix in message patterns unless there
+is ambiguity in the given formatting content or in the runtime.
+However, tooling might reject or have difficulty processing values without
+the prefix being present.
+
+> For example, if an implementation is using the ICU4J library, any of the
+> following messages might be acceptable alternatives:
+> ```
+> Today is {$today :datetime skeleton=EEEEMd}
+> Today is {$today :datetime icu:skeleton=EEEEMd}
+> Today is {$today :icu:datetime skeleton=EEEEMd}
+> Today is {$today :icu:datetime icu:skeleton=EEEEMd}
 > ```
 
 ## Alternatives Considered
@@ -154,3 +211,27 @@ Examples:
 _What other solutions are available?_
 _How do they compare against the requirements?_
 _What other properties they have?_
+
+### No namespacing
+
+Each implementation can install whatever additional functionality.
+It is up to the implementation to describe what is permitted and to check messages.
+Users will have to RTFM.
+
+- **+** Flexible
+- **-** Does not promote a healthy ecosystem of add-on packages
+- **-** Does not supply a mechanism for tooling to leverage
+
+### Reverse-domain-name namespacing
+
+Use `com.foo.bar.baz.Function` type naming for functions, options, or expressions.
+
+>```
+>Today is {$today :com.example.foo.datetime dateStyle=short}
+>Today is {$today :datetime com.example.foo.skeleton=EEEEMd}
+>```
+
+- **+** Familiarity. This is a familiar structure for developers.
+- **-** Verbose. The resulting names are long and difficult to parse visually
+
+
