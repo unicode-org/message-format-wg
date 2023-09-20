@@ -40,23 +40,22 @@ registry could significantly lower the barrier of entry as well as the need to w
 Implementations are required to implement and expose the entire _built-in registry_ that would provide the capabilities
 in this document.
 
+The names of functions and associated options defined by the registry **MUST** remain unchanged for the sake of
+compatibility, interoperability and general API stability.
+
 ## Constraints
 
-Like many standardized APIs out there, the biggest constraint on the resulting _built-in registry_ would be that until
-we decide to make another major update to MessageFormat, we'd not be able to make breaking changes to the function
-signatures since that would invalidate the promise of a consistent API across implementations and versions.
-
-Another constraint is that since MessageFormat would be used alongside other internationalization features in many
-programming environments, the final interface should be somewhat consistent to reduce developer confusion.
+Since MessageFormat would be used alongside other internationalization features in many programming environments, the
+final interface **SHOULD NOT** deviate a lot from existing APIs in order to minimize developer confusion.
 
 ## Proposed Design
 
 The **_<dfn>built-in registry</dfn>_** is the set of functions, together with their options, that are present in every
 implementation.
 Implementations MUST provide each of the functions defined in the _built-in registry_, including all of the options.
-The ouptut of each function is implementation-defined.
-They MAY include additional options, although implementers are cautioned to avoid options which might conflict with
-future standardization.
+The output of each function is implementation-defined.
+Implementations MAY include additional options for built-in functions, although implementers are cautioned to avoid
+adding options that might conflict with future standardization.
 These include the following capabilities:
 
 - Formatting the following types of data in a locale-sensitive manner:
