@@ -268,6 +268,34 @@ _What other solutions are available?_
 _How do they compare against the requirements?_
 _What other properties they have?_
 
+### Choice of namespace separator
+
+The choice of the `:` character as a separator is, as noted above, a considered part
+of the design, but it is not required. 
+Other characters are possible for the same purpose.
+
+A concern is that `name-char` reserves `:`, `-`, and `.`, which are probably the
+most likely candidates. 
+Choosing one of these characters would require altering the `name-char` (and
+thus `name`) production.
+Moving to use `NCName` instead of `Nmtoken` as a basis for `name` would address
+the use of `:`.
+Moving to `-` or `.` would not require alterations of the syntax if we decided
+that namespacing is not formally a part of the specification but, rather, is 
+just a convention.
+
+Of the remaining characters not currently in use, the most obvious candidates would
+be `/` and `~`. 
+
+> Here are examples of the options:
+> ```
+> {$today :ns:function  ns:option=foo}{+ns:a}{-ns:a}
+> {$today :ns-function  ns-option=foo}{+ns-a}{-ns-a}
+> {$today :ns.function  ns.option=foo}{+ns.a}{-ns.a}
+> {$today :ns/function  ns/option=foo}{+ns/a}{-ns/a}
+> {$today :ns~function  ns~option=foo}{+ns~a}{-ns~a}
+> ```
+
 ### No namespacing
 
 Each implementation can install whatever additional functionality.
@@ -289,3 +317,17 @@ Use `com.foo.bar.baz.Function` type naming for functions, options, or expression
 
 - **+** Familiarity. This is a familiar structure for developers.
 - **-** Verbose. The resulting names are long and difficult to parse visually
+
+### Namespacing sigils are customary not normative
+
+Imported namespace names are agglutinated to the function/option/spannable/attribute
+name with no separator.
+The use of a separator, such as `:` or `.` is a convention used by developers
+or users when importing the namespace.
+Thus, a user could import a library as `foo` or as `foo:`, resulting in examples like:
+
+> ```
+> {$today :foofunction  foooption=foo}{+fooa}{-fooa} with just "foo"
+> {$today :foo:function  foo:option=foo}{+foo:a}{-foo:a} with prefix "foo:"
+> {$today :foo:-:function  foo:-:option=foo}{+foo:-:a}{-foo:-:a} users can use any legal characters
+> ```
