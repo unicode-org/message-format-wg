@@ -7,6 +7,7 @@ Status: **Proposed**
 	<dl>
 		<dt>Contributors</dt>
 		<dd>@eemeli</dd>
+		<dd>@aphillips</dd><!-- Seville and other inserted edits -->
 		<dt>First proposed</dt>
 		<dd>2023-09-13</dd>
 		<dt>Pull Request</dt>
@@ -70,17 +71,43 @@ Rarely, messages needs to include leading or trailing whitespace due to
 e.g. how they will be concatenated with other text,
 or as a result of being segmented from some larger volume of text.
 
+---
+
+Users editing a simple message and who wish to add an `input` or `local` annotiation 
+to the message do not wish to reformat the message extensively.
+
+Users who have messages that include leading or trailing whitespace
+want to ensure that this whitespace is included in the translatable 
+text portion of the message. Which whitespace characters are displayed at runtime
+should not be surprising.
+
 ## Requirements
 
 Easy things should be easy, and hard things should be possible.
 
 Developers and translators should be able to read and write the syntax easily in a text editor.
 
+Translators (and their tools) are not software engineers, so we want our syntax
+to be as simple, robust, and non-fussy as possible. 
+Multiple levels of complex nesting should be avoided, 
+along with any constructs that require an excessive
+level of precision on the part of non-technical users.
+
 As MessageFormat 2 will be at best a secondary language to all its users,
 it should conform to user expectations and require as little learning as possible.
 
 The syntax should avoid footguns,
 in particular as it's passed through various tools during formatting.
+
+ASCII-compatible syntax. While support for non-ASCII characters for variable names,
+values, literals, options, and the like are important, the syntax itself should
+be restricted to ASCII characters. This allows the message to be parsed
+visually by humans even when embedded in a syntax that requires escaping.
+
+Whitespace is forgiving. We _require_ the minimum amount of whitespace and allow
+users to format or change unimportant whitespace as much as they want.
+This avoids the need for translators or tools to be super pedantic about
+formatting.
 
 ## Constraints
 
@@ -206,7 +233,7 @@ You have eaten {$count} apples
 ```
 {| |}and some more
 ```
-
+  
 ### Start with text, formalize for code
 
 _(From an exercise we did 2023-09-12 with @stasm, @mihnita, @aphillips.
