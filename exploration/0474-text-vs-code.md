@@ -153,8 +153,9 @@ Hello {$user}. Today is {$now}
 {when *}   Hello {$user}. Today is {$now} and you have {$count} geese.
 ```
 
-Bear in mind that whitespace has no meaning in our syntax, 
+Bear in mind that whitespace has no meaning in our syntax,
 so some of the above messages are actually:
+
 ```
 {input $now :datetime dateStyle=long}Hello {$user}. Today is {$now}
 
