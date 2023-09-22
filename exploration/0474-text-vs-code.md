@@ -73,11 +73,11 @@ or as a result of being segmented from some larger volume of text.
 
 ---
 
-Users editing a simple message and who wish to add an `input` or `local` annotiation 
+Users editing a simple message and who wish to add an `input` or `local` annotiation
 to the message do not wish to reformat the message extensively.
 
 Users who have messages that include leading or trailing whitespace
-want to ensure that this whitespace is included in the translatable 
+want to ensure that this whitespace is included in the translatable
 text portion of the message. Which whitespace characters are displayed at runtime
 should not be surprising.
 
@@ -88,8 +88,8 @@ Easy things should be easy, and hard things should be possible.
 Developers and translators should be able to read and write the syntax easily in a text editor.
 
 Translators (and their tools) are not software engineers, so we want our syntax
-to be as simple, robust, and non-fussy as possible. 
-Multiple levels of complex nesting should be avoided, 
+to be as simple, robust, and non-fussy as possible.
+Multiple levels of complex nesting should be avoided,
 along with any constructs that require an excessive
 level of precision on the part of non-technical users.
 
@@ -233,7 +233,7 @@ You have eaten {$count} apples
 ```
 {| |}and some more
 ```
-  
+
 ### Start with text, formalize for code
 
 _(From an exercise we did 2023-09-12 with @stasm, @mihnita, @aphillips.
