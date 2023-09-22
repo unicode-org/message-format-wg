@@ -39,8 +39,11 @@ quoted-char = %x0-5B         ; omit \
 ; based on https://www.w3.org/TR/xml/#NT-Nmtoken,
 ; but cannot start with U+002D HYPHEN-MINUS or U+003A COLON ":"
 unquoted = unquoted-start *name-char
-unquoted-start = name-start / DIGIT / "."
-               / %xB7 / %x300-36F / %x203F-2040
+unquoted-start = ALPHA / DIGIT / "." / "_"
+               / %xB7 / %xC0-D6 / %xD8-F6 / %xF8-37D
+               / %x37F-1FFF / %x200C-200D / %x203F-2040
+               / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
+               / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
 
 
 ; reserve sigils for private-use by implementations
@@ -61,15 +64,14 @@ reserved-char  = %x00-08        ; omit HTAB and LF
                / %x7E-D7FF      ; omit surrogates
                / %xE000-10FFFF
 
-; based on https://www.w3.org/TR/xml/#NT-Name,
-; but cannot start with U+003A COLON ":"
+; matches https://www.w3.org/TR/xml/#NT-Name
 name = name-start *name-char
-name-start = ALPHA / "_"
+name-start = ALPHA / ":" / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
            / %x370-37D / %x37F-1FFF / %x200C-200D
            / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
            / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
-name-char  = name-start / DIGIT / "-" / "." / ":"
+name-char  = name-start / DIGIT / "-" / "."
            / %xB7 / %x300-36F / %x203F-2040
 
 text-escape     = backslash ( backslash / "{" / "}" )

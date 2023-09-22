@@ -619,8 +619,11 @@ quoted-char    = %x0-5B         ; omit \
                / %xE000-10FFFF
 
 unquoted       = unquoted-start *name-char
-unquoted-start = name-start / DIGIT / "."
-               / %xB7 / %x300-36F / %x203F-2040
+unquoted-start = ALPHA / DIGIT / "." / "_"
+               / %xB7 / %xC0-D6 / %xD8-F6 / %xF8-37D
+               / %x37F-1FFF / %x200C-200D / %x203F-2040
+               / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
+               / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
 ```
 
 ### Names
@@ -628,22 +631,22 @@ unquoted-start = name-start / DIGIT / "."
 A **_<dfn>name</dfn>_** is an identifier for a _variable_ (prefixed with `$`),
 for a _function_ (prefixed with `:`, `+` or `-`),
 or for an _option_ (these have no prefix).
-The namespace for _names_ is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name),
-with the restriction that it MUST NOT start with `:`,
-as that would conflict with the _function_ start character.
-Otherwise, the set of characters allowed in names is large.
+The namespace for _name_ matches XML's [Name](https://www.w3.org/TR/xml/#NT-Name).
+
+As `:` is also used as the start sigil of _function_,
+using a _name_ with it as a first character is NOT RECOMMENDED.
 
 ```abnf
 variable = "$" name
 function = (":" / "+" / "-") name
 
 name = name-start *name-char
-name-start = ALPHA / "_"
+name-start = ALPHA / ":" / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
            / %x370-37D / %x37F-1FFF / %x200C-200D
            / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
            / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
-name-char  = name-start / DIGIT / "-" / "." / ":"
+name-char  = name-start / DIGIT / "-" / "."
            / %xB7 / %x300-36F / %x203F-2040
 ```
 
