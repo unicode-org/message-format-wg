@@ -271,23 +271,24 @@ _What other properties they have?_
 ### Choice of namespace separator
 
 The choice of the `:` character as a separator is, as noted above, a considered part
-of the design, but it is not required. 
+of the design, but it is not required.
 Other characters are possible for the same purpose.
 
 A concern is that `name-char` reserves `:`, `-`, and `.`, which are probably the
-most likely candidates. 
+most likely candidates.
 Choosing one of these characters would require altering the `name-char` (and
 thus `name`) production.
 Moving to use `NCName` instead of `Nmtoken` as a basis for `name` would address
 the use of `:`.
 Moving to `-` or `.` would not require alterations of the syntax if we decided
-that namespacing is not formally a part of the specification but, rather, is 
+that namespacing is not formally a part of the specification but, rather, is
 just a convention.
 
 Of the remaining characters not currently in use, the most obvious candidates would
-be `/` and `~`. 
+be `/` and `~`.
 
 > Here are examples of the options:
+>
 > ```
 > {$today :ns:function  ns:option=foo}{+ns:a}{-ns:a}
 > {$today :ns-function  ns-option=foo}{+ns-a}{-ns-a}
