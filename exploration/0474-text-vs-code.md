@@ -159,7 +159,7 @@ so some of the above messages are actually:
 ```
 {input $now :datetime dateStyle=long}Hello {$user}. Today is {$now}
 
-{match {$count :number option=value}{when 0} Hello {$user}{when one} Hello {$user}{when *}{ Hello {$user} }
+{match {$count :number option=value}}{when 0} Hello {$user}{when one} Hello {$user}{when *}{ Hello {$user} }
 ```
 
 Key choices we should consider as a working group:
