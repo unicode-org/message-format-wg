@@ -130,7 +130,48 @@ equivalent of `\n`.
 
 ## Proposed Design
 
-TBD
+**Start in text mode**
+
+In this option, whitespace is trimmed from `pattern` constructs unless
+the pattern is quoted.
+
+```
+Hello world!
+
+Hello {$user}!
+
+{input $now :datetime dateStyle=long}
+Hello {$user}. Today is {$now}
+
+{local $now = {:systemGetCurrentTime :datetime dateStyle=medium}}
+Hello {$user}. Today is {$now}
+
+{match {$count :number integer=true}}
+{when 0}   Hello {$user}. Today is {$now} and you have no geese.
+{when one} Hello {$user}. Today is {$now} and you have {$count} goose.
+{when few} {  Hello {$user}, this message has spaces on the front and end.  }
+{when *}   Hello {$user}. Today is {$now} and you have {$count} geese.
+```
+
+Bear in mind that whitespace has no meaning in our syntax, 
+so some of the above messages are actually:
+```
+{input $now :datetime dateStyle=long}Hello {$user}. Today is {$now}
+
+{match {$count :number option=value}{when 0} Hello {$user}{when one} Hello {$user}{when *}{ Hello {$user} }
+```
+
+Key choices we should consider as a working group:
+
+- Do we like the double-brackets that `local` and `match` require?
+- Is the whitespace story clear? Will tools generate the extra `{}`
+  around patterns "just to be sure"?
+- Is the single-line representation (most users will actually see this!)
+  a good one? Is this noise good noise?
+
+I have put this as the proposed design because no one has stood up for starting
+in code mode and this is the most conservative change.
+This does not make it the right syntax.
 
 ## Alternatives Considered
 
