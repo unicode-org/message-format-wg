@@ -83,7 +83,7 @@ should not be surprising.
 
 ## Requirements
 
-Easy things should be easy, and hard things should be possible.
+Common things should be easy, uncommon things should be possible.
 
 Developers and translators should be able to read and write the syntax easily in a text editor.
 
