@@ -208,7 +208,7 @@ _What other solutions are available?_
 _How do they compare against the requirements?_
 _What other properties they have?_
 
-### Use quotation marks
+### [a1] Use quotation marks
 
 Early drafts of the syntax specification used double quotes to delimit literals.
 This changed in [#263](https://github.com/unicode-org/message-format-wg/issues/263#issue-1233590015).
@@ -226,7 +226,7 @@ This changed in [#263](https://github.com/unicode-org/message-format-wg/issues/2
 - [r5 FAIR] Quotation marks are not automatically paired by parsers nor IDEs,
   but many text editors provide features to make working with and around quotes easier.
 
-### Dual quoting
+### [a2] Dual quoting
 
 PR [#414](https://github.com/unicode-org/message-format-wg/pull/414) proposes to
 allow either single quotes `'` or double quotes `"` as literal delimiters,
@@ -244,7 +244,7 @@ a variant of the "Use quotation marks" solution.
 - [r5 FAIR] Quotation marks cannot be paired by parsers nor IDEs,
   but many text editors provide features to make working with and around quotes easier.
 
-### Use round or angle brackets
+### [a3] Use round or angle brackets
 
 - Round parentheses are very uncommon as string delimiters [r2 GOOD],
   and thus may be surprising,
@@ -254,15 +254,75 @@ a variant of the "Use quotation marks" solution.
 - Angle brackets require escaping in XML-based storage formats [r2 POOR].
 - All brackets can be easily paired by parsers and IDEs [r5 GOOD].
 
-### Change escape introducer
+### [a4] Change escape introducer
 
 Changing the escape sequence introducer from backslash [c1] to another character
 could help partially mitigate the burden of first escaping literal delimiters
 and then escaping the escapes themselves [r1].
 However, it wouldn't address other requirements and use-cases.
 
-### Double delimiters to escape them
+### [a5] Double delimiters to escape them
 
 This is the approach taken by ICU MessageFormat 1.0 for quotes.
 It allows literals to contain quotes [r1 GOOD]
 at the expense of doubling the amount of escaping required when embedding messages in code [r2 POOR].
+
+## Comparison table
+
+<table>
+   <tr>
+      <th></th>
+      <th>Proposal</th>
+      <th>[a1]</th>
+      <th>[a2]</th>
+      <th>[a3]</th>
+      <th>[a4]</th>
+      <th>[a5]</th>
+   </tr>
+   <tr>
+      <th>[r1] escape inside literals</th>
+      <td>++</td>
+      <td>-</td>
+      <td>+</td>
+      <td>-</td>
+      <td>++</td>
+      <td>++</td>
+   </tr>
+   <tr>
+      <th>[r2] escape when embedding</th>
+      <td>++</td>
+      <td>+</td>
+      <td>++</td>
+      <td>-/++</td>
+      <td></td>
+      <td>-</td>
+   </tr>
+   <tr>
+      <th>[r3] escape by modifying</th>
+      <td>++</td>
+      <td>?</td>
+      <td>?</td>
+      <td>++</td>
+      <td></td>
+      <td></td>
+   </tr>
+   <tr>
+      <th>[r4] no surprises</th>
+      <td>+</td>
+      <td>++</td>
+      <td>++</td>
+      <td>-</td>
+      <td>-</td>
+      <td>+</td>
+   </tr>
+   <tr>
+      <th>[r5] pair delimiters</th>
+      <td>-</td>
+      <td>+</td>
+      <td>+</td>
+      <td>++</td>
+      <td></td>
+      <td></td>
+   </tr>
+
+</table>
