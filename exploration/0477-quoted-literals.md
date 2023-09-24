@@ -251,7 +251,7 @@ a variant of the "Use quotation marks" solution.
   especially given the well-established meaning in prose [r4 POOR].
   That said, there's prior art in using them for [delimiting strings in PostScript](https://en.wikipedia.org/wiki/PostScript#%22Hello_world%22).
   Furthermore, they are relatively common in text, where they'd require escaping [r1 POOR].
-- Angle brackets require escaping in XML-based storage formats [r2 POOR].
+- Angle brackets require escaping in XML-based storage formats [r2 FAIR].
 - All brackets can be easily paired by parsers and IDEs [r5 GOOD].
 
 ### [a4] Change escape introducer
@@ -293,7 +293,7 @@ at the expense of doubling the amount of escaping required when embedding messag
       <td>++</td>
       <td>+</td>
       <td>++</td>
-      <td>-/++</td>
+      <td>+/++</td>
       <td></td>
       <td>-</td>
    </tr>
