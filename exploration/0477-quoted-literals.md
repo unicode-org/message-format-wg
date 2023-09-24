@@ -110,8 +110,9 @@ More specifically:
 - Developers may want to embed messages with quoted literals in code written in another programming language
   which uses single or double quotes to delimit strings.
 
+  <!-- prettier-ignore -->
   > ```js
-  > let message = new MessageFormat("en", "{A message with {|a literal|}.}");
+  > let message = new MessageFormat('en', '{A message with {|a literal|}.}');
   > ```
 
 - Developers and localization engineers may want to embed messages with quoted literals in a container format, such as JSON.
