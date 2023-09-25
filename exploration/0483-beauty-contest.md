@@ -1,11 +1,11 @@
 # Syntax Variation Beauty Contest
 
-As discussed in the 2023-09-25 teleconference, we need to choose a syntax to proceed with. 
+As discussed in the 2023-09-25 teleconference, we need to choose a syntax to proceed with.
 This page hosts various options for considering in the 2023-10-02 call.
 
 ## Current
 
-This is the current syntax. 
+This is the current syntax.
 The list of messages in this section also serves as the basis for all other examples.
 
 ```
@@ -67,4 +67,3 @@ Hello {$var}, you have a {$foo}
 
 {match {$foo :function option=value}{$bar :function option=value}}{when a b} {  {$foo} is {$bar}  }{when x y} {  {$foo} is {$bar}  }{when * *} {|  |}{$foo} is {$bar}{|  |}
 ```
-
