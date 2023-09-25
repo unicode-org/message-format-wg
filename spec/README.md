@@ -70,26 +70,24 @@ A reference to a _term_ looks like this.
 
 ### Stability Policy
 
-Updates to this specification MUST NOT change
+Updates to this specification will not change
 the syntactical meaning, the runtime output, or other behaviour
 of valid messages written for earlier versions of this specification
 that only use functions and expression attributes defined in this specification.
-Updates to this specification will not remove any syntax provided
-in this version. Future versions MAY add additional structure or meaning
-to existing syntax.
+Updates to this specification will not remove any syntax provided in this version.
+Future versions MAY add additional structure or meaning to existing syntax.
 
-Updates to this specification will not remove any reserved keywords
-or sigils.
+Updates to this specification will not remove any reserved keywords or sigils.
 
-> Note: future versions may defined new keywords
+> Note: future versions may define new keywords.
 
-Updates to this specification will not reserve or assign meaning to any
-character "sigils" except for those in the `reserved` production.
+Updates to this specification will not reserve or assign meaning to
+any character "sigils" except for those in the `reserved` production.
 
-Updates to this specification will not remove any functions
-defined in the default registry nor will they remove any options
-or option values. Additional options or option values MAY be
-defined.
+Updates to this specification
+will not remove any functions defined in the default registry nor
+will they remove any options or option values.
+Additional options or option values MAY be defined.
 
 > [!NOTE]
 > This does not guarantee that the results of formatting will never change.
@@ -97,7 +95,9 @@ defined.
 > the functions for date formatting, number formatting and so on
 > will change their results over time.
 
-Updates to this specification MUST NOT introduce message syntax that,
+Later specification versions MAY make previously invalid messages valid.
+
+Updates to this specification will not introduce message syntax that,
 when parsed according to earlier versions of this specification,
 would produce syntax or data model errors.
 Such messages MAY produce errors when formatted
