@@ -67,3 +67,63 @@ Hello {$var}, you have a {$foo}
 
 {match {$foo :function option=value}{$bar :function option=value}}{when a b} {  {$foo} is {$bar}  }{when x y} {  {$foo} is {$bar}  }{when * *} {|  |}{$foo} is {$bar}{|  |}
 ```
+
+## Use sigils for code mode
+
+Try to redues the use of `{`/`}` to just expressions and placeholders instead of the three
+uses we have now (the other use is for patterns). This requires escaping whitespace or using 
+a placeholder for it.
+
+The sigil `#` was chosen because `#define` type constructs are fairly common. Introduces `[`/`]` for keys.
+
+```
+#{input $var :function option=value}
+Hello {$var}
+
+#{input $var :function option=value}
+#local $foo = {$bar :function option=value}
+Hello {$var}, you have a {$foo}
+
+#match {$foo} {$bar}
+#when[foo bar] Hello {$foo} you have a {$var}
+#when[  *   *] {$foo} hello you have a {$var}
+
+#match {$foo :function option=value} {$bar :function option=value}
+#when [a b] \ \ {$foo} is {$bar}\ \ 
+#when [x y] \ \ {$foo} is {$bar}\ \ 
+#when [* *] {|  |}{$foo} is {$bar}{|  |}
+
+#{input $var :function option=value}#local $foo = {$bar :function option=value}Hello {$var}, you have a {$foo}
+
+#match {$foo} {$bar}#when[foo bar] Hello {$foo} you have a {$var}#when[* *] {$foo} hello you have a {$var}
+
+#match {$foo :function option=value} {$bar :function option=value}#when [a b] \ \ {$foo} is {$bar}\ \ #when [x y] \ \ {$foo} is {$bar}\ \ #when [* *] {|  |}{$foo} is {$bar}{|  |}
+```
+
+## Reducing keywords
+
+Avoids keywords in favor of entirely sigil based parsing.
+
+```
+#$var = {$var :function option=value}
+Hello {$var}
+
+#$var = {$var :function option=value}
+#$foo = {$bar :function option=value}
+Hello {$var}, you have a {$foo}
+
+?? {$foo} {$bar}
+::[ foo bar] Hello {$foo} you have a {$var}
+::[ *     *] {$foo} hello you have a {$var}
+
+?? {$foo :function option=value} {$bar :function option=value}
+::[when a b] {  {$foo} is {$bar}  }
+::[when x y] {  {$foo} is {$bar}  }
+::[when * *] {|  |}{$foo} is {$bar}{|  |}
+
+#$var = {$var :function option=value}#$foo = {$bar :function option=value}Hello {$var}, you have a {$foo}
+
+??{$foo} {$bar}::[ foo bar] Hello {$foo} you have a {$var}::[ *     *] {$foo} hello you have a {$var}
+
+??{$foo :function option=value} {$bar :function option=value}::[when a b] {  {$foo} is {$bar}  }::[when x y] {  {$foo} is {$bar}  }::[when * *] {|  |}{$foo} is {$bar}{|  |}
+```
