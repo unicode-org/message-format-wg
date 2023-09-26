@@ -71,7 +71,7 @@ Hello {$var}, you have a {$foo}
 ## Use sigils for code mode
 
 Try to redues the use of `{`/`}` to just expressions and placeholders instead of the three
-uses we have now (the other use is for patterns). This requires escaping whitespace or using 
+uses we have now (the other use is for patterns). This requires escaping whitespace or using
 a placeholder for it.
 
 The sigil `#` was chosen because `#define` type constructs are fairly common. Introduces `[`/`]` for keys.
@@ -89,8 +89,8 @@ Hello {$var}, you have a {$foo}
 #when[  *   *] {$foo} hello you have a {$var}
 
 #match {$foo :function option=value} {$bar :function option=value}
-#when [a b] \ \ {$foo} is {$bar}\ \ 
-#when [x y] \ \ {$foo} is {$bar}\ \ 
+#when [a b] \ \ {$foo} is {$bar}\ \
+#when [x y] \ \ {$foo} is {$bar}\ \
 #when [* *] {|  |}{$foo} is {$bar}{|  |}
 
 #{input $var :function option=value}#local $foo = {$bar :function option=value}Hello {$var}, you have a {$foo}
