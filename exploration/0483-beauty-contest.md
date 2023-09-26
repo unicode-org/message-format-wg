@@ -117,13 +117,13 @@ Hello {$var}, you have a {$foo}
 ::[ *     *] {$foo} hello you have a {$var}
 
 ?? {$foo :function option=value} {$bar :function option=value}
-::[when a b] {  {$foo} is {$bar}  }
-::[when x y] {  {$foo} is {$bar}  }
-::[when * *] {|  |}{$foo} is {$bar}{|  |}
+::[a b] {  {$foo} is {$bar}  }
+::[x y] {  {$foo} is {$bar}  }
+::[* *] {|  |}{$foo} is {$bar}{|  |}
 
 #$var = {$var :function option=value}#$foo = {$bar :function option=value}Hello {$var}, you have a {$foo}
 
 ??{$foo}{$bar}::[foo bar] Hello {$foo} you have a {$var}::[* *] {$foo} hello you have a {$var}
 
-??{$foo :function option=value}{$bar :function option=value}::[when a b] {  {$foo} is {$bar}  }::[when x y] {  {$foo} is {$bar}  }::[when * *] {|  |}{$foo} is {$bar}{|  |}
+??{$foo :function option=value}{$bar :function option=value}::[a b] {  {$foo} is {$bar}  }::[x y] {  {$foo} is {$bar}  }::[* *] {|  |}{$foo} is {$bar}{|  |}
 ```
