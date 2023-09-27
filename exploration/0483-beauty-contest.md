@@ -77,10 +77,10 @@ a placeholder for it.
 The sigil `#` was chosen because `#define` type constructs are fairly common. Introduces `[`/`]` for keys.
 
 ```
-#{input $var :function option=value}
+#input {$var :function option=value}
 Hello {$var}
 
-#{input $var :function option=value}
+#input {$var :function option=value}
 #local $foo = {$bar :function option=value}
 Hello {$var}, you have a {$foo}
 
