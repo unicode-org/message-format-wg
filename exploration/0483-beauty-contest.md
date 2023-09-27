@@ -127,3 +127,86 @@ Hello {$var}, you have a {$foo}
 
 ??{$foo :function option=value}{$bar :function option=value}::[a b] {  {$foo} is {$bar}  }::[x y] {  {$foo} is {$bar}  }::[* *] {|  |}{$foo} is {$bar}{|  |}
 ```
+
+## Use "blocks" for declarations and body
+
+Use code-mode "blocks" to introduce code. _(This section has an additional example)_
+
+```
+{#
+  input {$var :function option=value}
+}
+Hello {$var}
+
+{#
+   input {$var :function option=value}
+   local $foo = {$bar :function option=value}
+}
+Hello {$var}, you have a {$foo}
+
+{
+  match {$foo} {$bar}
+  [ foo bar] Hello {$foo} you have a {$var}
+  [ *     *] {$foo} hello you have a {$var}
+}
+
+{#
+   input $foo :function option=value
+}
+{
+match {$foo :function option=value} {$bar :function option=value}
+[a b] {  {$foo} is {$bar}  }
+[x y] {  {$foo} is {$bar}  }
+[* *] {|  |}{$foo} is {$bar}{|  |}
+}
+
+{#input {$var :function option=value}}Hello {$var}
+
+{#input {$var :function option=value} local $foo = {$bar :function option=value}}Hello {$var}, you have a {$foo}
+
+{match {$foo} {$bar}[ foo bar] Hello {$foo} you have a {$var}[ *     *] {$foo} hello you have a {$var}}
+
+{#input $foo :function option=value}{match {$foo :function option=value} {$bar :function option=value}[a b] {  {$foo} is {$bar}  }[x y] {  {$foo} is {$bar}  }[* *] {|  |}{$foo} is {$bar}{|  |}}
+```
+
+## Use "statements"
+
+Many languages delimit statements using a terminator, such as `;`.
+In some languages, the terminator is the newline and lines can be extended using an escape like `\`.
+Here we use `#` as a terminator.
+
+Here the last example is repeated showing `when` as an independent statement.
+
+```
+#input {$var :function option=value}#
+Hello {$var}
+
+#input {$var :function option=value}#
+#local $foo = {$bar :function option=value}#
+Hello {$var}, you have a {$foo}
+
+#match {$foo} {$bar}
+when [ foo bar] Hello {$foo} you have a {$var}
+when [ *     *] {$foo} hello you have a {$var}
+#
+
+#match {$foo :function option=value} {$bar :function option=value}
+   when [a b] {  {$foo} is {$bar}  }
+   when [x y] {  {$foo} is {$bar}  }
+   when [* *] {|  |}{$foo} is {$bar}{|  |}
+#
+
+#match {$foo :function option=value} {$bar :function option=value}#
+#when a b#  {$foo} is {$bar}  
+#when x y#  {$foo} is {$bar}  
+#when * *# {|  |}{$foo} is {$bar}{|  |}
+
+
+#input {$var :function option=value}##local $foo = {$bar :function option=value}#Hello {$var}, you have a {$foo}
+
+#match {$foo} {$bar}when [ foo bar] Hello {$foo} you have a {$var}when [ *     *] {$foo} hello you have a {$var}#
+
+#match {$foo :function option=value} {$bar :function option=value}when [a b] {  {$foo} is {$bar}  }when[x y] {  {$foo} is {$bar}  }when[* *] {|  |}{$foo} is {$bar}{|  |}#
+
+#match {$foo :function option=value} {$bar :function option=value}##when a b#  {$foo} is {$bar}  #when x y#  {$foo} is {$bar}  #when * *# {|  |}{$foo} is {$bar}{|  |}
+```
