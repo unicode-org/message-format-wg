@@ -152,12 +152,11 @@ Hello {$var}, you have a {$foo}
 
 {#
    input $foo :function option=value
-}
-{
-match {$foo :function option=value} {$bar :function option=value}
-[a b] {  {$foo} is {$bar}  }
-[x y] {  {$foo} is {$bar}  }
-[* *] {|  |}{$foo} is {$bar}{|  |}
+}{
+  match {$foo :function option=value} {$bar :function option=value}
+  [a b] {  {$foo} is {$bar}  }
+  [x y] {  {$foo} is {$bar}  }
+  [* *] {|  |}{$foo} is {$bar}{|  |}
 }
 
 {#input {$var :function option=value}}Hello {$var}
@@ -174,8 +173,9 @@ match {$foo :function option=value} {$bar :function option=value}
 Many languages delimit statements using a terminator, such as `;`.
 In some languages, the terminator is the newline and lines can be extended using an escape like `\`.
 Here we use `#` as a terminator.
+Note that the closing `#` on `match` might be optional.
 
-Here the last example is repeated showing `when` as an independent statement.
+_Here the last example is repeated showing `when` as an independent statement._
 
 ```
 #input {$var :function option=value}#
