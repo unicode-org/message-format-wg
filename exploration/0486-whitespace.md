@@ -32,11 +32,10 @@ Its most common use is visual formatting, usually when concatenating the output 
 operation.
 
 Examples include:
+
 - command line utilities often need to emit a newline at the end of a message
 - creating bullet lists
 - indenting text
-
-
 
 ## Use-Cases
 
@@ -50,12 +49,11 @@ _What use-cases do we see? Ideally, quote concrete examples._
 
 _What properties does the solution have to manifest to enable the use-cases above?_
 
-
 ## Constraints
 
 _What prior decisions and existing conditions limit the possible design?_
 
-- Pattern interior whitespace is just a sequence of characters inside the pattern. 
+- Pattern interior whitespace is just a sequence of characters inside the pattern.
   Some of the escapes shown here can be used for pattern interior whitespace also,
   but this is not required.
 
@@ -68,7 +66,7 @@ Document solutions (1) and (2) below.
 
 ## Alternatives Considered
 
-In our call of 2023-10-02 we discussed options for whitespace handling. 
+In our call of 2023-10-02 we discussed options for whitespace handling.
 In this section we will look at different mechanisms for including pattern exterior whitespace.
 
 ```
@@ -88,39 +86,49 @@ Note that (1) and (2) will be valid options regardless of what else we do.
 #### Examples of the above with newlines and tabs in a variant
 
 (1)
+
 ```
 #when [*] {|
   |}Newline and tab quoted
 ```
+
 (2)
+
 ```
 #when [*] {||}
   Newline and tab after empty literal
 ```
+
 (3)
+
 ```
 #when [*] {
   Newline and tab inside pattern}
 ```
 
 (4)
+
 ```
 #when [*] {{
   Newline and tab inside pattern}}
 ```
 
 (5)
+
 ```
 #when [*] \
 \  Newline and tab escaped
 ```
 
 (6)
+
 ```
 #when [*] \
   Newline escaped and tab naked
 ```
+
 (7)
+
 ```
 #when [*]
   Newline and tab are significant whitespace
@@ -128,44 +136,51 @@ Note that (1) and (2) will be valid options regardless of what else we do.
 
 #### Examples of the above in a selector
 
-(1) 
+(1)
+
 ```
 #match {$user}
 #when [*] {|  |}Hello {$user}{|  |}
 ```
 
 (2)
+
 ```
 #match {$user}
 #when [*] {||}  Hello {$user}  {||}
 ```
 
 (3)
+
 ```
 #match {$user}
 #when [*] {  Hello {$user}  }
 ```
 
 (4)
+
 ```
 #match {$user}
 #when [*] {{ Hello {$user}  }}
 ```
 
 (5)
+
 ```
 #match {$user}
-#when [*] \ \ Hello {$user}\ \ 
+#when [*] \ \ Hello {$user}\ \
 ```
 
 (6)
+
 ```
 #match {$user}
 #when [*] \  Hello {$user} \
 ```
 
 (7)
+
 ```
 #match {$user}
-#when [*]  Hello {$user}  
+#when [*]  Hello {$user}
 ```
