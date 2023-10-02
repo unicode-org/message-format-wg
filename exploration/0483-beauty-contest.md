@@ -105,7 +105,7 @@ Try to redues the use of `{`/`}` to just expressions and placeholders instead of
 uses we have now (the other use is for patterns). This requires escaping whitespace or using
 a placeholder for it. See #486 for a discussion of whitespace options.
 
-The sigil `#` was chosen because `#define` type constructs are fairly common. 
+The sigil `#` was chosen because `#define` type constructs are fairly common.
 Introduces `[`/`]` for keys.
 
 ```
