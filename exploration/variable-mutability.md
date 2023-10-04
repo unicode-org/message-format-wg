@@ -174,8 +174,6 @@ The _expression_ rule can't be used directly in _input-declaration_ because the 
 
 With this approach, variables are immutable,
 so each may be defined by only one _declaration_.
-The order of declarations does not matter,
-to allow for e.g. `input` annotations to refer to `local` variables.
 
 References to later declarations are not allowed,
 so this is considered an error:
@@ -184,6 +182,13 @@ so this is considered an error:
 local $foo = {$bar :number}
 local $bar = {42 :number}
 {The answer is {$foo}}
+```
+
+Note that this means that `input` declarations can (and sometimes _must_)
+follow `local` ones, such as when an `input` is annotated using a `local` value:
+```
+local $foo = {|2| :number}
+input $bar :number maxFractionDigits={$foo}
 ```
 
 An _input-declaration_ is not required for each external variable.
