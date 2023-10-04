@@ -186,6 +186,7 @@ local $bar = {42 :number}
 
 Note that this means that `input` declarations can (and sometimes _must_)
 follow `local` ones, such as when an `input` is annotated using a `local` value:
+
 ```
 local $foo = {|2| :number}
 input $bar :number maxFractionDigits={$foo}
