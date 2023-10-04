@@ -238,7 +238,7 @@ Hello {$var}, you have a {$foo}
 
 {#input $foo :function option=value
 local $baz = {|some annotation|}}
-#match {$f00} {$bar :function}
+#match {$foo} {$bar :function}
 [a b] {$foo} is {$bar}
 [x y] {$foo} is {$bar}
 [* *] {$foo} is {$bar}
