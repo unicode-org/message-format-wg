@@ -244,7 +244,6 @@ local $baz = {|some annotation|}}
 [* *] {$foo} is {$bar}
 ```
 
-
 ## 6. Use "statements"
 
 Many languages delimit statements using a terminator, such as `;`.
