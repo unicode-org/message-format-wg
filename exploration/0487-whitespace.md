@@ -31,6 +31,13 @@ when the pattern is being used in a space-sensitive manner during output.
 Its most common use is visual formatting,
 usually when concatenating the output of the formatting operation.
 
+Sometimes, pattern exterior whitespace is localizable,
+such as when segmentation results in a message with a leading or trailing space
+used to separate the message from other clauses or phrases.
+When such a message is translated to a locale using a CJK or other script
+that does not use spaces to separate clauses,
+the space needs to be dropped.
+
 Examples include:
 
 - command line utilities often need to emit a newline at the end of a message
