@@ -43,6 +43,7 @@ Examples include:
 - command line utilities often need to emit a newline at the end of a message
 - creating bullet lists
 - indenting text
+- manually aligning multi-line text that is rendered with a monospace font
 
 ## Use-Cases
 
