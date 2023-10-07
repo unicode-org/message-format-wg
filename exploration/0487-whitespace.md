@@ -18,18 +18,18 @@ Status: **Proposed**
 
 _What is this proposal trying to achieve?_
 
-The WG is discussing how to handle "pattern exterior" whitespace, which is ASCII
-whitespace (tab, newline, or U+0020) that is **_part_** of the pattern and occurs
-at the start or end of the pattern.
+The WG is discussing how to handle "pattern exterior" whitespace,
+which is ASCII whitespace (tab, newline, or U+0020) that is **_part_** of the pattern
+and occurs at the start or end of the pattern.
 
 ## Background
 
 _What context is helpful to understand this proposal?_
 
-Pattern exterior whitespace can occur in a message when the pattern is being used in a space-sensitive
-manner during output.
-Its most common use is visual formatting, usually when concatenating the output of the formatting
-operation.
+Pattern exterior whitespace can occur in a message
+when the pattern is being used in a space-sensitive manner during output.
+Its most common use is visual formatting,
+usually when concatenating the output of the formatting operation.
 
 Examples include:
 
@@ -85,102 +85,102 @@ Note that (1) and (2) will be valid options regardless of what else we do.
 
 #### Examples of the above with newlines and tabs in a variant
 
-(1)
+1. Quoted literals
 
-```
-#when [*] {|
-  |}Newline and tab quoted
-```
+   ```
+   #when [*] {|
+     |}Newline and tab quoted
+   ```
 
-(2)
+2. Empty literals
 
-```
-#when [*] {||}
-  Newline and tab after empty literal
-```
+   ```
+   #when [*] {||}
+     Newline and tab after empty literal
+   ```
 
-(3)
+3. {Quoted} pattern
 
-```
-#when [*] {
-  Newline and tab inside pattern}
-```
+   ```
+   #when [*] {
+     Newline and tab inside pattern}
+   ```
 
-(4)
+4. {{Quoted}} pattern
 
-```
-#when [*] {{
-  Newline and tab inside pattern}}
-```
+   ```
+   #when [*] {{
+     Newline and tab inside pattern}}
+   ```
 
-(5)
+5. Quote exterior spaces
 
-```
-#when [*] \
-\  Newline and tab escaped
-```
+   ```
+   #when [*] \
+   \  Newline and tab escaped
+   ```
 
-(6)
+6. Quote outside space
 
-```
-#when [*] \
-  Newline escaped and tab naked
-```
+   ```
+   #when [*] \
+     Newline escaped and tab naked
+   ```
 
-(7)
+7. No trimming
 
-```
-#when [*]
-  Newline and tab are significant whitespace
-```
+   ```
+   #when [*]
+     Newline and tab are significant whitespace
+   ```
 
 #### Examples of the above in a selector
 
-(1)
+1. Quoted literals
 
-```
-#match {$user}
-#when [*] {|  |}Hello {$user}{|  |}
-```
+   ```
+   #match {$user}
+   #when [*] {|  |}Hello {$user}{|  |}
+   ```
 
-(2)
+2. Empty literals
 
-```
-#match {$user}
-#when [*] {||}  Hello {$user}  {||}
-```
+   ```
+   #match {$user}
+   #when [*] {||}  Hello {$user}  {||}
+   ```
 
-(3)
+3. {Quoted} pattern
 
-```
-#match {$user}
-#when [*] {  Hello {$user}  }
-```
+   ```
+   #match {$user}
+   #when [*] {  Hello {$user}  }
+   ```
 
-(4)
+4. {{Quoted}} pattern
 
-```
-#match {$user}
-#when [*] {{ Hello {$user}  }}
-```
+   ```
+   #match {$user}
+   #when [*] {{ Hello {$user}  }}
+   ```
 
-(5)
+5. Quote exterior spaces
 
-```
-#match {$user}
-#when [*] \ \ Hello {$user}\ \
-```
+   ```
+   #match {$user}
+   #when [*] \ \ Hello {$user}\ \
+   ```
 
-(6)
+6. Quote outside space
 
-```
-#match {$user}
-#when [*] \  Hello {$user} \
-```
+   ```
+   #match {$user}
+   #when [*] \  Hello {$user} \
+   ```
 
-(7)
+7. No trimming
 
-```
-#match {$user}
-#when [*]  Hello {$user}
-```
+   ```
+   #match {$user}
+   #when [*]  Hello {$user}
+   ```
