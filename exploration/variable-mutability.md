@@ -1,6 +1,6 @@
 # Design Proposal Template
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Variable Namespacing and Mutability</summary>
