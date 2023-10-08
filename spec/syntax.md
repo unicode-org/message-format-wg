@@ -414,7 +414,7 @@ annotation = (function *(s option)) / reserved / private-use
 ```
 
 An **_<dfn>operand</dfn>_** is the _literal_ of a _literal-expression_ or
-the _variable_ of a _variable-expression.
+the _variable_ of a \_variable-expression.
 
 An _annotation_ can appear in an _expression_ by itself or following a single _operand_.
 When following an _operand_, the _operand_ serves as input to the _annotation_.
