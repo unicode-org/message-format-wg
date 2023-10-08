@@ -7,6 +7,7 @@ Status: **Proposed**
 	<dl>
 		<dt>Contributors</dt>
 		<dd>@aphillips</dd>
+		<dd>@eemeli</dd>
 		<dt>First proposed</dt>
 		<dd>2023-09-04</dd>
 		<dt>Pull Request</dt>
