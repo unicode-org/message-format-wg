@@ -128,8 +128,6 @@ a non-empty sequence of pattern parts (text, expressions).
 Markup spans may be nested,
 as in `<b>Bold and <i>also italic</i></b>`.
 
-Markup spans may be improperly nested,
-as in `<b>Bold <i>and</b> italic</i>`.
 
 Markup may have localisable options,
 such as `Click <a title="Link tooltip">here</a> to continue`.
