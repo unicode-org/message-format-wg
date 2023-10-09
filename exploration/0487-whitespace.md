@@ -1,6 +1,6 @@
 # Pattern Exterior Whitespace
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -20,7 +20,7 @@ Status: **Proposed**
 _What is this proposal trying to achieve?_
 
 The WG is discussing how to handle "pattern exterior" whitespace,
-which is ASCII whitespace (tab, newline, or U+0020) that is **_part_** of the pattern
+which is ASCII whitespace (tab, CR, LF, or U+0020) that is **_part_** of the pattern
 and occurs at the start or end of the pattern.
 
 ## Background
@@ -70,8 +70,12 @@ _What prior decisions and existing conditions limit the possible design?_
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
 
-Trim all whitespace.
-Document solutions (1) and (2) below.
+- Patterns MAY be quoted using solution 4
+- User can quote whitespace using solutions 1 and 2
+
+Still being discussed:
+- Whether unquoted "simple" patterns are trimmed.
+  This will be dealt with in the syntax spec.
 
 ## Alternatives Considered
 
@@ -91,6 +95,57 @@ In this section we will look at different mechanisms for including pattern exter
 Note that (1) and (2) will be valid options regardless of what else we do.
 
 ---
+
+#### Examples of the above in a selector
+
+1. Quoted literals
+
+   ```
+   #match {$user}
+   #when [*] {|  |}Hello {$user}{|  |}
+   ```
+
+2. Empty literals
+
+   ```
+   #match {$user}
+   #when [*] {||}  Hello {$user}  {||}
+   ```
+
+3. {Quoted} pattern
+
+   ```
+   #match {$user}
+   #when [*] {  Hello {$user}  }
+   ```
+
+4. {{Quoted}} pattern
+
+   ```
+   #match {$user}
+   #when [*] {{ Hello {$user}  }}
+   ```
+
+5. Quote exterior spaces
+
+   ```
+   #match {$user}
+   #when [*] \ \ Hello {$user}\ \
+   ```
+
+6. Quote outside space
+
+   ```
+   #match {$user}
+   #when [*] \  Hello {$user} \
+   ```
+
+7. No trimming
+
+   ```
+   #match {$user}
+   #when [*]  Hello {$user}
+   ```
 
 #### Examples of the above with newlines and tabs in a variant
 
@@ -143,53 +198,4 @@ Note that (1) and (2) will be valid options regardless of what else we do.
      Newline and tab are significant whitespace
    ```
 
-#### Examples of the above in a selector
 
-1. Quoted literals
-
-   ```
-   #match {$user}
-   #when [*] {|  |}Hello {$user}{|  |}
-   ```
-
-2. Empty literals
-
-   ```
-   #match {$user}
-   #when [*] {||}  Hello {$user}  {||}
-   ```
-
-3. {Quoted} pattern
-
-   ```
-   #match {$user}
-   #when [*] {  Hello {$user}  }
-   ```
-
-4. {{Quoted}} pattern
-
-   ```
-   #match {$user}
-   #when [*] {{ Hello {$user}  }}
-   ```
-
-5. Quote exterior spaces
-
-   ```
-   #match {$user}
-   #when [*] \ \ Hello {$user}\ \
-   ```
-
-6. Quote outside space
-
-   ```
-   #match {$user}
-   #when [*] \  Hello {$user} \
-   ```
-
-7. No trimming
-
-   ```
-   #match {$user}
-   #when [*]  Hello {$user}
-   ```
