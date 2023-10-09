@@ -74,6 +74,7 @@ _Describe the proposed solution. Consider syntax, formatting, errors, registry, 
 - User can quote whitespace using solutions 1 and 2
 
 Still being discussed:
+
 - Whether unquoted "simple" patterns are trimmed.
   This will be dealt with in the syntax spec.
 
@@ -197,5 +198,3 @@ Note that (1) and (2) will be valid options regardless of what else we do.
    #when [*]
      Newline and tab are significant whitespace
    ```
-
-
