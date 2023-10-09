@@ -57,15 +57,15 @@ Hello {$var}, you have a {$foo}
 {when * *} {$foo} hello you have a {$var}
 
 {match {$foo :function option=value} {$bar :function option=value}}
-{when a b} {  {$foo} is {$bar}  }
-{when x y} {  {$foo} is {$bar}  }
+{when a b} {{  {$foo} is {$bar}  }}
+{when x y} {{  {$foo} is {$bar}  }}
 {when * *} {|  |}{$foo} is {$bar}{|  |}
 
 {input $var :function option=value}{local $foo = $bar :function option=value}Hello {$var}, you have a {$foo}
 
 {match {$foo} {$bar}}{when foo bar} Hello {$foo} you have a {$var}{when * *} {$foo} hello you have a {$var}
 
-{match {$foo :function option=value}{$bar :function option=value}}{when a b} {  {$foo} is {$bar}  }{when x y} {  {$foo} is {$bar}  }{when * *} {|  |}{$foo} is {$bar}{|  |}
+{match {$foo :function option=value}{$bar :function option=value}}{when a b} {{  {$foo} is {$bar}  }}{when x y} {{  {$foo} is {$bar}  }}{when * *} {|  |}{$foo} is {$bar}{|  |}
 ```
 
 ## 2. Text First, but Always Code After Code-Mode
@@ -80,23 +80,23 @@ Hello world!
 Hello {$user}
 
 {input $var :function option=value}
-{Hello {$var}}
+{{Hello {$var}}}
 
 {input $var :function option=value}
 {local $foo = $bar :function option=value}
-{Hello {$var}, you have a {$foo}}
+{{Hello {$var}, you have a {$foo}}}
 
 {match {$foo} {$bar}}
-{when foo bar} {Hello {$foo} you have a {$var}}
-{when * *} {{$foo} hello you have a {$var}}
+{when foo bar} {{Hello {$foo} you have a {$var}}}
+{when * *} {{{$foo} hello you have a {$var}}}
 
 {match {$foo :function option=value} {$bar :function option=value}}
-{when a b} {  {$foo} is {$bar}  }
-{when x y} {  {$foo} is {$bar}  }
+{when a b} {{  {$foo} is {$bar}  }}
+{when x y} {{  {$foo} is {$bar}  }}
 
-{input $var :function option=value}{local $foo = $bar :function option=value}{Hello {$var}, you have a {$foo}}
+{input $var :function option=value}{local $foo = $bar :function option=value}{{Hello {$var}, you have a {$foo}}}
 
-{match {$foo} {$bar}}{when foo bar} Hello {$foo} you have a {$var}{when * *}{{$foo} hello you have a {$var}}
+{match {$foo} {$bar}}{when foo bar} {{Hello {$foo} you have a {$var}}}{when * *}{{{$foo} hello you have a {$var}}}
 
 {match {$foo :function option=value}{$bar :function option=value}}{when a b} {  {$foo} is {$bar}  }{when x y} {  {$foo} is {$bar}  }
 ```
@@ -123,7 +123,7 @@ Hello {$var}, you have a {$foo}
 #when[  *   *] {$foo} hello you have a {$var}
 
 #match {$foo :function option=value} {$bar :function option=value}
-#when [a b] \ \ {$foo} is {$bar}\ \
+#when [a b] {{  {$foo} is {$bar}  }}
 #when [x y] {||}  {$foo} is {$bar}  {||}
 #when [* *] {|  |}{$foo} is {$bar}{|  |}
 
@@ -131,7 +131,7 @@ Hello {$var}, you have a {$foo}
 
 #match {$foo} {$bar}#when[foo bar] Hello {$foo} you have a {$var}#when[* *] {$foo} hello you have a {$var}
 
-#match {$foo :function option=value} {$bar :function option=value}#when [a b] \ \ {$foo} is {$bar}\ \ #when [x y] {||}  {$foo} is {$bar}  {||}#when [* *] {|  |}{$foo} is {$bar}{|  |}
+#match {$foo :function option=value} {$bar :function option=value}#when [a b] {{  {$foo} is {$bar}  }} #when [x y] {||}  {$foo} is {$bar}  {||}#when [* *] {|  |}{$foo} is {$bar}{|  |}
 ```
 
 ## 4. Reducing keywords
@@ -155,8 +155,8 @@ Hello {$var}, you have a {$foo}
 ::[ *     *] {$foo} hello you have a {$var}
 
 ?? {$foo :function option=value} {$bar :function option=value}
-::[a b] {  {$foo} is {$bar}  }
-::[x y] {  {$foo} is {$bar}  }
+::[a b] {{  {$foo} is {$bar}  }}
+::[x y] {{  {$foo} is {$bar}  }}
 ::[* *] {|  |}{$foo} is {$bar}{|  |}
 
 #$var :function option=value}#$foo = {$bar :function option=value}Hello {$var}, you have a {$foo}
@@ -192,7 +192,7 @@ Hello {$var}
 }
 Hello {$var}, you have a {$foo}
 
-{
+{#
   match {$foo} {$bar}
   [ foo bar] Hello {$foo} you have a {$var}
   [ *     *] {$foo} hello you have a {$var}
@@ -202,8 +202,8 @@ Hello {$var}, you have a {$foo}
    input $foo :function option=value
 }{
   match {$foo :function option=value} {$bar :function option=value}
-  [a b] {  {$foo} is {$bar}  }
-  [x y] {  {$foo} is {$bar}  }
+  [a b] {{  {$foo} is {$bar}  }}
+  [x y] {{  {$foo} is {$bar}  }}
   [* *] {|  |}{$foo} is {$bar}{|  |}
 }
 
