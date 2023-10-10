@@ -179,15 +179,15 @@ but the benefit is lost or reduced after that.
 
 Uses double or paired sigils to reduce the need for escaping common characters (such as `?`)
 
-Requires escaping `#` inside a pattern.
+Requires escaping `#` in a pattern.
 Requires escaping `??` at the start of a pattern.
-Requires escaping `::[` inside a pattern.
+Requires escaping `::[` in a pattern.
 
 ```
-#$var :function option=value
+#{$var :function option=value}
 Hello {$var}
 
-#$var :function option=value
+#{$var :function option=value}
 #$foo = {$bar :function option=value}
 Hello {$var}, you have a {$foo}
 
@@ -200,7 +200,7 @@ Hello {$var}, you have a {$foo}
 ::[x y] {{  {$foo} is {$bar}  }}
 ::[* *] {|  |}{$foo} is {$bar}{|  |}
 
-#$var :function option=value}#$foo = {$bar :function option=value}Hello {$var}, you have a {$foo}
+#{$var :function option=value}#$foo = {$bar :function option=value}Hello {$var}, you have a {$foo}
 
 ??{$foo}{$bar}::[foo bar] Hello {$foo} you have a {$var}::[* *] {$foo} hello you have a {$var}
 
