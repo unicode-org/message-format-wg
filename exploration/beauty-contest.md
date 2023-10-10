@@ -254,9 +254,9 @@ Hello {$var}, you have a {$foo}
 
 {#input {$var :function option=value} local $foo = {$bar :function option=value}}Hello {$var}, you have a {$foo}
 
-{match {$foo} {$bar}[ foo bar] Hello {$foo} you have a {$var}[* *] {$foo} hello you have a {$var}}
+{#match {$foo} {$bar}[foo bar] Hello {$foo} you have a {$var}[* *] {$foo} hello you have a {$var}}
 
-{#input $foo :function option=value}{match {$foo :function option=value} {$bar :function option=value}[a b] {  {$foo} is {$bar}  }[x y] {  {$foo} is {$bar}  }[* *] {|  |}{$foo} is {$bar}{|  |}}
+{#input {$foo :function option=value}match {$foo :function option=value} {$bar :function option=value}[a b] {{  {$foo} is {$bar}  }}[x y] {{  {$foo} is {$bar}  }}[* *] {|  |}{$foo} is {$bar}{|  |}}
 ```
 
 ## 5a. Declaration block but sigils for selectors
