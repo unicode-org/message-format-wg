@@ -41,6 +41,8 @@ match {$foo :function option=value} {$bar :function option=value}when a b {  {$f
 
 Consumes exterior whitespace.
 
+Requires dropping unquoted literal operands from the syntax.
+
 ```
 Hello world!
 
