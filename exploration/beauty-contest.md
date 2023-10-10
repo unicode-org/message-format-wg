@@ -5,7 +5,8 @@ This page hosts various options for considering in the 2023-10-02 call.
 
 ## 0. Current
 
-This is the current syntax.
+This is the current syntax,
+including the changes introduced in [#488](https://github.com/unicode-org/message-format-wg/pull/488).
 The list of messages in this section also serves as the basis for all other examples.
 
 ```
@@ -13,10 +14,10 @@ The list of messages in this section also serves as the basis for all other exam
 
 {Hello {$user}}
 
-input $var :function option=value
+input {$var :function option=value}
 {Hello {$var}}
 
-input $var :function option=value
+input {$var :function option=value}
 local $foo = {$bar :function option=value}
 {Hello {$var}, you have a {$foo}}
 
@@ -29,7 +30,7 @@ when a b {  {$foo} is {$bar}  }
 when x y {  {$foo} is {$bar}  }
 when * * {  {$foo} is {$bar}  }
 
-input $var :function option=value local $foo = {$bar :function option=value}{Hello {$var}, you have a {$foo}}
+input {$var :function option=value} local $foo = {$bar :function option=value}{Hello {$var}, you have a {$foo}}
 
 match {$foo} {$bar} when foo bar {Hello {$foo} you have a {$var}} when * * {{$foo} hello you have a {$var}}
 
@@ -66,6 +67,39 @@ Hello {$var}, you have a {$foo}
 {match {$foo} {$bar}}{when foo bar} Hello {$foo} you have a {$var}{when * *} {$foo} hello you have a {$var}
 
 {match {$foo :function option=value}{$bar :function option=value}}{when a b} {{  {$foo} is {$bar}  }}{when x y} {{  {$foo} is {$bar}  }}{when * *} {|  |}{$foo} is {$bar}{|  |}
+```
+
+## 1a. Invert for Text Mode, distinguish statements from placeholders
+
+Same as 1, but non-placeholder statements use a `#` prefix.
+This allows us to keep unquoted literal syntax.
+
+```
+Hello world!
+
+Hello {$user}
+
+{#input $var :function option=value}
+Hello {$var}
+
+{#input $var :function option=value}
+{#local $foo = $bar :function option=value}
+Hello {$var}, you have a {$foo}
+
+{#match {$foo} {$bar}}
+{#when foo bar} Hello {$foo} you have a {$var}
+{#when * *} {$foo} hello you have a {$var}
+
+{#match {$foo :function option=value} {$bar :function option=value}}
+{#when a b} {{  {$foo} is {$bar}  }}
+{#when x y} {{  {$foo} is {$bar}  }}
+{#when * *} {|  |}{$foo} is {$bar}{|  |}
+
+{#input $var :function option=value} {#local $foo = $bar :function option=value} Hello {$var}, you have a {$foo}
+
+{#match {$foo} {$bar}} {#when foo bar} Hello {$foo} you have a {$var} {#when * *} {$foo} hello you have a {$var}
+
+{#match {$foo :function option=value}{$bar :function option=value}} {#when a b} {{  {$foo} is {$bar}  }} {#when x y} {{  {$foo} is {$bar}  }} {#when * *} {|  |}{$foo} is {$bar}{|  |}
 ```
 
 ## 2. Text First, but Always Code After Code-Mode
