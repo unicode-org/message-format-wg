@@ -179,6 +179,9 @@ but the benefit is lost or reduced after that.
 
 Uses double or paired sigils to reduce the need for escaping common characters (such as `?`)
 
+Requires escaping `#` inside a pattern. 
+Requires escaping `??` at the start of a pattern.
+Requires escaping `::[` inside a pattern.
 ```
 #$var :function option=value
 Hello {$var}
