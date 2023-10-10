@@ -110,6 +110,8 @@ This is @mihnita's proposal, mentioned in the 2023-10-02 call.
 Start in text mode, but stay in code mode once you get there.
 Adapted @eemeli's start-in-text-mode syntax for these examples.
 
+Requires dropping unquoted literal operands from the syntax.
+
 ```
 Hello world!
 
