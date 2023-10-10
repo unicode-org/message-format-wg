@@ -164,7 +164,7 @@ Hello {$var}, you have a {$foo}
 #when [x y] {||}  {$foo} is {$bar}  {||}
 #when [* *] {|  |}{$foo} is {$bar}{|  |}
 
-#{input $var :function option=value}#local $foo = {$bar :function option=value}Hello {$var}, you have a {$foo}
+#input {$var :function option=value}#local $foo = {$bar :function option=value}Hello {$var}, you have a {$foo}
 
 #match {$foo} {$bar}#when[foo bar] Hello {$foo} you have a {$var}#when[* *] {$foo} hello you have a {$var}
 
