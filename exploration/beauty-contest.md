@@ -145,6 +145,8 @@ See [#487](https://github.com/unicode-org/message-format-wg/pull/487) for a disc
 The sigil `#` was chosen because `#define` type constructs are fairly common.
 Introduces `[`/`]` for keys.
 
+Requires escaping `#` when used as a pattern character.
+
 ```
 #input {$var :function option=value}
 Hello {$var}
