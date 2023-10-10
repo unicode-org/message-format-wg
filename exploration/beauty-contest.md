@@ -217,6 +217,7 @@ require additional typing for each declaration.
 Note too that this syntax could be extended to allow other types of blocks,
 such as comments or different types of statement.
 
+Requires escaping `[` when used as a pattern character in an unquoted pattern.
 ```
 {#
   input {$var :function option=value}
