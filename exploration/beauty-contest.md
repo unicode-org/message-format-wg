@@ -353,6 +353,9 @@ Note that the closing `;` on `match` might be optional.
 Defining a statement syntax might allow us to introduce different types of selectors in future versions,
 such as looping constructs.
 
+Requires escaping the word `when` and the character `;` in a pattern,
+and the character `#` when used at the start of a pattern.
+
 ```
 #input {$var :function option=value};
 Hello {$var}
