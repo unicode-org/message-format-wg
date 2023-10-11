@@ -318,6 +318,9 @@ Start in text mode.
 Enclose declarations in a block.
 Use a sigil for `match` selector.
 
+Requires escaping `[` when used as a pattern character,
+and the sequence `#match` when used at the start of a pattern.
+
 ```
 {# input $var :function option=value}
 Hello {$var}
