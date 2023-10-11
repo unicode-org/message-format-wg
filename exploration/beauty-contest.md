@@ -3,6 +3,24 @@
 As discussed in the 2023-09-25 teleconference, we need to choose a syntax to proceed with.
 This page hosts various options for considering in the 2023-10-02 call.
 
+## Shorthand description of some aspects of the options
+
+Please dispute factual errors in this. The table uses multiple `-` when an option requires more than one of something. `+` is not weighted.
+
+|Option|Description|Doesn’t Nest {}|Doesn’t Need More Escapes|Doesn’t Require Quoted Pattern|Allows Unquoted Literal Operands|Counted {} works|Adds no sigils|
+|:----|:----|:----|:----|:----|:----|:----|:----|
+|0|Current syntax, starts in code mode|-|+|--|+|-|+|
+|1|Invert for text mode|-|+|+|-|+|+|
+|1a|Invert for text mode, distinguish statements from placeholders|-|+|+|+|+|-|
+|2|Text first, but always code mode after code|-|+|-|-|+|+|
+|3|Use sigils for code mode|+|--|+|+|+|--|
+|3a|Use sigils for code mode, use {/} for keys|+|-|+|+|+|-|
+|4|Reducing keywords|+|---|+|+|+|---|
+|5|Use blocks for declarations and body|--|+|+|-|-|-|
+|5a|Use blocks for declarations but sigils for selectors|+|-|+|-|-|-|
+|6|Use statements|--|-|+|+|+|-|
+
+
 ## 0. Current
 
 This is the current syntax,
