@@ -175,6 +175,39 @@ Hello {$var}, you have a {$foo}
 #match {$foo :function option=value} {$bar :function option=value}#when [a b] {{  {$foo} is {$bar}  }} #when [x y] {||}  {$foo} is {$bar}  {||}#when [* *] {|  |}{$foo} is {$bar}{|  |}
 ```
 
+## 3a. Use sigils for code mode, use `{`/`}` for keys
+
+Similar to 3, but uses braces instead of `[`/`]` square brackets for keys, reducing variation and
+the need for additional pattern escapes.
+See Slack thread.
+
+Requires `#` to be escaped in unquoted patterns.
+
+```
+#input {$var :function option=value}
+Hello {$var}
+
+#input {$var :function option=value}
+#local $foo = {$bar :function option=value}
+Hello {$var}, you have a {$foo}
+
+#match {$foo} {$bar}
+#when{foo bar} Hello {$foo} you have a {$var}
+#when{  *   *} {$foo} hello you have a {$var}
+
+#match {$foo :function option=value} {$bar :function option=value}
+#when {a b} {{  {$foo} is {$bar}  }}
+#when {x y} {||}  {$foo} is {$bar}  {||}
+#when {* *} {|  |}{$foo} is {$bar}{|  |}
+
+#input {$var :function option=value}#local $foo = {$bar :function option=value}Hello {$var}, you have a {$foo}
+
+#match {$foo} {$bar}#when{foo bar} Hello {$foo} you have a {$var}#when{* *} {$foo} hello you have a {$var}
+
+#match {$foo :function option=value} {$bar :function option=value}#when{a b}{{  {$foo} is {$bar}  }} #when{x y}{||}  {$foo} is {$bar}  {||}#when{* *}{|  |}{$foo} is {$bar}{|  |}
+```
+
+
 ## 4. Reducing keywords
 
 Avoids keywords in favor of sigil based parsing.
