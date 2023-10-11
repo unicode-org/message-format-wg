@@ -18,7 +18,7 @@ Please dispute factual errors in this. The table uses multiple `-` when an optio
 | 4      | Reducing keywords                                              | +               | ---                       | +                              | +                                | +                | ---            |
 | 5      | Use blocks for declarations and body                           | --              | -                         | +                              | -                                | -                | -              |
 | 5a     | Use blocks for declarations but sigils for selectors           | +               | -                         | +                              | -                                | -                | -              |
-| 6      | Use statements                                                 | --              | -                         | +                              | +                                | +                | -              |
+| 6      | Use statements                                                 | --              | ---                       | +                              | +                                | +                | -              |
 
 ## 0. Current
 
