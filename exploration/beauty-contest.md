@@ -207,7 +207,6 @@ Hello {$var}, you have a {$foo}
 #match {$foo :function option=value} {$bar :function option=value}#when{a b}{{  {$foo} is {$bar}  }} #when{x y}{||}  {$foo} is {$bar}  {||}#when{* *}{|  |}{$foo} is {$bar}{|  |}
 ```
 
-
 ## 4. Reducing keywords
 
 Avoids keywords in favor of sigil based parsing.
