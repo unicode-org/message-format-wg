@@ -54,6 +54,44 @@ match {$foo} {$bar} when foo bar {Hello {$foo} you have a {$var}} when * * {{$fo
 match {$foo :function option=value} {$bar :function option=value}when a b {  {$foo} is {$bar}  }when x y {  {$foo} is {$bar}  }when * * {  {$foo} is {$bar}  }
 ```
 
+## 0a. Hybrid
+
+Starts in text mode,
+but switches to the current code-mode syntax
+when the message is wrapped in `{{ }}`.
+
+```
+Hello world!
+
+Hello {$user}
+
+{{ input {$var :function option=value}
+   {Hello {$var}}
+}}
+
+{{ input {$var :function option=value}
+   local $foo = {$bar :function option=value}
+   {Hello {$var}, you have a {$foo}}
+}}
+
+{{ match {$foo} {$bar}
+   when foo bar {Hello {$foo} you have a {$var}}
+   when * * {{$foo} hello you have a {$var}}
+}}
+
+{{ match {$foo :function option=value} {$bar :function option=value}
+   when a b {  {$foo} is {$bar}  }
+   when x y {  {$foo} is {$bar}  }
+   when * * {  {$foo} is {$bar}  }
+}}
+
+{{input {$var :function option=value} local $foo = {$bar :function option=value}{Hello {$var}, you have a {$foo}}}}
+
+{{match {$foo} {$bar} when foo bar {Hello {$foo} you have a {$var}} when * * {{$foo} hello you have a {$var}}}}
+
+{{match {$foo :function option=value} {$bar :function option=value}when a b {  {$foo} is {$bar}  }when x y {  {$foo} is {$bar}  }when * * {  {$foo} is {$bar}  }}}
+```
+
 ## 1. Invert for Text Mode
 
 Consumes exterior whitespace.
