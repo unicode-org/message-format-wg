@@ -19,9 +19,16 @@ Status: **Accepted**
 
 _What is this proposal trying to achieve?_
 
-The WG is discussing how to handle "pattern exterior" whitespace,
-which is ASCII whitespace (tab, CR, LF, or U+0020) that is **_part_** of the pattern
-and occurs at the start or end of the pattern.
+The Working Group has identified a need for users to be able to specify the inclusion of
+whitespace at the start or end of the pattern that is **_part_** of the pattern.
+
+The definition of `whitespace` in this design is based on the `s` production in the ANBF.
+Currently this includes the characters U+0009 TAB, U+000D CARRIAGE RETURN, U+000A LINE FEED, and U+0020 SPACE.
+This definition of whitespace is subject to modification as part of the syntax;
+the exact definition is not important to this design.
+
+Note that this definition of whitespace does not include some ASCII whitespace characters,
+such as vertical tab or form feed.
 
 ## Background
 
