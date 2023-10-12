@@ -159,6 +159,40 @@ Hello {$var}, you have a {$foo}
 {#match {$foo :function option=value}{$bar :function option=value}} {#when a b} {{  {$foo} is {$bar}  }} {#when x y} {{  {$foo} is {$bar}  }} {#when * *} {|  |}{$foo} is {$bar}{|  |}
 ```
 
+## 1b. Templating Language
+
+Same as 1, but directly inspired by existing templating languages.
+Leverages the familiarity with established templating solutions,
+such as [Jinja](https://jinja.palletsprojects.com/en/3.1.x/), [Twig](https://twig.symfony.com), and [Liquid](https://shopify.github.io/liquid/).
+
+```
+Hello world!
+
+Hello {{ $user }}
+
+{% input $var :function option=value %}
+Hello {{ $var }}
+
+{% input $var :function option=value %}
+{% local $foo = $bar :function option=value %}
+Hello {{ $var }}, you have a {{ $foo }}
+
+{% match {$foo} {$bar} %}
+{% when foo bar %} Hello {{ $foo }} you have a {{ $var }}
+{% when * * %} {{ $foo }} hello you have a {{ $var }}
+
+{% match {$foo :function option=value} {$bar :function option=value} %}
+{% when a b %} {|  {{$foo}} is {{$bar}}  |}
+{% when x y %} {|  {{$foo}} is {{$bar}}  |}
+{% when * * %} {{ |  | }}{{ $foo }} is {{ $bar }}{{ |  | }}
+
+{% input $var :function option=value %}{% local $foo = $bar :function option=value %}Hello {{ $var }}, you have a {{ $foo }}
+
+{% match {$foo} {$bar} %}{% when foo bar %} Hello {{ $foo }} you have a {{ $var }}{% when * * %} {{ $foo }} hello you have a {{ $var }}
+
+{% match {$foo :function option=value}{$bar :function option=value} %}{% when a b %} {|  {{ $foo }} is {{ $bar }}  |}{% when x y %} {|  {{ $foo }} is {{ $bar }}  |}{% when * * %} {{ |  | }}{{ $foo }} is {{ $bar }}{{ |  | }}
+```
+
 ## 2. Text First, but Always Code After Code-Mode
 
 This is @mihnita's proposal, mentioned in the 2023-10-02 call.
