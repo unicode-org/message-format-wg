@@ -76,24 +76,24 @@ _Describe the proposed solution. Consider syntax, formatting, errors, registry, 
 - All unquoted whitespace on the exterior of a pattern is not meaningful and is removed
   during formatting.
 - Patterns MAY be quoted (solution 4). Whitespace inside the quoting syntax is meaningful.
-  >```
-  >when foo bar {{   This pattern has exactly two spaces at the start and two at the end  }}  when * *
-  >```
+  > ```
+  > when foo bar {{   This pattern has exactly two spaces at the start and two at the end  }}  when * *
+  > ```
 - A pattern can begin or end with a quoted literal containing whitespace (or any other allowed characters).
   All whitespace within a pattern is meaningful.
   The quoted literal may be empty.
-  >```
-  >when foo bar  {|  |}  This pattern has four spaces at the start and two at the end{|  |} when * *
-  >when foo bar  {||}    This pattern also has four spaces at the start and two at the end  {||} when * *
-  >```
+  > ```
+  > when foo bar  {|  |}  This pattern has four spaces at the start and two at the end{|  |} when * *
+  > when foo bar  {||}    This pattern also has four spaces at the start and two at the end  {||} when * *
+  > ```
 
 Still being discussed:
 
 - Whether unquoted "simple" patterns are trimmed.
   This will be dealt with in the syntax spec.
-  >```
-  >    Does this message have spaces at the start/end or not? {$user} wants to know.  
-  >```
+  > ```
+  >    Does this message have spaces at the start/end or not? {$user} wants to know.
+  > ```
 
 ## Alternatives Considered
 
