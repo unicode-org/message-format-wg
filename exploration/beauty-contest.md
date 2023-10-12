@@ -296,6 +296,41 @@ Hello {$var}, you have a {$foo}
 #match {$foo :function option=value} {$bar :function option=value}#when{a b}{{  {$foo} is {$bar}  }} #when{x y}{||}  {$foo} is {$bar}  {||}#when{* *}{|  |}{$foo} is {$bar}{|  |}
 ```
 
+## 3b. Double sigils for code mode
+
+Same as 3, but the `#` sign is only special when followed by `[`,
+hopefully making escaping rarely needed.
+
+This variant also experiments with dropping the `when` key,
+and uses `|[` to introduce variants,
+since `|` naturally lends itself as a delimiter for variants.
+(However, `#[when foo bar]` would also be viable,
+and would require less escaping.)
+
+```
+#[input $var :function option=value]
+Hello {$var}
+
+#[input $var :function option=value]
+#[local $foo = $bar :function option=value]
+Hello {$var}, you have a {$foo}
+
+#[match {$foo} {$bar}]
+|[foo bar] Hello {$foo} you have a {$var}
+|[  *   *] {$foo} hello you have a {$var}
+
+#[match {$foo :function option=value} {$bar :function option=value}]
+|[a b] {{  {$foo} is {$bar}  }}
+|[x y] {||}  {$foo} is {$bar}  {||}
+|[* *] {|  |}{$foo} is {$bar}{|  |}
+
+#[input $var :function option=value]#[local $foo = $bar :function option=value]Hello {$var}, you have a {$foo}
+
+#[match {$foo} {$bar}]|[foo bar] Hello {$foo} you have a {$var}|[* *] {$foo} hello you have a {$var}
+
+#[match {$foo :function option=value} {$bar :function option=value}]|[a b] {{  {$foo} is {$bar}  }} |[x y] {||}  {$foo} is {$bar}  {||}|[* *] {|  |}{$foo} is {$bar}{|  |}
+```
+
 ## 4. Reducing keywords
 
 Avoids keywords in favor of sigil based parsing.
