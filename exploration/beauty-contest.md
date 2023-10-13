@@ -12,9 +12,12 @@ Please dispute factual errors in this. The table uses multiple `-` when an optio
 | 0      | Current syntax, starts in code mode                            | -               | +                         | --                             | +                                | -                | +              |
 | 1      | Invert for text mode                                           | -               | +                         | +                              | -                                | +                | +              |
 | 1a     | Invert for text mode, distinguish statements from placeholders | -               | +                         | +                              | +                                | +                | -              |
+| 1b     | Invert for text mode, leverage existing templating languages   | -               | +                         | +                              | +                                | +                | -              |
 | 2      | Text first, but always code mode after code                    | -               | +                         | -                              | -                                | +                | +              |
+| 2a     | Text first, current syntax for complex messages                | -               | +                         | -                              | +                                | -                | +              |
 | 3      | Use sigils for code mode                                       | +               | -                         | +                              | +                                | +                | --             |
 | 3a     | Use sigils for code mode, use {/} for keys                     | +               | -                         | +                              | +                                | +                | -              |
+| 3b     | Use `#[` for code mode, use `#[]` for keys                     | +               | -                         | +                              | +                                | +                | -              |
 | 4      | Reducing keywords                                              | +               | ---                       | +                              | +                                | +                | ---            |
 | 5      | Use blocks for declarations and body                           | --              | -                         | +                              | -                                | -                | -              |
 | 5a     | Use blocks for declarations but sigils for selectors           | +               | --                        | +                              | -                                | -                | -              |
@@ -121,6 +124,40 @@ Hello {$var}, you have a {$foo}
 {#match {$foo :function option=value}{$bar :function option=value}} {#when a b} {{  {$foo} is {$bar}  }} {#when x y} {{  {$foo} is {$bar}  }} {#when * *} {|  |}{$foo} is {$bar}{|  |}
 ```
 
+## 1b. Templating Language
+
+Same as 1, but directly inspired by existing templating languages.
+Leverages the familiarity with established templating solutions,
+such as [Jinja](https://jinja.palletsprojects.com/en/3.1.x/), [Twig](https://twig.symfony.com), and [Liquid](https://shopify.github.io/liquid/).
+
+```
+Hello world!
+
+Hello {{ $user }}
+
+{% input $var :function option=value %}
+Hello {{ $var }}
+
+{% input $var :function option=value %}
+{% local $foo = $bar :function option=value %}
+Hello {{ $var }}, you have a {{ $foo }}
+
+{% match {$foo} {$bar} %}
+{% when foo bar %} Hello {{ $foo }} you have a {{ $var }}
+{% when * * %} {{ $foo }} hello you have a {{ $var }}
+
+{% match {$foo :function option=value} {$bar :function option=value} %}
+{% when a b %} {|  {{$foo}} is {{$bar}}  |}
+{% when x y %} {|  {{$foo}} is {{$bar}}  |}
+{% when * * %} {{ |  | }}{{ $foo }} is {{ $bar }}{{ |  | }}
+
+{% input $var :function option=value %}{% local $foo = $bar :function option=value %}Hello {{ $var }}, you have a {{ $foo }}
+
+{% match {$foo} {$bar} %}{% when foo bar %} Hello {{ $foo }} you have a {{ $var }}{% when * * %} {{ $foo }} hello you have a {{ $var }}
+
+{% match {$foo :function option=value}{$bar :function option=value} %}{% when a b %} {|  {{ $foo }} is {{ $bar }}  |}{% when x y %} {|  {{ $foo }} is {{ $bar }}  |}{% when * * %} {{ |  | }}{{ $foo }} is {{ $bar }}{{ |  | }}
+```
+
 ## 2. Text First, but Always Code After Code-Mode
 
 This is @mihnita's proposal, mentioned in the 2023-10-02 call.
@@ -154,6 +191,44 @@ Hello {$user}
 {match {$foo} {$bar}}{when foo bar} {{Hello {$foo} you have a {$var}}}{when * *}{{{$foo} hello you have a {$var}}}
 
 {match {$foo :function option=value}{$bar :function option=value}}{when a b} {  {$foo} is {$bar}  }{when x y} {  {$foo} is {$bar}  }
+```
+
+## 2a. Text First, Current Syntax for Complex Messages
+
+Starts in text mode,
+but switches to the current code-mode syntax
+when the message is wrapped in `{{ }}`.
+
+```
+Hello world!
+
+Hello {$user}
+
+{{ input {$var :function option=value}
+   {Hello {$var}}
+}}
+
+{{ input {$var :function option=value}
+   local $foo = {$bar :function option=value}
+   {Hello {$var}, you have a {$foo}}
+}}
+
+{{ match {$foo} {$bar}
+   when foo bar {Hello {$foo} you have a {$var}}
+   when * * {{$foo} hello you have a {$var}}
+}}
+
+{{ match {$foo :function option=value} {$bar :function option=value}
+   when a b {  {$foo} is {$bar}  }
+   when x y {  {$foo} is {$bar}  }
+   when * * {  {$foo} is {$bar}  }
+}}
+
+{{input {$var :function option=value} local $foo = {$bar :function option=value}{Hello {$var}, you have a {$foo}}}}
+
+{{match {$foo} {$bar} when foo bar {Hello {$foo} you have a {$var}} when * * {{$foo} hello you have a {$var}}}}
+
+{{match {$foo :function option=value} {$bar :function option=value}when a b {  {$foo} is {$bar}  }when x y {  {$foo} is {$bar}  }when * * {  {$foo} is {$bar}  }}}
 ```
 
 ## 3. Use sigils for code mode
@@ -222,6 +297,39 @@ Hello {$var}, you have a {$foo}
 #match {$foo} {$bar}#when{foo bar} Hello {$foo} you have a {$var}#when{* *} {$foo} hello you have a {$var}
 
 #match {$foo :function option=value} {$bar :function option=value}#when{a b}{{  {$foo} is {$bar}  }} #when{x y}{||}  {$foo} is {$bar}  {||}#when{* *}{|  |}{$foo} is {$bar}{|  |}
+```
+
+## 3b. Double sigils for code mode
+
+Same as 3, but the `#` sign is only special when followed by `[`,
+hopefully making escaping rarely needed.
+
+Requires `#[` to be escaped in unquoted patterns.
+
+This variant also experiments with dropping the `when` key.
+
+```
+#[input $var :function option=value]
+Hello {$var}
+
+#[input $var :function option=value]
+#[local $foo = $bar :function option=value]
+Hello {$var}, you have a {$foo}
+
+#[match {$foo} {$bar}]
+#[foo bar] Hello {$foo} you have a {$var}
+#[  *   *] {$foo} hello you have a {$var}
+
+#[match {$foo :function option=value} {$bar :function option=value}]
+#[a b] {{  {$foo} is {$bar}  }}
+#[x y] {||}  {$foo} is {$bar}  {||}
+#[* *] {|  |}{$foo} is {$bar}{|  |}
+
+#[input $var :function option=value]#[local $foo = $bar :function option=value]Hello {$var}, you have a {$foo}
+
+#[match {$foo} {$bar}]#[foo bar] Hello {$foo} you have a {$var}#[* *] {$foo} hello you have a {$var}
+
+#[match {$foo :function option=value} {$bar :function option=value}]#[a b] {{  {$foo} is {$bar}  }} #[x y] {||}  {$foo} is {$bar}  {||}#[* *] {|  |}{$foo} is {$bar}{|  |}
 ```
 
 ## 4. Reducing keywords
