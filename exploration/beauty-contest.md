@@ -10,11 +10,11 @@ Please dispute factual errors in this. The table uses multiple `-` when an optio
 | Option | Description                                                    | Doesn’t Nest {} | Doesn’t Need More Escapes | Doesn’t Require Quoted Pattern | Allows Unquoted Literal Operands | Counted {} works | Adds no sigils |
 | :----- | :------------------------------------------------------------- | :-------------- | :------------------------ | :----------------------------- | :------------------------------- | :--------------- | :------------- |
 | 0      | Current syntax, starts in code mode                            | -               | +                         | --                             | +                                | -                | +              |
-| 0a     | Hybrid syntax, starts in text mode                             | -               | +                         | -                              | +                                | -                | +              |
 | 1      | Invert for text mode                                           | -               | +                         | +                              | -                                | +                | +              |
 | 1a     | Invert for text mode, distinguish statements from placeholders | -               | +                         | +                              | +                                | +                | -              |
 | 1b     | Invert for text mode, leverage existing templating languages   | -               | +                         | +                              | +                                | +                | -              |
 | 2      | Text first, but always code mode after code                    | -               | +                         | -                              | -                                | +                | +              |
+| 2a     | Text first, current syntax for complex messages                | -               | +                         | -                              | +                                | -                | +              |
 | 3      | Use sigils for code mode                                       | +               | -                         | +                              | +                                | +                | --             |
 | 3a     | Use sigils for code mode, use {/} for keys                     | +               | -                         | +                              | +                                | +                | -              |
 | 3b     | Use `#[` for code mode, use `#[]` for keys                     | +               | -                         | +                              | +                                | +                | -              |
@@ -55,44 +55,6 @@ input {$var :function option=value} local $foo = {$bar :function option=value}{H
 match {$foo} {$bar} when foo bar {Hello {$foo} you have a {$var}} when * * {{$foo} hello you have a {$var}}
 
 match {$foo :function option=value} {$bar :function option=value}when a b {  {$foo} is {$bar}  }when x y {  {$foo} is {$bar}  }when * * {  {$foo} is {$bar}  }
-```
-
-## 0a. Hybrid
-
-Starts in text mode,
-but switches to the current code-mode syntax
-when the message is wrapped in `{{ }}`.
-
-```
-Hello world!
-
-Hello {$user}
-
-{{ input {$var :function option=value}
-   {Hello {$var}}
-}}
-
-{{ input {$var :function option=value}
-   local $foo = {$bar :function option=value}
-   {Hello {$var}, you have a {$foo}}
-}}
-
-{{ match {$foo} {$bar}
-   when foo bar {Hello {$foo} you have a {$var}}
-   when * * {{$foo} hello you have a {$var}}
-}}
-
-{{ match {$foo :function option=value} {$bar :function option=value}
-   when a b {  {$foo} is {$bar}  }
-   when x y {  {$foo} is {$bar}  }
-   when * * {  {$foo} is {$bar}  }
-}}
-
-{{input {$var :function option=value} local $foo = {$bar :function option=value}{Hello {$var}, you have a {$foo}}}}
-
-{{match {$foo} {$bar} when foo bar {Hello {$foo} you have a {$var}} when * * {{$foo} hello you have a {$var}}}}
-
-{{match {$foo :function option=value} {$bar :function option=value}when a b {  {$foo} is {$bar}  }when x y {  {$foo} is {$bar}  }when * * {  {$foo} is {$bar}  }}}
 ```
 
 ## 1. Invert for Text Mode
@@ -229,6 +191,44 @@ Hello {$user}
 {match {$foo} {$bar}}{when foo bar} {{Hello {$foo} you have a {$var}}}{when * *}{{{$foo} hello you have a {$var}}}
 
 {match {$foo :function option=value}{$bar :function option=value}}{when a b} {  {$foo} is {$bar}  }{when x y} {  {$foo} is {$bar}  }
+```
+
+## 2a. Text First, Current Syntax for Complex Messages
+
+Starts in text mode,
+but switches to the current code-mode syntax
+when the message is wrapped in `{{ }}`.
+
+```
+Hello world!
+
+Hello {$user}
+
+{{ input {$var :function option=value}
+   {Hello {$var}}
+}}
+
+{{ input {$var :function option=value}
+   local $foo = {$bar :function option=value}
+   {Hello {$var}, you have a {$foo}}
+}}
+
+{{ match {$foo} {$bar}
+   when foo bar {Hello {$foo} you have a {$var}}
+   when * * {{$foo} hello you have a {$var}}
+}}
+
+{{ match {$foo :function option=value} {$bar :function option=value}
+   when a b {  {$foo} is {$bar}  }
+   when x y {  {$foo} is {$bar}  }
+   when * * {  {$foo} is {$bar}  }
+}}
+
+{{input {$var :function option=value} local $foo = {$bar :function option=value}{Hello {$var}, you have a {$foo}}}}
+
+{{match {$foo} {$bar} when foo bar {Hello {$foo} you have a {$var}} when * * {{$foo} hello you have a {$var}}}}
+
+{{match {$foo :function option=value} {$bar :function option=value}when a b {  {$foo} is {$bar}  }when x y {  {$foo} is {$bar}  }when * * {  {$foo} is {$bar}  }}}
 ```
 
 ## 3. Use sigils for code mode
