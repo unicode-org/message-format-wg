@@ -10,7 +10,7 @@ Status: **Proposed**
 		<dt>First proposed</dt>
 		<dd>2023-09-28</dd>
 		<dt>Pull Request</dt>
-		<dd>#000</dd>
+		<dd>#495</dd>
 	</dl>
 </details>
 
@@ -35,6 +35,7 @@ Several pre-existing test files have been considered before forming this proposa
 ## Use-Cases
 
 The main platforms for which the tests should initially run are:
+
 - Node.js
 - ICU4J (Java)
 - ICU4C (C++)
@@ -44,10 +45,11 @@ Other platforms, such as ICU4X (Rust) may be added later.
 ## Requirements
 
 - Test framework
+
   - The test cases and assertions must be easy to read.
   - The test cases and assertions must be completely platform-agnostic.
   - The framework must include the platform-specific test executors as part of the solution.
-  - The framework must be extendable with new executors (e.g. ICU4X) and it should be clear how to do this. 
+  - The framework must be extendable with new executors (e.g. ICU4X) and it should be clear how to do this.
 
 - Test content
   - Syntax tests: Testing which standard registry functions are invoked when different arguments are passed to a given pattern.
@@ -89,6 +91,7 @@ local $foo = {$bar}
 The MF2 test framework should follow the ['Unicode & CLDR Data Driven Test'](https://github.com/unicode-org/conformance) framework.
 
 As per the project's [README.md](https://github.com/unicode-org/conformance#readme):
+
 > "The goal of this work is an easy-to-use framework for verifying that an implementation of ICU functions agrees with the required behavior. When a DDT test passes, it a strong indication that output is consistent across platforms. [...] Data Driven Test (DDT) focuses on functions that accept data input such as numbers, date/time data, and other basic information."
 
 This aligns closely with the goals and characteristics of the MF2 tests. Parity with ICU procedures is an added advantage.
@@ -98,6 +101,7 @@ The README specifies that test cases and expected results are to be located in s
 #### Test file example
 
 `example_1_test.json`
+
 ```jsonc
 {
   "Test scenario": "example_1",
@@ -109,25 +113,27 @@ The README specifies that test cases and expected results are to be located in s
       "locale": "en-US",
       "pattern": "{Some MF2 pattern}",
       "options": {}, // Optional configuration
-      "input": { "namedArg": "foo" }, // Arguments to the function being tested, such as a message.formatToString() function. May vary with testType.
-    },
+      "input": { "namedArg": "foo" } // Arguments to the function being tested, such as a message.formatToString() function. May vary with testType.
+    }
     // ...
   ]
 }
 ```
+
 #### Verification file example
 
 `example_1_verify.json`
+
 ```jsonc
 {
- "Test scenario": "example_1",
- "verifications": [
-  {
-   "label": "0000",
-   "verify": "Expected result"
-  },
-  // ...
- ]
+  "Test scenario": "example_1",
+  "verifications": [
+    {
+      "label": "0000",
+      "verify": "Expected result"
+    }
+    // ...
+  ]
 }
 ```
 
@@ -143,7 +149,8 @@ We can include a script that converts YAML-formatted "test" and "verify" files t
 
 These tests evaluate the pattern based on the runtime arguments. Formatters are shown as stringified representations of the function because formatter output is tested separately.
 
-Example: 
+Example:
+
 ```jsonc
 {
   "label": "Renders multiple inputs in formatted string",
@@ -162,6 +169,7 @@ Example:
 These tests focus on the standard registry's formatters (e.g. `:number`, `:datetime`). They cover the different options that can be passed to each formatter (e.g. `offset`, `skeleton`).
 
 Example:
+
 ```jsonc
 {
   "label": "Skeleton affects datetime format",
@@ -169,7 +177,7 @@ Example:
   "pattern": "{$givenDateTime :datetime skeleton=yMMMdE}",
   "inputs": {
     "givenDateTime": { "type": "datetime", "value": "2000-12-31T00:00:00.000Z" }
-  },
+  }
   // "verify":  "Sun, 31 Dec 2000"
 }
 ```
@@ -178,8 +186,8 @@ Example:
 
 These are extensive tests of the cases within a `match` statement. Testing of multiple selectors is included.
 
-
 Example:
+
 ```jsonc
 {
   "label": "Matches numbers other than one",
@@ -205,10 +213,11 @@ If a particular implementation of MF2 exposes a standardized representation of [
 Based on the readability concerns mentioned above, the Gherkin syntax was also considered.
 
 Example:
+
 ```feature
 Feature: Multi-selector messages
 
-  Background: 
+  Background:
     Given the username is "Matt"
     And the source is:
       """
