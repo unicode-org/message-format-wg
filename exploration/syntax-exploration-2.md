@@ -160,11 +160,11 @@ Hello {$var}
 %input {$var :function option=value}Hello {$var}
 ```
 ```
-~input {$var :function option=value}
-~local $foo = {$bar :function option=value}
+%input {$var :function option=value}
+%local $foo = {$bar :function option=value}
 Hello {$var}, you have a {$foo}
 
-~input {$var :function option=value}~local $foo = {$bar :function option=value}Hello {$var}, you have a {$foo}
+%input {$var :function option=value}%local $foo = {$bar :function option=value}Hello {$var}, you have a {$foo}
 ```
 ```
 ~match {$foo} {$bar}
