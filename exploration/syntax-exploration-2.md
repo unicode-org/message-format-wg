@@ -207,6 +207,6 @@ Here are the potential sigils that can be used:
 | `\|` |  | Already used in our syntax for a diff purpose. Weird. |
 | `>` |  | Has meaning in markup. Wants to pair with `<`. |
 | `<` |  | Has meaning in markup. Wants to pair with `>`. |
-| '?' |  | Looks like `?` operator. Looks like a variable. Very common in real text. |
-| '::' |  | Common in real text. Looks like part of a ternary operator. |
-| ';' | Can't think of any. | Looks like a statement close. |
+| `?` |  | Looks like `?` operator. Looks like a variable. Very common in real text. |
+| `::` |  | Common in real text. Looks like part of a ternary operator. |
+| `;` | Can't think of any. | Looks like a statement close. |
