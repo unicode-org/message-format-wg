@@ -175,10 +175,10 @@ Hello {$var}, you have a {$foo}
 ```
 
 ```
-~match {$foo :function option=value} {$bar :function option=value}
-~when {a b} {{  {$foo} is {$bar}  }}
-~when {x y} {||}  {$foo} is {$bar}  {||}
-~when {* *} {|  |}{$foo} is {$bar}{|  |}
+%match {$foo :function option=value} {$bar :function option=value}
+%when {a b} {{  {$foo} is {$bar}  }}
+%when {x y} {||}  {$foo} is {$bar}  {||}
+%when {* *} {|  |}{$foo} is {$bar}{|  |}
 
-~match {$foo :function option=value}{$bar :function option=value}~when {a b}{{  {$foo} is {$bar}  }}~when {x y} {||}{$foo} is {$bar}  {||}~when {* *}{|  |}{$foo} is {$bar}{|  |}
+%match {$foo :function option=value}{$bar :function option=value}%when {a b}{{  {$foo} is {$bar}  }}%when {x y} {||}{$foo} is {$bar}  {||}%when {* *}{|  |}{$foo} is {$bar}{|  |}
 ```
