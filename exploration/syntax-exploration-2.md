@@ -154,10 +154,10 @@ Hello world!
 Hello {$user}!
 ```
 ```
-~input {$var :function option=value}
+%input {$var :function option=value}
 Hello {$var}
 
-~input {$var :function option=value}Hello {$var}
+%input {$var :function option=value}Hello {$var}
 ```
 ```
 ~input {$var :function option=value}
