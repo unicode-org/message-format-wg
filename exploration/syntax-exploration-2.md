@@ -9,7 +9,11 @@ We have generally used `#` as the placeholder for this sigil in the previous ite
 
 ## Comparison Matrix
 
-... goes here...
+| Option | Description                                                    | Doesn’t Nest {} | Doesn’t Need More Escapes | Doesn’t Require Quoted Pattern |  Counted {} works | Multiple Expression Syntaxes |
+| :----- | :------------------------------------------------------------- | :-------------- | :------------------------ | :----------------------------- |  :--------------- | :------------ |
+| 1a     | Invert for text mode, distinguish statements from placeholders | -               | +                         | +                              | +                | - |
+| 2a     | Text first, current syntax for complex messages                | -               | +                         | -                              | -                | + |
+| 3a     | Use sigils for code mode, use `{`/`}` for keys                 | +               | -                         | +                              | +                | + |
 
 ## Candidates
 
@@ -182,3 +186,27 @@ Hello {$var}, you have a {$foo}
 
 %match {$foo :function option=value}{$bar :function option=value}%when {a b}{{  {$foo} is {$bar}  }}%when {x y} {||}{$foo} is {$bar}  {||}%when {* *}{|  |}{$foo} is {$bar}{|  |}
 ```
+
+
+## Sigil Candidates
+
+Some of the above syntaxes require an additional sigil.
+
+Here are the potential sigils that can be used:
+
+| Sigil | Positives | Negatives |
+|---|---|---|
+| `!` |  | Means "not" in most programming languages. |
+| `@` | Feels like code? | Means "address" in a lot of contexts. Might be used for annotations |
+| `#` | Feels like code. Similar to `#define`. | Common in real text. Used for _everything_ |
+| `%` | Feels like code. Used by some templating languages. | Common in real text. |
+| `^` |  | Uncommon choice. Harder to see. |
+| `&` |  | Used in a lot of escapes, notably HTML. |
+| `+` |  | Looks like an operator. |
+| `_` | Feels like code. | Looks like a name prefix. Hard to see. |
+| `\|` |  | Already used in our syntax for a diff purpose. Weird. |
+| `>` |  | Has meaning in markup. Wants to pair with `<`. |
+| `<` |  | Has meaning in markup. Wants to pair with `>`. |
+| '?' |  | Looks like `?` operator. Looks like a variable. Very common in real text. |
+| '::' |  | Common in real text. Looks like part of a ternary operator. |
+| ';' | Can't think of any. | Looks like a statement close. |
