@@ -210,3 +210,14 @@ Here are the potential sigils that can be used:
 | `?` |  | Looks like `?` operator. Looks like a variable. Very common in real text. |
 | `::` |  | Common in real text. Looks like part of a ternary operator. |
 | `;` | Can't think of any. | Looks like a statement close. |
+| `~` |  | Looks like an operator. |
+| `*` |  | Looks like a wildcard. Already used by the syntax. |
+| `-` |  | Too common in normal text. |
+| `=` |  | Looks like an operator. Already used by the syntax. |
+| `[` |  | Enclosing punctuation. |
+| `]` |  | Enclosing punctuation. |
+| `.` |  | Too common in normal text. Used by other syntaxes |
+| `,` |  | Too common in normal text. Not code-like? |
+| `\`` |  | Quote mark. |
+| `'`  |  | Quote mark. |
+| `"` |  | Quote mark. |
