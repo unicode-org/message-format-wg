@@ -107,11 +107,11 @@ local $foo = {$bar :function option=value}
 >>input {$var :function option=value}local $foo = {$bar :function option=value}{Hello {$var}, you have a {$foo}}
 ```
 ```
->>match {$foo} {$bar}
-when foo bar {Hello {$foo} you have a {$var}}
-when * * {{$foo} hello you have a {$var}}
+>>match {$foo}
+when foo {Hello {$foo} you have a {$var}}
+when * {{$foo} hello you have a {$var}}
 
->>match {$foo}{$bar}when foo bar {Hello {$foo} you have a {$var}}when * * {{$foo} hello you have a {$var}}
+>>match {$foo}when foo{Hello {$foo} you have a {$var}}when *{{$foo} hello you have a {$var}}
 ```
 
 ```
