@@ -136,7 +136,7 @@ when * * {  {$foo} is {$bar}  }
 - Placeholders and expressions use `{`/`}`:
   > `{$var}`, `{unquoted}`, `{|quoted|}`, `{$var :function}`
 
-The use of `~` as the sigil is **_not_** an inherent part of the design here.
+The use of `%` as the sigil is **_not_** an inherent part of the design here.
 The actual sigil or sigil sequence needs to be decided. 
 Note that using a doubled-sigil reduces the need for escaping.
 
