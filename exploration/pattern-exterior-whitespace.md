@@ -84,6 +84,74 @@ For example:
 >Hello {$foo}
 >```
 
+### Why would we allow unquoted patterns?
+
+Most _messages_ are expected to be simple. 
+The most frequent messages will have no placeholders or be simple replacements:
+```
+Hello, world!
+Hello, {$user}!
+```
+
+The need to quote these patterns is undesirable because it is unnatural.
+
+The ability to have unquoted patterns depends, to some degree, on the syntax we choose
+for _messages_ as a whole.
+Allowing unquoted patterns would make it simpler for authors and translators
+by reducing the overall message complexity
+(i.e. needing to balance open and close "quote" characters)
+
+### Why would we want to trim pattern exterior whitespace?
+
+Messages with _selectors_ (`match`) represent the primary case for quoted patterns.
+Each _variant_ consists of a set of _keys_ and a _pattern_ being selected.
+In the examples in MFv2's specification and documentation, it is common to 
+represent each _message_ as a multi-line construct.
+
+Some users may wish to incorporate this formatting or additional spaces/indentation
+for the purposes of simplifying authoring.
+The leads to the inclusion of additional whitespace inside the _message_
+which the user does not intend to be part of the _pattern_.
+
+Quoted patterns make the division between _key_ and _pattern_ clear
+at the cost of addition syntax for quoting the pattern.
+
+Unquoted patterns could consume all whitespace verbatim from the _message_.
+However, we believe that, while software developers might understand the need for the
+_pattern_ to start directly after the _key_, 
+it seems likely that accidental whitespace will be a common error:
+
+> Unintended spaces:
+>```
+>%match {$foo} %when {*} I should not have a space.
+>%match {$foo} %when {*}
+>   I should not have space or a newline.
+>```
+> Corrected:
+> ```
+> %match {$foo} %when {*}I have no space.
+> %match {$foo} %when {*} {{ I have a space before and after }}
+> %match {$foo} %when {*}
+>     {{ I have a space before and after }}
+> ```
+
+Allowing the _pattern_ to be unquoted simplifies authoring, since most _messages_
+do not require pattern exterior whitespace.
+
+There is also no uniformity in where a _message_ will be embedded.
+If it is in a `.properties` file, then the host format will trim the whitespace anyway.
+If it is in JSON, the `"..."` will make it explicit.
+
+If 20% of messages require MFv2 patterns...
+
+And 20% of those require a selector...
+
+And 1% of require pattern exterior whitespace...
+
+That's 0.4% of strings that require quoting the pattern.
+
+This appears to exaggerate the number of strings requiring PEWS.
+
 ## Use-Cases
 
 _What use-cases do we see? Ideally, quote concrete examples._
