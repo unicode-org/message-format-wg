@@ -187,6 +187,38 @@ Hello {$var}, you have a {$foo}
 %match {$foo :function option=value}{$bar :function option=value}%when {a b}{{  {$foo} is {$bar}  }}%when {x y} {||}{$foo} is {$bar}  {||}%when {* *}{|  |}{$foo} is {$bar}{|  |}
 ```
 
+## Whitespace and Pattern Boundaries
+
+One key consideration for the above options is distinguishing the boundary between 
+the end of a _pattern_ and the start of a _variant_ (`when` clause).
+This was not an issue in the code-mode syntax because the patterns were always delimited ("quoted").
+
+> [*Note]
+> This type of syntax is only needed if patterns are not quoted.
+> The "hot debate" in our 2023-10-16 teleconference was between "WYSIWYG"
+> no-whitespace-trimming supporters and current WG consensus.
+> For current consensus and discussion of whitespace design see [here](pattern-exterior-whitespace.md)
+
+- Candidate 1a uses a double sigil `{#` or distinguishing sequence `{#when` to accomplish this.
+- Candidate 2a quotes all patterns in code-mode.
+- Candidate 3a uses a sigil-keyword sequence `%when` that required at least some additional escaping.
+
+It is reasonable to think that we might modify this particular part of the syntax
+to improve usability. **_Keep in mind the need for single-line authoring._**
+
+For example:
+
+>```
+>%match {$foo}
+>%%{0} You have no ducks.
+>%%{one} You have {$foo} duck.
+>%%{*} You have {$foo} ducks.
+>
+>%match {$foo}
+>[[0]] You have no ducks.
+>[[one]] You have {$foo} duck.
+>[[*]] You have {$foo} duck.
+>```
 
 ## Sigil Candidates
 
