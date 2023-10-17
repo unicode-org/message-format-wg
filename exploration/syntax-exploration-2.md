@@ -13,7 +13,7 @@ We have generally used `#` as the placeholder for this sigil in the previous ite
 | :----- | :------------------------------------------------------------- | :-------------- | :------------------------ | :----------------------------- |  :--------------- | :------------ |
 | 1a     | Invert for text mode, distinguish statements from placeholders | -               | +                         | +                              | +                | - |
 | 2a     | Text first, current syntax for complex messages                | -               | +                         | -                              | -                | + |
-| 3a     | Use sigils for code mode, use `{`/`}` for keys                 | +               | -                         | +                              | +                | + |
+| 3a     | Use sigils for code mode                                       | +               | -                         | +                              | +                | + |
 
 ## Candidates
 
@@ -129,7 +129,7 @@ when * * {  {$foo} is {$bar}  }
 
 ### Candidate 3a
 
-**Description:** Use sigils for code mode, use `{`/`}` for keys
+**Description:** Use sigils for code mode
 
 - Starts in text mode. 
 - Uses a sigil for code statements. 
@@ -137,12 +137,13 @@ when * * {  {$foo} is {$bar}  }
   - Quoted patterns do not require this sigil to be escaped.
   - Note that decisions about auto-trimming affect the escaping situation. 
     If quoting the pattern is required, no additional escapes are needed.
-- Placeholders and expressions use `{`/`}`:
+- Expressions use `{`/`}`:
   > `{$var}`, `{unquoted}`, `{|quoted|}`, `{$var :function}`
-
-The use of `%` as the sigil is **_not_** an inherent part of the design here.
-The actual sigil or sigil sequence needs to be decided. 
-Note that using a doubled-sigil reduces the need for escaping.
+  - There is only one expression syntax, which applies to all expressions.
+  - Note: placeholders are expressions.
+- Variants use a double-sigil `%[` at the start and close the list of `keys`
+  with a `]`.
+  - The sequence `%[` must be escaped in unquoted patterns.
 
 Patterns in this syntax are generally unquoted,
 but MAY be quoted with the 2023-10-09 consensus `{{`/`}}` quotes.
@@ -172,19 +173,19 @@ Hello {$var}, you have a {$foo}
 ```
 ```
 %match {$foo}
-%when{foo} Hello {$foo} you have a {$var}
-%when{*} {$foo} hello you have a {$var}
+%[foo] Hello {$foo} you have a {$var}
+%[*] {$foo} hello you have a {$var}
 
-%match {$foo}%when{foo}Hello {$foo} you have a {$var}%when{*}{$foo} hello you have a {$var}
+%match {$foo}%[foo] Hello {$foo} you have a {$var}%[*] {$foo} hello you have a {$var}
 ```
 
 ```
 %match {$foo :function option=value} {$bar :function option=value}
-%when {a b} {{  {$foo} is {$bar}  }}
-%when {x y} {||}  {$foo} is {$bar}  {||}
-%when {* *} {|  |}{$foo} is {$bar}{|  |}
+%[a b] {{  {$foo} is {$bar}  }}
+%[x y] {||}  {$foo} is {$bar}  {||}
+%[* *] {|  |}{$foo} is {$bar}{|  |}
 
-%match {$foo :function option=value}{$bar :function option=value}%when {a b}{{  {$foo} is {$bar}  }}%when {x y} {||}{$foo} is {$bar}  {||}%when {* *}{|  |}{$foo} is {$bar}{|  |}
+%match {$foo :function option=value} {$bar :function option=value}%[a b] {{  {$foo} is {$bar}  }}%[x y] {||}  {$foo} is {$bar}  {||}%[* *] {|  |}{$foo} is {$bar}{|  |}
 ```
 
 ## Whitespace and Pattern Boundaries
@@ -201,7 +202,7 @@ This was not an issue in the code-mode syntax because the patterns were always d
 
 - Candidate 1a uses a double sigil `{#` or distinguishing sequence `{#when` to accomplish this.
 - Candidate 2a quotes all patterns in code-mode.
-- Candidate 3a uses a sigil-keyword sequence `%when` that required at least some additional escaping.
+- Candidate 3a uses a sigil sequence `%[` to accomplish this
 
 It is reasonable to think that we might modify this particular part of the syntax
 to improve usability. **_Keep in mind the need for single-line authoring._**
