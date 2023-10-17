@@ -205,7 +205,7 @@ Here are the potential sigils that can be used:
 | `+` |  | Looks like an operator. |
 | `_` | Feels like code. | Looks like a name prefix. Hard to see. |
 | `\|` |  | Already used in our syntax for a diff purpose. Weird. |
-| `\` | Feels like code. Already escaped in patterns. | May beed doubling in a resource format. |
+| `\` | Feels like code. Already escaped in patterns. | May require escaping (doubling) in host formats. |
 | `>` |  | Has meaning in markup. Wants to pair with `<`. |
 | `<` |  | Has meaning in markup. Wants to pair with `>`. |
 | `?` |  | Looks like `?` operator. Looks like a variable. Very common in real text. |
