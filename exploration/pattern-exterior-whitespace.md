@@ -34,15 +34,19 @@ such as vertical tab or form feed.
 
 _What context is helpful to understand this proposal?_
 
-Pattern exterior whitespace can occur in a message
-when the pattern is being used in a space-sensitive manner during output.
+**_<dfn>Pattern exterior whitespace</dfn>_** is syntax-meaningful whitespace 
+(that is, it matches the `s` production in the ABNF for `message`) that appears
+at the start or end of an **unquoted** _pattern_ in a _message_.
+
+_Pattern exterior whitespace_ is usually found in a _message_
+when the _pattern_ is being used in a space-sensitive manner during output.
 Its most common use is visual formatting,
 usually when concatenating the output of the formatting operation.
 
-Sometimes, pattern exterior whitespace is localizable,
-such as when segmentation results in a message with a leading or trailing space
-used to separate the message from other clauses or phrases.
-When such a message is translated to a locale using a CJK or other script
+Sometimes _pattern exterior whitespace_ is localizable,
+such as when segmentation results in a _message_ with a leading or trailing space
+used to separate the _message_ from other clauses or phrases.
+When such a _message_ is translated to a locale using a CJK or other script
 that does not use spaces to separate clauses,
 the space needs to be dropped.
 
@@ -52,6 +56,33 @@ Examples include:
 - creating bullet lists
 - indenting text
 - manually aligning multi-line text that is rendered with a monospace font
+
+### Other whitespace characters
+
+Note that there are many whitespace characters in Unicode, such as U+3000,
+U+200A, U+200B, U+2025, etc. which are not included in the `s` production.
+These whitespace characters are part of the _pattern_ and are not subject to being
+trimmed in syntaxes that support unquoted patterns.
+Because these whitespace characters look like spaces (or nothing)
+and can be followed by characters that would be pattern exterior whitespace,
+in some _messages_ users might be surprised by the lack of trimming.
+Note that this is true of any non-ASCII whitespace characters, however,
+when viewed as plain text.
+
+For example:
+>```
+> %match {$foo}
+> %{when *} \u200a  \nHello {$foo}
+>```
+>The `*`-keyed _pattern_ starts with a `HAIRSPACE` followed by two ASCII spaces and a newline.
+>The AScII space (U+0020) before the `\u200a` character is _pattern exterior whitespace_.
+>The `\u` escapes are not part of MFv2's syntax and are for visibility.
+>What this message actually looks like is:
+>```
+>%match {$foo}
+>%{when *}
+>Hello {$foo}
+>```
 
 ## Use-Cases
 
