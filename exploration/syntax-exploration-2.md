@@ -198,13 +198,14 @@ Here are the potential sigils that can be used:
 |---|---|---|
 | `!` |  | Means "not" in most programming languages. |
 | `@` | Feels like code? | Means "address" in a lot of contexts. Might be used for annotations |
-| `#` | Feels like code. Similar to `#define`. | Common in real text. Used for _everything_ |
+| `#` | Feels like code. Similar to `#define`. | Common in real text. Used for _everything_, in particular comments. |
 | `%` | Feels like code. Used by some templating languages. | Common in real text. |
 | `^` |  | Uncommon choice. Harder to see. |
 | `&` |  | Used in a lot of escapes, notably HTML. |
 | `+` |  | Looks like an operator. |
 | `_` | Feels like code. | Looks like a name prefix. Hard to see. |
 | `\|` |  | Already used in our syntax for a diff purpose. Weird. |
+| `\` | Feels like code. Already escaped in patterns. | May beed doubling in a resource format. |
 | `>` |  | Has meaning in markup. Wants to pair with `<`. |
 | `<` |  | Has meaning in markup. Wants to pair with `>`. |
 | `?` |  | Looks like `?` operator. Looks like a variable. Very common in real text. |
@@ -218,6 +219,6 @@ Here are the potential sigils that can be used:
 | `]` |  | Enclosing punctuation. |
 | `.` |  | Too common in normal text. Used by other syntaxes |
 | `,` |  | Too common in normal text. Not code-like? |
-| `\`` |  | Quote mark. |
+| <code>`</code> |  | Quote mark. |
 | `'`  |  | Quote mark. |
 | `"` |  | Quote mark. |
