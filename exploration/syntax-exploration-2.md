@@ -107,27 +107,33 @@ input {$user :function option=value}
 {#input {$user :function option=value}{Hello {$user}}#}
 ```
 ```
->>input {$var :function option=value}
+{#
+input {$var :function option=value}
 local $foo = {$bar :function option=value}
 {Hello {$var}, you have a {$foo}}
+#}
 
->>input {$var :function option=value}local $foo = {$bar :function option=value}{Hello {$var}, you have a {$foo}}
+{#input {$var :function option=value}local $foo = {$bar :function option=value}{Hello {$var}, you have a {$foo}}#}
 ```
 ```
->>match {$foo}
+{#
+match {$foo}
 when foo {Hello {$foo} you have a {$var}}
 when * {{$foo} hello you have a {$var}}
+#}
 
->>match {$foo}when foo{Hello {$foo} you have a {$var}}when *{{$foo} hello you have a {$var}}
+{#match {$foo}when foo{Hello {$foo} you have a {$var}}when *{{$foo} hello you have a {$var}}#}
 ```
 
 ```
->>match {$foo :function option=value} {$bar :function option=value}
+{#
+match {$foo :function option=value} {$bar :function option=value}
 when a b {  {$foo} is {$bar}  }
 when x y {  {$foo} is {$bar}  }
 when * * {  {$foo} is {$bar}  }
+#}
 
->>match {$foo :function option=value}{$bar :function option=value}when a b{  {$foo} is {$bar}  }when x y{  {$foo} is {$bar}  }when * *{  {$foo} is {$bar}  }
+{#match {$foo :function option=value}{$bar :function option=value}when a b{  {$foo} is {$bar}  }when x y{  {$foo} is {$bar}  }when * *{  {$foo} is {$bar}  }#}
 ```
 
 ### Candidate 3a
