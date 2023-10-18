@@ -104,7 +104,7 @@ input {$user :function option=value}
 {Hello {$user}}
 #}
 
->>input {$user :function option=value}{Hello {$user}}
+{#input {$user :function option=value}{Hello {$user}}#}
 ```
 ```
 >>input {$var :function option=value}
