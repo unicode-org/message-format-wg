@@ -9,11 +9,15 @@ We have generally used `#` as the placeholder for this sigil in the previous ite
 
 ## Comparison Matrix
 
-| Option | Description                                                    | Doesn’t Nest {} | Doesn’t Need More Escapes | Doesn’t Require Quoted Pattern |  Counted {} works | Multiple Expression Syntaxes |
+> [!Note]
+> The `+` and `-` values do not connote a value judgment about a given candidate.
+
+| Option | Description                                                    | Doesn’t Nest {} | Doesn’t Need More Escapes | Allows Unquoted Pattern |  Counted {} works | Multiple Expression Syntaxes |
 | :----- | :------------------------------------------------------------- | :-------------- | :------------------------ | :----------------------------- |  :--------------- | :------------ |
 | 1a     | Invert for text mode, distinguish statements from placeholders | -               | +                         | +                              | +                | - |
 | 2a     | Text first, current syntax for complex messages                | -               | +                         | -                              | -                | + |
 | 3a     | Use sigils for code mode                                       | +               | -                         | +                              | +                | + |
+
 
 ## Candidates
 
