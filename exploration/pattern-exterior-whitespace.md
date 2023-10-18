@@ -104,7 +104,7 @@ by reducing the overall message complexity
 
 Messages with _selectors_ (`match`) represent the primary case for quoted patterns.
 Each _variant_ consists of a set of _keys_ and a _pattern_ being selected.
-In the examples in MFv2's specification and documentation, it is common to 
+In the examples in our specification and documentation, it is common to 
 represent each _message_ as a multi-line construct.
 
 Some users may wish to incorporate this formatting or additional spaces/indentation
