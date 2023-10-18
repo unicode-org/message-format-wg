@@ -88,10 +88,7 @@ Starts in text mode, but switches to the current "code-mode" syntax for any mess
   Note that "pattern whitespace" is only that whitespace that appears inside the quoting `{`/`}`
   for quoted patterns.
 
-> The use in the previous iteration of `{{` and `}}` surrounding code-mode messages was identified as a potential negative, 
-> as the closing `}}` are superfluous to the message.
-
-The use of `>>` to represent the "starting code-mode sigil" is **_not_** final.
+The use of `{# ... #}` to represent the starting and ending code-mode sigils is **_not_** final.
 **_Do not fixate on the specific character sequence when choosing (or not) this design._**
 
 **Examples**
