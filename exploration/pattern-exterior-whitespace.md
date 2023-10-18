@@ -141,11 +141,9 @@ There is also no uniformity in where a _message_ will be embedded.
 If it is in a `.properties` file, then the host format will trim the whitespace anyway.
 If it is in JSON, the `"..."` will make it explicit.
 
-If 20% of messages require MFv2 patterns...
-
-And 20% of those require a selector...
-
-And 1% of require pattern exterior whitespace...
+If 20% of messages are not completely plain strings,<br>
+and 20% of those require a selector,<br>
+and 1% of those require pattern exterior whitespace...
 
 That's 0.4% of strings that require quoting the pattern.
 
