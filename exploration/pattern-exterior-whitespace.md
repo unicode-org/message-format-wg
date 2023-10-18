@@ -109,7 +109,7 @@ represent each _message_ as a multi-line construct.
 
 Some users may wish to incorporate this formatting or additional spaces/indentation
 for the purposes of simplifying authoring.
-The leads to the inclusion of additional whitespace inside the _message_
+This leads to the inclusion of additional whitespace inside the _message_
 which the user does not intend to be part of the _pattern_.
 
 Quoted patterns make the division between _key_ and _pattern_ clear
