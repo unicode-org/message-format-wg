@@ -145,9 +145,8 @@ If 20% of messages are not completely plain strings,<br>
 and 20% of those require a selector,<br>
 and 1% of those require pattern exterior whitespace...
 
-That's 0.4% of strings that require quoting the pattern.
-
-This appears to exaggerate the number of strings requiring PEWS.
+That's 0.04% of strings that require quoting the pattern due to _pattern exterior whitespace_.
+Given the rather generous estimates used to reach this figure, it is probably an exaggeration.
 
 ## Use-Cases
 
