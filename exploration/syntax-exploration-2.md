@@ -99,8 +99,10 @@ Hello world!
 Hello {$user}
 ```
 ```
->>input {$user :function option=value}
+{#
+input {$user :function option=value}
 {Hello {$user}}
+#}
 
 >>input {$user :function option=value}{Hello {$user}}
 ```
