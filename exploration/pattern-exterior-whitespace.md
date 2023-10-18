@@ -34,15 +34,19 @@ such as vertical tab or form feed.
 
 _What context is helpful to understand this proposal?_
 
-Pattern exterior whitespace can occur in a message
-when the pattern is being used in a space-sensitive manner during output.
+**_<dfn>Pattern exterior whitespace</dfn>_** is syntax-meaningful whitespace 
+(that is, it matches the `s` production in the ABNF for `message`) that appears
+at the start or end of an **unquoted** _pattern_ in a _message_.
+
+_Pattern exterior whitespace_ is usually found in a _message_
+when the _pattern_ is being used in a space-sensitive manner during output.
 Its most common use is visual formatting,
 usually when concatenating the output of the formatting operation.
 
-Sometimes, pattern exterior whitespace is localizable,
-such as when segmentation results in a message with a leading or trailing space
-used to separate the message from other clauses or phrases.
-When such a message is translated to a locale using a CJK or other script
+Sometimes _pattern exterior whitespace_ is localizable,
+such as when segmentation results in a _message_ with a leading or trailing space
+used to separate the _message_ from other clauses or phrases.
+When such a _message_ is translated to a locale using a CJK or other script
 that does not use spaces to separate clauses,
 the space needs to be dropped.
 
@@ -52,6 +56,97 @@ Examples include:
 - creating bullet lists
 - indenting text
 - manually aligning multi-line text that is rendered with a monospace font
+
+### Other whitespace characters
+
+Note that there are many whitespace characters in Unicode, such as U+3000,
+U+200A, U+200B, U+2025, etc. which are not included in the `s` production.
+These whitespace characters are part of the _pattern_ and are not subject to being
+trimmed in syntaxes that support unquoted patterns.
+Because these whitespace characters look like spaces (or nothing)
+and can be followed by characters that would be pattern exterior whitespace,
+in some _messages_ users might be surprised by the lack of trimming.
+Note that this is true of any non-ASCII whitespace characters,
+when viewed as plain text.
+
+For example:
+>```
+> %match {$foo}
+> %{when *} \u200a  Hello {$foo}
+>```
+>The `*`-keyed _pattern_ starts with a `HAIRSPACE` followed by two ASCII spaces.
+>The ASCII space (U+0020) before the `\u200a` character is _pattern exterior whitespace_.
+>The `\u` escapes are not part of MF2 syntax and are for visibility.
+>What this message actually looks like is:
+>```
+>%match {$foo}
+>%{when *}    Hello {$foo}
+>```
+
+### Why would we allow unquoted patterns?
+
+Most _messages_ are expected to be simple. 
+The most frequent messages will have no placeholders or be simple replacements:
+```
+Hello, world!
+Hello, {$user}!
+```
+
+The need to quote these patterns is undesirable because it is unnatural.
+
+The ability to have unquoted patterns depends, to some degree, on the syntax we choose
+for _messages_ as a whole.
+Allowing unquoted patterns would make it simpler for authors and translators
+by reducing the overall message complexity
+(i.e. needing to balance open and close "quote" characters)
+
+### Why would we want to trim pattern exterior whitespace?
+
+Messages with _selectors_ (`match`) represent the primary case for quoted patterns.
+Each _variant_ consists of a set of _keys_ and a _pattern_ being selected.
+In the examples in our specification and documentation, it is common to 
+represent each _message_ as a multi-line construct.
+
+Some users may wish to incorporate this formatting or additional spaces/indentation
+for the purposes of simplifying authoring.
+This leads to the inclusion of additional whitespace inside the _message_
+which the user does not intend to be part of the _pattern_.
+
+Quoted patterns make the division between _key_ and _pattern_ clear
+at the cost of addition syntax for quoting the pattern.
+
+Unquoted patterns could consume all whitespace verbatim from the _message_.
+However, we believe that, while software developers might understand the need for the
+_pattern_ to start directly after the _key_, 
+it seems likely that accidental whitespace will be a common error:
+
+> Unintended spaces:
+>```
+>%match {$foo} %when {*} I should not have a space.
+>%match {$foo} %when {*}
+>   I should not have space or a newline.
+>```
+> Corrected:
+> ```
+> %match {$foo} %when {*}I have no space.
+> %match {$foo} %when {*} {{ I have a space before and after }}
+> %match {$foo} %when {*}
+>     {{ I have a space before and after }}
+> ```
+
+Allowing the _pattern_ to be unquoted simplifies authoring, since most _messages_
+do not require pattern exterior whitespace.
+
+There is also no uniformity in where a _message_ will be embedded.
+If it is in a `.properties` file, then the host format will trim the whitespace anyway.
+If it is in JSON, the `"..."` will make it explicit.
+
+If 20% of messages are not completely plain strings,<br>
+and 20% of those require a selector,<br>
+and 1% of those require pattern exterior whitespace...
+
+That's 0.04% of strings that require quoting the pattern due to _pattern exterior whitespace_.
+Given the rather generous estimates used to reach this figure, it is probably an exaggeration.
 
 ## Use-Cases
 
