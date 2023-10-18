@@ -72,16 +72,15 @@ when viewed as plain text.
 For example:
 >```
 > %match {$foo}
-> %{when *} \u200a  \nHello {$foo}
+> %{when *} \u200a  Hello {$foo}
 >```
->The `*`-keyed _pattern_ starts with a `HAIRSPACE` followed by two ASCII spaces and a newline.
->The AScII space (U+0020) before the `\u200a` character is _pattern exterior whitespace_.
->The `\u` escapes are not part of MFv2's syntax and are for visibility.
+>The `*`-keyed _pattern_ starts with a `HAIRSPACE` followed by two ASCII spaces.
+>The ASCII space (U+0020) before the `\u200a` character is _pattern exterior whitespace_.
+>The `\u` escapes are not part of MF2 syntax and are for visibility.
 >What this message actually looks like is:
 >```
 >%match {$foo}
->%{when *}
->Hello {$foo}
+>%{when *}    Hello {$foo}
 >```
 
 ### Why would we allow unquoted patterns?
