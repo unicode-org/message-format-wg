@@ -66,7 +66,7 @@ trimmed in syntaxes that support unquoted patterns.
 Because these whitespace characters look like spaces (or nothing)
 and can be followed by characters that would be pattern exterior whitespace,
 in some _messages_ users might be surprised by the lack of trimming.
-Note that this is true of any non-ASCII whitespace characters, however,
+Note that this is true of any non-ASCII whitespace characters,
 when viewed as plain text.
 
 For example:
