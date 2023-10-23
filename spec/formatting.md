@@ -7,7 +7,7 @@ when formatting a message for display in a user interface, or for some later pro
 
 To start, we presume that a _message_ has either been parsed from its syntax
 or created from a data model description.
-If this construction has encountered any Syntax or Data Model errors,
+If this construction has encountered any Syntax or Data Model Errors,
 their handling during formatting is specified here as well.
 
 Formatting of a _message_ is defined by the following operations:
@@ -67,7 +67,7 @@ At a minimum, it includes:
   This will be used by strategies for bidirectional isolation,
   and can be used to set the base direction of the _message_ upon display.
 
-- A mapping of string identifiers to values,
+- An **_<dfn>input mapping</dfn>_** of string identifiers to values,
   defining variable values that are available during _variable resolution_.
   This is often determined by a user-provided argument of a formatting function call.
 
@@ -83,10 +83,14 @@ Implementations MAY include additional fields in their _formatting context_.
 
 _Expressions_ are used in _declarations_, _selectors_, and _patterns_.
 
-In a _declaration_, the resolved value of the _expression_ is assigned to a _variable_,
+In a _declaration_, the resolved value of the _expression_ is bound to a _variable_,
 which is available for use by later _expressions_.
 Since a _variable_ can be referenced in different ways later,
 implementations SHOULD NOT immediately fully format the value for output.
+
+In an _input-declaration_, the _variable_ operand of the _variable-expression_
+identifies not only the name of the external input value,
+but also the _variable_ to which the resolved value of the _variable-expression_ is bound.
 
 In _selectors_, the resolved value of an _expression_ is used for _pattern selection_.
 
@@ -106,7 +110,7 @@ and different implementations MAY choose to perform different levels of resoluti
 > Alternatively, it could be an instance of an ICU4J `FormattedNumber`,
 > or some other locally appropriate value.
 
-Depending on the presence or absence of an _operand_
+Depending on the presence or absence of a _variable_ or _literal_ operand
 and a _function_, _private-use_, or _reserved_ _annotation_,
 the resolved value of the _expression_ is determined as follows:
 
@@ -119,8 +123,7 @@ its resolved value is defined according to the implementation's specification.
 Else, if the _expression_ contains an _annotation_,
 its resolved value is defined by _function resolution_.
 
-Else, the _expression_ will contain only an _operand_,
-which consists of either a _literal_ or a _variable_.
+Else, the _expression_ will contain only either a _literal_ or a _variable_.
 
 If the _expression_ consists of a _variable_,
 its resolved value is defined by _variable resolution_.
@@ -150,9 +153,9 @@ its resolved value is defined by _literal resolution_.
 > an _annotation_ needs to be provided:
 >
 > ```
-> let $aNumber = {1234 :number}
-> let $aDate = {|2023-08-30| :datetime}
-> let $aFoo = {|some foo| :foo}
+> local $aNumber = {1234 :number}
+> local $aDate = {|2023-08-30| :datetime}
+> local $aFoo = {|some foo| :foo}
 > {You have {42 :number}}
 > ```
 
@@ -175,13 +178,10 @@ The resolution of a _text_ or _literal_ token MUST always succeed.
 ### Variable Resolution
 
 To resolve the value of a _variable_,
-its _name_ is used to identify either a local variable,
-or a variable defined elsewhere.
-If a local variable and an externally defined one use the same name,
-the local variable takes precedence.
-
-It is an error for a local variable definition to
-refer to a local variable that's defined after it in the message.
+its _name_ is used to identify either a local variable or an input variable.
+If a _declaration_ exists for the _variable_, its resolved value is used.
+Otherwise, the _variable_ is an implicit reference to an input value,
+and its value is looked up from the _formatting context_ _input mapping_.
 
 The resolution of a _variable_ MAY fail if no value is identified for its _name_.
 If this happens, an Unresolved Variable error MUST be emitted.
@@ -272,12 +272,12 @@ rather than the _expression_ in the _selector_ or _pattern_.
 > attempting to format either of the following messages:
 >
 > ```
-> let $var = {|horse| :func}
+> local $var = {|horse| :func}
 > {The value is {$var}.}
 > ```
 >
 > ```
-> let $var = {|horse|}
+> local $var = {|horse|}
 > {The value is {$var :func}.}
 > ```
 >
@@ -690,7 +690,7 @@ These are divided into the following categories:
   > ```
   >
   > ```
-  > let $var = {|no message body|}
+  > local $var = {|no message body|}
   > ```
 
 - **Data Model errors** occur when a message is invalid due to
@@ -744,16 +744,15 @@ These are divided into the following categories:
     > ```
     >
     > ```
-    > let $one = {|The one|}
+    > local $one = {|The one|}
     > match {$one}
     > when 1 {Value is one}
     > when * {Value is not one}
     > ```
     >
     > ```
-    > let $one = {|The one| :func}
-    > let $two = {$one}
-    > match {$two}
+    > input {$one}
+    > match {$one}
     > when 1 {Value is one}
     > when * {Value is not one}
     > ```
@@ -769,7 +768,7 @@ These are divided into the following categories:
     > ```
     >
     > ```
-    > let $foo = {horse :func one=1 two=2 one=1}
+    > local $foo = {horse :func one=1 two=2 one=1}
     > {This is {$foo}}
     > ```
 
@@ -844,7 +843,7 @@ These are divided into the following categories:
     > ```
     >
     > ```
-    > let $sel = {|horse| :plural}
+    > local $sel = {|horse| :plural}
     > match {$sel}
     > when 1 {The value is one.}
     > when * {The value is not one.}
@@ -873,7 +872,7 @@ These are divided into the following categories:
   > ```
   >
   > ```
-  > let $id = {$user :get field=id}
+  > local $id = {$user :get field=id}
   > {Hello, {$id :get field=name}!}
   > ```
   >

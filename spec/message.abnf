@@ -2,8 +2,12 @@ message = pattern / complex-message
 
 complex-message = "{{" [s] *(declaration [s]) body [s] "}}"
 
-declaration = let s variable [s] "=" [s] expression
+declaration = input-declaration / local-declaration
+input-declaration = input [s] variable-expression
+local-declaration = local s variable [s] "=" [s] expression
+
 body = quoted-pattern
+
      / (selectors 1*([s] variant))
 
 quoted-pattern = "{{" pattern "}}"
@@ -12,8 +16,10 @@ selectors      = match 1*([s] expression)
 variant        = when 1*(s key) [s] quoted-pattern
 key            = literal / "*"
 
-expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
-operand    = literal / variable
+expression = literal-expression / variable-expression / function-expression
+literal-expression = "{" [s] literal [s annotation] [s] "}"
+variable-expression = "{" [s] variable [s annotation] [s] "}"
+function-expression = "{" [s] annotation [s] "}"
 annotation = (function *(s option)) / reserved / private-use
 
 literal = quoted / unquoted
@@ -22,7 +28,8 @@ function = (":" / "+" / "-") name
 option = name [s] "=" [s] (literal / variable)
 
 ; reserved keywords are always lowercase
-let   = %x6C.65.74        ; "let"
+input = %x69.6E.70.75.74  ; "input"
+local = %x6C.6F.63.61.6C  ; "local"
 match = %x6D.61.74.63.68  ; "match"
 when  = %x77.68.65.6E     ; "when"
 
