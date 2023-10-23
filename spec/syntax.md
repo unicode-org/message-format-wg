@@ -111,14 +111,16 @@ A **_<dfn>message</dfn>_** is the complete template for a specific message forma
 > > **Example** This _message_:
 > >
 > > ```
-> > local $foo   =   { |horse| }
-> > {You have a {$foo}!}
+> > {{
+> >   local $foo   =   { |horse| }
+> >   {{You have a {$foo}!}}
+> > }}
 > > ```
 > >
 > > Can also be written as:
 > >
 > > ```
-> > local $foo={|horse|}{You have a {$foo}!}
+> > {{local $foo={|horse|}{{You have a {$foo}!}}}}
 > > ```
 > >
 > > An exception to this is: whitespace inside a _pattern_ is **always** significant.
