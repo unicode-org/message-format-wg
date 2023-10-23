@@ -123,7 +123,13 @@ A **_<dfn>message</dfn>_** is the complete template for a specific message forma
 > >
 > > An exception to this is: whitespace inside a _pattern_ is **always** significant.
 
-A _message_ consists of two parts:
+A _message_ can be a _pattern_ or it can be a _complex message_.
+
+A **_<dfn>complex message</dfn>_** is any _message_ that contains _declarations_,
+a _matcher_, or both.
+A _complex message_ always begins with the the sequence `{{`
+and is terminated by the sequence `}}`
+and consists of:
 
 1. an optional list of _declarations_, followed by
 2. a _body_
@@ -156,55 +162,40 @@ local-declaration = local s variable [s] "=" [s] expression
 ### Body
 
 The **_<dfn>body</dfn>_** of a _message_ is the part that will be formatted.
-The _body_ consists of either a _pattern_ or a _matcher_.
+The _body_ consists of either a _quoted pattern_ or a _matcher_.
 
 ```abnf
-body = pattern / matcher
+body = quoted-pattern
+     / (selectors 1*([s] variant))
 ```
-
-All _messages_ MUST contain a _body_.
-An empty string is not a _well-formed_ _message_.
-
-> A simple _message_ containing only a _body_:
->
-> ```
-> {Hello world!}
-> ```
->
-> The same _message_ defined in a `.properties` file:
->
-> ```properties
-> app.greetings.hello = {Hello, world!}
-> ```
->
-> The same _message_ defined inline in JavaScript:
->
-> ```js
-> let hello = new MessageFormat("{Hello, world!}");
-> hello.format();
-> ```
 
 ## Pattern
 
 A **_<dfn>pattern</dfn>_** contains a sequence of _text_ and _placeholders_ to be formatted as a unit.
-All _patterns_ begin with U+007B LEFT CURLY BRACKET `{` and end with U+007D RIGHT CURLY BRACKET `}`.
 Unless there is an error, resolving a _message_ always results in the formatting
 of a single _pattern_.
 
 ```abnf
 pattern = "{" *(text / expression) "}"
 ```
-
 A _pattern_ MAY be empty.
-
-> An empty _pattern_:
->
-> ```
-> {}
-> ```
 
 A _pattern_ MAY contain an arbitrary number of _placeholders_ to be evaluated
 during the formatting process.
+
+### Quoted Pattern
+
+A **_<dfn>quoted pattern</dfn>_** is a pattern that is enclosed by
+starting with a sequence of two U+007B LEFT CURLY BRACKET `{{` 
+and ending with a sequence of two U+007D RIGHT CURLY BRACKET `}}`.
+
+A _quoted pattern_ MAY be empty.
+
+> An empty _quoted pattern_:
+>
+> ```
+> {{}}
+> ```
 
 ### Text
 
@@ -273,15 +264,17 @@ matcher = match 1*(selector) 1*(variant)
 > A _message_ with a _matcher_:
 >
 > ```
+> {{
 > match {$count :number}
-> when 1 {You have one notification.}
-> when * {You have {$count} notifications.}
+> when 1 {{You have one notification.}}
+> when * {{You have {$count} notifications.}}
+> }}
 > ```
 
 > A _message_ containing a _matcher_ formatted on a single line:
 >
 > ```
-> match {:platform} when windows {Settings} when * {Preferences}
+> {{match {:platform} when windows {{Settings}} when * {{Preferences}}}}
 > ```
 
 ### Selector
@@ -302,22 +295,26 @@ There MAY be any number of additional _selectors_.
 > allowing the _message_ to choose a _pattern_ based on grammatical case:
 >
 > ```
+> {{
 > match {$userName :hasCase}
-> when vocative {Hello, {$userName :person case=vocative}!}
-> when accusative {Please welcome {$userName :person case=accusative}!}
-> when * {Hello!}
+> when vocative {{Hello, {$userName :person case=vocative}!}}
+> when accusative {{Please welcome {$userName :person case=accusative}!}}
+> when * {{Hello!}}
+> }}
 > ```
 
 > A message with two _selectors_:
 >
 > ```
+> {{
 > match {$photoCount :number} {$userGender :equals}
-> when 1 masculine {{$userName} added a new photo to his album.}
-> when 1 feminine  {{$userName} added a new photo to her album.}
-> when 1 *         {{$userName} added a new photo to their album.}
-> when * masculine {{$userName} added {$photoCount} photos to his album.}
-> when * feminine  {{$userName} added {$photoCount} photos to her album.}
-> when * *         {{$userName} added {$photoCount} photos to their album.}
+> when 1 masculine {{{$userName} added a new photo to his album.}}
+> when 1 feminine  {{{$userName} added a new photo to her album.}}
+> when 1 *         {{{$userName} added a new photo to their album.}}
+> when * masculine {{{$userName} added {$photoCount} photos to his album.}}
+> when * feminine  {{{$userName} added {$photoCount} photos to her album.}}
+> when * *         {{{$userName} added {$photoCount} photos to their album.}}
+> }}
 > ```
 
 ### Variant
@@ -397,9 +394,9 @@ Additionally, an _input-declaration_ can contain a _variable-expression_.
 > Placeholders:
 >
 > ```
-> {This placeholder contains an {|expression with a literal|}}
-> {This placeholder references a {$variable}}
-> {This placeholder references a function on a variable: {$variable :function with=options}}
+> {{This placeholder contains an {|expression with a literal|}}}
+> {{This placeholder references a {$variable}}}
+> {{This placeholder references a function on a variable: {$variable :function with=options}}}
 > ```
 
 ### Annotation
@@ -445,14 +442,14 @@ and vice versa.
 > A _message_ with a _standalone_ _function_ operating on the _variable_ `$now`:
 >
 > ```
-> {{$now :datetime}}
+> {$now :datetime}
 > ```
 >
 > A _message_ with two markup-like _functions_, `button` and `link`,
 > which the runtime can use to construct a document tree structure for a UI framework:
 >
 > ```
-> {{+button}Submit{-button} or {+link}cancel{-link}.}
+> {+button}Submit{-button} or {+link}cancel{-link}.
 > ```
 
 A _function_ consists of a prefix sigil followed by a _name_.
@@ -487,7 +484,7 @@ option = name [s] "=" [s] (literal / variable)
 > A _message_ with a `$date` _variable_ formatted with the `:datetime` _function_:
 >
 > ```
-> {Today is {$date :datetime weekday=long}.}
+> Today is {$date :datetime weekday=long}.
 > ```
 
 > A _message_ with a `$userName` _variable_ formatted with
@@ -495,7 +492,7 @@ option = name [s] "=" [s] (literal / variable)
 > declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
 >
 > ```
-> {Hello, {$userName :person case=vocative}!}
+> Hello, {$userName :person case=vocative}!
 > ```
 
 > A _message_ with a `$userObj` _variable_ formatted with
@@ -503,7 +500,7 @@ option = name [s] "=" [s] (literal / variable)
 > plucking the first name from the object representing a person:
 >
 > ```
-> {Hello, {$userObj :person firstName=long}!}
+> Hello, {$userObj :person firstName=long}!
 > ```
 
 #### Private-Use
@@ -540,12 +537,12 @@ private-start = "&" / "^"
 > Here are some examples of what _private-use_ sequences might look like:
 >
 > ```
-> {Here's private use with an operand: {$foo &bar}}
-> {Here's a placeholder that is entirely private-use: {&anything here}}
-> {Here's a private-use function that uses normal function syntax: {$operand ^foo option=|literal|}}
-> {The character \| has to be paired or escaped: {&private || |something between| or isolated: \| }}
-> {Stop {& "translate 'stop' as a verb" might be a translator instruction or comment }}
-> {Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}}
+> Here's private use with an operand: {$foo &bar}
+> Here's a placeholder that is entirely private-use: {&anything here}
+> Here's a private-use function that uses normal function syntax: {$operand ^foo option=|literal|}
+> The character \| has to be paired or escaped: {&private || |something between| or isolated: \| }
+> Stop {& "translate 'stop' as a verb" might be a translator instruction or comment }
+> Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}
 > ```
 
 #### Reserved
@@ -669,7 +666,7 @@ name-char  = name-start / DIGIT / "-" / "." / ":"
            / %xB7 / %x300-36F / %x203F-2040
 ```
 
-> **Note**\
+> [!NOTE]
 > _External variables_ can be passed in that are not valid _names_.
 > Such variables cannot be referenced in a _message_,
 > but are not otherwise errors.
