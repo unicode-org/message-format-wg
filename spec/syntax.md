@@ -135,7 +135,7 @@ This _variable_ can then be used in other _expressions_ within the same _message
 _Declarations_ are optional: many messages will not contain any _declarations_.
 
 An **_<dfn>input-declaration</dfn>_** binds a _variable_ to an external input value,
-such as a named value in an object argument of a formatting call.
+such as a named argument of a formatting call.
 The _variable-expression_ of an _input-declaration_
 MAY include an _annotation_ that is applied to the external value.
 
