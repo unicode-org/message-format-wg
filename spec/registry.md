@@ -181,12 +181,16 @@ Messages can now use the `:noun` and the `:adjective` functions.
 The following message references the first signature of `:adjective`,
 which expects the `plural` and `case` options:
 
+> ```
 > You see {$color :adjective article=indefinite plural=one case=nominative} {$object :noun case=nominative}!
+> ```
 
 The following message references the second signature of `:adjective`,
 which only expects the `accord` option:
 
+>```
 > {{
 >  input {$object :noun case=nominative}
 >  {{You see {$color :adjective article=indefinite accord=$object} {$object}!}}
 > }}
+>```
