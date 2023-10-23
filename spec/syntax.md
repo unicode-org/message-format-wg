@@ -134,8 +134,7 @@ A **_<dfn>declaration</dfn>_** binds a _variable_ identifier to a value within t
 This _variable_ can then be used in other _expressions_ within the same _message_.
 _Declarations_ are optional: many messages will not contain any _declarations_.
 
-An **_<dfn>input-declaration</dfn>_** binds a _variable_ to an external input value,
-such as a named argument of a formatting call.
+An **_<dfn>input-declaration</dfn>_** binds a _variable_ to an external input value.
 The _variable-expression_ of an _input-declaration_
 MAY include an _annotation_ that is applied to the external value.
 
