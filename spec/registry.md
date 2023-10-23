@@ -123,9 +123,11 @@ For the sake of brevity, only `locales="en"` is considered.
 Given the above description, the `:number` function is defined to work both in a selector and a placeholder:
 
 ```
+{{
 match {$count :number}
-when 1 {One new message}
-when * {{$count :number} new messages}
+when 1 {{One new message}}
+when * {{{$count :number} new messages}}
+}}
 ```
 
 Furthermore,
