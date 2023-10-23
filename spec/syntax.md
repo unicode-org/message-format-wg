@@ -178,7 +178,7 @@ Unless there is an error, resolving a _message_ always results in the formatting
 of a single _pattern_.
 
 ```abnf
-pattern = "{" *(text / expression) "}"
+pattern = *(text / expression)
 ```
 A _pattern_ MAY be empty.
 
@@ -190,6 +190,10 @@ during the formatting process.
 A **_<dfn>quoted pattern</dfn>_** is a pattern that is enclosed by
 starting with a sequence of two U+007B LEFT CURLY BRACKET `{{` 
 and ending with a sequence of two U+007D RIGHT CURLY BRACKET `}}`.
+
+```abnf
+quoted-pattern = "{{" pattern "}}"
+```
 
 A _quoted pattern_ MAY be empty.
 
