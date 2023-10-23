@@ -11,10 +11,10 @@ body = quoted-pattern
      / (selectors 1*([s] variant))
 
 quoted-pattern = "{{" pattern "}}"
-pattern        = *(text / expression)
-selectors      = match 1*([s] expression)
-variant        = when 1*(s key) [s] quoted-pattern
-key            = literal / "*"
+pattern = *(text / expression)
+selectors = match 1*([s] expression)
+variant = when 1*(s key) [s] quoted-pattern
+key = literal / "*"
 
 expression = literal-expression / variable-expression / function-expression
 literal-expression = "{" [s] literal [s annotation] [s] "}"
