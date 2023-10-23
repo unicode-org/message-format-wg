@@ -187,9 +187,10 @@ during the formatting process.
 
 ### Quoted Pattern
 
-A **_<dfn>quoted pattern</dfn>_** is a pattern that is enclosed by
-starting with a sequence of two U+007B LEFT CURLY BRACKET `{{` 
-and ending with a sequence of two U+007D RIGHT CURLY BRACKET `}}`.
+A **_<dfn>quoted pattern</dfn>_** is a _pattern_ that is "quoted" to prevent 
+interference with other parts of the _message_. 
+A _quoted pattern_ starts with a sequence of two U+007B LEFT CURLY BRACKET `{{` 
+and ends with a sequence of two U+007D RIGHT CURLY BRACKET `}}`.
 
 ```abnf
 quoted-pattern = "{{" pattern "}}"
