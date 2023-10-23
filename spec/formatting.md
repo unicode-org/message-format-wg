@@ -135,7 +135,7 @@ when resolving the value of the _expression_.
 > So, given a _message_ like this:
 >
 > ```
-> {Today is {$date}}
+> Today is {$date}
 > ```
 >
 > If the value passed in the _variable_ were a date object,
@@ -153,10 +153,12 @@ its resolved value is defined by _literal resolution_.
 > an _annotation_ needs to be provided:
 >
 > ```
+> {{
 > local $aNumber = {1234 :number}
 > local $aDate = {|2023-08-30| :datetime}
 > local $aFoo = {|some foo| :foo}
-> {You have {42 :number}}
+> {{You have {42 :number}}}
+> }}
 > ```
 
 ### Literal Resolution
@@ -272,13 +274,17 @@ rather than the _expression_ in the _selector_ or _pattern_.
 > attempting to format either of the following messages:
 >
 > ```
+> {{
 > local $var = {|horse| :func}
-> {The value is {$var}.}
+> {{The value is {$var}.}}
+> }}
 > ```
 >
 > ```
+> {{
 > local $var = {|horse|}
-> {The value is {$var :func}.}
+> {{The value is {$var :func}.}}
+> }}
 > ```
 >
 > would in both cases result in the _pattern_ _expression_
@@ -301,8 +307,10 @@ Each _key_ corresponds to an _expression_ in the _selectors_ by its position in 
 > For example, in this message:
 >
 > ```
+> {{
 > match {:one} {:two} {:three}
-> when  1 2 3 { ... }
+> when  1 2 3 {{ ... }}
+> }}
 > ```
 >
 > The first _key_ `1` corresponds to the first _expression_ in the _selectors_ (`{:one}`),
@@ -444,10 +452,12 @@ the variable reference `$bar` resolves to the string `'bar'`,
 pattern selection proceeds as follows for this message:
 
 ```
+{{
 match {$foo :string} {$bar :string}
-when bar bar {All bar}
-when foo foo {All foo}
-when * * {Otherwise}
+when bar bar {{All bar}}
+when foo foo {{All foo}}
+when * * {{Otherwise}}
+}}
 ```
 
 1. For the first selector:<br>
@@ -475,11 +485,13 @@ Alternatively, with the same implementation and formatting context as in Example
 pattern selection would proceed as follows for this message:
 
 ```
+{{
 match {$foo :string} {$bar :string}
-when * bar {Any and bar}
-when foo * {Foo and any}
-when foo bar {Foo and bar}
-when * * {Otherwise}
+when * bar {{Any and bar}}
+when foo * {{Foo and any}}
+when foo bar {{Foo and bar}}
+when * * {{Otherwise}}
+}}
 ```
 
 1. For the first selector:<br>
@@ -523,10 +535,12 @@ and an `en` (English) locale,
 the pattern selection proceeds as follows for this message:
 
 ```
+{{
 match {$count :plural}
-when one {Category match}
-when 1   {Exact match}
-when *   {Other match}
+when one {{Category match}}
+when 1   {{Exact match}}
+when *   {{Other match}}
+}}
 ```
 
 1. For the selector:<br>
@@ -682,15 +696,16 @@ These are divided into the following categories:
   > Example invalid messages resulting in a Syntax error:
   >
   > ```
-  > {Missing end brace
+  > {{{{Missing end braces
+  > {{{{Missing one end brace}}}
   > ```
   >
   > ```
-  > {Unknown {{expression}}}
+  > Unknown {{expression}}
   > ```
   >
   > ```
-  > local $var = {|no message body|}
+  > {{local $var = {|no message body|}}}
   > ```
 
 - **Data Model errors** occur when a message is invalid due to
@@ -702,16 +717,20 @@ These are divided into the following categories:
     > Example invalid messages resulting in a Variant Key Mismatch error:
     >
     > ```
+    > {{
     > match {$one :func}
-    > when 1 2 {Too many}
-    > when * {Otherwise}
+    > when 1 2 {{Too many}}
+    > when * {{Otherwise}}
+    > }}
     > ```
     >
     > ```
+    > {{
     > match {$one :func} {$two :func}
-    > when 1 2 {Two keys}
-    > when * {Missing a key}
-    > when * * {Otherwise}
+    > when 1 2 {{Two keys}}
+    > when * {{Missing a key}}
+    > when * * {{Otherwise}}
+    > }}
     > ```
 
   - **Missing Fallback Variant errors** occur when the message
@@ -720,15 +739,19 @@ These are divided into the following categories:
     > Example invalid messages resulting in a Missing Fallback Variant error:
     >
     > ```
+    > {{
     > match {$one :func}
-    > when 1 {Value is one}
-    > when 2 {Value is two}
+    > when 1 {{Value is one}}
+    > when 2 {{Value is two}}
+    > }}
     > ```
     >
     > ```
+    > {{
     > match {$one :func} {$two :func}
-    > when 1 * {First is one}
-    > when * 1 {Second is one}
+    > when 1 * {{First is one}}
+    > when * 1 {{Second is one}}
+    > }}
     > ```
 
   - A **_Missing Selector Annotation error_** is an error that occurs when the _message_
@@ -738,23 +761,29 @@ These are divided into the following categories:
     > Example invalid messages resulting in a _Missing Selector Annotation error_:
     >
     > ```
+    > {{
     > match {$one}
-    > when 1 {Value is one}
-    > when * {Value is not one}
+    > when 1 {{Value is one}}
+    > when * {{Value is not one}}
+    > }}
     > ```
     >
     > ```
+    > {{
     > local $one = {|The one|}
     > match {$one}
-    > when 1 {Value is one}
-    > when * {Value is not one}
+    > when 1 {{Value is one}}
+    > when * {{Value is not one}}
+    > }}
     > ```
     >
     > ```
+    > {{
     > input {$one}
     > match {$one}
-    > when 1 {Value is one}
-    > when * {Value is not one}
+    > when 1 {{Value is one}}
+    > when * {{Value is not one}}
+    > }}
     > ```
 
   - **Duplicate Option Name errors** occur when the same _name_
@@ -764,12 +793,14 @@ These are divided into the following categories:
     > Example invalid messages resulting in a Duplicate Option Name error:
     >
     > ```
-    > {Value is {42 :number style=percent style=decimal}}
+    > Value is {42 :number style=percent style=decimal}
     > ```
     >
     > ```
+    > {{
     > local $foo = {horse :func one=1 two=2 one=1}
-    > {This is {$foo}}
+    > {{This is {$foo}}}
+    > }}
     > ```
 
 - **Resolution errors** occur when the runtime value of a part of a message
@@ -782,13 +813,15 @@ These are divided into the following categories:
     > does not provide for the variable reference `$var` to be successfully resolved:
     >
     > ```
-    > {The value is {$var}.}
+    > The value is {$var}.
     > ```
     >
     > ```
+    > {{
     > match {$var :func}
-    > when 1 {The value is one.}
-    > when * {The value is not one.}
+    > when 1 {{The value is one.}}
+    > when * {{The value is not one.}}
+    > }}
     > ```
 
   - **Unknown Function errors** occur when an _expression_ includes
@@ -799,13 +832,15 @@ These are divided into the following categories:
     > does not provide for the function `:func` to be successfully resolved:
     >
     > ```
-    > {The value is {horse :func}.}
+    > The value is {horse :func}.
     > ```
     >
     > ```
+    > {{
     > match {|horse| :func}
-    > when 1 {The value is one.}
-    > when * {The value is not one.}
+    > when 1 {{The value is one.}}
+    > when * {{The value is not one.}}
+    > }}
     > ```
 
   - **Unsupported Expression errors** occur when an expression uses
@@ -816,16 +851,18 @@ These are divided into the following categories:
     > would always result in an Unsupported Expression error:
     >
     > ```
-    > {The value is {@horse}.}
+    > The value is {@horse}.
     > ```
     >
     > Attempting to format this message would result in an Unsupported Expression error
     > if done within a context that does not support the `^` private use sigil:
     >
     > ```
+    > {{
     > match {|horse| ^private}
-    > when 1 {The value is one.}
-    > when * {The value is not one.}
+    > when 1 {{The value is one.}}
+    > when * {{The value is not one.}}
+    > }}
     > ```
 
 - **Selection errors** occur when message selection fails.
@@ -837,16 +874,20 @@ These are divided into the following categories:
     > uses a `:plural` selector function which requires its input to be numeric:
     >
     > ```
+    > {{
     > match {|horse| :plural}
-    > when 1 {The value is one.}
-    > when * {The value is not one.}
+    > when 1 {{The value is one.}}
+    > when * {{The value is not one.}}
+    > }}
     > ```
     >
     > ```
+    > {{
     > local $sel = {|horse| :plural}
     > match {$sel}
-    > when 1 {The value is one.}
-    > when * {The value is not one.}
+    > when 1 {{The value is one.}}
+    > when * {{The value is not one.}}
+    > }}
     > ```
 
 - **Formatting errors** occur during the formatting of a resolved value,
@@ -864,20 +905,22 @@ These are divided into the following categories:
   >    an option `field` to be provided with a string value,
   >
   > ```
-  > {Hello, {horse :get field=name}!}
+  > Hello, {horse :get field=name}!
   > ```
   >
   > ```
-  > {Hello, {$user :get}!}
+  > Hello, {$user :get}!
   > ```
   >
   > ```
+  > {{
   > local $id = {$user :get field=id}
-  > {Hello, {$id :get field=name}!}
+  > {{Hello, {$id :get field=name}!}}
+  > }}
   > ```
   >
   > ```
-  > {Your {$field} is {$id :get field=$field}}
+  > Your {$field} is {$id :get field=$field}
   > ```
 
 Syntax and Data Model errors MUST be emitted as soon as possible.
