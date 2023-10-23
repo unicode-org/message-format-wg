@@ -163,7 +163,7 @@ local-declaration = local s variable [s] "=" [s] expression
 
 ### Body
 
-The **_<dfn>body</dfn>_** of a _message_ is the part that will be formatted.
+The **_<dfn>body</dfn>_** of a _complex message_ is the part that will be formatted.
 The _body_ consists of either a _quoted pattern_ or a _matcher_.
 
 ```abnf
