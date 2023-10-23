@@ -214,8 +214,11 @@ respectively.
 
 Whitespace in _text_, including tabs, spaces, and newlines is significant and MUST
 be preserved during formatting.
-Embedding a _pattern_ in curly brackets ensures that _messages_ can be embedded into
+
+When a _pattern_ is quoted by embedding the _pattern_ in curly brackets, the
+resulting _message_ can be embedded into
 various formats regardless of the container's whitespace trimming rules.
+Otherwise, care must be taken to ensure that pattern-significant whitespace is preserved.
 
 > **Example**
 > In a Java `.properties` file, the values `hello` and `hello2` both contain
@@ -223,8 +226,8 @@ various formats regardless of the container's whitespace trimming rules.
 > This _pattern_ consists of _text_ with exactly three spaces before and after the word "Hello":
 >
 > ```properties
-> hello = {   Hello   }
-> hello2={   Hello   }
+> hello = {{{{   Hello   }}}}
+> hello2=\   Hello  \ 
 > ```
 
 ```abnf
