@@ -43,8 +43,8 @@ interface SelectMessage {
 ```
 
 Each message _declaration_ is represented by a `Declaration`,
-which connects the `name` of the left-hand side _variable_
-with its right-hand side `value`.
+which connects the `name` of the _variable_
+with its _expression_ `value`.
 The `name` does not include the initial `$` of the _variable_.
 
 ```ts
