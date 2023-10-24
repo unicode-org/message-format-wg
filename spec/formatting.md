@@ -202,7 +202,9 @@ the following steps are taken:
    and use a _fallback value_ for the _expression_.
 3. Resolve the _option_ values to a mapping of string identifiers to values.
    For each _option_:
-   - If its right-hand side successfully resolves to a value,
+   - If the _option_ contains no value,
+     bind the _name_ of the _option_ to the character sequence `true`.
+   - Else, if its right-hand side successfully resolves to a value,
      bind the _name_ of the _option_ to the resolved value in the mapping.
    - Otherwise, do not bind the _name_ of the _option_ to any value in the mapping.
 4. Call the function implementation with the following arguments:

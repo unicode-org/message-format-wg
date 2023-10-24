@@ -470,16 +470,19 @@ _Options_ are not required.
 An **_<dfn>option</dfn>_** is a key-value pair
 containing a named argument that is passed to a _function_.
 
-An _option_ has a _name_ and a _value_.
-The _name_ is separated from the _value_ by an U+003D EQUALS SIGN `=` along with
+An _option_ has a _name_ and optionally a _value_.
+An _option_ without a _value_ is taken to have the literal value `true`.
+
+If an _option_ has a _value_,
+it is separated from the _name_ by an U+003D EQUALS SIGN `=` along with
 optional whitespace.
-The value of an _option_ can be either a _literal_ or a _variable_.
+The _value_ of an _option_ can be either a _literal_ or a _variable_.
 
 Multiple _options_ are permitted in an _annotation_.
 Each _option_ is separated by whitespace.
 
 ```abnf
-option = name [s] "=" [s] (literal / variable)
+option = name [[s] "=" [s] (literal / variable)]
 ```
 
 > Examples of _functions_ with _options_
@@ -492,10 +495,11 @@ option = name [s] "=" [s] (literal / variable)
 
 > A _message_ with a `$userName` _variable_ formatted with
 > the custom `:person` _function_ capable of
-> declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
+> declension (using either a fixed dictionary, algorithmic declension, ML, etc.),
+> as well as capitalization:
 >
 > ```
-> {Hello, {$userName :person case=vocative}!}
+> Hello, {$userName :person case=vocative capitalized}!
 > ```
 
 > A _message_ with a `$userObj` _variable_ formatted with
