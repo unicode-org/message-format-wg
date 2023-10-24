@@ -471,7 +471,7 @@ An **_<dfn>option</dfn>_** is a key-value pair
 containing a named argument that is passed to a _function_.
 
 An _option_ has a _name_ and optionally a _value_.
-An _option_ without a _value_ is taken to have the literal value `true`.
+An _option_ without a _value_ has the literal value `true`.
 
 If an _option_ has a _value_,
 it is separated from the _name_ by an U+003D EQUALS SIGN `=` along with

@@ -21,7 +21,8 @@ annotation = (function *(s option)) / reserved / private-use
 literal = quoted / unquoted
 variable = "$" name
 function = (":" / "+" / "-") name
-option = name [[s] "=" [s] (literal / variable)]
+option = name [option-value]
+option-value = [s] "=" [s] (literal / variable)
 
 ; reserved keywords are always lowercase
 input = %x69.6E.70.75.74  ; "input"
