@@ -73,7 +73,7 @@ For example, formatting a message like `You have {$distance} kilometers to go`
 requires that the numeric value `{$distance}` be formatted as a number according to the locale: `You have 1,234 kilometers to go`.
 
 Formatting of replacement variables might also require tailoring.
-For example, if the user wants to show fractions of a kilometer in the above example
+For example, if the author wants to show fractions of a kilometer in the above example
 they might include a `minimumFractionDigits` option to get a result like
 `You have 1,234.5 kilometers to go`.
 
@@ -91,13 +91,13 @@ or as a result of being segmented from some larger volume of text.
 
 ---
 
-Users editing a simple message and who wish to add an `input` or `local` annotiation
+Developers editing a simple message and who wish to add an `input` or `local` annotiation
 to the message do not wish to reformat the message extensively.
 
-Users who have messages that include leading or trailing whitespace
+Developers who have messages that include leading or trailing whitespace
 want to ensure that this whitespace is included in the translatable
-text portion of the message. Which whitespace characters are displayed at runtime
-should not be surprising.
+text portion of the message.
+Which whitespace characters are displayed at runtime should not be surprising.
 
 ## Requirements
 
@@ -109,9 +109,9 @@ Translators (and their tools) are not software engineers, so we want our syntax
 to be as simple, robust, and non-fussy as possible.
 Multiple levels of complex nesting should be avoided,
 along with any constructs that require an excessive
-level of precision on the part of non-technical users.
+level of precision on the part of non-technical authors.
 
-As MessageFormat 2 will be at best a secondary language to all its users,
+As MessageFormat 2 will be at best a secondary language to all its authors and editors,
 it should conform to user expectations and require as little learning as possible.
 
 The syntax should avoid footguns,
@@ -122,8 +122,9 @@ values, literals, options, and the like are important, the syntax itself should
 be restricted to ASCII characters. This allows the message to be parsed
 visually by humans even when embedded in a syntax that requires escaping.
 
-Whitespace is forgiving. We _require_ the minimum amount of whitespace and allow
-users to format or change unimportant whitespace as much as they want.
+Whitespace is forgiving.
+We _require_ the minimum amount of whitespace and allow
+authors to format or change unimportant whitespace as much as they want.
 This avoids the need for translators or tools to be super pedantic about
 formatting.
 
