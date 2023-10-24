@@ -25,16 +25,17 @@ Existing message and template formatting languages tend to start in "text" mode,
 and require special syntax like `{{` or `{%` to enter "code" mode.
 
 ICU MessageFormat and Fluent both support inline selectors
-separated from the text using `{ ... }` for multi-variant messages.
+separated from the text using `{…}` for multi-variant messages.
+ICU MessageFormat is the only known format that uses `{…}` to also delimit text.
 
 [Mustache templates](https://mustache.github.io/mustache.5.html)
-and related languages wrap "code" in `{{ ... }}`.
+and related languages wrap "code" in `{{…}}`.
 In addition to placeholders that are replaced by their interpolated value during formatting,
-this also includes conditional blocks using `{{#...}}`/`{{/...}}` wrappers.
+this also includes conditional blocks using `{{#…}}`/`{{/…}}` wrappers.
 
 [Handlebars](https://handlebarsjs.com/guide/) extends Mustache expressions
-with operators such as `{{#if ...}}` and `{{#each ...}}`,
-as well as custom formatting functions that become available as e.g. `{{bold ...}}`.
+with operators such as `{{#if …}}` and `{{#each …}}`,
+as well as custom formatting functions that become available as e.g. `{{bold …}}`.
 
 [Jinja templates](https://jinja.palletsprojects.com/en/3.1.x/templates/) separate
 `{% statements %}` and `{{ expressions }}` from the base text.
@@ -48,6 +49,12 @@ Other formats supporting multiple message variants tend to rely on a surrounding
 such as [Rails internationalization](https://guides.rubyonrails.org/i18n.html#pluralization) in Ruby or YAML
 and [Android String Resources](https://developer.android.com/guide/topics/resources/string-resource.html#Plurals) in XML.
 These formats rely on the resource format providing clear delineation of the beginning and end of a pattern.
+
+Based on available data,
+no more than 0.3% of all messages and no more than 0.1% of messages with variants
+contain leading or trailing whitespace.
+No more than one third of this whitespace is localizable,
+and most commonly it's due to improper segmentation or other internationalization bugs.
 
 ## Use-Cases
 
@@ -130,49 +137,24 @@ equivalent of `\n`.
 
 ## Proposed Design
 
-**Start in text mode**
+### Start in text, encapsulate code, trim around statements
 
-In this option, whitespace is trimmed from `pattern` constructs unless
-the pattern is quoted.
+Allow for message patterns to not be quoted.
 
-```
-Hello world!
+Encapsulate with `{…}` or otherwise distinguishing statements from
+the primarily unquoted translatable message contents.
 
-Hello {$user}!
+For messages with multiple variants,
+separate the variants using `when` statements.
 
-{input $now :datetime dateStyle=long}
-Hello {$user}. Today is {$now}
+Trim whitespace between and around statements such as `input` and `when`,
+but do not otherwise trim any leading or trailing whitespace from a message.
+This allows for whitespace such as spaces and newlines to be used outside patterns
+to make a message more readable.
 
-{local $now = {:systemGetCurrentTime :datetime dateStyle=medium}}
-Hello {$user}. Today is {$now}
-
-{match {$count :number integer=true}}
-{when 0}   Hello {$user}. Today is {$now} and you have no geese.
-{when one} Hello {$user}. Today is {$now} and you have {$count} goose.
-{when few} {  Hello {$user}, this message has spaces on the front and end.  }
-{when *}   Hello {$user}. Today is {$now} and you have {$count} geese.
-```
-
-Bear in mind that whitespace has no meaning in our syntax,
-so some of the above messages are actually:
-
-```
-{input $now :datetime dateStyle=long}Hello {$user}. Today is {$now}
-
-{match {$count :number option=value}}{when 0} Hello {$user}{when one} Hello {$user}{when *}{ Hello {$user} }
-```
-
-Key choices we should consider as a working group:
-
-- Do we like the double-brackets that `local` and `match` require?
-- Is the whitespace story clear? Will tools generate the extra `{}`
-  around patterns "just to be sure"?
-- Is the single-line representation (most users will actually see this!)
-  a good one? Is this noise good noise?
-
-I have put this as the proposed design because no one has stood up for starting
-in code mode and this is the most conservative change.
-This does not make it the right syntax.
+Allow for a pattern to be `{{…}}` quoted
+such that it preserves its leading and/or trailing whitespace
+even when preceded or followed by statements.
 
 ## Alternatives Considered
 
@@ -180,98 +162,55 @@ This does not make it the right syntax.
 
 This approach treats messages as something like a resource format for pattern values.
 Keywords are declared directly at the top level of a message,
-and patterns are surrounded by `{...}`.
+and patterns are always surrounded by `{{…}}` or some other delimiters.
 
 Whitespace in patterns is never trimmed.
 
-Some code statements (variable declarations and match statements)
-also use `{...}` to surround values at the top level,
-so counting `{` instances is not sufficient to identify if a value is "code" or "text".
-
-The `{...}` are required for all messages,
+The `{{…}}` are required for all messages,
 including ones that only consist of text.
 Delimiters of the resource format are required in addition to this,
-so messages may appear wrapped as e.g. `"{...}"`.
+so messages may appear wrapped as e.g. `"{{…}}"`.
 
-Examples:
+This option is not chosen due to adding an excessive
+quoting burden on all messages.
 
-```
-{Hello world}
-```
+### Start in text, encapsulate code, re-encapsulate text within code
 
-```
-{Hello {$user}}
-```
+As in the proposed design, simple patterns are unquoted.
+Patterns in messages with statements, however,
+are required to always be surrounded by `{{…}}` or some other delimiters.
 
-```
-input {$count :number minimumFractionDigits=1}
-{You have eaten {$count} apples}
-```
+This effectively means that some syntax will "enable" code mode for a message,
+and that patterns in such a message need delimiters.
 
-```
-input {$count :number}
-match {$count}
-when 0 {You have no new message}
-when one {You have {$count} new message}
-when * {You have {$count} new messages}
-```
+This option is not chosen due to adding an excessive
+quoting burden on all multi-variant messages,
+as well as introducing an unnecessary additional conceptual layer to the syntax.
 
-```
-{ and some more}
-```
+### Start in text, encapsulate code, trim minimally
 
-### Start in text, encapsulate code
+This is the same as the proposed design,
+but with a different trimming rule:
 
-The approach treats messages as template strings,
-which may include statements and expressions surrounded by `{...}`.
-Multi-variant messages require `match` and `when` statements that are followed by text at the top level.
+- Trim all spaces before and between declarations.
+- For single-variant messages, trim one newline after the last declaration.
+- For multivariant messages,
+  trim one space after a `when` statement and
+  one newline followed by any spaces before a subsequent `when` statement.
 
-Whitespace around statements may need to be trimmed
-as e.g. `input` statements may be more readable when placed on a separate line,
-where they would be followed by a newline.
-At least the following trimming strategies may be considered:
+This option is not chosen due to the quoting being too magical.
+Even though this allows for all patterns with whitespace to not need quotes,
+the cost in complexity is too great.
 
-1. Do not trim any whitespace.
-1. Trim a minimal set of defined spaces:
-   - All spaces before and between variable statements.
-   - For single-variant messages, one newline after the last variable statement.
-   - For multivariant messages,
-     one space after a `when` statement and
-     one newline followed by any spaces before a subsequent `when` statement.
-1. Trim all leading and trailing whitespace.
+### Start in text, encapsulate code, trim maximally
 
-All "code" statements are surrounded by `{...}`,
-and all "text" is outside them.
+This is the same as the proposed design,
+but with a different trimming rule:
 
-Simple messages are not surrounded by any delimiters
-other that what may be required by the resource format.
+- Trim all leading and trailing whitespace for each pattern.
 
-Depending on the details of the syntax of code inside the `{...}`,
-unquoted non-numeric literals may need to be removed from the syntax.
-
-Examples using either "minimal" or "all" trimming:
-
-```
-Hello world
-```
-
-```
-Hello {$user}
-```
-
-```
-{input $count :number minimumFractionDigits=1}
-You have eaten {$count} apples
-```
-
-```
-{input $count :number}
-{match {$count}}
-{when 0} You have no new message
-{when one} You have {$count} new message
-{when *} You have {$count} new messages
-```
-
-```
-{| |}and some more
-```
+Expressing the trimming on patterns rather than statements
+means that leading and trailing spaces are also trimmed from simple messages.
+This option is not chosen due to this being somewhat surprising,
+especially when messages are embedded in host formats that have predefined means
+of escaping and/or trimming leading and trailing spaces from a value.
