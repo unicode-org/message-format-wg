@@ -14,6 +14,7 @@ Implementations are not required to use this data model for their internal repre
 To ensure compatibility across all platforms,
 this interchange data model is defined here using TypeScript notation.
 Two equivalent definitions of the data model are also provided:
+
 - [`message.json`](./message.json) is a JSON Schema definition,
   for use with message data encoded as JSON or compatible formats, such as YAML.
 - [`message.dtd`](./message.dtd) is a document type definition (DTD),
@@ -25,31 +26,31 @@ A `SelectMessage` corresponds to a syntax message that includes _selectors_.
 A message without _selectors_ and with a single _pattern_ is represented by a `PatternMessage`.
 
 ```ts
-type Message = PatternMessage | SelectMessage
+type Message = PatternMessage | SelectMessage;
 
 interface PatternMessage {
-  type: 'message'
-  declarations: Declaration[]
-  pattern: Pattern
+  type: "message";
+  declarations: Declaration[];
+  pattern: Pattern;
 }
 
 interface SelectMessage {
-  type: 'select'
-  declarations: Declaration[]
-  selectors: Expression[]
-  variants: Variant[]
+  type: "select";
+  declarations: Declaration[];
+  selectors: Expression[];
+  variants: Variant[];
 }
 ```
 
 Each message _declaration_ is represented by a `Declaration`,
-which connects the `name` of the left-hand side _variable_
-with its right-hand side `value`.
+which connects the `name` of the _variable_
+with its _expression_ `value`.
 The `name` does not include the initial `$` of the _variable_.
 
 ```ts
 interface Declaration {
-  name: string
-  value: Expression
+  name: string;
+  value: Expression;
 }
 ```
 
@@ -60,13 +61,13 @@ This is always `'*'` in MessageFormat 2 syntax, but may vary in other formats.
 
 ```ts
 interface Variant {
-  keys: Array<Literal | CatchallKey>
-  value: Pattern
+  keys: Array<Literal | CatchallKey>;
+  value: Pattern;
 }
 
 interface CatchallKey {
-  type: '*'
-  value?: string
+  type: "*";
+  value?: string;
 }
 ```
 
@@ -84,18 +85,18 @@ A `body` with an unrecognized value SHOULD be treated as an `Unsupported` value.
 
 ```ts
 interface Pattern {
-  body: Array<Text | Expression>
+  body: Array<Text | Expression>;
 }
 
 interface Text {
-  type: 'text'
-  value: string
+  type: "text";
+  value: string;
 }
 
 interface Expression {
-  type: 'expression'
-  body: Literal | VariableRef | FunctionRef | Unsupported
-  attributes: Option[]
+  type: "expression";
+  body: Literal | VariableRef | FunctionRef | Unsupported;
+  attributes: Option[];
 }
 ```
 
@@ -116,13 +117,13 @@ In a `VariableRef`, the `name` does not include the initial `$` of the _variable
 
 ```ts
 interface Literal {
-  type: 'literal'
-  value: string
+  type: "literal";
+  value: string;
 }
 
 interface VariableRef {
-  type: 'variable'
-  name: string
+  type: "variable";
+  name: string;
 }
 ```
 
@@ -138,16 +139,16 @@ Each _option_ is represented by an `Option`.
 
 ```ts
 interface FunctionRef {
-  type: 'function'
-  kind: 'open' | 'close' | 'value'
-  name: string
-  operand?: Literal | VariableRef
-  options?: Option[]
+  type: "function";
+  kind: "open" | "close" | "value";
+  name: string;
+  operand?: Literal | VariableRef;
+  options?: Option[];
 }
 
 interface Option {
-  name: string
-  value: Literal | VariableRef
+  name: string;
+  value: Literal | VariableRef;
 }
 ```
 
@@ -175,10 +176,10 @@ that the implementation attaches to that _annotation_.
 
 ```ts
 interface Unsupported {
-  type: 'unsupported'
-  sigil: '!' | '@' | '#' | '%' | '^' | '&' | '*' | '<' | '>' | '/' | '?' | '~'
-  source: string
-  operand?: Literal | VariableRef
+  type: "unsupported";
+  sigil: "!" | "@" | "#" | "%" | "^" | "&" | "*" | "<" | ">" | "/" | "?" | "~";
+  source: string;
+  operand?: Literal | VariableRef;
 }
 ```
 

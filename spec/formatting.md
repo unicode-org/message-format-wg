@@ -7,7 +7,7 @@ when formatting a message for display in a user interface, or for some later pro
 
 To start, we presume that a _message_ has either been parsed from its syntax
 or created from a data model description.
-If this construction has encountered any Syntax or Data Model errors,
+If this construction has encountered any Syntax or Data Model Errors,
 their handling during formatting is specified here as well.
 
 Formatting of a _message_ is defined by the following operations:
@@ -21,6 +21,21 @@ Formatting of a _message_ is defined by the following operations:
 
   The resolution of _text_ is rather straighforward,
   and is detailed under _literal resolution_.
+
+  > **Note**
+  >
+  > **This specification does not require either eager or lazy _expression resolution_ of _message_
+  > parts; do not construe any requirement in this document as requiring either.**
+  >
+  > Implementations are not required to evaluate all parts of a _message_ when
+  > parsing, processing, or formatting.
+  > In particular, an implementation MAY choose not to evaluate or resolve the
+  > value of a given _expression_ until it is actually used by a
+  > selection or formatting process.
+  > However, when an _expression_ is resolved, it MUST behave as if all preceding
+  > _declarations_ and _selectors_ affecting _variables_ referenced by that _expression_
+  > have already been evaluated in the order in which the relevant _declarations_
+  > and _selectors_ appear in the _message_.
 
 - **_Pattern Selection_** determines which of a message's _patterns_ is formatted.
   For a message with no _selectors_, this is simple as there is only one _pattern_.
@@ -52,7 +67,7 @@ At a minimum, it includes:
   This will be used by strategies for bidirectional isolation,
   and can be used to set the base direction of the _message_ upon display.
 
-- A mapping of string identifiers to values,
+- An **_<dfn>input mapping</dfn>_** of string identifiers to values,
   defining variable values that are available during _variable resolution_.
   This is often determined by a user-provided argument of a formatting function call.
 
@@ -68,10 +83,14 @@ Implementations MAY include additional fields in their _formatting context_.
 
 _Expressions_ are used in _declarations_, _selectors_, and _patterns_.
 
-In a _declaration_, the resolved value of the _expression_ is assigned to a _variable_,
+In a _declaration_, the resolved value of the _expression_ is bound to a _variable_,
 which is available for use by later _expressions_.
-As such a _variable_ MAY then be referenced in different ways,
+Since a _variable_ can be referenced in different ways later,
 implementations SHOULD NOT immediately fully format the value for output.
+
+In an _input-declaration_, the _variable_ operand of the _variable-expression_
+identifies not only the name of the external input value,
+but also the _variable_ to which the resolved value of the _variable-expression_ is bound.
 
 In _selectors_, the resolved value of an _expression_ is used for _pattern selection_.
 
@@ -91,19 +110,54 @@ and different implementations MAY choose to perform different levels of resoluti
 > Alternatively, it could be an instance of an ICU4J `FormattedNumber`,
 > or some other locally appropriate value.
 
-Depending on the presence or absence of an _operand_
+Depending on the presence or absence of a _variable_ or _literal_ operand
 and a _function_, _private-use_, or _reserved_ _annotation_,
-one of the following is used to resolve the value of the _expression_:
+the resolved value of the _expression_ is determined as follows:
 
-- If the _expression_ contains no _annotation_,
-  its resolved value is determined by _literal resolution_ or _variable resolution_,
-  depending on the shape of the _operand_.
-- Else, if the _expression_ has a _function_ _annotation_,
-  its resolved value is defined by _function resolution_.
-- Else, if the _expression_ has a _private-use_ _annotation_,
-  its resolved value is defined according to the implementations's specification.
-- Else, the _expression_ has a _reserved_ _annotation_,
-  an Unsupported Expression error is emitted and a fallback value is used as its value.
+If the _expression_ contains a _reserved_ _annotation_,
+an `Unsupported Expression` error is emitted and a fallback value is used as its value.
+
+Else, if the _expression_ contains a _private-use_ _annotation_,
+its resolved value is defined according to the implementation's specification.
+
+Else, if the _expression_ contains an _annotation_,
+its resolved value is defined by _function resolution_.
+
+Else, the _expression_ will contain only either a _literal_ or a _variable_.
+
+If the _expression_ consists of a _variable_,
+its resolved value is defined by _variable resolution_.
+An implementation MAY perform additional processing
+when resolving the value of the _expression_.
+
+> For example, it could apply _function resolution_ using a _function_
+> and a set of _options_ chosen based on the value or type of the _variable_.
+> So, given a _message_ like this:
+>
+> ```
+> {Today is {$date}}
+> ```
+>
+> If the value passed in the _variable_ were a date object,
+> such as a JavaScript `Date` or a Java `java.util.Date` or `java.time.Temporal`,
+> the implementation could interpret the _placeholder_ `{$date}` as if
+> the pattern included the function `:datetime` with some set of default options.
+
+Else, if the _expression_ consists of a _literal_,
+its resolved value is defined by _literal resolution_.
+
+> **Note**
+> This means that a _literal_ value with no _annotation_
+> is always treated as a string.
+> To represent values that are not strings as a _literal_,
+> an _annotation_ needs to be provided:
+>
+> ```
+> local $aNumber = {1234 :number}
+> local $aDate = {|2023-08-30| :datetime}
+> local $aFoo = {|some foo| :foo}
+> {You have {42 :number}}
+> ```
 
 _Expression attribute resolution_ defines the handling of _expression attributes_
 that have an impact on _message_ formatting.
@@ -127,13 +181,10 @@ The resolution of a _text_ or _literal_ token MUST always succeed.
 ### Variable Resolution
 
 To resolve the value of a _variable_,
-its _name_ is used to identify either a local variable,
-or a variable defined elsewhere.
-If a local variable and an externally defined one use the same name,
-the local variable takes precedence.
-
-It is an error for a local variable definition to
-refer to a local variable that's defined after it in the message.
+its _name_ is used to identify either a local variable or an input variable.
+If a _declaration_ exists for the _variable_, its resolved value is used.
+Otherwise, the _variable_ is an implicit reference to an input value,
+and its value is looked up from the _formatting context_ _input mapping_.
 
 The resolution of a _variable_ MAY fail if no value is identified for its _name_.
 If this happens, an Unresolved Variable error MUST be emitted.
@@ -228,12 +279,12 @@ rather than the _expression_ in the _selector_ or _pattern_.
 > attempting to format either of the following messages:
 >
 > ```
-> let $var = {|horse| :func}
+> local $var = {|horse| :func}
 > {The value is {$var}.}
 > ```
 >
 > ```
-> let $var = {|horse|}
+> local $var = {|horse|}
 > {The value is {$var :func}.}
 > ```
 >
@@ -264,7 +315,7 @@ which use a _name_ that contains at least one U+002D HYPHEN-MINUS `-` character.
 
 When a _message_ contains a _match_ construct with one or more _expressions_,
 the implementation needs to determine which _variant_ will be used
-to provide the _pattern_ for the formatting operation. 
+to provide the _pattern_ for the formatting operation.
 This is done by ordering and filtering the available _variant_ statements
 according to their _key_ values and selecting the first one.
 
@@ -273,21 +324,23 @@ The number of _keys_ in each _variant_ MUST equal the number of _expressions_ in
 Each _key_ corresponds to an _expression_ in the _selectors_ by its position in the _variant_.
 
 > For example, in this message:
+>
 > ```
 > match {:one} {:two} {:three}
 > when  1 2 3 { ... }
 > ```
+>
 > The first _key_ `1` corresponds to the first _expression_ in the _selectors_ (`{:one}`),
-> the second _key_ `2` to the second _expression_ (`{:two}`), 
+> the second _key_ `2` to the second _expression_ (`{:two}`),
 > and the third _key_ `3` to the third _expression_ (`{:three}`).
 
 To determine which _variant_ best matches a given set of inputs,
 each _selector_ is used in turn to order and filter the list of _variants_.
 
 Each _variant_ with a _key_ that does not match its corresponding _selector expression_
-is omitted from the list of _variants_. 
+is omitted from the list of _variants_.
 The remaining _variants_ are sorted according to the _expression_'s _key_-ordering preference.
-Earlier _expressions_ in the _selector_'s list of _expressions_ have a higher priority than later ones. 
+Earlier _expressions_ in the _selector_'s list of _expressions_ have a higher priority than later ones.
 
 When all of the _selector expressions_ have been processed,
 the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
@@ -530,14 +583,16 @@ _Formatting_ is a mostly implementation-defined process,
 as it depends on the implementation's shape for resolved values
 and the result type of the formatting.
 
-Formatting errors MAY be emitted during _formatting_,
-as formatting is not necessarily defined on every resolved value.
-A formatter MAY provide a value to use in such a case instead of a _fallback value_.
+Resolved values cannot always be formatted by a given implementation.
+When such an error occurs during _formatting_,
+an implementation SHOULD emit a _formatting error_ and produce a
+_fallback value_ for the _placeholder_ that produced the error.
+A formatting function MAY substitute a value to use instead of a _fallback value_.
 
-_Formatting_ MAY produce formatted messages with the following data types,
-as well as any others:
+Implementations MAY represent the result of _formatting_ using the most
+appropriate data type or structure. Some examples of these include:
 
-- A single concatenated string.
+- A single string concatenated from the parts of the resolved _pattern_.
 - A string with associated attributes for portions of its text.
 - A flat sequence of objects corresponding to each resolved value.
 - A hierarchical structure of objects that group spans of resolved values,
@@ -660,7 +715,7 @@ These are divided into the following categories:
   > ```
   >
   > ```
-  > let $var = {|no message body|}
+  > local $var = {|no message body|}
   > ```
 
 - **Data Model errors** occur when a message is invalid due to
@@ -714,21 +769,20 @@ These are divided into the following categories:
     > ```
     >
     > ```
-    > let $one = {|The one|}
+    > local $one = {|The one|}
     > match {$one}
     > when 1 {Value is one}
     > when * {Value is not one}
     > ```
     >
     > ```
-    > let $one = {|The one| :func}
-    > let $two = {$one}
-    > match {$two}
+    > input {$one}
+    > match {$one}
     > when 1 {Value is one}
     > when * {Value is not one}
     > ```
 
-  - **Duplicate Option Name errors** occur when the same _name_ 
+  - **Duplicate Option Name errors** occur when the same _name_
     appears on the left-hand side
     of more than one _option_ in the same _expression_.
 
@@ -739,7 +793,7 @@ These are divided into the following categories:
     > ```
     >
     > ```
-    > let $foo = {horse :func one=1 two=2 one=1}
+    > local $foo = {horse :func one=1 two=2 one=1}
     > {This is {$foo}}
     > ```
 
@@ -814,7 +868,7 @@ These are divided into the following categories:
     > ```
     >
     > ```
-    > let $sel = {|horse| :plural}
+    > local $sel = {|horse| :plural}
     > match {$sel}
     > when 1 {The value is one.}
     > when * {The value is not one.}
@@ -843,7 +897,7 @@ These are divided into the following categories:
   > ```
   >
   > ```
-  > let $id = {$user :get field=id}
+  > local $id = {$user :get field=id}
   > {Hello, {$id :get field=name}!}
   > ```
   >
