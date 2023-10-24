@@ -61,18 +61,29 @@ and most commonly it's due to improper segmentation or other internationalizatio
 Most messages in any localization system do not contain any expressions, statements or variants.
 These should be expressible as easily as possible.
 
-Many messages include expressions that are to be interpolated during formatting.
-For example, a greeting like "Hello, user!" may be formatted in many locales with the `user`
-being directly set by an input variable.
+Many messages include expressions that are meant to be replaced during formatting.
+For example, a greeting like "Hello, {$username}!" would be formatted with the variable
+`$username` being replaced by an input variable.
 
-Sometimes, interpolated values need explicit formatting within a message.
-For example, formatting a message like "You have eaten 3.2 apples"
-may require the input numerical value
-to be formatted with an explicit `minimumFractionDigits` option.
+In some rare cases, replacement variables might be added (or removed) in one particular
+locale versus messages in other locales.
 
-Some messages require multiple variants.
-This is often related to plural cases, such as "You have 3 new messages",
-where the value `3` is an input and the "messages" needs to correspond with its plural category.
+Sometimes, the replacement variables need to be formatted.
+For example, formatting a message like `You have {$distance} kilometers to go`
+requires that the numeric value `{$distance}` be formatted as a number according to the locale: `You have 1,234 kilometers to go`.
+
+Formatting of replacement variables might also require tailoring.
+For example, if the user wants to show fractions of a kilometer in the above example
+they might include a `minimumFractionDigits` option to get a result like
+`You have 1,234.5 kilometers to go`.
+
+Some messages need to choose between multiple patterns (called "variants").
+For example, this is often related to the handling of numeric values,
+in which the pattern used for formatting depends on one of the data values
+according to its plural category
+(see [CLDR Plural Rules](https://cldr.unicode.org/index/cldr-spec/plural-rules) for more information).
+So, in American English, the formatter might need to choose between formatting
+`You have 1 kilometer to go` and `You have 2 kilometers to go`.
 
 Rarely, messages needs to include leading or trailing whitespace due to
 e.g. how they will be concatenated with other text,
@@ -119,9 +130,6 @@ formatting.
 ## Constraints
 
 Limiting the range of characters that need to be escaped in plain text is important.
-Following past precedent,
-this design doc will only consider encapsulation styles which
-start with `{` and end with `}`.
 
 The current syntax includes some plain-ascii keywords:
 `input`, `local`, `match`, and `when`.
