@@ -184,5 +184,5 @@ which expects the `plural` and `case` options:
 The following message references the second signature of `:adjective`,
 which only expects the `accord` option:
 
-    let $obj = {$object :noun case=nominative}
-    {You see {$color :adjective article=indefinite accord=$obj} {$obj}!}
+    input {$object :noun case=nominative}
+    {You see {$color :adjective article=indefinite accord=$object} {$object}!}
