@@ -222,3 +222,16 @@ means that leading and trailing spaces are also trimmed from simple messages.
 This option is not chosen due to this being somewhat surprising,
 especially when messages are embedded in host formats that have predefined means
 of escaping and/or trimming leading and trailing spaces from a value.
+
+### Start in text, encapsulate code, do not trim
+
+This is the same as the proposed design,
+but with two simplifications:
+
+- No whitespace is ever trimmed.
+- Quoting a pattern with `{{…}}` is dropped as unnecessary.
+
+With these changes,
+all whitespace would need to be explicitly within the "code" part of the syntax,
+and patterns could never be separated from statements
+without adding whitespace to the pattern.
