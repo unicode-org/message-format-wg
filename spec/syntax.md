@@ -85,9 +85,12 @@ The complete formal syntax of a _message_ is described by the [ABNF](./message.a
 ### Well-formed vs. Valid Messages
 
 A _message_ is **_<dfn>well-formed</dfn>_** if it satisfies all the rules of the grammar.
+Attempting to parse a _message_ that is not _well-formed_ will result in a _Syntax Error_.
 
-A _message_ is **_<dfn>valid</dfn>_** if it is _well-formed_ and **also** meets the additional content restrictions
+A _message_ is **_<dfn>valid</dfn>_** if it is _well-formed_ and
+**also** meets the additional content restrictions
 and semantic requirements about its structure defined below.
+Attempting to parse a _message_ that is not _valid_ will result in a _Data Model Error_.
 
 ## The Message
 
@@ -108,14 +111,14 @@ A **_<dfn>message</dfn>_** is the complete template for a specific message forma
 > > **Example** This _message_:
 > >
 > > ```
-> > let $foo   =   { |horse| }
+> > local $foo   =   { |horse| }
 > > {You have a {$foo}!}
 > > ```
 > >
 > > Can also be written as:
 > >
 > > ```
-> > let $foo={|horse|}{You have a {$foo}!}
+> > local $foo={|horse|}{You have a {$foo}!}
 > > ```
 > >
 > > An exception to this is: whitespace inside a _pattern_ is **always** significant.
@@ -127,12 +130,27 @@ A _message_ consists of two parts:
 
 ### Declarations
 
-A **_<dfn>declaration</dfn>_** binds a _variable_ identifier to the value of an _expression_ within the scope of a _message_.
-This local variable can then be used in other _expressions_ within the same _message_.
+A **_<dfn>declaration</dfn>_** binds a _variable_ identifier to a value within the scope of a _message_.
+This _variable_ can then be used in other _expressions_ within the same _message_.
 _Declarations_ are optional: many messages will not contain any _declarations_.
 
+An **_<dfn>input-declaration</dfn>_** binds a _variable_ to an external input value.
+The _variable-expression_ of an _input-declaration_
+MAY include an _annotation_ that is applied to the external value.
+
+A **_<dfn>local-declaration</dfn>_** binds a _variable_ to the resolved value of an _expression_.
+
+Declared _variables_ MUST NOT be used before their _declaration_,
+and their values MUST NOT be self-referential;
+otherwise, a _message_ is not considered _valid_.
+
+Multiple _declarations_ MUST NOT bind a value to the same _variable_;
+otherwise, a _message_ is not considered _valid_.
+
 ```abnf
-declaration = let s variable [s] "=" [s] expression
+declaration = input-declaration / local-declaration
+input-declaration = input [s] variable-expression
+local-declaration = local s variable [s] "=" [s] expression
 ```
 
 ### Body
@@ -335,30 +353,39 @@ during the _message_'s formatting.
 An _expression_ MUST begin with U+007B LEFT CURLY BRACKET `{`
 and end with U+007D RIGHT CURLY BRACKET `}`.
 An _expression_ MUST NOT be empty.
-An _expression_ can contain an _operand_,
-an _annotation_,
-or an _operand_ followed by an _annotation_.
+
+A **_<dfn>literal-expression</dfn>_** contains a _literal_,
+optionally followed by an _annotation_.
+
+A **_<dfn>variable-expression</dfn>_** contains a _variable_,
+optionally followed by an _annotation_.
+
+A **_<dfn>function-expression</dfn>_** contains only an _annotation_.
 
 ```abnf
-expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
-operand = literal / variable
+expression = literal-expression / variable-expression / function-expression
+literal-expression = "{" [s] literal [s annotation] [s] "}"
+variable-expression = "{" [s] variable [s annotation] [s] "}"
+function-expression = "{" [s] annotation [s] "}"
 annotation = (function *(s option)) / private-use / reserved
 ```
 
 There are several types of _expression_ that can appear in a _message_.
 All _expressions_ share a common syntax. The types of _expression_ are:
 
-1. The value of a _declaration_
+1. The value of a _local-declaration_
 2. A _selector_
 3. A _placeholder_ in a _pattern_
+
+Additionally, an _input-declaration_ can contain a _variable-expression_.
 
 > Examples of different types of _expression_
 >
 > Declarations:
 >
 > ```
-> let $x = {|This is an expression|}
-> let $y = {$operand :function option=operand}
+> input {$x :function option=value}
+> local $y = {|This is an expression|}
 > ```
 >
 > Selectors:
@@ -375,15 +402,6 @@ All _expressions_ share a common syntax. The types of _expression_ are:
 > {This placeholder references a function on a variable: {$variable :function with=options}}
 > ```
 
-### Operand
-
-An **_<dfn>operand</dfn>_** is a _literal_ or a _variable_ to be evaluated in an _expression_.
-An _operand_ MAY optionally be followed by an _annotation_.
-
-```abnf
-operand    = literal / variable
-```
-
 ### Annotation
 
 An **_<dfn>annotation</dfn>_** is part of an _expression_ containing either
@@ -393,6 +411,9 @@ a _private-use_ or _reserved_ sequence.
 ```abnf
 annotation = (function *(s option)) / reserved / private-use
 ```
+
+An **_<dfn>operand</dfn>_** is the _literal_ of a _literal-expression_ or
+the _variable_ of a _variable-expression_.
 
 An _annotation_ can appear in an _expression_ by itself or following a single _operand_.
 When following an _operand_, the _operand_ serves as input to the _annotation_.
@@ -570,11 +591,12 @@ This section defines common elements used to construct _messages_.
 
 A **_<dfn>keyword</dfn>_** is a reserved token that has a unique meaning in the _message_ syntax.
 
-The following three keywords are reserved: `let`, `match`, and `when`.
+The following four keywords are reserved: `input`, `local`, `match`, and `when`.
 Reserved keywords are always lowercase.
 
 ```abnf
-let   = %x6C.65.74        ; "let"
+input = %x69.6E.70.75.74  ; "input"
+local = %x6C.6F.63.61.6C  ; "local"
 match = %x6D.61.74.63.68  ; "match"
 when  = %x77.68.65.6E     ; "when"
 ```
@@ -583,9 +605,9 @@ when  = %x77.68.65.6E     ; "when"
 
 A **_<dfn>literal</dfn>_** is a character sequence that appears outside
 of _text_ in various parts of a _message_.
-A _literal_ can appear in a _declaration_,
+A _literal_ can appear
 as a _key_ value,
-as an _operand_,
+as the _operand_ of a _literal-expression_,
 or in the value of an _option_.
 A _literal_ MAY include any Unicode code point
 except for surrogate code points U+D800 through U+DFFF.
