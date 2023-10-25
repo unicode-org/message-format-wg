@@ -1,6 +1,6 @@
 # Expression Attributes
 
-Status: **Accepted**
+Status: **Proposed**
 
 <details>
 	<summary>Metadata</summary>
@@ -36,24 +36,14 @@ At least the following expression attributes should be considered:
 
 - Attributes with a formatting runtime impact:
 
-  - `fallback` — A value to use instead of the default fallback,
-    should the expression's primary formatting fail in some way.
-
-    > Example that would format as "Hello world" if `$place` is not defined:
-    >
-    > ```
-    > {Hello {$place @fallback=world}}
-    > ```
-
   - `id` — An identifier for the expression.
     This is included in the formatted part,
     and allows the parts of an expression to be explicitly addressed.
 
-    > Example identifying two formatted numbers
-    > in a message with badly named input variables:
+    > Example identifying two literal numbers:
     >
     > ```
-    > {You received {$_0 :number @id=count} messages in {$_1 :number @id=time} hours.}
+    > The first number was {1234 :number @id=first} and the second {56789 :number @id=second}.
     > ```
 
   - `locale` — An override for the locale used to format the expression.
@@ -62,7 +52,7 @@ At least the following expression attributes should be considered:
     > Example embedding a French literal in an English message:
     >
     > ```
-    > {In French, "{|bonjour| @locale=fr}" is a greeting}
+    > In French, “{|bonjour| @locale=fr}” is a greeting
     > ```
 
   - `dir` — An override for the LTR/RTL/auto directionality of the expression.
@@ -70,7 +60,7 @@ At least the following expression attributes should be considered:
     > Example explicitly isolating the directionality of a placeholder:
     >
     > ```
-    > {Welcome, {$username @dir=auto}}
+    > Welcome, {$username @dir=auto}
     > ```
 
 - Attributes relevant for translators, tools, and other message operations,
@@ -82,7 +72,7 @@ At least the following expression attributes should be considered:
     > Example providing a translator with an example for `$place`:
     >
     > ```
-    > {Hello {$place @example=world}}
+    > Hello {$place @example=world}
     > ```
 
   - `note` — A comment on the expression for translators.
@@ -90,7 +80,7 @@ At least the following expression attributes should be considered:
     > Example providing a translator with an example for `$place`:
     >
     > ```
-    > {Welcome to {$place @note=|The user's current location|}}
+    > Welcome to {$place @note=|The user's current location|}
     > ```
 
   - `translate` — A boolean `yes`/`no` indicator communicating to translators
@@ -99,7 +89,7 @@ At least the following expression attributes should be considered:
     > Example embedding a non-translatable French literal in an English message:
     >
     > ```
-    > {In French, "{|bonjour| @locale=fr @translate=no}" is a greeting}
+    > In French, "{|bonjour| @locale=fr @translate=no}" is a greeting
     > ```
 
   - `canCopy`, `canDelete`, `canOverlap`, `canReorder`, etc. — Flags supported by
