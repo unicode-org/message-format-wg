@@ -171,27 +171,40 @@ the extent that we make it easy to get into trouble we fail.
 Developers and translators should be able to read and write the syntax easily in a text editor.
 
 Translators (and their tools) are not software engineers, so we want our syntax
-to be as simple, robust, and non-fussy as possible.
-Multiple levels of complex nesting should be avoided,
-along with any constructs that require an excessive
-level of precision on the part of non-technical authors.
+to be as simple and robust as possible.
+
+Nesting level is not a requirement.
+People are not parsers, and don't care about nesting.
+What matters to them is their ability to recognize where a message pattern starts and where it ends.
+In the following example, localizable text is easily recognizable (especially with syntax highlighting),
+even if it occurs 3 level deep.
+
+```java
+print "{{{This is translatable}}}"
+if (foo) print "{{{This is translatable}}}" else print "{{{This is NOT translatable}}}"
+if (foo) if (bar) switch (baz) case 1: print "{{{This is translatable, deep}}}" break; default: print "{{{This is NOT translatable, deep}}}"
+```
 
 As MessageFormat 2 will be at best a secondary language to all its authors and editors,
 it should conform to user expectations and require as little learning as possible.
 
-The syntax should avoid footguns,
-in particular as it's passed through various tools during formatting.
+The syntax should avoid footguns, in particular as it's passed through various tools during formatting or stored existing file formats, databases, etc.
+Very importantly in this regard,
+we should minimize the range of characters that need to be escaped in patterns.
+
 
 ASCII-compatible syntax. While support for non-ASCII characters for variable names,
 values, literals, options, and the like are important, the syntax itself should
 be restricted to ASCII characters. This allows the message to be parsed
 visually by humans even when embedded in a syntax that requires escaping.
 
-Whitespace is forgiving.
-We _require_ the minimum amount of whitespace and allow
-authors to format or change unimportant whitespace as much as they want.
+Whitespace is forgiving, so we should be flexible with its use in the code area of message.
 This avoids the need for translators or tools to be super pedantic about
 formatting.
+However, we want WYSIWYG behavior as much as possible in patterns, meaning that there is minimal visual difference
+between the pattern and its interpolated output,
+and that there is minimal ambiguity.
+This avoids chances for unwanted surprises between the message authoring time expectations and the actual runtime formatted results.
 
 ## Constraints
 
