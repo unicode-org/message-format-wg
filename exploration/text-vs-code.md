@@ -214,13 +214,25 @@ The current syntax includes some plain-ascii keywords:
 `input`, `local`, `match`, and `when`.
 
 The current syntax and active proposals include some sigil + name combinations,
-such as `:number`, `$var`, `|literal|`, `+bold`, and `@attr`.
+such as :number, $var, |literal|, +bold, -bold, and posibly @attr.
 
 The current syntax supports unquoted literal values as operands.
 
-Messages themselves are "simple strings" and must be considered to be a single
-line of text. In many containing formats, newlines will be represented as the local
-equivalent of `\n`.
+Messages themselves are "simple strings" and must be considered to be WYSIWYG.
+The WYSIWYG nature of representing a message pattern is independent of whether the message is a single line or contains multiple lines.
+
+There is no restriction that a message must only contain a single line (that is, not contain any newline characters),
+nor are there constraints about how newlines must be represented. As our [`spec/syntax.md`](../spec/syntax.md) states:
+
+> Any Unicode code point is allowed, except for surrogate code points U+D800 through U+DFFF inclusive.
+
+> Whitespace in _text_, including tabs, spaces, and newlines is significant and MUST be preserved during formatting.
+
+> ... Instead, we tolerate direct use of nearly all
+characters (including line breaks, control characters, etc.) and rely upon escaping
+in those outer formats to aid human comprehension (e.g., depending upon container
+format, a U+000A LINE FEED might be represented as `\n`, `\012`, `\x0A`, `\u000A`,
+`\U0000000A`, `&#xA;`, `&NewLine;`, `%0A`, `<LF>`, or something else entirely).
 
 ## Proposed Design
 
