@@ -85,6 +85,7 @@ At least the following expression attributes should be considered:
 
   - `translate` — A boolean `yes`/`no` indicator communicating to translators
     whether the expression should or should not be localised.
+    The values here correspond to those used for this property in HTML and elsewhere.
 
     > Example embedding a non-translatable French literal in an English message:
     >
@@ -206,6 +207,8 @@ but has a few caveats:
 
 - The order of operations matters,
   and an attribute such as the locale must be set before others that are influenced by it.
+- It's not clear whether the functions will be evaluated
+  left-to-right or right-to-left.
 - During formatting,
   passthrough functions such as `:xliff` must be explicitly provided.
 - Localization tools need to be aware and understand named functions,
