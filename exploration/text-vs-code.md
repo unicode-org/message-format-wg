@@ -76,13 +76,26 @@ The [whitespace behavior for Freemarker](https://freemarker.apache.org/docs/dgui
 Other formats supporting multiple message variants tend to rely on a surrounding resource format to define variants,
 such as [Rails internationalization](https://guides.rubyonrails.org/i18n.html#pluralization) in Ruby or YAML
 and [Android String Resources](https://developer.android.com/guide/topics/resources/string-resource.html#Plurals) in XML.
-These formats rely on the resource format providing clear delineation of the beginning and end of a pattern.
+A message author will need to resolve the combination of the rules of these formats and the rules of the containing resource formats in order to achieve a clear delineation of the beginning and end of a pattern.
+For example, an Android resource string that includes leading whitespace in the message might look like
+```
+<string xml:space="preserve">"   Section 7.a. Attribute Types"</string>
+```
+In this example above, the containing XML format will collapse consecutive whitespace characters into a single space unless you provide the attribute `xml:space="preserve"`.
+After the resource file gets parsed as XML, the Android string resource format 
+[does additional whitespace collapsing and Android escaping](https://developer.android.com/guide/topics/resources/string-resource#escaping_quotes),
+requiring the entire text node string to be wrapped in double quotation marks `"..."` to preserve the initial whitespace, or the inital whitespace to use Android escaping (`\u0032 \u0032 ...`).
 
 Based on available data,
 no more than 0.3% of all messages and no more than 0.1% of messages with variants
 contain leading or trailing whitespace.
-No more than one third of this whitespace is localizable,
-and most commonly it's due to improper segmentation or other internationalization bugs.
+However, frequency of occurrence is not an indicator of the importance of leading or trailing whitespace to those authoring such messages.
+For example, sometimes such messages are authored in order to achieve a semblance of formatting in contexts that lack rich text presentation styles,
+such as operating system widgets.
+Even though such messages are usually infrequent relative to the size of all user-facing / transalatable messages,
+that is not an indicator of their significance.
+Also importantly, we cannot make assumptions about the validity of leading or trailing whitespace in a message,
+especially since their usage may be entirely unrelated to internationalization issues (ex: sentence agreement disruption by concatenation).
 
 ## Use-Cases
 
