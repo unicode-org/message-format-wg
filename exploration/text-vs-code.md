@@ -60,10 +60,18 @@ and subject to control flow rules of their containing constructs.
   <b>{{name}}</b>
 {{/repo}}
 ```
+Some templating libraries support both styles.
 
-A cost that the message formatting and templating languages mentioned above need to rely on
-is some rule or behaviour that governs how to deal with whitespace at the beginning and end of a pattern,
-as statements may be separated from each other by newlines or other constructs for legibility.
+When considering string formatting and templating libraries,
+it is important to keep the rules of pattern or template handling separate from and uninfluenced by the output format's rules.
+For example, many templating languages are designed around producing HTML output, for which consecutive whitespace characters within the output are collapsed into a single ASCII space.
+However, if the templating language is not strict on preserving whitespace,
+then it would be incapable of generating Python source code,
+for which whitespace is significant in determining block scope via the indentation (leading whitespace on a line).
+
+In fact, some HTML-oriented templating libraries preserve whitespace by default in a what-you-see-is-what-you-get (WYSIWYG) manner (Mustache, [Jinja](https://jinja.palletsprojects.com/en/3.1.x/templates/#whitespace-control)),
+and some perform whitespace trimming in unspecified ways ([Handlebars](https://handlebarsjs.com/guide/expressions.html#whitespace-control)).
+The [whitespace behavior for Freemarker](https://freemarker.apache.org/docs/dgui_misc_whitespace.html), a general purpose templating library for multiple formats, is also WYSIWYG by default while allowing several optional trimming controls.
 
 Other formats supporting multiple message variants tend to rely on a surrounding resource format to define variants,
 such as [Rails internationalization](https://guides.rubyonrails.org/i18n.html#pluralization) in Ruby or YAML
