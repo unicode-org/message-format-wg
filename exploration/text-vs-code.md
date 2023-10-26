@@ -142,9 +142,6 @@ especially since their usage may be entirely unrelated to internationalization i
 
 ---
 
-Developers editing a simple message and who wish to add an `input` or `local` annotiation
-to the message do not wish to reformat the message extensively.
-
 Developers who have messages that include leading or trailing whitespace
 want to ensure that this whitespace is included in the translatable
 text portion of the message.
