@@ -149,7 +149,24 @@ Which whitespace characters are displayed at runtime should not be surprising.
 
 ## Requirements
 
-Common things should be easy, uncommon things should be possible.
+It should be easy to do simple things; possible to do complex things; and impossible, or at least difficult, to do wrong things.
+
+<details>
+<blockquote>
+APIs should be easy to use and hard to misuse. It should be easy to do simple things; possible to do complex things; and impossible, or at least difficult, to do wrong things.
+
+—<a href="https://www.infoq.com/articles/API-Design-Joshua-Bloch/">Joshua Bloch, 2008</a>, author of <i>Effective Java</i>, etc.
+</blockquote>
+<blockquote>
+The Pit of Success: in stark contrast to a summit, a
+peak, or a journey across a desert to find victory through many trials and
+surprises, we want our customers to simply fall into winning practices by using
+our platform and frameworks. To
+the extent that we make it easy to get into trouble we fail.
+          
+—Rico Mariani, MS Research MindSwap Oct 2003. (<a href="https://learn.microsoft.com/en-us/archive/blogs/brada/the-pit-of-success">restated by Brad Adams</a>, MS CLR and .Net team cofounder)
+</blockquote>
+</details>
 
 Developers and translators should be able to read and write the syntax easily in a text editor.
 
