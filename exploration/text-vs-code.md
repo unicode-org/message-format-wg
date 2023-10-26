@@ -28,18 +28,38 @@ ICU MessageFormat and Fluent both support inline selectors
 separated from the text using `{…}` for multi-variant messages.
 ICU MessageFormat is the only known format that uses `{…}` to also delimit text.
 
-[Mustache templates](https://mustache.github.io/mustache.5.html)
-and related languages wrap "code" in `{{…}}`.
-In addition to placeholders that are replaced by their interpolated value during formatting,
-this also includes conditional blocks using `{{#…}}`/`{{/…}}` wrappers.
+Formatting and templating are distinct operations with similarities.
+Both interpolate strings by using input values,
+provided as inputs alongisde the formatting pattern string or template,
+to produce a new string.
+Formatting usually refers to smaller strings, usually no larger than a sentence,
+whereas templating are used to produce larger strings, usually for text files of various file formats, often for HTML documents.
 
-[Handlebars](https://handlebarsjs.com/guide/) extends Mustache expressions
-with operators such as `{{#if …}}` and `{{#each …}}`,
-as well as custom formatting functions that become available as e.g. `{{bold …}}`.
-
-[Jinja templates](https://jinja.palletsprojects.com/en/3.1.x/templates/) separate
-`{% statements %}` and `{{ expressions }}` from the base text.
-The former may define tests that determine the inclusion of subsequent text blocks in the output.
+There are two different styles of templating library design.
+Some languages/libraries enable the interopolation of the template substrings through programmatic expressions in "code mode" that print expressions to the output stream 
+(ex: [PHP](https://www.php.net/),
+[Freemarker](https://freemarker.apache.org/index.html)):
+```php
+<html>
+...
+	<?php
+		if (true) {
+			echo '<p>Hello World</p>';
+		}
+	?>
+...
+</html>
+```
+Some libraries separate string literal values from the programmatic expressions in "code mode" by defining a set of control flow constructs within delimiters,
+and all text outside the delimiters is printed to the output stream,
+and subject to control flow rules of their containing constructs.
+(ex: [Mustache templates](https://mustache.github.io/mustache.5.html),
+[Freemarker](https://freemarker.apache.org/index.html)).
+```
+{{#repo}}
+  <b>{{name}}</b>
+{{/repo}}
+```
 
 A cost that the message formatting and templating languages mentioned above need to rely on
 is some rule or behaviour that governs how to deal with whitespace at the beginning and end of a pattern,
