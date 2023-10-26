@@ -100,7 +100,6 @@ especially since their usage may be entirely unrelated to internationalization i
 ## Use-Cases
 
 Most messages in any localization system do not contain any expressions, statements or variants.
-These should be expressible as easily as possible.
 
 Many messages include expressions that are meant to be replaced during formatting.
 For example, a greeting like "Hello, {$username}!" would be formatted with the variable
@@ -126,9 +125,20 @@ according to its plural category
 So, in American English, the formatter might need to choose between formatting
 `You have 1 kilometer to go` and `You have 2 kilometers to go`.
 
-Rarely, messages needs to include leading or trailing whitespace due to
-e.g. how they will be concatenated with other text,
+Rarely do messages that need to include leading or trailing whitespace do so due to
+how they will be concatenated with other text,
 or as a result of being segmented from some larger volume of text.
+Based on available data,
+no more than 0.3% of all messages and no more than 0.1% of messages with variants
+contain leading or trailing whitespace.
+
+However, frequency of occurrence is not an indicator of the importance of leading or trailing whitespace to those authoring such messages.
+For example, sometimes such messages are authored in order to achieve a semblance of formatting in contexts that lack rich text presentation styles,
+such as operating system widgets.
+Even though such messages are usually infrequent relative to the size of all user-facing / transalatable messages,
+that is not an indicator of their significance.
+Also importantly, we cannot make assumptions about the validity of leading or trailing whitespace in a message,
+especially since their usage may be entirely unrelated to internationalization issues (ex: sentence agreement disruption by concatenation).
 
 ---
 
