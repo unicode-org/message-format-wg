@@ -1,15 +1,19 @@
-message = [s] *(declaration [s]) body [s]
+message = pattern / complex-message
+
+complex-message = "{{" [s] *(declaration [s]) body [s] "}}"
 
 declaration = input-declaration / local-declaration
 input-declaration = input [s] variable-expression
 local-declaration = local s variable [s] "=" [s] expression
 
-body = pattern
+body = quoted-pattern
+
      / (selectors 1*([s] variant))
 
-pattern = "{" *(text / expression) "}"
+quoted-pattern = "{{" pattern "}}"
+pattern = *(text / expression)
 selectors = match 1*([s] expression)
-variant = when 1*(s key) [s] pattern
+variant = when 1*(s key) [s] quoted-pattern
 key = literal / "*"
 
 expression = literal-expression / variable-expression / function-expression
