@@ -176,6 +176,7 @@ Pros:
 Cons:
 - Requires one of the alternate syntaxes
 - Has two ways to represent a pattern.
+- May be difficult for translators to add quotes when needed.
 
 ### Trim All Unquoted
 
@@ -234,7 +235,7 @@ directly after code:
 >
 >>{when *}{|
 >|} You can quote the newlines and spaces should you desire {|
-|}
+>|}
 >```
 
 Pros:
