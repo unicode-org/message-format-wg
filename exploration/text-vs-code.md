@@ -19,9 +19,9 @@ Status: **Proposed**
 
 ## Objective
 
-Decide whether text patterns must always be quoted,
-or whether we allow them to be optionally quoted,
-for non-simple messages in MF2.
+Decide whether to permit _patterns_ (message text) to be unquoted
+when embedded in code. 
+Currently all _patterns_ must be quoted in non-simple messages.
 
 ## Background
 
@@ -33,11 +33,9 @@ separated from the text using `{…}` for multi-variant messages.
 ICU MessageFormat is the only known format that uses `{…}` to also delimit text.
 
 Formatting and templating are distinct operations with similarities.
-Both interpolate strings by using input values,
-provided as inputs alongisde the formatting pattern string or template,
-to produce a new string.
+Both take input values to replace portions of the pattern string or template, producing a new, formatted, string.
 Formatting usually refers to smaller strings, usually no larger than a sentence,
-whereas templating are used to produce larger strings, usually for text files of various file formats, often for HTML documents.
+whereas templating is typically used to produce larger strings (generally whole documents, such as an HTML file)
 
 There are two different styles of templating library design.
 Some languages/libraries enable the interopolation of the template substrings through programmatic expressions in "code mode" that print expressions to the output stream 
@@ -209,7 +207,7 @@ The current syntax includes some plain-ascii keywords:
 `input`, `local`, `match`, and `when`.
 
 The current syntax and active proposals include some sigil + name combinations,
-such as `:number`, `$var`, `|literal|`, `+bold`, `-bold`, and posibly `@attr`.
+such as `:number`, `$var`, `|literal|`, `+bold`, `-bold`, and possibly `@attr`.
 
 The current syntax supports unquoted literal values as operands.
 
