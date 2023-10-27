@@ -86,7 +86,7 @@ For example, an Android resource string that includes leading whitespace in the 
 <string xml:space="preserve">"   Section 7.a. Attribute Types"</string>
 ```
 In this example above, the containing XML format will collapse consecutive whitespace characters into a single space unless you provide the attribute `xml:space="preserve"`.
-After the resource file gets parsed as XML, the Android string resource format 
+After the resource file gets parsed as XML, the Android resource compiler requires
 [does additional whitespace collapsing and Android escaping](https://developer.android.com/guide/topics/resources/string-resource#escaping_quotes),
 requiring the entire text node string to be wrapped in double quotation marks `"..."` to preserve the initial whitespace, or the inital whitespace to use Android escaping (`\u0032 \u0032 ...`).
 
@@ -118,20 +118,20 @@ according to its plural category
 So, in American English, the formatter might need to choose between formatting
 `You have 1 kilometer to go` and `You have 2 kilometers to go`.
 
-Rarely do messages that need to include leading or trailing whitespace do so due to
-how they will be concatenated with other text,
+Rarely, messages need to include leading or trailing whitespace due to
+e.g. how they will be concatenated with other text,
 or as a result of being segmented from some larger volume of text.
 Based on available data,
 no more than 0.3% of all messages and no more than 0.1% of messages with variants
 contain leading or trailing whitespace.
 
 However, frequency of occurrence is not an indicator of the importance of leading or trailing whitespace to those authoring such messages.
-For example, sometimes such messages are authored in order to achieve a semblance of formatting in contexts that lack rich text presentation styles,
+For example, sometimes such messages are authored in order to achieve a [semblance of formatting in contexts that lack rich text presentation styles](https://docs.oracle.com/cd/E19957-01/817-4220/images/SetupWizWelcome2.gif),
 such as operating system widgets.
 Even though such messages are usually infrequent relative to the size of all user-facing / transalatable messages,
 that is not an indicator of their significance.
-Also importantly, we cannot make assumptions about the validity of leading or trailing whitespace in a message,
-especially since their usage may be entirely unrelated to internationalization issues (ex: sentence agreement disruption by concatenation).
+There are valid use cases for leading or trailing whitespace in a message that are not internationalization bugs.
+This means that it is not MF2's concern to enforce/discourage their usage.
 
 ---
 
@@ -146,7 +146,7 @@ It should be easy to do simple things; possible to do complex things; and imposs
 
 <details>
 <blockquote>
-APIs should be easy to use and hard to misuse. It should be easy to do simple things; possible to do complex things; and impossible, or at least difficult, to do wrong things.
+APIs should be easy to use and hard to misuse. It should be easy to do simple things; possible to do complex things; and impossible, or at least difficult, to do wrong things. (per Joshua Bloch)
 
 —<a href="https://www.infoq.com/articles/API-Design-Joshua-Bloch/">Joshua Bloch, 2008</a>, author of <i>Effective Java</i>, etc.
 </blockquote>
@@ -191,7 +191,7 @@ values, literals, options, and the like are important, the syntax itself should
 be restricted to ASCII characters. This allows the message to be parsed
 visually by humans even when embedded in a syntax that requires escaping.
 
-Whitespace is forgiving, so we should be flexible with its use in the code area of message.
+We should be flexible with the use of whitespace in the code area of message.
 This avoids the need for translators or tools to be super pedantic about
 formatting.
 However, we want WYSIWYG behavior as much as possible in patterns, meaning that there is minimal visual difference
@@ -277,6 +277,7 @@ while complex messages use the aforementioned delimiter to quote patterns (ex: `
 * Another potential drawback, specifically in the case of non-`match` complex messages with exactly 1 declaration,
 is that this option adds 2 extra delimiters compared to an alternative syntax that doesn't require quoted patterns
 and is designed to minimize delimiter usage only to code mode introducers.
+* If we use curlies for patterns and for placeholders, then they serve double duty, which may make the syntax harder to understand, and also harder to make the pattern out visually.
 
 Evaluation:
 
