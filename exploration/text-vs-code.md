@@ -66,12 +66,14 @@ Some templating libraries support both styles.
 
 When considering string formatting and templating libraries,
 it is important to keep the rules of pattern or template handling separate from and uninfluenced by the output format's rules.
-For example, many templating languages are designed around producing HTML output, for which consecutive whitespace characters within the output are collapsed into a single ASCII space.
-However, if the templating language is not strict on preserving whitespace,
+For example, many templating languages are designed around producing HTML output, for which consecutive whitespace characters within the output are collapsed into a single ASCII space by HTML renderers.
+However, if the templating language is similarly not strict on preserving whitespace,
 then it would be incapable of generating Python source code,
 for which whitespace is significant in determining block scope via the indentation (leading whitespace on a line).
 
-In fact, some HTML-oriented templating libraries preserve whitespace by default in a what-you-see-is-what-you-get (WYSIWYG) manner (Mustache, [Jinja](https://jinja.palletsprojects.com/en/3.1.x/templates/#whitespace-control)),
+In fact, many HTML-oriented templating libraries preserve whitespace by default in a what-you-see-is-what-you-get (WYSIWYG) manner
+([Mustache](https://mustache.github.io/mustache.5.html#Sections),
+[Jinja](https://jinja.palletsprojects.com/en/3.1.x/templates/#whitespace-control)),
 and some perform whitespace trimming in unspecified ways ([Handlebars](https://handlebarsjs.com/guide/expressions.html#whitespace-control)).
 The [whitespace behavior for Freemarker](https://freemarker.apache.org/docs/dgui_misc_whitespace.html), a general purpose templating library for multiple formats, is also WYSIWYG by default while allowing several optional trimming controls.
 
@@ -165,8 +167,8 @@ Translators (and their tools) are not software engineers, so we want our syntax
 to be as simple and robust as possible.
 
 Nesting level is not a requirement.
-People are not parsers, and don't care about nesting.
-What matters to them is their ability to recognize where a message pattern starts and where it ends.
+People are not parsers, and don't care about the nesting level as a primary concern when reading a message.
+What matters to them is their ability to recognize where a message's pattern starts and where it ends.
 In the following example, localizable text is easily recognizable (especially with syntax highlighting),
 even if it occurs 3 level deep.
 
@@ -205,7 +207,7 @@ The current syntax includes some plain-ascii keywords:
 `input`, `local`, `match`, and `when`.
 
 The current syntax and active proposals include some sigil + name combinations,
-such as :number, $var, |literal|, +bold, -bold, and posibly @attr.
+such as `:number`, `$var`, `|literal|`, `+bold`, `-bold`, and posibly `@attr`.
 
 The current syntax supports unquoted literal values as operands.
 
