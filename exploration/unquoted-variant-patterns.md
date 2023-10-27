@@ -128,6 +128,7 @@ Pros:
 - Since the pattern is already quoted, translators never have to add pattern quotes
   in order to add PEWs to a given pattern.
   This also might avoid some tools forcing escaping on added quotes that are needed.
+
 Cons:
 - Requires matching open/close quotes.
 
@@ -169,6 +170,7 @@ possible to use quoting to separate the pattern from code (and prevent trimming)
 
 Pros:
 - Code is special instead of text.
+
 Cons:
 - Requires one of the alternate syntaxes
 - Has two ways to represent a pattern.
@@ -204,6 +206,7 @@ Instead, PEWS whitespace must be individually quoted.
 Pros:
 - Code is special, whitespace is not.
 - Makes PEWS into a "special event", alerting developers to the non-I18N aspects of it?
+
 Cons:
 - Weird and unattractive.
 
@@ -234,6 +237,7 @@ directly after code:
 
 Pros:
 - More foregiving in some circumstances?
+
 Cons:
 - More complicated to use.
 - Users may be unclear where the boundaries are.
