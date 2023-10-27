@@ -149,6 +149,7 @@ the boundary between code and pattern works.
 
 Pros:
 - WYSIWYG (on steroids)
+
 Cons:
 - Probably not a serious alternative: the example
   includes any number of obvious footguns that have to be addressed
