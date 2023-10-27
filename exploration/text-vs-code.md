@@ -223,7 +223,72 @@ in those outer formats to aid human comprehension (e.g., depending upon containe
 format, a U+000A LINE FEED might be represented as `\n`, `\012`, `\x0A`, `\u000A`,
 `\U0000000A`, `&#xA;`, `&NewLine;`, `%0A`, `<LF>`, or something else entirely).
 
+## Simple Messages
+
+In the Subcommittee meetings following Github discussions on Issues #493 and #499,
+the general consensus that formed for simple messages
+is that we allow them to be unquoted.
+
+("Simple messages" refers to messages consisting solely of a pattern, and thus are not complex messages.)
+
+Because the simple message pattern consists of the entire message,
+the pattern includes any leading or trailing whitespace.
+
+Given simple messages already being decided at a high level,
+the design decisions below for the proposed and alternative designs pertain specifically to complex messages.
+
 ## Proposed Design
+
+### Start in text, encapsulate message, always quote patterns
+
+Description:
+
+Since simple messages are unquoted (starting in text mode),
+complex messages must also start in text mode.
+
+Within a complex message, patterns are always quoted with `{{...}}` or other choice of delimiter.
+
+The entire complex message is also wrapped with `{{...}}` or other choice of delimiter.
+This allows interior "code mode" of message to have flexible whitespace in between tokens
+and _around_ quoted patterns.
+
+Pros
+
+* The rule about the whether leading and trailing whitespace is included is simple and unambiguous.
+* This matches the WYSIWIG behavior that simple messages preserve.
+* The patterns can be detected within the pattern more easily due to the delimiters serving as a visual anchor.
+* Requiring all patterns to be quoted minimizes the number of characters that need to be escaped within a pattern to 3:
+the 2 pattern delimiter characters and the escape character itself.
+* Because the sum of counts of declarations + `match` statement + `when` statements is always
+greater than or equal to the number of patterns,
+wrapping the entire message once yields less visual noise of repetitive code mode introducer symbols
+when there is 1+ declarations in a `match` (selection) message,
+or when there are 2+ declarations in a non-`match` complex message.
+
+Cons:
+
+* This comes at the cost of an inconsistency in the WYSIWYG patterns are quoted between simple and complex messages.
+In the case of simple messages, the containing format itself implicitly defines the beginning and end of the pattern (example: `"..."`), which is not visible at the level of MF2,
+while complex messages use the aforementioned delimiter to quote patterns (ex: `{{...}}`).
+* Another potential drawback, specifically in the case of non-`match` complex messages with exactly 1 declaration,
+is that this option adds 2 extra delimiters compared to an alternative syntax that doesn't require quoted patterns
+and is designed to minimize delimiter usage only to code mode introducers.
+
+Evaluation:
+
+The pros outweigh the cons, not just in cardinality, but far more importantly, according to the relative weight
+our value system places to the requirements met by the pro aspects compared to the con aspects. Namely:
+
+* [high] Unsurprising WYSIWYG behavior from patterns
+* [high] Easy recognition of patterns, even for non-developers
+* [high] A minimal number of characters requiring escaping
+* [high] No limitations on users with valid non-i18n concerns
+* [med] Flexible whitespace outside of patterns
+* [low] Number of characters typed (probably comparable with alternatives anyways)
+* [low] Number of "mode levels" from a parser perspective
+
+
+## Alternatives Considered
 
 ### Start in text, encapsulate code, trim around statements
 
@@ -244,8 +309,6 @@ Allow for a pattern to be `{{…}}` quoted
 such that it preserves its leading and/or trailing whitespace
 even when preceded or followed by statements.
 
-## Alternatives Considered
-
 ### Start in code, encapsulate text
 
 This approach treats messages as something like a resource format for pattern values.
@@ -261,19 +324,6 @@ so messages may appear wrapped as e.g. `"{{…}}"`.
 
 This option is not chosen due to adding an excessive
 quoting burden on all messages.
-
-### Start in text, encapsulate code, re-encapsulate text within code
-
-As in the proposed design, simple patterns are unquoted.
-Patterns in messages with statements, however,
-are required to always be surrounded by `{{…}}` or some other delimiters.
-
-This effectively means that some syntax will "enable" code mode for a message,
-and that patterns in such a message need delimiters.
-
-This option is not chosen due to adding an excessive
-quoting burden on all multi-variant messages,
-as well as introducing an unnecessary additional conceptual layer to the syntax.
 
 ### Start in text, encapsulate code, trim minimally
 
@@ -315,3 +365,7 @@ With these changes,
 all whitespace would need to be explicitly within the "code" part of the syntax,
 and patterns could never be separated from statements
 without adding whitespace to the pattern.
+
+## Scoring matrix
+
+TBD
