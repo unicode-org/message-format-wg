@@ -171,6 +171,7 @@ possible to use quoting to separate the pattern from code (and prevent trimming)
 
 Pros:
 - Code is special instead of text.
+- Easy to use (best of both worlds?)
 
 Cons:
 - Requires one of the alternate syntaxes
