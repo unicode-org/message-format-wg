@@ -1,4 +1,4 @@
-# Message Parse Mode
+# Message Pattern Quoting
 
 Status: **Proposed**
 
@@ -17,7 +17,9 @@ Status: **Proposed**
 
 ## Objective
 
-Decide whether text patterns or code statements should be enclosed in MF2.
+Decide whether text patterns must always be quoted,
+or whether we allow them to be optionally quoted,
+for non-simple messages in MF2.
 
 ## Background
 
