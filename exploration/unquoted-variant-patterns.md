@@ -100,20 +100,24 @@ into multiple lines for readability without negatively affecting the output.
 
 ## Constraints
 
-_What prior decisions and existing conditions limit the possible design?_
+Some of the alternatives will require changes to the syntax to produce better usability.
+Similarly the current syntax could benefit from improvements if we decide to keep it.
+
+There are a limited number of sigils available for quoting.
 
 ## Proposed Design
 
-_Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
+Currently the syntax uses the first alternative below.
 
 ## Alternatives Considered
 
-There are four candidates for handling the boundaries between code and patterns:
+There are five candidates for handling the boundaries between code and patterns:
 
 1. Always quote non-simple patterns (current design)
 2. Never quote patterns (all whitespace is significant)
 3. Permit non-simple patterns to be quoted and trim unquoted whitespace
 4. Trim all unquoted whitespace, but do not permit quoting non-simple patterns
+5. Selectively trim patterns (all whitespace is otherwise significant)
 
 ### Always Quote
 
