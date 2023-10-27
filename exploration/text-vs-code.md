@@ -8,6 +8,8 @@ Status: **Proposed**
 		<dt>Contributors</dt>
 		<dd>@eemeli</dd>
 		<dd>@aphillips</dd><!-- Seville and other inserted edits -->
+		<dd>@mihnita</dd>
+		<dd>@echeran</dd>
 		<dt>First proposed</dt>
 		<dd>2023-09-13</dd>
 		<dt>Pull Request</dt>
