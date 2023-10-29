@@ -64,7 +64,7 @@ The syntax specification takes into account the following design restrictions:
 
 ## Messages and their Syntax
 
-The purpose of MessageFormat is the allow content to vary at runtime.
+The purpose of MessageFormat is to allow content to vary at runtime.
 This variation might be due to placing a value into the content
 or it might be due to selecting a different bit of content based on some data value
 or it might be due to a combination of the two.
