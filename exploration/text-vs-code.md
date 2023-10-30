@@ -282,7 +282,7 @@ directly after code:
 >
 > This has a newline and a space at the start and a space-newline at the end
 >
->>{when *}{|
+>{when *}{|
 >|} You can quote the newlines and spaces should you desire {|
 >|}
 >```
