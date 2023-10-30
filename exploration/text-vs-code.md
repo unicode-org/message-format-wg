@@ -1,4 +1,4 @@
-# Message Pattern Quoting
+# Unquoted Variant Patterns
 
 Status: **Proposed**
 
@@ -19,11 +19,280 @@ Status: **Proposed**
 
 ## Objective
 
-Decide whether to permit _patterns_ (message text) to be unquoted
-when embedded in code. 
-Currently all _patterns_ must be quoted in non-simple messages.
+The current syntax requires all patterns to be "quoted" in non-simple messages.
+
+We need to determine if we should allow patterns to be unquoted and, if so,
+how to determine the boundary between the pattern and any message code.
 
 ## Background
+
+### Summary
+
+A _pattern_ is the portion of a _message_ that will be formatted to produce
+output in a call to the MessageFormat API.
+
+Patterns include _text_ and _placeholders_.
+
+_Placeholders_ are the parts of the pattern that are replaced during formatting.
+>For example, in the following message, `{$var}` is a placeholder:
+>```
+>This has a {$var} placeholder.
+>```
+
+_Text_ are the string literal parts of a message.
+Text consists of a sequence of Unicode characters.
+This include all Unicode whitespace characters.
+
+>[!IMPORTANT]
+>When whitespace appears in (is part of) a pattern it is _always_ preserved by MessageFormat
+
+There are three ways that patterns can appear in a message:
+> 1. As a simple message:
+> ```
+>     Hello {$user}!   
+> ```
+> 2. As a pattern following declarations:
+> ```
+> {{
+>    input {$num :number}
+>    {{   This is the {$num} pattern   }}
+> }}
+> ```
+> 3. As part of a variant (following a _key_):
+> ```
+> {{
+>    match {$num :plural}
+>    when 0   {{   This is the zero pattern   }} <- the {{}} part is a pattern
+>    when one {{   This is the {$num} pattern   }}
+>    when *   {{   These are the {$num} patterns   }}
+> }}
+> ```
+
+With the current syntax, the boundary between pattern and the remainder of the message is always clear
+because the pattern is either the entire string
+or enclosed in the `{{...}}` quoting required by the syntax.
+
+
+## Use-Cases
+
+As a user, I sometimes need to include pattern-meaningful whitespace at
+the start or end of a pattern and I expect that whitespace to be preserved
+through the MessageFormat process. 
+I understand that my choice of storage format (such as .properties, strings.xml,
+ListResourceBundle, gettext `.po`, etc. etc.) may impact whitespace appearing
+in my serialization format. 
+However, I need to know reliably whether whitespace in a _message_ will appear
+(or not appear) in my output.
+
+As a translator, I need to determine the boundaries of the patterns easily.
+I also need to be able to modify the whitespace that appears in a given
+pattern, including at the front or end of the pattern.
+
+As a developer, I want to format my MF2 patterns in ways that are easy for 
+other developers, UX designers, or translators to use.
+I want to be able to break longer messages 
+(particularly those with match statements)
+into multiple lines for readability without negatively affecting the output.
+
+## Requirements
+
+* [high] Whitespace that is definitely inside a pattern must be preserved by MF2 formatters.
+* [high] The boundary of a pattern should be as simple to define and easy to visually detect as possible.
+* [high] Message syntax should avoid as many escape sequences as possible, particularly those that
+  might interfere with or require double-escaping in storage formats.
+* [med] Whitespace that is permitted in a message that is not part of the pattern should be forgiving
+  and not require special effort to manage.
+* [med] The message syntax should be as simple and robust as possible, but no simpler.
+* [med] The message syntax should avoid as many levels of nesting or character pairing
+  as possible, but no more.
+
+
+## Non-requirements
+
+* We should not make things harder for users unless it is to discourage well-known i18n bad practices (ex: message concatenation).
+    - There are valid non-i18n use cases in OSes for leading/trailing whitespace.
+* We should not confuse the _frequency_ of a usage pattern with its _impact_.
+    - The _impact_ of a user making a surprising mistake depends on the _cost to fix it_, or the value of where it is used, or other factors. The occurrence rate in a message corpus usually does not directly reflect those concerns.
+	- Also, instead of frequency of mistakes, we should consider how well we make it difficult to make mistakes.
+		> It should be easy to do simple things; possible to do complex things; and impossible, or at least difficult, to do wrong things.
+		>
+		> —<a href="https://www.infoq.com/articles/API-Design-Joshua-Bloch/">Joshua Bloch, 2008</a>, author of <i>Effective Java</i>, etc.
+* Reducing the number of characters typed to the point it reduces clarity
+    - Beyond a certain point, there becomes a tradeoff between clarity and concision. (ex: Perl)
+
+## Constraints
+
+Some of the alternatives will require changes to the syntax to produce better usability.
+Similarly the current syntax could benefit from improvements if we decide to keep it.
+
+There are a limited number of sigils available for quoting.
+
+## Simple Messages
+
+In the Subcommittee meetings following Github discussions on Issues #493 and #499,
+the general consensus that formed for simple messages
+is that we allow them to be unquoted.
+
+("Simple messages" refers to messages consisting solely of a pattern, and thus are not complex messages.)
+
+Because the simple message pattern consists of the entire message,
+the pattern includes any leading or trailing whitespace.
+
+Given simple messages already being decided at a high level,
+the design decisions below for the proposed and alternative designs pertain specifically to complex messages.
+
+## Proposed Design
+
+Currently the syntax uses the first alternative below.
+
+## Alternatives Considered
+
+There are five candidates for handling the boundaries between code and patterns:
+
+1. Always quote non-simple patterns (current design)
+2. Never quote patterns (all whitespace is significant)
+3. Permit non-simple patterns to be quoted and trim unquoted whitespace
+4. Trim all unquoted whitespace, but do not permit quoting non-simple patterns
+5. Selectively trim patterns (all whitespace is otherwise significant)
+
+### Always Quote
+
+Pros:
+- The boundary between pattern and code is always clear.
+- The quoting reduces the number of in-pattern escapes to the open/close sequence.
+  and the placeholder sequence sigils.
+- Since the pattern is already quoted, translators never have to add pattern quotes
+  in order to add PEWs to a given pattern.
+  This also might avoid some tools forcing escaping on added quotes that are needed.
+
+Cons:
+- Requires matching open/close quotes.
+
+### Never Quote Patterns
+
+In this alternative, all non-code whitespace is significant. 
+We have to use a slightly different syntax in the example, so that
+the boundary between code and pattern works.
+>```
+>{{
+>   match {$var}
+>   {when *} This pattern has a space in front (it's between \} and This)
+>   {when other}
+>      This pattern has a newline and six spaces in front of it
+>   {when moo}This pattern has no spaces in front of it, but an invisible space at the end
+>}}
+>```
+
+Pros:
+- WYSIWYG (on steroids)
+
+Cons:
+- Probably not a serious alternative: the example
+  includes any number of obvious footguns that have to be addressed
+
+### Permit pattern quoting
+
+In this alternative, non-simple patterns are trimmed, but it is 
+possible to use quoting to separate the pattern from code (and prevent trimming)
+>```
+>{match {$var}}
+>{when   0} This has no space in front of it.
+>{when one}
+>    This has no space or newline in front of it.
+>{when few}
+>   {{ This has one space at the start and the end. }}
+>{when many}   {{ This also has one space start and end. }}
+>{when *}{{You can quote patterns even without whitespace.}}
+>```
+
+Pros:
+- Code is special instead of text.
+- Easy to use (best of both worlds?)
+
+Cons:
+- Requires one of the alternate syntaxes
+- Has two ways to represent a pattern.
+- May be difficult for translators to add quotes when needed.
+
+### Trim All Unquoted
+
+In this alternative, all non-code whitespace is trimmed
+and we do not allow/provide for pattern quoting.
+Instead, PEWS whitespace must be individually quoted.
+
+> [!NOTE]
+> Whitespace quoting also works in the preceeding alternatives
+> because it is an inherent part of the syntax.
+> We don't show it in those alternatives because it is
+> distracting.
+
+>```
+>{match {$var}}
+>{when   0} This has no space in front of it.
+>{when one}
+>    This has no space or newline in front of it.
+>{when few}
+>   {||} This has one space at the start and the end. {||}
+>{when many}   {| |}This also has one space start and end.{| |}
+>{when *}
+>
+>       No amount of whitespace matters before this pattern
+>       but all of the whitespace at the end does.
+>
+>       {||}
+>```
+
+Pros:
+- Code is special, whitespace is not.
+- Makes PEWS into a "special event", alerting developers to the non-I18N aspects of it?
+
+Cons:
+- Weird and unattractive.
+
+### Selective Trimming
+
+In this alternative, only specific whitespace is automatically trimmed
+and the whitespace can be omitted.
+This is similar to "Never Quote Patterns" in that all whitespace
+is significant **_except_** for a newline, space, or newline space
+directly after code:
+>```
+>{match {$var}}
+>{when   0} This has no space in front of it.
+>{when one}
+> This has no space or newline in front of it.
+>{when 1}
+>  This has no newline but does have one space in front of it.
+>{when few}
+>  This has no space or newline in front of it or at the end {when many}This has no spaces or newlines.
+>{when 11}
+>
+> This has a newline and a space at the start and a space-newline at the end
+>
+>>{when *}{|
+>|} You can quote the newlines and spaces should you desire {|
+>|}
+>```
+
+Pros:
+- More foregiving in some circumstances?
+
+Cons:
+- More complicated to use.
+- Users may be unclear where the boundaries are.
+
+
+## Scoring matrix
+
+TBD
+
+## Extra Info
+
+### Extra Info: Background
+
+<details>
+
+#### Formatting and templating
 
 Existing message and template formatting languages tend to start in "text" mode,
 and require special syntax like `{{` or `{%` to enter "code" mode.
@@ -37,6 +306,8 @@ Both take input values to replace portions of the pattern string or template, pr
 Formatting usually refers to smaller strings, usually no larger than a sentence,
 whereas templating is typically used to produce larger strings (generally whole documents, such as an HTML file)
 
+#### Templating styles and nesting levels
+
 There are two different styles of templating library design.
 Some languages/libraries enable the interopolation of the template substrings through programmatic expressions in "code mode" that print expressions to the output stream 
 (ex: [PHP](https://www.php.net/),
@@ -44,11 +315,11 @@ Some languages/libraries enable the interopolation of the template substrings th
 ```php
 <html>
 ...
-	<?php
-		if (true) {
-			echo '<p>Hello World</p>';
-		}
-	?>
+<?php
+    if (true) {
+        echo '<p>Hello World</p>';
+    }
+?>
 ...
 </html>
 ```
@@ -64,6 +335,8 @@ and subject to control flow rules of their containing constructs.
 ```
 Some templating libraries support both styles.
 
+#### Templating whitespace handling
+
 When considering string formatting and templating libraries,
 it is important to keep the rules of pattern or template handling separate from and uninfluenced by the output format's rules.
 For example, many templating languages are designed around producing HTML output, for which consecutive whitespace characters within the output are collapsed into a single ASCII space by HTML renderers.
@@ -76,6 +349,8 @@ In fact, many HTML-oriented templating libraries preserve whitespace by default 
 [Jinja](https://jinja.palletsprojects.com/en/3.1.x/templates/#whitespace-control)),
 and some perform whitespace trimming in unspecified ways ([Handlebars](https://handlebarsjs.com/guide/expressions.html#whitespace-control)).
 The [whitespace behavior for Freemarker](https://freemarker.apache.org/docs/dgui_misc_whitespace.html), a general purpose templating library for multiple formats, is also WYSIWYG by default while allowing several optional trimming controls.
+
+#### Containing Format Interaction with Messages
 
 Other formats supporting multiple message variants tend to rely on a surrounding resource format to define variants,
 such as [Rails internationalization](https://guides.rubyonrails.org/i18n.html#pluralization) in Ruby or YAML
@@ -90,7 +365,13 @@ After the resource file gets parsed as XML, the Android resource compiler requir
 [does additional whitespace collapsing and Android escaping](https://developer.android.com/guide/topics/resources/string-resource#escaping_quotes),
 requiring the entire text node string to be wrapped in double quotation marks `"..."` to preserve the initial whitespace, or the inital whitespace to use Android escaping (`\u0032 \u0032 ...`).
 
-## Use-Cases
+</details>
+
+### Extra Info: Use Cases
+
+<details>
+
+#### Summary of General MF Behavior
 
 Most messages in any localization system do not contain any expressions, statements or variants.
 
@@ -118,6 +399,8 @@ according to its plural category
 So, in American English, the formatter might need to choose between formatting
 `You have 1 kilometer to go` and `You have 2 kilometers to go`.
 
+#### Leading and Trailing Whitespace
+
 Rarely, messages need to include leading or trailing whitespace due to
 e.g. how they will be concatenated with other text,
 or as a result of being segmented from some larger volume of text.
@@ -133,18 +416,22 @@ that is not an indicator of their significance.
 There are valid use cases for leading or trailing whitespace in a message that are not internationalization bugs.
 This means that it is not MF2's concern to enforce/discourage their usage.
 
----
-
 Developers who have messages that include leading or trailing whitespace
 want to ensure that this whitespace is included in the translatable
 text portion of the message.
 Which whitespace characters are displayed at runtime should not be surprising.
 
-## Requirements
+</details>
+
+### Extra Info: Requirements
+
+<details>
+
+#### Design Around Simplicity/Correctness
 
 It should be easy to do simple things; possible to do complex things; and impossible, or at least difficult, to do wrong things.
 
-<details>
+
 <blockquote>
 APIs should be easy to use and hard to misuse. It should be easy to do simple things; possible to do complex things; and impossible, or at least difficult, to do wrong things. (per Joshua Bloch)
 
@@ -159,7 +446,8 @@ the extent that we make it easy to get into trouble we fail.
           
 —Rico Mariani, MS Research MindSwap Oct 2003. (<a href="https://learn.microsoft.com/en-us/archive/blogs/brada/the-pit-of-success">restated by Brad Adams</a>, MS CLR and .Net team cofounder)
 </blockquote>
-</details>
+
+#### Balance Between Legibility and Nesting Levels
 
 Developers and translators should be able to read and write the syntax easily in a text editor.
 
@@ -177,6 +465,8 @@ print "{{{This is translatable}}}"
 if (foo) print "{{{This is translatable}}}" else print "{{{This is NOT translatable}}}"
 if (foo) if (bar) switch (baz) case 1: print "{{{This is translatable, deep}}}" break; default: print "{{{This is NOT translatable, deep}}}"
 ```
+
+#### Ease, Escaping, Reserved Syntax, Whitespace
 
 As MessageFormat 2 will be at best a secondary language to all its authors and editors,
 it should conform to user expectations and require as little learning as possible.
@@ -198,8 +488,13 @@ However, we want WYSIWYG behavior as much as possible in patterns, meaning that 
 between the pattern and its interpolated output,
 and that there is minimal ambiguity.
 This avoids chances for unwanted surprises between the message authoring time expectations and the actual runtime formatted results.
+</details>
 
-## Constraints
+### Extra Info: Constraints
+
+<details>
+
+#### Current Syntax Keywords & Values
 
 Limiting the range of characters that need to be escaped in plain text is important.
 
@@ -210,6 +505,8 @@ The current syntax and active proposals include some sigil + name combinations,
 such as `:number`, `$var`, `|literal|`, `+bold`, `-bold`, and possibly `@attr`.
 
 The current syntax supports unquoted literal values as operands.
+
+#### Message Representation When Embedding in Container Format
 
 Messages themselves are "simple strings" and must be considered to be WYSIWYG.
 The WYSIWYG nature of representing a message pattern is independent of whether the message is a single line or contains multiple lines.
@@ -226,151 +523,4 @@ characters (including line breaks, control characters, etc.) and rely upon escap
 in those outer formats to aid human comprehension (e.g., depending upon container
 format, a U+000A LINE FEED might be represented as `\n`, `\012`, `\x0A`, `\u000A`,
 `\U0000000A`, `&#xA;`, `&NewLine;`, `%0A`, `<LF>`, or something else entirely).
-
-## Simple Messages
-
-In the Subcommittee meetings following Github discussions on Issues #493 and #499,
-the general consensus that formed for simple messages
-is that we allow them to be unquoted.
-
-("Simple messages" refers to messages consisting solely of a pattern, and thus are not complex messages.)
-
-Because the simple message pattern consists of the entire message,
-the pattern includes any leading or trailing whitespace.
-
-Given simple messages already being decided at a high level,
-the design decisions below for the proposed and alternative designs pertain specifically to complex messages.
-
-## Proposed Design
-
-### Start in text, encapsulate message, always quote patterns
-
-Description:
-
-Since simple messages are unquoted (starting in text mode),
-complex messages must also start in text mode.
-
-Within a complex message, patterns are always quoted with `{{...}}` or other choice of delimiter.
-
-The entire complex message is also wrapped with `{{...}}` or other choice of delimiter.
-This allows interior "code mode" of message to have flexible whitespace in between tokens
-and _around_ quoted patterns.
-
-Pros
-
-* The rule about the whether leading and trailing whitespace is included is simple and unambiguous.
-* This matches the WYSIWIG behavior that simple messages preserve.
-* The patterns can be detected within the pattern more easily due to the delimiters serving as a visual anchor.
-* Requiring all patterns to be quoted minimizes the number of characters that need to be escaped within a pattern to 3:
-the 2 pattern delimiter characters and the escape character itself.
-* Because the sum of counts of declarations + `match` statement + `when` statements is always
-greater than or equal to the number of patterns,
-wrapping the entire message once yields less visual noise of repetitive code mode introducer symbols
-when there is 1+ declarations in a `match` (selection) message,
-or when there are 2+ declarations in a non-`match` complex message.
-
-Cons:
-
-* This comes at the cost of an inconsistency in the WYSIWYG patterns are quoted between simple and complex messages.
-In the case of simple messages, the containing format itself implicitly defines the beginning and end of the pattern (example: `"..."`), which is not visible at the level of MF2,
-while complex messages use the aforementioned delimiter to quote patterns (ex: `{{...}}`).
-* Another potential drawback, specifically in the case of non-`match` complex messages with exactly 1 declaration,
-is that this option adds 2 extra delimiters compared to an alternative syntax that doesn't require quoted patterns
-and is designed to minimize delimiter usage only to code mode introducers.
-* If we use curlies for patterns and for placeholders, then they serve double duty, which may make the syntax harder to understand, and also harder to make the pattern out visually.
-
-Evaluation:
-
-The pros outweigh the cons, not just in cardinality, but far more importantly, according to the relative weight
-our value system places to the requirements met by the pro aspects compared to the con aspects. Namely:
-
-* [high] Unsurprising WYSIWYG behavior from patterns
-* [high] Easy recognition of patterns, even for non-developers
-* [high] A minimal number of characters requiring escaping
-* [high] No limitations on users with valid non-i18n concerns
-* [med] Flexible whitespace outside of patterns
-* [low] Number of characters typed (probably comparable with alternatives anyways)
-* [low] Number of "mode levels" from a parser perspective
-
-
-## Alternatives Considered
-
-### Start in text, encapsulate code, trim around statements
-
-Allow for message patterns to not be quoted.
-
-Encapsulate with `{…}` or otherwise distinguishing statements from
-the primarily unquoted translatable message contents.
-
-For messages with multiple variants,
-separate the variants using `when` statements.
-
-Trim whitespace between and around statements such as `input` and `when`,
-but do not otherwise trim any leading or trailing whitespace from a message.
-This allows for whitespace such as spaces and newlines to be used outside patterns
-to make a message more readable.
-
-Allow for a pattern to be `{{…}}` quoted
-such that it preserves its leading and/or trailing whitespace
-even when preceded or followed by statements.
-
-### Start in code, encapsulate text
-
-This approach treats messages as something like a resource format for pattern values.
-Keywords are declared directly at the top level of a message,
-and patterns are always surrounded by `{{…}}` or some other delimiters.
-
-Whitespace in patterns is never trimmed.
-
-The `{{…}}` are required for all messages,
-including ones that only consist of text.
-Delimiters of the resource format are required in addition to this,
-so messages may appear wrapped as e.g. `"{{…}}"`.
-
-This option is not chosen due to adding an excessive
-quoting burden on all messages.
-
-### Start in text, encapsulate code, trim minimally
-
-This is the same as the proposed design,
-but with a different trimming rule:
-
-- Trim all spaces before and between declarations.
-- For single-variant messages, trim one newline after the last declaration.
-- For multivariant messages,
-  trim one space after a `when` statement and
-  one newline followed by any spaces before a subsequent `when` statement.
-
-This option is not chosen due to the quoting being too magical.
-Even though this allows for all patterns with whitespace to not need quotes,
-the cost in complexity is too great.
-
-### Start in text, encapsulate code, trim maximally
-
-This is the same as the proposed design,
-but with a different trimming rule:
-
-- Trim all leading and trailing whitespace for each pattern.
-
-Expressing the trimming on patterns rather than statements
-means that leading and trailing spaces are also trimmed from simple messages.
-This option is not chosen due to this being somewhat surprising,
-especially when messages are embedded in host formats that have predefined means
-of escaping and/or trimming leading and trailing spaces from a value.
-
-### Start in text, encapsulate code, do not trim
-
-This is the same as the proposed design,
-but with two simplifications:
-
-- No whitespace is ever trimmed.
-- Quoting a pattern with `{{…}}` is dropped as unnecessary.
-
-With these changes,
-all whitespace would need to be explicitly within the "code" part of the syntax,
-and patterns could never be separated from statements
-without adding whitespace to the pattern.
-
-## Scoring matrix
-
-TBD
+</details>
