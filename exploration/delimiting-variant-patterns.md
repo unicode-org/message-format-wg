@@ -1,6 +1,6 @@
-# Unquoted Variant Patterns
+# Delimiting of Patterns in Complex Messages
 
-Status: **Proposed**
+Status: **Balloting**
 
 <details>
 	<summary>Metadata</summary>
@@ -13,17 +13,62 @@ Status: **Proposed**
 		<dt>First proposed</dt>
 		<dd>2023-09-13</dd>
 		<dt>Pull Request</dt>
-		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/474">#474</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/505">#505</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/503">#503</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/474">#474</a></dd>
 	</dl>
 </details>
 
 ## Objective
 
-The current syntax requires all patterns to be "quoted" in non-simple messages.
+The current syntax requires all patterns in _complex messages_ to be delimited ("quoted")
+using curly brackets.
+The working group has discussed at length different options for allowing patterns
+to be unquoted.
+This document contains the proposed solutions, including some that have been rejected by
+the working group, along with some of the arguments related to the relative
+suitability of each solution.
 
-We need to determine if we should allow patterns to be unquoted and, if so,
-how to determine the boundary between the pattern and any message code.
+### Balloting Instructions
+
+In the 2023-10-30 WG teleconference, there was a unanimous support for balloting the group on
+the following question:
+
+> Using [instant runoff voting](https://en.wikipedia.org/wiki/Instant-runoff_voting), rank
+> your choice for how to handle delimiting of patterns in _complex messages_.
+
+The **_deadline_** is **1700 (5 PM) in the `America/Los_Angeles` time zone on Saturday, 4 November, 2023**
+
+- A group member in good standing MAY submit one vote consisting of a ranked set of choices
+  up until the deadline.
+- A group member MAY edit, change, or delete their vote up until the deadline.
+- Votes MUST be submitted as a comment on github issue [#505](https://github.com/unicode-org/message-format-wg/issues/505).
+  Group members who cannot submit a comment on this issue should contact the chair (@aphillips) for assitance.
+- Votes MUST contain a stack ranked list of candidate options.
+- Votes MUST only contain votes for candidate options.
+  Write in votes are not acceptable.
+- A vote MUST have at least one
+  item in order to be counted and MAY rank two items or all three items.
+- Only ranked votes will be counted. That is, do not submit a vote equating two entries.
+- Group members MUST NOT comment on the votes of others in the voting thread.
+  "Electioneering" or non-voting commentary is not permitted in the issue
+  except for the chair seeking clarification of a vote.
+
+### Definitions
+
+**_complex messages_** are messages that contain _declarations_, _selectors_, or both according
+to the ABNF.
+
+**_simple messages_** are messages consisting only of a _pattern_, with no _declarations_ or _selectors_.
+
+**_group member in good standing_** is any member of the MessageFormat mailing list or
+watcher of the message-format-wg github repo who has not be banned.
+
+### Candidates
+
+> 1. Always Quote Non-Simple Patterns (current syntax)
+> 3. Permit non-simple patterns to be quoted and trim unquoted whitespace
+> 4. Trim all unquoted whitespace, but do not permit quoting non-simple patterns
 
 ## Background
 
@@ -142,13 +187,11 @@ the pattern includes any leading or trailing whitespace.
 Given simple messages already being decided at a high level,
 the design decisions below for the proposed and alternative designs pertain specifically to complex messages.
 
-## Proposed Design
-
-Currently the syntax uses the first alternative below.
+---
 
 ## Alternatives Considered
 
-There are five candidates for handling the boundaries between code and patterns:
+There were five candidates for handling the boundaries between code and patterns:
 
 1. Always quote non-simple patterns (current design)
 2. ~~Never quote patterns (all whitespace is significant)~~
@@ -156,7 +199,9 @@ There are five candidates for handling the boundaries between code and patterns:
 4. Trim all unquoted whitespace, but do not permit quoting non-simple patterns
 5. ~~Selectively trim patterns (all whitespace is otherwise significant)~~
 
-### Always Quote
+The candidates for this vote include only items 1, 3, and 4 above.
+
+### 1. Always Quote
 
 ```
 {{
@@ -176,13 +221,13 @@ Pros:
 - The quoting reduces the number of in-pattern escapes to the open/close sequence.
   and the placeholder sequence sigils.
 - Since the pattern is already quoted, translators never have to add pattern quotes
-  in order to add PEWs to a given pattern.
+  in order to include whitespace into a given pattern.
   This also might avoid some tools forcing escaping on added quotes that are needed.
 
 Cons:
 - Requires matching open/close quotes.
 
-### Never Quote Patterns
+### ~~2. Never Quote Patterns~~
 
 > [!IMPORTANT]
 > This option was rejected by the working group in the 2023-10-30 call.
@@ -207,10 +252,12 @@ Cons:
 - Probably not a serious alternative: the example
   includes any number of obvious footguns that have to be addressed
 
-### Permit pattern quoting
+### 3. Permit pattern quoting
 
 In this alternative, non-simple patterns are trimmed, but it is 
-possible to use quoting to separate the pattern from code (and prevent trimming)
+possible to use quoting to separate the pattern from code. 
+Whitespace inside of pattern quotes are part of the pattern.
+
 >```
 >{match {$var}}
 >{when   0} This has no space in front of it.
@@ -231,11 +278,15 @@ Cons:
 - Has two ways to represent a pattern.
 - May be difficult for translators to add quotes when needed.
 
-### Trim All Unquoted
+### 4. Trim All Unquoted
 
-In this alternative, all non-code whitespace is trimmed
+In this alternative, non-simple patterns are trimmed
 and we do not allow/provide for pattern quoting.
-Instead, PEWS whitespace must be individually quoted.
+Instead, pattern-sigificant whitespace must be individually quoted.
+Note that only the first character of whitespace has to be quoted
+or that an empty literal can be used to start or end the pattern.
+Any whitespace between the start and end of the pattern is included
+in the pattern.
 
 > [!NOTE]
 > Whitespace quoting also works in the preceeding alternatives
@@ -253,20 +304,21 @@ Instead, PEWS whitespace must be individually quoted.
 >{when many}   {| |}This also has one space start and end.{| |}
 >{when *}
 >
->       No amount of whitespace matters before this pattern
->       but all of the whitespace at the end does.
+>       None of the whitespace before the letter 'N' at the start of this line
+> is part of the pattern but all of the whitespace after the period at
+> the end of this sentence is included in the pattern.
 >
 >       {||}
 >```
 
 Pros:
 - Code is special, whitespace is not.
-- Makes PEWS into a "special event", alerting developers to the non-I18N aspects of it?
+- Makes whitespace into a "special event", alerting developers to the non-I18N aspects of it?
 
 Cons:
 - Weird and unattractive.
 
-### Selective Trimming
+### ~~5. Selective Trimming~~
 
 > [!IMPORTANT]
 > This option was rejected by the working group in the 2023-10-30 call.
