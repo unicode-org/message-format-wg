@@ -62,7 +62,7 @@ to the ABNF.
 **_simple messages_** are messages consisting only of a _pattern_, with no _declarations_ or _selectors_.
 
 **_group member in good standing_** is any member of the MessageFormat mailing list or
-watcher of the message-format-wg github repo who has not be banned.
+watcher of the message-format-wg github repo who has not been banned.
 
 ### Candidates
 
@@ -221,7 +221,7 @@ Pros:
 - The quoting reduces the number of in-pattern escapes to the open/close sequence.
   and the placeholder sequence sigils.
 - Since the pattern is already quoted, translators never have to add pattern quotes
-  in order to include whitespace into a given pattern.
+in order to include leading or trailing whitespace into a given pattern.
   This also might avoid some tools forcing escaping on added quotes that are needed.
 
 Cons:
@@ -282,9 +282,9 @@ Cons:
 
 In this alternative, non-simple patterns are trimmed
 and we do not allow/provide for pattern quoting.
-Instead, pattern-sigificant whitespace must be individually quoted.
-Note that only the first character of whitespace has to be quoted
-or that an empty literal can be used to start or end the pattern.
+Instead, pattern-significant whitespace must be individually quoted.
+Note that only the first character of whitespace has to be quoted,
+or an empty literal `{||}` can be used to start or end the pattern.
 Any whitespace between the start and end of the pattern is included
 in the pattern.
 
@@ -313,7 +313,8 @@ in the pattern.
 
 Pros:
 - Code is special, whitespace is not.
-- Makes whitespace into a "special event", alerting developers to the non-I18N aspects of it?
+- Makes leading and trailing whitespace into a "special event",
+  alerting developers to the non-I18N aspects of it?
 
 Cons:
 - Weird and unattractive.
