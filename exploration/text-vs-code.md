@@ -157,6 +157,19 @@ There are five candidates for handling the boundaries between code and patterns:
 
 ### Always Quote
 
+```
+{{
+match {$var}
+when   0 {{This has no space in front of it.}}
+when one
+   {{This has no space or newline in front of it.}}
+when few
+  {{ This has one space at the start and the end. }}
+when many   {{ This also has one space start and end. }}
+when * {{You must quote all variant patterns.}}
+}}
+```
+
 Pros:
 - The boundary between pattern and code is always clear.
 - The quoting reduces the number of in-pattern escapes to the open/close sequence.
