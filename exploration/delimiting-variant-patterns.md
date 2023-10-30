@@ -43,7 +43,7 @@ The **_deadline_** is **1700 (5 PM) in the `America/Los_Angeles` time zone on Sa
   up until the deadline.
 - A group member MAY edit, change, or delete their vote up until the deadline.
 - Votes MUST be submitted as a comment on github issue [#505](https://github.com/unicode-org/message-format-wg/issues/505).
-  Group members who cannot submit a comment on this issue should contact the chair (@aphillips) for assitance.
+  Group members who cannot submit a comment on this issue should contact the chair (@aphillips) for assistance.
 - Votes MUST contain a stack ranked list of candidate options.
 - Votes MUST only contain votes for candidate options.
   Write in votes are not acceptable.
