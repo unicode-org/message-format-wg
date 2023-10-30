@@ -14,6 +14,7 @@ Status: **Proposed**
 		<dd>2023-09-13</dd>
 		<dt>Pull Request</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/474">#474</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/503">#503</a></dd>
 	</dl>
 </details>
 
@@ -150,10 +151,10 @@ Currently the syntax uses the first alternative below.
 There are five candidates for handling the boundaries between code and patterns:
 
 1. Always quote non-simple patterns (current design)
-2. Never quote patterns (all whitespace is significant)
+2. ~~Never quote patterns (all whitespace is significant)~~
 3. Permit non-simple patterns to be quoted and trim unquoted whitespace
 4. Trim all unquoted whitespace, but do not permit quoting non-simple patterns
-5. Selectively trim patterns (all whitespace is otherwise significant)
+5. ~~Selectively trim patterns (all whitespace is otherwise significant)~~
 
 ### Always Quote
 
@@ -182,6 +183,9 @@ Cons:
 - Requires matching open/close quotes.
 
 ### Never Quote Patterns
+
+> [!IMPORTANT]
+> This option was rejected by the working group in the 2023-10-30 call.
 
 In this alternative, all non-code whitespace is significant. 
 We have to use a slightly different syntax in the example, so that
@@ -263,6 +267,9 @@ Cons:
 - Weird and unattractive.
 
 ### Selective Trimming
+
+> [!IMPORTANT]
+> This option was rejected by the working group in the 2023-10-30 call.
 
 In this alternative, only specific whitespace is automatically trimmed
 and the whitespace can be omitted.
