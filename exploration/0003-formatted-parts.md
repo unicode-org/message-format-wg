@@ -17,9 +17,13 @@ Status: **Proposed**
 ## Objective
 
 Messages often include placeholders that,
-when formatted, contain internal structure ("parts")
-that the caller might want access to
-for the purposes of styling, presentation, or manipulation.
+when formatted, contain internal structure ("parts").
+Preserving this structure in a formatted message
+may be helpful to the caller,
+who can then manipulate the parts.
+For example, a caller may want to style or present
+messages with the same content differently
+if those messages have different internal structure.
 
 This proposal defines a formatted-parts target for MessageFormat 2.
 
@@ -27,6 +31,9 @@ This proposal defines a formatted-parts target for MessageFormat 2.
 
 Past examples have shown us that if we don't provide a formatter to parts,
 the string output will be re-parsed and re-processed by users.
+Recent examples of web browsers needing to account for such user behaviour are available from
+[June 2022](https://github.com/WebKit/WebKit/commit/1dc01f753d89a85ee19df8e8bd75f4aece80c594) and
+[November 2022](https://bugs.chromium.org/p/v8/issues/detail?id=13494).
 
 ## Use-Cases
 
