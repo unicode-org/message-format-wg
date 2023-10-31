@@ -3,7 +3,7 @@
 Status: **Accepted**
 
 <details>
-	<summary>Variable Namespacing and Mutability</summary>
+	<summary>Variable Namespacing and Name Shadowing</summary>
 	<dl>
 		<dt>Contributors</dt>
 		<dd>@aphillips</dd>
@@ -33,12 +33,18 @@ The term **local variable** refers to a value that is defined in a declaration.
 The term **external variable** refers to a value that is passed to the
 message formatter by name and which can be referred to in an expression.
 
+The term "name shadowing" refers to defining a variable in a scope where
+the same variable name is already defined. Shadowing removes a previous
+declaration from scope and introduces a new declaration with the same
+name, without changing the value of the variable in the outer scope.
+In other words, it overrides a variable locally.
+
 ## Use-Cases
 
 _What use-cases do we see? Ideally, quote concrete examples._
 
 - Users want to reference external variables in expressions.
-- Users can modify external variables using declarations.
+- Users want to declare new local variables whose expressions refer to external variables.
   For example, they can perform a text transformation or assign reusable formatting options.
 
   > ```
@@ -46,10 +52,12 @@ _What use-cases do we see? Ideally, quote concrete examples._
   > let $baz = {$someNumber :number groupingUsed=false}
   > ```
 
-- Users, such as translators, want to annotate a variable
-  (either local or external) without invalidating
-  existing use of the variable in pattern strings.
-  This saves the effort of finding and fixing all occurences
+- Users, such as translators, want to re-bind a variable
+  (either local or external) to an expression with an annotation,
+  in a particular scope.
+  They do not want the new binding to invalidate existing uses
+  of the variable in outer scopes.
+  This saves the effort of finding and fixing all occurrences
   in the various pattern strings, as well as issues that could arise from
   (for example) translation memory systems recalling the old expression.
   For example:
@@ -102,14 +110,14 @@ _What use-cases do we see? Ideally, quote concrete examples._
   > when * {You received {$count} messages on {$date}}
   > ```
 
-- Implementers need to know what value is associated with a named variable, see #299.
+- Implementers need to know what value is associated with a named variable, see [#299](https://github.com/unicode-org/message-format-wg/issues/299).
 
 - Users would like their tooling to identify, perhaps via static analysis, when
   they have mistyped or used an undeclared local variable.
 
 - Users would like to be able to create local variables without accidentially
-  overwriting external values. (The inverse of this, in which the declaration
-  overwrites an external value, can be difficult to debug if it occurs in,
+  overriding external values. (The inverse of this, in which the declaration
+  overrides an external value, can be difficult to debug if it occurs in,
   for example, just one of many different localized string variations.)
 
 ## Requirements
@@ -148,7 +156,7 @@ when * {You received {$count} messages on {$date}}
 ```
 
 This effectively replaces the current "hack" of saying `let $foo = {$foo ...}`,
-and provides a way to explicitly declare that a variable is non-local:
+and provides a way to explicitly declare that a variable is external:
 `input {$bar}` doesn't require an annotation.
 
 To correspond with "input",
@@ -173,7 +181,7 @@ local = %x6C.6F.63.61.6C  ; "local"
 
 The _expression_ rule can't be used directly in _input-declaration_ because the _variable_ is required.
 
-With this approach, variables are immutable,
+With this approach, local variables cannot be overridden,
 so each may be defined by only one _declaration_.
 
 References to later declarations are not allowed,
@@ -316,17 +324,18 @@ A different option is to say: it is up to the user to avoid using
 declared names that would confuse translators and others.
 This would mean that we provide no defense on the syntax level.
 
-### All Variables are Mutable; Shared Namespace
+### All Variable Names Can Be Shadowed; Shared Namespace
 
 **This is the current design.**
-A declaration can overwrite any passed in (external) value,
-either by adding annotation
-or by completely replacing the value.
-Further, one declaration can modify or completely overwrite a previous annotation.
+A declaration can override any passed in (external) variable
+with any other value, with or without an annotation.
+Further, a declaration can override any previous declaration
+of the same variable with a completely different value.
+In other words, name shadowing is allowed.
 
 There are no warnings or errors produced when this occurs, even when it is unintentional.
 
-If variables are mutable and namespaces are shared, it's easy to write a message that never
+If variables can be shadowed and namespaces are shared, it's easy to write a message that never
 fails but does produce unintended or unexpected results (from the caller's point of view).
 
 ```
@@ -336,9 +345,9 @@ let $arg1 = {42}
 {This always says {$arg1} == 42}
 ```
 
-### All Variables are Mutable; Non-shared Namespace
+### All Variable Names Can Be Shadowed; Non-shared Namespace
 
-If variables are mutable but namespaces are not shared, its easy for developers or translators to reference the wrong one:
+If variable names can be shadowed but namespaces are not shared, it's easy for developers or translators to reference the wrong one:
 
 ```
 {"arg1": "10000"}
@@ -347,9 +356,9 @@ let #arg1 = {42 :number maxFractionDigits=2}
 {This always says {$arg1} == 10000 because it should say {#arg1}}
 ```
 
-### All Variables are Immutable; Shared Namespace
+### All Variable Names are Unique; Shared Namespace
 
-If we make all variables immutable and external and local vars share a namespace,
+If we make all variables unique and external and local vars share a namespace,
 passing an argument that shares a name with a local declaration can cause a message to fail.
 
 ```
@@ -358,10 +367,12 @@ passing an argument that shares a name with a local declaration can cause a mess
 let $arg1 = {|42| :number maxFractionDigits=2}  // error
 ```
 
-### All Variables are Immutable; Non-shared Namespace
+### All Variables are Unique; Non-shared Namespace
 
-If we make all variables immutable but external and local vars do not share a namespace,
-this problem goes away. However, a local variable cannot be used to augment or annotate an external variable.
+If we make all variables unique but external and local vars do not share a namespace,
+this problem goes away. However, a local variable cannot be defined
+that has the same name as an external variable and a value augmenting
+the external variable's value with an annotation.
 
 ```
 { "arg1": "42" }
