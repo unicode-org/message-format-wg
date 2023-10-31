@@ -1,6 +1,6 @@
 # Syntax Exploration v2
 
-In the 2023-10-16 teleconference, we narrowed the options being considered for text-mode syntax to "1a", "2a", and "3a". 
+In the 2023-10-16 teleconference, we narrowed the options being considered for text-mode syntax to "1a", "2a", and "3a" from the [Syntax Variation Beauty Contest](./beauty-contest.md). 
 Each of these syntax candidates has been adjusted based on our conversation.
 
 One open issue, separately considered here, is the use of an additional sigil for some of the syntaxes.
