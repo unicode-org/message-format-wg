@@ -758,7 +758,7 @@ These are divided into the following categories:
     contains a _selector_ that does not have an _annotation_,
     or contains a _variable_ that does not directly or indirectly reference a _declaration_ with an _annotation_.
 
-    > Example invalid messages resulting in a _Missing Selector Annotation error_:
+    > Examples of invalid messages resulting in a _Missing Selector Annotation error_:
     >
     > ```
     > {{
@@ -786,11 +786,32 @@ These are divided into the following categories:
     > }}
     > ```
 
+  - **Duplicate Declaration errors** occur when a _variable_ appears in two _declarations_.
+    This includes when an _input-declaration_ binds a _variable_ that appears in a previous _declaration_,
+    when a _local-declaration_ binds a _variable_ that appears in a previous _declaration_,
+    or when a _local-declaration_ refers to its _variable_ in its _expression_.
+
+    > Examples of invalid messages resulting in a Duplicate Declaration error:
+    >
+    > ```
+    > {{
+    >    input {$var :number maxFractionDigits=0}
+    >    input {$var :number minFractionDigits=0}
+    >    {{Redeclaration of the same variable}}
+    > }}
+    > {{
+    >    local $var = {$ext :someFunction}
+    >    local $var = {$error}
+    >    local $var2 = {$var2 :error}
+    >    {{{$var} cannot be redefined. {$var2} cannot refer to itself}}
+    > }}
+    > ```
+
   - **Duplicate Option Name errors** occur when the same _name_
     appears on the left-hand side
     of more than one _option_ in the same _expression_.
 
-    > Example invalid messages resulting in a Duplicate Option Name error:
+    > Examples of invalid messages resulting in a Duplicate Option Name error:
     >
     > ```
     > Value is {42 :number style=percent style=decimal}
