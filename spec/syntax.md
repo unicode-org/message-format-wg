@@ -163,21 +163,6 @@ Duplicate Declaration error during formatting:
   _declaration_.
 - A _local-declaration_ MUST NOT bind a _variable_ that appears in its _expression_.
 
-> Examples of invalid messages:
-> ```
-> {{
->    input {$var :number maxFractionDigits=0}
->    input {$var :number minFractionDigits=0}
->    {{Redeclaration of the same variable}}
-> }}
-> {{
->    local $var = {$ext :someFunction}
->    local $var = {$error}
->    local $var2 = {$var2 :error}
->    {{{$var} cannot be redefined. {$var2} cannot refer to itself}}
-> }}
-> ```
-
 > [!Note]
 > These restrictions only apply to _declarations_.
 > A _placeholder_ or _selector_ MAY override the annotation provided in a _declaration_.
@@ -190,6 +175,7 @@ Duplicate Declaration error during formatting:
 >    when * {{This pattern can re-annotate {$var :number maxFractionDigits=3}}}
 > }}
 > ```
+> (See [Error Handling](./formatting.md#error-handling) for examples of invalid messages)
 
 ### Body
 
