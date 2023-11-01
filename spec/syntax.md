@@ -168,15 +168,15 @@ external input value does not appear in a _declaration_.
 
 > [!Note]
 > These restrictions only apply to _declarations_.
-> A _placeholder_ or _selector_ MAY supply a different annotation than one
-> provided in a _declaration_ for the same _variable_.
+> A _placeholder_ or _selector_ can apply a different annotation to a _variable_
+> than one applied to the same _variable_ name in a _declaration_.
 > For example, this message is _valid_:
 > ```
 > {{
 >    input {$var :number maxFractionDigits=0}
 >    match {$var :plural maxFractionDigits=2}
->    when 0 {{The selector can re-annotate {$var}}}
->    when * {{This pattern can re-annotate {$var :number maxFractionDigits=3}}}
+>    when 0 {{The selector can apply a different annotation to {$var} for the purposes of selection}}
+>    when * {{A placeholder in a pattern can apply a different annotation to {$var :number maxFractionDigits=3}}}
 > }}
 > ```
 > (See [Error Handling](./formatting.md#error-handling) for examples of invalid messages)
