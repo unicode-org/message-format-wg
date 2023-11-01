@@ -163,9 +163,13 @@ Duplicate Declaration error during formatting:
   _declaration_.
 - A _local-declaration_ MUST NOT bind a _variable_ that appears in its _expression_.
 
+A _local-declaration_ MAY overwrite an external input value as long as the
+external input value does not appear in a _declaration_.
+
 > [!Note]
 > These restrictions only apply to _declarations_.
-> A _placeholder_ or _selector_ MAY override the annotation provided in a _declaration_.
+> A _placeholder_ or _selector_ MAY supply a different annotation than one
+> provided in a _declaration_ for the same _variable_.
 > For example, this message is _valid_:
 > ```
 > {{
