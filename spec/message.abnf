@@ -7,7 +7,6 @@ input-declaration = input [s] variable-expression
 local-declaration = local s variable [s] "=" [s] expression
 
 body = quoted-pattern
-
      / (selectors 1*([s] variant))
 
 quoted-pattern = "{{" pattern "}}"
