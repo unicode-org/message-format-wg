@@ -622,10 +622,10 @@ The following four keywords are reserved: `input`, `local`, `match`, and `when`.
 Reserved keywords are always lowercase.
 
 ```abnf
-input = %x69.6E.70.75.74  ; "input"
-local = %x6C.6F.63.61.6C  ; "local"
-match = %x6D.61.74.63.68  ; "match"
-when  = %x77.68.65.6E     ; "when"
+input = "input"
+local = "local"
+match = "match"
+when  = "when"
 ```
 
 ### Literals
@@ -733,4 +733,18 @@ s = 1*( SP / HTAB / CR / LF )
 
 The grammar is formally defined in [`message.abnf`](./message.abnf)
 using the ABNF notation,
-as specified by [RFC 5234](https://datatracker.ietf.org/doc/html/rfc5234).
+as specified by [RFC 7405](https://www.rfc-editor.org/rfc/rfc7405).
+
+RFC7405 defines a variation of ABNF that is case-sensitive.
+Some ABNF tools depend on the case-insensitive version of ABNF, specifically 
+[RFC 5234](https://www.rfc-editor.org/rfc/rfc5234). 
+To make `message.abnf` compatible with this version of ABNF, replace
+the rules of the same name with this block:
+
+```abnf
+; reserved keywords are always lowercase
+input = %x69.6E.70.75.74  ; "input"
+local = %x6C.6F.63.61.6C  ; "local"
+match = %x6D.61.74.63.68  ; "match"
+when  = %x77.68.65.6E     ; "when"
+```
