@@ -789,7 +789,7 @@ These are divided into the following categories:
   - A **Duplicate Declaration error** occurs when a _variable_ appears in two _declarations_.
     This includes when an _input-declaration_ binds a _variable_ that appears in a previous _declaration_,
     when a _local-declaration_ binds a _variable_ that appears in a previous _declaration_,
-    or when a _local-declaration_ refers to its _variable_ in its _expression_.
+    or when a _local-declaration_ refers to its bound _variable_ in its _expression_.
 
     > Examples of invalid messages resulting in a Duplicate Declaration error:
     >
