@@ -154,15 +154,18 @@ It may be as long as desired, although users are cautioned that brevity
 is desirable.
 The prefix is separated from the name by a colon (U+003A COLON).
 
+The default namespace is called the _anonymous namespace_.
+Names without a namespace prefix are in the anonymous namespace.
+Resolution of which function (or option, annotation, or spannable) is used
+for a name in the anonymous namesapce is implementation defined.
+Generally it will consist of the value in the default registry
+or the implementation's default.
+
 The choice of a `:` is intentional, as it already used for function identification
 and might be familiar from similar usage in XML namespaces
 as well as slightly similar to C++, e.g. `ns::function`.
 This design leverages these sorts of "application familiarity"
 as well as the current syntax's use of colon as the function sigil.
-
-The namespace prefix `std` is reserved and refers to the default registry.
-The default registry will have a well-known URL under `unicode.org`
-but this URL is not yet specified.
 
 ```abnf
 name      = [namespace] name-body
@@ -213,10 +216,10 @@ Examples:
 > ```
 >
 > Everything altogether all at once. This probably does not work
-> correctly, since `std:datetime` may not understand `icu:skeleton`:
+> correctly, since `:foo:datetime` may not understand `icu:skeleton`:
 >
 > ```
-> Today is {+html:a}{$today :std:datetime icu:skeleton=EEEEyMdjm @my:annotation}{-html:a}
+> Today is {+html:a}{$today :foo:datetime icu:skeleton=EEEEyMdjm @my:annotation}{-html:a}
 > ```
 
 Users, such as developers writing messages or translators creating translations,
