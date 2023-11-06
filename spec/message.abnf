@@ -27,10 +27,10 @@ function = (":" / "+" / "-") name
 option = name [s] "=" [s] (literal / variable)
 
 ; reserved keywords are always lowercase
-input = "input"
-local = "local"
-match = "match"
-when  = "when"
+input = %s"input"
+local = %s"local"
+match = %s"match"
+when  = %s"when"
 
 text = 1*(text-char / text-escape)
 text-char = %x0-5B         ; omit \
