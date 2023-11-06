@@ -8,6 +8,7 @@ Status: **Proposed**
 		<dt>Contributors</dt>
 		<dd>@eemeli</dd>
 		<dd>@aphillips</dd>
+		<dd>@stasm</dd>
 		<dt>First proposed</dt>
 		<dd>2023-09-05</dd>
 		<dt>Pull Request</dt>
@@ -220,3 +221,70 @@ Rendered as React this could become:
 _What other solutions are available?_
 _How do they compare against the requirements?_
 _What other properties they have?_
+
+### New declarations and a familiar syntax
+
+The goal of this solution is to avoid adding new sigils to the syntax.
+Instead, it leverages *keywords* as the tool for qualifying certain placeholders as open, close, or standalone,
+combined with familiar HTML-inspired syntax.
+
+This solution consists of adding:
+
+* Two new declaration types called `openclose` and `standalone`.
+* New placeholder syntax: `{foo}`, `{/foo}`, and `{foo/}`.
+
+
+> [!NOTE]
+> This require dropping unquoted literals as operands,
+> so that `{foo}` is not parsed as `{|foo|}`.
+
+```
+{{
+    openclose {html:strong class=foo onclick=bar}
+    standalone {html:img src=http://example.com}
+    {{This is {html:strong}bold{/html:strong} and this is {html:img alt=|an image|/}.}}
+}}
+```
+
+Similar to `input` declarations, markup declarations are optional.
+If they’re absent, then any `{foo}` is interpreted as a span-open, any `{/foo}` as a span-close, and `{foo/}` as a standalone element.
+If declarations are present, they specify the kind of markup precisely,
+making `{strong/}` and `{img}` and `{/img}` invalid in the example above.
+Additionally, declarations allow adding non-localizable attributes to markup elements.
+
+Declarations could optionally specify a local element name bound to a particular element expression.
+This would allow creating shorter aliases for namespaced elements,
+as well as binding more than one element expression.
+
+```
+{{
+    standalone img1 = {html:img src=http://example.com/image1.png}
+    standalone img2 = {html:img src=http://example.com/image2.png}
+    {{There are {img1/} and {img2/} here.}}
+}}
+```
+
+#### Pros
+
+* Doesn't add new sigils except for `/`,
+  which is universally known thanks to the wide-spread use of HTML.
+
+* Leverages an existing mechanism of using optional declarations to aid the tooling usecases.
+  Compare how `input` declarations can be used to augment messages.
+
+* Using syntax inspired by HTML should make it familiar to most translators.
+  Prior art for a similar inspiration can be found in the [BBCode](https://en.wikipedia.org/wiki/BBCode) syntax,
+  which uses `[foo]` and `[/foo]` as tags.
+
+* Avoids the issues of using JSX-style syntax, `<foo>`...`</foo>`,
+  which looks *exactly* like HTML, but has different semantics and behavior.
+
+#### Cons
+
+* May still be confusing because it looks almost like HTML, but doesn't use the familiar angle brackets.
+
+* Requires changes to the existing MF2 syntax: dropping unquoted literals as expression operands.
+
+* Regular placeholders, e.g. `{$var}`, use the same `{...}` syntax, and may be confused for *open* elements.
+
+* Using declarations is verbose.
