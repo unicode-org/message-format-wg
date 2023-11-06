@@ -800,6 +800,16 @@ These are divided into the following categories:
     >    {{Redeclaration of the same variable}}
     > }}
     > {{
+    >    local $var = {$ext :number maxFractionDigits=0}
+    >    input {$var :number minFractionDigits=0}
+    >    {{Redeclaration of a local variable}}
+    > }}
+    > {{
+    >    input {$var :number minFractionDigits=0}
+    >    local $var = {$ext :number maxFractionDigits=0}
+    >    {{Redeclaration of an input variable}}
+    > }}
+    > {{
     >    local $var = {$ext :someFunction}
     >    local $var = {$error}
     >    local $var2 = {$var2 :error}
