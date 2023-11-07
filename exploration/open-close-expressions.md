@@ -220,3 +220,28 @@ Rendered as React this could become:
 _What other solutions are available?_
 _How do they compare against the requirements?_
 _What other properties they have?_
+
+### Do Nothing
+
+We could not provide any special support for spans and markup elements,
+and instead delegate the problem completely to tools and downstream processing layers.
+
+```
+This is <html:strong>bold</html:strong> and this is <html:img alt="an image">.
+```
+
+#### Pros:
+
+* No work required from us right now.
+* It's HTML.
+* The least surprising syntax for developers and translators.
+* Some CAT tools already support HTML in translations.
+
+#### Cons:
+
+* Requires quoting in XML-based containers.
+* Relies on a best-effort convention; is not a standard.
+* Markup becomes a completely alient concept in MessageFormat:
+  * It cannot be validated via the AST nor the reigstry.
+  * It cannot be protected, unless put inside literal expressions.
+  * It is not supported by `formatToParts`, which in turn makes double-parsing difficult.
