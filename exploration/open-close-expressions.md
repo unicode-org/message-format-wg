@@ -245,3 +245,43 @@ This is <html:strong>bold</html:strong> and this is <html:img alt="an image">.
   * It cannot be validated via the AST nor the reigstry.
   * It cannot be protected, unless put inside literal expressions.
   * It is not supported by `formatToParts`, which in turn makes double-parsing difficult.
+
+### HTML Syntax
+
+We could parse the HTML syntax as part of MessageFormat parsing,
+and represent markup as first-class data-model concepts of MessageFormat.
+
+```
+This is <html:strong>bold</html:strong> and this is <html:img alt="an image">.
+```
+
+To represent HTML's auto-closing tags, like `<img>`,
+we could follow HTML's syntax to the letter, similer to the snippet above,
+and use the *span-open* syntax for them.
+This would be consistent with HTML, but would require:
+
+* Either the parser to hardcode which elements are standalone;
+  this approach wouldn't scale well beyond the current set of HTML elements.
+
+* Or, the validation and processing which leverages the open/close and standalone concepts
+  to be possible only when the registry is available.
+
+Alternatively, we could diverge from proper HTML,
+and use the stricter XML syntax: `<img/>`.
+
+```
+This is <html:strong>bold</html:strong> and this is <html:img alt="an image" />.
+```
+
+The same approach would be used for self-closing elements defined by other dialects of XML.
+
+#### Pros:
+
+* Looks like HTML.
+* The least surprising syntax for developers and translators.
+
+#### Cons:
+
+* Looks like HTML, but isn't *exactly* HTML, unless we go to great lengths to make it so.
+  See the differences between HTML and React's JSX as a case-study of consequences.
+* Requires quoting in XML-based containers.
