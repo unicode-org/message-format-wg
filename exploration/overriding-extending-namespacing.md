@@ -1,4 +1,4 @@
-# Design Proposal Template
+# Design Proposal: Namespaces for Extending Functions, Options, etc.
 
 Status: **Proposed**
 
@@ -18,6 +18,10 @@ Status: **Proposed**
 
 _What is this proposal trying to achieve?_
 
+This design defines how externally-authored functions can appear in a _message_;
+how externally-authored function options (and their values) can be supported;
+and what, if any, effects this has on the namespace of functions and options.
+
 Implementations will provide the functionality for selection and formatting,
 including options and option values.
 Much of this functionality will be mandated by the default registry.
@@ -33,10 +37,6 @@ A successful ecosystem will allow users to pick-and-choose or cherry-pick fuctio
 options to use in a given development environment.
 Each function, option, or option value extension needs to work as seamlessly as possible
 with other add-ons and with the built-in functionality.
-
-To that end, we need to define how externally-authored functions appear in a _message_;
-how externally-authored function options (and their values) can be supported;
-and what, if any, effects this has on the namespace of functions and options.
 
 ## Background
 
@@ -107,10 +107,9 @@ _What properties does the solution have to manifest to enable the use-cases abov
 
 - Developers must be able to write functions that do not later collide with items in the default registry.
 - Developers must be able to write function add-ons that do not later collide with items in the default registry.
-- Users should be able to tell visually when an add-on feature has been used vs. a built-in
+- Users should be able to tell visually when an add-on feature has been used vs. a built-in feature
 - Users should be able to resolve conflicts between add-on packages that use the same
   function names without altering add-on packages
--
 
 ## Constraints
 
@@ -186,7 +185,7 @@ The `name` production as defined here applies to:
 
 - function (selector/formatting) names
 - option names
-- spanable names
+- spannable names
 - expression annotation names (if approved)
 
 Examples:
@@ -194,10 +193,10 @@ Examples:
 > Add-on function:
 >
 > ```
-> Today is {$today :icu:datetime skeleton=EEEEyMdjm}
+> Today is {$today :icu:datetime dateStyle=long}
 > ```
 >
-> Add on option:
+> Add-on option:
 >
 > ```
 > Today is {$today :datetime icu:skeleton=EEEEyMdjm}
