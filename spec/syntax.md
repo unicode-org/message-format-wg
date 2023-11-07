@@ -732,13 +732,13 @@ s = 1*( SP / HTAB / CR / LF )
 ## Complete ABNF
 
 The grammar is formally defined in [`message.abnf`](./message.abnf)
-using the ABNF notation,
-as specified by [RFC 7405](https://www.rfc-editor.org/rfc/rfc7405).
+using the ABNF notation [[STD68](https://www.rfc-editor.org/info/std68)],
+including the modifications found in [RFC 7405](https://www.rfc-editor.org/rfc/rfc7405).
 
 RFC7405 defines a variation of ABNF that is case-sensitive.
-Some ABNF tools depend on the case-insensitive version of ABNF, specifically 
+Some ABNF tools are only compatible with the specification found in
 [RFC 5234](https://www.rfc-editor.org/rfc/rfc5234). 
-To make `message.abnf` compatible with this version of ABNF, replace
+To make `message.abnf` compatible with that version of ABNF, replace
 the rules of the same name with this block:
 
 ```abnf
