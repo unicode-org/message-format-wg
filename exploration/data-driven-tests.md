@@ -16,7 +16,11 @@ Status: **Proposed**
 
 ## Objective
 
-Establish a suitable approach for testing that different implmentations of MessageFormat 2 align with the specification.
+One of the [deliverables of the Message Format Working Group (MFWG)](https://github.com/unicode-org/message-format-wg/blob/main/docs/goals.md#deliverables) is:
+
+> "A conformance test suite for parsing and formatting messages sufficient to ensure implementations can validate conformance to the specification(s) provided".
+
+This design proposal captures the planned approach for the suite.
 
 This approach includes _how_ tests are written: They should be captured in a single platform-agnostic format that can be utilized by all MF2 implementations. There should be no need to rewrite individual test cases for each platform.
 
@@ -26,13 +30,19 @@ This approach also includes _what_ kind of tests are written. We need to identif
 
 Several pre-existing test files have been considered before forming this proposal:
 
-- [Unicode's Data Driven Test framework](https://github.com/unicode-org/conformance)
-- [message-format-wg XML test format](https://github.com/unicode-org/message-format-wg/tree/514758923abac13a2c5eb71b6b6cdef4a181280e/test)
-- [Intl.MessageFormat polyfill tests](https://github.com/messageformat/messageformat/tree/main/packages/mf2-messageformat/src)
-- [ICU4J test examples](https://github.com/unicode-org/icu/tree/main/icu4j/main/core/src/test/java/com/ibm/icu/dev/test/message2)
-- [Tim Chevalier's draft ICU4C tests](https://github.com/catamorphism/icu/blob/parser-plus-data-model-plus-full-api/icu4c/source/test/intltest/messageformat2test.cpp)
+- [**Unicode's Data Driven Test framework**](https://github.com/unicode-org/conformance) is a project with a goal that aligns with that of MFWG's conformance test suite.
+
+- [**message-format-wg XML test format**](https://github.com/unicode-org/message-format-wg/tree/514758923abac13a2c5eb71b6b6cdef4a181280e/test) includes a test schema and accompanying test examples from which we can take inspiration.
+
+- [**Intl.MessageFormat polyfill tests**](https://github.com/messageformat/messageformat/tree/main/packages/mf2-messageformat/src) are implementation-specific but they capture the type of tests that we may want to include in the conformance test suite. The polyfill itself is an implementation that the test suite could be run against.
+
+- [**ICU**](https://github.com/unicode-org/icu) also contains platform-specific MF2 test cases that could be reused for the conformance test suite, including the [ICU4J tests](https://github.com/unicode-org/icu/tree/main/icu4j/main/core/src/test/java/com/ibm/icu/dev/test/message2) and [Tim Chevalier's draft ICU4C tests](https://github.com/catamorphism/icu/blob/parser-plus-data-model-plus-full-api/icu4c/source/test/intltest/messageformat2test.cpp).
 
 ## Use-Cases
+
+**Developers** of MF2 implementations need to easily verify that their completed implementation conforms to the specification. This needs to be fully automated and easily repeatable.
+
+For incomplete and incorrect implementations, it is important for developers to easily understand where the specification is not being met and why.
 
 The main platforms for which the tests should initially run are:
 
@@ -41,6 +51,10 @@ The main platforms for which the tests should initially run are:
 - ICU4C (C++)
 
 Other platforms, such as ICU4X (Rust) may be added later.
+
+**Stakeholders** and **MF2 users** may use the conformance test suite as human-readable documentation of the specification. It needs to be easily navigable and legible for this purpose.
+
+**Vendors** using tooling that conforms to the specification may want to run tests against it to verify that this is the case.
 
 ## Requirements
 
@@ -53,20 +67,15 @@ Other platforms, such as ICU4X (Rust) may be added later.
 
 - Test content
   - Syntax tests: Testing which standard registry functions are invoked when different arguments are passed to a given pattern.
-  - Formatter tests: Testing the output of each of the standard registry's formatting functions.
   - Selector tests: Testing which case of a `match` statement is selected, based on what follows the `when` keyword.
 
 ## Constraints
 
-### External dependencies
+### External dependencies can impact portability
 
-Due to the platform-agnostic nature of the tests, we must ensure that they are easily adaptable to new technologies. This means that any external dependency must be introduced with a great deal of caution because it may impact the portability of the test framework.
+The platform-agnostic nature of the tests means that great caution must be taken around adding dependencies. The test suite must cater for a range of technology stacks and workflows with different restrictions around external dependencies.
 
-### Data model is not part of the specification
-
-Although a standard data model is included in this repository, there is no requirement for all MF2 implementation to use it. This means that any data model tests included in the test suite may fail for standard-compliant implementations. If any tests of this type are included, they must be optional.
-
-### Errors and evaluation strategy
+### Errors and evaluation strategy may not be consistent
 
 It is important to test error cases for each of the test types mentioned above but, because variable evaluation is not captured within the standard, we cannot guarantee what kind of error will be raised in all cases.
 
@@ -83,6 +92,14 @@ Similarly, this pattern may show a different error depending on evaluation. The 
 local $foo = {$bar}
 {Hello, {$bar}!}
 ```
+
+### The output of formatters may not be stable over time
+
+Where possible, any parts of the suite that do not directly test the formatters should be independent of their output. This is to reduce the number of test failures caused by formatter output changes.
+
+### Data model is not part of the specification
+
+Although a standard data model is included in this repository, there is no requirement for all MF2 implementations to use it. This means that any data model tests included in the test suite may fail for otherwise standard-compliant implementations. If any tests of this type are included, they must be optional.
 
 ## Proposed Design
 
@@ -137,11 +154,24 @@ The README specifies that test cases and expected results are to be located in s
 }
 ```
 
-### YAML-to-JSON test transpilation (optional)
+### Test format
 
-JSON does not support multiline strings. Test files may need to include `\n` line breaks in order to capture multiline patterns, which could cause readability issues. YAML syntax offers improved readability in this situation.
+As per the 'Unicode & CLDR Data Driven Test' documentation, test and verification files are provided in JSON format. The proposal is to write tests in YAML and transpile them to JSON.
 
-We can include a script that converts YAML-formatted "test" and "verify" files to JSON. Assuming both the YAML- and JSON-format tests are committed, the JSON can remain the single source of truth for the tests, which aligns with the expectations of Unicode Data Driven Tests.
+JSON does not support multiline strings so test files may need to include `\n` line breaks in order to capture multiline patterns, which may impact readability. This is the main reason not to author tests in JSON directly. Assuming both the source and JSON-format tests are committed to the repository, the JSON remains the single source of truth for the tests and it can be consumed by the test executor without the need for any transpilation at runtime.
+
+The source format should offer the following:
+
+- Precise control over whitespace as many MF2 tests concern this.
+- Literal newlines for use in multiline patterns.
+- Concise readable syntax.
+- Comment syntax.
+- Validation against a schema.
+- (Optional) Editor integration for syntax highlighting and validation.
+
+YAML fulfils these requirements and is widely used.
+
+There is a [test generator](https://github.com/unicode-org/conformance/tree/main/testgen) included in the 'Unicode & CLDR Data Driven Test' repository. At the time of writing, this is specific to number format tests and is not easily adaptable to the needs of MF2. It does, however, demonstrate generating JSON from source files.
 
 ### Test content
 
@@ -155,18 +185,53 @@ Example:
 {
   "label": "Renders multiple inputs in formatted string",
   "locale": "en-US",
-  "pattern": "{{$strArg :string} and {$numArg :number}}",
+  "pattern": "{{$strArg :string} and {$numArg :number minimumFractionDigits=2}}",
   "inputs": {
     "strArg": { "type": "string", "value": "foo" },
     "numArg": { "type": "number", "value": 123 }
   }
-  // "verify":  "{ formatter: "string", value: "foo" } and { formatter: number, value: 123 }"
+  // "verify":  "{ formatter: "string", value: "foo" } and { formatter: number, value: 123, minimumFractionDigits: 2 }"
 }
 ```
 
-#### Formatter tests
+#### Selector tests
+
+These are extensive tests of the cases within a `match` statement. Testing of multiple selectors is included.
+
+Single selector example:
+
+```jsonc
+{
+  "label": "Matches numbers other than one",
+  "locale": "en-US",
+  "pattern": "match {$arg :number} when 1 {result 1} when * {result multi}",
+  "inputs": {
+    "arg": { "type": "number", "value": 2 }
+  }
+  // "verify": "result multi"
+}
+```
+
+Multiple selector example:
+
+```jsonc
+{
+  "label": "Matches wildcard strings and numbers other than one",
+  "locale": "en-US",
+  "pattern": "match {$name :string} {$count :number} when apple 1 {result apple 1} when apple * {result apple multi} when * 1 {result other 1} when * * {result other multi}",
+  "inputs": {
+    "name": { "type": "string", "value": "banana" },
+    "count": { "type": "number", "value": 3 }
+  }
+  // "verify": "result other multi"
+}
+```
+
+#### Formatter tests (optional)
 
 These tests focus on the standard registry's formatters (e.g. `:number`, `:datetime`). They cover the different options that can be passed to each formatter (e.g. `offset`, `skeleton`).
+
+If the output of a formatter changes in the future, these tests may need updating.
 
 Example:
 
@@ -182,24 +247,6 @@ Example:
 }
 ```
 
-#### Selector tests
-
-These are extensive tests of the cases within a `match` statement. Testing of multiple selectors is included.
-
-Example:
-
-```jsonc
-{
-  "label": "Matches numbers other than one",
-  "locale": "en-US",
-  "pattern": "match {$arg :number} when one {one} when * {*}",
-  "inputs": {
-    "arg": { "type": "number", "value": 3 }
-  }
-  // "verify": "*"
-}
-```
-
 #### Data model tests (optional)
 
 There is no standard data model within the specification, which means that we cannot create mandatory data model tests.
@@ -208,7 +255,18 @@ If a particular implementation of MF2 exposes a standardized representation of [
 
 ## Alternatives Considered
 
-### Gherkin syntax and Cucumber runner
+### XML test syntax
+
+As mentioned above, there are several advantages to writing tests in XML:
+
+- It allows preservation of whitespace in strings, which is crucial for MF2 test cases.
+- It allows literal newline characters in strings, which provides enhanced readability for multiline patterns.
+- It supports a schema format, which can be used to validate test files.
+- It is widely supported.
+
+XML is fairly verbose though. It is better suited to writing markup, which is not our use-case.
+
+### Gherkin test syntax and Cucumber runner
 
 Based on the readability concerns mentioned above, the Gherkin syntax was also considered.
 
@@ -238,6 +296,6 @@ Feature: Multi-selector messages
     Then the string output is "Matt added a new photo to his album."
 ```
 
-The [Cucumber framework](https://cucumber.io/) was considered because of its integration with the Gherkin syntax. Cucumber's approach of using platform-specific step definitions for Gherkin scenarios aligns with our goal of having a data-only representation of the test content. Unfortunately, the MF2 test runner may need to target a wide range of platforms in future. In this case, integrating with Cucumber would incur additional overhead.
+The [Cucumber framework](https://cucumber.io/) was considered because of its integration with the Gherkin syntax. Cucumber's approach of using platform-specific step definitions for Gherkin scenarios aligns with our goal of having a data-only representation of the test content. It may, however, be difficult to support Cucumber in certain technology stacks and workflows.
 
-It would, however, be possible to transpile Gherkin to JSON without using Cucumber, which would provide similar benefits to the YAML transpilation mentioned above. This can be discussed further.
+It would be possible to transpile Gherkin to JSON without using Cucumber, which would provide similar benefits to the YAML transpilation mentioned above. This can be discussed further.
