@@ -66,8 +66,8 @@ Other platforms, such as ICU4X (Rust) may be added later.
   - The framework must be extendable with new executors (e.g. ICU4X) and it should be clear how to do this.
 
 - Test content
-  - Syntax tests: Testing which standard registry functions are invoked when different arguments are passed to a given pattern.
-  - Selector tests: Testing which case of a `match` statement is selected, based on what follows the `when` keyword.
+  - **Syntax tests:** These test that valid patterns are evaluated correctly and that invalid patterns are identified. Where standard registry functions are used, they also test that the correct function is invoked with the expected arguments.
+  - **Selector tests:** These test that the correct case of a `match` statement is selected, based on what follows the `when` keyword.
 
 ## Constraints
 
