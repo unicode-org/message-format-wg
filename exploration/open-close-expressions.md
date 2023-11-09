@@ -241,6 +241,7 @@ they are distinct from `$variables`, `:functions`, and `|literals|`.
 > [!NOTE]
 > This requires dropping unquoted literals as operands,
 > so that `{foo}` is not parsed as `{|foo|}`.
+> See [#518](https://github.com/unicode-org/message-format-wg/issues/518).
 
 The exact meaning of the new placeholer types is as follows:
 
