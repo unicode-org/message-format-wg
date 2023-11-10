@@ -144,7 +144,7 @@ _What properties does the solution have to manifest to enable the use-cases abov
 - **[r3; medium priority]** Minimize the incentive to avoid escaping by changing messages
   (e.g. rephrasing content, using typographic apostrophes, or switching outer delimiters).
 
-- **[r4; medium priority]** Don't surprise users with syntax that's too exotic.
+- **[r4; medium/high priority]** Don't surprise users with syntax that's too exotic.
   We expect quoted literals to be rare,
   which means fewer opportunities to get used to their syntax and remember it.
 
@@ -154,6 +154,25 @@ _What properties does the solution have to manifest to enable the use-cases abov
   to visually indicate to the user editing a message the bounds of the literal under caret.
   However, quoted literals are usually short and already enclosed in a placeholder (which has its own delimiters)
   or are outside patterns (when used as variant keys).
+
+  <details>
+    <summary>How can paired delimiters improve parsing recovery?</summary>
+    If both paired delimiters are made special in the literal,
+    i.e. both the opening and the closing delimiter require escaping inside the literal to be part of its contents,
+    then the start of another literal can be an anchor point for a parser to stop parsing and attempt to rewind and recover.
+
+    ```
+    There {:is a=|broken literal=|here|}
+                        ^         ^
+                        The closing delimiter is missing here.
+                                  The syntax error occurs here.
+    There {:is a=[broken literal=[here]}
+                        ^^       ^
+                        The closing delimiter is missing here.
+                        |       The parser can recognize a new literal here...
+                        and rewind to here.
+    ```
+  </details>
 
 ## Constraints
 
@@ -173,7 +192,9 @@ _What prior decisions and existing conditions limit the possible design?_
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
 
-Use the vertical line character, `|`, to delimit quoted strings. For example:
+Use the vertical line character, `|`, to delimit quoted strings.
+The vertical line is rarely found in text content,
+and it has sufficiently good delimitation properties.
 
 > ```
 > {The Unix epoch is defined as {|Thu, 01 Jan 1970 00:00:00 GMT| :datetime}.}
@@ -189,18 +210,17 @@ quoted-char   = %x0-5B         ; omit \
 quoted-escape = backslash ( backslash / "|" )
 ```
 
-By being both uncommon in text content
-and uncommon as a string delimiter in other programming languages,
+By being both uncommon in text content and uncommon as a string delimiter in other programming languages,
 the vertical line sidesteps the "inwards" and "outwards" problems of escaping.
 
 - [r1 GOOD] Writing `"` and `'` in literals doesn't require escaping them via `\`.
   This means no extra `\` that need escaping.
 - [r2 GOOD] Embedding messages in most code or containers doesn't require escaping the literal delimiters.
 - [r3 GOOD] Message don't have to be modified otherwise before embedding them.
-- [r4 FAIR] Vertical lines are not commonly used as string delimiters
+- [r4 POOR/FAIR] Vertical lines are not commonly used as string delimiters
   and thus can be harder to learn for beginners.
-  There's prior art in a practice of using vertical lines as delimiters for inline code literals in email and chat.
-  Vertical bars can also be used as a separator in [delimiter-separated data formats](http://www.catb.org/~esr/writings/taoup/html/ch05s02.html).
+  Vertical bars can be used as a separator in [delimiter-separated data formats](http://www.catb.org/~esr/writings/taoup/html/ch05s02.html).
+  However, typically vertical lines tend to be used as delimiters for *separating* rather than for *enclosing*.
 - [r5 POOR] Vertical lines are not automatically paired by parsers nor IDEs.
 
 ## Alternatives Considered
@@ -309,7 +329,7 @@ at the expense of doubling the amount of escaping required when embedding messag
    </tr>
    <tr>
       <th>[r4] no surprises</th>
-      <td>+</td>
+      <td>-/+</td>
       <td>++</td>
       <td>++</td>
       <td>-</td>
