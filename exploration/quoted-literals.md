@@ -288,6 +288,41 @@ This is the approach taken by ICU MessageFormat 1.0 for quotes.
 It allows literals to contain quotes [r1 GOOD]
 at the expense of doubling the amount of escaping required when embedding messages in code [r2 POOR].
 
+### [a6] Accept either `|` or quotes
+
+Allow any of the following as literal delimiters:
+
+- the vertical line character `|`
+- single quotes `'`
+- double quotes `"`
+
+This approach supports multiple different quoting styles to be used for literals.
+This flexibility allows for using a familiar and common style such as `'single'` or `"double"` quotes,
+while also allowing for `|pipes|` when the message's contents or embedding would otherwise require additional escaping.
+
+```abnf
+literal       = quoted / unquoted
+quoted        = "|" *(quoted-char / "'" / DQUOTE / quoted-escape) "|"
+              / "'" *(quoted-char / DQUOTE / "|" / quoted-escape) "'"
+              / DQUOTE *(quoted-char / "'" / "|" / quoted-escape) DQUOTE
+quoted-char   = %x0-21         ; omit "
+              / %x23-26        ; omit '
+              / %x28-5B        ; omit \
+              / %x5D-7B        ; omit |
+              / %x7D-D7FF      ; omit surrogates
+              / %xE000-10FFFF
+quoted-escape = backslash ( backslash / "|" / "'" / DQUOTE )
+```
+
+- [r1 GOOD] Writing any two of `|`, `"` and `'` in literals doesn't require escaping them via `\`.
+  This means no extra `\` that need escaping.
+- [r2 GOOD] Embedding messages in most code or containers doesn't require escaping the literal delimiters.
+- [r3 FAIR] Message don't have to be modified otherwise before embedding them,
+  unless they happen to contain conflicting quote delimiters.
+- [r4 GOOD] Quotation marks are universally recognized as string delimiters.
+- [r5 FAIR] Using the same marks for quote-start and quote-end cannot be paired by parsers nor IDEs,
+  but many text editors provide features to make working with and around quotes easier.
+
 ## Comparison table
 
 <table>
@@ -299,6 +334,7 @@ at the expense of doubling the amount of escaping required when embedding messag
       <th>[a3]</th>
       <th>[a4]</th>
       <th>[a5]</th>
+      <th>[a6]</th>
    </tr>
    <tr>
       <th>[r1] escape inside literals</th>
@@ -306,6 +342,7 @@ at the expense of doubling the amount of escaping required when embedding messag
       <td>-</td>
       <td>+</td>
       <td>-</td>
+      <td>++</td>
       <td>++</td>
       <td>++</td>
    </tr>
@@ -317,6 +354,7 @@ at the expense of doubling the amount of escaping required when embedding messag
       <td>+/++</td>
       <td></td>
       <td>-</td>
+      <td>++</td>
    </tr>
    <tr>
       <th>[r3] escape by modifying</th>
@@ -326,6 +364,7 @@ at the expense of doubling the amount of escaping required when embedding messag
       <td>++</td>
       <td></td>
       <td></td>
+      <td>+</td>
    </tr>
    <tr>
       <th>[r4] no surprises</th>
@@ -335,6 +374,7 @@ at the expense of doubling the amount of escaping required when embedding messag
       <td>-</td>
       <td>-</td>
       <td>+</td>
+      <td>++</td>
    </tr>
    <tr>
       <th>[r5] pair delimiters</th>
@@ -344,6 +384,7 @@ at the expense of doubling the amount of escaping required when embedding messag
       <td>++</td>
       <td></td>
       <td></td>
+      <td>+</td>
    </tr>
 
 </table>
