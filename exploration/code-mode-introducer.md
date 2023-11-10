@@ -42,6 +42,7 @@ I want the syntax to be logical and as consistent as possible.
 As a translator, I don't want to have to learn special syntax to support features such as declarations.
 
 As a user, I want my messages to be robust.
+Minor edits and changes should not result in syntax errors.
 
 As a user, I want to be able to see which messages are complex at a glance
 and to parse messages into their component parts visually as easily as possible.
@@ -53,6 +54,24 @@ _What properties does the solution have to manifest to enable the use-cases abov
 ## Constraints
 
 _What prior decisions and existing conditions limit the possible design?_
+
+Some of the options use a new sigil as part of the introducer.
+For various reasons, `#` has been used recently as a placeholder for this sigil.
+There are concerns that this character is not suitable, since it is used as a comment
+introducer in a number of formats. 
+See for example #520.
+The actual sigil used needs to be an ASCII character in the reserved or private use
+set (with syntax adjustments if we use up a private-use one).
+Most of the options below have been changed to use `^`, using 
+Apple's experimental syntax as a model for sigil choice.
+
+It should be noted that an introducer sigil should be as rare as possible in normal text.
+This tends to run against common punctuation marks `&`, `%`, `!`, and `?`.
+
+```abnf
+reserved-start = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "/" / "?" / "~"
+private-start  = "^" / "&"
+```
 
 ## Proposed Design
 
@@ -105,13 +124,13 @@ Cons:
 Complex messages start with a special sigil character.
 
 ```
-#input {$var}
+^input {$var}
 match {$var}
 when * {{Pattern}}
 ```
 Sample quoted pattern with no declarations or match:
 ```
-#{{Pattern}}
+^{{Pattern}}
 ```
 
 Pros:
@@ -127,13 +146,13 @@ Cons:
 Like Option B, except the sigil is doubled.
 
 ```
-##input {$var}
+^^input {$var}
 match {$var}
 when * {{Pattern}}
 ```
 Sample quoted pattern with no declarations or match:
 ```
-##{{Pattern}}
+^^{{Pattern}}
 ```
 
 Pros:
@@ -172,19 +191,25 @@ Cons:
 - Requires an additional sigil
 - Requires an additional escape for simple pattern start
 
+> [!Note] Unlike the other options, Option D is presented with `#` as the sigil.
+> That doesn't mean that this should be the sigil.
+> However, `#` was originally chosen for similarity in declarations to `#define` and `#import`
+> in various programming languages.
+> It is kept "as-is" here.
+
 ### Option E. Special Sequence
 
 Like Option A except the sequence is closed locally (not at the end of the message).
 The suggested sequence is `{#}` but might be `{}` or `{{}}` also.
 
 ```
-{#}input {$var}
+{^}input {$var}
 match {$var}
 when * {{Pattern}}
 ```
 Sample quoted pattern with no declarations or match:
 ```
-{#}{{Pattern}}
+{^}{{Pattern}}
 ```
 
 Pros:
