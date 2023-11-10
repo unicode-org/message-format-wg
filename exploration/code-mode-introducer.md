@@ -116,6 +116,7 @@ Sample quoted pattern with no declarations or match:
 
 Pros:
 - Requires minimum additional typing
+
 Cons:
 - Requires an additional sigil
 - Requires an additional escape for simple pattern start
@@ -137,6 +138,7 @@ Sample quoted pattern with no declarations or match:
 
 Pros:
 - Less likely to conflict with a simple pattern
+
 Cons:
 - Requires an additional sigil
 - Requires an additional escape for simple pattern start
@@ -165,6 +167,7 @@ Pros:
 - Adds no characters to messages that consist of only a quoted pattern;
   that is, quoting the pattern consists only of adding the `{{`/`}}` quotes
 - Maybe makes single-line messages easier to parse visually???
+
 Cons:
 - Requires an additional sigil
 - Requires an additional escape for simple pattern start
@@ -188,6 +191,7 @@ Pros:
 - Less likely to conflict with a simple pattern
 - Requires no additional sigil
 - Requires no additional escape
+
 Cons:
 - Has no other purpose in the syntax
 - Looks like something should happen inside it
