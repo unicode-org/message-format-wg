@@ -199,8 +199,7 @@ the vertical line sidesteps the "inwards" and "outwards" problems of escaping.
 - [r4 FAIR] Vertical lines are not commonly used as string delimiters
   and thus can be harder to learn for beginners.
   There's prior art in a practice of using vertical lines as delimiters for inline code literals in email and chat.
-  Vertical bars can also be used to delimit [regular expressions in `sed`](https://en.wikipedia.org/wiki/Vertical_bar#Delimiter),
-  and as a separator in [delimiter-separated data formats](http://www.catb.org/~esr/writings/taoup/html/ch05s02.html).
+  Vertical bars can also be used as a separator in [delimiter-separated data formats](http://www.catb.org/~esr/writings/taoup/html/ch05s02.html).
 - [r5 POOR] Vertical lines are not automatically paired by parsers nor IDEs.
 
 ## Alternatives Considered
