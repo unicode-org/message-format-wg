@@ -93,6 +93,7 @@ Pros:
 - Uses a sigil `{` already present in the syntax
 - No additional escapes
 - Consistent with other parts of the syntax?
+
 Cons:
 - Somewhat verbose
 - Closing portion of the syntax adds no value;
