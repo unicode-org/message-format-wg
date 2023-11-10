@@ -49,19 +49,19 @@ More specifically:
   to represent it instead of the typograhic (curly) apostrophe.
 
   > ```
-  > {…{|New Year's Eve|}…}
+  > …{|New Year's Eve|}…
   > ```
 
 - Message authors may want to use literals to define locale-aware dates as literals in a modified RFC 3339 format:
 
   > ```
-  > {The Unix epoch is defined as {|1970-01-01 00:00:00Z| :datetime}.}
+  > The Unix epoch is defined as {|1970-01-01 00:00:00Z| :datetime}.
   > ```
 
 - Message authors may want to use multiple words as values of certain options passed to custom functions and markup elements:
 
   > ```
-  > {{+button title=|Click here!|}Submit{-button}}
+  > {+button title=|Click here!|}Submit{-button}
   > ```
 
   > [!NOTE]
@@ -69,7 +69,7 @@ More specifically:
   >
   > ```
   > -- This is impossible in MessageFormat 2.0.
-  > {{+button title=|Goodbye, {$userName}!|}Sign out{-button}}
+  > {+button title=|Goodbye, {$userName}!|}Sign out{-button}
   > ```
 
 - Selector function implementers may want to support multi-word variant keys
@@ -77,49 +77,50 @@ More specifically:
   to effectively create "mini-DSLs" for the matching logic:
 
   > ```
-  > match ($count :choice}
-  > when |<10| {A handful.}
-  > when |11..19| {Umpteen.}
-  > when * {Lots.}
+  > {{ match {$count :choice}
+  >    when |<10| {{A handful.}}
+  >    when |11..19| {{Umpteen.}}
+  >    when * {{Lots.}}
+  > }}
   >
-  > match {$arbitraryString}
-  > when |can't resolve| {Can't resolve!}
-  > when |11'233.44| {Locale formatted number}
-  > when |New York| {A multi-word proper name}
-  > when * {Imagine more...}
+  > {{ match {$arbitraryString}
+  >    when |can't resolve| {{Can't resolve!}}
+  >    when |11'233.44| {{Locale formatted number}}
+  >    when |New York| {{A multi-word proper name}}
+  >    when * {{Imagine more...}}
+  > }}
   > ```
 
 - Message authors may want to protect untranslatable strings:
 
   > ```
-  > {Visit {|http://www.example.com| @translate=false}.}
+  > Visit {|http://www.example.com| @translate=false}.
   > ```
   >
-  > See [design proposal 0002](https://github.com/unicode-org/message-format-wg/blob/main/exploration/0002-expression-attributes.md).
+  > See the [expression attributes design proposal](https://github.com/unicode-org/message-format-wg/blob/main/exploration/0002-expression-attributes.md).
 
 - Message authors may want to decorate substrings as being written in a particular language,
   different from the message's language,
   for the purpose of accessibility, text-to-speech, and semantic correctness.
 
   > ```
-  > {The official native name of the Republic of Poland is {|Rzeczpospolita Polska| @lang=pl}.}
+  > The official native name of the Republic of Poland is {|Rzeczpospolita Polska| @lang=pl}.
   > ```
   >
-  > See [design proposal 0002](https://github.com/unicode-org/message-format-wg/blob/main/exploration/0002-expression-attributes.md).
+  > See the [expression attributes design proposal](https://github.com/unicode-org/message-format-wg/blob/main/exploration/0002-expression-attributes.md).
 
 - Developers may want to embed messages with quoted literals in code written in another programming language
   which uses single or double quotes to delimit strings.
 
-  <!-- prettier-ignore -->
   > ```js
-  > let message = new MessageFormat('en', '{A message with {|a literal|}.}');
+  > let message = new MessageFormat('en', 'A message with {|a literal|}.');
   > ```
 
 - Developers and localization engineers may want to embed messages with quoted literals in a container format, such as JSON.
 
   > ```json
   > {
-  >   "msg": "{A message with {|a literal|}.}"
+  >   "msg": "A message with {|a literal|}."
   > }
   > ```
 
