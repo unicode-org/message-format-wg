@@ -222,4 +222,30 @@ Cons:
 - Has no other purpose in the syntax
 - Looks like something should happen inside it
 - Most additional typing
-  
+
+### Option F. Preamble
+
+In this option, all declarations are placed in a dedicated block at the beginning of the message.
+The preamble is the "front-matter" of the message, containing the message's logic.
+`when` clauses are not part of the preamble.
+
+The preamble can be delimited with `{% ... %}`:
+
+    {%input {$var} match {$var}%} when * {{Pattern}}
+
+Alternatively, it can be delimited with a new kind of delimiter, to make it visually distinct from placeholders and patterns:
+
+    [[input {$var} match {$var}]] when * {{Pattern}}
+    
+We could also consider dropping the `when` keywords:
+
+    [[input {$var} match {$var}]] * {{Pattern}}
+
+Pros:
+- Provides a clear conceptual distinction between declarations and variants.
+- Visually, all code is grouped together.
+- Unnests variant patterns. 
+
+Cons:
+- If `[[ ... ]]` is used to delimit the preamble, it will require `[[` to be escaped at the beginning of simple patterns.
+
