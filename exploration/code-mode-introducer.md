@@ -59,7 +59,7 @@ Some of the options use a new sigil as part of the introducer.
 For various reasons, `#` has been used recently as a placeholder for this sigil.
 There are concerns that this character is not suitable, since it is used as a comment
 introducer in a number of formats. 
-See for example #520.
+See for example [#520](https://github.com/unicode-org/message-format-wg/issues/520).
 The actual sigil used needs to be an ASCII character in the reserved or private use
 set (with syntax adjustments if we use up a private-use one).
 Most of the options below have been changed to use `^`, using 
