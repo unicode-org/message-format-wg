@@ -191,7 +191,8 @@ Cons:
 - Requires an additional sigil
 - Requires an additional escape for simple pattern start
 
-> [!Note] Unlike the other options, Option D is presented with `#` as the sigil.
+> [!NOTE]
+> Unlike the other options, Option D is presented with `#` as the sigil.
 > That doesn't mean that this should be the sigil.
 > However, `#` was originally chosen for similarity in declarations to `#define` and `#import`
 > in various programming languages.
