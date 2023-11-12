@@ -33,7 +33,7 @@ In addition, we expect to provide support for markup and templating regimes.
 These need to be implemented using values not found in the default registry.
 
 An additional hope is that a robust ecosystem of function libraries will be created.
-A successful ecosystem will allow users to pick-and-choose or cherry-pick fuctions or
+A successful ecosystem will allow users to pick-and-choose or cherry-pick functions or
 options to use in a given development environment.
 Each function, option, or option value extension needs to work as seamlessly as possible
 with other add-ons and with the built-in functionality.
