@@ -677,16 +677,45 @@ unquoted-start = name-start / DIGIT / "."
 A **_<dfn>name</dfn>_** is an identifier for a _variable_ (prefixed with `$`),
 for a _function_ (prefixed with `:`, `+` or `-`),
 or for an _option_ (these have no prefix).
-The namespace for _names_ is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name),
-with the restriction that it MUST NOT start with `:`,
-as that would conflict with the _function_ start character.
+The namespace for _names_ is based on Namespaces in XML 1.0's 
+[NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
+This is different from XML's [Name](https://www.w3.org/TR/xml/#NT-Name)
+in that it MUST NOT start with `:`.
 Otherwise, the set of characters allowed in names is large.
 
+_Functions_ and _options_ may be preceded by a _namespace_ identifier
+which is separated from the body of the _name_ by a `: U+003A COLON`.
+Built-in _functions_ and _options_ do not have a _namespace_ identifier.
+
+Examples:
+> A variable:
+>```
+>This has a {$variable}
+>```
+>A function:
+> ```
+> This has a {:function}
+> ```
+> An add-on function from the `icu` namespace:
+> ```
+> This has a {:icu:function}
+> ```
+> An option and an add-on option:
+> ```
+> This has {:options option=value icu:option=add_on}
+> ```
+
+Support for _namespaces_ and their interpretation is implementation-defined
+in this release.
+
 ```abnf
-variable = "$" name
+variable = "$" name-body
 function = (":" / "+" / "-") name
 
-name = name-start *name-char
+name      = [namespace] name-body
+namespace = name-start *name-char namespace-sep
+namespace-sep = ":"
+name-body = name-start *name-char
 name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
            / %x370-37D / %x37F-1FFF / %x200C-200D
