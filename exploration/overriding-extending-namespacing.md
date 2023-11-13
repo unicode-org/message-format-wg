@@ -1,6 +1,6 @@
 # Design Proposal: Namespaces for Extending Functions, Options, etc.
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
