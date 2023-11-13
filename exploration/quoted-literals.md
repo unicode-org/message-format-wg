@@ -65,11 +65,11 @@ More specifically:
   > ```
 
   > [!NOTE]
-> Quoted literals are not evaluated as part of a pattern or option sequence.
-> This means that their contents cannot be dynamic.
-> ```
-> -- The "title" contains the string "{$userName}"
-> {+button title=|Goodbye, {$userName}!|}Sign out{-button}
+  > Quoted literals are not evaluated as part of a pattern or option sequence.
+  > This means that their contents cannot be dynamic.
+  > ```
+  > -- The "title" contains the string "{$userName}"
+  > {+button title=|Goodbye, {$userName}!|}Sign out{-button}
   > ```
 
 - Selector function implementers might need to match different string values
