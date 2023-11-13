@@ -142,7 +142,7 @@ _What properties does the solution have to manifest to enable the use-cases abov
   However, note that many programming languages also provide alternative ways of delimiting strings, e.g. _raw strings_ or triple-quoted literals.
 
 - **[r3; medium priority]** Minimize the incentive to avoid escaping by changing messages
-  (e.g. rephrasing content, using typographic apostrophes, or switching outer delimiters).
+  (e.g. rephrasing content, using typographic apostrophes, or switching literal delimiters).
 
 - **[r4; medium/high priority]** Don't surprise users with syntax that's too exotic.
   We expect quoted literals to be rare,
@@ -154,6 +154,16 @@ _What properties does the solution have to manifest to enable the use-cases abov
   to visually indicate to the user editing a message the bounds of the literal under caret.
   However, quoted literals are usually short and already enclosed in a placeholder (which has its own delimiters)
   or are outside patterns (when used as variant keys).
+
+- **[r6; low priority]** Be able to drop messages into host formats without changing them.
+  For example, if the host format uses `""` to delimit strings literals,
+  then all occurences of `"` inside messages must be escaped.
+  While we can't prevent `"` from appearing in translation content,
+  we can minimize the overhead of the MessageFormat 2 syntax.
+  This requirement is scored as _low_, because many storage formats don't use delimiters at all (`.properties`, YAML),
+  or they are meant to be primarily used by machines (JSON),
+  and because many programming languages provide a way to delimit _raw strings_,
+  e.g. via backticks in JavaScript and `"""` in Python.
 
   <details>
     <summary>How can paired delimiters improve parsing recovery?</summary>
@@ -242,7 +252,6 @@ This changed in [#263](https://github.com/unicode-org/message-format-wg/issues/2
   In many programming languages, however, alternatives to quotation marks exist,
   which could be used to allow unescaped quotes in messages.
   See [comment on #263](https://github.com/unicode-org/message-format-wg/issues/263#issuecomment-1430929542).
-- [r3 ???]
 - [r4 GOOD] Quotation marks are universally recognized as string delimiters.
 - [r5 FAIR] Quotation marks are not automatically paired by parsers nor IDEs,
   but many text editors provide features to make working with and around quotes easier.
@@ -260,7 +269,6 @@ a variant of the "Use quotation marks" solution.
 - [r2 GOOD] Embedding messages in certain container formats requires escaping the literal delimiters.
   If the container format does not itself support dual quoting,
   the embedded message's quotes may be adjusted to avoid their escaping.
-- [r3 ???]
 - [r4 GOOD] Quotation marks are universally recognized as string delimiters.
 - [r5 FAIR] Quotation marks cannot be paired by parsers nor IDEs,
   but many text editors provide features to make working with and around quotes easier.
@@ -385,6 +393,16 @@ quoted-escape = backslash ( backslash / "|" / "'" / DQUOTE )
       <td></td>
       <td></td>
       <td>+</td>
+   </tr>
+   <tr>
+      <th>[r6] drop into host</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
    </tr>
 
 </table>
