@@ -119,6 +119,9 @@ Cons:
   could be a source of unintentional syntax errors
 - Messages commonly end with four `}}}}`
 
+> [!NOTE] Other enclosing sequences are also an option, notably `{%...%}` (or similar). 
+> This does reduce the number of curly brackets in a row.
+
 ### Option B. Use a Sigil
 
 Complex messages start with a special sigil character.
@@ -166,13 +169,17 @@ Cons:
 ### Option D. Sigilized Keywords
 
 Instead of quoting the message, adds a sigil to keywords that
-start statements, that is, `#input`, `#local` and `#match`.
+start statements, that is, `.input`, `.local` and `.match`.
 The keyword `when` might be considered separately.
 
+The sigil used was changed to `.` as a result of the 2023-11-13 teleconference
+discussion of sigils. Others considered were `~`, `@`, `&`, and `%`. 
+Originally this was `#` for similarity to `#define` (etc.) in other environments.
+
 ```
-#input {$var}
-#local $foo = {$bar}
-#match {$var}
+.input {$var}
+.local $foo = {$bar}
+.match {$var}
 when * {{Pattern}}
 ```
 Sample quoted pattern with no declarations or match:
@@ -181,7 +188,9 @@ Sample quoted pattern with no declarations or match:
 ```
 
 Pros:
-- Sigil is part of the keyword, not something separate
+- Sigil is part of the keyword, not something separate; note that the
+  need for escaping is reduced by attaching the sigil to the keyword,
+  since `.input` or `.local` or `.match` are unlikely to be message starters
 - Requires minimum additional typing
 - Adds no characters to messages that consist of only a quoted pattern;
   that is, quoting the pattern consists only of adding the `{{`/`}}` quotes
@@ -190,13 +199,6 @@ Pros:
 Cons:
 - Requires an additional sigil
 - Requires an additional escape for simple pattern start
-
-> [!NOTE]
-> Unlike the other options, Option D is presented with `#` as the sigil.
-> That doesn't mean that this should be the sigil.
-> However, `#` was originally chosen for similarity in declarations to `#define` and `#import`
-> in various programming languages.
-> It is kept "as-is" here.
 
 ### Option E. Special Sequence
 
