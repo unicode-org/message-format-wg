@@ -65,16 +65,17 @@ More specifically:
   > ```
 
   > [!NOTE]
-  > Quoted literals cannot contain placeholders, making interpolating data into them impossible.
-  >
-  > ```
-  > -- This is impossible in MessageFormat 2.0.
-  > {+button title=|Goodbye, {$userName}!|}Sign out{-button}
+> Quoted literals are not evaluated as part of a pattern or option sequence.
+> This means that their contents cannot be dynamic.
+> ```
+> -- The "title" contains the string "{$userName}"
+> {+button title=|Goodbye, {$userName}!|}Sign out{-button}
   > ```
 
-- Selector function implementers may want to support multi-word variant keys
-  or exotic characters in variant keys
-  to effectively create "mini-DSLs" for the matching logic:
+- Selector function implementers might need to match different string values
+  such as those present in data values.
+  These might include keys containing arbitrary text, multiple words,
+  or other sequences not otherwise permitted in the syntax.
 
   > ```
   > {{ match {$count :choice}
