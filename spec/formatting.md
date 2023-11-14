@@ -197,17 +197,19 @@ the following steps are taken:
 
 1. If the _expression_ includes an _operand_, resolve its value.
    If this fails, use a _fallback value_ for the _expression_.
-2. Based on the _function_ starting sigil and _name_,
+2. _Resolve the name_ of the _function_ and, based on the starting sigil,
    find the appropriate function implementation from the _function registry_.
    If the registry does not define an implementation for this _name_,
    emit an Unknown Function error
    and use a _fallback value_ for the _expression_.
-3. Resolve the _option_ values to a mapping of string identifiers to values.
+4. If the _expression_ includes _options_, resolve the _options_ to a mapping
+   of string identifiers to values.
    For each _option_:
+   - _Resolve the name_ of the option.
    - If its right-hand side successfully resolves to a value,
      bind the _name_ of the _option_ to the resolved value in the mapping.
    - Otherwise, do not bind the _name_ of the _option_ to any value in the mapping.
-4. Call the function implementation with the following arguments:
+6. Call the function implementation with the following arguments:
 
    - The current _locale_.
    - The resolved mapping of _options_.
@@ -218,15 +220,63 @@ the following steps are taken:
    An implementation MAY pass additional arguments to the function,
    as long as reasonable precautions are taken to keep the function interface
    simple and minimal, and avoid introducing potential security vulnerabilities.
+   Implementations SHOULD use an implementation-defined _namesapce_ for
+   any additional arguments exposed to users as _options_.
 
-   As implementations MAY allow custom functions to be defined by users,
-   their access to the _formatting context_ SHOULD be minimal and read-only,
-   and their execution time SHOULD be limited.
+   An implementations MAY define its own functions or allow custom functions
+   to be defined by users.
+   Function access to the _formatting context_ SHOULD be minimal and read-only,
+   and execution time SHOULD be limited.
+   Implementation-defined _functions_ SHOULD use an implementation-defined _namespace_.
+   User-defined _functions_ SHOULD be permitted to define the _namespace_ to use
+   in name resolution.
 
-5. If the call succeeds,
+8. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
    If the call fails or does not return a valid value,
    emit a Resolution error and use a _fallback value_ for the _expression_.
+
+### Name Resolution
+
+<dfn title="resolve the name">**_Name resolution_**</dfn> is the determination of
+the _name_ and the _namespace_ of the name for a given _function_
+or _option_.
+
+To determine the _name_ of an item, the following steps are taken:
+
+1. Let the _name_ be the string to be processed, less any preceeding
+   sigils or markers.
+   For example, in the _expression_ `{:function}`, the string `function`
+   is the _name_ string.
+2. Determine if _name_ contains the character U+003A COLON `:`:
+   - If _name_ contains a colon, let _namespace_ be the
+      substring of _name_ up to (but not including)
+      the colon and _name_ be the substring of _name_ following the colon;
+   - Else let _namespace_ be an empty value (null, void, or empty string).
+4. If the _name_ is empty, return a Syntax error.
+5. Return _namespace_ and _name_.
+
+Implementations are not required to support the installation or resolution
+of different namespaces.
+How namespaces are defined, provisioned, or handled is also implementation defined.
+It is important to note that the _namespace_ is not considered part of the _name_
+after resolution. 
+The _namespace_ MAY affect which function is called.
+
+Example:
+> Suppose the ICU implementation of MessageFormat added a custom option `skeleton`
+> to the `:datetime` function.
+> Users of that implementation could invoke the datetime formatter with an
+> expression similar to:
+> ```
+> {{Today is {$date :datetime icu:skeleton=yMMMd}.}}
+> ```
+> The `name` of the `datetime` function is resolved as:
+> > `namespace`: (blank)
+> > `name`: `datetime`
+> The `name` of the option in the expression is resolved as:
+> > `namespace`: `icu`
+> > `name`: `skelelton`
 
 ### Fallback Resolution
 
