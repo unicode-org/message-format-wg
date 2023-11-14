@@ -225,7 +225,7 @@ the following steps are taken:
 
 An implementation MAY define its own functions.
 An implementation MAY allow custom functions to be defined by users.
-   Function access to the _formatting context_ SHOULD be minimal and read-only,
+   Function access to the _formatting context_ MUST be minimal and read-only,
    and execution time SHOULD be limited.
    Implementation-defined _functions_ SHOULD use an implementation-defined _namespace_.
    User-defined _functions_ SHOULD be permitted to define the _namespace_ to use
