@@ -223,8 +223,8 @@ the following steps are taken:
    Implementations SHOULD use an implementation-defined _namesapce_ for
    any additional arguments exposed to users as _options_.
 
-   An implementations MAY define its own functions or allow custom functions
-   to be defined by users.
+An implementation MAY define its own functions.
+An implementation MAY allow custom functions to be defined by users.
    Function access to the _formatting context_ SHOULD be minimal and read-only,
    and execution time SHOULD be limited.
    Implementation-defined _functions_ SHOULD use an implementation-defined _namespace_.
