@@ -683,8 +683,8 @@ This is different from XML's [Name](https://www.w3.org/TR/xml/#NT-Name)
 in that it MUST NOT start with `:`.
 Otherwise, the set of characters allowed in names is large.
 
-_Functions_ and _options_ may be preceded by a _namespace_ identifier
-which is separated from the body of the _name_ by a `: U+003A COLON`.
+_Functions_ and _options_ MAY be preceded by a _namespace_ identifier
+which is separated from the body of the _name_ by a U+003A COLON `:`.
 Built-in _functions_ and _options_ do not have a _namespace_ identifier.
 
 Examples:
