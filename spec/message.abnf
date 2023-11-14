@@ -22,7 +22,7 @@ function-expression = "{" [s] annotation [s] "}"
 annotation = (function *(s option)) / reserved / private-use
 
 literal = quoted / unquoted
-variable = "$" name-body
+variable = "$" name-part
 function = (":" / "+" / "-") name
 option = name [s] "=" [s] (literal / variable)
 
@@ -71,10 +71,9 @@ reserved-char  = %x00-08        ; omit HTAB and LF
                / %xE000-10FFFF
 
 ; based on https://www.w3.org/TR/REC-xml-names/#NT-QName
-name      = [namespace] name-body
-namespace = name-start *name-char namespace-sep
-namespace-sep = ":"
-name-body = name-start *name-char
+name       = [namespace ":"] name-body
+namespace  = name-part
+name-part  = name-start *name-char
 name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
            / %x370-37D / %x37F-1FFF / %x200C-200D
