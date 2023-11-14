@@ -203,7 +203,8 @@ Cons:
 ### Option E. Special Sequence
 
 Like Option A except the sequence is closed locally (not at the end of the message).
-The suggested sequence is `{#}` but might be `{}` or `{{}}` also.
+The suggested sequence is `{^}` but might be `{}` or `{{}}` also. 
+Additional sigils can also be considered.
 
 ```
 {^}input {$var}
