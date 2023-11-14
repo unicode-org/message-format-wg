@@ -202,15 +202,16 @@ the following steps are taken:
    If the registry does not define an implementation for this _name_,
    emit an Unknown Function error
    and use a _fallback value_ for the _expression_.
-4. If the _expression_ includes _options_, resolve the _options_ to a mapping
+3. If the _expression_ includes _options_, resolve the _options_ to a mapping
    of string identifiers to values.
    For each _option_:
-   - _Resolve the name_ of the option.
-   - If its right-hand side successfully resolves to a value,
-     bind the _name_ of the _option_ to the resolved value in the mapping.
+   - _Resolve the name_ of the _option_.
+   - If the _option_'s _name-part_ already exists in the resolved mapping of _options_,
+     emit a Duplicate Option Name error.
+   - If the _option_'s right-hand side successfully resolves to a value,
+     bind the _name-part_ of the _option_'s to the resolved value in the mapping.
    - Otherwise, do not bind the _name_ of the _option_ to any value in the mapping.
-6. Call the function implementation with the following arguments:
-
+4. Call the function implementation with the following arguments:
    - The current _locale_.
    - The resolved mapping of _options_.
    - If the _expression_ includes an _operand_, its resolved value.
@@ -220,18 +221,20 @@ the following steps are taken:
    An implementation MAY pass additional arguments to the function,
    as long as reasonable precautions are taken to keep the function interface
    simple and minimal, and avoid introducing potential security vulnerabilities.
-   Implementations SHOULD use an implementation-defined _namesapce_ for
-   any additional arguments exposed to users as _options_.
 
-An implementation MAY define its own functions.
-An implementation MAY allow custom functions to be defined by users.
+   Implementations MAY expose _options_ in an implementation-defined _namespace_
+   in addition to or superceding those found in the default registry.
+
+   An implementation MAY define its own functions.
+   An implementation MAY allow custom functions to be defined by users.
+
    Function access to the _formatting context_ MUST be minimal and read-only,
    and execution time SHOULD be limited.
    Implementation-defined _functions_ SHOULD use an implementation-defined _namespace_.
    User-defined _functions_ SHOULD be permitted to define the _namespace_ to use
    in name resolution.
 
-8. If the call succeeds,
+5. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
    If the call fails or does not return a valid value,
    emit a Resolution error and use a _fallback value_ for the _expression_.
@@ -239,10 +242,10 @@ An implementation MAY allow custom functions to be defined by users.
 ### Name Resolution
 
 <dfn title="resolve the name">**_Name resolution_**</dfn> is the determination of
-the _name_ and the _namespace_ of the name for a given _function_
+the _name-part_ and, where present, the _namespace_ of the _name_ for a given _function_
 or _option_.
 
-To determine the _name_ of an item, the following steps are taken:
+To resolve the _name_ of an item, the following steps are taken:
 
 1. Let the _name_ be the string to be processed, less any preceeding
    sigils or markers.
@@ -251,10 +254,11 @@ To determine the _name_ of an item, the following steps are taken:
 2. Determine if _name_ contains the character U+003A COLON `:`:
    - If _name_ contains a colon, let _namespace_ be the
       substring of _name_ up to (but not including)
-      the colon and _name_ be the substring of _name_ following the colon;
-   - Else let _namespace_ be an empty value (null, void, or empty string).
-4. If the _name_ is empty, return a Syntax error.
-5. Return _namespace_ and _name_.
+      the colon and _name-part_ be the substring of _name_ following the colon;
+   - Else let _namespace_ be an empty value (null, void, or empty string)
+     and _name-part_ be the _name_.
+3. If the _name-part_ is empty, return a Syntax error.
+4. Return _namespace_ and _name-part_.
 
 Implementations are not required to support the installation or resolution
 of different namespaces.
