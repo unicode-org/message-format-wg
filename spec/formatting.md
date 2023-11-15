@@ -223,7 +223,7 @@ the following steps are taken:
    simple and minimal, and avoid introducing potential security vulnerabilities.
 
    Implementations MAY expose _options_ in an implementation-defined _namespace_
-   in addition to or superceding those found in the default registry.
+   in addition to or superseding those found in the default registry.
 
    An implementation MAY define its own functions.
    An implementation MAY allow custom functions to be defined by users.
