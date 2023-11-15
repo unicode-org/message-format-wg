@@ -276,11 +276,12 @@ Example:
 > {{Today is {$date :datetime icu:skeleton=yMMMd}.}}
 > ```
 > The `name` of the `datetime` function is resolved as:
-> > `namespace`: (blank)
-> > `name`: `datetime`
+> * `namespace`: (blank)
+> * `name`: `datetime`
+> 
 > The `name` of the option in the expression is resolved as:
-> > `namespace`: `icu`
-> > `name`: `skeleton`
+> * `namespace`: `icu`
+> * `name`: `skeleton`
 
 ### Fallback Resolution
 
