@@ -271,7 +271,7 @@ Example:
 > Suppose the ICU implementation of MessageFormat added a custom option `skeleton`
 > to the `:datetime` function.
 > Users of that implementation could invoke the datetime formatter with an
-> expression similar to:
+> pattern similar to:
 > ```
 > {{Today is {$date :datetime icu:skeleton=yMMMd}.}}
 > ```
