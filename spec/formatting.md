@@ -280,7 +280,7 @@ Example:
 > > `name`: `datetime`
 > The `name` of the option in the expression is resolved as:
 > > `namespace`: `icu`
-> > `name`: `skelelton`
+> > `name`: `skeleton`
 
 ### Fallback Resolution
 
