@@ -336,6 +336,7 @@ quoted-escape = backslash ( backslash / "|" / "'" / DQUOTE )
 <table>
    <tr>
       <th></th>
+      <th>Priority</th>
       <th>Proposal</th>
       <th>[a1]</th>
       <th>[a2]</th>
@@ -346,6 +347,7 @@ quoted-escape = backslash ( backslash / "|" / "'" / DQUOTE )
    </tr>
    <tr>
       <th>[r1] escape inside literals</th>
+      <th>HIGH</th>
       <td>++</td>
       <td>-</td>
       <td>+</td>
@@ -356,6 +358,7 @@ quoted-escape = backslash ( backslash / "|" / "'" / DQUOTE )
    </tr>
    <tr>
       <th>[r2] escape when embedding</th>
+      <th>MED</th>
       <td>++</td>
       <td>+</td>
       <td>++</td>
@@ -366,6 +369,7 @@ quoted-escape = backslash ( backslash / "|" / "'" / DQUOTE )
    </tr>
    <tr>
       <th>[r3] no surprises</th>
+      <th>MED/HIGH</th>
       <td>-/+</td>
       <td>++</td>
       <td>++</td>
@@ -376,6 +380,7 @@ quoted-escape = backslash ( backslash / "|" / "'" / DQUOTE )
    </tr>
    <tr>
       <th>[r4] pair delimiters</th>
+      <th>LOW</th>
       <td>-</td>
       <td>+</td>
       <td>+</td>
@@ -386,6 +391,7 @@ quoted-escape = backslash ( backslash / "|" / "'" / DQUOTE )
    </tr>
    <tr>
       <th>[r5] one way</th>
+      <th>LOW</th>
       <td>++</td>
       <td>++</td>
       <td>+</td>
