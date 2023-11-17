@@ -182,8 +182,7 @@ _What properties does the solution have to manifest to enable the use-cases abov
 
 - **[r5; low priority]** Do not require users to choose between too many syntax options.
   > There should be one — and preferably only one — obvious way to do it.<br>
-  > Although that way may not be obvious at first unless you're Dutch.<br>
-  > — _[The Zen of Python](https://peps.python.org/pep-0020/)_
+  > —_[The Zen of Python](https://peps.python.org/pep-0020/)_
 
 ## Constraints
 
