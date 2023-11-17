@@ -138,9 +138,15 @@ _What properties does the solution have to manifest to enable the use-cases abov
   when the message is embedded in code or containers.
   (This is how some syntaxes produce the gnarly `\\\`.)
 
-- **[r2; high priority]** Minimize the need to escape characters when embedding messages in code or containers.
+- **[r2; medium priority]** Minimize the need to escape characters or change the host format's string delimiters when embedding messages in code or containers.
   In particular, choose a delimiter that isn't frequently used as a string delimiter in programming languages and container formats.
-  However, note that many programming languages also provide alternative ways of delimiting strings, e.g. _raw strings_ or triple-quoted literals.
+
+  This requirement is scored as _medium_, because many storage formats don't use delimiters at all (`.properties`, YAML),
+  or they are meant to be primarily used by machines (JSON),
+  and because many programming languages provide a way to delimit _raw strings_,
+  e.g. via <code>``</code> in JavaScript and `"""` in Python.
+  Also, messages including e.g. newlines or `\` escapes in their source
+  will likely need those characters accounted for when dropping them into new host formats.
 
 - **[r3; medium priority]** Minimize the incentive to avoid escaping by changing messages
   (e.g. rephrasing content, using typographic apostrophes, or switching literal delimiters).
@@ -155,16 +161,6 @@ _What properties does the solution have to manifest to enable the use-cases abov
   to visually indicate to the user editing a message the bounds of the literal under caret.
   However, quoted literals are usually short and already enclosed in a placeholder (which has its own delimiters)
   or are outside patterns (when used as variant keys).
-
-- **[r6; low priority]** Be able to drop messages into host formats without changing them.
-  For example, if the host format uses `""` to delimit strings literals,
-  then all occurences of `"` inside messages must be escaped.
-  While we can't prevent `"` from appearing in translation content,
-  we can minimize the overhead of the MessageFormat 2 syntax.
-  This requirement is scored as _low_, because many storage formats don't use delimiters at all (`.properties`, YAML),
-  or they are meant to be primarily used by machines (JSON),
-  and because many programming languages provide a way to delimit _raw strings_,
-  e.g. via backticks in JavaScript and `"""` in Python.
 
   <details>
     <summary>How can paired delimiters improve parsing recovery?</summary>
@@ -394,16 +390,6 @@ quoted-escape = backslash ( backslash / "|" / "'" / DQUOTE )
       <td></td>
       <td></td>
       <td>+</td>
-   </tr>
-   <tr>
-      <th>[r6] drop into host</th>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
    </tr>
 
 </table>
