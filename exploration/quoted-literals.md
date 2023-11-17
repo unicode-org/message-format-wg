@@ -132,11 +132,13 @@ _What properties does the solution have to manifest to enable the use-cases abov
 - **[r1; high priority]** Minimize the need to escape characters inside literals.
   In particular, choose a delimiter that isn't frequently used in translation content.
   Having to escape characters inside literals is inconvenient and error-prone when done by hand,
-  and it also introduces the backslash into the message, `\`,
-  which is the escape introducer.
-  The backslash then needs to be escaped too,
-  when the message is embedded in code or containers.
-  (This is how some syntaxes produce the gnarly `\\\`.)
+  and it also introduces the backslash `\` into the message as the escape introducer.
+  When the message is embedded in code or containers, the backslash then needs to be escaped too;
+  this is how some syntaxes produce the gnarly `\\\`.
+
+  By minimizing the need to escape characters,
+  we also minimze the incentive to _avoid_ escaping by changing translation content,
+  e.g. by rephrasing content or by using typographic punctuation marks.
 
 - **[r2; medium priority]** Minimize the need to escape characters or change the host format's string delimiters when embedding messages in code or containers.
   In particular, choose a delimiter that isn't frequently used as a string delimiter in programming languages and container formats.
@@ -148,14 +150,11 @@ _What properties does the solution have to manifest to enable the use-cases abov
   Also, messages including e.g. newlines or `\` escapes in their source
   will likely need those characters accounted for when dropping them into new host formats.
 
-- **[r3; medium priority]** Minimize the incentive to avoid escaping by changing messages
-  (e.g. rephrasing content, using typographic apostrophes, or switching literal delimiters).
-
-- **[r4; medium/high priority]** Don't surprise users with syntax that's too exotic.
+- **[r3; medium/high priority]** Do not surprise users with syntax that's too exotic.
   We expect quoted literals to be rare,
   which means fewer opportunities to get used to their syntax and remember it.
 
-- **[r5; low priority]** Be able to pair the opening and the closing delimiter,
+- **[r4; low priority]** Be able to pair the opening and the closing delimiter,
   to aid parsers recover from syntax errors,
   and to leverage IDE's ability to highlight matching pairs of delimiters,
   to visually indicate to the user editing a message the bounds of the literal under caret.
@@ -223,12 +222,11 @@ the vertical line sidesteps the "inwards" and "outwards" problems of escaping.
 - [r1 GOOD] Writing `"` and `'` in literals doesn't require escaping them via `\`.
   This means no extra `\` that need escaping.
 - [r2 GOOD] Embedding messages in most code or containers doesn't require escaping the literal delimiters.
-- [r3 GOOD] Message don't have to be modified otherwise before embedding them.
-- [r4 POOR/FAIR] Vertical lines are not commonly used as string delimiters
+- [r3 POOR/FAIR] Vertical lines are not commonly used as string delimiters
   and thus can be harder to learn for beginners.
   Vertical bars can be used as a separator in [delimiter-separated data formats](http://www.catb.org/~esr/writings/taoup/html/ch05s02.html).
   However, typically vertical lines tend to be used as delimiters for *separating* rather than for *enclosing*.
-- [r5 POOR] Vertical lines are not automatically paired by parsers nor IDEs.
+- [r4 POOR] Vertical lines are not automatically paired by parsers nor IDEs.
 
 ## Alternatives Considered
 
@@ -249,8 +247,8 @@ This changed in [#263](https://github.com/unicode-org/message-format-wg/issues/2
   In many programming languages, however, alternatives to quotation marks exist,
   which could be used to allow unescaped quotes in messages.
   See [comment on #263](https://github.com/unicode-org/message-format-wg/issues/263#issuecomment-1430929542).
-- [r4 GOOD] Quotation marks are universally recognized as string delimiters.
-- [r5 FAIR] Quotation marks are not automatically paired by parsers nor IDEs,
+- [r3 GOOD] Quotation marks are universally recognized as string delimiters.
+- [r4 FAIR] Quotation marks are not automatically paired by parsers nor IDEs,
   but many text editors provide features to make working with and around quotes easier.
 
 ### [a2] Dual quoting
@@ -266,8 +264,8 @@ a variant of the "Use quotation marks" solution.
 - [r2 GOOD] Embedding messages in certain container formats requires escaping the literal delimiters.
   If the container format does not itself support dual quoting,
   the embedded message's quotes may be adjusted to avoid their escaping.
-- [r4 GOOD] Quotation marks are universally recognized as string delimiters.
-- [r5 FAIR] Quotation marks cannot be paired by parsers nor IDEs,
+- [r3 GOOD] Quotation marks are universally recognized as string delimiters.
+- [r4 FAIR] Quotation marks cannot be paired by parsers nor IDEs,
   but many text editors provide features to make working with and around quotes easier.
 
 ### [a3] Use round or angle brackets
@@ -321,11 +319,11 @@ quoted-escape = backslash ( backslash / "|" / "'" / DQUOTE )
 
 - [r1 GOOD] Writing any two of `|`, `"` and `'` in literals doesn't require escaping them via `\`.
   This means no extra `\` that need escaping.
-- [r2 GOOD] Embedding messages in most code or containers doesn't require escaping the literal delimiters.
-- [r3 FAIR] Message don't have to be modified otherwise before embedding them,
+  Message don't have to be modified otherwise before embedding them,
   unless they happen to contain conflicting quote delimiters.
-- [r4 GOOD] Quotation marks are universally recognized as string delimiters.
-- [r5 FAIR] Using the same marks for quote-start and quote-end cannot be paired by parsers nor IDEs,
+- [r2 GOOD] Embedding messages in most code or containers doesn't require escaping the literal delimiters.
+- [r3 GOOD] Quotation marks are universally recognized as string delimiters.
+- [r4 FAIR] Using the same marks for quote-start and quote-end cannot be paired by parsers nor IDEs,
   but many text editors provide features to make working with and around quotes easier.
 
 ## Comparison table
@@ -362,17 +360,7 @@ quoted-escape = backslash ( backslash / "|" / "'" / DQUOTE )
       <td>++</td>
    </tr>
    <tr>
-      <th>[r3] escape by modifying</th>
-      <td>++</td>
-      <td>?</td>
-      <td>?</td>
-      <td>++</td>
-      <td></td>
-      <td></td>
-      <td>+</td>
-   </tr>
-   <tr>
-      <th>[r4] no surprises</th>
+      <th>[r3] no surprises</th>
       <td>-/+</td>
       <td>++</td>
       <td>++</td>
@@ -382,7 +370,7 @@ quoted-escape = backslash ( backslash / "|" / "'" / DQUOTE )
       <td>++</td>
    </tr>
    <tr>
-      <th>[r5] pair delimiters</th>
+      <th>[r4] pair delimiters</th>
       <td>-</td>
       <td>+</td>
       <td>+</td>
