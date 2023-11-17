@@ -180,6 +180,11 @@ _What properties does the solution have to manifest to enable the use-cases abov
     ```
   </details>
 
+- **[r5; low priority]** Do not require users to choose between too many syntax options.
+  > There should be one — and preferably only one — obvious way to do it.<br>
+  > Although that way may not be obvious at first unless you're Dutch.<br>
+  > — _[The Zen of Python](https://peps.python.org/pep-0020/)_
+
 ## Constraints
 
 _What prior decisions and existing conditions limit the possible design?_
@@ -378,6 +383,16 @@ quoted-escape = backslash ( backslash / "|" / "'" / DQUOTE )
       <td></td>
       <td></td>
       <td>+</td>
+   </tr>
+   <tr>
+      <th>[r5] one way</th>
+      <td>++</td>
+      <td>++</td>
+      <td>+</td>
+      <td>++</td>
+      <td></td>
+      <td></td>
+      <td>-</td>
    </tr>
 
 </table>
