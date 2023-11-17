@@ -223,11 +223,11 @@ _What other properties they have?_
 
 ### Do Nothing
 
-We could not provide any special support for spans and markup elements,
-and instead delegate the problem completely to tools and downstream processing layers.
+We could choose to not provide any special support for spannables or markup.
+This would delegate the problem to tools and downstream processing layers.
 
 ```
-This is <html:strong>bold</html:strong> and this is <html:img alt="an image">.
+This is <strong>bold</strong> and this is <img alt="an image" src="{$imgsrc}">.
 ```
 
 #### Pros:
@@ -241,7 +241,7 @@ This is <html:strong>bold</html:strong> and this is <html:img alt="an image">.
 
 * Requires quoting in XML-based containers.
 * Relies on a best-effort convention; is not a standard.
-* Markup becomes a completely alient concept in MessageFormat:
+* Markup becomes a completely alien concept in MessageFormat:
   * It cannot be validated via the AST nor the reigstry.
   * It cannot be protected, unless put inside literal expressions.
   * It is not supported by `formatToParts`, which in turn makes double-parsing difficult.
@@ -252,7 +252,7 @@ We could parse the HTML syntax as part of MessageFormat parsing,
 and represent markup as first-class data-model concepts of MessageFormat.
 
 ```
-This is <html:strong>bold</html:strong> and this is <html:img alt="an image">.
+This is <strong>bold</strong> and this is <img alt="an image">.
 ```
 
 To represent HTML's auto-closing tags, like `<img>`,
@@ -285,3 +285,4 @@ The same approach would be used for self-closing elements defined by other diale
 * Looks like HTML, but isn't *exactly* HTML, unless we go to great lengths to make it so.
   See the differences between HTML and React's JSX as a case-study of consequences.
 * Requires quoting in XML-based containers.
+* It only supports HTML.
