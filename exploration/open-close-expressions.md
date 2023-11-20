@@ -232,10 +232,13 @@ This is <strong>bold</strong> and this is <img alt="an image" src="{$imgsrc}">.
 
 #### Pros:
 
-* No work required from us right now.
+* No work required from us right now. We can always add support later.
+* We already support (and are required to support) in-line literal markup in messages, since they are just character sequences.
+* Unlike other solutions, does not require MessageFormat to reinterpret or process markup to create the desired output.
 * It's HTML.
 * The least surprising syntax for developers and translators.
-* Some CAT tools already support HTML in translations.
+* Some CAT tools already support HTML and other markup in translations.
+* Supports other markup or templating syntaxes with no additional effort (it's just strings)
 
 #### Cons:
 
