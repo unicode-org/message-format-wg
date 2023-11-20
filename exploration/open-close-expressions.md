@@ -149,6 +149,8 @@ without access to the other parts of the selected pattern.
 This design relies on the recognition that the formatted output of MF2
 may be further processed by other tools before presentation to a user.
 
+### Syntax
+
 Let us add _markup_ as a new type of _placeholder_,
 in parallel with _expression_:
 
@@ -170,10 +172,31 @@ Unlike annotations, markup expressions may not have operands.
 
 Markup is not valid in _declarations_ or _selectors_.
 
+#### Pros
+
+* Doesn't conflict with any other placeholder expressions.
+
+* Agnostic syntax, different from HTML or other markup and templating systems.
+
+#### Cons
+
+* Adds 3 new sigils to the expression syntax.
+
+* Because they're agnostic, the meaning of the sigils must be learned or deduced.
+
+* Requires the special-casing of negative numeral literals,
+  to distinguish `{-foo}` and `{-42}`.
+
+### Runtime Behavior
+
+#### Formatting to a String
+
 When formatting to a string,
 markup placholders format to an empty string by default.
 An implementation may customize this behaviour,
 e.g. emitting XML-ish tags for each open/close placeholder.
+
+#### Formatting to Parts
 
 When formatting to parts (as proposed in <a href="https://github.com/unicode-org/message-format-wg/pull/463">#463</a>),
 markup placeholders format to an object including the following properties:
