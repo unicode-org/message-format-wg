@@ -10,7 +10,7 @@ Status: **Proposed**
 		<dt>First proposed</dt>
 		<dd>2023-08-29</dd>
 		<dt>Pull Request</dt>
-		<dd>#000</dd>
+                <dd>#463</dd>
 	</dl>
 </details>
 
@@ -100,7 +100,7 @@ some may have none.
 interface MessageExpressionPart {
   type: string;
   source: string;
-  parts?: Iterable<{ type: string; value: unknown }>;
+  parts?: Iterable<{ type: string; value: unknown; source?: string }>;
   value?: unknown;
   dir?: "ltr" | "rtl" | "auto";
   locale?: string;
@@ -167,8 +167,8 @@ Where possible, a function SHOULD provide a `parts` representation
 if its output might reasonably consist of multiple fields.
 Where available, such a formatted value should itself be represented by `parts`
 rather than a unitary string `value`.
-These sub-parts should not need fields beyond their `type` and `value`,
-and in most cases it's presumed that the sub-part `value` would be a string.
+In most cases, these sub-parts should not need fields beyond their `type` and a string `value`,
+Where necessary, other `value` types may be used and other fields such as a `source` included.
 
 ```ts
 interface MessageDateTimePart {
