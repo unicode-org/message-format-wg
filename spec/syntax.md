@@ -680,7 +680,7 @@ or for an _option_ (these have no prefix).
 The namespace for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
 [NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
 This is different from XML's [Name](https://www.w3.org/TR/xml/#NT-Name)
-in that it MUST NOT start with `:`.
+in that it MUST NOT contain a U+003A COLON `:`.
 Otherwise, the set of characters allowed in names is large.
 
 _Functions_ and _options_ MAY be preceded by a _namespace_ identifier
