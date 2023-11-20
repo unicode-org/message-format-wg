@@ -245,7 +245,8 @@ This is <strong>bold</strong> and this is <img alt="an image" src="{$imgsrc}">.
   * It cannot be validated via the AST nor the reigstry.
   * It cannot be protected, unless put inside literal expressions.
   * It is not supported by `formatToParts`, which in turn makes double-parsing difficult.
-
+* It requires special handling when inserting messages into the DOM.
+* It requires "sniffing" the message to detect embedded markup. XSS prevention becomes much more complicated.
 ### HTML Syntax
 
 We could parse the HTML syntax as part of MessageFormat parsing,
