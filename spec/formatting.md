@@ -199,19 +199,21 @@ the following steps are taken:
    If this fails, use a _fallback value_ for the _expression_.
 2. _Resolve the name_ of the _function_ and, based on the starting sigil,
    find the appropriate function implementation from the _function registry_.
-   If the registry does not define an implementation for this _name_,
+   If the implementation does not support the _namespace_ of the _name_
+   or the _namespace_ does not support the _name-part_ named _function_
+   or the registry does not otherwise support the _name_,
    emit an Unknown Function error
    and use a _fallback value_ for the _expression_.
-3. If the _expression_ includes _options_, resolve the _options_ to a mapping
+4. If the _expression_ includes _options_, resolve the _options_ to a mapping
    of string identifiers to values.
    For each _option_:
    - _Resolve the name_ of the _option_.
-   - If the _option_'s _name-part_ already exists in the resolved mapping of _options_,
+   - If the _option_'s _name_ already exists in the resolved mapping of _options_,
      emit a Duplicate Option Name error.
    - If the _option_'s right-hand side successfully resolves to a value,
-     bind the _name-part_ of the _option_'s to the resolved value in the mapping.
+     bind the _name_ of the _option_ to the resolved value in the mapping.
    - Otherwise, do not bind the _name_ of the _option_ to any value in the mapping.
-4. Call the function implementation with the following arguments:
+5. Call the function implementation with the following arguments:
    - The current _locale_.
    - The resolved mapping of _options_.
    - If the _expression_ includes an _operand_, its resolved value.
@@ -234,7 +236,7 @@ the following steps are taken:
    User-defined _functions_ SHOULD be permitted to define the _namespace_ to use
    in name resolution.
 
-5. If the call succeeds,
+6. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
    If the call fails or does not return a valid value,
    emit a Resolution error and use a _fallback value_ for the _expression_.
@@ -263,8 +265,6 @@ To resolve the _name_ of an item, the following steps are taken:
 Implementations are not required to support the installation or resolution
 of different namespaces.
 How namespaces are defined, provisioned, or handled is also implementation defined.
-It is important to note that the _namespace_ is not considered part of the _name_
-after resolution. 
 The _namespace_ MAY affect which function is called.
 
 Example:
@@ -276,12 +276,15 @@ Example:
 > {{Today is {$date :datetime icu:skeleton=yMMMd}.}}
 > ```
 > The `name` of the `datetime` function is resolved as:
+> * `name`     : `datetime`
 > * `namespace`: (blank)
-> * `name`: `datetime`
+> * `name-part`: `datetime`
 > 
 > The `name` of the option in the expression is resolved as:
+> * `name`     : `icu:skeleton`
 > * `namespace`: `icu`
-> * `name`: `skeleton`
+> * `name-part`: `skeleton`
+
 
 ### Fallback Resolution
 
