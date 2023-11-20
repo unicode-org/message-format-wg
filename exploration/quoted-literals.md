@@ -306,6 +306,10 @@ Allow any of the following as literal delimiters:
 This approach supports multiple different quoting styles to be used for literals.
 This flexibility allows for using a familiar and common style such as `'single'` or `"double"` quotes,
 while also allowing for `|pipes|` when the message's contents or embedding would otherwise require additional escaping.
+This means that literals could for example prefer `'single quotes'`,
+but use `"double 'em"` if necessary,
+or `|'pipe' characters|` if the whole message is wrapped in `"quotes"` due to the host format
+or if the literal value contains both `'` and `"` quotes.
 
 ```abnf
 literal       = quoted / unquoted
