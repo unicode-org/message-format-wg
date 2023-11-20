@@ -223,17 +223,12 @@ the following steps are taken:
    as long as reasonable precautions are taken to keep the function interface
    simple and minimal, and avoid introducing potential security vulnerabilities.
 
-   Implementations MAY expose _options_ in an implementation-defined _namespace_
-   in addition to or superseding those found in the default registry.
-
    An implementation MAY define its own functions.
    An implementation MAY allow custom functions to be defined by users.
 
    Function access to the _formatting context_ MUST be minimal and read-only,
    and execution time SHOULD be limited.
    Implementation-defined _functions_ SHOULD use an implementation-defined _namespace_.
-   User-defined _functions_ SHOULD be permitted to define the _namespace_ to use
-   in name resolution.
 
 6. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
