@@ -8,6 +8,7 @@ Status: **Proposed**
 		<dt>Contributors</dt>
 		<dd>@eemeli</dd>
 		<dd>@aphillips</dd>
+		<dd>@stasm</dd>
 		<dt>First proposed</dt>
 		<dd>2023-09-05</dd>
 		<dt>Pull Request</dt>
@@ -221,7 +222,7 @@ _What other solutions are available?_
 _How do they compare against the requirements?_
 _What other properties they have?_
 
-### Do Nothing
+### A1. Do Nothing
 
 We could choose to not provide any special support for spannables or markup.
 This would delegate the problem to tools and downstream processing layers.
@@ -250,7 +251,7 @@ This is <strong>bold</strong> and this is <img alt="an image" src="{$imgsrc}">.
 * It requires special handling when inserting messages into the DOM.
 * It requires "sniffing" the message to detect embedded markup. XSS prevention becomes much more complicated.
 
-### HTML Syntax
+### A2. HTML Syntax
 
 We could parse the HTML syntax as part of MessageFormat parsing,
 and represent markup as first-class data-model concepts of MessageFormat.
@@ -290,3 +291,51 @@ The same approach would be used for self-closing elements defined by other diale
   See the differences between HTML and React's JSX as a case-study of consequences.
 * Requires quoting in XML-based containers.
 * It only supports HTML.
+
+### A3. HTML-like syntax
+
+The goal of this solution is to avoid adding new sigils to the syntax.
+Instead, it leverages the familiarity of the `foo`...`/foo` idiom,
+inspired by HTML and BBCode.
+
+This solution consists of adding new placeholder syntax:
+`{foo}`, `{/foo}`, and `{foo/}`.
+
+```
+This is {html:strong}bold{/html:strong} and this is {html:img alt=|an image|/}.
+```
+
+Markup names are *effectively namespaced* due to their not using any sigils;
+they are distinct from `$variables`, `:functions`, and `|literals|`.
+
+> [!NOTE]
+> This requires dropping unquoted literals as operands,
+> so that `{foo}` is not parsed as `{|foo|}`.
+> See [#518](https://github.com/unicode-org/message-format-wg/issues/518).
+
+The exact meaning of the new placeholer types is as follows:
+
+* `{foo}` is a span-open.
+* `{/foo}` is a span-close.
+* `{foo/}` is a standalone element.
+
+#### Pros
+
+* Doesn't add new sigils except for `/`,
+  which is universally known thanks to the wide-spread use of HTML.
+
+* Using syntax inspired by HTML makes it familiar to most translators.
+  Prior art for a similar inspiration can be found in the [BBCode](https://en.wikipedia.org/wiki/BBCode) syntax,
+  which uses `[foo]` and `[/foo]` as tags.
+  Despite being a niche language, BBCode can be argued to be many people's first introduction to markup-like syntax.
+
+* Avoids the issues of using JSX-style syntax, `<foo>`...`</foo>`,
+  which looks *exactly* like HTML, but has different semantics and behavior.
+
+#### Cons
+
+* May still be confusing because it looks almost like HTML, but doesn't use the familiar angle brackets.
+
+* Requires changes to the existing MF2 syntax: dropping unquoted literals as expression operands.
+
+* Regular placeholders, e.g. `{$var}`, use the same `{...}` syntax, and may be confused for *open* elements.
