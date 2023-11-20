@@ -200,8 +200,7 @@ the following steps are taken:
 2. _Resolve the name_ of the _function_ and, based on the starting sigil,
    find the appropriate function implementation from the _function registry_.
    If the implementation does not support the _namespace_ of the _name_
-   or the _namespace_ does not support the _name-part_ named _function_
-   or the registry does not otherwise support the _name_,
+   or the _namespace_ does not support the _name-part_ named _function_,
    emit an Unknown Function error
    and use a _fallback value_ for the _expression_.
 4. If the _expression_ includes _options_, resolve the _options_ to a mapping
