@@ -354,6 +354,8 @@ it also proposes to use the forward slash `/` for the closing element syntax.
 However, opening elements are decorated with a pound sign `#`:
 resulting in `{#foo}` and `{/foo}`.
 
+This is similar to [Mustache](http://mustache.github.io/mustache.5.html)'s control flow syntax.
+
 Standalone elements combine the sigil in front and HTML's forward slash `/` at the end of the placeholder: `{#foo/}`.
 
 The data model and the runtime considerations are the same as in the proposed solution.
@@ -371,11 +373,15 @@ They are distinct from `$variables`, `:functions`, and `|literals|`.
 
 * Doesn't conflict with any other placeholder expressions.
 
+* Prior art exists: Mustache.
+
 #### Cons
 
 * Introduces a new sigil, the pound sign `#`.
 
 * The standalone syntax is a bit clunky (but logical): `{#foo/}`.
+
+* In Mustache, the `{{#foo}}`...`{{/foo}}` syntax is used for *control flow* statements rather than printable data.
 
 ### A5. Square Brackets
 
