@@ -232,13 +232,12 @@ This is <strong>bold</strong> and this is <img alt="an image" src="{$imgsrc}">.
 
 #### Pros:
 
-* No work required from us right now. We can always add support later.
-* We already support (and are required to support) in-line literal markup in messages, since they are just character sequences.
+* No work required from us right now. We can always add support later, provided we reserve adequate placeholder syntax.
+* We already allow (and are required to allow) in-line literal markup and other templating syntax in messages, since they are just character sequences.
 * Unlike other solutions, does not require MessageFormat to reinterpret or process markup to create the desired output.
 * It's HTML.
 * The least surprising syntax for developers and translators.
 * Some CAT tools already support HTML and other markup in translations.
-* Supports other markup or templating syntaxes with no additional effort (it's just strings)
 
 #### Cons:
 
@@ -250,6 +249,7 @@ This is <strong>bold</strong> and this is <img alt="an image" src="{$imgsrc}">.
   * It is not supported by `formatToParts`, which in turn makes double-parsing difficult.
 * It requires special handling when inserting messages into the DOM.
 * It requires "sniffing" the message to detect embedded markup. XSS prevention becomes much more complicated.
+
 ### HTML Syntax
 
 We could parse the HTML syntax as part of MessageFormat parsing,
