@@ -101,6 +101,45 @@ _What use-cases do we see? Ideally, quote concrete examples._
 - Translators and tools would like a machine-readable way to find out the names
   and option values for add-on packages.
 
+---
+
+_A user story_
+
+Suppose you're you're creating the ICU4J implementation. 
+The `:datetime` function in the default registry might be 
+backed by `com.ibm.icu.text.DateFormat` as an implementing class. 
+There's no need to prefix `:datetime` for that. 
+That's just in the implementation.
+
+The same developer might want to expose ICU4J's `skeleton` feature
+(which uses `DateTimePatternGenerator` to create a pattern).
+That's not a default registry option. 
+So she should prefix the _option_ as `icu:skeleton` in her implementation.
+
+Suppose the same developer then goes on to implement `com.ibm.icu.text.DateIntervalFormat`
+as a function. 
+That's not in the default registry, so it gets `:icu:dateinterval`.
+The _options_ for this function might or might not be namespaced.
+
+Suppose the same developer goes on to implement an SPI for custom functions. 
+Suppose an ICU4J user writes her own date formatter. 
+It doesn't replace the one in `:dateformat`, so it gets a prefix like `:my:dateformat`. 
+The standard options might not be prefixed, but custom options (similar to `skeleton` above) would be. 
+ICU's options would probably not be recognized. 
+
+In such an implementation, users could write expressions such as:
+
+```
+{$now :datetime icu:skeleton=yMMMd}
+{$now :icu:dateinterval end=$then skeleton=yMMM}
+{$now :my:datetime dateStyle=short :my:wonderfulness=high}
+```
+
+Suppose a tool implementer is working with messages written for the above implementation with the `my` add-on. 
+When they see a namespace prefix, that tells them that the function or the option is non-standard. 
+The prefix might tell them where to look for the add-on registry
+or at least be something that they can key locally. 
+
 ## Requirements
 
 _What properties does the solution have to manifest to enable the use-cases above?_
