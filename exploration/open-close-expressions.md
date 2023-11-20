@@ -253,6 +253,8 @@ This is <strong>bold</strong> and this is <img alt="an image" src="{$imgsrc}">.
 
 ### A2. HTML Syntax
 
+> `<foo>`, `</foo>`, `<foo>` or `</foo>`
+
 We could parse the HTML syntax as part of MessageFormat parsing,
 and represent markup as first-class data-model concepts of MessageFormat.
 
@@ -293,6 +295,8 @@ The same approach would be used for self-closing elements defined by other diale
 * It only supports HTML.
 
 ### A3. HTML-like syntax
+
+> `{foo}`, `{/foo}`, `{foo/}`
 
 The goal of this solution is to avoid adding new sigils to the syntax.
 Instead, it leverages the familiarity of the `foo`...`/foo` idiom,
@@ -340,3 +344,33 @@ The exact meaning of the new placeholer types is as follows:
 * Requires changes to the existing MF2 syntax: dropping unquoted literals as expression operands.
 
 * Regular placeholders, e.g. `{$var}`, use the same `{...}` syntax, and may be confused for *open* elements.
+
+### A4. Poundslash
+
+> `{#foo}`, `{/foo}`, `{#foo/}`
+
+This solution is similar to A3 in that
+it also proposes to use the forward slash `/` for the closing element syntax.
+However, opening elements are decorated with a pound sign `#`:
+resulting in `{#foo}` and `{/foo}`.
+Standalone elements combine the sigil in front and HTML's forward slash `/` at the end of the placeholder: `{#foo/}`.
+The data model and the runtime considerations are the same as in the proposed solution.
+
+```
+This is {#html:strong}bold{/html:strong} and this is {#html:img alt=|an image|/}.
+```
+
+Markup names are *namespaced* by their use of the pound sign `#` and the forward slash `/` sigils.
+They are distinct from `$variables`, `:functions`, and `|literals|`.
+
+#### Pros
+
+* Leverages the familiarity of the forward slash `/` used for closing spans.
+
+* Doesn't conflict with any other placeholder expressions.
+
+#### Cons
+
+* Introduces a new sigil, the pound sign `#`.
+
+* The standalone syntax is a bit clunky (but logical): `{#foo/}`.
