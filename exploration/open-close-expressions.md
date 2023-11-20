@@ -300,6 +300,7 @@ inspired by HTML and BBCode.
 
 This solution consists of adding new placeholder syntax:
 `{foo}`, `{/foo}`, and `{foo/}`.
+The data model and the runtime considerations are the same as in the proposed solution.
 
 ```
 This is {html:strong}bold{/html:strong} and this is {html:img alt=|an image|/}.
@@ -309,7 +310,7 @@ Markup names are *effectively namespaced* due to their not using any sigils;
 they are distinct from `$variables`, `:functions`, and `|literals|`.
 
 > [!NOTE]
-> This requires dropping unquoted literals as operands,
+> This requires dropping unquoted non-numeric literals as operands,
 > so that `{foo}` is not parsed as `{|foo|}`.
 > See [#518](https://github.com/unicode-org/message-format-wg/issues/518).
 
