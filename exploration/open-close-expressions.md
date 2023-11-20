@@ -326,7 +326,7 @@ The exact meaning of the new placeholer types is as follows:
 
 #### Pros
 
-* Doesn't add new sigils except for `/`,
+* Doesn't add new sigils except for the forward slash `/`,
   which is universally known thanks to the wide-spread use of HTML.
 
 * Using syntax inspired by HTML makes it familiar to most translators.
@@ -345,7 +345,7 @@ The exact meaning of the new placeholer types is as follows:
 
 * Regular placeholders, e.g. `{$var}`, use the same `{...}` syntax, and may be confused for *open* elements.
 
-### A4. Poundslash
+### A4. Hash & Slash
 
 > `{#foo}`, `{/foo}`, `{#foo/}`
 
@@ -353,7 +353,9 @@ This solution is similar to A3 in that
 it also proposes to use the forward slash `/` for the closing element syntax.
 However, opening elements are decorated with a pound sign `#`:
 resulting in `{#foo}` and `{/foo}`.
+
 Standalone elements combine the sigil in front and HTML's forward slash `/` at the end of the placeholder: `{#foo/}`.
+
 The data model and the runtime considerations are the same as in the proposed solution.
 
 ```
@@ -374,3 +376,34 @@ They are distinct from `$variables`, `:functions`, and `|literals|`.
 * Introduces a new sigil, the pound sign `#`.
 
 * The standalone syntax is a bit clunky (but logical): `{#foo/}`.
+
+### A5. Square Brackets
+
+> `[foo]`, `[/foo]`, `[foo/]`
+
+```
+This is [html:strong]bold[/html:strong] and this is [html:img alt=|an image|/].
+```
+
+#### Pros
+
+* Concise and less noisy than the alternatives.
+
+* Doesn't add new sigils except for the forward slash `/`,
+  which is universally known thanks to the wide-spread use of HTML.
+
+* Leverages the familiarity of the forward slash `/` used for closing spans.
+
+* Makes it clear that `{42}` and `[foo]` are different concepts:
+  one is a standalone placeholder and the other is an open-span element.
+
+* Makes it clear that markup and spans are not expressions,
+  and thus cannot be used in declarations nor selectors.
+
+* Established prior art: the [BBCode](https://en.wikipedia.org/wiki/BBCode) syntax.
+  Despite being a niche language, BBCode can be argued to be many people's first introduction to markup-like syntax.
+
+#### Cons
+
+* Requires making `[` (and possibly `]`) special in text.
+  Arguably however, markup is more common in translations than the literal `[ ... ]`.
