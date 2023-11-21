@@ -1,27 +1,19 @@
 message = simple-message / complex-message
 
-simple-message = [almost-keyword]
-               / ((almost-keyword not-keyword / text-start / expression) pattern)
-complex-message = *(declaration [s]) body
+simple-message = [simple-start pattern]
+simple-start = text-start / text-escape / expression
 
+pattern = *(text / expression)
+
+complex-message = *(declaration [s]) complex-body
 declaration = input-declaration / local-declaration / reserved-declaration
 input-declaration = input [s] variable-expression
 local-declaration = local s variable [s] "=" [s] expression
-reserved-declaration = "." 4*(%x61-7A) reserved-body 1*expression
+reserved-declaration = "." reserved-body 1*expression
 
-almost-keyword = "." *3(%x61-7A)
-not-keyword    = %x0-5B        ; omit \
-               / %x5D-60       ; omit a-z and {
-               / %x7C          ; omit }
-               / %x7E-D7FF     ; omit surrogates
-               / %xE000-10FFFF
-               / expression
-
-body = quoted-pattern
-     / (selectors 1*([s] variant))
-
+complex-body = quoted-pattern
+             / (selectors 1*([s] variant))
 quoted-pattern = "{{" pattern "}}"
-pattern = *(text / expression)
 
 selectors = match 1*([s] expression)
 variant = 1*(s key) [s] quoted-pattern
@@ -38,7 +30,7 @@ variable = "$" name
 function = (":" / "+" / "-") name
 option = name [s] "=" [s] (literal / variable)
 
-; keywords always consist of a . followed by at least four lower-case a-z letters
+; keywords always consist of a . followed by lower-case a-z letters
 input = %s".input"
 local = %s".local"
 match = %s".match"
