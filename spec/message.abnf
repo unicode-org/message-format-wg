@@ -5,10 +5,10 @@ simple-start = simple-start-char / text-escape / expression
 pattern = *(text-char / text-escape / expression)
 
 complex-message = *(declaration [s]) complex-body [s]
-declaration = input-declaration / local-declaration / reserved-declaration
+declaration = input-declaration / local-declaration / reserved-syntax
 input-declaration = input [s] variable-expression
 local-declaration = local s variable [s] "=" [s] expression
-reserved-declaration = "." reserved-body 1*expression
+reserved-syntax = "." reserved-body 1*expression
 
 complex-body = quoted-pattern
              / (selectors 1*([s] variant))
