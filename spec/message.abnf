@@ -1,11 +1,10 @@
 message = simple-message / complex-message
 
 simple-message = [simple-start pattern]
-simple-start = text-start / text-escape / expression
+simple-start = simple-start-char / text-escape / expression
+pattern = *(text-char / text-escape / expression)
 
-pattern = *(text / expression)
-
-complex-message = *(declaration [s]) complex-body
+complex-message = *(declaration [s]) complex-body [s]
 declaration = input-declaration / local-declaration / reserved-declaration
 input-declaration = input [s] variable-expression
 local-declaration = local s variable [s] "=" [s] expression
@@ -16,7 +15,7 @@ complex-body = quoted-pattern
 quoted-pattern = "{{" pattern "}}"
 
 selectors = match 1*([s] expression)
-variant = 1*(s key) [s] quoted-pattern
+variant = key *(s key) [s] quoted-pattern
 key = literal / "*"
 
 expression = literal-expression / variable-expression / function-expression
@@ -30,19 +29,17 @@ variable = "$" name
 function = (":" / "+" / "-") name
 option = name [s] "=" [s] (literal / variable)
 
-; keywords always consist of a . followed by lower-case a-z letters
 input = %s".input"
 local = %s".local"
 match = %s".match"
 
-text = 1*(text-char / text-escape)
-text-start = %x0-2D         ; omit .
-           / %x2F-5B        ; omit \
-           / %x5D-7A        ; omit {
-           / %x7C           ; omit }
-           / %x7E-D7FF      ; omit surrogates
-           / %xE000-10FFFF
-text-char  = text-start / "."
+simple-start-char = %x0-2D         ; omit .
+                  / %x2F-5B        ; omit \
+                  / %x5D-7A        ; omit {
+                  / %x7C           ; omit }
+                  / %x7E-D7FF      ; omit surrogates
+                  / %xE000-10FFFF
+text-char = simple-start-char-start / "."
 
 quoted      = "|" *(quoted-char / quoted-escape) "|"
 quoted-char = %x0-5B         ; omit \
