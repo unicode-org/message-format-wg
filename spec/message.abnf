@@ -5,7 +5,7 @@ simple-start = simple-start-char / text-escape / expression
 pattern = *(text-char / text-escape / expression)
 
 complex-message = *(declaration [s]) complex-body [s]
-declaration = input-declaration / local-declaration / reserved-keyword
+declaration = input-declaration / local-declaration / reserved-statement
 input-declaration = input [s] variable-expression
 local-declaration = local s variable [s] "=" [s] expression
 
@@ -59,7 +59,7 @@ unquoted-start = name-start / DIGIT / "."
 ; Note that the following expression is a simplification,
 ; as this rule MUST NOT be considered to match existing keywords:
 ;   (input / local / match) (s / "{")
-reserved-keyword = "." reserved-body 1*expression
+reserved-statement = "." reserved-body 1*expression
 
 ; Reserve additional sigils for use by future versions of this specification.
 reserved-annotation = reserved-annotation-start reserved-body
