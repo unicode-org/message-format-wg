@@ -40,7 +40,7 @@ simple-start-char = %x0-2D         ; omit .
                   / %x7C           ; omit }
                   / %x7E-D7FF      ; omit surrogates
                   / %xE000-10FFFF
-text-char = simple-start-char-start / "."
+text-char = simple-start-char / "."
 
 quoted      = "|" *(quoted-char / quoted-escape) "|"
 quoted-char = %x0-5B         ; omit \
