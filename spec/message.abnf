@@ -5,10 +5,9 @@ simple-start = simple-start-char / text-escape / expression
 pattern = *(text-char / text-escape / expression)
 
 complex-message = *(declaration [s]) complex-body [s]
-declaration = input-declaration / local-declaration / reserved-syntax
+declaration = input-declaration / local-declaration / reserved-keyword
 input-declaration = input [s] variable-expression
 local-declaration = local s variable [s] "=" [s] expression
-reserved-syntax = "." reserved-body 1*expression
 
 complex-body = quoted-pattern
              / (selectors 1*([s] variant))
@@ -22,7 +21,9 @@ expression = literal-expression / variable-expression / function-expression
 literal-expression = "{" [s] literal [s annotation] [s] "}"
 variable-expression = "{" [s] variable [s annotation] [s] "}"
 function-expression = "{" [s] annotation [s] "}"
-annotation = (function *(s option)) / reserved / private-use
+annotation = (function *(s option))
+           / reserved-annotation
+           / private-use-annotation
 
 literal = quoted / unquoted
 variable = "$" name
@@ -54,16 +55,18 @@ unquoted-start = name-start / DIGIT / "."
                / %xB7 / %x300-36F / %x203F-2040
 
 
-; reserve sigils for private-use by implementations
-private-use    = private-start reserved-body
-private-start  = "^" / "&"
+; Reserve additional .keywords for use by future versions of this specification.
+; Note that the following expression is a simplification,
+; as this rule MUST NOT be considered to match existing keywords:
+;   (input / local / match) (s / "{")
+reserved-keyword = "." reserved-body 1*expression
 
-; reserve additional sigils for use by 
-; future versions of this specification
-reserved       = reserved-start reserved-body
-reserved-start = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "/" / "?" / "~"
+; Reserve additional sigils for use by future versions of this specification.
+reserved-annotation = reserved-annotation-start reserved-body
+reserved-annotation-start = "!" / "@" / "#" / "%" / "*"
+                          / "<" / ">" / "/" / "?" / "~"
+
 reserved-body  = *([s] 1*(reserved-char / reserved-escape / quoted))
-
 reserved-char  = %x00-08        ; omit HTAB and LF
                / %x0B-0C        ; omit CR
                / %x0E-19        ; omit SP
@@ -71,6 +74,10 @@ reserved-char  = %x00-08        ; omit HTAB and LF
                / %x5D-7A        ; omit { | }
                / %x7E-D7FF      ; omit surrogates
                / %xE000-10FFFF
+
+; Reserve sigils for private-use by implementations.
+private-use-annotation = private-start reserved-body
+private-start  = "^" / "&"
 
 ; based on https://www.w3.org/TR/xml/#NT-Name,
 ; but cannot start with U+003A COLON ":"
