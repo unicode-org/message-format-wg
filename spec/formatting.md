@@ -198,11 +198,17 @@ the following steps are taken:
 1. If the _expression_ includes an _operand_, resolve its value.
    If this fails, use a _fallback value_ for the _expression_.
 2. _Resolve the name_ of the _function_ and, based on the starting sigil,
-   find the appropriate function implementation from the _function registry_.
-   If the implementation does not support the _namespace_ of the _name_
-   or the _namespace_ does not support the _name-part_ named _function_,
-   emit an Unknown Function error
+   find the appropriate function implementation to call.
+   If the implementation cannot find the function, emit an Unknown Function error
    and use a _fallback value_ for the _expression_.
+
+   An implementation MAY emit an Unknown Function error if the implementation    
+   does not support the _namespace_ of the _name_
+   or the _namespace_ does not support the _name-part_ named _function_.
+
+   Implementations are not required to implement _namespaces_ or installable
+   _function registries_.
+
 4. If the _expression_ includes _options_, resolve the _options_ to a mapping
    of string identifiers to values.
    For each _option_:
@@ -226,58 +232,19 @@ the following steps are taken:
    An implementation MAY define its own functions.
    An implementation MAY allow custom functions to be defined by users.
 
+   An implementation MAY perform additional processing before calling the function.
+   For example, it can modify the _name_ of an _option_ to match the function's
+   input expectations (such as by removing the _namespace_ prefix from the _name-part_).
+
    Function access to the _formatting context_ MUST be minimal and read-only,
    and execution time SHOULD be limited.
+   
    Implementation-defined _functions_ SHOULD use an implementation-defined _namespace_.
 
-6. If the call succeeds,
+7. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
    If the call fails or does not return a valid value,
    emit a Resolution error and use a _fallback value_ for the _expression_.
-
-### Name Resolution
-
-<dfn title="resolve the name">**_Name resolution_**</dfn> is the determination of
-the _name-part_ and, where present, the _namespace_ of the _name_ for a given _function_
-or _option_.
-
-To resolve the _name_ of an item, the following steps are taken:
-
-1. Let the _name_ be the string to be processed, less any preceeding
-   sigils or markers.
-   For example, in the _expression_ `{:function}`, the string `function`
-   is the _name_ string.
-2. Determine if _name_ contains the character U+003A COLON `:`:
-   - If _name_ contains a colon, let _namespace_ be the
-      substring of _name_ up to (but not including)
-      the colon and _name-part_ be the substring of _name_ following the colon;
-   - Else let _namespace_ be an empty value (null, void, or empty string)
-     and _name-part_ be the _name_.
-3. If the _name-part_ is empty, return a Syntax error.
-4. Return _namespace_ and _name-part_.
-
-Implementations are not required to support the installation or resolution
-of different namespaces.
-How namespaces are defined, provisioned, or handled is also implementation defined.
-The _namespace_ MAY affect which function is called.
-
-Example:
-> Suppose the ICU implementation of MessageFormat added a custom option `skeleton`
-> to the `:datetime` function.
-> Users of that implementation could invoke the datetime formatter with an
-> pattern similar to:
-> ```
-> {{Today is {$date :datetime icu:skeleton=yMMMd}.}}
-> ```
-> The `name` of the `datetime` function is resolved as:
-> * `name`     : `datetime`
-> * `namespace`: (blank)
-> * `name-part`: `datetime`
-> 
-> The `name` of the option in the expression is resolved as:
-> * `name`     : `icu:skeleton`
-> * `namespace`: `icu`
-> * `name-part`: `skeleton`
 
 
 ### Fallback Resolution
