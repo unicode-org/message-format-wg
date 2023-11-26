@@ -233,10 +233,6 @@ the following steps are taken:
    An implementation MAY define its own functions.
    An implementation MAY allow custom functions to be defined by users.
 
-   An implementation MAY perform additional processing before calling the function.
-   For example, it can modify the _name_ of an _option_ to match the function's
-   input expectations (such as by removing the _namespace_ prefix from the _name-part_).
-
    Function access to the _formatting context_ MUST be minimal and read-only,
    and execution time SHOULD be limited.
    
