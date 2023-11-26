@@ -242,7 +242,7 @@ the following steps are taken:
    
    Implementation-defined _functions_ SHOULD use an implementation-defined _namespace_.
 
-7. If the call succeeds,
+5. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
    If the call fails or does not return a valid value,
    emit a Resolution error and use a _fallback value_ for the _expression_.
