@@ -218,7 +218,8 @@ the following steps are taken:
    - If the _option_'s right-hand side successfully resolves to a value,
      bind the _name_ of the _option_ to the resolved value in the mapping.
    - Otherwise, do not bind the _name_ of the _option_ to any value in the mapping.
-5. Call the function implementation with the following arguments:
+4. Call the function implementation with the following arguments:
+
    - The current _locale_.
    - The resolved mapping of _options_.
    - If the _expression_ includes an _operand_, its resolved value.
