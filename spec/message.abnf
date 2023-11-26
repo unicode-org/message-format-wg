@@ -71,7 +71,7 @@ reserved-char  = %x00-08        ; omit HTAB and LF
                / %xE000-10FFFF
 
 ; based on https://www.w3.org/TR/REC-xml-names/#NT-QName
-name       = [namespace ":"] name-body
+name       = [namespace ":"] name-part
 namespace  = name-part
 name-part  = name-start *name-char
 name-start = ALPHA / "_"
