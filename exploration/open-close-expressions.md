@@ -274,9 +274,9 @@ This is <strong>bold</strong> and this is <img alt="an image" src="{$imgsrc}">.
 * It requires special handling when inserting messages into the DOM.
 * It requires "sniffing" the message to detect embedded markup. XSS prevention becomes much more complicated.
 
-### A2. HTML Syntax
+### A2. XML Syntax
 
-> `<foo>`, `</foo>`, `<foo>` or `</foo>`
+> `<foo>`, `</foo>`, or `<foo/>`
 
 We could parse the HTML syntax as part of MessageFormat parsing,
 and represent markup as first-class data-model concepts of MessageFormat.
@@ -317,7 +317,7 @@ The same approach would be used for self-closing elements defined by other diale
 * Requires quoting in XML-based containers.
 * It only supports HTML.
 
-### A3. HTML-like syntax
+### A3. XML-like syntax
 
 > `{foo}`, `{/foo}`, `{foo/}`
 
@@ -349,7 +349,7 @@ The exact meaning of the new placeholer types is as follows:
 
 #### Pros
 
-* Doesn't add new sigils except for the forward slash `/`,
+* Only adds `/` as a new sigil,
   which is universally known thanks to the wide-spread use of HTML.
 
 * Using syntax inspired by HTML makes it familiar to most translators.
@@ -400,7 +400,7 @@ They are distinct from `$variables`, `:functions`, and `|literals|`.
 
 #### Cons
 
-* Introduces a new sigil, the pound sign `#`.
+* Introduces two new sigils, the pound sign `#` and the forward slash `/`.
 
 * The standalone syntax is a bit clunky (but logical): `{#foo/}`.
 
