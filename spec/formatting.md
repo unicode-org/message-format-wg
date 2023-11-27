@@ -197,14 +197,14 @@ the following steps are taken:
 
 1. If the _expression_ includes an _operand_, resolve its value.
    If this fails, use a _fallback value_ for the _expression_.
-2. _Resolve the name_ of the _function_ and, based on the starting sigil,
+2. Resolve the _identifier_ of the _function_ and, based on the starting sigil,
    find the appropriate function implementation to call.
    If the implementation cannot find the function, emit an Unknown Function error
    and use a _fallback value_ for the _expression_.
 
    An implementation MAY emit an Unknown Function error if the implementation    
-   does not support the _namespace_ of the _name_
-   or the _namespace_ does not support the _name-part_ named _function_.
+   does not support the _namespace_ of the _identifier_
+   or the _namespace_ does not support the named _function_.
 
    Implementations are not required to implement _namespaces_ or installable
    _function registries_.
@@ -212,12 +212,12 @@ the following steps are taken:
 4. If the _expression_ includes _options_, resolve the _options_ to a mapping
    of string identifiers to values.
    For each _option_:
-   - _Resolve the name_ of the _option_.
-   - If the _option_'s _name_ already exists in the resolved mapping of _options_,
+   - Resolve the _identifier_ of the _option_.
+   - If the _option_'s _identifier_ already exists in the resolved mapping of _options_,
      emit a Duplicate Option Name error.
    - If the _option_'s right-hand side successfully resolves to a value,
-     bind the _name_ of the _option_ to the resolved value in the mapping.
-   - Otherwise, do not bind the _name_ of the _option_ to any value in the mapping.
+     bind the _identifier_ of the _option_ to the resolved value in the mapping.
+   - Otherwise, do not bind the _identifier_ of the _option_ to any value in the mapping.
 4. Call the function implementation with the following arguments:
 
    - The current _locale_.
@@ -271,13 +271,13 @@ The _fallback value_ depends on the contents of the _expression_:
   > Example: `$user`
 
 - _expression_ with no _operand_:
-  the _function_ starting sigil followed by its _name_
+  the _function_ starting sigil followed by its _identifier_
 
   > Examples: `:platform`, `+tag`, `-tag`
 
 - Otherwise: The U+FFFD REPLACEMENT CHARACTER `�` character
 
-_Option_ names and values are not included in the _fallback value_.
+_Option_ identifiers and values are not included in the _fallback value_.
 
 When an error occurs in an _expression_ with a _variable_ _operand_
 and the _variable_ refers to a local _declaration_,
@@ -833,7 +833,7 @@ These are divided into the following categories:
     > }}
     > ```
 
-  - A **Duplicate Option Name error** occurs when the same _name_
+  - A **Duplicate Option Name error** occurs when the same _identifier_
     appears on the left-hand side
     of more than one _option_ in the same _expression_.
 
