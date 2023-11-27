@@ -1,37 +1,51 @@
 <!ELEMENT registry (function|validationRule)*>
 
 <!ELEMENT function (description,(formatSignature|matchSignature|alias)+)>
-<!ATTLIST function name NMTOKEN #REQUIRED>
+<!ATTLIST function
+    name           NMTOKEN  #REQUIRED
+>
 
 <!ELEMENT description (#PCDATA)>
 
 <!ELEMENT validationRule EMPTY>
-<!ATTLIST validationRule id ID #REQUIRED>
-<!ATTLIST validationRule regex CDATA #REQUIRED>
+<!ATTLIST validationRule
+    id             ID     #REQUIRED
+    regex          CDATA  #REQUIRED
+>
 
 <!ELEMENT formatSignature (input?,option*)>
-<!ATTLIST formatSignature position (open|close|standalone) "standalone">
-<!ATTLIST formatSignature locales NMTOKENS #IMPLIED>
+<!ATTLIST formatSignature
+    position       (open|close|standalone)  "standalone"
+    locales        NMTOKENS                 #IMPLIED
+>
 
 <!ELEMENT matchSignature (input?,option*,match*)>
-<!ATTLIST matchSignature locales NMTOKENS #IMPLIED>
+<!ATTLIST matchSignature
+    locales        NMTOKENS  #IMPLIED
+>
 
 <!ELEMENT input EMPTY>
-<!ATTLIST input values NMTOKENS #IMPLIED>
-<!ATTLIST input validationRule IDREF #IMPLIED>
-<!ATTLIST input readonly (true|false) "false">
+<!ATTLIST input
+    values         NMTOKENS      #IMPLIED
+    validationRule IDREF         #IMPLIED
+    readonly       (true|false)  "false"
+>
 
 <!ELEMENT option EMPTY>
-<!ATTLIST option name NMTOKEN #REQUIRED>
-<!ATTLIST option values NMTOKENS #IMPLIED>
-<!ATTLIST option default NMTOKEN #IMPLIED>
-<!ATTLIST option validationRule IDREF #IMPLIED>
-<!ATTLIST option required (true|false) "false">
-<!ATTLIST option readonly (true|false) "false">
+<!ATTLIST option
+    name           NMTOKEN       #REQUIRED
+    values         NMTOKENS      #IMPLIED
+    default        NMTOKEN       #IMPLIED
+    validationRule IDREF         #IMPLIED
+    required       (true|false)  "false"
+    readonly       (true|false)  "false"
+>
 
 <!ELEMENT match EMPTY>
-<!ATTLIST match values NMTOKENS #IMPLIED>
-<!ATTLIST match validationRule IDREF #IMPLIED>
+<!ATTLIST match
+    values         NMTOKENS  #IMPLIED
+    validationRule IDREF     #IMPLIED
+>
 
 <!ELEMENT alias (description,setOption*)>
 <!ATTLIST alias

@@ -149,6 +149,8 @@ without access to the other parts of the selected pattern.
 This design relies on the recognition that the formatted output of MF2
 may be further processed by other tools before presentation to a user.
 
+### Syntax
+
 Let us add _markup_ as a new type of _placeholder_,
 in parallel with _expression_:
 
@@ -170,10 +172,31 @@ Unlike annotations, markup expressions may not have operands.
 
 Markup is not valid in _declarations_ or _selectors_.
 
+#### Pros
+
+* Doesn't conflict with any other placeholder expressions.
+
+* Agnostic syntax, different from HTML or other markup and templating systems.
+
+#### Cons
+
+* Adds 3 new sigils to the expression syntax.
+
+* Because they're agnostic, the meaning of the sigils must be learned or deduced.
+
+* Requires the special-casing of negative numeral literals,
+  to distinguish `{-foo}` and `{-42}`.
+
+### Runtime Behavior
+
+#### Formatting to a String
+
 When formatting to a string,
 markup placholders format to an empty string by default.
 An implementation may customize this behaviour,
 e.g. emitting XML-ish tags for each open/close placeholder.
+
+#### Formatting to Parts
 
 When formatting to parts (as proposed in <a href="https://github.com/unicode-org/message-format-wg/pull/463">#463</a>),
 markup placeholders format to an object including the following properties:
@@ -222,7 +245,81 @@ _What other solutions are available?_
 _How do they compare against the requirements?_
 _What other properties they have?_
 
-### HTML-like syntax
+### A1. Do Nothing
+
+We could choose to not provide any special support for spannables or markup.
+This would delegate the problem to tools and downstream processing layers.
+
+```
+This is <strong>bold</strong> and this is <img alt="an image" src="{$imgsrc}">.
+```
+
+#### Pros:
+
+* No work required from us right now. We can always add support later, provided we reserve adequate placeholder syntax.
+* We already allow (and are required to allow) in-line literal markup and other templating syntax in messages, since they are just character sequences.
+* Unlike other solutions, does not require MessageFormat to reinterpret or process markup to create the desired output.
+* It's HTML.
+* The least surprising syntax for developers and translators.
+* Some CAT tools already support HTML and other markup in translations.
+
+#### Cons:
+
+* Requires quoting in XML-based containers.
+* Relies on a best-effort convention; is not a standard.
+* Markup becomes a completely alien concept in MessageFormat:
+  * It cannot be validated via the AST nor the reigstry.
+  * It cannot be protected, unless put inside literal expressions.
+  * It is not supported by `formatToParts`, which in turn makes double-parsing difficult.
+* It requires special handling when inserting messages into the DOM.
+* It requires "sniffing" the message to detect embedded markup. XSS prevention becomes much more complicated.
+
+### A2. XML Syntax
+
+> `<foo>`, `</foo>`, or `<foo/>`
+
+We could parse the HTML syntax as part of MessageFormat parsing,
+and represent markup as first-class data-model concepts of MessageFormat.
+
+```
+This is <strong>bold</strong> and this is <img alt="an image">.
+```
+
+To represent HTML's auto-closing tags, like `<img>`,
+we could follow HTML's syntax to the letter, similer to the snippet above,
+and use the *span-open* syntax for them.
+This would be consistent with HTML, but would require:
+
+* Either the parser to hardcode which elements are standalone;
+  this approach wouldn't scale well beyond the current set of HTML elements.
+
+* Or, the validation and processing which leverages the open/close and standalone concepts
+  to be possible only when the registry is available.
+
+Alternatively, we could diverge from proper HTML,
+and use the stricter XML syntax: `<img/>`.
+
+```
+This is <html:strong>bold</html:strong> and this is <html:img alt="an image" />.
+```
+
+The same approach would be used for self-closing elements defined by other dialects of XML.
+
+#### Pros:
+
+* Looks like HTML.
+* The least surprising syntax for developers and translators.
+
+#### Cons:
+
+* Looks like HTML, but isn't *exactly* HTML, unless we go to great lengths to make it so.
+  See the differences between HTML and React's JSX as a case-study of consequences.
+* Requires quoting in XML-based containers.
+* It only supports HTML.
+
+### A3. XML-like syntax
+
+> `{foo}`, `{/foo}`, `{foo/}`
 
 The goal of this solution is to avoid adding new sigils to the syntax.
 Instead, it leverages the familiarity of the `foo`...`/foo` idiom,
@@ -230,6 +327,7 @@ inspired by HTML and BBCode.
 
 This solution consists of adding new placeholder syntax:
 `{foo}`, `{/foo}`, and `{foo/}`.
+The data model and the runtime considerations are the same as in the proposed solution.
 
 ```
 This is {html:strong}bold{/html:strong} and this is {html:img alt=|an image|/}.
@@ -239,7 +337,7 @@ Markup names are *effectively namespaced* due to their not using any sigils;
 they are distinct from `$variables`, `:functions`, and `|literals|`.
 
 > [!NOTE]
-> This requires dropping unquoted literals as operands,
+> This requires dropping unquoted non-numeric literals as operands,
 > so that `{foo}` is not parsed as `{|foo|}`.
 > See [#518](https://github.com/unicode-org/message-format-wg/issues/518).
 
@@ -251,7 +349,7 @@ The exact meaning of the new placeholer types is as follows:
 
 #### Pros
 
-* Doesn't add new sigils except for `/`,
+* Only adds `/` as a new sigil,
   which is universally known thanks to the wide-spread use of HTML.
 
 * Using syntax inspired by HTML makes it familiar to most translators.
@@ -269,3 +367,72 @@ The exact meaning of the new placeholer types is as follows:
 * Requires changes to the existing MF2 syntax: dropping unquoted literals as expression operands.
 
 * Regular placeholders, e.g. `{$var}`, use the same `{...}` syntax, and may be confused for *open* elements.
+
+### A4. Hash & Slash
+
+> `{#foo}`, `{/foo}`, `{#foo/}`
+
+This solution is similar to A3 in that
+it also proposes to use the forward slash `/` for the closing element syntax.
+However, opening elements are decorated with a pound sign `#`:
+resulting in `{#foo}` and `{/foo}`.
+
+This is similar to [Mustache](http://mustache.github.io/mustache.5.html)'s control flow syntax.
+
+Standalone elements combine the sigil in front and HTML's forward slash `/` at the end of the placeholder: `{#foo/}`.
+
+The data model and the runtime considerations are the same as in the proposed solution.
+
+```
+This is {#html:strong}bold{/html:strong} and this is {#html:img alt=|an image|/}.
+```
+
+Markup names are *namespaced* by their use of the pound sign `#` and the forward slash `/` sigils.
+They are distinct from `$variables`, `:functions`, and `|literals|`.
+
+#### Pros
+
+* Leverages the familiarity of the forward slash `/` used for closing spans.
+
+* Doesn't conflict with any other placeholder expressions.
+
+* Prior art exists: Mustache.
+
+#### Cons
+
+* Introduces two new sigils, the pound sign `#` and the forward slash `/`.
+
+* The standalone syntax is a bit clunky (but logical): `{#foo/}`.
+
+* In Mustache, the `{{#foo}}`...`{{/foo}}` syntax is used for *control flow* statements rather than printable data.
+
+### A5. Square Brackets
+
+> `[foo]`, `[/foo]`, `[foo/]`
+
+```
+This is [html:strong]bold[/html:strong] and this is [html:img alt=|an image|/].
+```
+
+#### Pros
+
+* Concise and less noisy than the alternatives.
+
+* Doesn't add new sigils except for the forward slash `/`,
+  which is universally known thanks to the wide-spread use of HTML.
+
+* Leverages the familiarity of the forward slash `/` used for closing spans.
+
+* Makes it clear that `{42}` and `[foo]` are different concepts:
+  one is a standalone placeholder and the other is an open-span element.
+
+* Makes it clear that markup and spans are not expressions,
+  and thus cannot be used in declarations nor selectors.
+
+* Established prior art: the [BBCode](https://en.wikipedia.org/wiki/BBCode) syntax.
+  Despite being a niche language, BBCode can be argued to be many people's first introduction to markup-like syntax.
+
+#### Cons
+
+* Requires making `[` (and possibly `]`) special in text.
+  Arguably however, markup is more common in translations than the literal `[ ... ]`.
