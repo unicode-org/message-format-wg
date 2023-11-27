@@ -47,6 +47,7 @@ quoted-char = %x0-5B         ; omit \
 
 unquoted       = unquoted-start *name-char
 unquoted-start = name-start / DIGIT / "."
+               / %xB7 / %x300-36F / %x203F-2040
 
 ; reserve sigils for private-use by implementations
 private-use    = private-start reserved-body
