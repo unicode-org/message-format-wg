@@ -9,12 +9,10 @@
 <!ATTLIST validationRule id ID #REQUIRED>
 <!ATTLIST validationRule regex CDATA #REQUIRED>
 
-<!ELEMENT formatSignature (input?,option*)>
+<!ELEMENT formatSignature (input?,option*,override*)>
 <!ATTLIST formatSignature position (open|close|standalone) "standalone">
-<!ATTLIST formatSignature locales NMTOKENS #IMPLIED>
 
-<!ELEMENT matchSignature (input?,option*,match*)>
-<!ATTLIST matchSignature locales NMTOKENS #IMPLIED>
+<!ELEMENT matchSignature (input?,option*,match*,override*)>
 
 <!ELEMENT input EMPTY>
 <!ATTLIST input values NMTOKENS #IMPLIED>
@@ -30,5 +28,13 @@
 <!ATTLIST option readonly (true|false) "false">
 
 <!ELEMENT match EMPTY>
-<!ATTLIST match values NMTOKENS #IMPLIED>
-<!ATTLIST match validationRule IDREF #IMPLIED>
+<!ATTLIST match
+    locales        NMTOKENS  #IMPLIED
+    values         NMTOKENS  #IMPLIED
+    validationRule IDREF     #IMPLIED
+>
+
+<!ELEMENT override (input?,option*)>
+<!ATTLIST override
+    locales        NMTOKENS  #REQUIRED
+>

@@ -50,8 +50,6 @@ A _signature_ defines one particular set of at most one argument and any number 
 that can be used together in a single call to the function.
 `<formatSignature>` corresponds to a function call inside a placeholder inside translatable text.
 `<matchSignature>` corresponds to a function call inside a selector.
-Signatures with a non-empty `locales` attribute are locale-specific
-and only available in translations in the given languages.
 
 A signature may define the positional argument of the function with the `<input>` element.
 If the `<input>` element is not present, the function is defined as a nullary function.
@@ -61,6 +59,12 @@ unless the `required` attribute is present.
 They accept either a finite enumeration of values (the `values` attribute)
 or validate their input with a regular expression (the `validationRule` attribute).
 Read-only options (the `readonly` attribute) can be displayed to translators in CAT tools, but may not be edited.
+
+As the `<input>` and `<option>` rules may be locale-dependent,
+each signature can include an `<override locales="...">` that extends and overrides
+the corresponding input and options rules.
+If multiple `<override>` elements would match the current locale,
+only the first one is used.
 
 Matching-function signatures additionally include one or more `<match>` elements
 to define the keys against which they can match when used as selectors.
@@ -93,7 +97,7 @@ For the sake of brevity, only `locales="en"` is considered.
             Match a **formatted** numerical value against CLDR plural categories or against a number literal.
         </description>
 
-        <matchSignature locales="en">
+        <matchSignature>
             <input validationRule="anyNumber"/>
             <option name="type" values="cardinal ordinal"/>
             <option name="minimumIntegerDigits" validationRule="positiveInteger"/>
@@ -102,11 +106,11 @@ For the sake of brevity, only `locales="en"` is considered.
             <option name="minimumSignificantDigits" validationRule="positiveInteger"/>
             <option name="maximumSignificantDigits" validationRule="positiveInteger"/>
             <!-- Since this applies to both cardinal and ordinal, all plural options are valid. -->
-            <match values="zero one two few many"/>
-            <match validationRule="anyNumber"/>
+            <match locales="en" values="one two few other" validationRule="anyNumber"/>
+            <match values="zero one two few many other" validationRule="anyNumber"/>
         </matchSignature>
 
-        <formatSignature locales="en">
+        <formatSignature>
             <input validationRule="anyNumber"/>
             <option name="minimumIntegerDigits" validationRule="positiveInteger"/>
             <option name="minimumFractionDigits" validationRule="positiveInteger"/>
@@ -132,14 +136,15 @@ when * {{{$count :number} new messages}}
 
 Furthermore,
 `:number`'s `<matchSignature>` contains two `<match>` elements
-which allow to validate the variant keys.
-If at least one `<match>` validation rules passes,
-a variant key is considered valid.
+which allow the validation of variant keys.
+The first element with `locales` matching the current locale
+(or an alement with no `locales`) is used:
 
-- `<match validationRule="anyNumber"/>` can be used to valide the `when 1` variant
+- `<match locales="en" values="one two few other" .../>` can be used in locales like `en` and `en-GB`
+  to valide the `when other` variant by verifying that the `other` key is present
+  in the list of enumarated values: `one other`.
+- `<match ... validationRule="anyNumber"/>` can be used to valide the `when 1` variant
   by testing the `1` key against the `anyNumber` regular expression defined in the registry file.
-- `<match values="one other"/>` can be used to valide the `when other` variant
-  by verifying that the `other` key is present in the list of enumarated values: `one other`.
 
 ---
 
@@ -152,26 +157,32 @@ A localization engineer can then extend the registry by defining the following `
 <registry>
     <function name="noun">
         <description>Handle the grammar of a noun.</description>
-        <formatSignature locales="en">
-            <input/>
-            <option name="article" values="definite indefinite"/>
-            <option name="plural" values="one other"/>
-            <option name="case" values="nominative genitive" default="nominative"/>
+        <formatSignature>
+            <override locales="en">
+                <input/>
+                <option name="article" values="definite indefinite"/>
+                <option name="plural" values="one other"/>
+                <option name="case" values="nominative genitive" default="nominative"/>
+            </override>
         </formatSignature>
     </function>
 
     <function name="adjective">
         <description>Handle the grammar of an adjective.</description>
-        <formatSignature locales="en">
-            <input/>
-            <option name="article" values="definite indefinite"/>
-            <option name="plural" values="one other"/>
-            <option name="case" values="nominative genitive" default="nominative"/>
+        <formatSignature>
+            <override locales="en">
+                <input/>
+                <option name="article" values="definite indefinite"/>
+                <option name="plural" values="one other"/>
+                <option name="case" values="nominative genitive" default="nominative"/>
+            </override>
         </formatSignature>
-        <formatSignature locales="en">
-            <input/>
-            <option name="article" values="definite indefinite"/>
-            <option name="accord"/>
+        <formatSignature>
+            <override locales="en">
+                <input/>
+                <option name="article" values="definite indefinite"/>
+                <option name="accord"/>
+            </override>
         </formatSignature>
     </function>
 </registry>
