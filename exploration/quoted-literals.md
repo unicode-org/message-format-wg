@@ -1,6 +1,6 @@
 # Quoted Literals
 
-Status: **Accepted**
+Status: **Proposed**
 
 <details>
 	<summary>Metadata</summary>
