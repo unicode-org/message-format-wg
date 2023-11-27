@@ -169,7 +169,7 @@ external input value does not appear in a _declaration_.
 > [!Note]
 > These restrictions only apply to _declarations_.
 > A _placeholder_ or _selector_ can apply a different annotation to a _variable_
-> than one applied to the same _variable_ name in a _declaration_.
+> than one applied to the same _variable_ named in a _declaration_.
 > For example, this message is _valid_:
 > ```
 > {{
@@ -482,7 +482,7 @@ and vice versa.
 > {+button}Submit{-button} or {+link}cancel{-link}.
 > ```
 
-A _function_ consists of a prefix sigil followed by a _name_.
+A _function_ consists of a prefix sigil followed by an _identifier_.
 The following sigils are used for _functions_:
 
 - `:` for a _standalone_ function
@@ -497,8 +497,8 @@ _Options_ are not required.
 An **_<dfn>option</dfn>_** is a key-value pair
 containing a named argument that is passed to a _function_.
 
-An _option_ has a _name_ and a _value_.
-The _name_ is separated from the _value_ by an U+003D EQUALS SIGN `=` along with
+An _option_ has an _identifier_ and a _value_.
+The _identifier_ is separated from the _value_ by an U+003D EQUALS SIGN `=` along with
 optional whitespace.
 The value of an _option_ can be either a _literal_ or a _variable_.
 
@@ -506,7 +506,7 @@ Multiple _options_ are permitted in an _annotation_.
 Each _option_ is separated by whitespace.
 
 ```abnf
-option = name [s] "=" [s] (literal / variable)
+option = identifier [s] "=" [s] (literal / variable)
 ```
 
 > Examples of _functions_ with _options_
@@ -672,22 +672,30 @@ unquoted-start = name-start / DIGIT / "."
                / %xB7 / %x300-36F / %x203F-2040
 ```
 
-### Names
+### Names and Identifiers
 
-A **_<dfn>name</dfn>_** is an identifier for a _variable_ (prefixed with `$`),
+An **_<dfn>identifier</dfn>_** is a character sequence that
+identifies a _function_ or _option_.
+Each _identifier_ consists of a _name_ optionally preceeded by
+a _namespace_. 
+When present, the _namespace_ is separated from the _name_ by a
+U+003A COLON `:`.
+Built-in _functions_ and their _options_ do not have a _namespace_ identifier.
+
+_Function_ _identifiers_ are prefixed with `:`, `+`, or `-`.
+_Option_ _identifiers_ have no prefix.
+
+A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_ 
+or as the name for for a _variable_.
+
+_Variable_ names are prefixed with `$`.
 for a _function_ (prefixed with `:`, `+` or `-`),
-or for an _option_ (these have no prefix).
-The namespace for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
+
+Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
 [NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
 This is different from XML's [Name](https://www.w3.org/TR/xml/#NT-Name)
 in that it MUST NOT contain a U+003A COLON `:`.
-Otherwise, the set of characters allowed in names is large.
-
-A **_<dfn>name</dfn>_** is a character sequence that is used as
-an identifier for _functions_ and _options_.
-This MAY include a non-empty _namespace_ identifier at its start
-which is separated from the rest of the _name_ by a U+003A COLON `:`.
-Built-in _functions_ and their _options_ do not have a _namespace_ identifier.
+Otherwise, the set of characters allowed in a _name_ is large.
 
 > [!NOTE]
 > _External variables_ can be passed in that are not valid _names_.
@@ -716,12 +724,13 @@ Support for _namespaces_ and their interpretation is implementation-defined
 in this release.
 
 ```abnf
-variable = "$" name-part
-function = (":" / "+" / "-") name
+variable = "$" name
+function = (":" / "+" / "-") identifier
+option = identifier [s] "=" [s] (literal / variable)
 
-name       = [namespace ":"] name-part
-namespace  = name-part
-name-part  = name-start *name-char
+identifier = [namespace ":"] name-part
+namespace  = name
+name       = name-start *name-char
 name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
            / %x370-37D / %x37F-1FFF / %x200C-200D
@@ -730,49 +739,6 @@ name-start = ALPHA / "_"
 name-char  = name-start / DIGIT / "-" / "." / ":"
            / %xB7 / %x300-36F / %x203F-2040
 ```
-
-#### Name resolution
-
-<dfn title="resolve the name">**_Resolve the name_**</dfn> means the determination of
-the _name-part_ and, where present, the _namespace_ of the _name_ for a given _function_
-or _option_.
-
-To resolve the _name_ of an item, the following steps are taken:
-
-1. Let the _name_ be the string to be processed, less any preceeding
-   sigils or markers.
-   For example, in the _expression_ `{:function}`, the string `function`
-   is the _name_ string.
-2. Determine if _name_ contains the character U+003A COLON `:`:
-   - If _name_ contains a colon, let _namespace_ be the
-      substring of _name_ up to (but not including)
-      the colon and _name-part_ be the substring of _name_ following the colon;
-   - Else let _namespace_ be an empty value (null, void, or empty string)
-     and _name-part_ be the _name_.
-3. Return _namespace_ and _name-part_.
-
-Implementations are not required to support the installation or resolution
-of different namespaces.
-How namespaces are defined, provisioned, or handled is also implementation defined.
-
-Example:
-> Suppose the ICU implementation of MessageFormat added a custom option `skeleton`
-> to the `:datetime` function.
-> Users of that implementation could invoke the datetime formatter with an
-> pattern similar to:
-> ```
-> {{Today is {$date :datetime icu:skeleton=yMMMd}.}}
-> ```
-> The `name` of the `datetime` function is resolved as:
-> * `name`     : `datetime`
-> * `namespace`: (blank)
-> * `name-part`: `datetime`
-> 
-> The `name` of the option in the expression is resolved as:
-> * `name`     : `icu:skeleton`
-> * `namespace`: `icu`
-> * `name-part`: `skeleton`
-
 
 ### Escape Sequences
 
