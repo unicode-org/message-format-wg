@@ -683,9 +683,11 @@ This is different from XML's [Name](https://www.w3.org/TR/xml/#NT-Name)
 in that it MUST NOT contain a U+003A COLON `:`.
 Otherwise, the set of characters allowed in names is large.
 
-_Functions_ and _options_ MAY be preceded by a _namespace_ identifier
-which is separated from the body of the _name_ by a U+003A COLON `:`.
-Built-in _functions_ and _options_ do not have a _namespace_ identifier.
+A **_<dfn>name</dfn>_** is a character sequence that is used as
+an identifier for _functions_ and _options_.
+This MAY include a non-empty _namespace_ identifier at its start
+which is separated from the rest of the _name_ by a U+003A COLON `:`.
+Built-in _functions_ and their _options_ do not have a _namespace_ identifier.
 
 > [!NOTE]
 > _External variables_ can be passed in that are not valid _names_.
