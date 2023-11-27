@@ -336,72 +336,10 @@ quoted-escape = backslash ( backslash / "|" / "'" / DQUOTE )
 
 ## Comparison table
 
-<table>
-   <tr>
-      <th></th>
-      <th>Priority</th>
-      <th>Proposal</th>
-      <th>[a1]</th>
-      <th>[a2]</th>
-      <th>[a3]</th>
-      <th>[a4]</th>
-      <th>[a5]</th>
-      <th>[a6]</th>
-   </tr>
-   <tr>
-      <th>[r1] escape inside literals</th>
-      <th>HIGH</th>
-      <td>++</td>
-      <td>-</td>
-      <td>+</td>
-      <td>-</td>
-      <td>++</td>
-      <td>++</td>
-      <td>++</td>
-   </tr>
-   <tr>
-      <th>[r2] escape when embedding</th>
-      <th>MED</th>
-      <td>++</td>
-      <td>+</td>
-      <td>++</td>
-      <td>+/++</td>
-      <td></td>
-      <td>-</td>
-      <td>++</td>
-   </tr>
-   <tr>
-      <th>[r3] no surprises</th>
-      <th>MED/HIGH</th>
-      <td>-/+</td>
-      <td>++</td>
-      <td>++</td>
-      <td>-</td>
-      <td>-</td>
-      <td>+</td>
-      <td>++</td>
-   </tr>
-   <tr>
-      <th>[r4] pair delimiters</th>
-      <th>LOW</th>
-      <td>-</td>
-      <td>+</td>
-      <td>+</td>
-      <td>++</td>
-      <td></td>
-      <td></td>
-      <td>+</td>
-   </tr>
-   <tr>
-      <th>[r5] one way</th>
-      <th>LOW</th>
-      <td>++</td>
-      <td>++</td>
-      <td>+</td>
-      <td>++</td>
-      <td></td>
-      <td></td>
-      <td>-</td>
-   </tr>
-
-</table>
+|                             | Priority | Proposal | [a1] | [a2] | [a3] | [a4] | [a5] | [a6] |
+|-----------------------------|----------|:--------:|:----:|:----:|:----:|:----:|:----:|:----:|
+| [r1] escape inside literals | HIGH     |    ++    |   -  |   +  |   -  |  ++  |  ++  |  ++  |
+| [r2] escape when embedding  | MED      |    ++    |   +  |  ++  | +/++ |      |   -  |  ++  |
+| [r3] no surprises           | MED/HIGH |    -/+   |  ++  |  ++  |   -  |   -  |   +  |  ++  |
+| [r4] pair delimiters        | LOW      |     -    |   +  |   +  |  ++  |      |      |   +  |
+| [r5] one way                | LOW      |    ++    |  ++  |   +  |  ++  |      |      |   -  |
