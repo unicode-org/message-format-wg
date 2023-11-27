@@ -160,7 +160,8 @@ interface MessageFallbackPart {
 }
 ```
 
-Formatting functions defined in the registry
+### Registry definition of formatted parts
+
 Each function defined in the registry MUST define its "formatted-parts" representation.
 A function can define either a unitary string `value` or a `parts` representation.
 Where possible, a function SHOULD provide a `parts` representation
