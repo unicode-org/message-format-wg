@@ -166,8 +166,6 @@ Each function defined in the registry MUST define its "formatted-parts" represen
 A function can define either a unitary string `value` or a `parts` representation.
 Where possible, a function SHOULD provide a `parts` representation
 if its output might reasonably consist of multiple fields.
-Where available, such a formatted value should itself be represented by `parts`
-rather than a unitary string `value`.
 In most cases, these sub-parts should not need fields beyond their `type` and a string `value`,
 Where necessary, other `value` types may be used and other fields such as a `source` included.
 
