@@ -141,7 +141,7 @@ The first element with `locales` matching the current locale
 (or an alement with no `locales`) is used:
 
 - `<match locales="en" values="one two few other" .../>` can be used in locales like `en` and `en-GB`
-  to valide the `when other` variant by verifying that the `other` key is present
+  to validate the `when other` variant by verifying that the `other` key is present
   in the list of enumarated values: `one other`.
 - `<match ... validationRule="anyNumber"/>` can be used to valide the `when 1` variant
   by testing the `1` key against the `anyNumber` regular expression defined in the registry file.
