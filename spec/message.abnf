@@ -90,7 +90,7 @@ name-start = ALPHA / "_"
 name-char  = name-start / DIGIT / "-" / "." / ":"
            / %xB7 / %x300-36F / %x203F-2040
 
-text-escape     = backslash ( backslash / "." / "{" / "}" )
+text-escape     = backslash ( backslash / "{" / "}" )
 quoted-escape   = backslash ( backslash / "|" )
 reserved-escape = backslash ( backslash / "{" / "|" / "}" )
 backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
