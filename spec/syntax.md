@@ -728,7 +728,7 @@ variable = "$" name
 function = (":" / "+" / "-") identifier
 option = identifier [s] "=" [s] (literal / variable)
 
-identifier = [namespace ":"] name-part
+identifier = [namespace ":"] name
 namespace  = name
 name       = name-start *name-char
 name-start = ALPHA / "_"
