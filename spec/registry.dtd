@@ -24,14 +24,14 @@
     locales        NMTOKENS  #IMPLIED
 >
 
-<!ELEMENT input EMPTY>
+<!ELEMENT input (#PCDATA)>
 <!ATTLIST input
     values         NMTOKENS      #IMPLIED
     validationRule IDREF         #IMPLIED
     readonly       (true|false)  "false"
 >
 
-<!ELEMENT option EMPTY>
+<!ELEMENT option (#PCDATA)>
 <!ATTLIST option
     name           NMTOKEN       #REQUIRED
     values         NMTOKENS      #IMPLIED
