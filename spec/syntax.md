@@ -285,13 +285,16 @@ Whitespace in _text_, including tabs, spaces, and newlines is significant and MU
 be preserved during formatting.
 
 ```abnf
-simple-start-char = %x0-2D         ; omit .
-                  / %x2F-5B        ; omit \
-                  / %x5D-7A        ; omit {
-                  / %x7C           ; omit }
-                  / %x7E-D7FF      ; omit surrogates
-                  / %xE000-10FFFF
-text-char = simple-start-char / "."
+content-char = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
+             / %x0B-0C        ; omit CR (%x0D)
+             / %x0E-19        ; omit SP (%x20)
+             / %x21-2D        ; omit . (%x2E)
+             / %x2F-5B        ; omit \ (%x5C)
+             / %x5D-7A        ; omit { | } (%x7B-7D)
+             / %x7E-D7FF      ; omit surrogates
+             / %xE000-10FFFF
+simple-start-char = content-char / s / "|"
+text-char = content-char / s / "." / "|"
 ```
 
 When a _pattern_ is quoted by embedding the _pattern_ in curly brackets, the
@@ -658,13 +661,7 @@ reserved-annotation-start = "!" / "@" / "#" / "%" / "*"
                           / "<" / ">" / "/" / "?" / "~"
 
 reserved-body = *([s] 1*(reserved-char / reserved-escape / quoted))
-reserved-char = %x00-08        ; omit HTAB and LF
-              / %x0B-0C        ; omit CR
-              / %x0E-19        ; omit SP
-              / %x21-5B        ; omit \
-              / %x5D-7A        ; omit { | }
-              / %x7E-D7FF      ; omit surrogates
-              / %xE000-10FFFF
+reserved-char = content-char / "."
 ```
 
 ## Other Syntax Elements
@@ -717,10 +714,7 @@ of number values in _operands_ or _options_, or as _keys_ for _variants_.
 literal = quoted / unquoted
 
 quoted         = "|" *(quoted-char / quoted-escape) "|"
-quoted-char    = %x0-5B         ; omit \
-               / %x5D-7B        ; omit |
-               / %x7D-D7FF      ; omit surrogates
-               / %xE000-10FFFF
+quoted-char    = content-char / s / "." / "{" / "}"
 
 unquoted       = name
                / number-literal
