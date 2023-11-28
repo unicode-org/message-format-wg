@@ -11,8 +11,11 @@ Status: **Proposed**
 		<dd>@stasm</dd>
 		<dt>First proposed</dt>
 		<dd>2023-09-05</dd>
-		<dt>Pull Request</dt>
+		<dt>Pull Requests</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/470">#470</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/516">#516</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/517">#517</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/535">#535</a></dd>
 	</dl>
 </details>
 
@@ -39,38 +42,38 @@ _What context is helpful to understand this proposal?_
   On runtime, I expect these markup elements to produce live UI elements.
 
   > ```
-  > {Click {+link}here{-link}.}
+  > Click {#link}here{/link}.
   > ```
 
 - As an app author, I want to be able to interpolate standalone markup elements into the translation: `img`, `hr`, `input`.
   On runtime, I expect these markup elements to produce live UI elements.
 
   > ```
-  > {This is a giraffe: {#img src=giraffe.gif}.}
+  > This is a giraffe: {#img src=giraffe.gif}.
   > ```
 
 - I want to be able to use minimal markup to inform XLIFF interchange.
 
   > ```
-  > {Click {+ph}<a href="">{-ph}here{+ph}</a>{-ph}.}
+  > Click {#ph}<a href="">{/ph}here{#ph}</a>{/ph}.
   > ```
 
 - As an app author, I want to be able to pass certain attributes to markup elements, including dynamic values, such as coming from variables.
 
   > ```
-  > {Click {+link href=$url}here{-link}.}
+  > Click {#link href=$url}here{/link}.
   > ```
 
 - As a translator, I want to be able to translate content around and between markup elements.
 
   > ```
-  > {Kliknij {+link}tutaj{-link}.}
+  > Kliknij {#link}tutaj{/link}.
   > ```
 
 - As a translator, I want to be able to translate certain markup attributes.
 
   > ```
-  > {Click {+link title=|Hey you!|}here{-link}}
+  > Click {#link title=|Hey you!|}here{/link}
   > ```
 
 - As a developer or as a translator, I want to protect placeholders from modification and deletion.
@@ -89,8 +92,9 @@ _What context is helpful to understand this proposal?_
 - As a translator, I want my tools to be able to leverage translations where the text differs only in markup, e.g.:
 
   > ```
-  > {This is {+b}sure{-b} good.}
-  > {This is {+i}sure{-i}good.}
+  > This is {#b}sure{/b} good.
+  >
+  > This is {#i}sure{/i}good.
   > ```
 
 - As a CAT tool, I want to use the concepts of open, close, and standalone that I am already familiar with, to provide certain functionalities above.
@@ -108,7 +112,7 @@ _What context is helpful to understand this proposal?_
   > Message:
   >
   > ```
-  > {+popup-info img=|img/alt.png| data-text=|Your card validation code (CVC) is an extra security feature — it is the last 3 or 4 numbers on the back of your card.|}{-popup-info}
+  > {#popup-info img=|img/alt.png| data-text=|Your card validation code (CVC) is an extra security feature — it is the last 3 or 4 numbers on the back of your card.|}{/popup-info}
   > ```
 
 **_Non-markup use cases to consider (which may or may not be addressed by the design)_**
@@ -159,33 +163,44 @@ pattern = "{" *(text / placeholder) "}"
 placeholder = expression / markup
 
 markup       = "{" [s] markup-body [s] "}"
-markup-body  = (markup-standalone *(s option))
-             / (markup-open *(s option))
+markup-body  = (markup-open *(s option))
              / markup-close
-markup-standalone = "#" name
-markup-open       = "+" name
-markup-close      = "-" name
+markup-open  = "#" name
+markup-close = "/" name
 ```
 
-This allows for placeholders like `{+b}`, `{#img}`, and `{+a title=|Link tooltip|}`.
+This is similar to [Mustache](http://mustache.github.io/mustache.5.html)'s control flow syntax.
+
+```
+This is {#strong}bold{/strong} and this is {#img alt=|an image|}.
+```
+
+Markup names are _namespaced_ by their use of the pound sign `#` and the forward slash `/` sigils.
+They are distinct from `$variables`, `:functions`, and `|literals|`.
+
+This allows for placeholders like `{#b}`, `{#img}`, and `{#a title=|Link tooltip|}`.
 Unlike annotations, markup expressions may not have operands.
 
 Markup is not valid in _declarations_ or _selectors_.
 
 #### Pros
 
+* Leverages the familiarity of the forward slash `/` used for closing spans.
+
 * Doesn't conflict with any other placeholder expressions.
 
-* Agnostic syntax, different from HTML or other markup and templating systems.
+* Prior art exists: Mustache.
 
 #### Cons
 
-* Adds 3 new sigils to the expression syntax.
+* Introduces two new sigils, the pound sign `#` and the forward slash `/`.
 
-* Because they're agnostic, the meaning of the sigils must be learned or deduced.
+* As in HTML, differentiating "open" and "standalone" elements relies on registry information,
+  or in translations matching the structure used in the source
+  A rather clunky `{#foo/}` syntax was considered for explicitly-standalone elements,
+  but this did not reach consensus support.
 
-* Requires the special-casing of negative numeral literals,
-  to distinguish `{-foo}` and `{-42}`.
+* In Mustache, the `{{#foo}}`...`{{/foo}}` syntax is used for *control flow* statements rather than printable data.
 
 ### Runtime Behavior
 
@@ -201,9 +216,9 @@ e.g. emitting XML-ish tags for each open/close placeholder.
 When formatting to parts (as proposed in <a href="https://github.com/unicode-org/message-format-wg/pull/463">#463</a>),
 markup placeholders format to an object including the following properties:
 
-- The `type` of the markup: `"open" | "close" | "standalone"`
-- The `name` of the markup, e.g. `"b"` for `{+b}`
-- For _markup-open_ and _markup-standalone_,
+- The `type` of the markup: `"markup" | "markup-close"`
+- The `name` of the markup, e.g. `"b"` for `{#b}`
+- For _markup_,
   the `options` with the resolved key-value pairs of the expression options
 
 To make use of _markup_,
@@ -212,7 +227,7 @@ and the desired shape constructed from the parts.
 For example, the message
 
 ```
-{Click {+a title=|Link tooltip|}here{-a} to continue}
+Click {+a title=|Link tooltip|}here{-a} to continue
 ```
 
 would format to parts as
@@ -220,9 +235,9 @@ would format to parts as
 ```coffee
 [
   { type: "text", value: "Click " },
-  { type: "open", name: "a", options: { title: "Link tooltip" } },
+  { type: "markup", name: "a", options: { title: "Link tooltip" } },
   { type: "text", value: "here" },
-  { type: "close", name: "a" },
+  { type: "markup-close", name: "a" },
   { type: "text", value: " to continue" }
 ]
 ```
@@ -368,43 +383,32 @@ The exact meaning of the new placeholer types is as follows:
 
 * Regular placeholders, e.g. `{$var}`, use the same `{...}` syntax, and may be confused for *open* elements.
 
-### A4. Hash & Slash
+### A4. Plus & Minus
 
-> `{#foo}`, `{/foo}`, `{#foo/}`
+> `{+foo}`, `{-foo}`, `{#foo}`
 
-This solution is similar to A3 in that
-it also proposes to use the forward slash `/` for the closing element syntax.
-However, opening elements are decorated with a pound sign `#`:
-resulting in `{#foo}` and `{/foo}`.
-
-This is similar to [Mustache](http://mustache.github.io/mustache.5.html)'s control flow syntax.
-
-Standalone elements combine the sigil in front and HTML's forward slash `/` at the end of the placeholder: `{#foo/}`.
+Use `+` for opening an element, `-` for closing, and `#` for standalone.
 
 The data model and the runtime considerations are the same as in the proposed solution.
 
 ```
-This is {#html:strong}bold{/html:strong} and this is {#html:img alt=|an image|/}.
+This is {+strong}bold{-strong} and this is {#img alt=|an image|/}.
 ```
-
-Markup names are *namespaced* by their use of the pound sign `#` and the forward slash `/` sigils.
-They are distinct from `$variables`, `:functions`, and `|literals|`.
 
 #### Pros
 
-* Leverages the familiarity of the forward slash `/` used for closing spans.
-
 * Doesn't conflict with any other placeholder expressions.
 
-* Prior art exists: Mustache.
+* Agnostic syntax, different from HTML or other markup and templating systems.
 
 #### Cons
 
-* Introduces two new sigils, the pound sign `#` and the forward slash `/`.
+* Adds two new sigils to the expression syntax (three with `#standalone`).
 
-* The standalone syntax is a bit clunky (but logical): `{#foo/}`.
+* Because they're agnostic, the meaning of the sigils must be learned or deduced.
 
-* In Mustache, the `{{#foo}}`...`{{/foo}}` syntax is used for *control flow* statements rather than printable data.
+* Requires the special-casing of negative numeral literals,
+  to distinguish `{-foo}` and `{-42}`.
 
 ### A5. Square Brackets
 
