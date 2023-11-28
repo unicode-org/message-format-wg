@@ -1,6 +1,6 @@
 # Selection on Numerical Values
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -10,7 +10,7 @@ Status: **Proposed**
 		<dt>First proposed</dt>
 		<dd>2023-09-06</dd>
 		<dt>Pull Request</dt>
-		<dd>#000</dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/471">#471</a></dd>
 	</dl>
 </details>
 
@@ -72,7 +72,7 @@ Given that we already have a `:number`,
 it makes sense to add a `<matchSignature>` to it with an option
 
 ```xml
-<option name="type" values="plural ordinal exact" default="plural" />
+<option name="select" values="plural ordinal exact" default="plural" />
 ```
 
 The default `plural` value is presumed to be the most common use case,
@@ -85,7 +85,21 @@ but may cause problems in target languages that the original developer is not co
 Additional options such as `minimumFractionDigits` and others already supported by `:number`
 should also be supported.
 
+If PR [#532](https://github.com/unicode-org/message-format-wg/pull/532) is accepted,
+also add the following `<alias>` definitions to `<function name="number">`:
+
+```xml
+<alias name="plural" supports="match">
+	<setOption name="select" value="plural"/>
+</alias>
+<alias name="ordinal" supports="match">
+	<setOption name="select" value="ordinal"/>
+</alias>
+```
+
 ## Alternatives Considered
+
+### Completely Separate Functions
 
 An alternative approach to this problem could be to leave the `:number` `<matchSignature>` undefined,
 and to define three further functions, each with a `<matchSignature>`:
@@ -106,10 +120,10 @@ To expand on the last of these,
 consider this message:
 
 ```
-match {$count :plural minimumFractionDigits=1}
-when 0 {You have no apples}
-when 1 {You have exactly one apple}
-when * {You have {$count :number minimumFractionDigits=1} apples}
+.match {$count :plural minimumFractionDigits=1}
+0 {{You have no apples}}
+1 {{You have exactly one apple}}
+* {{You have {$count :number minimumFractionDigits=1} apples}}
 ```
 
 Here, because selection on `:number` is not allowed,
@@ -120,14 +134,32 @@ as it's not required for the English source.
 With the proposed design, this message would much more naturally be written as:
 
 ```
-let $count = {$count :number minimumFractionDigits=1}
-match {$count}
-when 0 {You have no apples}
-when 1 {You have exactly one apple}
-when * {You have {$count} apples}
+.input {$count :number minimumFractionDigits=1}
+.match {$count}
+0 {{You have no apples}}
+1 {{You have exactly one apple}}
+* {{You have {$count} apples}}
 ```
 
-The proposed design is more robust than this alternative,
-leading to fewer user mistakes and removing rather than adding new error conditions.
-It guides users to making better choices without needing to be actively aware
-of all the complexities different languages have.
+#### Pros
+
+- None?
+
+#### Cons
+
+- Naïve selection on `:number` will fail, leading to user confusion and annoyance.
+- No encouragement to use the same options for selection and formatting.
+
+### Do Not Standardize Number Selection
+
+We could leave number selection undefined in the spec, making it an implementation concern.
+Each implementation could/would then provide their own selectors,
+and they _might_ converge on some overlap that users could safely use across platforms.
+
+#### Pros
+
+- The spec is a little bit lighter, as we've left out this part.
+
+#### Cons
+
+- No guarantees about interoperability for a relatively core feature.
