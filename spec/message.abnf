@@ -56,10 +56,11 @@ unquoted-start = name-start / DIGIT / "."
 
 
 ; Reserve additional .keywords for use by future versions of this specification.
+reserved-statement = reserved-keyword [s [reserved-body [s]]] 1*expression
 ; Note that the following expression is a simplification,
-; as this rule MUST NOT be considered to match existing keywords:
-;   (input / local / match) (s / "{")
-reserved-statement = "." reserved-body 1*expression
+; as this rule MUST NOT be considered to match existing keywords.
+; As regexp, this would be: /\.(?!input|local|match)[a-z]+/
+reserved-keyword = "." 1*(%x61-7A)
 
 ; Reserve additional sigils for use by future versions of this specification.
 reserved-annotation = reserved-annotation-start reserved-body
