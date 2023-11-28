@@ -217,8 +217,10 @@ the following steps are taken:
      emit a Duplicate Option Name error.
    - If the _option_'s right-hand side successfully resolves to a value,
      bind the _identifier_ of the _option_ to the resolved value in the mapping.
-   - Otherwise, do not bind the _identifier_ of the _option_ to any value in the mapping.
-4. Call the function implementation with the following arguments:
+   - Otherwise, emit an appropriate error (e.g., an Unresolved Variable error) and
+     bind the _identifier_ of the _option_ to an unresolved value in the mapping.
+4. Remove from the resolved mapping of _options_ any binding for which the value is an unresolved value.
+5. Call the function implementation with the following arguments:
 
    - The current _locale_.
    - The resolved mapping of _options_.
