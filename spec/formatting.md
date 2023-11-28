@@ -202,10 +202,10 @@ the following steps are taken:
    If the implementation cannot find the function, emit an Unknown Function error
    and use a _fallback value_ for the _expression_.
 
-An implementation MUST emit an Unknown Function error
-if the implementation does not support _namespaces_
-or if the _namespace_ of the _identifier_ is not recognized by the implementation
-or the _namespace_ does not support the named _function_.
+   An implementation MUST emit an Unknown Function error
+   if the implementation does not support _namespaces_
+   or if the _namespace_ of the _identifier_ is not recognized by the implementation
+   or the _namespace_ does not support the named _function_.
 
    Implementations are not required to implement _namespaces_ or installable
    _function registries_.
