@@ -88,12 +88,13 @@ but can cause problems in target locales that the original developer is not cons
 
 > For example, a naive developer might use a special message for the value `1` without
 > considering other locale's need for a `one` plural:
->```
+>
+> ```
 > .match {$var}
 > [1] {{You have one last chance}}
 > [one] {{You have {$var} chance remaining}} // needed by languages such as Polish or Russian
 > [*] {{You have {$var} chances remaining}}
->```
+> ```
 
 Additional options such as `minimumFractionDigits` and others already supported by `:number`
 should also be supported.
