@@ -199,7 +199,9 @@ the following steps are taken:
    If this fails, use a _fallback value_ for the _expression_.
 2. Resolve the _identifier_ of the _function_ and, based on the starting sigil,
    find the appropriate function implementation to call.
-   If the implementation cannot find the function, emit an Unknown Function error
+   If the implementation cannot find the function,
+   or if the _identifier_ includes a _namespace_ that the implementation does not support,
+   emit an Unknown Function error
    and use a _fallback value_ for the _expression_.
 
    An implementation MUST emit an Unknown Function error
