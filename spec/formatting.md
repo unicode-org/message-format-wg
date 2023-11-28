@@ -202,15 +202,16 @@ the following steps are taken:
    If the implementation cannot find the function, emit an Unknown Function error
    and use a _fallback value_ for the _expression_.
 
-   An implementation MAY emit an Unknown Function error if the implementation    
-   does not support the _namespace_ of the _identifier_
-   or the _namespace_ does not support the named _function_.
+An implementation MUST emit an Unknown Function error
+if the implementation does not support _namespaces_
+or if the _namespace_ of the _identifier_ is not recognized by the implementation
+or the _namespace_ does not support the named _function_.
 
    Implementations are not required to implement _namespaces_ or installable
    _function registries_.
 
-4. If the _expression_ includes _options_, resolve the _options_ to a mapping
-   of string identifiers to values.
+3. Resolve the _options_ to a mapping of string identifiers to values.
+   If _options_ is missing, the mapping will be empty.
    For each _option_:
    - Resolve the _identifier_ of the _option_.
    - If the _option_'s _identifier_ already exists in the resolved mapping of _options_,
