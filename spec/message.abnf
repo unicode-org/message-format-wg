@@ -67,7 +67,8 @@ reserved-char  = %x00-08        ; omit HTAB and LF
                / %x7E-D7FF      ; omit surrogates
                / %xE000-10FFFF
 
-; based on https://www.w3.org/TR/REC-xml-names/#NT-QName
+; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName
+; name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName
 identifier = [namespace ":"] name
 namespace  = name
 name       = name-start *name-char
