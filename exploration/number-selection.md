@@ -58,7 +58,11 @@ we would like to support on numeric values:
 - Enable cardinal plural selection.
 - Enable ordinal number selection.
 - Enable exact match selection.
-- Support relevant formatting options, such as `minimumFractionDigits`.
+- Enable simultaneous "exact match" and either plural or ordinal selection.
+  > For example, allow variants `[1]` and `[one]` in the same message.
+- Selection must support relevant formatting options, such as `minimumFractionDigits`.
+  > For example, in English the value `1` matches plural rule `one` while the value `1.0`
+  > matches the plural rule `other` (`*`)
 - Encourage developers to provide the formatting options used in patterns to the selector
   so that proper selection can be done.
 
@@ -80,7 +84,16 @@ and it affords the least bad fallback when used incorrectly:
 Using "plural" for "exact" still selects exactly matching cases,
 whereas using "exact" for "plural" will not select LDML category matches.
 This might not be noticeable in the source language,
-but may cause problems in target languages that the original developer is not considering.
+but can cause problems in target locales that the original developer is not considering.
+
+> For example, a naive developer might use a special message for the value `1` without
+> considering other locale's need for a `one` plural:
+>```
+> .match {$var}
+> [1] {{You have one last chance}}
+> [one] {{You have {$var} chance remaining}} // needed by languages such as Polish or Russian
+> [*] {{You have {$var} chances remaining}}
+>```
 
 Additional options such as `minimumFractionDigits` and others already supported by `:number`
 should also be supported.
