@@ -64,7 +64,7 @@ The syntax specification takes into account the following design restrictions:
 
 ## Messages and their Syntax
 
-The purpose of MessageFormat is the allow content to vary at runtime.
+The purpose of MessageFormat is to allow content to vary at runtime.
 This variation might be due to placing a value into the content
 or it might be due to selecting a different bit of content based on some data value
 or it might be due to a combination of the two.
@@ -85,9 +85,12 @@ The complete formal syntax of a _message_ is described by the [ABNF](./message.a
 ### Well-formed vs. Valid Messages
 
 A _message_ is **_<dfn>well-formed</dfn>_** if it satisfies all the rules of the grammar.
+Attempting to parse a _message_ that is not _well-formed_ will result in a _Syntax Error_.
 
-A _message_ is **_<dfn>valid</dfn>_** if it is _well-formed_ and **also** meets the additional content restrictions
+A _message_ is **_<dfn>valid</dfn>_** if it is _well-formed_ and
+**also** meets the additional content restrictions
 and semantic requirements about its structure defined below.
+Attempting to parse a _message_ that is not _valid_ will result in a _Data Model Error_.
 
 ## The Message
 
@@ -108,85 +111,118 @@ A **_<dfn>message</dfn>_** is the complete template for a specific message forma
 > > **Example** This _message_:
 > >
 > > ```
-> > let $foo   =   { |horse| }
-> > {You have a {$foo}!}
+> > {{
+> >   local $foo   =   { |horse| }
+> >   {{You have a {$foo}!}}
+> > }}
 > > ```
 > >
 > > Can also be written as:
 > >
 > > ```
-> > let $foo={|horse|}{You have a {$foo}!}
+> > {{local $foo={|horse|}{{You have a {$foo}!}}}}
 > > ```
 > >
 > > An exception to this is: whitespace inside a _pattern_ is **always** significant.
 
-A _message_ consists of two parts:
+A _message_ can be a _pattern_ or it can be a _complex message_.
+
+A **_<dfn>complex message</dfn>_** is any _message_ that contains _declarations_,
+a _matcher_, or both.
+A _complex message_ always begins with the the sequence `{{`
+and is terminated by the sequence `}}`
+and consists of:
 
 1. an optional list of _declarations_, followed by
 2. a _body_
 
 ### Declarations
 
-A **_<dfn>declaration</dfn>_** binds a _variable_ identifier to the value of an _expression_ within the scope of a _message_.
-This local variable can then be used in other _expressions_ within the same _message_.
+A **_<dfn>declaration</dfn>_** binds a _variable_ identifier to a value within the scope of a _message_.
+This _variable_ can then be used in other _expressions_ within the same _message_.
 _Declarations_ are optional: many messages will not contain any _declarations_.
 
+An **_<dfn>input-declaration</dfn>_** binds a _variable_ to an external input value.
+The _variable-expression_ of an _input-declaration_
+MAY include an _annotation_ that is applied to the external value.
+
+A **_<dfn>local-declaration</dfn>_** binds a _variable_ to the resolved value of an _expression_.
+
 ```abnf
-declaration = let s variable [s] "=" [s] expression
+declaration = input-declaration / local-declaration
+input-declaration = input [s] variable-expression
+local-declaration = local s variable [s] "=" [s] expression
 ```
+
+_Variables_, once declared, MUST NOT be redeclared. 
+A _message_ that does any of the following is not _valid_ and will produce a 
+Duplicate Declaration error during formatting:
+- An _input-declaration_ MUST NOT bind a _variable_ that appears as a _variable_ in a previous 
+  _declaration_.
+- A _local-declaration_ MUST NOT bind a _variable_ that appears as a _variable_ in a previous
+  _declaration_.
+- A _local-declaration_ MUST NOT bind a _variable_ that appears in its _expression_.
+
+A _local-declaration_ MAY overwrite an external input value as long as the
+external input value does not appear in a _declaration_.
+
+> [!Note]
+> These restrictions only apply to _declarations_.
+> A _placeholder_ or _selector_ can apply a different annotation to a _variable_
+> than one applied to the same _variable_ name in a _declaration_.
+> For example, this message is _valid_:
+> ```
+> {{
+>    input {$var :number maxFractionDigits=0}
+>    match {$var :plural maxFractionDigits=2}
+>    when 0 {{The selector can apply a different annotation to {$var} for the purposes of selection}}
+>    when * {{A placeholder in a pattern can apply a different annotation to {$var :number maxFractionDigits=3}}}
+> }}
+> ```
+> (See [Error Handling](./formatting.md#error-handling) for examples of invalid messages)
 
 ### Body
 
-The **_<dfn>body</dfn>_** of a _message_ is the part that will be formatted.
-The _body_ consists of either a _pattern_ or a _matcher_.
+The **_<dfn>body</dfn>_** of a _complex message_ is the part that will be formatted.
+The _body_ consists of either a _quoted pattern_ or a _matcher_.
 
 ```abnf
-body = pattern / matcher
+body = quoted-pattern
+     / (selectors 1*([s] variant))
 ```
-
-All _messages_ MUST contain a _body_.
-An empty string is not a _well-formed_ _message_.
-
-> A simple _message_ containing only a _body_:
->
-> ```
-> {Hello world!}
-> ```
->
-> The same _message_ defined in a `.properties` file:
->
-> ```properties
-> app.greetings.hello = {Hello, world!}
-> ```
->
-> The same _message_ defined inline in JavaScript:
->
-> ```js
-> let hello = new MessageFormat("{Hello, world!}");
-> hello.format();
-> ```
 
 ## Pattern
 
 A **_<dfn>pattern</dfn>_** contains a sequence of _text_ and _placeholders_ to be formatted as a unit.
-All _patterns_ begin with U+007B LEFT CURLY BRACKET `{` and end with U+007D RIGHT CURLY BRACKET `}`.
 Unless there is an error, resolving a _message_ always results in the formatting
 of a single _pattern_.
 
 ```abnf
-pattern = "{" *(text / expression) "}"
+pattern = *(text / expression)
 ```
-
 A _pattern_ MAY be empty.
-
-> An empty _pattern_:
->
-> ```
-> {}
-> ```
 
 A _pattern_ MAY contain an arbitrary number of _placeholders_ to be evaluated
 during the formatting process.
+
+### Quoted Pattern
+
+A **_<dfn>quoted pattern</dfn>_** is a _pattern_ that is "quoted" to prevent 
+interference with other parts of the _message_. 
+A _quoted pattern_ starts with a sequence of two U+007B LEFT CURLY BRACKET `{{` 
+and ends with a sequence of two U+007D RIGHT CURLY BRACKET `}}`.
+
+```abnf
+quoted-pattern = "{{" pattern "}}"
+```
+
+A _quoted pattern_ MAY be empty.
+
+> An empty _quoted pattern_:
+>
+> ```
+> {{}}
+> ```
 
 ### Text
 
@@ -198,8 +234,11 @@ respectively.
 
 Whitespace in _text_, including tabs, spaces, and newlines is significant and MUST
 be preserved during formatting.
-Embedding a _pattern_ in curly brackets ensures that _messages_ can be embedded into
+
+When a _pattern_ is quoted by embedding the _pattern_ in curly brackets, the
+resulting _message_ can be embedded into
 various formats regardless of the container's whitespace trimming rules.
+Otherwise, care must be taken to ensure that pattern-significant whitespace is preserved.
 
 > **Example**
 > In a Java `.properties` file, the values `hello` and `hello2` both contain
@@ -207,8 +246,8 @@ various formats regardless of the container's whitespace trimming rules.
 > This _pattern_ consists of _text_ with exactly three spaces before and after the word "Hello":
 >
 > ```properties
-> hello = {   Hello   }
-> hello2={   Hello   }
+> hello = {{{{   Hello   }}}}
+> hello2=\   Hello  \ 
 > ```
 
 ```abnf
@@ -255,15 +294,17 @@ matcher = match 1*(selector) 1*(variant)
 > A _message_ with a _matcher_:
 >
 > ```
+> {{
 > match {$count :number}
-> when 1 {You have one notification.}
-> when * {You have {$count} notifications.}
+> when 1 {{You have one notification.}}
+> when * {{You have {$count} notifications.}}
+> }}
 > ```
 
 > A _message_ containing a _matcher_ formatted on a single line:
 >
 > ```
-> match {:platform} when windows {Settings} when * {Preferences}
+> {{match {:platform} when windows {{Settings}} when * {{Preferences}}}}
 > ```
 
 ### Selector
@@ -284,22 +325,26 @@ There MAY be any number of additional _selectors_.
 > allowing the _message_ to choose a _pattern_ based on grammatical case:
 >
 > ```
+> {{
 > match {$userName :hasCase}
-> when vocative {Hello, {$userName :person case=vocative}!}
-> when accusative {Please welcome {$userName :person case=accusative}!}
-> when * {Hello!}
+> when vocative {{Hello, {$userName :person case=vocative}!}}
+> when accusative {{Please welcome {$userName :person case=accusative}!}}
+> when * {{Hello!}}
+> }}
 > ```
 
 > A message with two _selectors_:
 >
 > ```
+> {{
 > match {$photoCount :number} {$userGender :equals}
-> when 1 masculine {{$userName} added a new photo to his album.}
-> when 1 feminine  {{$userName} added a new photo to her album.}
-> when 1 *         {{$userName} added a new photo to their album.}
-> when * masculine {{$userName} added {$photoCount} photos to his album.}
-> when * feminine  {{$userName} added {$photoCount} photos to her album.}
-> when * *         {{$userName} added {$photoCount} photos to their album.}
+> when 1 masculine {{{$userName} added a new photo to his album.}}
+> when 1 feminine  {{{$userName} added a new photo to her album.}}
+> when 1 *         {{{$userName} added a new photo to their album.}}
+> when * masculine {{{$userName} added {$photoCount} photos to his album.}}
+> when * feminine  {{{$userName} added {$photoCount} photos to her album.}}
+> when * *         {{{$userName} added {$photoCount} photos to their album.}}
+> }}
 > ```
 
 ### Variant
@@ -335,30 +380,39 @@ during the _message_'s formatting.
 An _expression_ MUST begin with U+007B LEFT CURLY BRACKET `{`
 and end with U+007D RIGHT CURLY BRACKET `}`.
 An _expression_ MUST NOT be empty.
-An _expression_ can contain an _operand_,
-an _annotation_,
-or an _operand_ followed by an _annotation_.
+
+A **_<dfn>literal-expression</dfn>_** contains a _literal_,
+optionally followed by an _annotation_.
+
+A **_<dfn>variable-expression</dfn>_** contains a _variable_,
+optionally followed by an _annotation_.
+
+A **_<dfn>function-expression</dfn>_** contains only an _annotation_.
 
 ```abnf
-expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
-operand = literal / variable
+expression = literal-expression / variable-expression / function-expression
+literal-expression = "{" [s] literal [s annotation] [s] "}"
+variable-expression = "{" [s] variable [s annotation] [s] "}"
+function-expression = "{" [s] annotation [s] "}"
 annotation = (function *(s option)) / private-use / reserved
 ```
 
 There are several types of _expression_ that can appear in a _message_.
 All _expressions_ share a common syntax. The types of _expression_ are:
 
-1. The value of a _declaration_
+1. The value of a _local-declaration_
 2. A _selector_
 3. A _placeholder_ in a _pattern_
+
+Additionally, an _input-declaration_ can contain a _variable-expression_.
 
 > Examples of different types of _expression_
 >
 > Declarations:
 >
 > ```
-> let $x = {|This is an expression|}
-> let $y = {$operand :function option=operand}
+> input {$x :function option=value}
+> local $y = {|This is an expression|}
 > ```
 >
 > Selectors:
@@ -370,19 +424,10 @@ All _expressions_ share a common syntax. The types of _expression_ are:
 > Placeholders:
 >
 > ```
-> {This placeholder contains an {|expression with a literal|}}
-> {This placeholder references a {$variable}}
-> {This placeholder references a function on a variable: {$variable :function with=options}}
+> This placeholder contains an {|expression with a literal|}
+> This placeholder references a {$variable}
+> This placeholder references a function on a variable: {$variable :function with=options}
 > ```
-
-### Operand
-
-An **_<dfn>operand</dfn>_** is a _literal_ or a _variable_ to be evaluated in an _expression_.
-An _operand_ MAY optionally be followed by an _annotation_.
-
-```abnf
-operand    = literal / variable
-```
 
 ### Annotation
 
@@ -393,6 +438,9 @@ a _private-use_ or _reserved_ sequence.
 ```abnf
 annotation = (function *(s option)) / reserved / private-use
 ```
+
+An **_<dfn>operand</dfn>_** is the _literal_ of a _literal-expression_ or
+the _variable_ of a _variable-expression_.
 
 An _annotation_ can appear in an _expression_ by itself or following a single _operand_.
 When following an _operand_, the _operand_ serves as input to the _annotation_.
@@ -424,14 +472,14 @@ and vice versa.
 > A _message_ with a _standalone_ _function_ operating on the _variable_ `$now`:
 >
 > ```
-> {{$now :datetime}}
+> {$now :datetime}
 > ```
 >
 > A _message_ with two markup-like _functions_, `button` and `link`,
 > which the runtime can use to construct a document tree structure for a UI framework:
 >
 > ```
-> {{+button}Submit{-button} or {+link}cancel{-link}.}
+> {+button}Submit{-button} or {+link}cancel{-link}.
 > ```
 
 A _function_ consists of a prefix sigil followed by a _name_.
@@ -466,7 +514,7 @@ option = name [s] "=" [s] (literal / variable)
 > A _message_ with a `$date` _variable_ formatted with the `:datetime` _function_:
 >
 > ```
-> {Today is {$date :datetime weekday=long}.}
+> Today is {$date :datetime weekday=long}.
 > ```
 
 > A _message_ with a `$userName` _variable_ formatted with
@@ -474,7 +522,7 @@ option = name [s] "=" [s] (literal / variable)
 > declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
 >
 > ```
-> {Hello, {$userName :person case=vocative}!}
+> Hello, {$userName :person case=vocative}!
 > ```
 
 > A _message_ with a `$userObj` _variable_ formatted with
@@ -482,7 +530,7 @@ option = name [s] "=" [s] (literal / variable)
 > plucking the first name from the object representing a person:
 >
 > ```
-> {Hello, {$userObj :person firstName=long}!}
+> Hello, {$userObj :person firstName=long}!
 > ```
 
 #### Private-Use
@@ -519,12 +567,12 @@ private-start = "&" / "^"
 > Here are some examples of what _private-use_ sequences might look like:
 >
 > ```
-> {Here's private use with an operand: {$foo &bar}}
-> {Here's a placeholder that is entirely private-use: {&anything here}}
-> {Here's a private-use function that uses normal function syntax: {$operand ^foo option=|literal|}}
-> {The character \| has to be paired or escaped: {&private || |something between| or isolated: \| }}
-> {Stop {& "translate 'stop' as a verb" might be a translator instruction or comment }}
-> {Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}}
+> Here's private use with an operand: {$foo &bar}
+> Here's a placeholder that is entirely private-use: {&anything here}
+> Here's a private-use function that uses normal function syntax: {$operand ^foo option=|literal|}
+> The character \| has to be paired or escaped: {&private || |something between| or isolated: \| }
+> Stop {& "translate 'stop' as a verb" might be a translator instruction or comment }
+> Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}
 > ```
 
 #### Reserved
@@ -570,22 +618,23 @@ This section defines common elements used to construct _messages_.
 
 A **_<dfn>keyword</dfn>_** is a reserved token that has a unique meaning in the _message_ syntax.
 
-The following three keywords are reserved: `let`, `match`, and `when`.
+The following four keywords are reserved: `input`, `local`, `match`, and `when`.
 Reserved keywords are always lowercase.
 
 ```abnf
-let   = %x6C.65.74        ; "let"
-match = %x6D.61.74.63.68  ; "match"
-when  = %x77.68.65.6E     ; "when"
+input = "input"
+local = "local"
+match = "match"
+when  = "when"
 ```
 
 ### Literals
 
 A **_<dfn>literal</dfn>_** is a character sequence that appears outside
 of _text_ in various parts of a _message_.
-A _literal_ can appear in a _declaration_,
+A _literal_ can appear
 as a _key_ value,
-as an _operand_,
+as the _operand_ of a _literal-expression_,
 or in the value of an _option_.
 A _literal_ MAY include any Unicode code point
 except for surrogate code points U+D800 through U+DFFF.
@@ -647,7 +696,7 @@ name-char  = name-start / DIGIT / "-" / "." / ":"
            / %xB7 / %x300-36F / %x203F-2040
 ```
 
-> **Note**\
+> [!NOTE]
 > _External variables_ can be passed in that are not valid _names_.
 > Such variables cannot be referenced in a _message_,
 > but are not otherwise errors.
@@ -683,5 +732,19 @@ s = 1*( SP / HTAB / CR / LF )
 ## Complete ABNF
 
 The grammar is formally defined in [`message.abnf`](./message.abnf)
-using the ABNF notation,
-as specified by [RFC 5234](https://datatracker.ietf.org/doc/html/rfc5234).
+using the ABNF notation [[STD68](https://www.rfc-editor.org/info/std68)],
+including the modifications found in [RFC 7405](https://www.rfc-editor.org/rfc/rfc7405).
+
+RFC7405 defines a variation of ABNF that is case-sensitive.
+Some ABNF tools are only compatible with the specification found in
+[RFC 5234](https://www.rfc-editor.org/rfc/rfc5234). 
+To make `message.abnf` compatible with that version of ABNF, replace
+the rules of the same name with this block:
+
+```abnf
+; reserved keywords are always lowercase
+input = %x69.6E.70.75.74  ; "input"
+local = %x6C.6F.63.61.6C  ; "local"
+match = %x6D.61.74.63.68  ; "match"
+when  = %x77.68.65.6E     ; "when"
+```

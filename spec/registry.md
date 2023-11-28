@@ -123,9 +123,11 @@ For the sake of brevity, only `locales="en"` is considered.
 Given the above description, the `:number` function is defined to work both in a selector and a placeholder:
 
 ```
+{{
 match {$count :number}
-when 1 {One new message}
-when * {{$count :number} new messages}
+when 1 {{One new message}}
+when * {{{$count :number} new messages}}
+}}
 ```
 
 Furthermore,
@@ -179,10 +181,16 @@ Messages can now use the `:noun` and the `:adjective` functions.
 The following message references the first signature of `:adjective`,
 which expects the `plural` and `case` options:
 
-    {You see {$color :adjective article=indefinite plural=one case=nominative} {$object :noun case=nominative}!}
+> ```
+> You see {$color :adjective article=indefinite plural=one case=nominative} {$object :noun case=nominative}!
+> ```
 
 The following message references the second signature of `:adjective`,
 which only expects the `accord` option:
 
-    let $obj = {$object :noun case=nominative}
-    {You see {$color :adjective article=indefinite accord=$obj} {$obj}!}
+>```
+> {{
+>  input {$object :noun case=nominative}
+>  {{You see {$color :adjective article=indefinite accord=$object} {$object}!}}
+> }}
+>```
