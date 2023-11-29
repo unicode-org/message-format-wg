@@ -49,7 +49,7 @@ _What context is helpful to understand this proposal?_
   On runtime, I expect these markup elements to produce live UI elements.
 
   > ```
-  > This is a giraffe: {#img src=giraffe.gif}.
+  > This is a giraffe: {#img src=giraffe.gif/}.
   > ```
 
 - I want to be able to use minimal markup to inform XLIFF interchange.
@@ -139,6 +139,8 @@ such as `Click <a title="Link tooltip">here</a> to continue`.
 As with function options,
 markup options should be defined in a registry so that they can be validated.
 
+Provide a way to tell open and standalone elements apart.
+
 ## Constraints
 
 Due to segmentation,
@@ -147,6 +149,9 @@ markup may be split across messages so that it opens in one and closes in anothe
 Following previously established consensus,
 the resolution of the value of an _expression_ may only depend on its own contents,
 without access to the other parts of the selected pattern.
+
+Any information stored in the registry is not available on runtime,
+and may be unavailable in tooling.
 
 ## Proposed Design
 
@@ -178,7 +183,7 @@ This is {#strong}bold{/strong} and this is {#img alt=|an image|}.
 Markup names are _namespaced_ by their use of the pound sign `#` and the forward slash `/` sigils.
 They are distinct from `$variables`, `:functions`, and `|literals|`.
 
-This allows for placeholders like `{#b}`, `{#img}`, and `{#a title=|Link tooltip|}`.
+This allows for placeholders like `{#b}`, and `{#a title=|Link tooltip|}`.
 Unlike annotations, markup expressions may not have operands.
 
 Markup is not valid in _declarations_ or _selectors_.
@@ -195,12 +200,39 @@ Markup is not valid in _declarations_ or _selectors_.
 
 * Introduces two new sigils, the pound sign `#` and the forward slash `/`.
 
-* As in HTML, differentiating "open" and "standalone" elements relies on registry information,
-  or in translations matching the structure used in the source
-  A rather clunky `{#foo/}` syntax was considered for explicitly-standalone elements,
-  but this did not reach consensus support.
-
 * In Mustache, the `{{#foo}}`...`{{/foo}}` syntax is used for *control flow* statements rather than printable data.
+
+### Standalone Markup
+
+_Standalone_ markup remains an open question.
+Three alternatives have been suggested:
+
+* Introduce additional syntax inspired by XML: `{#foo/}`.
+
+  This approach encodes the _standalone_ aspect in the data model, and doesn't rely on external sources of truth,
+  at the expense of introducing new syntax, which is admittedly a bit clunky.
+
+  It also creates a dichotomy between standalone _markup_ and regular _placeholders_, which can be argued to be _standalone_ as well.
+
+* Differentiate _open_ and _standalone_ elements based on the information stored in the registry,
+  or based on some other external source of truth
+  (e.g. the structure of the source to which the message is applied).
+
+  This approach offers a cleaner syntax at the expense of relying on external sources of truth for telling open and standalone elements apart.
+  Without the access to these sources of truth (e.g. a custom registry), standalone markup will be interpreted as open elements.
+
+* Re-use regular placeholders with regular function calls: `{:img src=logo.png}`.
+
+  This approach leverages the fact that regular placeholders can also be thought of as being _standalone_.
+  It also doesn't introduce any new syntax, instead relying on the function call syntax: `:img`.
+
+  Namespacing is a concern: to ensure forward compatibility, implementations and users should avoid introducing new symbols to the default, anonymous namespace.
+  Thus, a custom function representing a standalone element should be namespaced: `:html:img` or `:moz:img`.
+  While a good practice in general, it results in more verbose syntax,
+  possibly also for the _open_ and _close_ markup, which would be namespaced for consistency: `{#html:link}...{/html:link}`.
+
+  In this approach there's also no way to enforce the lack of operands to standalone markup at the syntax level.
+  Instead, access to a custom registry is required to know that `:img` does not accept any operands.
 
 ### Runtime Behavior
 
