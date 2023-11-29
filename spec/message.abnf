@@ -1,16 +1,24 @@
-message = [s] *(declaration [s]) body [s]
+message = pattern / complex-message
 
-declaration = let s variable [s] "=" [s] expression
-body = pattern
+complex-message = "{{" [s] *(declaration [s]) body [s] "}}"
+
+declaration = input-declaration / local-declaration
+input-declaration = input [s] variable-expression
+local-declaration = local s variable [s] "=" [s] expression
+
+body = quoted-pattern
      / (selectors 1*([s] variant))
 
-pattern = "{" *(text / expression) "}"
+quoted-pattern = "{{" pattern "}}"
+pattern = *(text / expression)
 selectors = match 1*([s] expression)
-variant = when 1*(s key) [s] pattern
+variant = when 1*(s key) [s] quoted-pattern
 key = literal / "*"
 
-expression = "{" [s] ((operand [s annotation]) / annotation) [s] "}"
-operand    = literal / variable
+expression = literal-expression / variable-expression / function-expression
+literal-expression = "{" [s] literal [s annotation] [s] "}"
+variable-expression = "{" [s] variable [s annotation] [s] "}"
+function-expression = "{" [s] annotation [s] "}"
 annotation = (function *(s option)) / reserved / private-use
 
 literal = quoted / unquoted
@@ -19,9 +27,10 @@ function = (":" / "+" / "-") name
 option = name [s] "=" [s] (literal / variable)
 
 ; reserved keywords are always lowercase
-let   = %x6C.65.74        ; "let"
-match = %x6D.61.74.63.68  ; "match"
-when  = %x77.68.65.6E     ; "when"
+input = %s"input"
+local = %s"local"
+match = %s"match"
+when  = %s"when"
 
 text = 1*(text-char / text-escape)
 text-char = %x0-5B         ; omit \

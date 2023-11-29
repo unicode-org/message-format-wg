@@ -7,7 +7,7 @@ when formatting a message for display in a user interface, or for some later pro
 
 To start, we presume that a _message_ has either been parsed from its syntax
 or created from a data model description.
-If this construction has encountered any Syntax or Data Model errors,
+If this construction has encountered any Syntax or Data Model Errors,
 their handling during formatting is specified here as well.
 
 Formatting of a _message_ is defined by the following operations:
@@ -21,6 +21,21 @@ Formatting of a _message_ is defined by the following operations:
 
   The resolution of _text_ is rather straighforward,
   and is detailed under _literal resolution_.
+
+  > **Note**
+  >
+  > **This specification does not require either eager or lazy _expression resolution_ of _message_
+  > parts; do not construe any requirement in this document as requiring either.**
+  >
+  > Implementations are not required to evaluate all parts of a _message_ when
+  > parsing, processing, or formatting.
+  > In particular, an implementation MAY choose not to evaluate or resolve the
+  > value of a given _expression_ until it is actually used by a
+  > selection or formatting process.
+  > However, when an _expression_ is resolved, it MUST behave as if all preceding
+  > _declarations_ and _selectors_ affecting _variables_ referenced by that _expression_
+  > have already been evaluated in the order in which the relevant _declarations_
+  > and _selectors_ appear in the _message_.
 
 - **_Pattern Selection_** determines which of a message's _patterns_ is formatted.
   For a message with no _selectors_, this is simple as there is only one _pattern_.
@@ -52,7 +67,7 @@ At a minimum, it includes:
   This will be used by strategies for bidirectional isolation,
   and can be used to set the base direction of the _message_ upon display.
 
-- A mapping of string identifiers to values,
+- An **_<dfn>input mapping</dfn>_** of string identifiers to values,
   defining variable values that are available during _variable resolution_.
   This is often determined by a user-provided argument of a formatting function call.
 
@@ -68,10 +83,14 @@ Implementations MAY include additional fields in their _formatting context_.
 
 _Expressions_ are used in _declarations_, _selectors_, and _patterns_.
 
-In a _declaration_, the resolved value of the _expression_ is assigned to a _variable_,
+In a _declaration_, the resolved value of the _expression_ is bound to a _variable_,
 which is available for use by later _expressions_.
-As such a _variable_ MAY then be referenced in different ways,
+Since a _variable_ can be referenced in different ways later,
 implementations SHOULD NOT immediately fully format the value for output.
+
+In an _input-declaration_, the _variable_ operand of the _variable-expression_
+identifies not only the name of the external input value,
+but also the _variable_ to which the resolved value of the _variable-expression_ is bound.
 
 In _selectors_, the resolved value of an _expression_ is used for _pattern selection_.
 
@@ -91,19 +110,56 @@ and different implementations MAY choose to perform different levels of resoluti
 > Alternatively, it could be an instance of an ICU4J `FormattedNumber`,
 > or some other locally appropriate value.
 
-Depending on the presence or absence of an _operand_
+Depending on the presence or absence of a _variable_ or _literal_ operand
 and a _function_, _private-use_, or _reserved_ _annotation_,
-one of the following is used to resolve the value of the _expression_:
+the resolved value of the _expression_ is determined as follows:
 
-- If the _expression_ contains no _annotation_,
-  its resolved value is determined by _literal resolution_ or _variable resolution_,
-  depending on the shape of the _operand_.
-- Else, if the _expression_ has a _function_ _annotation_,
-  its resolved value is defined by _function resolution_.
-- Else, if the _expression_ has a _private-use_ _annotation_,
-  its resolved value is defined according to the implementations's specification.
-- Else, the _expression_ has a _reserved_ _annotation_,
-  an Unsupported Expression error is emitted and a fallback value is used as its value.
+If the _expression_ contains a _reserved_ _annotation_,
+an `Unsupported Expression` error is emitted and a fallback value is used as its value.
+
+Else, if the _expression_ contains a _private-use_ _annotation_,
+its resolved value is defined according to the implementation's specification.
+
+Else, if the _expression_ contains an _annotation_,
+its resolved value is defined by _function resolution_.
+
+Else, the _expression_ will contain only either a _literal_ or a _variable_.
+
+If the _expression_ consists of a _variable_,
+its resolved value is defined by _variable resolution_.
+An implementation MAY perform additional processing
+when resolving the value of the _expression_.
+
+> For example, it could apply _function resolution_ using a _function_
+> and a set of _options_ chosen based on the value or type of the _variable_.
+> So, given a _message_ like this:
+>
+> ```
+> Today is {$date}
+> ```
+>
+> If the value passed in the _variable_ were a date object,
+> such as a JavaScript `Date` or a Java `java.util.Date` or `java.time.Temporal`,
+> the implementation could interpret the _placeholder_ `{$date}` as if
+> the pattern included the function `:datetime` with some set of default options.
+
+Else, if the _expression_ consists of a _literal_,
+its resolved value is defined by _literal resolution_.
+
+> **Note**
+> This means that a _literal_ value with no _annotation_
+> is always treated as a string.
+> To represent values that are not strings as a _literal_,
+> an _annotation_ needs to be provided:
+>
+> ```
+> {{
+> local $aNumber = {1234 :number}
+> local $aDate = {|2023-08-30| :datetime}
+> local $aFoo = {|some foo| :foo}
+> {{You have {42 :number}}}
+> }}
+> ```
 
 ### Literal Resolution
 
@@ -124,13 +180,10 @@ The resolution of a _text_ or _literal_ token MUST always succeed.
 ### Variable Resolution
 
 To resolve the value of a _variable_,
-its _name_ is used to identify either a local variable,
-or a variable defined elsewhere.
-If a local variable and an externally defined one use the same name,
-the local variable takes precedence.
-
-It is an error for a local variable definition to
-refer to a local variable that's defined after it in the message.
+its _name_ is used to identify either a local variable or an input variable.
+If a _declaration_ exists for the _variable_, its resolved value is used.
+Otherwise, the _variable_ is an implicit reference to an input value,
+and its value is looked up from the _formatting context_ _input mapping_.
 
 The resolution of a _variable_ MAY fail if no value is identified for its _name_.
 If this happens, an Unresolved Variable error MUST be emitted.
@@ -221,13 +274,17 @@ rather than the _expression_ in the _selector_ or _pattern_.
 > attempting to format either of the following messages:
 >
 > ```
-> let $var = {|horse| :func}
-> {The value is {$var}.}
+> {{
+> local $var = {|horse| :func}
+> {{The value is {$var}.}}
+> }}
 > ```
 >
 > ```
-> let $var = {|horse|}
-> {The value is {$var :func}.}
+> {{
+> local $var = {|horse|}
+> {{The value is {$var :func}.}}
+> }}
 > ```
 >
 > would in both cases result in the _pattern_ _expression_
@@ -250,8 +307,10 @@ Each _key_ corresponds to an _expression_ in the _selectors_ by its position in 
 > For example, in this message:
 >
 > ```
+> {{
 > match {:one} {:two} {:three}
-> when  1 2 3 { ... }
+> when  1 2 3 {{ ... }}
+> }}
 > ```
 >
 > The first _key_ `1` corresponds to the first _expression_ in the _selectors_ (`{:one}`),
@@ -393,10 +452,12 @@ the variable reference `$bar` resolves to the string `'bar'`,
 pattern selection proceeds as follows for this message:
 
 ```
+{{
 match {$foo :string} {$bar :string}
-when bar bar {All bar}
-when foo foo {All foo}
-when * * {Otherwise}
+when bar bar {{All bar}}
+when foo foo {{All foo}}
+when * * {{Otherwise}}
+}}
 ```
 
 1. For the first selector:<br>
@@ -424,11 +485,13 @@ Alternatively, with the same implementation and formatting context as in Example
 pattern selection would proceed as follows for this message:
 
 ```
+{{
 match {$foo :string} {$bar :string}
-when * bar {Any and bar}
-when foo * {Foo and any}
-when foo bar {Foo and bar}
-when * * {Otherwise}
+when * bar {{Any and bar}}
+when foo * {{Foo and any}}
+when foo bar {{Foo and bar}}
+when * * {{Otherwise}}
+}}
 ```
 
 1. For the first selector:<br>
@@ -472,10 +535,12 @@ and an `en` (English) locale,
 the pattern selection proceeds as follows for this message:
 
 ```
+{{
 match {$count :plural}
-when one {Category match}
-when 1   {Exact match}
-when *   {Other match}
+when one {{Category match}}
+when 1   {{Exact match}}
+when *   {{Other match}}
+}}
 ```
 
 1. For the selector:<br>
@@ -507,14 +572,16 @@ _Formatting_ is a mostly implementation-defined process,
 as it depends on the implementation's shape for resolved values
 and the result type of the formatting.
 
-Formatting errors MAY be emitted during _formatting_,
-as formatting is not necessarily defined on every resolved value.
-A formatter MAY provide a value to use in such a case instead of a _fallback value_.
+Resolved values cannot always be formatted by a given implementation.
+When such an error occurs during _formatting_,
+an implementation SHOULD emit a _formatting error_ and produce a
+_fallback value_ for the _placeholder_ that produced the error.
+A formatting function MAY substitute a value to use instead of a _fallback value_.
 
-_Formatting_ MAY produce formatted messages with the following data types,
-as well as any others:
+Implementations MAY represent the result of _formatting_ using the most
+appropriate data type or structure. Some examples of these include:
 
-- A single concatenated string.
+- A single string concatenated from the parts of the resolved _pattern_.
 - A string with associated attributes for portions of its text.
 - A flat sequence of objects corresponding to each resolved value.
 - A hierarchical structure of objects that group spans of resolved values,
@@ -629,15 +696,16 @@ These are divided into the following categories:
   > Example invalid messages resulting in a Syntax error:
   >
   > ```
-  > {Missing end brace
+  > {{{{Missing end braces
+  > {{{{Missing one end brace}}}
   > ```
   >
   > ```
-  > {Unknown {{expression}}}
+  > Unknown {{expression}}
   > ```
   >
   > ```
-  > let $var = {|no message body|}
+  > {{local $var = {|no message body|}}}
   > ```
 
 - **Data Model errors** occur when a message is invalid due to
@@ -649,16 +717,20 @@ These are divided into the following categories:
     > Example invalid messages resulting in a Variant Key Mismatch error:
     >
     > ```
+    > {{
     > match {$one :func}
-    > when 1 2 {Too many}
-    > when * {Otherwise}
+    > when 1 2 {{Too many}}
+    > when * {{Otherwise}}
+    > }}
     > ```
     >
     > ```
+    > {{
     > match {$one :func} {$two :func}
-    > when 1 2 {Two keys}
-    > when * {Missing a key}
-    > when * * {Otherwise}
+    > when 1 2 {{Two keys}}
+    > when * {{Missing a key}}
+    > when * * {{Otherwise}}
+    > }}
     > ```
 
   - **Missing Fallback Variant errors** occur when the message
@@ -667,57 +739,99 @@ These are divided into the following categories:
     > Example invalid messages resulting in a Missing Fallback Variant error:
     >
     > ```
+    > {{
     > match {$one :func}
-    > when 1 {Value is one}
-    > when 2 {Value is two}
+    > when 1 {{Value is one}}
+    > when 2 {{Value is two}}
+    > }}
     > ```
     >
     > ```
+    > {{
     > match {$one :func} {$two :func}
-    > when 1 * {First is one}
-    > when * 1 {Second is one}
+    > when 1 * {{First is one}}
+    > when * 1 {{Second is one}}
+    > }}
     > ```
 
   - A **_Missing Selector Annotation error_** is an error that occurs when the _message_
     contains a _selector_ that does not have an _annotation_,
     or contains a _variable_ that does not directly or indirectly reference a _declaration_ with an _annotation_.
 
-    > Example invalid messages resulting in a _Missing Selector Annotation error_:
+    > Examples of invalid messages resulting in a _Missing Selector Annotation error_:
     >
     > ```
+    > {{
     > match {$one}
-    > when 1 {Value is one}
-    > when * {Value is not one}
+    > when 1 {{Value is one}}
+    > when * {{Value is not one}}
+    > }}
     > ```
     >
     > ```
-    > let $one = {|The one|}
+    > {{
+    > local $one = {|The one|}
     > match {$one}
-    > when 1 {Value is one}
-    > when * {Value is not one}
+    > when 1 {{Value is one}}
+    > when * {{Value is not one}}
+    > }}
     > ```
     >
     > ```
-    > let $one = {|The one| :func}
-    > let $two = {$one}
-    > match {$two}
-    > when 1 {Value is one}
-    > when * {Value is not one}
+    > {{
+    > input {$one}
+    > match {$one}
+    > when 1 {{Value is one}}
+    > when * {{Value is not one}}
+    > }}
     > ```
 
-  - **Duplicate Option Name errors** occur when the same _name_
+  - A **Duplicate Declaration error** occurs when a _variable_ appears in two _declarations_.
+    This includes when an _input-declaration_ binds a _variable_ that appears in a previous _declaration_,
+    when a _local-declaration_ binds a _variable_ that appears in a previous _declaration_,
+    or when a _local-declaration_ refers to its bound _variable_ in its _expression_.
+
+    > Examples of invalid messages resulting in a Duplicate Declaration error:
+    >
+    > ```
+    > {{
+    >    input {$var :number maxFractionDigits=0}
+    >    input {$var :number minFractionDigits=0}
+    >    {{Redeclaration of the same variable}}
+    > }}
+    > {{
+    >    local $var = {$ext :number maxFractionDigits=0}
+    >    input {$var :number minFractionDigits=0}
+    >    {{Redeclaration of a local variable}}
+    > }}
+    > {{
+    >    input {$var :number minFractionDigits=0}
+    >    local $var = {$ext :number maxFractionDigits=0}
+    >    {{Redeclaration of an input variable}}
+    > }}
+    > {{
+    >    local $var = {$ext :someFunction}
+    >    local $var = {$error}
+    >    local $var2 = {$var2 :error}
+    >    {{{$var} cannot be redefined. {$var2} cannot refer to itself}}
+    > }}
+    > ```
+
+  - A **Duplicate Option Name error** occurs when the same _name_
     appears on the left-hand side
     of more than one _option_ in the same _expression_.
 
-    > Example invalid messages resulting in a Duplicate Option Name error:
+    > Examples of invalid messages resulting in a Duplicate Option Name error:
     >
     > ```
-    > {Value is {42 :number style=percent style=decimal}}
+    > Value is {42 :number style=percent style=decimal}
     > ```
     >
     > ```
-    > let $foo = {horse :func one=1 two=2 one=1}
-    > {This is {$foo}}
+    > {{
+    > local $foo = {horse :func one=1 two=2 one=1}
+    > {{This is {$foo}}}
+    > }}
     > ```
 
 - **Resolution errors** occur when the runtime value of a part of a message
@@ -730,13 +844,15 @@ These are divided into the following categories:
     > does not provide for the variable reference `$var` to be successfully resolved:
     >
     > ```
-    > {The value is {$var}.}
+    > The value is {$var}.
     > ```
     >
     > ```
+    > {{
     > match {$var :func}
-    > when 1 {The value is one.}
-    > when * {The value is not one.}
+    > when 1 {{The value is one.}}
+    > when * {{The value is not one.}}
+    > }}
     > ```
 
   - **Unknown Function errors** occur when an _expression_ includes
@@ -747,13 +863,15 @@ These are divided into the following categories:
     > does not provide for the function `:func` to be successfully resolved:
     >
     > ```
-    > {The value is {horse :func}.}
+    > The value is {horse :func}.
     > ```
     >
     > ```
+    > {{
     > match {|horse| :func}
-    > when 1 {The value is one.}
-    > when * {The value is not one.}
+    > when 1 {{The value is one.}}
+    > when * {{The value is not one.}}
+    > }}
     > ```
 
   - **Unsupported Expression errors** occur when an expression uses
@@ -764,16 +882,18 @@ These are divided into the following categories:
     > would always result in an Unsupported Expression error:
     >
     > ```
-    > {The value is {@horse}.}
+    > The value is {@horse}.
     > ```
     >
     > Attempting to format this message would result in an Unsupported Expression error
     > if done within a context that does not support the `^` private use sigil:
     >
     > ```
+    > {{
     > match {|horse| ^private}
-    > when 1 {The value is one.}
-    > when * {The value is not one.}
+    > when 1 {{The value is one.}}
+    > when * {{The value is not one.}}
+    > }}
     > ```
 
 - **Selection errors** occur when message selection fails.
@@ -785,16 +905,20 @@ These are divided into the following categories:
     > uses a `:plural` selector function which requires its input to be numeric:
     >
     > ```
+    > {{
     > match {|horse| :plural}
-    > when 1 {The value is one.}
-    > when * {The value is not one.}
+    > when 1 {{The value is one.}}
+    > when * {{The value is not one.}}
+    > }}
     > ```
     >
     > ```
-    > let $sel = {|horse| :plural}
+    > {{
+    > local $sel = {|horse| :plural}
     > match {$sel}
-    > when 1 {The value is one.}
-    > when * {The value is not one.}
+    > when 1 {{The value is one.}}
+    > when * {{The value is not one.}}
+    > }}
     > ```
 
 - **Formatting errors** occur during the formatting of a resolved value,
@@ -812,20 +936,22 @@ These are divided into the following categories:
   >    an option `field` to be provided with a string value,
   >
   > ```
-  > {Hello, {horse :get field=name}!}
+  > Hello, {horse :get field=name}!
   > ```
   >
   > ```
-  > {Hello, {$user :get}!}
+  > Hello, {$user :get}!
   > ```
   >
   > ```
-  > let $id = {$user :get field=id}
-  > {Hello, {$id :get field=name}!}
+  > {{
+  > local $id = {$user :get field=id}
+  > {{Hello, {$id :get field=name}!}}
+  > }}
   > ```
   >
   > ```
-  > {Your {$field} is {$id :get field=$field}}
+  > Your {$field} is {$id :get field=$field}
   > ```
 
 Syntax and Data Model errors MUST be emitted as soon as possible.
