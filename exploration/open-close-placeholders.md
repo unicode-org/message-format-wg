@@ -16,6 +16,7 @@ Status: **Proposed**
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/516">#516</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/517">#517</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/535">#535</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/540">#540</a></dd>
 	</dl>
 </details>
 
