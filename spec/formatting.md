@@ -267,7 +267,7 @@ The _fallback value_ depends on the contents of the _expression_:
 
   > Examples:
   > In a context where `:func` fails to resolve, `{:func}` resolves to the _fallback value_ `:func`.
-  > In any context, `{@reserved |...|}` resolves to the _fallback value_ `@reserved`.
+  > In a context where `:ns:func` fails to resolve, `{:ns:func}` resolves to the _fallback value_ `:ns:func`.
 
 - _expression_ with _literal_ _operand_:
   U+007C VERTICAL LINE `|`
