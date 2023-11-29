@@ -1,6 +1,6 @@
 # Open/Close Expressions
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
