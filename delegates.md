@@ -23,7 +23,7 @@ Please include your primary affiliation (e.g., the company you represent or wher
 
 - Addison Phillips - Amazon.com (APS)
 - Dan Chiba - Oracle (DCA)
-- Eemeli Aro - OpenJSF & Vincit (EAO)
+- Eemeli Aro - Mozilla & OpenJSF (EAO)
 - Elango Cheran - Google (ECH)
 - George Rhoten - Apple (GWR)
 - Jan Mühlemann - Locize (JMU)
@@ -42,7 +42,7 @@ Please include your primary affiliation (e.g., the company you represent or wher
 - Robert Chu - Amazon.com (RCU)
 - Romulo Cintra - CaixaBank (RCA)
 - Shane Carr - Google (SFC)
-- Staś Małolepszy - Mozilla (STA)
+- Staś Małolepszy - Google (STA)
 - Steven R. Loomis - IBM (SRL)
 - Zibi Braniecki - Amazon Alexa (ZBI)
 
