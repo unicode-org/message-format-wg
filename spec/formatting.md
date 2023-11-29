@@ -964,7 +964,7 @@ SHOULD prioritise Syntax and Data Model errors over others.
 
 When an error occurs in the resolution of an _option_,
 the surrounding _expression_ MUST be processed as if the _option_ were not present.
-This MAY allow the _expression_ to resolve to a value that is not a _fallback value_,
+This can result in the _expression_ resolving to a value that is not a _fallback value_,
 though an error MUST still be emitted.
 
 When an error occurs within a _selector_,
