@@ -10,7 +10,7 @@ Status: **Proposed**
 		<dt>First proposed</dt>
 		<dd>2023-08-29</dd>
 		<dt>Pull Request</dt>
-                <dd>#463</dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/463">#463</a></dd>
 	</dl>
 </details>
 
@@ -97,13 +97,24 @@ Each part should have at most one of `value` or `parts` defined;
 some may have none.
 
 ```ts
-interface MessageExpressionPart {
-  type: string;
+type MessageExpressionPart =
+  | MessageSingleValuePart<string, unknown>
+  | MessageMultiValuePart<string, unknown>;
+
+interface MessageSingleValuePart<T extends string, V> {
+  type: T;
   source: string;
-  parts?: Iterable<{ type: string; value: unknown; source?: string }>;
-  value?: unknown;
   dir?: "ltr" | "rtl" | "auto";
   locale?: string;
+  value?: V;
+}
+
+interface MessageMultiValuePart<T extends string, V> {
+  type: T;
+  source: string;
+  dir?: "ltr" | "rtl" | "auto";
+  locale?: string;
+  parts: Iterable<{ type: string; value: V; source?: string }>;
 }
 ```
 
@@ -127,6 +138,7 @@ the `value` of MessageStringPart is always a string.
 
 ```ts
 interface MessageStringPart {
+  // MessageSingleValuePart<"string", string>
   type: "string";
   source: string;
   value: string;
@@ -142,6 +154,7 @@ are represented by MessageUnknownPart.
 
 ```ts
 interface MessageUnknownPart {
+  // MessageSingleValuePart<"unknown", unknown>
   type: "unknown";
   source: string;
   value: unknown;
@@ -155,6 +168,7 @@ the part's representation would be `'{' + source + '}'`.
 
 ```ts
 interface MessageFallbackPart {
+  // MessageSingleValuePart<"fallback", never>
   type: "fallback";
   source: string;
 }
@@ -169,8 +183,12 @@ if its output might reasonably consist of multiple fields.
 In most cases, these sub-parts should not need fields beyond their `type` and a string `value`,
 Where necessary, other `value` types may be used and other fields such as a `source` included.
 
+For example, `:datetime` and `:number` formatters could use the following formatted-parts representations.
+In many implementations, these could be further narrowed to only use `string` values.
+
 ```ts
 interface MessageDateTimePart {
+  // MessageMultiValuePart<"datetime", unknown>
   type: "datetime";
   source: string;
   parts: Iterable<{ type: string; value: unknown }>;
@@ -179,6 +197,7 @@ interface MessageDateTimePart {
 }
 
 interface MessageNumberPart {
+  // MessageMultiValuePart<"number", unknown>
   type: "number";
   source: string;
   parts: Iterable<{ type: string; value: unknown }>;
