@@ -267,7 +267,7 @@ The _fallback value_ depends on the contents of the _expression_:
 
   > Examples:
   > In a context where `:func` fails to resolve, `{:func}` resolves to the _fallback value_ `:func`.
-  > `{@reserved |...|}` always resolves to the _fallback value_ `@reserved`.
+  > In any context, `{@reserved |...|}` resolves to the _fallback value_ `@reserved`.
 
 - _expression_ with _literal_ _operand_:
   U+007C VERTICAL LINE `|`
@@ -280,7 +280,7 @@ The _fallback value_ depends on the contents of the _expression_:
   > In a context where `:func` fails to resolve,
   > `{42 :func}` resolves to the _fallback value_ `|42|` and
   > `{|C:\\| :func}` resolves to the _fallback value_ `|C:\\|`.
-  > `{|| @reserved}` always resolves to the _fallback value_ `||`.
+  > In any context, `{|| @reserved}` resolves to the _fallback value_ `||`.
 
 - _expression_ with _variable_ _operand_ (with or without an _annotation_):
   - If the _variable_ fails to resolve, or resolves to a value that is not a _fallback value_:
@@ -289,12 +289,22 @@ The _fallback value_ depends on the contents of the _expression_:
     > Examples:
     > In a context where `$var` fails to resolve, `{$var}` and `{$var :number}` and `{$var @reserved}`
     > all resolve to the _fallback value_ `$var`.
-    > In a context where `:func` fails to resolve, `.input $arg {{{$arg :func}}}` resolves to the _fallback value_ `$arg`.
+    > In a context where `:func` fails to resolve,
+    > the _pattern_'s _expression_ in `.input $arg {{{$arg :func}}}` resolves to the _fallback value_ `$arg` and
+    > the message formats to `{$arg}`.
 
   - If the _variable_ resolves to a _fallback value_: the _fallback value_ to which it resolves
 
+    > Examples:
     > In a context where `:now` fails to resolve but `:datetime` does not,
-    > `.local $t = {:now format=iso8601} .local $pretty_t = {$t :datetime} {{{$pretty_t}}}` resolves to the _fallback value_ `:now`.
+    > the _pattern_'s _expression_ in
+    > ```
+    > .local $t = {:now format=iso8601}
+    > .local $pretty_t = {$t :datetime}
+    > {{{$pretty_t}}}
+    > ```
+    > resolves to the _fallback value_ `:now` and
+    > the message formats to `{:now}`.
 
 _Option_ _identifiers_ and values are not included in the _fallback value_.
 
