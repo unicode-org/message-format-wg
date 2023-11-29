@@ -21,7 +21,7 @@ Please include your primary affiliation (e.g., the company you represent or wher
 
 ### Current
 
-- Addison Phillips - Amazon.com (APS)
+- Addison Phillips - Unicode (APP)
 - Dan Chiba - Oracle (DCA)
 - Eemeli Aro - Mozilla & OpenJSF (EAO)
 - Elango Cheran - Google (ECH)
