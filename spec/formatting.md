@@ -178,7 +178,7 @@ whether its value was originally _quoted_ or _unquoted_.
 > For example,
 > the _option_ `foo=42` and the _option_ `foo=|42|` are treated as identical.
 
-The resolution of a _text_ or _literal_ token MUST never fail to resolve.
+The resolution of a _text_ or _literal_ MUST resolve to a string.
 
 ### Variable Resolution
 
