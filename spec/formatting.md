@@ -262,12 +262,25 @@ An _expression_ fails to resolve when:
 
 The _fallback value_ depends on the contents of the _expression_:
 
-- _expression_ with _annotation_ and no _operand_:
+- _expression_ with _function_ _annotation_ and no _operand_:
   the _annotation_ starting sigil followed by its _identifier_
 
   > Examples:
   > In a context where `:func` fails to resolve, `{:func}` resolves to the _fallback value_ `:func`.
   > In a context where `:ns:func` fails to resolve, `{:ns:func}` resolves to the _fallback value_ `:ns:func`.
+
+- _expression_ with non-_function_ _annotation_ and no _operand_:
+  - If the _annotation_ consists of a _sigil_-prefixed _identifier_
+    optionally followed by a whitespace-prefixed tail:
+    the _annotation_ starting sigil followed by that _identifier_
+
+    > Examples:
+    > In any context, `{@reserved}` and `{@reserved |...|}` both resolve to the _fallback value_ `@reserved`.
+
+  - Otherwise: the U+FFFD REPLACEMENT CHARACTER `�`
+
+    > Examples:
+    > In any context, `{@reserved\\}` and `{? reserved ?}` both resolve to the _fallback value_ `�`.
 
 - _expression_ with _literal_ _operand_:
   U+007C VERTICAL LINE `|`
