@@ -150,7 +150,8 @@ Following previously established consensus,
 the resolution of the value of an _expression_ may only depend on its own contents,
 without access to the other parts of the selected pattern.
 
-Any information stored in the registry is not available on runtime,
+Any information stored in the registry is not available at runtime
+unless reflected in the implementation's behaviour,
 and may be unavailable in tooling.
 
 ## Proposed Design
