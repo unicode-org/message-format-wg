@@ -253,7 +253,7 @@ A **_fallback value_** is the resolved value for an _expression_ that fails to r
 
 An _expression_ fails to resolve when:
 
-- A _variable_ used as complete _expression_ contents or as an _operand_ fails to resolve.
+- A _variable_ used as an _operand_ (with or without an _annotation_) fails to resolve.
   * Note that this does not include a _variable_ used as an _option_ value.
 - A _function_ _annotation_ fails to resolve.
 - A _private-use annotation_ is unsupported by the implementation or if
@@ -282,7 +282,7 @@ The _fallback value_ depends on the contents of the _expression_:
   > `{|C:\\| :func}` resolves to the _fallback value_ `|C:\\|`.
   > `{|| @reserved}` always resolves to the _fallback value_ `||`.
 
-- _expression_ that consists of a _variable_, or _expression_ with _variable_ _operand_:
+- _expression_ with _variable_ _operand_ (with or without an _annotation_):
   - If the _variable_ fails to resolve, or resolves to a value that is not a _fallback value_:
     U+0024 DOLLAR SIGN `$` followed by the _name_ of the _variable_
 
