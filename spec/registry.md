@@ -138,7 +138,7 @@ Furthermore,
 `:number`'s `<matchSignature>` contains two `<match>` elements
 which allow the validation of variant keys.
 The first element with `locales` matching the current locale
-(or an alement with no `locales`) is used:
+(or an element with no `locales`) is used:
 
 - `<match locales="en" values="one two few other" .../>` can be used in locales like `en` and `en-GB`
   to validate the `when other` variant by verifying that the `other` key is present
