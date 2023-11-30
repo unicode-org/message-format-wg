@@ -197,17 +197,28 @@ the following steps are taken:
 
 1. If the _expression_ includes an _operand_, resolve its value.
    If this fails, use a _fallback value_ for the _expression_.
-2. Based on the _function_ starting sigil and _name_,
-   find the appropriate function implementation from the _function registry_.
-   If the registry does not define an implementation for this _name_,
+2. Resolve the _identifier_ of the _function_ and, based on the starting sigil,
+   find the appropriate function implementation to call.
+   If the implementation cannot find the function,
+   or if the _identifier_ includes a _namespace_ that the implementation does not support,
    emit an Unknown Function error
    and use a _fallback value_ for the _expression_.
-3. Resolve the _option_ values to a mapping of string identifiers to values.
+
+   Implementations are not required to implement _namespaces_ or installable
+   _function registries_.
+
+3. Resolve the _options_ to a mapping of string identifiers to values.
+   If _options_ is missing, the mapping will be empty.
    For each _option_:
-   - If its right-hand side successfully resolves to a value,
-     bind the _name_ of the _option_ to the resolved value in the mapping.
-   - Otherwise, do not bind the _name_ of the _option_ to any value in the mapping.
-4. Call the function implementation with the following arguments:
+   - Resolve the _identifier_ of the _option_.
+   - If the _option_'s _identifier_ already exists in the resolved mapping of _options_,
+     emit a Duplicate Option Name error.
+   - If the _option_'s right-hand side successfully resolves to a value,
+     bind the _identifier_ of the _option_ to the resolved value in the mapping.
+   - Otherwise, bind the _identifier_ of the _option_ to an unresolved value in the mapping.
+     (Note that an Unresolved Variable error will have been emitted.)
+4. Remove from the resolved mapping of _options_ any binding for which the value is an unresolved value.
+5. Call the function implementation with the following arguments:
 
    - The current _locale_.
    - The resolved mapping of _options_.
@@ -219,14 +230,19 @@ the following steps are taken:
    as long as reasonable precautions are taken to keep the function interface
    simple and minimal, and avoid introducing potential security vulnerabilities.
 
-   As implementations MAY allow custom functions to be defined by users,
-   their access to the _formatting context_ SHOULD be minimal and read-only,
-   and their execution time SHOULD be limited.
+   An implementation MAY define its own functions.
+   An implementation MAY allow custom functions to be defined by users.
+
+   Function access to the _formatting context_ MUST be minimal and read-only,
+   and execution time SHOULD be limited.
+   
+   Implementation-defined _functions_ SHOULD use an implementation-defined _namespace_.
 
 5. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
    If the call fails or does not return a valid value,
    emit a Resolution error and use a _fallback value_ for the _expression_.
+
 
 ### Fallback Resolution
 
@@ -255,13 +271,13 @@ The _fallback value_ depends on the contents of the _expression_:
   > Example: `$user`
 
 - _expression_ with no _operand_:
-  the _function_ starting sigil followed by its _name_
+  the _function_ starting sigil followed by its _identifier_
 
   > Examples: `:platform`, `+tag`, `-tag`
 
 - Otherwise: The U+FFFD REPLACEMENT CHARACTER `�` character
 
-_Option_ names and values are not included in the _fallback value_.
+_Option_ identifiers and values are not included in the _fallback value_.
 
 When an error occurs in an _expression_ with a _variable_ _operand_
 and the _variable_ refers to a local _declaration_,
@@ -817,7 +833,7 @@ These are divided into the following categories:
     > }}
     > ```
 
-  - A **Duplicate Option Name error** occurs when the same _name_
+  - A **Duplicate Option Name error** occurs when the same _identifier_
     appears on the left-hand side
     of more than one _option_ in the same _expression_.
 
