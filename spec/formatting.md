@@ -262,26 +262,6 @@ An _expression_ fails to resolve when:
 
 The _fallback value_ depends on the contents of the _expression_:
 
-- _expression_ with _annotation_ and no _operand_:
-  - If the _annotation_ is a _function_ _annotation_:
-    the _annotation_ starting sigil followed by its _identifier_
-
-    > Examples:
-    > In a context where `:func` fails to resolve, `{:func}` resolves to the _fallback value_ `:func`.
-    > In a context where `:ns:func` fails to resolve, `{:ns:func}` resolves to the _fallback value_ `:ns:func`.
-
-  - If the non-_function_ _annotation_ consists of a _sigil_-prefixed _identifier_
-    optionally followed by a whitespace-prefixed tail:
-    the _annotation_ starting sigil followed by that _identifier_
-
-    > Examples:
-    > In any context, `{@reserved}` and `{@reserved |...|}` both resolve to the _fallback value_ `@reserved`.
-
-  - Otherwise: the U+FFFD REPLACEMENT CHARACTER `�`
-
-    > Examples:
-    > In any context, `{@reserved\\}` and `{? reserved ?}` both resolve to the _fallback value_ `�`.
-
 - _expression_ with _literal_ _operand_:
   U+007C VERTICAL LINE `|`
   followed by the value of the _literal_
@@ -295,33 +275,52 @@ The _fallback value_ depends on the contents of the _expression_:
   > `{|C:\\| :func}` resolves to the _fallback value_ `|C:\\|`.
   > In any context, `{|| @reserved}` resolves to the _fallback value_ `||`.
 
-- _expression_ with _variable_ _operand_ (with or without an _annotation_):
-  - If the _variable_ refers to a local _declaration_:
-    the _value_ to which it resolves (which may already be a _fallback value_)
+- _expression_ with _variable_ _operand_ referring to a local _declaration_ (with or without an _annotation_):
+  the _value_ to which it resolves (which may already be a _fallback value_)
 
-    > Examples:
-    > In a context where `:func` fails to resolve,
-    > the _pattern_'s _expression_ in `.local $var={|val|} {{{$val :func}}}`
-    > resolves to the _fallback value_ `|val|` and the message formats to `{|val|}`.
-    > In a context where `:now` fails to resolve but `:datetime` does not,
-    > the _pattern_'s _expression_ in
-    > ```
-    > .local $t = {:now format=iso8601}
-    > .local $pretty_t = {$t :datetime}
-    > {{{$pretty_t}}}
-    > ```
-    > (transitively) resolves to the _fallback value_ `:now` and
-    > the message formats to `{:now}`.
+  > Examples:
+  > In a context where `:func` fails to resolve,
+  > the _pattern_'s _expression_ in `.local $var={|val|} {{{$val :func}}}`
+  > resolves to the _fallback value_ `|val|` and the message formats to `{|val|}`.
+  > In a context where `:now` fails to resolve but `:datetime` does not,
+  > the _pattern_'s _expression_ in
+  > ```
+  > .local $t = {:now format=iso8601}
+  > .local $pretty_t = {$t :datetime}
+  > {{{$pretty_t}}}
+  > ```
+  > (transitively) resolves to the _fallback value_ `:now` and
+  > the message formats to `{:now}`.
 
-  - Otherwise: U+0024 DOLLAR SIGN `$` followed by the _name_ of the _variable_
+- _expression_ with _variable_ _operand_ not referring to a local _declaration_ (with or without an _annotation_):
+  U+0024 DOLLAR SIGN `$` followed by the _name_ of the _variable_
 
-    > Examples:
-    > In a context where `$var` fails to resolve, `{$var}` and `{$var :number}` and `{$var @reserved}`
-    > all resolve to the _fallback value_ `$var`.
-    > In a context where `:func` fails to resolve,
-    > the _pattern_'s _expression_ in `.input $arg {{{$arg :func}}}`
-    > resolves to the _fallback value_ `$arg` and
-    > the message formats to `{$arg}`.
+  > Examples:
+  > In a context where `$var` fails to resolve, `{$var}` and `{$var :number}` and `{$var @reserved}`
+  > all resolve to the _fallback value_ `$var`.
+  > In a context where `:func` fails to resolve,
+  > the _pattern_'s _expression_ in `.input $arg {{{$arg :func}}}`
+  > resolves to the _fallback value_ `$arg` and
+  > the message formats to `{$arg}`.
+
+- _function_ _expression_ with no _operand_:
+  the _function_ starting sigil followed by its _identifier_
+
+  > Examples:
+  > In a context where `:func` fails to resolve, `{:func}` resolves to the _fallback value_ `:func`.
+  > In a context where `:ns:func` fails to resolve, `{:ns:func}` resolves to the _fallback value_ `:ns:func`.
+
+- non-_function_ _annotation_ (i.e., _private-use_ or _reserved_) consisting of a _sigil_-prefixed _identifier_
+  optionally followed by a whitespace-prefixed tail:
+  the _annotation_ starting sigil followed by that _identifier_
+
+  > Examples:
+  > In any context, `{@reserved}` and `{@reserved |...|}` both resolve to the _fallback value_ `@reserved`.
+
+- Otherwise: the U+FFFD REPLACEMENT CHARACTER `�`
+
+  > Examples:
+  > In any context, `{@reserved\\}` and `{? reserved ?}` both resolve to the _fallback value_ `�`.
 
 _Option_ _identifiers_ and values are not included in the _fallback value_.
 
