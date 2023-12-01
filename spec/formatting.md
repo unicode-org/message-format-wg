@@ -262,12 +262,11 @@ An _expression_ fails to resolve when:
 
 The _fallback value_ depends on the contents of the _expression_:
 
-- _expression_ with _literal_ _operand_:
+- _expression_ with _literal_ _operand_ (_quoted_ or _unquoted_):
   U+007C VERTICAL LINE `|`
   followed by the value of the _literal_
   with escaping applied to U+005C REVERSE SOLIDUS `\` and U+007C VERTICAL LINE `|`,
   and then by U+007C VERTICAL LINE `|`.
-  The same representation is used for both _quoted_ and _unquoted_ values.
 
   > Examples:
   > In a context where `:func` fails to resolve,
