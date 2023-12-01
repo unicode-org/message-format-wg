@@ -180,8 +180,10 @@ Each function defined in the registry MUST define its "formatted-parts" represen
 A function can define either a unitary string `value` or a `parts` representation.
 Where possible, a function SHOULD provide a `parts` representation
 if its output might reasonably consist of multiple fields.
-In most cases, these sub-parts should not need fields beyond their `type` and a string `value`,
-Where necessary, other `value` types may be used and other fields such as a `source` included.
+In most cases, these sub-parts should not need fields beyond their `type` and a string `value`.
+Where necessary, other `value` types may be used
+and other fields such as a `source` included in the sub-parts,
+and additional fields included in the `MessageExpressionPart`.
 
 For example, `:datetime` and `:number` formatters could use the following formatted-parts representations.
 In many implementations, these could be further narrowed to only use `string` values.
