@@ -183,7 +183,7 @@ if its output might reasonably consist of multiple fields.
 In most cases, these sub-parts should not need fields beyond their `type` and a string `value`.
 Where necessary, other `value` types may be used
 and other fields such as a `source` included in the sub-parts,
-and additional fields included in the `MessageExpressionPart`.
+and additional fields may be included in the `MessageExpressionPart`.
 
 For example, `:datetime` and `:number` formatters could use the following formatted-parts representations.
 In many implementations, these could be further narrowed to only use `string` values.
