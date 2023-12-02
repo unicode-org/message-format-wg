@@ -140,7 +140,7 @@ simple-start = simple-start-char / text-escape / placeholder
 
 A **_<dfn>complex message</dfn>_** is any _message_ that contains _declarations_,
 a _matcher_, or both.
-A _complex message_ always begins with a keyword that has a `.` prefix
+A _complex message_ always begins with either a keyword that has a `.` prefix or a _quoted pattern_
 and consists of:
 
 1. an optional list of _declarations_, followed by
@@ -668,8 +668,8 @@ This section defines common elements used to construct _messages_.
 
 A **_<dfn>keyword</dfn>_** is a reserved token that has a unique meaning in the _message_ syntax.
 
-The following three keywords are reserved: `.input`, `.local`, and `.match`.
-Reserved keywords are always lowercase and start with U+002E FULL STOP `.`.
+The following three keywords are defined: `.input`, `.local`, and `.match`.
+Keywords are always lowercase and start with U+002E FULL STOP `.`.
 
 ```abnf
 input = %s".input"

@@ -65,7 +65,7 @@ The `name` of an `InputDeclaration` MUST be the same
 as the `name` in the `VariableRef` of its `VariableExpression` `value`.
 
 An `UnsupportedStatement` represents a statement not supported by the implementation.
-Its `keyword` is a non-empty string of a-z contents (i.e. not including the initial `.`).
+Its `keyword` is a non-empty string name (i.e. not including the initial `.`).
 If not empty, the `body` is the "raw" value (i.e. escape sequences are not processed)
 starting after the keyword and up to the first _expression_,
 not including leading or trailing whitespace.
@@ -120,7 +120,7 @@ interface CatchallKey {
 ## Patterns
 
 Each `Pattern` represents a linear sequence, without selectors.
-Each element of the `body` array MUST either be a string or an `Expression` object.
+Each element of the `body` array MUST either be a non-empty string or an `Expression` object.
 String values represent literal _text_,
 while `Expression` wraps each of the potential _expression_ shapes.
 The `body` strings are the "cooked" _text_ values, i.e. escape sequences are processed.
