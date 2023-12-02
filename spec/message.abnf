@@ -13,7 +13,7 @@ local-declaration = local s variable [s] "=" [s] expression
 complex-body = quoted-pattern / matcher
 quoted-pattern = "{{" pattern "}}"
 
-matcher = (match-statement / reserved-statement) 1*([s] variant)
+matcher = match-statement 1*([s] variant)
 match-statement = match 1*([s] selector)
 selector = expression
 variant = key *(s key) [s] quoted-pattern

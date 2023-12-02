@@ -29,18 +29,8 @@ In the syntax,
 a `PatternMessage` may be represented either as a _simple message_ or as a _complex message_,
 depending on whether it has declarations and if its `pattern` is allowed in a _simple message_.
 
-While this specification currently only supports `"match"` selectors,
-the _matcher_ syntax may include a _reserved statement_,
-allowing for future expansion.
-In the data model, this is represented as a `SelectMessage` with a string `type`
-that is not `"input"`, `"local"`, `"match"`, or `"message"`
-(corresponding to a concatenation of the `UnsupportedStatement` `keyword` and `body`),
-and with `selectors` matching the _reserved statement_ _expressions_.
-As TypeScript does not support [negated types](https://github.com/microsoft/TypeScript/issues/4196#issuecomment-1601404332),
-that is left out from here but included in the JSON Schema and DTD definitions.
-
 ```ts
-type Message = PatternMessage | SelectMessage<"match">;
+type Message = PatternMessage | SelectMessage;
 
 interface PatternMessage {
   type: "message";
@@ -48,8 +38,8 @@ interface PatternMessage {
   pattern: Pattern;
 }
 
-interface SelectMessage<T extends string> {
-  type: T;
+interface SelectMessage {
+  type: "select";
   declarations: Declaration[];
   selectors: Expression[];
   variants: Variant[];

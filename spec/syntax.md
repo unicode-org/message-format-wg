@@ -337,11 +337,8 @@ satisfied:
 - The number of _keys_ on each _variant_ MUST be equal to the number of _selectors_.
 - At least one _variant_ MUST exist whose _keys_ are all equal to the "catch-all" key `*`.
 
-For compatibility with later MessageFormat 2 specification versions,
-a _reserved statement_ MAY also be used instead of a `match` statement.
-
 ```abnf
-matcher = (match-statement / reserved-statement) 1*([s] variant)
+matcher = match-statement 1*([s] variant)
 match-statement = match 1*([s] selector)
 ```
 

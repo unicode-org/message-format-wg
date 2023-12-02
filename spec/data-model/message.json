@@ -175,12 +175,7 @@
     "select": {
       "type": "object",
       "properties": {
-        "type": {
-          "type": "string",
-          "not": {
-            "enum": ["input", "local", "message"]
-          }
-        },
+        "type": { "const": "select" },
         "declarations": { "$ref": "#/$defs/declarations" },
         "selectors": {
           "type": "array",
