@@ -640,7 +640,7 @@ these are reserved for future standardization.
 Implementations MUST NOT remove or alter the contents of a _reserved annotation_.
 
 While a reserved sequence is technically "well-formed",
-unrecognized reserved sequences have no meaning and MAY result in errors during formatting.
+unrecognized _reserved-annotations_ or _private-use-annotations_ have no meaning.
 
 ```abnf
 reserved-annotation = reserved-annotation-start reserved-body
