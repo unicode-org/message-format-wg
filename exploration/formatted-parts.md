@@ -1,6 +1,12 @@
 # Formatted Parts
 
-Status: **Proposed**
+Status: **Not Accepted**
+
+In the 2023-12-04 teleconference, the working group decided not
+to include format to parts as a normative portion of the MFv2
+specification.
+The materials in this design document may be valuable to implementers
+and could serve as the basis for a reasonable implementation.
 
 <details>
 	<summary>Metadata</summary>
