@@ -25,6 +25,10 @@ Two equivalent definitions of the data model are also provided:
 A `SelectMessage` corresponds to a syntax message that includes _selectors_.
 A message without _selectors_ and with a single _pattern_ is represented by a `PatternMessage`.
 
+In the syntax,
+a `PatternMessage` may be represented either as a _simple message_ or as a _complex message_,
+depending on whether it has declarations and if its `pattern` is allowed in a _simple message_.
+
 ```ts
 type Message = PatternMessage | SelectMessage;
 
@@ -43,14 +47,46 @@ interface SelectMessage {
 ```
 
 Each message _declaration_ is represented by a `Declaration`,
-which connects the `name` of the _variable_
+which connects the `name` of a _variable_
 with its _expression_ `value`.
 The `name` does not include the initial `$` of the _variable_.
 
+The `name` of an `InputDeclaration` MUST be the same
+as the `name` in the `VariableRef` of its `VariableExpression` `value`.
+
+An `UnsupportedStatement` represents a statement not supported by the implementation.
+Its `keyword` is a non-empty string name (i.e. not including the initial `.`).
+If not empty, the `body` is the "raw" value (i.e. escape sequences are not processed)
+starting after the keyword and up to the first _expression_,
+not including leading or trailing whitespace.
+The non-empty `expressions` correspond to the trailing _expressions_ of the _reserved statement_.
+
+> **Note**
+> Be aware that future versions of this specification
+> might assign meaning to _reserved statement_ values.
+> This would result in new interfaces being added to
+> this data model.
+
 ```ts
-interface Declaration {
+type Declaration = InputDeclaration | LocalDeclaration | UnsupportedStatement;
+
+interface InputDeclaration {
+  type: "input";
+  name: string;
+  value: VariableExpression;
+}
+
+interface LocalDeclaration {
+  type: "local";
   name: string;
   value: Expression;
+}
+
+interface UnsupportedStatement {
+  type: "unsupported-statement";
+  keyword: string;
+  body?: string;
+  expressions: Expression[];
 }
 ```
 
@@ -74,28 +110,35 @@ interface CatchallKey {
 ## Patterns
 
 Each `Pattern` represents a linear sequence, without selectors.
-Each element of the sequence MUST have either a `Text` or an `Expression` shape.
-`Text` represents literal _text_,
+Each element of the `body` array MUST either be a non-empty string or an `Expression` object.
+String values represent literal _text_,
 while `Expression` wraps each of the potential _expression_ shapes.
-The `value` of `Text` is the "cooked" value (i.e. escape sequences are processed).
+The `body` strings are the "cooked" _text_ values, i.e. escape sequences are processed.
 
-Implementations MUST NOT rely on the set of `Expression` `body` values being exhaustive,
+Implementations MUST NOT rely on the set of `Expression` interfaces being exhaustive,
 as future versions of this specification MAY define additional expressions.
-A `body` with an unrecognized value SHOULD be treated as an `Unsupported` value.
+An `Expression` `func` with an unrecognized value SHOULD be treated as an `UnsupportedExpression` value.
 
 ```ts
 interface Pattern {
-  body: Array<Text | Expression>;
+  body: Array<string | Expression>;
 }
 
-interface Text {
-  type: "text";
-  value: string;
+type Expression = LiteralExpression | VariableExpression | FunctionExpression;
+
+interface LiteralExpression {
+  arg: Literal;
+  func?: FunctionRef | UnsupportedExpression;
 }
 
-interface Expression {
-  type: "expression";
-  body: Literal | VariableRef | FunctionRef | Unsupported;
+interface VariableExpression {
+  arg: VariableRef;
+  func?: FunctionRef | UnsupportedExpression;
+}
+
+interface FunctionExpression {
+  arg?: never;
+  func: FunctionRef | UnsupportedExpression;
 }
 ```
 
@@ -148,8 +191,8 @@ interface Option {
 }
 ```
 
-An `Unsupported` represents an _expression_ with a
-_reserved_ _annotation_ or a _private-use_ _annotation_ not supported
+An `UnsupportedExpression` represents an _expression_ with a
+_reserved annotation_ or a _private-use annotation_ not supported
 by the implementation.
 The `sigil` corresponds to the starting sigil of the _annotation_.
 The `source` is the "raw" value (i.e. escape sequences are not processed)
@@ -157,22 +200,22 @@ and does not include the starting `sigil`.
 
 > **Note**
 > Be aware that future versions of this specification
-> might assign meaning to _reserved_ `sigil` values.
+> might assign meaning to _reserved annotation_ `sigil` values.
 > This would result in new interfaces being added to
 > this data model.
 
 If the _expression_ includes a _literal_ or _variable_ before the _annotation_,
 it is included as the `operand`.
 
-When parsing the syntax of a _message_ that includes a _private-use_ _annotation_
+When parsing the syntax of a _message_ that includes a _private-use annotation_
 supported by the implementation,
 the implementation SHOULD represent it in the data model
 using an interface appropriate for the semantics and meaning
 that the implementation attaches to that _annotation_.
 
 ```ts
-interface Unsupported {
-  type: "unsupported";
+interface UnsupportedExpression {
+  type: "unsupported-expression";
   sigil: "!" | "@" | "#" | "%" | "^" | "&" | "*" | "<" | ">" | "/" | "?" | "~";
   source: string;
   operand?: Literal | VariableRef;
