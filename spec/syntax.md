@@ -735,7 +735,7 @@ or as the name for for a _variable_
 or the value of an _unquoted_ _literal_.
 
 _Variable_ names are prefixed with `$`.
-for a _function_ (prefixed with `:`, `+` or `-`).
+_Function_ names are prefixed with `:`, `+` or `-`.
 
 Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
 [NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
