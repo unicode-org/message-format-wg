@@ -69,6 +69,11 @@ only the first one is used.
 Matching-function signatures additionally include one or more `<match>` elements
 to define the keys against which they can match when used as selectors.
 
+Functions may also include `<alias>` definitions,
+which provide shorthands for commonly used option baskets.
+An _alias name_ may be used equivalently to a _function name_ in messages.
+Its `<setOption>` values are always set, and may not be overridden in message annotations.
+
 ## Example
 
 The following `registry.xml` is an example of a registry file
@@ -120,6 +125,12 @@ For the sake of brevity, only `locales="en"` is considered.
             <option name="style" readonly="true" values="decimal currency percent unit" default="decimal"/>
             <option name="currency" readonly="true" validationRule="currencyCode"/>
         </formatSignature>
+
+        <alias name="integer">
+          <description>Locale-sensitive integral number formatting</description>
+          <setOption name="maximumFractionDigits" value="0" />
+          <setOption name="style" value="decimal" />
+        </alias>
     </function>
 </registry>
 ```
@@ -127,11 +138,9 @@ For the sake of brevity, only `locales="en"` is considered.
 Given the above description, the `:number` function is defined to work both in a selector and a placeholder:
 
 ```
-{{
-match {$count :number}
-when 1 {{One new message}}
-when * {{{$count :number} new messages}}
-}}
+.match {$count :number}
+1 {{One new message}}
+* {{{$count :number} new messages}}
 ```
 
 Furthermore,
@@ -202,8 +211,6 @@ The following message references the second signature of `:adjective`,
 which only expects the `accord` option:
 
 >```
-> {{
->  input {$object :noun case=nominative}
->  {{You see {$color :adjective article=indefinite accord=$object} {$object}!}}
-> }}
+> .input {$object :noun case=nominative}
+> {{You see {$color :adjective article=indefinite accord=$object} {$object}!}}
 >```

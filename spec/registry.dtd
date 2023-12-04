@@ -1,6 +1,6 @@
 <!ELEMENT registry (function|validationRule)*>
 
-<!ELEMENT function (description,(formatSignature|matchSignature)+)>
+<!ELEMENT function (description,(formatSignature|matchSignature|alias)+)>
 <!ATTLIST function
     name           NMTOKEN  #REQUIRED
 >
@@ -47,4 +47,16 @@
 <!ELEMENT override (input?,option*)>
 <!ATTLIST override
     locales        NMTOKENS  #REQUIRED
+>
+
+<!ELEMENT alias (description,setOption*)>
+<!ATTLIST alias
+    name           NMTOKEN  #REQUIRED
+    supports       (format|match|all)  "all"
+>
+
+<!ELEMENT setOption EMPTY>
+<!ATTLIST setOption
+    name           NMTOKEN #REQUIRED
+    value          CDATA #REQUIRED
 >

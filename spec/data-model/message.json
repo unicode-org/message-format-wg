@@ -32,7 +32,6 @@
         "type": { "const": "function" },
         "kind": { "enum": ["open", "close", "value"] },
         "name": { "type": "string" },
-        "operand": { "$ref": "#/$defs/value" },
         "options": {
           "type": "array",
           "items": {
@@ -47,69 +46,110 @@
       },
       "required": ["type", "kind", "name"]
     },
-    "unsupported": {
+    "unsupported-expression": {
       "type": "object",
       "properties": {
-        "type": { "const": "unsupported" },
+        "type": { "const": "unsupported-expression" },
         "sigil": {
           "enum": ["!", "@", "#", "%", "^", "&", "*", "<", ">", "?", "~"]
         },
-        "source": { "type": "string" },
-        "operand": { "$ref": "#/$defs/value" }
+        "source": { "type": "string" }
       },
       "required": ["type", "sigil", "source"]
     },
+    "annotation": {
+      "oneOf": [
+        { "$ref": "#/$defs/function" },
+        { "$ref": "#/$defs/unsupported-expression" }
+      ]
+    },
 
-    "text": {
+    "literal-expression": {
       "type": "object",
       "properties": {
-        "type": { "const": "text" },
-        "value": { "type": "string" }
+        "arg": { "$ref": "#/$defs/literal" },
+        "func": { "$ref": "#/$defs/annotation" }
       },
-      "required": ["type", "value"]
+      "required": ["arg"]
+    },
+    "variable-expression": {
+      "type": "object",
+      "properties": {
+        "arg": { "$ref": "#/$defs/variable" },
+        "func": { "$ref": "#/$defs/annotation" }
+      },
+      "required": ["arg"]
+    },
+    "function-expression": {
+      "type": "object",
+      "properties": {
+        "func": { "$ref": "#/$defs/annotation" }
+      },
+      "required": ["func"]
     },
     "expression": {
-      "type": "object",
-      "properties": {
-        "type": { "const": "expression" },
-        "body": {
-          "oneOf": [
-            { "$ref": "#/$defs/literal" },
-            { "$ref": "#/$defs/variable" },
-            { "$ref": "#/$defs/function" },
-            { "$ref": "#/$defs/unsupported" }
-          ]
-        }
-      },
-      "required": ["type", "body"]
+      "oneOf": [
+        { "$ref": "#/$defs/literal-expression" },
+        { "$ref": "#/$defs/variable-expression" },
+        { "$ref": "#/$defs/function-expression" }
+      ]
     },
+
     "pattern": {
       "type": "object",
       "properties": {
         "body": {
           "type": "array",
           "items": {
-            "oneOf": [
-              { "$ref": "#/$defs/text" },
-              { "$ref": "#/$defs/expression" }
-            ]
+            "oneOf": [{ "type": "string" }, { "$ref": "#/$defs/expression" }]
           }
         }
       },
       "required": ["body"]
     },
 
+    "input-declaration": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "input" },
+        "name": { "type": "string" },
+        "value": { "$ref": "#/$defs/variable-expression" }
+      },
+      "required": ["type", "name", "value"]
+    },
+    "local-declaration": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "local" },
+        "name": { "type": "string" },
+        "value": { "$ref": "#/$defs/expression" }
+      },
+      "required": ["type", "name", "value"]
+    },
+    "unsupported-statement": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "unsupported-statement" },
+        "keyword": { "type": "string" },
+        "body": { "type": "string" },
+        "expressions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/expression" }
+        }
+      },
+      "required": ["type", "keyword", "expressions"]
+    },
     "declarations": {
       "type": "array",
       "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "value": { "$ref": "#/$defs/expression" }
-        },
-        "required": ["target", "value"]
+        "oneOf": [
+          { "$ref": "#/$defs/input-declaration" },
+          { "$ref": "#/$defs/local-declaration" },
+          { "$ref": "#/$defs/unsupported-statement" }
+        ]
       }
     },
+
     "variant-key": {
       "oneOf": [
         { "$ref": "#/$defs/literal" },
