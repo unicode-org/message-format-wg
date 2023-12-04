@@ -119,7 +119,8 @@ and a _function_, _private-use annotation_, or _reserved annotation_,
 the resolved value of the _expression_ is determined as follows:
 
 If the _expression_ contains a _reserved annotation_,
-an `Unsupported Expression` error is emitted and a fallback value is used as its value.
+an Unsupported Expression error is emitted and
+a _fallback value_ is used as the resolved value of the _expression_.
 
 Else, if the _expression_ contains a _private-use annotation_,
 its resolved value is defined according to the implementation's specification.
@@ -177,7 +178,7 @@ whether its value was originally _quoted_ or _unquoted_.
 > For example,
 > the _option_ `foo=42` and the _option_ `foo=|42|` are treated as identical.
 
-The resolution of a _text_ or _literal_ token MUST always succeed.
+The resolution of a _text_ or _literal_ MUST resolve to a string.
 
 ### Variable Resolution
 
@@ -248,11 +249,12 @@ the following steps are taken:
 
 ### Fallback Resolution
 
-A **_fallback value_** is the resolved value emitted when an _expression_ cannot be resolved.
+A **_fallback value_** is the resolved value for an _expression_ that fails to resolve.
 
 An _expression_ fails to resolve when:
 
-- A _variable_ _operand_ fails to resolve.
+- A _variable_ used as an _operand_ (with or without an _annotation_) fails to resolve.
+  * Note that this does not include a _variable_ used as an _option_ value.
 - A _function_ _annotation_ fails to resolve.
 - A _private-use annotation_ is unsupported by the implementation or if
   a _private-use annotation_ fails to resolve.
@@ -260,49 +262,73 @@ An _expression_ fails to resolve when:
 
 The _fallback value_ depends on the contents of the _expression_:
 
-- _expression_ with _literal_ _operand_: U+007C VERTICAL LINE `|`
-  followed by the value of the Literal,
+- _expression_ with _literal_ _operand_ (_quoted_ or _unquoted_):
+  U+007C VERTICAL LINE `|`
+  followed by the value of the _literal_
+  with escaping applied to U+005C REVERSE SOLIDUS `\` and U+007C VERTICAL LINE `|`,
   and then by U+007C VERTICAL LINE `|`.
-  The same representation is used for both _quoted_ and _unquoted_ values.
 
-  > Examples: `|your horse|`, `|42|`
+  > Examples:
+  > In a context where `:func` fails to resolve,
+  > `{42 :func}` resolves to the _fallback value_ `|42|` and
+  > `{|C:\\| :func}` resolves to the _fallback value_ `|C:\\|`.
+  > In any context, `{|| @reserved}` resolves to the _fallback value_ `||`.
 
-- _expression_ with _variable_ _operand_: U+0024 DOLLAR SIGN `$`
-  followed by the _variable_ _name_ of the _operand_
+- _expression_ with _variable_ _operand_ referring to a local _declaration_ (with or without an _annotation_):
+  the _value_ to which it resolves (which may already be a _fallback value_)
 
-  > Example: `$user`
+  > Examples:
+  > In a context where `:func` fails to resolve,
+  > the _pattern_'s _expression_ in `.local $var={|val|} {{{$val :func}}}`
+  > resolves to the _fallback value_ `|val|` and the message formats to `{|val|}`.
+  > In a context where `:now` fails to resolve but `:datetime` does not,
+  > the _pattern_'s _expression_ in
+  > ```
+  > .local $t = {:now format=iso8601}
+  > .local $pretty_t = {$t :datetime}
+  > {{{$pretty_t}}}
+  > ```
+  > (transitively) resolves to the _fallback value_ `:now` and
+  > the message formats to `{:now}`.
 
-- _expression_ with no _operand_:
+- _expression_ with _variable_ _operand_ not referring to a local _declaration_ (with or without an _annotation_):
+  U+0024 DOLLAR SIGN `$` followed by the _name_ of the _variable_
+
+  > Examples:
+  > In a context where `$var` fails to resolve, `{$var}` and `{$var :number}` and `{$var @reserved}`
+  > all resolve to the _fallback value_ `$var`.
+  > In a context where `:func` fails to resolve,
+  > the _pattern_'s _expression_ in `.input $arg {{{$arg :func}}}`
+  > resolves to the _fallback value_ `$arg` and
+  > the message formats to `{$arg}`.
+
+- _function_ _expression_ with no _operand_:
   the _function_ starting sigil followed by its _identifier_
 
-  > Examples: `:platform`, `+tag`, `-tag`
+  > Examples:
+  > In a context where `:func` fails to resolve, `{:func}` resolves to the _fallback value_ `:func`.
+  > In a context where `:ns:func` fails to resolve, `{:ns:func}` resolves to the _fallback value_ `:ns:func`.
 
-- Otherwise: The U+FFFD REPLACEMENT CHARACTER `�` character
+- unsupported _private-use annotation_ or _reserved annotation_ with no _operand_:
+  the _annotation_ starting sigil
 
-_Option_ identifiers and values are not included in the _fallback value_.
+  > Examples:
+  > In any context, `{@reserved}` and `{@reserved |...|}` both resolve to the _fallback value_ `@`.
 
-When an error occurs in an _expression_ with a _variable_ _operand_
-and the _variable_ refers to a local _declaration_,
-the _fallback value_ is formatted based on the _expression_
-on the right-hand side of the _declaration_,
-rather than the _expression_ in the _selector_ or _pattern_.
+- supported _private-use annotation_ with no _operand_:
+  the _annotation_ starting sigil, optionally followed by implementation-defined details
+  conforming with patterns in the other cases (such as quoting literals).
+  If details are provided, they SHOULD NOT leak potentially private information.
 
-> For example,
-> in a context in which the function `:func` fails to resolve,
-> attempting to format either of the following messages:
->
-> ```
-> .local $var = {|horse| :func}
-> {{The value is {$var}.}}
-> ```
->
-> ```
-> .local $var = {|horse|}
-> {{The value is {$var :func}.}}
-> ```
->
-> would in both cases result in the _pattern_ _expression_
-> resolving to a _fallback value_ of `|horse|`.
+  > Examples:
+  > In a context where `^` expressions are used for comments, `{^▽^}` might resolve to the _fallback value_ `^`.
+  > In a context where `&` expressions are _function_-like macro invocations, `{&foo |...|}` might resolve to the _fallback value_ `&foo`.
+
+- Otherwise: the U+FFFD REPLACEMENT CHARACTER `�`
+
+  This is not currently used by any expression, but may apply in future revisions.
+
+_Option_ _identifiers_ and values are not included in the _fallback value_.
 
 _Pattern selection_ is not supported for _fallback values_.
 
@@ -960,7 +986,7 @@ SHOULD prioritise Syntax and Data Model errors over others.
 
 When an error occurs in the resolution of an _option_,
 the surrounding _expression_ MUST be processed as if the _option_ were not present.
-This MAY allow the _expression_ to resolve to a non-fallback _value_,
+This can result in the _expression_ resolving to a value that is not a _fallback value_,
 though an error MUST still be emitted.
 
 When an error occurs within a _selector_,
