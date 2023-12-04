@@ -699,10 +699,9 @@ Any _unquoted_ literal MAY be _quoted_.
 Implementations MUST NOT distinguish between _quoted_ and _unquoted_ literals
 that have the same sequence of code points.
 
-_Unquoted_ literals can contain a _name_
-or consist of a _number-literal_.
-A _number-literal_ uses the same syntax as JSON for encoding
-number values.
+_Unquoted_ literals can contain a _name_ or consist of a _number-literal_.
+A _number-literal_ uses the same syntax as JSON and is intended for the encoding 
+of number values in _operands_ or _options_, or as _keys_ for _variants_.
 
 ```abnf
 literal = quoted / unquoted
