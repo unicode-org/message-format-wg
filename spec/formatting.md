@@ -309,17 +309,24 @@ The _fallback value_ depends on the contents of the _expression_:
   > In a context where `:func` fails to resolve, `{:func}` resolves to the _fallback value_ `:func`.
   > In a context where `:ns:func` fails to resolve, `{:ns:func}` resolves to the _fallback value_ `:ns:func`.
 
-- non-_function_ _annotation_ (i.e., _private-use_ or _reserved_) consisting of a _sigil_-prefixed _identifier_
-  optionally followed by a whitespace-prefixed tail:
-  the _annotation_ starting sigil followed by that _identifier_
+- unsupported _private-use annotation_ or _reserved annotation_ with no _operand_:
+  the _annotation_ starting sigil
 
   > Examples:
-  > In any context, `{@reserved}` and `{@reserved |...|}` both resolve to the _fallback value_ `@reserved`.
+  > In any context, `{@reserved}` and `{@reserved |...|}` both resolve to the _fallback value_ `@`.
+
+- supported _private-use annotation_ with no _operand_:
+  the _annotation_ starting sigil, optionally followed by implementation-defined details
+  conforming with patterns in the other cases (such as quoting literals).
+  If details are provided, they SHOULD NOT leak potentially private information.
+
+  > Examples:
+  > In a context where `^` expressions are used for comments, `{^▽^}` might resolve to the _fallback value_ `^`.
+  > In a context where `&` expressions are _function_-like macro invocations, `{&foo |...|}` might resolve to the _fallback value_ `&foo`.
 
 - Otherwise: the U+FFFD REPLACEMENT CHARACTER `�`
 
-  > Examples:
-  > In any context, `{@reserved\\}` and `{? reserved ?}` both resolve to the _fallback value_ `�`.
+  This is not currently used by any expression, but may apply in future revisions.
 
 _Option_ _identifiers_ and values are not included in the _fallback value_.
 
