@@ -137,7 +137,10 @@ when * {{{$count :number} new messages}}
 Furthermore,
 `:number`'s `<matchSignature>` contains two `<match>` elements
 which allow the validation of variant keys.
-The first element with `locales` matching the current locale
+The element whose `locales` best matches the current locale
+using resource item [lookup](https://unicode.org/reports/tr35/#Lookup) from LDML is used.
+An element with no `locales` attribute is the default
+(and is considered equivalent to the `root` locale).
 (or an element with no `locales`) is used:
 
 - `<match locales="en" values="one two few other" .../>` can be used in locales like `en` and `en-GB`
