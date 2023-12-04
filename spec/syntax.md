@@ -731,7 +731,7 @@ _Function_ _identifiers_ are prefixed with `:`, `+`, or `-`.
 _Option_ _identifiers_ have no prefix.
 
 A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_ 
-or as the name for for a _variable_
+or as the name for a _variable_
 or the value of an _unquoted_ _literal_.
 
 _Variable_ names are prefixed with `$`.
