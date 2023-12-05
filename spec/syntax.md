@@ -699,10 +699,9 @@ Any _unquoted_ literal MAY be _quoted_.
 Implementations MUST NOT distinguish between _quoted_ and _unquoted_ literals
 that have the same sequence of code points.
 
-_Unquoted_ literals have a much more restricted range that
-is intentionally close to the XML's [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken),
-with the restriction that it MUST NOT start with `-` or `:`,
-as those would conflict with _function_ start characters.
+_Unquoted_ literals can contain a _name_ or consist of a _number-literal_.
+A _number-literal_ uses the same syntax as JSON and is intended for the encoding 
+of number values in _operands_ or _options_, or as _keys_ for _variants_.
 
 ```abnf
 literal = quoted / unquoted
@@ -713,9 +712,9 @@ quoted-char    = %x0-5B         ; omit \
                / %x7D-D7FF      ; omit surrogates
                / %xE000-10FFFF
 
-unquoted       = unquoted-start *name-char
-unquoted-start = name-start / DIGIT / "."
-               / %xB7 / %x300-36F / %x203F-2040
+unquoted       = name
+               / number-literal
+number-literal = ["-"] (0 / ([1-9] *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
 ```
 
 ### Names and Identifiers
@@ -732,10 +731,11 @@ _Function_ _identifiers_ are prefixed with `:`, `+`, or `-`.
 _Option_ _identifiers_ have no prefix.
 
 A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_ 
-or as the name for for a _variable_.
+or as the name for a _variable_
+or the value of an _unquoted_ _literal_.
 
 _Variable_ names are prefixed with `$`.
-for a _function_ (prefixed with `:`, `+` or `-`),
+_Function_ names are prefixed with `:`, `+` or `-`.
 
 Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
 [NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
