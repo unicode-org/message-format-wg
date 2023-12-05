@@ -49,7 +49,7 @@
     locales        NMTOKENS  #REQUIRED
 >
 
-<!ELEMENT alias (description,setOption*)>
+<!ELEMENT alias (description,setOption*,override*)>
 <!ATTLIST alias
     name           NMTOKEN  #REQUIRED
     supports       (format|match|all)  "all"
