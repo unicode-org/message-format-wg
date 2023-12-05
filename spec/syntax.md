@@ -431,13 +431,21 @@ optionally followed by an _annotation_.
 A **_<dfn>variable-expression</dfn>_** contains a _variable_,
 optionally followed by an _annotation_.
 
-A **_<dfn>function-expression</dfn>_** contains only an _annotation_.
+A **_<dfn>function-expression</dfn>_** contains only a _function_ _annotation_.
+
+A **_<dfn>private-use-expression</dfn>_** contains only a _private-use annotation_.
+
+A **_<dfn>reserved-expression</dfn>_** contains only a _reserved annotation_.
 
 ```abnf
 expression = literal-expression / variable-expression / function-expression
+           / private-use-expression / reserved-expression
 literal-expression = "{" [s] literal [s annotation] [s] "}"
 variable-expression = "{" [s] variable [s annotation] [s] "}"
-function-expression = "{" [s] annotation [s] "}"
+function-expression = "{" [s] function-annotation [s] "}"
+private-use-expression = "{" [s] private-use-annotation [s] "}"
+reserved-expression = "{" [s] reserved-annotation [s] "}"
+function-annotation = function *(s option)
 ```
 
 There are several types of _expression_ that can appear in a _message_.
@@ -476,12 +484,10 @@ Additionally, an _input-declaration_ can contain a _variable-expression_.
 
 An **_<dfn>annotation</dfn>_** is part of an _expression_ containing either
 a _function_ together with its associated _options_, or
-a _reserved annotation_ or a _private-use annotation_.
+a _private-use annotation_ or a _reserved annotation_.
 
 ```abnf
-annotation = (function *(s option))
-           / reserved-annotation
-           / private-use-annotation
+annotation = function-annotation / private-use-annotation / reserved-annotation
 ```
 
 An **_<dfn>operand</dfn>_** is the _literal_ of a _literal-expression_ or

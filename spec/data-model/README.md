@@ -117,28 +117,37 @@ The `body` strings are the "cooked" _text_ values, i.e. escape sequences are pro
 
 Implementations MUST NOT rely on the set of `Expression` interfaces being exhaustive,
 as future versions of this specification MAY define additional expressions.
-An `Expression` `func` with an unrecognized value SHOULD be treated as an `UnsupportedExpression` value.
 
 ```ts
 interface Pattern {
   body: Array<string | Expression>;
 }
 
-type Expression = LiteralExpression | VariableExpression | FunctionExpression;
+type Expression = LiteralExpression | VariableExpression | FunctionExpression |
+                  UnsupportedExpression;
 
 interface LiteralExpression {
+  type: "literal-expression";
   arg: Literal;
-  func?: FunctionRef | UnsupportedExpression;
+  annotation?: FunctionAnnotation | UnsupportedAnnotation;
 }
 
 interface VariableExpression {
+  type: "variable-expression";
   arg: VariableRef;
-  func?: FunctionRef | UnsupportedExpression;
+  annotation?: FunctionAnnotation | UnsupportedAnnotation;
 }
 
 interface FunctionExpression {
+  type: "function-expression";
   arg?: never;
-  func: FunctionRef | UnsupportedExpression;
+  annotation: FunctionAnnotation;
+}
+
+interface UnsupportedExpression {
+  type: "unsupported-expression";
+  arg?: never;
+  annotation: UnsupportedAnnotation;
 }
 ```
 
@@ -166,8 +175,8 @@ interface VariableRef {
 }
 ```
 
-A `FunctionRef` represents an _expression_ with a _function_ _annotation_.
-In a `FunctionRef`,
+A `FunctionAnnotation` represents a _function_ _annotation_.
+In a `FunctionAnnotation`,
 the `kind` corresponds to the starting sigil of a _function_:
 `'open'` for `+`, `'close'` for `-`, and `'value'` for `:`.
 The `name` does not include this starting sigil.
@@ -177,8 +186,8 @@ before the _annotation_ in the _expression_, if present.
 Each _option_ is represented by an `Option`.
 
 ```ts
-interface FunctionRef {
-  type: "function";
+interface FunctionAnnotation {
+  type: "function-annotation";
   kind: "open" | "close" | "value";
   name: string;
   operand?: Literal | VariableRef;
@@ -191,9 +200,8 @@ interface Option {
 }
 ```
 
-An `UnsupportedExpression` represents an _expression_ with a
-_reserved annotation_ or a _private-use annotation_ not supported
-by the implementation.
+An `UnsupportedAnnotation` represents a
+_private-use annotation_ not supported by the implementation or a _reserved annotation_.
 The `sigil` corresponds to the starting sigil of the _annotation_.
 The `source` is the "raw" value (i.e. escape sequences are not processed)
 and does not include the starting `sigil`.
@@ -214,8 +222,8 @@ using an interface appropriate for the semantics and meaning
 that the implementation attaches to that _annotation_.
 
 ```ts
-interface UnsupportedExpression {
-  type: "unsupported-expression";
+interface UnsupportedAnnotation {
+  type: "unsupported-annotation";
   sigil: "!" | "@" | "#" | "%" | "^" | "&" | "*" | "<" | ">" | "/" | "?" | "~";
   source: string;
   operand?: Literal | VariableRef;

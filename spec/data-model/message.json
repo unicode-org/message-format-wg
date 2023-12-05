@@ -33,10 +33,10 @@
       "required": ["name", "value"]
     },
 
-    "function": {
+    "function-annotation": {
       "type": "object",
       "properties": {
-        "type": { "const": "function" },
+        "type": { "const": "function-annotation" },
         "kind": { "enum": ["open", "close", "value"] },
         "name": { "type": "string" },
         "operand": {
@@ -49,10 +49,10 @@
       },
       "required": ["type", "kind", "name"]
     },
-    "unsupported-expression": {
+    "unsupported-annotation": {
       "type": "object",
       "properties": {
-        "type": { "const": "unsupported-expression" },
+        "type": { "const": "unsupported-annotation" },
         "sigil": {
           "enum": ["!", "@", "#", "%", "^", "&", "*", "<", ">", "/", "?", "~"]
         },
@@ -67,46 +67,53 @@
     "literal-expression": {
       "type": "object",
       "properties": {
+        "type": { "const": "literal-expression" },
         "arg": { "$ref": "#/$defs/literal" },
-        "func": {
+        "annotation": {
           "oneOf": [
-            { "$ref": "#/$defs/function" },
-            { "$ref": "#/$defs/unsupported-expression" }
+            { "$ref": "#/$defs/function-annotation" },
+            { "$ref": "#/$defs/unsupported-annotation" }
           ]
         }
       },
-      "required": ["arg"]
+      "required": ["type", "arg"]
     },
     "variable-expression": {
       "type": "object",
       "properties": {
+        "type": { "const": "variable-expression" },
         "arg": { "$ref": "#/$defs/variable" },
-        "func": {
+        "annotation": {
           "oneOf": [
-            { "$ref": "#/$defs/function" },
-            { "$ref": "#/$defs/unsupported-expression" }
+            { "$ref": "#/$defs/function-annotation" },
+            { "$ref": "#/$defs/unsupported-annotation" }
           ]
         }
       },
-      "required": ["arg"]
+      "required": ["type", "arg"]
     },
     "function-expression": {
       "type": "object",
       "properties": {
-        "func": {
-          "oneOf": [
-            { "$ref": "#/$defs/function" },
-            { "$ref": "#/$defs/unsupported-expression" }
-          ]
-        }
+        "type": { "const": "function-expression" },
+        "annotation": { "$ref": "#/$defs/function-annotation" }
       },
-      "required": ["func"]
+      "required": ["type", "annotation"]
+    },
+    "unsupported-expression": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "unsupported-expression" },
+        "annotation": { "$ref": "#/$defs/unsupported-annotation" }
+      },
+      "required": ["type", "annotation"]
     },
     "expression": {
       "oneOf": [
         { "$ref": "#/$defs/literal-expression" },
         { "$ref": "#/$defs/variable-expression" },
-        { "$ref": "#/$defs/function-expression" }
+        { "$ref": "#/$defs/function-expression" },
+        { "$ref": "#/$defs/unsupported-expression" }
       ]
     },
 
