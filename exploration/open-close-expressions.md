@@ -181,7 +181,7 @@ This is similar to [Mustache](http://mustache.github.io/mustache.5.html)'s contr
 This is {#strong}bold{/strong} and this is {#img alt=|an image|}.
 ```
 
-Markup names are _namespaced_ by their use of the pound sign `#` and the forward slash `/` sigils.
+Markup names are _namespaced_ by their use of the U+0023 NUMBER SIGN `#` and the U+002F SOLIDUS `/` sigils.
 They are distinct from `$variables`, `:functions`, and `|literals|`.
 
 This allows for placeholders like `{#b}`, and `{#a title=|Link tooltip|}`.
@@ -191,7 +191,7 @@ Markup is not valid in _declarations_ or _selectors_.
 
 #### Pros
 
-* Leverages the familiarity of the forward slash `/` used for closing spans.
+* Leverages the familiarity of the forward slash (U+002F SOLIDUS `/`) for closing spans.
 
 * Doesn't conflict with any other placeholder expressions.
 
@@ -199,7 +199,7 @@ Markup is not valid in _declarations_ or _selectors_.
 
 #### Cons
 
-* Introduces two new sigils, the pound sign `#` and the forward slash `/`.
+* Introduces two new sigils, U+0023 NUMBER SIGN `#` and the U+002F SOLIDUS `/`.
 
 * In Mustache, the `{{#foo}}`...`{{/foo}}` syntax is used for *control flow* statements rather than printable data.
 
@@ -455,10 +455,10 @@ This is [html:strong]bold[/html:strong] and this is [html:img alt=|an image|/].
 
 * Concise and less noisy than the alternatives.
 
-* Doesn't add new sigils except for the forward slash `/`,
+* Doesn't add new sigils except for the forward slash (U+002F SOLIDUS `/`),
   which is universally known thanks to the wide-spread use of HTML.
 
-* Leverages the familiarity of the forward slash `/` used for closing spans.
+* Leverages the familiarity of the forward slash (U+002F SOLIDUS `/`) used for closing spans.
 
 * Makes it clear that `{42}` and `[foo]` are different concepts:
   one is a standalone placeholder and the other is an open-span element.
