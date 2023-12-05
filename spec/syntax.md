@@ -424,6 +424,7 @@ during the _message_'s formatting.
 An _expression_ MUST begin with U+007B LEFT CURLY BRACKET `{`
 and end with U+007D RIGHT CURLY BRACKET `}`.
 An _expression_ MUST NOT be empty.
+An _expression_ cannot contain another _expression_.
 
 A **_<dfn>literal-expression</dfn>_** contains a _literal_,
 optionally followed by an _annotation_.
@@ -470,6 +471,7 @@ Additionally, an _input-declaration_ can contain a _variable-expression_.
 > This placeholder contains an {|expression with a literal|}
 > This placeholder references a {$variable}
 > This placeholder references a function on a variable: {$variable :function with=options}
+> This placeholder has an option with a variable: {:function option=$variable}
 > ```
 
 ### Annotation
@@ -576,6 +578,12 @@ option = identifier [s] "=" [s] (literal / variable)
 >
 > ```
 > Hello, {$userObj :person firstName=long}!
+> ```
+
+> A _message_ with a _variable_ as an option:
+>
+> ```
+> Hello, {$userList :list maxEntries=$maxEntries}!
 > ```
 
 #### Private-Use Annotations
