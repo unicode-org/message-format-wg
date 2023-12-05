@@ -39,9 +39,6 @@
         "type": { "const": "function-annotation" },
         "kind": { "enum": ["open", "close", "value"] },
         "name": { "type": "string" },
-        "operand": {
-          "oneOf": [{ "$ref": "#/$defs/literal" }, { "$ref": "#/$defs/variable" }]
-        },
         "options": {
           "type": "array",
           "items": { "$ref": "#/$defs/option" }
@@ -56,10 +53,7 @@
         "sigil": {
           "enum": ["!", "@", "#", "%", "^", "&", "*", "<", ">", "/", "?", "~"]
         },
-        "source": { "type": "string" },
-        "operand": {
-          "oneOf": [{ "$ref": "#/$defs/literal" }, { "$ref": "#/$defs/variable" }]
-        }
+        "source": { "type": "string" }
       },
       "required": ["type", "sigil", "source"]
     },

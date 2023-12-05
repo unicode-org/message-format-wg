@@ -181,8 +181,6 @@ the `kind` corresponds to the starting sigil of a _function_:
 `'open'` for `+`, `'close'` for `-`, and `'value'` for `:`.
 The `name` does not include this starting sigil.
 
-The optional `operand` is the _literal_ or _variable_
-before the _annotation_ in the _expression_, if present.
 Each _option_ is represented by an `Option`.
 
 ```ts
@@ -190,7 +188,6 @@ interface FunctionAnnotation {
   type: "function-annotation";
   kind: "open" | "close" | "value";
   name: string;
-  operand?: Literal | VariableRef;
   options?: Option[];
 }
 
@@ -212,9 +209,6 @@ and does not include the starting `sigil`.
 > This would result in new interfaces being added to
 > this data model.
 
-If the _expression_ includes a _literal_ or _variable_ before the _annotation_,
-it is included as the `operand`.
-
 When parsing the syntax of a _message_ that includes a _private-use annotation_
 supported by the implementation,
 the implementation SHOULD represent it in the data model
@@ -226,7 +220,6 @@ interface UnsupportedAnnotation {
   type: "unsupported-annotation";
   sigil: "!" | "@" | "#" | "%" | "^" | "&" | "*" | "<" | ">" | "/" | "?" | "~";
   source: string;
-  operand?: Literal | VariableRef;
 }
 ```
 
