@@ -580,7 +580,9 @@ option = identifier [s] "=" [s] (literal / variable)
 > Hello, {$userObj :person firstName=long}!
 > ```
 
-> A _message_ with a _variable_ as an option:
+> A _message_ formatted with the custom _function_ `:list`
+> that has an option `maxEntries`
+> that has a _variable_ as its value:
 >
 > ```
 > Hello, {$userList :list maxEntries=$maxEntries}!
