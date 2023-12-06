@@ -468,10 +468,10 @@ Additionally, an _input-declaration_ can contain a _variable-expression_.
 > Placeholders:
 >
 > ```
-> This placeholder contains an {|expression with a literal|}
-> This placeholder references a {$variable}
+> This placeholder contains a literal expression: {|literal|}
+> This placeholder contains a variable expression: {$variable}
 > This placeholder references a function on a variable: {$variable :function with=options}
-> This placeholder has an option with a variable: {:function option=$variable}
+> This placeholder contains a function expression with a variable-valued option: {:function option=$variable}
 > ```
 
 ### Annotation
