@@ -3,12 +3,15 @@
     xml:lang       NMTOKEN  #IMPLIED
 >
 
-<!ELEMENT function (description,(formatSignature|matchSignature)+)>
+<!ELEMENT function (description+,(formatSignature|matchSignature)+)>
 <!ATTLIST function
     name           NMTOKEN  #REQUIRED
 >
 
 <!ELEMENT description (#PCDATA)>
+<!ATTLIST description
+    xml:lang       NMTOKEN  #IMPLIED
+>
 
 <!ELEMENT validationRule EMPTY>
 <!ATTLIST validationRule
@@ -27,15 +30,14 @@
     locales        NMTOKENS  #IMPLIED
 >
 
-<!ELEMENT input (#PCDATA)>
+<!ELEMENT input (description*)>
 <!ATTLIST input
     values         NMTOKENS      #IMPLIED
     validationRule IDREF         #IMPLIED
     readonly       (true|false)  "false"
-    xml:lang       NMTOKEN       #IMPLIED
 >
 
-<!ELEMENT option (#PCDATA)>
+<!ELEMENT option (description*)>
 <!ATTLIST option
     name           NMTOKEN       #REQUIRED
     values         NMTOKENS      #IMPLIED
@@ -43,7 +45,6 @@
     validationRule IDREF         #IMPLIED
     required       (true|false)  "false"
     readonly       (true|false)  "false"
-    xml:lang       NMTOKEN       #IMPLIED
 >
 
 <!ELEMENT match EMPTY>

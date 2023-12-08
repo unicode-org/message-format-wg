@@ -32,7 +32,7 @@ The registry contains descriptions of function signatures.
 
 The main building block of the registry is the `<function>` element.
 It represents an implementation of a custom function available to translation at runtime.
-A function defines a human-readable _description_ of its behavior
+A function defines a human-readable `<description>` of its behavior
 and one or more machine-readable _signatures_ of how to call it.
 Named `<validationRule>` elements can optionally define regex validation rules for
 literals, option values, and variant keys.
@@ -65,6 +65,11 @@ Read-only options (the `readonly` attribute) can be displayed to translators in 
 Matching-function signatures additionally include one or more `<match>` elements
 to define the keys against which they can match when used as selectors.
 
+If a `<function>`, `<input>` or `<option>` includes multiple `<description>` elements,
+each SHOULD have a different `xml:lang` attribute value.
+This allows for the descriptions of these elements to be themselves localized
+according to the preferred locale of the message authors and editors.
+
 ## Example
 
 The following `registry.xml` is an example of a registry file
@@ -75,7 +80,7 @@ For the sake of brevity, only `locales="en"` is considered.
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE registry SYSTEM "./registry.dtd">
 
-<registry>
+<registry xml:lang="en">
     <function name="platform">
         <description>Match the current OS.</description>
         <matchSignature>
@@ -149,7 +154,7 @@ A localization engineer can then extend the registry by defining the following `
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE registry SYSTEM "./registry.dtd">
 
-<registry>
+<registry xml:lang="en">
     <function name="noun">
         <description>Handle the grammar of a noun.</description>
         <formatSignature locales="en">
