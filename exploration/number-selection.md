@@ -20,9 +20,9 @@ Define how selection on numbers happens.
 
 ## Background
 
-As discussed on numerous past occasions and explicitly identified in
-<a href="https://github.com/unicode-org/message-format-wg/pull/457">#457</a>,
-it would be good for both plural and non-plural match selection to be supported in MF2.
+As discussed by the working group and explicitly identified in
+<a href="https://github.com/unicode-org/message-format-wg/pull/457">discussion of #457</a>,
+there is a need to support multiple types of selection on numeric values in MF2.
 
 MF1 supported selection on either cardinal plurals or ordinal numbers,
 via the `plural` and `selectordinal` selectors.
@@ -36,22 +36,42 @@ such as a four-digit year or the integer value of an enumerator.
 
 Furthermore, as pointed out by <a href="https://github.com/ryzokuken">@ryzokuken</a>
 in <a href="https://github.com/unicode-org/message-format-wg/pull/457#discussion_r1307443288">#457 (comment)</a>,
-ordinal selection is similar to plural selection, but not identical.
+ordinal selection works similarly to plural selection, but uses a separate set of rules
+for each locale.
+This is visible in English, for example, where plural rules use only `one` and `other`
+but ordinal rules use `one` (_1st_, _21st_, etc.), `few` (_2nd_, _22nd_, etc.), 
+`many` (_3rd_, _23rd_, etc.), and `other` (_4th_, _5th_, etc.).
 
 Additionally,
-MF1 provides `ChoiceFormat` selection based on whether a number is within a range,
-and both JS and ICU PluralRules implementations provide for determining the plural category
+MF1 provides `ChoiceFormat` selection based on a complex rule set
+(and which allows determining if a number falls into a specific range).
+
+Both JS and ICU PluralRules implementations provide for determining the plural category
 of a range based on its start and end values.
-These range-based selectors are not initially considered here.
+Range-based selectors are not initially considered here.
 
 ## Use-Cases
 
-Put together, we have thus identified three different types of selection
-we would like to support on numeric values:
+As a user, I want to write messages that use the correct plural for
+my locale and enables translation to locales that use different rules.
 
-- cardinal plural selection
-- ordinal selection
-- exact value match selection
+As a user, I want to write messages that use the correct ordinal for
+my locale and enables translation to locales that use different rules.
+
+As a user, I want to write messages in which the pattern used depends on exactly matching
+a numeric value.
+
+As a user, I want to write messages that mix exact matching and 
+either plural or ordinal selection in a single message. 
+> For example:
+>```
+>.match {$numRemaining}
+>0 {{You have no more chances remaining (exact match)}}
+>1 {{You have one more chance remaining (exact match)}}
+>one {{You have {$numRemaining} chance remaining (plural)}}
+> * {{You have {$numRemaining} chances remaining (plural)}}
+>```
+
 
 ## Requirements
 
@@ -120,7 +140,7 @@ and to define three further functions, each with a `<matchSignature>`:
 
 - `:plural`
 - `:ordinal`
-- `:exact`
+- `:exact` (actual name TBD, pending the resolution of [#433](https://github.com/unicode-org/message-format-wg/issues/433)
 
 which would each need the same set of options as `:number`, except for `type`.
 
@@ -152,6 +172,7 @@ With the proposed design, this message would much more naturally be written as:
 .match {$count}
 0 {{You have no apples}}
 1 {{You have exactly one apple}}
+one {{You have {$count} apple}}
 * {{You have {$count} apples}}
 ```
 
