@@ -3,7 +3,7 @@
     xml:lang       NMTOKEN  #IMPLIED
 >
 
-<!ELEMENT function (description+,(formatSignature|matchSignature)+)>
+<!ELEMENT function (description+,(formatSignature|matchSignature|alias)+)>
 <!ATTLIST function
     name           NMTOKEN  #REQUIRED
 >
@@ -19,16 +19,12 @@
     regex          CDATA  #REQUIRED
 >
 
-<!ELEMENT formatSignature (input?,option*)>
+<!ELEMENT formatSignature (input?,option*,override*)>
 <!ATTLIST formatSignature
     position       (open|close|standalone)  "standalone"
-    locales        NMTOKENS                 #IMPLIED
 >
 
-<!ELEMENT matchSignature (input?,option*,match*)>
-<!ATTLIST matchSignature
-    locales        NMTOKENS  #IMPLIED
->
+<!ELEMENT matchSignature (input?,option*,match*,override*)>
 
 <!ELEMENT input (description*)>
 <!ATTLIST input
@@ -49,6 +45,24 @@
 
 <!ELEMENT match EMPTY>
 <!ATTLIST match
+    locales        NMTOKENS  #IMPLIED
     values         NMTOKENS  #IMPLIED
     validationRule IDREF     #IMPLIED
+>
+
+<!ELEMENT override (input?,option*)>
+<!ATTLIST override
+    locales        NMTOKENS  #REQUIRED
+>
+
+<!ELEMENT alias (description,setOption*,override*)>
+<!ATTLIST alias
+    name           NMTOKEN  #REQUIRED
+    supports       (format|match|all)  "all"
+>
+
+<!ELEMENT setOption EMPTY>
+<!ATTLIST setOption
+    name           NMTOKEN #REQUIRED
+    value          CDATA #REQUIRED
 >

@@ -243,6 +243,11 @@
       </option>
     </formatSignature>
 
+    <alias name="integer">
+      <description>Locale-sensitive integral number formatting</description>
+      <setOption name="maximumFractionDigits" value="0" />
+      <setOption name="style" value="decimal" />
+    </alias>
   </function>
 
 </registry>
