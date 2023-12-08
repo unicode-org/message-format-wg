@@ -24,8 +24,8 @@ literal-expression = "{" [s] literal [s annotation] [s] "}"
 variable-expression = "{" [s] variable [s annotation] [s] "}"
 annotation-expression = "{" [s] annotation [s] "}"
 annotation = (function *(s option))
-           / reserved-annotation
            / private-use-annotation
+           / reserved-annotation
 
 literal = quoted / unquoted
 variable = "$" name

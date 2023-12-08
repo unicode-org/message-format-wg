@@ -480,8 +480,8 @@ a _private-use annotation_ or a _reserved annotation_.
 
 ```abnf
 annotation = (function *(s option))
-           / reserved-annotation
            / private-use-annotation
+           / reserved-annotation
 ```
 
 An **_<dfn>operand</dfn>_** is the _literal_ of a _literal-expression_ or
