@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="registry.dtd" type="application/xml-dtd"?>
-<registry>
+<registry xml:lang="en">
   <!-- All regex here are to be seen as provisory. See issue #422. -->
   <validationRule id="anyNumber" regex="-?(0|([1-9]\d*))(\.\d*)?([eE][-+]?\d+)?"/>
   <validationRule id="positiveInteger" regex="0|([1-9]\d*)"/>

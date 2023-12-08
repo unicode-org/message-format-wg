@@ -1,4 +1,7 @@
 <!ELEMENT registry (function|validationRule)*>
+<!ATTLIST registry
+    xml:lang       NMTOKEN  #IMPLIED
+>
 
 <!ELEMENT function (description,(formatSignature|matchSignature)+)>
 <!ATTLIST function
@@ -29,6 +32,7 @@
     values         NMTOKENS      #IMPLIED
     validationRule IDREF         #IMPLIED
     readonly       (true|false)  "false"
+    xml:lang       NMTOKEN       #IMPLIED
 >
 
 <!ELEMENT option (#PCDATA)>
@@ -39,6 +43,7 @@
     validationRule IDREF         #IMPLIED
     required       (true|false)  "false"
     readonly       (true|false)  "false"
+    xml:lang       NMTOKEN       #IMPLIED
 >
 
 <!ELEMENT match EMPTY>
