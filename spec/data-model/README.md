@@ -127,25 +127,21 @@ type Expression = LiteralExpression | VariableExpression | FunctionExpression |
                   UnsupportedExpression;
 
 interface LiteralExpression {
-  type: "literal-expression";
   arg: Literal;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
 }
 
 interface VariableExpression {
-  type: "variable-expression";
   arg: VariableRef;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
 }
 
 interface FunctionExpression {
-  type: "function-expression";
   arg?: never;
   annotation: FunctionAnnotation;
 }
 
 interface UnsupportedExpression {
-  type: "unsupported-expression";
   arg?: never;
   annotation: UnsupportedAnnotation;
 }
@@ -185,7 +181,7 @@ Each _option_ is represented by an `Option`.
 
 ```ts
 interface FunctionAnnotation {
-  type: "function-annotation";
+  type: "function";
   kind: "open" | "close" | "value";
   name: string;
   options?: Option[];

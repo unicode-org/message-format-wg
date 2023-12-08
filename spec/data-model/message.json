@@ -36,7 +36,7 @@
     "function-annotation": {
       "type": "object",
       "properties": {
-        "type": { "const": "function-annotation" },
+        "type": { "const": "function" },
         "kind": { "enum": ["open", "close", "value"] },
         "name": { "type": "string" },
         "options": {
@@ -61,7 +61,6 @@
     "literal-expression": {
       "type": "object",
       "properties": {
-        "type": { "const": "literal-expression" },
         "arg": { "$ref": "#/$defs/literal" },
         "annotation": {
           "oneOf": [
@@ -70,12 +69,11 @@
           ]
         }
       },
-      "required": ["type", "arg"]
+      "required": ["arg"]
     },
     "variable-expression": {
       "type": "object",
       "properties": {
-        "type": { "const": "variable-expression" },
         "arg": { "$ref": "#/$defs/variable" },
         "annotation": {
           "oneOf": [
@@ -84,23 +82,21 @@
           ]
         }
       },
-      "required": ["type", "arg"]
+      "required": ["arg"]
     },
     "function-expression": {
       "type": "object",
       "properties": {
-        "type": { "const": "function-expression" },
         "annotation": { "$ref": "#/$defs/function-annotation" }
       },
-      "required": ["type", "annotation"]
+      "required": ["annotation"]
     },
     "unsupported-expression": {
       "type": "object",
       "properties": {
-        "type": { "const": "unsupported-expression" },
         "annotation": { "$ref": "#/$defs/unsupported-annotation" }
       },
-      "required": ["type", "annotation"]
+      "required": ["annotation"]
     },
     "expression": {
       "oneOf": [
