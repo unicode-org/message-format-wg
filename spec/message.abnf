@@ -19,15 +19,13 @@ selector = expression
 variant = key *(s key) [s] quoted-pattern
 key = literal / "*"
 
-expression = literal-expression / variable-expression / function-expression
-           / private-use-expression / reserved-expression
+expression = literal-expression / variable-expression / annotation-expression
 literal-expression = "{" [s] literal [s annotation] [s] "}"
 variable-expression = "{" [s] variable [s annotation] [s] "}"
-function-expression = "{" [s] function-annotation [s] "}"
-private-use-expression = "{" [s] private-use-annotation [s] "}"
-reserved-expression = "{" [s] reserved-annotation [s] "}"
-annotation = function-annotation / private-use-annotation / reserved-annotation
-function-annotation = function *(s option)
+annotation-expression = "{" [s] annotation [s] "}"
+annotation = (function *(s option))
+           / reserved-annotation
+           / private-use-annotation
 
 literal = quoted / unquoted
 variable = "$" name
