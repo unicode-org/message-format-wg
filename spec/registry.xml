@@ -110,7 +110,7 @@
         Possible values are the ISO 4217 currency codes, such as "USD" for the US dollar,
         "EUR" for the euro, or "CNY" for the Chinese RMB — see the
         Current currency &amp; funds code list
-        (https://www.six-group.com/en/products-services/financial-information/data-standards.html#scrollTo=currency-codes).
+        (https://www.unicode.org/cldr/charts/latest/supplemental/detailed_territory_currency_information.html).
         There is no default value; if the style is "currency", the currency property must be provided.
       </option>
       <option name="currencyDisplay" values="symbol narrowSymbol code name" default="symbol">
