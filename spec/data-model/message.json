@@ -57,17 +57,18 @@
       },
       "required": ["type", "sigil", "source"]
     },
+    "annotation": {
+      "oneOf": [
+        { "$ref": "#/$defs/function-annotation" },
+        { "$ref": "#/$defs/unsupported-annotation" }
+      ]
+    },
 
     "literal-expression": {
       "type": "object",
       "properties": {
         "arg": { "$ref": "#/$defs/literal" },
-        "annotation": {
-          "oneOf": [
-            { "$ref": "#/$defs/function-annotation" },
-            { "$ref": "#/$defs/unsupported-annotation" }
-          ]
-        }
+        "annotation": { "$ref": "#/$defs/annotation" }
       },
       "required": ["arg"]
     },
@@ -75,12 +76,7 @@
       "type": "object",
       "properties": {
         "arg": { "$ref": "#/$defs/variable" },
-        "annotation": {
-          "oneOf": [
-            { "$ref": "#/$defs/function-annotation" },
-            { "$ref": "#/$defs/unsupported-annotation" }
-          ]
-        }
+        "annotation": { "$ref": "#/$defs/annotation" }
       },
       "required": ["arg"]
     },
