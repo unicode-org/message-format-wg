@@ -22,11 +22,18 @@
       },
       "required": ["type", "name"]
     },
-    "value": {
-      "oneOf": [{ "$ref": "#/$defs/literal" }, { "$ref": "#/$defs/variable" }]
+    "option": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "value": {
+          "oneOf": [{ "$ref": "#/$defs/literal" }, { "$ref": "#/$defs/variable" }]
+        }
+      },
+      "required": ["name", "value"]
     },
 
-    "function": {
+    "function-annotation": {
       "type": "object",
       "properties": {
         "type": { "const": "function" },
@@ -34,24 +41,17 @@
         "name": { "type": "string" },
         "options": {
           "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": { "type": "string" },
-              "value": { "$ref": "#/$defs/value" }
-            },
-            "required": ["name", "value"]
-          }
+          "items": { "$ref": "#/$defs/option" }
         }
       },
       "required": ["type", "kind", "name"]
     },
-    "unsupported-expression": {
+    "unsupported-annotation": {
       "type": "object",
       "properties": {
-        "type": { "const": "unsupported-expression" },
+        "type": { "const": "unsupported-annotation" },
         "sigil": {
-          "enum": ["!", "@", "#", "%", "^", "&", "*", "<", ">", "?", "~"]
+          "enum": ["!", "@", "#", "%", "^", "&", "*", "<", ">", "/", "?", "~"]
         },
         "source": { "type": "string" }
       },
@@ -59,8 +59,8 @@
     },
     "annotation": {
       "oneOf": [
-        { "$ref": "#/$defs/function" },
-        { "$ref": "#/$defs/unsupported-expression" }
+        { "$ref": "#/$defs/function-annotation" },
+        { "$ref": "#/$defs/unsupported-annotation" }
       ]
     },
 
@@ -68,7 +68,7 @@
       "type": "object",
       "properties": {
         "arg": { "$ref": "#/$defs/literal" },
-        "func": { "$ref": "#/$defs/annotation" }
+        "annotation": { "$ref": "#/$defs/annotation" }
       },
       "required": ["arg"]
     },
@@ -76,22 +76,30 @@
       "type": "object",
       "properties": {
         "arg": { "$ref": "#/$defs/variable" },
-        "func": { "$ref": "#/$defs/annotation" }
+        "annotation": { "$ref": "#/$defs/annotation" }
       },
       "required": ["arg"]
     },
     "function-expression": {
       "type": "object",
       "properties": {
-        "func": { "$ref": "#/$defs/annotation" }
+        "annotation": { "$ref": "#/$defs/function-annotation" }
       },
-      "required": ["func"]
+      "required": ["annotation"]
+    },
+    "unsupported-expression": {
+      "type": "object",
+      "properties": {
+        "annotation": { "$ref": "#/$defs/unsupported-annotation" }
+      },
+      "required": ["annotation"]
     },
     "expression": {
       "oneOf": [
         { "$ref": "#/$defs/literal-expression" },
         { "$ref": "#/$defs/variable-expression" },
-        { "$ref": "#/$defs/function-expression" }
+        { "$ref": "#/$defs/function-expression" },
+        { "$ref": "#/$defs/unsupported-expression" }
       ]
     },
 
