@@ -73,6 +73,15 @@ using resource item [lookup](https://unicode.org/reports/tr35/#Lookup) from LDML
 An element with no `locales` attribute is the default
 (and is considered equivalent to the `root` locale).
 
+As the available keys may depend on option values,
+`<when>` elements can be used to select an appropriate set of `<match>` elements for selection.
+If the resolved or default value of a selector option
+corresponding to the `<when>` `option` attribute
+is included in its list of `values`,
+its contents are considered before any and all later `<when>` and `<match>` elements.
+If a `<match>` element within a `<when>` matches the current locale,
+later `<match>` elements outside that `<when>` are not considered.
+
 Functions may also include `<alias>` definitions,
 which provide shorthands for commonly used option baskets.
 An _alias name_ may be used equivalently to a _function name_ in messages.
@@ -108,14 +117,18 @@ For the sake of brevity, only `locales="en"` is considered.
 
         <matchSignature>
             <input validationRule="anyNumber"/>
-            <option name="type" values="cardinal ordinal"/>
+            <option name="select" values="plural ordinal" default="plural"/>
             <option name="minimumIntegerDigits" validationRule="positiveInteger"/>
             <option name="minimumFractionDigits" validationRule="positiveInteger"/>
             <option name="maximumFractionDigits" validationRule="positiveInteger"/>
             <option name="minimumSignificantDigits" validationRule="positiveInteger"/>
             <option name="maximumSignificantDigits" validationRule="positiveInteger"/>
-            <!-- Since this applies to both cardinal and ordinal, all plural options are valid. -->
-            <match locales="en" values="one two few other" validationRule="anyNumber"/>
+            <when option="select" values="plural">
+                <match locales="en" values="one other" validationRule="anyNumber"/>
+            </when>
+            <when option="select" values="ordinal">
+                <match locales="en" values="one two few other" validationRule="anyNumber"/>
+            </when>
             <match values="zero one two few many other" validationRule="anyNumber"/>
         </matchSignature>
 
@@ -148,14 +161,18 @@ Given the above description, the `:number` function is defined to work both in a
 ```
 
 Furthermore,
-`:number`'s `<matchSignature>` contains two `<match>` elements
+`:number`'s `<matchSignature>` contains multiple `<match>` and `<when>` elements
 which allow the validation of variant keys.
 
-- `<match locales="en" values="one two few other" .../>` can be used in locales like `en` and `en-GB`
-  to validate the `when other` variant by verifying that the `other` key is present
-  in the list of enumarated values: `one other`.
-- `<match ... validationRule="anyNumber"/>` can be used to valide the `when 1` variant
-  by testing the `1` key against the `anyNumber` regular expression defined in the registry file.
+- `<when option="select" values="plural"><match locales="en" values="one other" ... />`
+  can be used in locales like `en` and `en-GB` if the selection type is known to be plural
+  to validate that only `one`, `other` or numeric keys are used for variants.
+- `<when option="select" values="ordinal"><match locales="en" values="one two few other" ... />`
+  can be used in locales like `en` and `en-GB` if the selection type is known to be ordinal
+  to validate that only `one`, `two`, `few`, `other` or numeric keys are used for variants.
+- `<match values="zero one two few many other" validationRule="anyNumber"/>` can be used
+  for all locales and selection types, validating that variant keys are either numeric
+  or use one of the plural category identifiers.
 
 ---
 

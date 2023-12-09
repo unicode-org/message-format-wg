@@ -18,7 +18,7 @@
     position       (open|close|standalone)  "standalone"
 >
 
-<!ELEMENT matchSignature (input?,option*,match*,override*)>
+<!ELEMENT matchSignature (input?,option*,override*,when*,match*)>
 
 <!ELEMENT input EMPTY>
 <!ATTLIST input
@@ -42,6 +42,12 @@
     locales        NMTOKENS  #IMPLIED
     values         NMTOKENS  #IMPLIED
     validationRule IDREF     #IMPLIED
+>
+
+<!ELEMENT when (when*,match*)>
+<!ATTLIST when
+    option         NMTOKEN   #REQUIRED
+    values         NMTOKENS  #REQUIRED
 >
 
 <!ELEMENT override (input?,option*)>
