@@ -68,6 +68,10 @@ only the first one is used.
 
 Matching-function signatures additionally include one or more `<match>` elements
 to define the keys against which they can match when used as selectors.
+The `<match>` element whose `locales` best matches the current locale
+using resource item [lookup](https://unicode.org/reports/tr35/#Lookup) from LDML is used.
+An element with no `locales` attribute is the default
+(and is considered equivalent to the `root` locale).
 
 Functions may also include `<alias>` definitions,
 which provide shorthands for commonly used option baskets.
@@ -146,10 +150,6 @@ Given the above description, the `:number` function is defined to work both in a
 Furthermore,
 `:number`'s `<matchSignature>` contains two `<match>` elements
 which allow the validation of variant keys.
-The element whose `locales` best matches the current locale
-using resource item [lookup](https://unicode.org/reports/tr35/#Lookup) from LDML is used.
-An element with no `locales` attribute is the default
-(and is considered equivalent to the `root` locale).
 
 - `<match locales="en" values="one two few other" .../>` can be used in locales like `en` and `en-GB`
   to validate the `when other` variant by verifying that the `other` key is present
