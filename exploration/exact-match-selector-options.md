@@ -1,6 +1,6 @@
 # Design Proposal Template
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -16,7 +16,7 @@ Status: **Proposed**
 
 _What is this proposal trying to achieve?_
 
-We need to choose a name for the default "exact match" selector function.
+We need to choose a name for the selector function used when no other selector is specified.
 
 ## Background
 
@@ -27,12 +27,10 @@ and issues raised in various design documents, notably
 <a href="https://github.com/unicode-org/message-format-wg/pull/471">#471</a>
 (about number selection).
 
-The default selector function is the function used when an implementation
+The exact match selector function is the function used when an implementation
 cannot find another selector.
 It is also an attribute of selectors, such as `:number` or perhaps `:date`
 that need to match specific values.
-ICU MF1 has a selector called `com.ibm.icu.text.SelectFormat` 
-associated with the keyword `select` in the MF1 syntax.
 
 ## Use-Cases
 
@@ -86,9 +84,23 @@ _What properties does the solution have to manifest to enable the use-cases abov
 
 _What prior decisions and existing conditions limit the possible design?_
 
+ICU MF1 has a selector called `com.ibm.icu.text.SelectFormat` 
+associated with the keyword `select` in the MF1 syntax. 
+Our design should be compatible with this selector when used for the same use case,
+but it not constrained to use the same name or terminology.
+
 ## Proposed Design
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
+
+The exact match selector is named `:string`.
+The exact match selector matches the string literal value of its operand against
+any sets of keys in a case-sensitive, encoding-sensitive manner.
+No Unicode normalization is performed.
+
+The `:string` selector is also a verbatim formatting function.
+That is, the message "{$var :string}" when formatted contains the resolved string
+value of the variable `$var`.
 
 ## Alternatives Considered
 
