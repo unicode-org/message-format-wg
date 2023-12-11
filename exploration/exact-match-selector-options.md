@@ -99,7 +99,9 @@ _What other properties do they have?_
 ### Option A. `:select`
 
 Pros:
-- The same as ICU MF1's keyword. We have implementation experience.
+- The same as ICU MF1's keyword. Users have implementation experience.
+  Might fascilitate easier migration from MF1?
+- Not overly specific, so can conceptually fit with "non-exact" matching.
 
 Cons:
 - Somewhat generic name.
@@ -110,7 +112,9 @@ Pros:
 - Says what the match does.
 
 Cons:
-- Not super specific?
+- Unclear whether it refers to the serialization form or the imputed value.
+  There may be some cases where the match depends on options,
+  such as with `{|42.3| :integer}` and a key `42`
 
 ### Option C. `:equals`
 
@@ -129,7 +133,10 @@ Pros:
   it's the string value?
 
 Cons:
-- Not clear about 
+- Might confuse users who are comparing e.g. two numbers or two dates.
+  In typed languages, the values being compared might not actually be strings.
+- Depends on the serialization.
+
 
 ### Option E. Something else
 
