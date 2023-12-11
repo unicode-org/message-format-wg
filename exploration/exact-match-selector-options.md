@@ -98,6 +98,11 @@ The exact match selector matches the string literal value of its operand against
 any sets of keys in a case-sensitive, encoding-sensitive manner.
 No Unicode normalization is performed.
 
+> [!NOTE]
+> In this context "encoding-sensitive" does not mean "character encoding"
+> but rather "sensitive to the sequence of code points used by the string".
+> See [Character Model for the World Wide Web: String Matching](https://www.w3.org/TR/charmod-norm)
+
 The `:string` selector is also a verbatim formatting function.
 That is, the message "{$var :string}" when formatted contains the resolved string
 value of the variable `$var`.
