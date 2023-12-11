@@ -18,7 +18,7 @@
     position       (open|close|standalone)  "standalone"
 >
 
-<!ELEMENT matchSignature (input?,option*,override*,when*,match*)>
+<!ELEMENT matchSignature (input?,option*,override*,when*,matches?)>
 
 <!ELEMENT input EMPTY>
 <!ATTLIST input
@@ -37,14 +37,19 @@
     readonly       (true|false)  "false"
 >
 
+<!ELEMENT matches (match*)>
+<!ATTLIST matches
+    href           CDATA  #IMPLIED
+    validationRule IDREF  #IMPLIED
+>
+
 <!ELEMENT match EMPTY>
 <!ATTLIST match
     locales        NMTOKENS  #IMPLIED
     values         NMTOKENS  #IMPLIED
-    validationRule IDREF     #IMPLIED
 >
 
-<!ELEMENT when (when*,match*)>
+<!ELEMENT when (when*,matches?)>
 <!ATTLIST when
     option         NMTOKEN   #REQUIRED
     values         NMTOKENS  #REQUIRED
