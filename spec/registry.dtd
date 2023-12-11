@@ -1,11 +1,17 @@
 <!ELEMENT registry (function|validationRule)*>
+<!ATTLIST registry
+    xml:lang       NMTOKEN  #IMPLIED
+>
 
-<!ELEMENT function (description,(formatSignature|matchSignature|alias)+)>
+<!ELEMENT function (description+,(formatSignature|matchSignature|alias)+)>
 <!ATTLIST function
     name           NMTOKEN  #REQUIRED
 >
 
 <!ELEMENT description (#PCDATA)>
+<!ATTLIST description
+    xml:lang       NMTOKEN  #IMPLIED
+>
 
 <!ELEMENT validationRule EMPTY>
 <!ATTLIST validationRule
@@ -20,14 +26,14 @@
 
 <!ELEMENT matchSignature (input?,option*,match*,override*)>
 
-<!ELEMENT input EMPTY>
+<!ELEMENT input (description*)>
 <!ATTLIST input
     values         NMTOKENS      #IMPLIED
     validationRule IDREF         #IMPLIED
     readonly       (true|false)  "false"
 >
 
-<!ELEMENT option EMPTY>
+<!ELEMENT option (description*)>
 <!ATTLIST option
     name           NMTOKEN       #REQUIRED
     values         NMTOKENS      #IMPLIED
