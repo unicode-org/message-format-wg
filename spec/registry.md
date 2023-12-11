@@ -71,7 +71,7 @@ only the first one is used.
 Matching-function signatures can include `<matches>` and `<when>` elements
 defining the variant keys matched by the selector.
 
-Each `<matches>` MAY contain either one or more `<match>` elements, or an `href` attribute.
+Each `<matches>` contains either a (possibly empty) set of `<match>` elements or an `href` attribute.
 If `<matches>` contains both an `href` attribute and child elements
 the `href` attribute is ignored.
 If `<matches>` contains only an `href` attribute, any `validationRule` attributes are ignored. 
