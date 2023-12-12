@@ -280,6 +280,7 @@ In the ABNF, _text_ is represented by non-empty sequences of
 `simple-start-char`, `text-char`, and `text-escape`.
 The first of these is used at the start of a _simple message_,
 and matches `text-char` except for not allowing U+002E FULL STOP `.`.
+The ABNF uses `content-char` as a shared base for _text_ and _quoted literal_ characters.
 
 Whitespace in _text_, including tabs, spaces, and newlines is significant and MUST
 be preserved during formatting.
