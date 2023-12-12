@@ -1,12 +1,12 @@
 # WIP DRAFT MessageFormat 2.0 Registry
 
-_This document is non-normative._
-
-The implementations and tooling can greatly benefit from a
+Implementations and tooling can greatly benefit from a
 structured definition of formatting and matching functions available to messages at runtime.
 The _registry_ is a mechanism for storing such declarations in a portable manner.
 
 ## Goals
+
+_This section is non-normative._
 
 The registry provides a machine-readable description of MessageFormat 2 extensions (custom functions),
 in order to support the following goals and use-cases:
@@ -25,7 +25,44 @@ in order to support the following goals and use-cases:
   - Display/edit known message metadata.
   - Restrict input in GUI by providing a dropdown with all viable option values.
 
+## Conformance and Use
+
+_This section is normative._
+
+To be conformant with MessageFormat 2.0, an implementation MUST implement
+all of the _selectors_ and _functions_ described in the default registry,
+including all of the _options_ and _option_ values, _operands_ and outputs
+described by the default registry.
+
+Implementations are not required to provide a registry nor to read or interpret
+a copy of this registry in order to be conformant.
+
+The MessageFormat 2.0 Registry was created to describe the core set of _selectors_
+and _functions_, including _operands_, _options_, _option_ values, as well
+as expected outputs.
+The descriptions in this registry are intended to describe the specific required
+signatures for _selectors_ and _functions_ that all implementations of MessageFormat 2.0
+MUST implement.
+The goal is to ensure message interoperability between implementations,
+regardless of programming language or runtime environment.
+This ensures that developers do not have to relearn core MessageFormat syntax
+when moving between platforms
+and that translators do not need to know about the runtime environment for most
+selection or formatting operations.
+
+The registry provides a machine-readable description of _selectors_ and _functions_
+suitable for tools, such as those used in translation automation, so that
+variant expansion and information about available _options_ and their effects
+are available in the translation ecosystem.
+To that end, implementations are strongly encouraged to provide appropriately
+tailored versions of the registry for consumption by tools
+(even if not included in software distributions)
+and to encourage any add-on or plug-in functionality to provide
+a registry to support localization tooling.
+
 ## Data Model
+
+_This section is normative._
 
 The registry contains descriptions of function signatures.
 [`registry.dtd`](./registry.dtd) describes its data model.
