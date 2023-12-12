@@ -30,27 +30,27 @@ in order to support the following goals and use-cases:
 _This section is normative._
 
 To be conformant with MessageFormat 2.0, an implementation MUST implement
-all of the _selectors_ and _functions_ described in the default registry,
+all of the formatting and selection _functions_ described in the default registry,
 including all of the _options_ and _option_ values, _operands_ and outputs
 described by the default registry.
 
 Implementations are not required to provide a registry nor to read or interpret
 a copy of this registry in order to be conformant.
 
-The MessageFormat 2.0 Registry was created to describe the core set of _selectors_
-and _functions_, including _operands_, _options_, _option_ values, as well
-as expected outputs.
+The MessageFormat 2.0 Registry was created to describe
+the core set of formatting and selection _functions_,
+including _operands_, _options_, and _option_ values.
 The descriptions in this registry are intended to describe the specific required
-signatures for _selectors_ and _functions_ that all implementations of MessageFormat 2.0
+signatures for _functions_ that all implementations of MessageFormat 2.0
 MUST implement.
-The goal is to ensure message interoperability between implementations,
+The goal is to enable message interoperability between implementations,
 regardless of programming language or runtime environment.
 This ensures that developers do not have to relearn core MessageFormat syntax
-when moving between platforms
+and functionality when moving between platforms
 and that translators do not need to know about the runtime environment for most
 selection or formatting operations.
 
-The registry provides a machine-readable description of _selectors_ and _functions_
+The registry provides a machine-readable description of _functions_
 suitable for tools, such as those used in translation automation, so that
 variant expansion and information about available _options_ and their effects
 are available in the translation ecosystem.
