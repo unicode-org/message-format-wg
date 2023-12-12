@@ -62,7 +62,7 @@ a registry to support localization tooling.
 
 ## Data Model
 
-_This section is normative._
+_This section is non-normative._
 
 The registry contains descriptions of function signatures.
 [`registry.dtd`](./registry.dtd) describes its data model.
