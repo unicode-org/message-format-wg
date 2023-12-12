@@ -141,7 +141,7 @@
   <function name="number">
     <!-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat -->
     <description>
-      Locale-sensitive number formatting and selection
+      Number selection and formatting
     </description>
 
     <formatSignature>
@@ -249,12 +249,13 @@
         <description>
           The number selection type.
 
-          With `exact` selection, only a variant with a key matching
-          the JSON representation of the input number (without an exponent) will be selected.
-          With `plural` and `ordinal` selection, if no such exactly matching key is present,
-          a variant with the matching CLDR plural category (`zero`/`one`/`two`/`few`/`many`/`other`)
-          for the corresponding selection type will be selected,
-          according to the rules of the current locale
+          One of three selection models for numeric values, defaulting to "plural".
+
+          Each selector type matches numeric values to keys using the "number-literal" 
+          production from the ABNF.
+          The "plural" and "ordinal" selectors also use plural or ordinal rules from CLDR
+          to match categories "zero", "one", "two", "few", "many" and "other" with a lower
+          match quality than exact numeric match.
         </description>
       </option>
       <option name="minimumIntegerDigits" values="positiveInteger" default="1">
@@ -295,7 +296,7 @@
     </matchSignature>
 
     <alias name="integer">
-      <description>Locale-sensitive integral number formatting and selection</description>
+      <description>Integer selection and formatting</description>
       <setOption name="maximumFractionDigits" value="0" />
       <setOption name="style" value="decimal" />
     </alias>
