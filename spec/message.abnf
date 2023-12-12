@@ -73,6 +73,10 @@ name-start = ALPHA / "_"
 name-char  = name-start / DIGIT / "-" / "."
            / %xB7 / %x300-36F / %x203F-2040
 
+simple-start-char = content-char / s / "|"
+text-char         = content-char / s / "." / "|"
+quoted-char       = content-char / s / "." / "{" / "}"
+reserved-char     = content-char / "."
 content-char = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
              / %x0B-0C        ; omit CR (%x0D)
              / %x0E-19        ; omit SP (%x20)
@@ -81,10 +85,6 @@ content-char = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
              / %x5D-7A        ; omit { | } (%x7B-7D)
              / %x7E-D7FF      ; omit surrogates
              / %xE000-10FFFF
-simple-start-char = content-char / s / "|"
-text-char         = content-char / s / "." / "|"
-quoted-char       = content-char / s / "." / "{" / "}"
-reserved-char     = content-char / "."
 
 text-escape     = backslash ( backslash / "{" / "}" )
 quoted-escape   = backslash ( backslash / "|" )

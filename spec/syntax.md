@@ -286,6 +286,8 @@ Whitespace in _text_, including tabs, spaces, and newlines is significant and MU
 be preserved during formatting.
 
 ```abnf
+simple-start-char = content-char / s / "|"
+text-char         = content-char / s / "." / "|"
 content-char = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
              / %x0B-0C        ; omit CR (%x0D)
              / %x0E-19        ; omit SP (%x20)
@@ -294,8 +296,6 @@ content-char = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
              / %x5D-7A        ; omit { | } (%x7B-7D)
              / %x7E-D7FF      ; omit surrogates
              / %xE000-10FFFF
-simple-start-char = content-char / s / "|"
-text-char = content-char / s / "." / "|"
 ```
 
 When a _pattern_ is quoted by embedding the _pattern_ in curly brackets, the
