@@ -68,7 +68,7 @@ only the first one is used.
 
 ### Variant Key Matches
 
-Matching-function signatures can include `<matches>` and `<when>` elements
+Selector signatures can include `<matches>` and `<when>` elements
 defining the variant keys matched by the selector.
 
 Each `<matches>` contains either a (possibly empty) set of `<match>` elements or an `href` attribute.
