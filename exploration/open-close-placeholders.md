@@ -1,4 +1,4 @@
-# Open/Close Expressions
+# Open/Close Placeholders
 
 Status: **Proposed**
 
@@ -16,6 +16,7 @@ Status: **Proposed**
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/516">#516</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/517">#517</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/535">#535</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/540">#540</a></dd>
 	</dl>
 </details>
 
@@ -23,7 +24,7 @@ Status: **Proposed**
 
 _What is this proposal trying to achieve?_
 
-Describe the use cases and requirements for _expressions_
+Describe the use cases and requirements for _placeholders_
 that enclose parts of a pattern
 and develop a design that satisfies these needs.
 
@@ -33,7 +34,7 @@ _What context is helpful to understand this proposal?_
 
 ## Use-Cases
 
-- Representing markup, such as HTML, as expressions in a pattern
+- Representing markup, such as HTML, as placeholders in a pattern
   rather than as plain character sequences embedded in the _text_
   of a pattern. This also allows parts of a markup sequence to be
   programmable.
@@ -128,7 +129,7 @@ _What context is helpful to understand this proposal?_
 ## Requirements
 
 Be able to indicate that some identified markup applies to
-a non-empty sequence of pattern parts (text, expressions).
+a non-empty sequence of pattern parts (text, placeholders).
 
 Markup spans may be nested,
 as in `<b>Bold and <i>also italic</i></b>`.
@@ -147,7 +148,7 @@ Due to segmentation,
 markup may be split across messages so that it opens in one and closes in another.
 
 Following previously established consensus,
-the resolution of the value of an _expression_ may only depend on its own contents,
+the resolution of the value of a _placeholder_ may only depend on its own contents,
 without access to the other parts of the selected pattern.
 
 Any information stored in the registry is not available at runtime
@@ -185,7 +186,7 @@ Markup names are _namespaced_ by their use of the U+0023 NUMBER SIGN `#` and the
 They are distinct from `$variables`, `:functions`, and `|literals|`.
 
 This allows for placeholders like `{#b}`, and `{#a title=|Link tooltip|}`.
-Unlike annotations, markup expressions may not have operands.
+Unlike annotations, markup _placeholders_ may not have operands.
 
 Markup is not valid in _declarations_ or _selectors_.
 
@@ -252,7 +253,7 @@ markup placeholders format to an object including the following properties:
 - The `type` of the markup: `"markup" | "markup-close"`
 - The `name` of the markup, e.g. `"b"` for `{#b}`
 - For _markup_,
-  the `options` with the resolved key-value pairs of the expression options
+  the `options` with the resolved key-value pairs of the placeholder options
 
 To make use of _markup_,
 the message should be formatted to parts or to some other target supported by the implementation,
@@ -436,7 +437,7 @@ This is {+strong}bold{-strong} and this is {#img alt=|an image|/}.
 
 #### Cons
 
-* Adds two new sigils to the expression syntax (three with `#standalone`).
+* Adds two new sigils to the placeholder syntax (three with `#standalone`).
 
 * Because they're agnostic, the meaning of the sigils must be learned or deduced.
 

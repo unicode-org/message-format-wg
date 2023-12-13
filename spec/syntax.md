@@ -111,30 +111,44 @@ A **_<dfn>message</dfn>_** is the complete template for a specific message forma
 > > **Example** This _message_:
 > >
 > > ```
-> > {{
-> >   local $foo   =   { |horse| }
-> >   {{You have a {$foo}!}}
-> > }}
+> > .local $foo   =   { |horse| }
+> > {{You have a {$foo}!}}
 > > ```
 > >
 > > Can also be written as:
 > >
 > > ```
-> > {{local $foo={|horse|}{{You have a {$foo}!}}}}
+> > .local $foo={|horse|}{{You have a {$foo}!}}
 > > ```
 > >
 > > An exception to this is: whitespace inside a _pattern_ is **always** significant.
 
-A _message_ can be a _pattern_ or it can be a _complex message_.
+A _message_ can be a _simple message_ or it can be a _complex message_.
+
+```abnf
+message = simple-message / complex-message
+```
+
+A **_<dfn>simple message</dfn>_** contains a single _pattern_,
+with restrictions on its first character.
+An empty string is a valid _simple message_.
+
+```abnf
+simple-message = [simple-start pattern]
+simple-start = simple-start-char / text-escape / placeholder
+```
 
 A **_<dfn>complex message</dfn>_** is any _message_ that contains _declarations_,
 a _matcher_, or both.
-A _complex message_ always begins with the the sequence `{{`
-and is terminated by the sequence `}}`
+A _complex message_ always begins with either a keyword that has a `.` prefix or a _quoted pattern_
 and consists of:
 
 1. an optional list of _declarations_, followed by
-2. a _body_
+2. a _complex body_
+
+```abnf
+complex-message = *(declaration [s]) complex-body
+```
 
 ### Declarations
 
@@ -148,8 +162,11 @@ MAY include an _annotation_ that is applied to the external value.
 
 A **_<dfn>local-declaration</dfn>_** binds a _variable_ to the resolved value of an _expression_.
 
+For compatibility with later MessageFormat 2 specification versions,
+_declarations_ MAY also include _reserved statements_.
+
 ```abnf
-declaration = input-declaration / local-declaration
+declaration = input-declaration / local-declaration / reserved-statement
 input-declaration = input [s] variable-expression
 local-declaration = local s variable [s] "=" [s] expression
 ```
@@ -169,26 +186,52 @@ external input value does not appear in a _declaration_.
 > [!Note]
 > These restrictions only apply to _declarations_.
 > A _placeholder_ or _selector_ can apply a different annotation to a _variable_
-> than one applied to the same _variable_ name in a _declaration_.
+> than one applied to the same _variable_ named in a _declaration_.
 > For example, this message is _valid_:
 > ```
-> {{
->    input {$var :number maxFractionDigits=0}
->    match {$var :plural maxFractionDigits=2}
->    when 0 {{The selector can apply a different annotation to {$var} for the purposes of selection}}
->    when * {{A placeholder in a pattern can apply a different annotation to {$var :number maxFractionDigits=3}}}
-> }}
+> .input {$var :number maxFractionDigits=0}
+> .match {$var :plural maxFractionDigits=2}
+> 0 {{The selector can apply a different annotation to {$var} for the purposes of selection}}
+> * {{A placeholder in a pattern can apply a different annotation to {$var :number maxFractionDigits=3}}}
 > ```
 > (See [Error Handling](./formatting.md#error-handling) for examples of invalid messages)
 
-### Body
+#### Reserved Statements
 
-The **_<dfn>body</dfn>_** of a _complex message_ is the part that will be formatted.
-The _body_ consists of either a _quoted pattern_ or a _matcher_.
+A **_<dfn>reserved statement</dfn>_** reserves additional `.keywords`
+for use by future versions of this specification.
+Any such future keyword must start with `.`,
+followed by two or more lower-case ASCII characters.
+
+The rest of the statement supports
+a similarly wide range of content as _reserved annotations_,
+but it MUST end with one or more _expressions_.
 
 ```abnf
-body = quoted-pattern
-     / (selectors 1*([s] variant))
+reserved-statement = reserved-keyword [s reserved-body] 1*expression
+reserved-keyword = "." 2*(%x61-7A)
+```
+
+> [!Note]
+> The `reserved-keyword` ABNF rule is a simplification,
+> as it MUST NOT be considered to match any of the existing keywords
+> `.input`, `.local`, or `.match`.
+
+This allows flexibility in future standardization,
+as future definitions MAY define additional semantics and constraints
+on the contents of these _reserved statements_.
+
+Implementations MUST NOT assign meaning or semantics to a _reserved statement_:
+these are reserved for future standardization.
+Implementations MUST NOT remove or alter the contents of a _reserved statement_.
+
+### Complex Body
+
+The **_<dfn>complex body</dfn>_** of a _complex message_ is the part that will be formatted.
+The _complex body_ consists of either a _quoted pattern_ or a _matcher_.
+
+```abnf
+complex-body = quoted-pattern / matcher
 ```
 
 ## Pattern
@@ -198,7 +241,7 @@ Unless there is an error, resolving a _message_ always results in the formatting
 of a single _pattern_.
 
 ```abnf
-pattern = *(text / expression)
+pattern = *(text-char / text-escape / placeholder)
 ```
 A _pattern_ MAY be empty.
 
@@ -229,11 +272,27 @@ A _quoted pattern_ MAY be empty.
 **_<dfn>text</dfn>_** is the translateable content of a _pattern_.
 Any Unicode code point is allowed, except for surrogate code points U+D800
 through U+DFFF inclusive.
-The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}`
-respectively.
+The characters U+005C REVERSE SOLIDUS `\`,
+U+007B LEFT CURLY BRACKET `{`, and U+007D RIGHT CURLY BRACKET `}`
+MUST be escaped as `\\`, `\{`, and `\}` respectively.
+
+In the ABNF, _text_ is represented by non-empty sequences of
+`simple-start-char`, `text-char`, and `text-escape`.
+The first of these is used at the start of a _simple message_,
+and matches `text-char` except for not allowing U+002E FULL STOP `.`.
 
 Whitespace in _text_, including tabs, spaces, and newlines is significant and MUST
 be preserved during formatting.
+
+```abnf
+simple-start-char = %x0-2D         ; omit .
+                  / %x2F-5B        ; omit \
+                  / %x5D-7A        ; omit {
+                  / %x7C           ; omit }
+                  / %x7E-D7FF      ; omit surrogates
+                  / %xE000-10FFFF
+text-char = simple-start-char / "."
+```
 
 When a _pattern_ is quoted by embedding the _pattern_ in curly brackets, the
 resulting _message_ can be embedded into
@@ -246,18 +305,9 @@ Otherwise, care must be taken to ensure that pattern-significant whitespace is p
 > This _pattern_ consists of _text_ with exactly three spaces before and after the word "Hello":
 >
 > ```properties
-> hello = {{{{   Hello   }}}}
+> hello = {{   Hello   }}
 > hello2=\   Hello  \ 
 > ```
-
-```abnf
-text = 1*(text-char / text-escape)
-text-char = %x0-5B         ; omit \
-          / %x5D-7A        ; omit {
-          / %x7C           ; omit }
-          / %x7E-D7FF      ; omit surrogates
-          / %xE000-10FFFF
-```
 
 ### Placeholder
 
@@ -270,7 +320,7 @@ placeholder = expression
 
 ## Matcher
 
-A **_<dfn>matcher</dfn>_** is the _body_ of a _message_ that allows runtime selection
+A **_<dfn>matcher</dfn>_** is the _complex body_ of a _message_ that allows runtime selection
 of the _pattern_ to use for formatting.
 This allows the form or content of a _message_ to vary based on values
 determined at runtime.
@@ -288,29 +338,28 @@ satisfied:
 - At least one _variant_ MUST exist whose _keys_ are all equal to the "catch-all" key `*`.
 
 ```abnf
-matcher = match 1*(selector) 1*(variant)
+matcher = match-statement 1*([s] variant)
+match-statement = match 1*([s] selector)
 ```
 
 > A _message_ with a _matcher_:
 >
 > ```
-> {{
-> match {$count :number}
-> when 1 {{You have one notification.}}
-> when * {{You have {$count} notifications.}}
-> }}
+> .match {$count :number}
+> 1 {{You have one notification.}}
+> * {{You have {$count} notifications.}}
 > ```
 
 > A _message_ containing a _matcher_ formatted on a single line:
 >
 > ```
-> {{match {:platform} when windows {{Settings}} when * {{Preferences}}}}
+> .match {:platform} windows {{Settings}} * {{Preferences}}
 > ```
 
 ### Selector
 
 A **_<dfn>selector</dfn>_** is an _expression_ that ranks or excludes the
-_variants_ based on the value of its corresponding _key_ in each _variant_.
+_variants_ based on the value of the corresponding _key_ in each _variant_.
 The combination of _selectors_ in a _matcher_ thus determines
 which _pattern_ will be used during formatting.
 
@@ -325,41 +374,36 @@ There MAY be any number of additional _selectors_.
 > allowing the _message_ to choose a _pattern_ based on grammatical case:
 >
 > ```
-> {{
-> match {$userName :hasCase}
-> when vocative {{Hello, {$userName :person case=vocative}!}}
-> when accusative {{Please welcome {$userName :person case=accusative}!}}
-> when * {{Hello!}}
-> }}
+> .match {$userName :hasCase}
+> vocative {{Hello, {$userName :person case=vocative}!}}
+> accusative {{Please welcome {$userName :person case=accusative}!}}
+> * {{Hello!}}
 > ```
 
 > A message with two _selectors_:
 >
 > ```
-> {{
-> match {$photoCount :number} {$userGender :equals}
-> when 1 masculine {{{$userName} added a new photo to his album.}}
-> when 1 feminine  {{{$userName} added a new photo to her album.}}
-> when 1 *         {{{$userName} added a new photo to their album.}}
-> when * masculine {{{$userName} added {$photoCount} photos to his album.}}
-> when * feminine  {{{$userName} added {$photoCount} photos to her album.}}
-> when * *         {{{$userName} added {$photoCount} photos to their album.}}
-> }}
+> .match {$photoCount :number} {$userGender :equals}
+> 1 masculine {{{$userName} added a new photo to his album.}}
+> 1 feminine  {{{$userName} added a new photo to her album.}}
+> 1 *         {{{$userName} added a new photo to their album.}}
+> * masculine {{{$userName} added {$photoCount} photos to his album.}}
+> * feminine  {{{$userName} added {$photoCount} photos to her album.}}
+> * *         {{{$userName} added {$photoCount} photos to their album.}}
 > ```
 
 ### Variant
 
-A **_<dfn>variant</dfn>_** is a _pattern_ associated with a set of _keys_ in a _matcher_.
-Each _variant_ MUST begin with the keyword `when`,
-be followed by a sequence of _keys_,
-and terminate with a valid _pattern_.
+A **_<dfn>variant</dfn>_** is a _quoted pattern_ associated with a set of _keys_ in a _matcher_.
+Each _variant_ MUST begin with a sequence of _keys_,
+and terminate with a valid _quoted pattern_.
 The number of _keys_ in each _variant_ MUST match the number of _selectors_ in the _matcher_.
 
-Each _key_ is separated from the keyword `when` and from each other by whitespace.
-Whitespace is permitted but not required between the last _key_ and the _pattern_.
+Each _key_ is separated from each other by whitespace.
+Whitespace is permitted but not required between the last _key_ and the _quoted pattern_.
 
 ```abnf
-variant = when 1*(s key) [s] pattern
+variant = key *(s key) [s] quoted-pattern
 key = literal / "*"
 ```
 
@@ -380,6 +424,7 @@ during the _message_'s formatting.
 An _expression_ MUST begin with U+007B LEFT CURLY BRACKET `{`
 and end with U+007D RIGHT CURLY BRACKET `}`.
 An _expression_ MUST NOT be empty.
+An _expression_ cannot contain another _expression_.
 
 A **_<dfn>literal-expression</dfn>_** contains a _literal_,
 optionally followed by an _annotation_.
@@ -387,14 +432,13 @@ optionally followed by an _annotation_.
 A **_<dfn>variable-expression</dfn>_** contains a _variable_,
 optionally followed by an _annotation_.
 
-A **_<dfn>function-expression</dfn>_** contains only an _annotation_.
+An **_<dfn>annotation-expression</dfn>_** contains an _annotation_ without an _operand_.
 
 ```abnf
-expression = literal-expression / variable-expression / function-expression
+expression = literal-expression / variable-expression / annotation-expression
 literal-expression = "{" [s] literal [s annotation] [s] "}"
 variable-expression = "{" [s] variable [s annotation] [s] "}"
-function-expression = "{" [s] annotation [s] "}"
-annotation = (function *(s option)) / private-use / reserved
+annotation-expression = "{" [s] annotation [s] "}"
 ```
 
 There are several types of _expression_ that can appear in a _message_.
@@ -411,32 +455,35 @@ Additionally, an _input-declaration_ can contain a _variable-expression_.
 > Declarations:
 >
 > ```
-> input {$x :function option=value}
-> local $y = {|This is an expression|}
+> .input {$x :function option=value}
+> .local $y = {|This is an expression|}
 > ```
 >
 > Selectors:
 >
 > ```
-> match {$selector :functionRequired}
+> .match {$selector :functionRequired}
 > ```
 >
 > Placeholders:
 >
 > ```
-> This placeholder contains an {|expression with a literal|}
-> This placeholder references a {$variable}
+> This placeholder contains a literal expression: {|literal|}
+> This placeholder contains a variable expression: {$variable}
 > This placeholder references a function on a variable: {$variable :function with=options}
+> This placeholder contains a function expression with a variable-valued option: {:function option=$variable}
 > ```
 
 ### Annotation
 
 An **_<dfn>annotation</dfn>_** is part of an _expression_ containing either
 a _function_ together with its associated _options_, or
-a _private-use_ or _reserved_ sequence.
+a _private-use annotation_ or a _reserved annotation_.
 
 ```abnf
-annotation = (function *(s option)) / reserved / private-use
+annotation = (function *(s option))
+           / private-use-annotation
+           / reserved-annotation
 ```
 
 An **_<dfn>operand</dfn>_** is the _literal_ of a _literal-expression_ or
@@ -482,7 +529,7 @@ and vice versa.
 > {+button}Submit{-button} or {+link}cancel{-link}.
 > ```
 
-A _function_ consists of a prefix sigil followed by a _name_.
+A _function_ consists of a prefix sigil followed by an _identifier_.
 The following sigils are used for _functions_:
 
 - `:` for a _standalone_ function
@@ -497,8 +544,8 @@ _Options_ are not required.
 An **_<dfn>option</dfn>_** is a key-value pair
 containing a named argument that is passed to a _function_.
 
-An _option_ has a _name_ and a _value_.
-The _name_ is separated from the _value_ by an U+003D EQUALS SIGN `=` along with
+An _option_ has an _identifier_ and a _value_.
+The _identifier_ is separated from the _value_ by an U+003D EQUALS SIGN `=` along with
 optional whitespace.
 The value of an _option_ can be either a _literal_ or a _variable_.
 
@@ -506,7 +553,7 @@ Multiple _options_ are permitted in an _annotation_.
 Each _option_ is separated by whitespace.
 
 ```abnf
-option = name [s] "=" [s] (literal / variable)
+option = identifier [s] "=" [s] (literal / variable)
 ```
 
 > Examples of _functions_ with _options_
@@ -533,36 +580,45 @@ option = name [s] "=" [s] (literal / variable)
 > Hello, {$userObj :person firstName=long}!
 > ```
 
-#### Private-Use
+> A _message_ formatted with the custom _function_ `:list`
+> that has an option `maxEntries`
+> that has a _variable_ as its value:
+>
+> ```
+> Hello, {$userList :list maxEntries=$maxEntries}!
+> ```
 
-A **_<dfn>private-use</dfn>_** _annotation_ is an _annotation_ whose syntax is reserved
+#### Private-Use Annotations
+
+A **_<dfn>private-use annotation</dfn>_** is an _annotation_ whose syntax is reserved
 for use by a specific implementation or by private agreement between multiple implementations.
-Implementations MAY define their own meaning and semantics for _private-use_ annotations.
+Implementations MAY define their own meaning and semantics for _private-use annotations_.
 
-A _private-use_ annotation starts with either U+0026 AMPERSAND `&` or U+005E CIRCUMFLEX ACCENT `^`.
+A _private-use annotation_ starts with either U+0026 AMPERSAND `&` or U+005E CIRCUMFLEX ACCENT `^`.
 
 Characters, including whitespace, are assigned meaning by the implementation.
 The definition of escapes in the `reserved-body` production, used for the body of
-a _private-use_ annotation is an affordance to implementations that
+a _private-use annotation_ is an affordance to implementations that
 wish to use a syntax exactly like other functions. Specifically:
 
 - The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}` respectively
-  when they appear in the body of a _private-use_ annotation.
-- The character `|` is special: it SHOULD be escaped as `\|` in a _private-use_ annotation,
-  but can appear unescaped as long as it is paired with another `|`. This is an affordance to
-  allow _literals_ to appear in the private use syntax.
+  when they appear in the body of a _private-use annotation_.
+- The character `|` is special: it SHOULD be escaped as `\|` in a _private-use annotation_,
+  but can appear unescaped as long as it is paired with another `|`.
+  This is an affordance to allow _literals_ to appear in the private use syntax.
 
-A _private-use_ _annotation_ MAY be empty after its introducing sigil.
-
-**NOTE:** Users are cautioned that _private-use_ sequences cannot be reliably exchanged
-and can result in errors during formatting.
-It is generally a better idea to use the function registry
-to define additional formatting or annotation options.
+A _private-use annotation_ MAY be empty after its introducing sigil.
 
 ```abnf
-private-use   = private-start reserved-body
-private-start = "&" / "^"
+private-use-annotation = private-start reserved-body
+private-start = "^" / "&"
 ```
+
+> [!Note]
+> Users are cautioned that _private-use annotations_ cannot be reliably exchanged
+> and can result in errors during formatting.
+> It is generally a better idea to use the function registry
+> to define additional formatting or annotation options.
 
 > Here are some examples of what _private-use_ sequences might look like:
 >
@@ -575,39 +631,40 @@ private-start = "&" / "^"
 > Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}
 > ```
 
-#### Reserved
+#### Reserved Annotations
 
-A **_<dfn>reserved</dfn>_** _annotation_ is an _annotation_ whose syntax is reserved
+A **_<dfn>reserved annotation</dfn>_** is an _annotation_ whose syntax is reserved
 for future standardization.
 
-A _reserved_ _annotation_ starts with a reserved character.
-A _reserved_ _annotation_ MAY be empty or contain arbitrary text after its first character.
+A _reserved annotation_ starts with a reserved character.
+A _reserved annotation_ MAY be empty or contain arbitrary text after its first character.
 
 This allows maximum flexibility in future standardization,
 as future definitions MAY define additional semantics and constraints
 on the contents of these _annotations_.
-A _reserved_ _annotation_ does not include trailing whitespace.
+A _reserved annotation_ does not include trailing whitespace.
 
 Implementations MUST NOT assign meaning or semantics to
 an _annotation_ starting with `reserved-start`:
 these are reserved for future standardization.
-Implementations MUST NOT remove or alter the contents of a _reserved_ _annotation_.
+Implementations MUST NOT remove or alter the contents of a _reserved annotation_.
 
 While a reserved sequence is technically "well-formed",
-unrecognized reserved sequences have no meaning and MAY result in errors during formatting.
+unrecognized _reserved-annotations_ or _private-use-annotations_ have no meaning.
 
 ```abnf
-reserved       = reserved-start reserved-body
-reserved-start = "!" / "@" / "#" / "%" / "*" / "<" / ">" / "/" / "?" / "~"
+reserved-annotation = reserved-annotation-start reserved-body
+reserved-annotation-start = "!" / "@" / "#" / "%" / "*"
+                          / "<" / ">" / "/" / "?" / "~"
 
-reserved-body  = *( [s] 1*(reserved-char / reserved-escape / quoted))
-reserved-char  = %x00-08        ; omit HTAB and LF
-               / %x0B-0C        ; omit CR
-               / %x0E-19        ; omit SP
-               / %x21-5B        ; omit \
-               / %x5D-7A        ; omit { | }
-               / %x7E-D7FF      ; omit surrogates
-               / %xE000-10FFFF
+reserved-body = *([s] 1*(reserved-char / reserved-escape / quoted))
+reserved-char = %x00-08        ; omit HTAB and LF
+              / %x0B-0C        ; omit CR
+              / %x0E-19        ; omit SP
+              / %x21-5B        ; omit \
+              / %x5D-7A        ; omit { | }
+              / %x7E-D7FF      ; omit surrogates
+              / %xE000-10FFFF
 ```
 
 ## Other Syntax Elements
@@ -618,14 +675,13 @@ This section defines common elements used to construct _messages_.
 
 A **_<dfn>keyword</dfn>_** is a reserved token that has a unique meaning in the _message_ syntax.
 
-The following four keywords are reserved: `input`, `local`, `match`, and `when`.
-Reserved keywords are always lowercase.
+The following three keywords are defined: `.input`, `.local`, and `.match`.
+Keywords are always lowercase and start with U+002E FULL STOP `.`.
 
 ```abnf
-input = "input"
-local = "local"
-match = "match"
-when  = "when"
+input = %s".input"
+local = %s".local"
+match = %s".match"
 ```
 
 ### Literals
@@ -653,10 +709,9 @@ Any _unquoted_ literal MAY be _quoted_.
 Implementations MUST NOT distinguish between _quoted_ and _unquoted_ literals
 that have the same sequence of code points.
 
-_Unquoted_ literals have a much more restricted range that
-is intentionally close to the XML's [Nmtoken](https://www.w3.org/TR/xml/#NT-Nmtoken),
-with the restriction that it MUST NOT start with `-` or `:`,
-as those would conflict with _function_ start characters.
+_Unquoted_ literals can contain a _name_ or consist of a _number-literal_.
+A _number-literal_ uses the same syntax as JSON and is intended for the encoding 
+of number values in _operands_ or _options_, or as _keys_ for _variants_.
 
 ```abnf
 literal = quoted / unquoted
@@ -667,26 +722,71 @@ quoted-char    = %x0-5B         ; omit \
                / %x7D-D7FF      ; omit surrogates
                / %xE000-10FFFF
 
-unquoted       = unquoted-start *name-char
-unquoted-start = name-start / DIGIT / "."
-               / %xB7 / %x300-36F / %x203F-2040
+unquoted       = name
+               / number-literal
+number-literal = ["-"] (0 / ([1-9] *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
 ```
 
-### Names
+### Names and Identifiers
 
-A **_<dfn>name</dfn>_** is an identifier for a _variable_ (prefixed with `$`),
-for a _function_ (prefixed with `:`, `+` or `-`),
-or for an _option_ (these have no prefix).
-The namespace for _names_ is based on XML's [Name](https://www.w3.org/TR/xml/#NT-Name),
-with the restriction that it MUST NOT start with `:`,
-as that would conflict with the _function_ start character.
-Otherwise, the set of characters allowed in names is large.
+An **_<dfn>identifier</dfn>_** is a character sequence that
+identifies a _function_ or _option_.
+Each _identifier_ consists of a _name_ optionally preceeded by
+a _namespace_. 
+When present, the _namespace_ is separated from the _name_ by a
+U+003A COLON `:`.
+Built-in _functions_ and their _options_ do not have a _namespace_ identifier.
+
+_Function_ _identifiers_ are prefixed with `:`, `+`, or `-`.
+_Option_ _identifiers_ have no prefix.
+
+A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_ 
+or as the name for a _variable_
+or the value of an _unquoted_ _literal_.
+
+_Variable_ names are prefixed with `$`.
+_Function_ names are prefixed with `:`, `+` or `-`.
+
+Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
+[NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
+This is different from XML's [Name](https://www.w3.org/TR/xml/#NT-Name)
+in that it MUST NOT contain a U+003A COLON `:`.
+Otherwise, the set of characters allowed in a _name_ is large.
+
+> [!NOTE]
+> _External variables_ can be passed in that are not valid _names_.
+> Such variables cannot be referenced in a _message_,
+> but are not otherwise errors.
+
+Examples:
+> A variable:
+>```
+>This has a {$variable}
+>```
+>A function:
+> ```
+> This has a {:function}
+> ```
+> An add-on function from the `icu` namespace:
+> ```
+> This has a {:icu:function}
+> ```
+> An option and an add-on option:
+> ```
+> This has {:options option=value icu:option=add_on}
+> ```
+
+Support for _namespaces_ and their interpretation is implementation-defined
+in this release.
 
 ```abnf
 variable = "$" name
-function = (":" / "+" / "-") name
+function = (":" / "+" / "-") identifier
+option = identifier [s] "=" [s] (literal / variable)
 
-name = name-start *name-char
+identifier = [namespace ":"] name
+namespace  = name
+name       = name-start *name-char
 name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
            / %x370-37D / %x37F-1FFF / %x200C-200D
@@ -695,11 +795,6 @@ name-start = ALPHA / "_"
 name-char  = name-start / DIGIT / "-" / "." / ":"
            / %xB7 / %x300-36F / %x203F-2040
 ```
-
-> [!NOTE]
-> _External variables_ can be passed in that are not valid _names_.
-> Such variables cannot be referenced in a _message_,
-> but are not otherwise errors.
 
 ### Escape Sequences
 
@@ -742,9 +837,7 @@ To make `message.abnf` compatible with that version of ABNF, replace
 the rules of the same name with this block:
 
 ```abnf
-; reserved keywords are always lowercase
-input = %x69.6E.70.75.74  ; "input"
-local = %x6C.6F.63.61.6C  ; "local"
-match = %x6D.61.74.63.68  ; "match"
-when  = %x77.68.65.6E     ; "when"
+input = %x2E.69.6E.70.75.74  ; ".input"
+local = %x2E.6C.6F.63.61.6C  ; ".local"
+match = %x2E.6D.61.74.63.68  ; ".match"
 ```
