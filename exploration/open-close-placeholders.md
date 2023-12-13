@@ -185,7 +185,7 @@ This is {#strong}bold{/strong} and this is {#img alt=|an image|}.
 Markup names are _namespaced_ by their use of the U+0023 NUMBER SIGN `#` and the U+002F SOLIDUS `/` sigils.
 They are distinct from `$variables`, `:functions`, and `|literals|`.
 
-This allows for placeholders like `{#b}`, and `{#a title=|Link tooltip|}`.
+This allows for placeholders like `{#b}`, `{#img}`, and `{#a title=|Link tooltip|}`.
 Unlike annotations, markup _placeholders_ may not have operands.
 
 Markup is not valid in _declarations_ or _selectors_.
@@ -201,6 +201,9 @@ Markup is not valid in _declarations_ or _selectors_.
 #### Cons
 
 * Introduces two new sigils, U+0023 NUMBER SIGN `#` and the U+002F SOLIDUS `/`.
+
+* As in HTML, differentiating "open" and "standalone" placeholders requires
+  additional information not encoded in the bare syntax.
 
 * In Mustache, the `{{#foo}}`...`{{/foo}}` syntax is used for *control flow* statements rather than printable data.
 
