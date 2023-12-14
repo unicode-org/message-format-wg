@@ -1,5 +1,8 @@
 # Consensus Decisions
 
+> [!NOTE]
+> This document is historical. This mechanism was replaced with design documents and meeting notes.
+
 During its proceedings, the working group has reached internal consensus on a number of issues.
 This document enumerates those, and provides a reference for later actions.
 
