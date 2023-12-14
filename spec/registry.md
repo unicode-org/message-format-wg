@@ -40,10 +40,9 @@ a copy of this registry in order to be conformant.
 The MessageFormat 2.0 Registry was created to describe
 the core set of formatting and selection _functions_,
 including _operands_, _options_, and _option_ values.
-The descriptions in this registry are intended to describe the specific required
-signatures for _functions_ that all implementations of MessageFormat 2.0
-MUST implement.
-The goal is to enable message interoperability between implementations,
+This is the minimum set of functionality needed for conformance.
+By using the same names and values, _messages_ can be used interchangeably
+by different implementations,
 regardless of programming language or runtime environment.
 This ensures that developers do not have to relearn core MessageFormat syntax
 and functionality when moving between platforms
