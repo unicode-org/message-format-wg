@@ -33,8 +33,8 @@ Aliases:
 - `:integer` (implies: `maximumFractionDigits=0`)
 - `:currency` (implies: `style=currency`)
 - `:percent` (implies: `style=percent`)
-- `:plural` (selector only, implies CLDR rules)
-- `:ordinal` (missing formats, missing selector)
+- `:plural` (no format, implies `style=plural` which is default)
+- `:ordinal` (missing format, implies: `style=ordinal`)
 
 Operand: anyNumber
 
@@ -46,7 +46,8 @@ Options:
 - `notation` (`standard` `scientific` `engineering` `compact`; default: `standard`)
 - `numberingSystem` (arab arabext bali beng deva fullwide gujr guru hanidec khmr knda laoo latn 
    limb mlym mong mymr orya tamldec telu thai tibt)
-- `signDisplay` (auto always exceptZero never" default="auto")
+- `select` (`plural`, `ordinal`, `exact`; default: `plural`)
+- `signDisplay` (`auto` `always` `exceptZero` `never`; default="auto")
 - `style` (decimal currency percent unit" default="decimal")
 - `unit` (anything not empty)
 - `unitDisplay` (long short narrow" default="short")
@@ -56,6 +57,8 @@ Options:
 - `minimumSignificantDigits`, (positive integer, default: `1`)
 - `maximumSignificantDigits`, (positive integer, default: `21`)
 
+(When no default is given, the default depends on the locale or implementation)
+
 ### Dates and Times
 
 Function name: `:datetime`
@@ -63,24 +66,26 @@ Function name: `:datetime`
 Operand: "iso8601"
 
 Options:
-- `dateStyle` (full long medium short)
-- `timeStyle` (full long medium short)
+- `dateStyle` (`full` `long` `medium` `short`)
+- `timeStyle` (`full` `long` `medium` `short`)
 - `calendar` (buddhist chinese coptic dangi ethioaa ethiopic gregory hebrew indian islamic islamic-umalqura 
    islamic-tbla islamic-civil islamic-rgsa iso8601 japanese persian roc)
 - `numberingSystem` (arab arabext bali beng deva fullwide gujr guru hanidec khmr knda laoo latn 
    limb mlym mong mymr orya tamldec telu thai tibt)
 - `timezone` (tzid)
-- `hourCycle` (h11 h12 h23 h24)
-- `weekday` (long short narrow)
-- `era` (long short narrow)
-- `year` (numeric, 2-digit)
-- `month` (numeric 2-digit long short narrow)
-- `day` (numeric 2-digit)
-- `hour` (numeric 2-digit)
-- `minute` (numeric 2-digit)
-- `second` (numeric 2-digit)
-- `fractionalSecondDigits` (1, 2, 3)
-- `timeZoneName` (long short shortOffset longOffset shortGeneric longGeneric)
+- `hourCycle` (`h11` `h12` `h23` `h24`)
+- `weekday` (`long` `short` `narrow`)
+- `era` (`long` `short` `narrow`)
+- `year` (`numeric` `2-digit`)
+- `month` (`numeric` `2-digit` `long` `short` `narrow`)
+- `day` (`numeric` `2-digit`)
+- `hour` (`numeric` `2-digit`)
+- `minute` (`numeric` `2-digit`)
+- `second` (`numeric` `2-digit`)
+- `fractionalSecondDigits` (`1`, `2`, `3`)
+- `timeZoneName` (`long` `short` `shortOffset` `longOffset` `shortGeneric` `longGeneric`)
+
+(When no default is given, the default depends on the locale or implementation)
 
 ### Strings
 
