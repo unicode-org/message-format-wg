@@ -97,18 +97,20 @@ Options:
 
 ## Compatibility Matrix
 
+How to write an MF1 format or selector in MF2:
+
 | MF1      | Syntax               | MF2                                                          | Comment |
 |----------|----------------------|--------------------------------------------------------------|---------|
 | Number   | {num,number}         | {$num :number}                                               |         |
 | Integer  | {num,number,integer} | {$num :number maximumFractionDigits=0}  {$num :integer}      |         |
-| Percent  | {num,number,percent} |                                                              | missing |
+| Percent  | {num,number,percent} | {$num :number style=percent} {$num :percent}                 |         |
 | Currency | {num,number,currency} | {$num :number currency=$code} {$num :currency}              |         |
 | Plural (selector)  | {num,plural, ...}    | .match {$num :number} {$num :plural}               |         |
 | Ordinal (selector) | {num,selectordinal, ...} | .match {$num :ordinal}                         |         |
 | Ordinal (format)   | {num,ordinal} | {$num :number type=ordinal} {$num :ordinal}               |         |
-| Date     | {date,date}          | {$date :datetime type=date}                                  |         |
+| Date     | {date,date}          | {$date :datetime}                                            | short date is default |
 | Date     | {date,date,short}    | {$date :datetime dateStyle=short}                            | also medium,long,full |
-| Time     | {date,time}          | {$date :datetime type=time}                                  |         |
+| Time     | {date,time}          | {$date :datetime timeStyle=short}                            | timeStyle required    |
 | Date     | {date,time,short}    | {$date :datetime timeStyle=short}                            | also medium,long,full |
 | Datetime | (requires picture or skeleton) | {$date :datetime dateStyle=short timeStyle=short}  | also medium,long,full |
 | Datetime | {date,time,::skeleton} | {$date :datetime weekday=short etc.}                       | supported through options bag |
