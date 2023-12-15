@@ -33,8 +33,8 @@ Aliases:
 - `:integer` (implies: `maximumFractionDigits=0`)
 - `:currency` (implies: `style=currency`)
 - `:percent` (implies: `style=percent`)
-- `:plural` (no format, implies `style=plural` which is default)
-- `:ordinal` (missing format, implies: `style=ordinal`)
+- `:plural` (no format, implies `select=plural` which is default)
+- `:ordinal` (implies: `select=ordinal`; we are missing `style=ordinal`)
 
 Operand: anyNumber
 
@@ -47,10 +47,10 @@ Options:
 - `numberingSystem` (arab arabext bali beng deva fullwide gujr guru hanidec khmr knda laoo latn 
    limb mlym mong mymr orya tamldec telu thai tibt)
 - `select` (`plural`, `ordinal`, `exact`; default: `plural`)
-- `signDisplay` (`auto` `always` `exceptZero` `never`; default="auto")
-- `style` (decimal currency percent unit" default="decimal")
+- `signDisplay` (`auto` `always` `exceptZero` `never`; default=`auto`)
+- `style` (`decimal` `currency` `percent` `unit`; default=`decimal`)
 - `unit` (anything not empty)
-- `unitDisplay` (long short narrow" default="short")
+- `unitDisplay` (`long` `short` `narrow`; default=`short`)
 - `minimumIntegerDigits`, (positive integer, default: `1`)
 - `minimumFractionDigits`, (positive integer)
 - `maximumFractionDigits`, (positive integer)
