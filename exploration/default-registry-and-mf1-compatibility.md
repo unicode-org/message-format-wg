@@ -1,0 +1,112 @@
+# Default Registry and MF1 Compatbility
+
+Status: **Proposed**
+
+<details>
+	<summary>Metadata</summary>
+	<dl>
+		<dt>Contributors</dt>
+		<dd>@aphillips</dd>
+		<dt>First proposed</dt>
+		<dd>2023-12-15</dd>
+	</dl>
+</details>
+
+## Objective
+
+_What is this proposal trying to achieve?_
+
+This section contains the list of functions (both _selectors_ and _formatters_)
+proposed for the 2.0 default registry,
+along with their _operands_ and _options_.
+
+It also contains a section comparing MF1 (as embodied by ICU4J) and MF2
+to ensure that we don't forget something.
+
+## Default Registry Entries
+
+### Numbers
+
+Function name: `:number`
+
+Aliases: `:integer`, `:currency`, `:percent`
+
+Operand: anyNumber
+
+Options:
+- `compactDisplay` (`short`, `long`; default: `short`)
+- `currency` (ISO 4712 currency code)
+- `currencyDisplay` (`symbol` `narrowSymbol` `code` `name`; default: `symbol`)
+- `currencySign` (`accounting`, `standard`; default: `standard`)
+- `notation` (`standard` `scientific` `engineering` `compact`; default: `standard`)
+- `numberingSystem` (arab arabext bali beng deva fullwide gujr guru hanidec khmr knda laoo latn 
+   limb mlym mong mymr orya tamldec telu thai tibt)
+- `signDisplay` (auto always exceptZero never" default="auto")
+- `style` (decimal currency percent unit" default="decimal")
+- `unit` (anything not empty)
+- `unitDisplay` (long short narrow" default="short")
+- `minimumIntegerDigits`, (positive integer, default: `1`)
+- `minimumFractionDigits`, (positive integer)
+- `maximumFractionDigits`, (positive integer)
+- `minimumSignificantDigits`, (positive integer, default: `1`)
+- `maximumSignificantDigits`, (positive integer, default: `21`)
+
+### Dates and Times
+
+Function name: `:datetime`
+
+Operand: "iso8601"
+
+Options:
+- `dateStyle` (full long medium short)
+- `timeStyle` (full long medium short)
+- `calendar` (buddhist chinese coptic dangi ethioaa ethiopic gregory hebrew indian islamic islamic-umalqura 
+   islamic-tbla islamic-civil islamic-rgsa iso8601 japanese persian roc)
+- `numberingSystem` (arab arabext bali beng deva fullwide gujr guru hanidec khmr knda laoo latn 
+   limb mlym mong mymr orya tamldec telu thai tibt)
+- `timezone` (tzid)
+- `hourCycle` (h11 h12 h23 h24)
+- `weekday` (long short narrow)
+- `era` (long short narrow)
+- `year` (numeric, 2-digit)
+- `month` ("numeric 2-digit long short narrow)
+- `day` (numeric 2-digit)
+- `hour` (numeric 2-digit)
+- `minute` (numeric 2-digit)
+- `second` (numeric 2-digit)
+- `fractionalSecondDigits` (1, 2, 3)
+- `timeZoneName` (long short shortOffset longOffset shortGeneric longGeneric)
+
+### Strings
+
+Function name: `:string`
+
+Operand: any string
+
+Options:
+(none?)
+
+
+### Other
+
+
+## Compatibility Matrix
+
+| MF1      | Syntax               | MF2                                                          | Comment |
+|----------|----------------------|--------------------------------------------------------------|---------|
+| Number   | {num,number}         | {$num :number}                                               |         |
+| Integer  | {num,number,integer} | {$num :number maximumFractionDigits=0}  {$num :integer}      |         |
+| Percent  | {num,number,percent} |                                                              | missing |
+| Currency | {num,number,currency} | {$num :number currency=$code} {$num :currency}              |         |
+| Plural (selector)  | {num,plural, ...}    | .match {$num :number} {$num :plural}               |         |
+| Ordinal (selector) | {num,selectordinal, ...} | .match {$num :ordinal}                         |         |
+| Oridnal (format)   | {num,ordinal} | {$num :number type=ordinal} {$num :ordinal}               |         |
+| Date     | {date,date}          | {$date :datetime type=date}                                  |         |
+| Date     | {date,date,short}    | {$date :datetime dateStyle=short}                            | also medium,long,full |
+| Time     | {date,time}          | {$date :datetime type=time}                                  |         |
+| Date     | {date,time,short}    | {$date :datetime timeStyle=short}                            | also medium,long,full |
+| Datetime | (requires picture or skeleton) | {$date :datetime dateStyle=short timeStyle=short}  | also medium,long,full |
+| Datetime | {date,time,::skeleton} | {$date :datetime weekday=short etc.}                       | supported through options bag |
+| Spellout | {num,spellout}       |                                                              | missing |
+| Duration | {num,duration}       |                                                              | missing |
+| Choice   | {num,choice, ...}    |                                                              | deprecated in MF1 |
