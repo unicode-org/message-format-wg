@@ -112,7 +112,7 @@ How to write an MF1 format or selector in MF2:
 | Currency | {num,number,currency} | {$num :number currency=$code} {$num :currency}              |         |
 | Plural (selector)  | {num,plural, ...}    | .match {$num :number} {$num :plural}               |         |
 | Ordinal (selector) | {num,selectordinal, ...} | .match {$num :ordinal}                         |         |
-| Ordinal (format)   | {num,ordinal} | {$num :number type=ordinal} {$num :ordinal}               |         |
+| Ordinal (format)   | {num,ordinal} |                                                           | missing |
 | Date     | {date,date}          | {$date :datetime}                                            | short date is default |
 | Date     | {date,date,short}    | {$date :datetime dateStyle=short}                            | also medium,long,full |
 | Time     | {date,time}          | {$date :datetime timeStyle=short}                            | timeStyle required    |
