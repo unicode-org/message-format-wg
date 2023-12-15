@@ -114,9 +114,9 @@ How to write an MF1 format or selector in MF2:
 | String   | {var}                | {$var} {$var :string}                                        |         |
 | Select   | {var,select...}      | .match {$var :string}                                        |         |
 | Number   | {num,number}         | {$num :number}                                               |         |
-| Integer  | {num,number,integer} | {$num :number maximumFractionDigits=0}  {$num :integer}      |         |
-| Percent  | {num,number,percent} | {$num :number style=percent} {$num :percent}                 |         |
-| Currency | {num,number,currency} | {$num :number currency=$code} {$num :currency}              |         |
+| Integer  | {num,number,integer} | {$num :number maximumFractionDigits=0}<br/>{$num :integer}      |         |
+| Percent  | {num,number,percent} | {$num :number style=percent}<br/>{$num :percent}                 |         |
+| Currency | {num,number,currency} | {$num :number currency=$code}<br/>{$num :currency}              |         |
 | Plural (selector)  | {num,plural, ...}    | .match {$num :number} {$num :plural}               |         |
 | Ordinal (selector) | {num,selectordinal, ...} | .match {$num :ordinal}                         |         |
 | Ordinal (format)   | {num,ordinal} |                                                           | missing |
