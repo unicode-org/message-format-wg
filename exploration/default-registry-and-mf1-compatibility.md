@@ -1,4 +1,4 @@
-# Default Registry and MF1 Compatbility
+# Default Registry and MF1 Compatibility
 
 Status: **Proposed**
 
@@ -29,7 +29,12 @@ to ensure that we don't forget something.
 
 Function name: `:number`
 
-Aliases: `:integer`, `:currency`, `:percent`
+Aliases: 
+- `:integer` (implies: `maximumFractionDigits=0`)
+- `:currency` (implies: `style=currency`)
+- `:percent` (implies: `style=percent`)
+- `:plural` (selector only, implies CLDR rules)
+- `:ordinal` (missing formats, missing selector)
 
 Operand: anyNumber
 
@@ -69,7 +74,7 @@ Options:
 - `weekday` (long short narrow)
 - `era` (long short narrow)
 - `year` (numeric, 2-digit)
-- `month` ("numeric 2-digit long short narrow)
+- `month` (numeric 2-digit long short narrow)
 - `day` (numeric 2-digit)
 - `hour` (numeric 2-digit)
 - `minute` (numeric 2-digit)
@@ -100,7 +105,7 @@ Options:
 | Currency | {num,number,currency} | {$num :number currency=$code} {$num :currency}              |         |
 | Plural (selector)  | {num,plural, ...}    | .match {$num :number} {$num :plural}               |         |
 | Ordinal (selector) | {num,selectordinal, ...} | .match {$num :ordinal}                         |         |
-| Oridnal (format)   | {num,ordinal} | {$num :number type=ordinal} {$num :ordinal}               |         |
+| Ordinal (format)   | {num,ordinal} | {$num :number type=ordinal} {$num :ordinal}               |         |
 | Date     | {date,date}          | {$date :datetime type=date}                                  |         |
 | Date     | {date,date,short}    | {$date :datetime dateStyle=short}                            | also medium,long,full |
 | Time     | {date,time}          | {$date :datetime type=time}                                  |         |
