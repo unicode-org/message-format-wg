@@ -16,7 +16,7 @@ Status: **Accepted**
 
 _What is this proposal trying to achieve?_
 
-We need to choose a name for the selector function used when no other selector is specified.
+We need to choose a name for the selector function used to match keys to the string value of an operand.
 
 ## Background
 
