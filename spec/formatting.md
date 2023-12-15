@@ -657,12 +657,13 @@ and a U+007D RIGHT CURLY BRACKET `}`.
 _Messages_ contain text which can be bidirectional,
 consisting of a mixture of left-to-right and right-to-left spans of text.
 
-When concatenating formatted values,
-the [Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9]
-can produce unexpected or undesirable effects, such as "spillover".
-Formatted values SHOULD be bidirectionally isolated
+When producing a formatted _message_, the replacement of
+_placeholders_ with formatted text can result in spans of text that,
+when the [Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9]
+is applied, produce unexpected or undesirable effects, such as "spillover".
+To avoid problems, formatted values SHOULD be bidirectionally isolated,
 so that the directionality of a formatted _expression_
-does not negatively affect the presentation of the overall formatted result.
+does not negatively affect the presentation of the overall formatted _message_.
 
 An implementation MUST define methods for
 determining the directionality of each formatted _expression_.
@@ -671,16 +672,24 @@ MAY rely on the introspection of its contents, or on other means.
 The directionality of the message as a whole is provided by the _formatting context_.
 
 If a formatted _expression_ itself contains spans with differing directionality,
-its formatter SHOULD isolate such parts to avoid
-negatively affecting the presentation of the overall formatted result.
+its formatter SHOULD perform any necessary processing, such as inserting controls or
+isolating such parts to ensure that the formatted value displays correctly in a plain text context.
 
-> For example, an implementation could provide a `:number` formatting function
-> which would always produce output matching the message's locale,
-> allowing for its formatted string representation to never need isolation.
+> For example, an implementation could provide a `:currency` formatting function
+> which inserts RLM, ALM, or LRM characters to properly display a currency symbol
+> next to a formatted number.
+> An example of this is formatting the value `1234.56` as the currency `AED`
+> in the `ar-AE` locale. The formatted value appears like this:
+> ```
+> ‎-1,234.56 د.إ.‏
+> ```
+> The code point sequence used by the ICU4J `NumberFormat` function for this is:
+> U+200F U+200E U+002D U+0031 U+002C U+0032 U+0033 U+0034 U+002E U+0035 U+0036 U+00A0 U+062F U+002E U+0625 U+002E U+200F
 
 Implementations formatting messages as a concatenated string or a sequence of strings
 MUST provide one or more strategies for bidirectional isolation.
-One such strategy MUST behave as follows:
+One such strategy MUST be the **_Plain Text Bidirectional Isolation Strategy_**, which behaves
+as follows:
 
 1. Let `msgdir` be the directionality of the whole message,
    one of « `'LTR'`, `'RTL'`, `'unknown'` ».
@@ -703,7 +712,7 @@ One such strategy MUST behave as follows:
          prefix `fmt` with U+2067 RIGHT-TO-LEFT ISOLATE
          and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
 
-Alternatives to this "compatibility" strategy MAY be provided by implementations,
+Alternatives to this strategy MAY be provided by implementations,
 which MAY also introspect the _pattern_'s _text_ values
 and identify situations where isolate characters are not needed
 or where additional or different isolation would produce better results.
