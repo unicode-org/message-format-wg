@@ -683,8 +683,10 @@ isolating such parts to ensure that the formatted value displays correctly in a 
 > ```
 > ‎-1,234.56 د.إ.‏
 > ```
-> The code point sequence used by the ICU4J `NumberFormat` function for this is:
-> U+200F U+200E U+002D U+0031 U+002C U+0032 U+0033 U+0034 U+002E U+0035 U+0036 U+00A0 U+062F U+002E U+0625 U+002E U+200F
+> The code point sequence produced by the ICU4J `NumberFormat` function for this is:
+> **U+200F U+200E** U+002D U+0031 U+002C U+0032 U+0033 U+0034 U+002E U+0035 U+0036
+> U+00A0 U+062F U+002E U+0625 U+002E **U+200F**
+> Note that U+200F is RIGHT-TO-LEFT MARK and U+200E is LEFT-TO-RIGHT MARK.
 
 Implementations formatting messages as a concatenated string or a sequence of strings
 MUST provide one or more strategies for bidirectional isolation.
