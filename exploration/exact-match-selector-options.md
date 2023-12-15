@@ -107,6 +107,9 @@ The `:string` selector is also a verbatim formatting function.
 That is, the message "{$var :string}" when formatted contains the resolved string
 value of the variable `$var`.
 
+Other selectors may follow the example of `:number`,
+which includes an option `select` that may take a value `exact`.
+
 ## Alternatives Considered
 
 _What other solutions are available?_
