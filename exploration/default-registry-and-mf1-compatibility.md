@@ -63,6 +63,9 @@ Options:
 
 Function name: `:datetime`
 
+Aliases:
+- (none currently; should there be `:date` and `:time` aliases to shorthand getting particularly timeStyle?)
+
 Operand: "iso8601"
 
 Options:
@@ -91,7 +94,9 @@ Options:
 
 Function name: `:string`
 
-Operand: any string
+String is both a formatter and a selector, where it fills the role that `SelectFormat` fills in MF1.
+
+Operand: any value
 
 Options:
 (none?)
@@ -106,6 +111,8 @@ How to write an MF1 format or selector in MF2:
 
 | MF1      | Syntax               | MF2                                                          | Comment |
 |----------|----------------------|--------------------------------------------------------------|---------|
+| String   | {var}                | {$var} {$var :string}                                        |         |
+| Select   | {var,select...}      | .match {$var :string}                                        |         |
 | Number   | {num,number}         | {$num :number}                                               |         |
 | Integer  | {num,number,integer} | {$num :number maximumFractionDigits=0}  {$num :integer}      |         |
 | Percent  | {num,number,percent} | {$num :number style=percent} {$num :percent}                 |         |
