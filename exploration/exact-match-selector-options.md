@@ -27,10 +27,12 @@ and issues raised in various design documents, notably
 <a href="https://github.com/unicode-org/message-format-wg/pull/471">#471</a>
 (about number selection).
 
-The exact match selector function is the function used when an implementation
-cannot find another selector.
-It is also an attribute of selectors, such as `:number` or perhaps `:date`
-that need to match specific values.
+The exact match selector function is an "all-purpose" built-in selector
+for use in messages when a more specific selector (such as for numbers or
+dates) is not available.
+Other selectors, such as `:number` or `:datetime`
+that need to match specific values provide similar functionality.
+Custom selectors should model their exact-match on this selector.
 
 ## Use-Cases
 
