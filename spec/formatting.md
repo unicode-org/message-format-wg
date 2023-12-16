@@ -676,22 +676,28 @@ its formatter SHOULD perform any necessary processing, such as inserting control
 isolating such parts to ensure that the formatted value displays correctly in a plain text context.
 
 > For example, an implementation could provide a `:currency` formatting function
-> which inserts RLM, ALM, or LRM characters to properly display a currency symbol
-> next to a formatted number.
-> An example of this is formatting the value `1234.56` as the currency `AED`
+> which inserts strongly directional characters, such as U+200F RIGHT-TO-LEFT MARK (RLM),
+> U+200E LEFT-TO-RIGHT MARK (LRM), or U+061C ARABIC LETTER MARKER (ALM), 
+> to coerce proper display of the sign and currency symbol next to a formatted number.
+> An example of this is formatting the value `-1234.56` as the currency `AED`
 > in the `ar-AE` locale. The formatted value appears like this:
 > ```
 > ‎-1,234.56 د.إ.‏
 > ```
-> The code point sequence produced by the ICU4J `NumberFormat` function for this is:
-> **U+200F U+200E** U+002D U+0031 U+002C U+0032 U+0033 U+0034 U+002E U+0035 U+0036
-> U+00A0 U+062F U+002E U+0625 U+002E **U+200F**
-> Note that U+200F is RIGHT-TO-LEFT MARK and U+200E is LEFT-TO-RIGHT MARK.
+> The code point sequence for this string, as produced by the ICU4J `NumberFormat` function,
+> includes **U+200F U+200E** at the start and **U+200F** at the end of the string.
 
 Implementations formatting messages as a concatenated string or a sequence of strings
 MUST provide one or more strategies for bidirectional isolation.
-One such strategy MUST be the **_Plain Text Bidirectional Isolation Strategy_**, which behaves
-as follows:
+
+The **_Default Bidi Strategy_** is a bidirectional isolation strategy that uses
+isolating Unicode control characters around placeholders.
+It is intended for use in plain-text strings, where markup or other mechanisms
+are not available.
+Implementations MUST provide the _Default Bidi Strategy_ as one of the 
+bidirectional isolation strategies.
+
+The _Default Bidi Strategy_ is defined as follows:
 
 1. Let `msgdir` be the directionality of the whole message,
    one of « `'LTR'`, `'RTL'`, `'unknown'` ».
@@ -701,17 +707,17 @@ as follows:
    1. Let `fmt` be the formatted string representation of the resolved value of `exp`.
    1. Let `dir` be the directionality of `fmt`,
       one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
-   1. If `dir` is `'unknown'`:
+   1. If `dir` is `'RTL'`:
       1. In the formatted output,
-         prefix `fmt` with U+2068 FIRST STRONG ISOLATE
+         prefix `fmt` with U+2067 RIGHT-TO-LEFT ISOLATE
          and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
-   1. Else, if `dir` is `'LTR'` and `msgdir` is not `'LTR'`:
+   1. Else, if `dir` is `'LTR'`:
       1. In the formatted output,
          prefix `fmt` with U+2066 LEFT-TO-RIGHT ISOLATE
          and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
-   1. Else, if `dir` is `'RTL'` and `msgdir` is not `'RTL'`:
+   1. Else:
       1. In the formatted output,
-         prefix `fmt` with U+2067 RIGHT-TO-LEFT ISOLATE
+         prefix `fmt` with U+2068 FIRST STRONG ISOLATE
          and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
 
 Alternatives to this strategy MAY be provided by implementations,
