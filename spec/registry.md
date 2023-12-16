@@ -89,8 +89,8 @@ If the resolved or default value of a selector option
 corresponding to the `<when>` `option` attribute
 is included in its list of `values`,
 its contents are considered before any and all later `<when>` and `<matches>` elements.
-If a `<matches>` element within a `<when>` has a `<match>` for the current locale,
-later `<matches>` elements outside that `<when>` are not considered.
+If a `<matches>` element within a matching `<when>` has a `<match>` for the current locale,
+later `<matches>` outside that `<when>` are not considered.
 
 ### Function Aliases
 
