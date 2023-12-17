@@ -136,6 +136,17 @@
       </option>
     </formatSignature>
 
+    <alias name="date">
+      <description>Date formatting</description>
+      <mapOption alias="style" name="dateStyle" default="short" />
+      <setOption name="timeStyle" value="" />
+    </alias>
+
+    <alias name="time">
+      <description>Time formatting</description>
+      <mapOption alias="style" name="timeStyle" default="short" />
+      <setOption name="dateStyle" value="" />
+    </alias>
   </function>
 
   <function name="number">

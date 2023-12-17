@@ -72,7 +72,10 @@ to define the keys against which they can match when used as selectors.
 Functions may also include `<alias>` definitions,
 which provide shorthands for commonly used option baskets.
 An _alias name_ may be used equivalently to a _function name_ in messages.
+Its `<mapOption>` values map option names from those used in the `alias` to the `name` used in the _function_,
+and can include a `default`` value.
 Its `<setOption>` values are always set, and may not be overridden in message annotations.
+If the `<setOption>` `value` is an empty string, the option is not used in the alias.
 
 If a `<function>`, `<input>` or `<option>` includes multiple `<description>` elements,
 each SHOULD have a different `xml:lang` attribute value.
