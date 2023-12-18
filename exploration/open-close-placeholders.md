@@ -1,6 +1,6 @@
 # Open/Close Placeholders
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -17,6 +17,7 @@ Status: **Proposed**
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/517">#517</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/535">#535</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/540">#540</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/541">#541</a></dd>
 	</dl>
 </details>
 
@@ -169,23 +170,22 @@ in parallel with _expression_:
 pattern = "{" *(text / placeholder) "}"
 placeholder = expression / markup
 
-markup       = "{" [s] markup-body [s] "}"
-markup-body  = (markup-open *(s option))
-             / markup-close
-markup-open  = "#" name
+markup       = "{" [s] markup-open [s] ["/"] "}"
+             / "{" [s] markup-close [s] "}"
+markup-open  = "#" name *(s option)
 markup-close = "/" name
 ```
 
 This is similar to [Mustache](http://mustache.github.io/mustache.5.html)'s control flow syntax.
 
 ```
-This is {#strong}bold{/strong} and this is {#img alt=|an image|}.
+This is {#strong}bold{/strong} and this is {#img alt=|an image| /}.
 ```
 
 Markup names are _namespaced_ by their use of the U+0023 NUMBER SIGN `#` and the U+002F SOLIDUS `/` sigils.
 They are distinct from `$variables`, `:functions`, and `|literals|`.
 
-This allows for placeholders like `{#b}`, `{#img}`, and `{#a title=|Link tooltip|}`.
+This allows for placeholders like `{#b}`, `{#img/}`, and `{#a title=|Link tooltip|}`.
 Unlike annotations, markup _placeholders_ may not have operands.
 
 Markup is not valid in _declarations_ or _selectors_.
@@ -202,22 +202,22 @@ Markup is not valid in _declarations_ or _selectors_.
 
 * Introduces two new sigils, U+0023 NUMBER SIGN `#` and the U+002F SOLIDUS `/`.
 
-* As in HTML, differentiating "open" and "standalone" placeholders requires
-  additional information not encoded in the bare syntax.
+* Introduces a new sigil position at the end of a placeholder for the self-closing standalone markup.
 
 * In Mustache, the `{{#foo}}`...`{{/foo}}` syntax is used for *control flow* statements rather than printable data.
 
 ### Standalone Markup
 
-_Standalone_ markup remains an open question.
-Three alternatives have been suggested:
+_Standalone_ markup is supported by syntax inspired by XML: `{#foo/}`.
 
-* Introduce additional syntax inspired by XML: `{#foo/}`.
+This approach encodes the _standalone_ aspect in the data model,
+and doesn't rely on external sources of truth,
+at the expense of introducing new syntax, which is admittedly a bit clunky.
 
-  This approach encodes the _standalone_ aspect in the data model, and doesn't rely on external sources of truth,
-  at the expense of introducing new syntax, which is admittedly a bit clunky.
+It also creates a dichotomy between standalone _markup_ and regular _placeholders_,
+which can be argued to be _standalone_ as well.
 
-  It also creates a dichotomy between standalone _markup_ and regular _placeholders_, which can be argued to be _standalone_ as well.
+Two alternatives have been suggested, and were considered insufficient:
 
 * Differentiate _open_ and _standalone_ elements based on the information stored in the registry,
   or based on some other external source of truth
@@ -253,7 +253,7 @@ e.g. emitting XML-ish tags for each open/close placeholder.
 When formatting to parts (as proposed in <a href="https://github.com/unicode-org/message-format-wg/pull/463">#463</a>),
 markup placeholders format to an object including the following properties:
 
-- The `type` of the markup: `"markup" | "markup-close"`
+- The `type` of the markup: `"markup-open" | "markup-standalone" | "markup-close"`
 - The `name` of the markup, e.g. `"b"` for `{#b}`
 - For _markup_,
   the `options` with the resolved key-value pairs of the placeholder options
@@ -272,7 +272,7 @@ would format to parts as
 ```coffee
 [
   { type: "text", value: "Click " },
-  { type: "markup", name: "a", options: { title: "Link tooltip" } },
+  { type: "markup-open", name: "a", options: { title: "Link tooltip" } },
   { type: "text", value: "here" },
   { type: "markup-close", name: "a" },
   { type: "text", value: " to continue" }
