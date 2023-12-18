@@ -74,7 +74,7 @@ A reference to a _term_ looks like this.
 > The provisions of the stability policy are not in effect until
 > the conclusion of the technical preview and adoption of this specification.
 > Implementers should expect that changes to the specification during
-> and following the preview period will minimal and will require compelling evidence.
+> and following the preview period will be minimal and will require compelling evidence.
 > However, the technical committee reserves the right to make necessary
 > changes to the specification until it becomes stablized.
 
