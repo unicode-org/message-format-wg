@@ -703,25 +703,32 @@ The _Default Bidi Strategy_ is defined as follows:
    one of « `'LTR'`, `'RTL'`, `'unknown'` ».
    These correspond to the message having left-to-right directionality,
    right-to-left directionality, and to the message's directionality not being known.
+1. Let `localedir` be the default directionality of the current locale,
+   one of « `'LTR'`, `'RTL'`, `'unknown'` ».
+   These correspond to the locale having left-to-right directionality,
+   right-to-left directionality, and to the locale's default directionality not being known.
 1. For each _expression_ `exp` in _pattern_:
    1. Let `fmt` be the formatted string representation of the resolved value of `exp`.
    1. Let `dir` be the directionality of `fmt`,
       one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
-   1. If `dir` is `'RTL'`:
+   1. If `dir` is `'LTR'`:
+      1. If `msgdir` and `localedir` are both `'LTR'`
+         in the formatted output, let `fmt` be itself
+      1. Else, in the formatted output,
+         prefix `fmt` with U+2066 LEFT-TO-RIGHT ISOLATE
+         and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
+   1. Else, if `dir` is `'RTL'`:
       1. In the formatted output,
          prefix `fmt` with U+2067 RIGHT-TO-LEFT ISOLATE
-         and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
-   1. Else, if `dir` is `'LTR'`:
-      1. In the formatted output,
-         prefix `fmt` with U+2066 LEFT-TO-RIGHT ISOLATE
          and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
    1. Else:
       1. In the formatted output,
          prefix `fmt` with U+2068 FIRST STRONG ISOLATE
          and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
 
-Alternatives to this strategy MAY be provided by implementations,
-which MAY also introspect the _pattern_'s _text_ values
+Alternatives to this strategy MAY be provided by implementations.
+
+In particular, implementations MAY introspect the _pattern_'s _text_ values
 and identify situations where isolate characters are not needed
 or where additional or different isolation would produce better results.
 
