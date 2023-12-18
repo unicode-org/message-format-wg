@@ -97,11 +97,19 @@ Additional options or option values MAY be defined.
 
 Later specification versions MAY make previously invalid messages valid.
 
-Updates to this specification will not introduce message syntax that,
-when parsed according to earlier versions of this specification,
-would produce syntax or data model errors.
-Such messages MAY produce errors when formatted
-according to an earlier version of this specification.
+> [!NOTE]
+> For the purposes of a technical preview in LDML v45, the following stability
+> policy does not apply.
+> The working group expects that this policy will be enforced once
+> MessageFormat has completed its preview:
+> 
+> ---
+> 
+>> Updates to this specification will not introduce message syntax that,
+>> when parsed according to earlier versions of this specification,
+>> would produce syntax or data model errors.
+>> Such messages MAY produce errors when formatted
+>> according to an earlier version of this specification.
 
 From version 2.0, MessageFormat will only reserve, define, or require
 function names or function option names
