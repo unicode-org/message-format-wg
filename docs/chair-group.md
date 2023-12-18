@@ -1,5 +1,8 @@
 ## Chair group
 
+> [!NOTE]
+> This document is historical. The chair group was replaced by having a WG chair.
+
 #### Definition and Motivation
 
 The Chair Group is a representative body of the Message Format WG that collectively shares WG responsibilities among WG members that volunteered to get involved in the group chairing activities. Being part of a chair group requires an additional commitment that comes with a set of duties/responsibilities.

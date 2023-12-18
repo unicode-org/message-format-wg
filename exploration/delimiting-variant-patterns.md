@@ -1,6 +1,6 @@
 # Delimiting of Patterns in Complex Messages
 
-Status: **Balloting**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>

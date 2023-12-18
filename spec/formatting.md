@@ -40,6 +40,10 @@ Formatting of a _message_ is defined by the following operations:
 - **_Pattern Selection_** determines which of a message's _patterns_ is formatted.
   For a message with no _selectors_, this is simple as there is only one _pattern_.
   With _selectors_, this will depend on their resolution.
+  
+  At the start of _pattern selection_,
+  if the _message_ contains any _reserved statements_,
+  emit an Unsupported Statement Error.
 
 - **_Formatting_** takes the resolved values of the selected _pattern_,
   and produces the formatted result for the _message_.
@@ -111,13 +115,14 @@ and different implementations MAY choose to perform different levels of resoluti
 > or some other locally appropriate value.
 
 Depending on the presence or absence of a _variable_ or _literal_ operand
-and a _function_, _private-use_, or _reserved_ _annotation_,
+and a _function_, _private-use annotation_, or _reserved annotation_,
 the resolved value of the _expression_ is determined as follows:
 
-If the _expression_ contains a _reserved_ _annotation_,
-an `Unsupported Expression` error is emitted and a fallback value is used as its value.
+If the _expression_ contains a _reserved annotation_,
+an Unsupported Expression error is emitted and
+a _fallback value_ is used as the resolved value of the _expression_.
 
-Else, if the _expression_ contains a _private-use_ _annotation_,
+Else, if the _expression_ contains a _private-use annotation_,
 its resolved value is defined according to the implementation's specification.
 
 Else, if the _expression_ contains an _annotation_,
@@ -153,12 +158,10 @@ its resolved value is defined by _literal resolution_.
 > an _annotation_ needs to be provided:
 >
 > ```
-> {{
-> local $aNumber = {1234 :number}
-> local $aDate = {|2023-08-30| :datetime}
-> local $aFoo = {|some foo| :foo}
+> .local $aNumber = {1234 :number}
+> .local $aDate = {|2023-08-30| :datetime}
+> .local $aFoo = {|some foo| :foo}
 > {{You have {42 :number}}}
-> }}
 > ```
 
 ### Literal Resolution
@@ -175,7 +178,7 @@ whether its value was originally _quoted_ or _unquoted_.
 > For example,
 > the _option_ `foo=42` and the _option_ `foo=|42|` are treated as identical.
 
-The resolution of a _text_ or _literal_ token MUST always succeed.
+The resolution of a _text_ or _literal_ MUST resolve to a string.
 
 ### Variable Resolution
 
@@ -197,16 +200,28 @@ the following steps are taken:
 
 1. If the _expression_ includes an _operand_, resolve its value.
    If this fails, use a _fallback value_ for the _expression_.
-2. Based on the _function_ starting sigil and _name_,
-   find the appropriate function implementation from the _function registry_.
-   If the registry does not define an implementation for this _name_,
+2. Resolve the _identifier_ of the _function_ and, based on the starting sigil,
+   find the appropriate function implementation to call.
+   If the implementation cannot find the function,
+   or if the _identifier_ includes a _namespace_ that the implementation does not support,
    emit an Unknown Function error
    and use a _fallback value_ for the _expression_.
-3. Resolve the _option_ values to a mapping of string identifiers to values.
+
+   Implementations are not required to implement _namespaces_ or installable
+   _function registries_.
+
+3. Resolve the _options_ to a mapping of string identifiers to values.
+   If _options_ is missing, the mapping will be empty.
    For each _option_:
-   - If its right-hand side successfully resolves to a value,
-     bind the _name_ of the _option_ to the resolved value in the mapping.
-   - Otherwise, do not bind the _name_ of the _option_ to any value in the mapping.
+   - Resolve the _identifier_ of the _option_.
+   - If the _option_'s _identifier_ already exists in the resolved mapping of _options_,
+     emit a Duplicate Option Name error.
+   - If the _option_'s right-hand side successfully resolves to a value,
+     bind the _identifier_ of the _option_ to the resolved value in the mapping.
+   - Otherwise, bind the _identifier_ of the _option_ to an unresolved value in the mapping.
+     Implementations MAY later remove this value before calling the _function_.
+     (Note that an Unresolved Variable error will have been emitted.)
+
 4. Call the function implementation with the following arguments:
 
    - The current _locale_.
@@ -219,113 +234,137 @@ the following steps are taken:
    as long as reasonable precautions are taken to keep the function interface
    simple and minimal, and avoid introducing potential security vulnerabilities.
 
-   As implementations MAY allow custom functions to be defined by users,
-   their access to the _formatting context_ SHOULD be minimal and read-only,
-   and their execution time SHOULD be limited.
+   An implementation MAY define its own functions.
+   An implementation MAY allow custom functions to be defined by users.
+
+   Function access to the _formatting context_ MUST be minimal and read-only,
+   and execution time SHOULD be limited.
+   
+   Implementation-defined _functions_ SHOULD use an implementation-defined _namespace_.
 
 5. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
    If the call fails or does not return a valid value,
    emit a Resolution error and use a _fallback value_ for the _expression_.
 
+
 ### Fallback Resolution
 
-A **_fallback value_** is the resolved value emitted when an _expression_ cannot be resolved.
+A **_fallback value_** is the resolved value for an _expression_ that fails to resolve.
 
 An _expression_ fails to resolve when:
 
-- A _variable_ _operand_ fails to resolve.
+- A _variable_ used as an _operand_ (with or without an _annotation_) fails to resolve.
+  * Note that this does not include a _variable_ used as an _option_ value.
 - A _function_ _annotation_ fails to resolve.
-- A _private-use_ _annotation_ is unsupported by the implementation or if
-  a _private-use_ _annotation_ fails to resolve.
-- The _expression_ has a _reserved_ _annotation_.
+- A _private-use annotation_ is unsupported by the implementation or if
+  a _private-use annotation_ fails to resolve.
+- The _expression_ has a _reserved annotation_.
 
 The _fallback value_ depends on the contents of the _expression_:
 
-- _expression_ with _literal_ _operand_: U+007C VERTICAL LINE `|`
-  followed by the value of the Literal,
+- _expression_ with _literal_ _operand_ (_quoted_ or _unquoted_):
+  U+007C VERTICAL LINE `|`
+  followed by the value of the _literal_
+  with escaping applied to U+005C REVERSE SOLIDUS `\` and U+007C VERTICAL LINE `|`,
   and then by U+007C VERTICAL LINE `|`.
-  The same representation is used for both _quoted_ and _unquoted_ values.
 
-  > Examples: `|your horse|`, `|42|`
+  > Examples:
+  > In a context where `:func` fails to resolve,
+  > `{42 :func}` resolves to the _fallback value_ `|42|` and
+  > `{|C:\\| :func}` resolves to the _fallback value_ `|C:\\|`.
+  > In any context, `{|| @reserved}` resolves to the _fallback value_ `||`.
 
-- _expression_ with _variable_ _operand_: U+0024 DOLLAR SIGN `$`
-  followed by the _variable_ _name_ of the _operand_
+- _expression_ with _variable_ _operand_ referring to a local _declaration_ (with or without an _annotation_):
+  the _value_ to which it resolves (which may already be a _fallback value_)
 
-  > Example: `$user`
+  > Examples:
+  > In a context where `:func` fails to resolve,
+  > the _pattern_'s _expression_ in `.local $var={|val|} {{{$val :func}}}`
+  > resolves to the _fallback value_ `|val|` and the message formats to `{|val|}`.
+  > In a context where `:now` fails to resolve but `:datetime` does not,
+  > the _pattern_'s _expression_ in
+  > ```
+  > .local $t = {:now format=iso8601}
+  > .local $pretty_t = {$t :datetime}
+  > {{{$pretty_t}}}
+  > ```
+  > (transitively) resolves to the _fallback value_ `:now` and
+  > the message formats to `{:now}`.
 
-- _expression_ with no _operand_:
-  the _function_ starting sigil followed by its _name_
+- _expression_ with _variable_ _operand_ not referring to a local _declaration_ (with or without an _annotation_):
+  U+0024 DOLLAR SIGN `$` followed by the _name_ of the _variable_
 
-  > Examples: `:platform`, `+tag`, `-tag`
+  > Examples:
+  > In a context where `$var` fails to resolve, `{$var}` and `{$var :number}` and `{$var @reserved}`
+  > all resolve to the _fallback value_ `$var`.
+  > In a context where `:func` fails to resolve,
+  > the _pattern_'s _expression_ in `.input $arg {{{$arg :func}}}`
+  > resolves to the _fallback value_ `$arg` and
+  > the message formats to `{$arg}`.
 
-- Otherwise: The U+FFFD REPLACEMENT CHARACTER `�` character
+- _function_ _expression_ with no _operand_:
+  the _function_ starting sigil followed by its _identifier_
 
-_Option_ names and values are not included in the _fallback value_.
+  > Examples:
+  > In a context where `:func` fails to resolve, `{:func}` resolves to the _fallback value_ `:func`.
+  > In a context where `:ns:func` fails to resolve, `{:ns:func}` resolves to the _fallback value_ `:ns:func`.
 
-When an error occurs in an _expression_ with a _variable_ _operand_
-and the _variable_ refers to a local _declaration_,
-the _fallback value_ is formatted based on the _expression_
-on the right-hand side of the _declaration_,
-rather than the _expression_ in the _selector_ or _pattern_.
+- unsupported _private-use annotation_ or _reserved annotation_ with no _operand_:
+  the _annotation_ starting sigil
 
-> For example,
-> in a context in which the function `:func` fails to resolve,
-> attempting to format either of the following messages:
->
-> ```
-> {{
-> local $var = {|horse| :func}
-> {{The value is {$var}.}}
-> }}
-> ```
->
-> ```
-> {{
-> local $var = {|horse|}
-> {{The value is {$var :func}.}}
-> }}
-> ```
->
-> would in both cases result in the _pattern_ _expression_
-> resolving to a _fallback value_ of `|horse|`.
+  > Examples:
+  > In any context, `{@reserved}` and `{@reserved |...|}` both resolve to the _fallback value_ `@`.
+
+- supported _private-use annotation_ with no _operand_:
+  the _annotation_ starting sigil, optionally followed by implementation-defined details
+  conforming with patterns in the other cases (such as quoting literals).
+  If details are provided, they SHOULD NOT leak potentially private information.
+
+  > Examples:
+  > In a context where `^` expressions are used for comments, `{^▽^}` might resolve to the _fallback value_ `^`.
+  > In a context where `&` expressions are _function_-like macro invocations, `{&foo |...|}` might resolve to the _fallback value_ `&foo`.
+
+- Otherwise: the U+FFFD REPLACEMENT CHARACTER `�`
+
+  This is not currently used by any expression, but may apply in future revisions.
+
+_Option_ _identifiers_ and values are not included in the _fallback value_.
 
 _Pattern selection_ is not supported for _fallback values_.
 
 ## Pattern Selection
 
-When a _message_ contains a _match_ construct with one or more _expressions_,
+When a _message_ contains a _matcher_ with one or more _selectors_,
 the implementation needs to determine which _variant_ will be used
 to provide the _pattern_ for the formatting operation.
 This is done by ordering and filtering the available _variant_ statements
 according to their _key_ values and selecting the first one.
 
-The number of _keys_ in each _variant_ MUST equal the number of _expressions_ in the _selectors_.
+The number of _keys_ in each _variant_ MUST equal the number of _selectors_.
 
-Each _key_ corresponds to an _expression_ in the _selectors_ by its position in the _variant_.
+Each _key_ corresponds to a _selector_ by its position in the _variant_.
 
 > For example, in this message:
 >
 > ```
-> {{
-> match {:one} {:two} {:three}
-> when  1 2 3 {{ ... }}
-> }}
+> .match {:one} {:two} {:three}
+> 1 2 3 {{ ... }}
 > ```
 >
-> The first _key_ `1` corresponds to the first _expression_ in the _selectors_ (`{:one}`),
-> the second _key_ `2` to the second _expression_ (`{:two}`),
-> and the third _key_ `3` to the third _expression_ (`{:three}`).
+> The first _key_ `1` corresponds to the first _selector_ (`{:one}`),
+> the second _key_ `2` to the second _selector_ (`{:two}`),
+> and the third _key_ `3` to the third _selector_ (`{:three}`).
 
 To determine which _variant_ best matches a given set of inputs,
 each _selector_ is used in turn to order and filter the list of _variants_.
 
-Each _variant_ with a _key_ that does not match its corresponding _selector expression_
+Each _variant_ with a _key_ that does not match its corresponding _selector_
 is omitted from the list of _variants_.
-The remaining _variants_ are sorted according to the _expression_'s _key_-ordering preference.
-Earlier _expressions_ in the _selector_'s list of _expressions_ have a higher priority than later ones.
+The remaining _variants_ are sorted according to the _selector_'s _key_-ordering preference.
+Earlier _selectors_ in the _matcher_'s list of _selectors_ have a higher priority than later ones.
 
-When all of the _selector expressions_ have been processed,
+When all of the _selectors_ have been processed,
 the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
 
 This selection method is defined in more detail below.
@@ -339,11 +378,11 @@ or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER `�`.
 
 ### Resolve Selectors
 
-First, resolve the values of each _selector_ _expression_:
+First, resolve the values of each _selector_:
 
 1. Let `res` be a new empty list of resolved values that support selection.
-1. For each _expression_ `exp` of the message's _selectors_,
-   1. Let `rv` be the resolved value of `exp`.
+1. For each _selector_ `sel`, in source order,
+   1. Let `rv` be the resolved value of `sel`.
    1. If selection is supported for `rv`:
       1. Append `rv` as the last element of the list `res`.
    1. Else:
@@ -452,12 +491,10 @@ the variable reference `$bar` resolves to the string `'bar'`,
 pattern selection proceeds as follows for this message:
 
 ```
-{{
-match {$foo :string} {$bar :string}
-when bar bar {{All bar}}
-when foo foo {{All foo}}
-when * * {{Otherwise}}
-}}
+.match {$foo :string} {$bar :string}
+bar bar {{All bar}}
+foo foo {{All foo}}
+* * {{Otherwise}}
 ```
 
 1. For the first selector:<br>
@@ -477,7 +514,7 @@ when * * {{Otherwise}}
    resulting in a list « `* *` » of variants.
 
 4. As the list `vars` only has one entry, it does not need to be sorted.<br>
-   The pattern `{Otherwise}` of the third variant is selected.
+   The pattern `Otherwise` of the third variant is selected.
 
 #### Example 2
 
@@ -485,13 +522,11 @@ Alternatively, with the same implementation and formatting context as in Example
 pattern selection would proceed as follows for this message:
 
 ```
-{{
-match {$foo :string} {$bar :string}
-when * bar {{Any and bar}}
-when foo * {{Foo and any}}
-when foo bar {{Foo and bar}}
-when * * {{Otherwise}}
-}}
+.match {$foo :string} {$bar :string}
+* bar {{Any and bar}}
+foo * {{Foo and any}}
+foo bar {{Foo and bar}}
+* * {{Otherwise}}
 ```
 
 1. For the first selector:<br>
@@ -519,7 +554,7 @@ when * * {{Otherwise}}
    This is then sorted as:<br>
    « ( 0, `foo bar` ), ( 0, `foo *` ), ( 1, `* bar` ), ( 1, `* *` ) ».<br>
 
-5. The pattern `{Foo and bar}` of the most preferred `foo bar` variant is selected.
+5. The pattern `Foo and bar` of the most preferred `foo bar` variant is selected.
 
 #### Example 3
 
@@ -535,12 +570,10 @@ and an `en` (English) locale,
 the pattern selection proceeds as follows for this message:
 
 ```
-{{
-match {$count :plural}
-when one {{Category match}}
-when 1   {{Exact match}}
-when *   {{Other match}}
-}}
+.match {$count :plural}
+one {{Category match}}
+1   {{Exact match}}
+*   {{Other match}}
 ```
 
 1. For the selector:<br>
@@ -561,7 +594,7 @@ when *   {{Other match}}
    This is then sorted as:<br>
    « ( 0, `1` ), ( 1, `one` ), ( 2, `*` ) »<br>
 
-4. The pattern `{Exact match}` of the most preferred `1` variant is selected.
+4. The pattern `Exact match` of the most preferred `1` variant is selected.
 
 ## Formatting
 
@@ -599,7 +632,7 @@ _This section is non-normative._
 1. An implementation might choose to return an interstitial object
    so that the caller can "decorate" portions of the formatted value.
    In ICU4J, the `NumberFormatter` class returns a `FormattedNumber` object,
-   so a _pattern_ such as `{This is my number {42 :number}}` might return
+   so a _pattern_ such as `This is my number {42 :number}` might return
    the character sequence `This is my number `
    followed by a `FormattedNumber` object representing the value `42` in the current locale.
 
@@ -696,8 +729,11 @@ These are divided into the following categories:
   > Example invalid messages resulting in a Syntax error:
   >
   > ```
-  > {{{{Missing end braces
-  > {{{{Missing one end brace}}}
+  > {{Missing end braces
+  > ```
+  >
+  > ```
+  > {{Missing one end brace}
   > ```
   >
   > ```
@@ -705,7 +741,7 @@ These are divided into the following categories:
   > ```
   >
   > ```
-  > {{local $var = {|no message body|}}}
+  > .local $var = {|no message body|}
   > ```
 
 - **Data Model errors** occur when a message is invalid due to
@@ -717,20 +753,16 @@ These are divided into the following categories:
     > Example invalid messages resulting in a Variant Key Mismatch error:
     >
     > ```
-    > {{
-    > match {$one :func}
-    > when 1 2 {{Too many}}
-    > when * {{Otherwise}}
-    > }}
+    > .match {$one :func}
+    > 1 2 {{Too many}}
+    > * {{Otherwise}}
     > ```
     >
     > ```
-    > {{
-    > match {$one :func} {$two :func}
-    > when 1 2 {{Two keys}}
-    > when * {{Missing a key}}
-    > when * * {{Otherwise}}
-    > }}
+    > .match {$one :func} {$two :func}
+    > 1 2 {{Two keys}}
+    > * {{Missing a key}}
+    > * * {{Otherwise}}
     > ```
 
   - **Missing Fallback Variant errors** occur when the message
@@ -739,19 +771,15 @@ These are divided into the following categories:
     > Example invalid messages resulting in a Missing Fallback Variant error:
     >
     > ```
-    > {{
-    > match {$one :func}
-    > when 1 {{Value is one}}
-    > when 2 {{Value is two}}
-    > }}
+    > .match {$one :func}
+    > 1 {{Value is one}}
+    > 2 {{Value is two}}
     > ```
     >
     > ```
-    > {{
-    > match {$one :func} {$two :func}
-    > when 1 * {{First is one}}
-    > when * 1 {{Second is one}}
-    > }}
+    > .match {$one :func} {$two :func}
+    > 1 * {{First is one}}
+    > * 1 {{Second is one}}
     > ```
 
   - A **_Missing Selector Annotation error_** is an error that occurs when the _message_
@@ -761,29 +789,23 @@ These are divided into the following categories:
     > Examples of invalid messages resulting in a _Missing Selector Annotation error_:
     >
     > ```
-    > {{
-    > match {$one}
-    > when 1 {{Value is one}}
-    > when * {{Value is not one}}
-    > }}
+    > .match {$one}
+    > 1 {{Value is one}}
+    > * {{Value is not one}}
     > ```
     >
     > ```
-    > {{
-    > local $one = {|The one|}
-    > match {$one}
-    > when 1 {{Value is one}}
-    > when * {{Value is not one}}
-    > }}
+    > .local $one = {|The one|}
+    > .match {$one}
+    > 1 {{Value is one}}
+    > * {{Value is not one}}
     > ```
     >
     > ```
-    > {{
-    > input {$one}
-    > match {$one}
-    > when 1 {{Value is one}}
-    > when * {{Value is not one}}
-    > }}
+    > .input {$one}
+    > .match {$one}
+    > 1 {{Value is one}}
+    > * {{Value is not one}}
     > ```
 
   - A **Duplicate Declaration error** occurs when a _variable_ appears in two _declarations_.
@@ -794,30 +816,25 @@ These are divided into the following categories:
     > Examples of invalid messages resulting in a Duplicate Declaration error:
     >
     > ```
-    > {{
-    >    input {$var :number maxFractionDigits=0}
-    >    input {$var :number minFractionDigits=0}
-    >    {{Redeclaration of the same variable}}
-    > }}
-    > {{
-    >    local $var = {$ext :number maxFractionDigits=0}
-    >    input {$var :number minFractionDigits=0}
-    >    {{Redeclaration of a local variable}}
-    > }}
-    > {{
-    >    input {$var :number minFractionDigits=0}
-    >    local $var = {$ext :number maxFractionDigits=0}
-    >    {{Redeclaration of an input variable}}
-    > }}
-    > {{
-    >    local $var = {$ext :someFunction}
-    >    local $var = {$error}
-    >    local $var2 = {$var2 :error}
-    >    {{{$var} cannot be redefined. {$var2} cannot refer to itself}}
-    > }}
+    > .input {$var :number maxFractionDigits=0}
+    > .input {$var :number minFractionDigits=0}
+    > {{Redeclaration of the same variable}}
+    >
+    > .local $var = {$ext :number maxFractionDigits=0}
+    > .input {$var :number minFractionDigits=0}
+    > {{Redeclaration of a local variable}}
+    >
+    > .input {$var :number minFractionDigits=0}
+    > .local $var = {$ext :number maxFractionDigits=0}
+    > {{Redeclaration of an input variable}}
+    >
+    > .local $var = {$ext :someFunction}
+    > .local $var = {$error}
+    > .local $var2 = {$var2 :error}
+    > {{{$var} cannot be redefined. {$var2} cannot refer to itself}}
     > ```
 
-  - A **Duplicate Option Name error** occurs when the same _name_
+  - A **Duplicate Option Name error** occurs when the same _identifier_
     appears on the left-hand side
     of more than one _option_ in the same _expression_.
 
@@ -828,10 +845,8 @@ These are divided into the following categories:
     > ```
     >
     > ```
-    > {{
-    > local $foo = {horse :func one=1 two=2 one=1}
+    > .local $foo = {horse :func one=1 two=2 one=1}
     > {{This is {$foo}}}
-    > }}
     > ```
 
 - **Resolution errors** occur when the runtime value of a part of a message
@@ -848,11 +863,9 @@ These are divided into the following categories:
     > ```
     >
     > ```
-    > {{
-    > match {$var :func}
-    > when 1 {{The value is one.}}
-    > when * {{The value is not one.}}
-    > }}
+    > .match {$var :func}
+    > 1 {{The value is one.}}
+    > * {{The value is not one.}}
     > ```
 
   - **Unknown Function errors** occur when an _expression_ includes
@@ -867,11 +880,9 @@ These are divided into the following categories:
     > ```
     >
     > ```
-    > {{
-    > match {|horse| :func}
-    > when 1 {{The value is one.}}
-    > when * {{The value is not one.}}
-    > }}
+    > .match {|horse| :func}
+    > 1 {{The value is one.}}
+    > * {{The value is not one.}}
     > ```
 
   - **Unsupported Expression errors** occur when an expression uses
@@ -889,11 +900,19 @@ These are divided into the following categories:
     > if done within a context that does not support the `^` private use sigil:
     >
     > ```
-    > {{
-    > match {|horse| ^private}
-    > when 1 {{The value is one.}}
-    > when * {{The value is not one.}}
-    > }}
+    > .match {|horse| ^private}
+    > 1 {{The value is one.}}
+    > * {{The value is not one.}}
+    > ```
+
+  - **Unsupported Statement errors** occur when a message includes a _reserved statement_.
+
+    > For example, attempting to format this message
+    > would always result in an Unsupported Statement error:
+    >
+    > ```
+    > .some {|horse|}
+    > {{The message body}}
     > ```
 
 - **Selection errors** occur when message selection fails.
@@ -905,20 +924,16 @@ These are divided into the following categories:
     > uses a `:plural` selector function which requires its input to be numeric:
     >
     > ```
-    > {{
-    > match {|horse| :plural}
-    > when 1 {{The value is one.}}
-    > when * {{The value is not one.}}
-    > }}
+    > .match {|horse| :plural}
+    > 1 {{The value is one.}}
+    > * {{The value is not one.}}
     > ```
     >
     > ```
-    > {{
-    > local $sel = {|horse| :plural}
-    > match {$sel}
-    > when 1 {{The value is one.}}
-    > when * {{The value is not one.}}
-    > }}
+    > .local $sel = {|horse| :plural}
+    > .match {$sel}
+    > 1 {{The value is one.}}
+    > * {{The value is not one.}}
     > ```
 
 - **Formatting errors** occur during the formatting of a resolved value,
@@ -944,10 +959,8 @@ These are divided into the following categories:
   > ```
   >
   > ```
-  > {{
-  > local $id = {$user :get field=id}
+  > .local $id = {$user :get field=id}
   > {{Hello, {$id :get field=name}!}}
-  > }}
   > ```
   >
   > ```
@@ -974,7 +987,7 @@ SHOULD prioritise Syntax and Data Model errors over others.
 
 When an error occurs in the resolution of an _option_,
 the surrounding _expression_ MUST be processed as if the _option_ were not present.
-This MAY allow the _expression_ to resolve to a non-fallback _value_,
+This can result in the _expression_ resolving to a value that is not a _fallback value_,
 though an error MUST still be emitted.
 
 When an error occurs within a _selector_,

@@ -1,7 +1,20 @@
-<!ELEMENT message (declaration*,(pattern|(selectors,variant+)))>
+<!ELEMENT message (
+  (declaration | unsupportedStatement)*,
+  (pattern | (selectors,variant+))
+)>
 
+<!-- In a <declaration type="input">, the <expression> MUST contain a <variable> -->
 <!ELEMENT declaration (expression)>
-<!ATTLIST declaration name NMTOKEN #REQUIRED>
+<!ATTLIST declaration
+  type (input | local) #REQUIRED
+  name NMTOKEN #REQUIRED
+>
+
+<!ELEMENT unsupportedStatement (expression)+>
+<!ATTLIST unsupportedStatement
+  keyword CDATA #REQUIRED
+  body CDATA #IMPLIED
+>
 
 <!ELEMENT selectors (expression)+>
 <!ELEMENT variant (key+,pattern)>
@@ -9,7 +22,11 @@
 <!ATTLIST key default (true | false) "false">
 
 <!ELEMENT pattern (#PCDATA | expression)*>
-<!ELEMENT expression (literal | variable | function | unsupported)>
+
+<!ELEMENT expression (
+  ((literal | variable), (functionAnnotation | unsupportedAnnotation)?) |
+  functionAnnotation | unsupportedAnnotation
+)>
 
 <!ELEMENT literal (#PCDATA)>
 <!ATTLIST literal quoted (true | false) #REQUIRED>
@@ -17,15 +34,13 @@
 <!ELEMENT variable (EMPTY)>
 <!ATTLIST variable name NMTOKEN #REQUIRED>
 
-<!ELEMENT function (operand?,option*)>
-<!ATTLIST function
+<!ELEMENT functionAnnotation (option)*>
+<!ATTLIST functionAnnotation
   kind (open | close | value) #REQUIRED
   name NMTOKEN #REQUIRED
 >
-<!ELEMENT operand (literal | variable)>
 <!ELEMENT option (literal | variable)>
 <!ATTLIST option name NMTOKEN #REQUIRED>
 
-<!ELEMENT unsupported (operand?,source)>
-<!ATTLIST unsupported sigil CDATA #REQUIRED>
-<!ELEMENT source (#PCDATA)>
+<!ELEMENT unsupportedAnnotation (#PCDATA)>
+<!ATTLIST unsupportedAnnotation sigil CDATA #REQUIRED>
