@@ -70,6 +70,14 @@ A reference to a _term_ looks like this.
 
 ### Stability Policy
 
+> [!IMPORTANT]
+> The provisions of the stability policy are not in effect until
+> the conclusion of the technical preview and adoption of this specification.
+> Implementers should expect that changes to the specification during
+> and following the preview period will minimal and will require compelling evidence.
+> However, the technical committee reserves the right to make necessary
+> changes to the specification until it becomes stablized.
+
 Updates to this specification will not change
 the syntactical meaning, the runtime output, or other behaviour
 of valid messages written for earlier versions of this specification
@@ -79,7 +87,8 @@ Future versions MAY add additional structure or meaning to existing syntax.
 
 Updates to this specification will not remove any reserved keywords or sigils.
 
-> Note: future versions may define new keywords.
+> [!NOTE]
+> Future versions may define new keywords.
 
 Updates to this specification will not reserve or assign meaning to
 any character "sigils" except for those in the `reserved` production.
@@ -97,19 +106,11 @@ Additional options or option values MAY be defined.
 
 Later specification versions MAY make previously invalid messages valid.
 
-> [!NOTE]
-> For the purposes of a technical preview in LDML v45, the following stability
-> policy does not apply.
-> The working group expects that this policy will be enforced once
-> MessageFormat has completed its preview:
-> 
-> ---
-> 
->> Updates to this specification will not introduce message syntax that,
->> when parsed according to earlier versions of this specification,
->> would produce syntax or data model errors.
->> Such messages MAY produce errors when formatted
->> according to an earlier version of this specification.
+Updates to this specification will not introduce message syntax that,
+when parsed according to earlier versions of this specification,
+would produce syntax or data model errors.
+Such messages MAY produce errors when formatted
+according to an earlier version of this specification.
 
 From version 2.0, MessageFormat will only reserve, define, or require
 function names or function option names
