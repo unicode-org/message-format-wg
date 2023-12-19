@@ -816,14 +816,24 @@ backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
 
 ### Whitespace
 
-**_<dfn>Whitespace</dfn>_** is defined as tab, carriage return, line feed, or the space character.
+**_<dfn>Whitespace</dfn>_** is defined as one or more of
+U+0009 CHARACTER TABULATION (tab), 
+U+000A LINE FEED (new line),
+U+000D CARRIAGE RETURN, 
+U+3000 IDEOGRAPHIC SPACE, 
+or U+0020 SPACE.
 
 Inside _patterns_ and _quoted literals_,
 whitespace is part of the content and is recorded and stored verbatim.
 Whitespace is not significant outside translatable text, except where required by the syntax.
 
+> [!NOTE]
+> The character U+3000 IDEOGRAPHIC SPACE is included in whitespace for
+> compatibility with certain East Asian keyboards and input methods,
+> in which users might accidentally create these characters in a _message_.
+
 ```abnf
-s = 1*( SP / HTAB / CR / LF )
+s = 1*( SP / HTAB / CR / LF / %x3000 )
 ```
 
 ## Complete ABNF
