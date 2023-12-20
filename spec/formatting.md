@@ -12,7 +12,7 @@ their handling during formatting is specified here as well.
 
 Formatting of a _message_ is defined by the following operations:
 
-- **_Expression Resolution_** determines the value of an _expression_,
+- **_Expression and Markup Resolution_** determines the value of an _expression_ or _markup_,
   with reference to the current _formatting context_.
   This can include multiple steps,
   such as looking up the value of a variable and calling formatting functions.
@@ -83,9 +83,10 @@ At a minimum, it includes:
 
 Implementations MAY include additional fields in their _formatting context_.
 
-## Expression Resolution
+## Expression and Markup Resolution
 
 _Expressions_ are used in _declarations_, _selectors_, and _patterns_.
+_Markup_ is only used in _patterns_.
 
 In a _declaration_, the resolved value of the _expression_ is bound to a _variable_,
 which is available for use by later _expressions_.
@@ -98,7 +99,7 @@ but also the _variable_ to which the resolved value of the _variable-expression_
 
 In _selectors_, the resolved value of an _expression_ is used for _pattern selection_.
 
-In a _pattern_, the resolved value of an _expression_ is used in its _formatting_.
+In a _pattern_, the resolved value of _expressions_ and _markup_ is used in their _formatting_.
 
 The shapes of resolved values are implementation-dependent,
 and different implementations MAY choose to perform different levels of resolution.
@@ -210,17 +211,7 @@ the following steps are taken:
    Implementations are not required to implement _namespaces_ or installable
    _function registries_.
 
-3. Resolve the _options_ to a mapping of string identifiers to values.
-   If _options_ is missing, the mapping will be empty.
-   For each _option_:
-   - Resolve the _identifier_ of the _option_.
-   - If the _option_'s _identifier_ already exists in the resolved mapping of _options_,
-     emit a Duplicate Option Name error.
-   - If the _option_'s right-hand side successfully resolves to a value,
-     bind the _identifier_ of the _option_ to the resolved value in the mapping.
-   - Otherwise, bind the _identifier_ of the _option_ to an unresolved value in the mapping.
-     Implementations MAY later remove this value before calling the _function_.
-     (Note that an Unresolved Variable error will have been emitted.)
+3. Perform _option resolution_.
 
 4. Call the function implementation with the following arguments:
 
@@ -247,6 +238,37 @@ the following steps are taken:
    If the call fails or does not return a valid value,
    emit a Resolution error and use a _fallback value_ for the _expression_.
 
+#### Option Resolution
+
+The result of resolving _option_ values is a mapping of string identifiers to values.
+
+For each _option_:
+
+- Resolve the _identifier_ of the _option_.
+- If the _option_'s _identifier_ already exists in the resolved mapping of _options_,
+   emit a Duplicate Option Name error.
+- If the _option_'s right-hand side successfully resolves to a value,
+   bind the _identifier_ of the _option_ to the resolved value in the mapping.
+- Otherwise, bind the _identifier_ of the _option_ to an unresolved value in the mapping.
+   Implementations MAY later remove this value before calling the _function_.
+   (Note that an Unresolved Variable error will have been emitted.)
+
+Errors MAY be emitted during _option resolution_,
+but it always resolves to some mapping of string identifiers to values.
+This mapping can be empty.
+
+### Markup Resolution
+
+Unlike _functions_, the resolution of _markup_ is not customizable.
+
+The resolved value of _markup_ includes the following fields:
+
+- The type of the markup: open, standalone, or close
+- The _name_ of the _markup_
+- For _markup-open_ and _markup_standalone_,
+  the resolved _options_ values after _option resolution_.
+
+The resolution of _markup_ MUST always succeed.
 
 ### Fallback Resolution
 
@@ -304,7 +326,7 @@ The _fallback value_ depends on the contents of the _expression_:
   > the message formats to `{$arg}`.
 
 - _function_ _expression_ with no _operand_:
-  the _function_ starting sigil followed by its _identifier_
+  U+003A COLON `:` followed by the _function_ _identifier_
 
   > Examples:
   > In a context where `:func` fails to resolve, `{:func}` resolves to the _fallback value_ `:func`.
@@ -599,7 +621,7 @@ one {{Category match}}
 ## Formatting
 
 After _pattern selection_,
-each _text_ and _expression_ part of the selected _pattern_ is resolved and formatted.
+each _text_ and _placeholder_ part of the selected _pattern_ is resolved and formatted.
 
 _Formatting_ is a mostly implementation-defined process,
 as it depends on the implementation's shape for resolved values
@@ -618,12 +640,17 @@ appropriate data type or structure. Some examples of these include:
 - A string with associated attributes for portions of its text.
 - A flat sequence of objects corresponding to each resolved value.
 - A hierarchical structure of objects that group spans of resolved values,
-  such as sequences delimited by "open" and "close" _function_ _annotations_.
+  such as sequences delimited by _markup-open_ and _markup-close_ _placeholders_.
 
 Implementations SHOULD provide _formatting_ result types that match user needs,
 including situations that require further processing of formatted messages.
 Implementations SHOULD encourage users to consider a formatted localised string
 as an opaque data structure, suitable only for presentation.
+
+When formatting to a string, the default representation of all _markup_
+MUST be an empty string.
+Implementations MAY offer functionality for customizing this,
+such as by emitting XML-ish tags for each _markup_.
 
 ### Examples
 

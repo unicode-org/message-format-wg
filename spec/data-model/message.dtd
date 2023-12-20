@@ -21,7 +21,7 @@
 <!ELEMENT key (#PCDATA)>
 <!ATTLIST key default (true | false) "false">
 
-<!ELEMENT pattern (#PCDATA | expression)*>
+<!ELEMENT pattern (#PCDATA | expression | markup)*>
 
 <!ELEMENT expression (
   ((literal | variable), (functionAnnotation | unsupportedAnnotation)?) |
@@ -35,12 +35,17 @@
 <!ATTLIST variable name NMTOKEN #REQUIRED>
 
 <!ELEMENT functionAnnotation (option)*>
-<!ATTLIST functionAnnotation
-  kind (open | close | value) #REQUIRED
-  name NMTOKEN #REQUIRED
->
+<!ATTLIST functionAnnotation name NMTOKEN #REQUIRED>
+
 <!ELEMENT option (literal | variable)>
 <!ATTLIST option name NMTOKEN #REQUIRED>
 
 <!ELEMENT unsupportedAnnotation (#PCDATA)>
 <!ATTLIST unsupportedAnnotation sigil CDATA #REQUIRED>
+
+<!-- A <markup kind="close"> MUST NOT contain any <option> elements -->
+<!ELEMENT markup (option)*>
+<!ATTLIST markup
+  kind (open | standalone | close) #REQUIRED
+  name NMTOKEN #REQUIRED
+>

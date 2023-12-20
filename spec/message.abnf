@@ -3,7 +3,7 @@ message = simple-message / complex-message
 simple-message = [simple-start pattern]
 simple-start = simple-start-char / text-escape / placeholder
 pattern = *(text-char / text-escape / placeholder)
-placeholder = expression
+placeholder = expression / markup
 
 complex-message = *(declaration [s]) complex-body
 declaration = input-declaration / local-declaration / reserved-statement
@@ -23,13 +23,18 @@ expression = literal-expression / variable-expression / annotation-expression
 literal-expression = "{" [s] literal [s annotation] [s] "}"
 variable-expression = "{" [s] variable [s annotation] [s] "}"
 annotation-expression = "{" [s] annotation [s] "}"
-annotation = (function *(s option))
+annotation = function
            / private-use-annotation
            / reserved-annotation
 
+markup       = "{" [s] markup-open [s] ["/"] "}"
+             / "{" [s] markup-close [s] "}"
+markup-open  = "#" identifier *(s option)
+markup-close = "/" identifier
+
 literal = quoted / unquoted
 variable = "$" name
-function = (":" / "+" / "-") identifier
+function = ":" identifier *(s option)
 option = identifier [s] "=" [s] (literal / variable)
 
 input = %s".input"
@@ -65,8 +70,8 @@ reserved-keyword = "." name
 
 ; Reserve additional sigils for use by future versions of this specification.
 reserved-annotation = reserved-annotation-start reserved-body
-reserved-annotation-start = "!" / "@" / "#" / "%" / "*"
-                          / "<" / ">" / "/" / "?" / "~"
+reserved-annotation-start = "!" / "@" / "%" / "*" / "+"
+                          / "<" / ">" / "?" / "~"
 
 reserved-body  = *([s] 1*(reserved-char / reserved-escape / quoted))
 reserved-char  = %x00-08        ; omit HTAB and LF

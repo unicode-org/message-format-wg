@@ -22,27 +22,29 @@
       },
       "required": ["type", "name"]
     },
-    "option": {
-      "type": "object",
-      "properties": {
-        "name": { "type": "string" },
-        "value": {
-          "oneOf": [{ "$ref": "#/$defs/literal" }, { "$ref": "#/$defs/variable" }]
-        }
-      },
-      "required": ["name", "value"]
+    "options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "value": {
+            "oneOf": [
+              { "$ref": "#/$defs/literal" },
+              { "$ref": "#/$defs/variable" }
+            ]
+          }
+        },
+        "required": ["name", "value"]
+      }
     },
 
     "function-annotation": {
       "type": "object",
       "properties": {
         "type": { "const": "function" },
-        "kind": { "enum": ["open", "close", "value"] },
         "name": { "type": "string" },
-        "options": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/option" }
-        }
+        "options": { "$ref": "#/$defs/options" }
       },
       "required": ["type", "kind", "name"]
     },
@@ -67,32 +69,36 @@
     "literal-expression": {
       "type": "object",
       "properties": {
+        "type": { "const": "expression" },
         "arg": { "$ref": "#/$defs/literal" },
         "annotation": { "$ref": "#/$defs/annotation" }
       },
-      "required": ["arg"]
+      "required": ["type", "arg"]
     },
     "variable-expression": {
       "type": "object",
       "properties": {
+        "type": { "const": "expression" },
         "arg": { "$ref": "#/$defs/variable" },
         "annotation": { "$ref": "#/$defs/annotation" }
       },
-      "required": ["arg"]
+      "required": ["type", "arg"]
     },
     "function-expression": {
       "type": "object",
       "properties": {
+        "type": { "const": "expression" },
         "annotation": { "$ref": "#/$defs/function-annotation" }
       },
-      "required": ["annotation"]
+      "required": ["type", "annotation"]
     },
     "unsupported-expression": {
       "type": "object",
       "properties": {
+        "type": { "const": "expression" },
         "annotation": { "$ref": "#/$defs/unsupported-annotation" }
       },
-      "required": ["annotation"]
+      "required": ["type", "annotation"]
     },
     "expression": {
       "oneOf": [
@@ -103,13 +109,43 @@
       ]
     },
 
+    "markup-open": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "markup" },
+        "kind": { "enum": ["open", "standalone"] },
+        "name": { "type": "string" },
+        "options": { "$ref": "#/$defs/options" }
+      },
+      "required": ["type", "kind", "name"]
+    },
+    "markup-close": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "markup" },
+        "kind": { "const": "close" },
+        "name": { "type": "string" }
+      },
+      "required": ["type", "kind", "name"]
+    },
+    "markup": {
+      "oneOf": [
+        { "$ref": "#/$defs/markup-open" },
+        { "$ref": "#/$defs/markup-close" }
+      ]
+    },
+
     "pattern": {
       "type": "object",
       "properties": {
         "body": {
           "type": "array",
           "items": {
-            "oneOf": [{ "type": "string" }, { "$ref": "#/$defs/expression" }]
+            "oneOf": [
+              { "type": "string" },
+              { "$ref": "#/$defs/expression" },
+              { "$ref": "#/$defs/markup" }
+            ]
           }
         }
       },
