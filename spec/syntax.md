@@ -510,7 +510,7 @@ and what outputs might result.
 See [function registry](./) for more information.
 
 A _function_ starts with a prefix sigil `:` followed by an _identifier_.
-The _name_ MAY be followed by one or more _options_.
+The _identifier_ MAY be followed by one or more _options_.
 _Options_ are not required.
 
 ```abnf

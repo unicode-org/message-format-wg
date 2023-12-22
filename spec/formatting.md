@@ -264,7 +264,7 @@ Unlike _functions_, the resolution of _markup_ is not customizable.
 The resolved value of _markup_ includes the following fields:
 
 - The type of the markup: open, standalone, or close
-- The _name_ of the _markup_
+- The _identifier_ of the _markup_
 - For _markup-open_ and _markup_standalone_,
   the resolved _options_ values after _option resolution_.
 
