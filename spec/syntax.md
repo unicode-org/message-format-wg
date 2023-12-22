@@ -658,16 +658,17 @@ that can be used to represent non-language parts of a _message_,
 such as inline elements or styling that should apply to a span of parts.
 Markup comes in three forms:
 
-**_<dfn>Markup-open</dfn>_** starts with `#` and
-is a _pattern_ part starting a span.
-It MAY include _options_, but these are not required.
+**_<dfn>Markup-open</dfn>_** starts with U+0023 NUMBER SIGN `#` and
+represents an opening element within the _message_,
+such as markup used to start a span.
+It MAY include _options_.
 
-If a _markup-open_ includes a `/` immediately before its closing `}`,
-it is a self-closing **_<dfn>markup-standalone</dfn>_** part
-representing a standalone element within a message,
-such as an inline image or any other opaque content.
+**_<dfn>Markup-standalone</dfn>_** starts with U+0023 NUMBER SIGN `#`
+and has a U+002F SOLIDUS `/` immediately before its closing `}`
+representing a self-closing or standalone element within the _message_.
+It MAY include _options_.
 
-**_<dfn>Markup-close</dfn>_** starts with `/` and
+**_<dfn>Markup-close</dfn>_** starts with U+002F SOLIDUS `/` and
 is a _pattern_ part ending a span.
 Unlike the other forms, it does not include _options_.
 
@@ -684,7 +685,7 @@ markup-close = "/" identifier
 > {#button}Submit{/button} or {#img alt=|Cancel| /}.}
 > ```
 
-_Markup-open_ and _markup-close_ parts SHOULD be paired,
+_Markup-open_ and _markup-close_ parts MAY be paired,
 but this is not a requirement.
 A _markup-open_ MAY be present in a message without
 a corresponding _markup-close_, and vice versa.
