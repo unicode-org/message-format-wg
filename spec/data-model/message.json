@@ -113,7 +113,17 @@
       "type": "object",
       "properties": {
         "type": { "const": "markup" },
-        "kind": { "enum": ["open", "standalone"] },
+        "kind": { "const": "open" },
+        "name": { "type": "string" },
+        "options": { "$ref": "#/$defs/options" }
+      },
+      "required": ["type", "kind", "name"]
+    },
+    "markup-standalone": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "markup" },
+        "kind": { "const": "standalone" },
         "name": { "type": "string" },
         "options": { "$ref": "#/$defs/options" }
       },
@@ -131,6 +141,7 @@
     "markup": {
       "oneOf": [
         { "$ref": "#/$defs/markup-open" },
+        { "$ref": "#/$defs/markup-standalone" },
         { "$ref": "#/$defs/markup-close" }
       ]
     },
