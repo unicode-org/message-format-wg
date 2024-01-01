@@ -89,7 +89,8 @@ Attempting to parse a _message_ that is not _well-formed_ will result in a _Synt
 
 A _message_ is **_<dfn>valid</dfn>_** if it is _well-formed_ and
 **also** meets the additional content restrictions
-and semantic requirements about its structure defined below.
+and semantic requirements about its structure defined below for
+_declarations_, _matcher_ and _options_.
 Attempting to parse a _message_ that is not _valid_ will result in a _Data Model Error_.
 
 ## The Message
@@ -553,6 +554,9 @@ The value of an _option_ can be either a _literal_ or a _variable_.
 
 Multiple _options_ are permitted in an _annotation_.
 Each _option_ is separated by whitespace.
+
+The _option_ _identifiers_ MUST be unique within each _expression_.
+Otherwise, the _message_ is not considered _valid_.
 
 ```abnf
 option = identifier [s] "=" [s] (literal / variable)

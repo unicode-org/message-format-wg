@@ -214,8 +214,6 @@ the following steps are taken:
    If _options_ is missing, the mapping will be empty.
    For each _option_:
    - Resolve the _identifier_ of the _option_.
-   - If the _option_'s _identifier_ already exists in the resolved mapping of _options_,
-     emit a Duplicate Option Name error.
    - If the _option_'s right-hand side successfully resolves to a value,
      bind the _identifier_ of the _option_ to the resolved value in the mapping.
    - Otherwise, bind the _identifier_ of the _option_ to an unresolved value in the mapping.
