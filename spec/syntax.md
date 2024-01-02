@@ -553,7 +553,7 @@ optional whitespace.
 The value of an _option_ can be either a _literal_ or a _variable_.
 
 Multiple _options_ are permitted in an _annotation_.
-_Options_ are separated from other parts of the _annotation_
+_Options_ are separated from the preceding _function_ _identifier_
 and from each other by whitespace.
 Each _option_'s _identifier_ MUST be unique within the _annotation_: 
 an _annotation_ with duplicate _option_ _identifiers_ is not valid.
