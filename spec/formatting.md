@@ -844,7 +844,7 @@ These are divided into the following categories:
     > .local $bar = {42 :number}
     > {{The answer is {$foo}}}
     >
-    > .local $foo = {42 :number minimumFractionDigits=$bar}
+    > .input {$foo :number minimumFractionDigits=$bar}
     > .local $bar = {2}
     > {{The answer is {$foo}}}
     > ```
