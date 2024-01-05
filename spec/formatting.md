@@ -834,6 +834,21 @@ These are divided into the following categories:
     > {{{$var} cannot be redefined. {$var2} cannot refer to itself}}
     > ```
 
+  - A **Forward Reference error** occurs when a _declaration_ _expression_ includes a _variable_
+    that is declared after it in the _message_.
+
+    > Examples of invalid messages resulting in a Forward Reference error:
+    >
+    > ```
+    > .local $foo = {$bar :number}
+    > .local $bar = {42 :number}
+    > {{The answer is {$foo}}}
+    >
+    > .local $foo = {42 :number minimumFractionDigits=$bar}
+    > .local $bar = {2}
+    > {{The answer is {$foo}}}
+    > ```
+
   - A **Duplicate Option Name error** occurs when the same _identifier_
     appears on the left-hand side
     of more than one _option_ in the same _expression_.

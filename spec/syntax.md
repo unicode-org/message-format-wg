@@ -183,6 +183,10 @@ Duplicate Declaration error during formatting:
 A _local-declaration_ MAY overwrite an external input value as long as the
 external input value does not appear in a _declaration_.
 
+A _declaration_ _expression_ MUST NOT include a _variable_
+that is declared after it in the _message_.
+Doing so produces a Forward Reference error during formatting.
+
 > [!Note]
 > These restrictions only apply to _declarations_.
 > A _placeholder_ or _selector_ can apply a different annotation to a _variable_
