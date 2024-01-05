@@ -110,7 +110,7 @@ interface CatchallKey {
 ## Patterns
 
 Each `Pattern` represents a linear sequence, without selectors.
-Each element of the `body` array MUST be a non-empty string, an `Expression` or a `Markup` object.
+Each element of the `body` array MUST be a non-empty string, an `Expression`, or a `Markup` object.
 String values represent literal _text_.
 `Expression` wraps each of the potential _expression_ shapes.
 `Markup` wraps each of the potential _markup_ shapes.
@@ -119,7 +119,7 @@ The `body` strings are the "cooked" _text_ values, i.e. escape sequences are pro
 Implementations MUST NOT rely on the set of `Expression` and 
 `Markup` interfaces defined in this document being exhaustive.
 Future versions of this specification might define additional
-types of expression or markup.
+expressions or markup.
 
 ```ts
 interface Pattern {
@@ -229,7 +229,8 @@ interface UnsupportedAnnotation {
 
 A `Markup` object is either `MarkupOpen`, `MarkupStandalone`, or `MarkupClose`,
 which are differentiated by `kind`.
-The `name` in these does not include the starting sigils `#` and `/`.
+The `name` in these does not include the starting sigils `#` and `/` 
+or the ending sigil `/`.
 The optional `options` for open and standalone markup use the same `Option`
 as `FunctionAnnotation`.
 

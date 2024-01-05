@@ -99,7 +99,7 @@ but also the _variable_ to which the resolved value of the _variable-expression_
 
 In _selectors_, the resolved value of an _expression_ is used for _pattern selection_.
 
-In a _pattern_, the resolved value of _expressions_ and _markup_ is used in their _formatting_.
+In a _pattern_, the resolved value of an _expression_ or _markup_ is used in its _formatting_.
 
 The shapes of resolved values are implementation-dependent,
 and different implementations MAY choose to perform different levels of resolution.
