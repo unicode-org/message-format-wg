@@ -227,9 +227,8 @@ interface UnsupportedAnnotation {
 
 ## Markup
 
-Each of the markup interfaces `MarkupOpen`, `MarkupStandalone`,
-and `MarkupClose` represent the _markup_ `type` of the corresponding
-`kind`.
+A `Markup` object is either `MarkupOpen`, `MarkupStandalone`, or `MarkupClose`,
+which are differentiated by `kind`.
 The `name` in these does not include the starting sigils `#` and `/`.
 The optional `options` for open and standalone markup use the same `Option`
 as `FunctionAnnotation`.

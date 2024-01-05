@@ -685,11 +685,11 @@ markup-close = "/" identifier
 > {#button}Submit{/button} or {#img alt=|Cancel| /}.}
 > ```
 
-_Markup-open_ and _markup-close_ parts MAY be paired,
-but this is not a requirement.
-A _markup-open_ MAY be present in a message without
-a corresponding _markup-close_, and vice versa.
-_Markup-standalone_ parts are not paired.
+A _markup-open_ can appear without a corresponding _markup-close_.
+A _markup-close_ can appear without a corresponding _markup-open_.
+_Markup_ _placeholders_ can appear in any order without making the _message_ invalid.
+However, specifications or implementations defining _markup_ might impose requirements
+on the pairing, ordering, or contents of _markup_ during _formatting_.
 
 ## Other Syntax Elements
 
