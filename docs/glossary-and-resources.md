@@ -23,23 +23,44 @@
 
 ### Terms for message formatting
 
+
+- **[ABNF](https://en.wikipedia.org/wiki/Augmented_Backus%E2%80%93Naur_form)** - (Augmented Backus-Naur Form). ABNF is a method of specifying valid syntax for a specification. The MessageFormat ABNF spec defines what is and is not required for a string to be valid MessageFormat. ABNF is specified by RFC 5234 and RFC 7405; x
 - **API** - any function call(s) invoked by the user to perform message formatting.
 - **API argument format** - syntax of values passed to input of message formatting API. May also refer to structure of values represented by the syntax. May be similar or same as _authoring format_. See _message syntax_.
 - **application locale** - the locale for formatting (or formatting resources) requested by an application.
+- **attribute** - A value in a message or a function call that provides additional information that may be needed to properly resolve. Attributes are key/value pairs expressed in the form "@key=value".
 - **authoring** - writing a message by hand that adheres to some syntax.
 - **authoring format** - syntax of message formatting inputs when constructed for a program, either manually (by a developer) or programtically (ex: a WYSIWYG tool used by a translator). May also refer to structure of values represented by the syntax. May be similar or same as _API argument format_. See _message syntax_.
+- **[CLDR](https://cldr.unicode.org/)** - Unicode's Common Locale Data Repository - a set of standardized building blocks that enable software to support languages and locales around the world.
 - **data model** - a syntax-independent description of the structure of values passed to the message formatting API.
-- **implementation** - code written to make the API achieve the intended behavior of output for a given input.
+- **format to parts** - context-aware functionality that can take a formatted string (such as a monetary amount, or a date), and return the seperated constituent parts.
+- **formatter** - in MessageFormat, a function that takes a set of parameters (eg: ```code: 'USD', amount: 3.9```), and returns formatted text that can be incorporated into the output string (eg: ```"<span class="cur"><span class="cur-symbol">$</span><span class="cur-amt">3.90</span> <span class="cur-code">USD</span>"```)
+- **function** - in MessageFormat, functionality that is callable in the context of a MessageFormat message to perform a variety of functions, from determining the plural form needed to represent a number, to formatting an option for output.
+- **gender** - In many languages, nouns are considered to have a gender which requires changes to the text around the noun. Common genders in linguistics are feminine, masculine, neuter, common (gendered) or epicene.
+- **grammeme** - a value of a grammatical category, such as "singular" or "plural" for numerical grammer, or "male" or "female" for gendered nouns
+- **implementation** - code written to achieve the intended behavior of output for a given input. It is expected that MessageFormat will have implementations in all popular programming languages.
+- **inflection** - a variation in a word or phrase common in many languages, that expresses further context such as tense, mood, formality, etc.
 - **interchange format** - syntax/file format used to convert the inputs of message formatting into inputs for other systems (ex: l10n systems).
 - **interpolate** - inserting the contents of one string in the middle of another, at places indicated by a pattern / placeholder. See _translation merging_.
+- **LDML** - Locale Data Markup Language - the spec schema that defines CLDR
 - **locale fallback** - offering a reasonable substitute locale when the requested locale's resources are not available. Results may vary depending on context (ex: audio vs. text vs. video).
 - **locale matching** - computing the locale fallback.
+- **markup** - characters present in the MessageFormat source strings that are intended to provide structure, functionality, or formatting to the output string, as opposed to display text.
+- **match** - a mechanism in MessageFormat that allows the message author to specify a variety of outcomes based on the combined values of one or more inputs.
+- **metadata** - Addition information about an MF2 message that aids in translation, or other pre-runtime processes, but has no impact on how the message will be rendered. This may be context notes, screenshots of the string in situ, etc. Metadata should never be relied upon at runtime.
+- **open/close** - syntax within the source test that changes the execution context of the parser from output mode to code mode, and back again.
+- **operand** - A character in a message that denotes an action taken during runtime execution, such as value assignment or comparison.
+- **options** - values passed in, along with an MF2 message, that will be used to determine the output. Examples may be item count in a search results string.
+- **placeholder** - Syntax in the MF2 message that deontes that an option should be inserted into that place in the string.
+- **registry** - MF2's function registry, which allows reusable logic to be executed at runtime while resolving an MF2 string to output.
 - **resource** - files bundled with an application that are loaded in by the executable code. UI strings, etc. and their locale-specific translations are typically stored as resources.
 - **roundtrip** - the process of transforming a message into another format or representation, then transforming it back into the original format.
 - **translation merging** - in l10n TMSes, the document-level interpolation of translated content. In other words, the replacing of translatable units in the source document with their equivalent translated units. See _interpolate_.
 - **selector** - see _placeholder type_.
 - **specification** - the rules we decide that describe what is passed to the API for message formatting (structure of data, syntax, etc.).
 - **serialization** - how to convert in-memory representations of data to/from a file/stream.
+- **sigil** - A character in a string that is used to denote a change in context.
+- **spannable** - A construct in messages where there is an open and a close denotation (start and stop). The italics markup, for instance ("<i>This is italicized</i>") is a spannable.
 - **syntax** - a general term to describe a set of rules that describe the set of allowed symbols and their ordering. Can apply to data, source code, communication protocols, etc. regardless of interface (stream, file). Sometimes used synonymously for _file format_.
 - **variant** - one of the pre-defined values (cases) in a switch/case manner that a message can take depending on the value of some variable (switch), such as a polaceholder.
 
