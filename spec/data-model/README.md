@@ -110,18 +110,16 @@ interface CatchallKey {
 ## Patterns
 
 Each `Pattern` represents a linear sequence, without selectors.
-Each element of the `body` array MUST either be a non-empty string or an `Expression` object.
+Each element of the `Pattern` MUST either be a non-empty string or an `Expression` object.
 String values represent literal _text_,
 while `Expression` wraps each of the potential _expression_ shapes.
-The `body` strings are the "cooked" _text_ values, i.e. escape sequences are processed.
+The `Pattern` strings are the "cooked" _text_ values, i.e. escape sequences are processed.
 
 Implementations MUST NOT rely on the set of `Expression` interfaces being exhaustive,
 as future versions of this specification MAY define additional expressions.
 
 ```ts
-interface Pattern {
-  body: Array<string | Expression>;
-}
+type Pattern = Array<string | Expression>;
 
 type Expression = LiteralExpression | VariableExpression | FunctionExpression |
                   UnsupportedExpression;
