@@ -47,7 +47,7 @@
 - **LDML** - Locale Data Markup Language - the spec schema that defines CLDR
 - **locale fallback** - offering a reasonable substitute locale when the requested locale's resources are not available. Results may vary depending on context (ex: audio vs. text vs. video).
 - **locale matching** - computing the locale fallback.
-- **markup** - characters present in the MessageFormat source strings that are intended to provide structure, functionality, or formatting to the output string, as opposed to display text.
+- **markup** - characters present in the MessageFormat source strings that are intended to provide structure, functionality, or formatting to the output, as opposed to display text.
 - **match** - a mechanism in MessageFormat that allows the message author to specify a variety of outcomes based on the combined values of one or more inputs.
 - **metadata** - Addition information about an MF2 message that aids in translation, or other pre-runtime processes, but has no impact on how the message will be rendered. This may be context notes, screenshots of the string in situ, etc. Metadata should never be relied upon at runtime.
 - **open/close** - syntax within the source test that changes the execution context of the parser from output mode to code mode, and back again.
