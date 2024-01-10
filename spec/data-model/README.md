@@ -109,8 +109,7 @@ interface CatchallKey {
 
 ## Patterns
 
-Each `Pattern` is a standalone linear sequence of text and placeholders
-that represents the output of a message.
+Each `Pattern` contains a linear sequence of text and placeholders corresponding to potential output of a message.
 
 Each element of the `Pattern` MUST either be a non-empty string or an `Expression` object.
 String values represent literal _text_.
