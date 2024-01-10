@@ -24,7 +24,7 @@
 ### Terms for message formatting
 
 
-- **[ABNF](https://en.wikipedia.org/wiki/Augmented_Backus%E2%80%93Naur_form)** - (Augmented Backus-Naur Form). ABNF is a method of specifying valid syntax for a specification. The MessageFormat ABNF spec defines what is and is not required for a string to be valid MessageFormat. ABNF is specified by RFC 5234 and RFC 7405; x
+- **[ABNF](https://en.wikipedia.org/wiki/Augmented_Backus%E2%80%93Naur_form)** - (Augmented Backus-Naur Form). ABNF is a method of specifying valid syntax for a specification. The MessageFormat ABNF spec defines what is and is not required for a string to be valid MessageFormat. ABNF is specified by RFC 5234 and RFC 7405.
 - **API** - any function call(s) invoked by the user to perform message formatting.
 - **API argument format** - syntax of values passed to input of message formatting API. May also refer to structure of values represented by the syntax. May be similar or same as _authoring format_. See _message syntax_.
 - **application locale** - the locale for formatting (or formatting resources) requested by an application.
