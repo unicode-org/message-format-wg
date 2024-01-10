@@ -53,7 +53,7 @@
 - **open/close** - syntax within the source test that changes the execution context of the parser from output mode to code mode, and back again.
 - **operand** - A character in a message that denotes an action taken during runtime execution, such as value assignment or comparison.
 - **options** - values passed in, along with an MF2 message, that will be used to determine the output. Examples may be item count in a search results string.
-- **placeholder** - Syntax in the MF2 message that deontes that an option should be inserted into that place in the string.
+- **placeholder** - An expression or markup in a message pattern.
 - **registry** - MF2's function registry, which allows reusable logic to be executed at runtime while resolving an MF2 string to output.
 - **resource** - files bundled with an application that are loaded in by the executable code. UI strings, etc. and their locale-specific translations are typically stored as resources.
 - **roundtrip** - the process of transforming a message into another format or representation, then transforming it back into the original format.
