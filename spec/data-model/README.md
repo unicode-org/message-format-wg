@@ -109,11 +109,14 @@ interface CatchallKey {
 
 ## Patterns
 
-Each `Pattern` represents a linear sequence, without selectors.
+Each `Pattern` is a standalone linear sequence of text and placeholders
+that represents the output of a message.
+
 Each element of the `Pattern` MUST either be a non-empty string or an `Expression` object.
-String values represent literal _text_,
-while `Expression` wraps each of the potential _expression_ shapes.
-The `Pattern` strings are the "cooked" _text_ values, i.e. escape sequences are processed.
+String values represent literal _text_.
+String values include all processing of the underlying _text_ values,
+including escape sequence processing.
+`Expression` values wrap each of the _expression_ shapes.
 
 Implementations MUST NOT rely on the set of `Expression` interfaces being exhaustive,
 as future versions of this specification MAY define additional expressions.
