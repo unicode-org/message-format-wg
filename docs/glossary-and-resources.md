@@ -36,7 +36,6 @@
 - **format to parts** - A formatting call that returns an array of objects representing the message,
   or some part of it, rather than a single concatenated string.
   A formatted part may also represent a non-string value, such as an inline image.
-- **formatter** - in MessageFormat, a function that takes a set of parameters (eg: ```code: 'USD', amount: 3.9```), and returns formatted text that can be incorporated into the output string (eg: ```"<span class="cur"><span class="cur-symbol">$</span><span class="cur-amt">3.90</span> <span class="cur-code">USD</span>"```)
 - **function** - in MessageFormat, functionality that is callable in the context of a MessageFormat message to perform a variety of functions, from determining the plural form needed to represent a number, to formatting an option for output.
 - **gender** - In many languages, nouns are considered to have a gender which requires changes to the text around the noun. Common genders in linguistics are feminine, masculine, neuter, common (gendered) or epicene.
 - **grammeme** - a value of a grammatical category, such as "singular" or "plural" for numerical grammer, or "male" or "female" for gendered nouns
