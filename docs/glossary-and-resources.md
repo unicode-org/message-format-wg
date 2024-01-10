@@ -61,7 +61,7 @@
 - **specification** - the rules we decide that describe what is passed to the API for message formatting (structure of data, syntax, etc.).
 - **serialization** - how to convert in-memory representations of data to/from a file/stream.
 - **sigil** - A character in a string that is used to denote a change in context.
-- **spannable** - A construct in messages where there is an open and a close denotation (start and stop). The italics markup, for instance ("<i>This is italicized</i>") is a spannable.
+- **spannable** - See _markup_.
 - **syntax** - a general term to describe a set of rules that describe the set of allowed symbols and their ordering. Can apply to data, source code, communication protocols, etc. regardless of interface (stream, file). Sometimes used synonymously for _file format_.
 - **variant** - one of the pre-defined values (cases) in a switch/case manner that a message can take depending on the value of some variable (switch), such as a polaceholder.
 
