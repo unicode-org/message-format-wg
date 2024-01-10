@@ -53,7 +53,7 @@
 - **operand** - A character in a message that denotes an action taken during runtime execution, such as value assignment or comparison.
 - **options** - values passed in, along with an MF2 message, that will be used to determine the output. Examples may be item count in a search results string.
 - **placeholder** - An expression or markup in a message pattern.
-- **registry** - MF2's function registry, which allows reusable logic to be executed at runtime while resolving an MF2 string to output.
+- **registry** - MF2's function registry, which allows reusable logic to be executed at runtime while formatting an MF2 message.
 - **resource** - files bundled with an application that are loaded in by the executable code. UI strings, etc. and their locale-specific translations are typically stored as resources.
 - **roundtrip** - the process of transforming a message into another format or representation, then transforming it back into the original format.
 - **translation merging** - in l10n TMSes, the document-level interpolation of translated content. In other words, the replacing of translatable units in the source document with their equivalent translated units. See _interpolate_.
