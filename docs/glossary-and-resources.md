@@ -33,7 +33,9 @@
 - **authoring format** - syntax of message formatting inputs when constructed for a program, either manually (by a developer) or programtically (ex: a WYSIWYG tool used by a translator). May also refer to structure of values represented by the syntax. May be similar or same as _API argument format_. See _message syntax_.
 - **[CLDR](https://cldr.unicode.org/)** - Unicode's Common Locale Data Repository - a set of standardized building blocks that enable software to support languages and locales around the world.
 - **data model** - a syntax-independent description of the structure of values passed to the message formatting API.
-- **format to parts** - context-aware functionality that can take a formatted string (such as a monetary amount, or a date), and return the seperated constituent parts.
+- **format to parts** - A formatting call that returns an array of objects representing the message,
+  or some part of it, rather than a single concatenated string.
+  A formatted part may also represent a non-string value, such as an inline image.
 - **formatter** - in MessageFormat, a function that takes a set of parameters (eg: ```code: 'USD', amount: 3.9```), and returns formatted text that can be incorporated into the output string (eg: ```"<span class="cur"><span class="cur-symbol">$</span><span class="cur-amt">3.90</span> <span class="cur-code">USD</span>"```)
 - **function** - in MessageFormat, functionality that is callable in the context of a MessageFormat message to perform a variety of functions, from determining the plural form needed to represent a number, to formatting an option for output.
 - **gender** - In many languages, nouns are considered to have a gender which requires changes to the text around the noun. Common genders in linguistics are feminine, masculine, neuter, common (gendered) or epicene.
