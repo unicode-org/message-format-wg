@@ -27,7 +27,10 @@
       "properties": {
         "name": { "type": "string" },
         "value": {
-          "oneOf": [{ "$ref": "#/$defs/literal" }, { "$ref": "#/$defs/variable" }]
+          "oneOf": [
+            { "$ref": "#/$defs/literal" },
+            { "$ref": "#/$defs/variable" }
+          ]
         }
       },
       "required": ["name", "value"]
@@ -104,16 +107,10 @@
     },
 
     "pattern": {
-      "type": "object",
-      "properties": {
-        "body": {
-          "type": "array",
-          "items": {
-            "oneOf": [{ "type": "string" }, { "$ref": "#/$defs/expression" }]
-          }
-        }
-      },
-      "required": ["body"]
+      "type": "array",
+      "items": {
+        "oneOf": [{ "type": "string" }, { "$ref": "#/$defs/expression" }]
+      }
     },
 
     "input-declaration": {
