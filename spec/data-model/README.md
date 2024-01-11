@@ -117,31 +117,40 @@ String values include all processing of the underlying _text_ values,
 including escape sequence processing.
 `Expression` values wrap each of the _expression_ shapes.
 
-Implementations MUST NOT rely on the set of `Expression` interfaces being exhaustive,
-as future versions of this specification MAY define additional expressions.
+Implementations MUST NOT rely on the set of `Expression` and 
+`Markup` interfaces defined in this document being exhaustive.
+Future versions of this specification might define additional
+expressions or markup.
 
 ```ts
 type Pattern = Array<string | Expression>;
 
-type Expression = LiteralExpression | VariableExpression | FunctionExpression |
-                  UnsupportedExpression;
+type Expression =
+  | LiteralExpression
+  | VariableExpression
+  | FunctionExpression
+  | UnsupportedExpression;
 
 interface LiteralExpression {
+  type: "expression";
   arg: Literal;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
 }
 
 interface VariableExpression {
+  type: "expression";
   arg: VariableRef;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
 }
 
 interface FunctionExpression {
+  type: "expression";
   arg?: never;
   annotation: FunctionAnnotation;
 }
 
 interface UnsupportedExpression {
+  type: "expression";
   arg?: never;
   annotation: UnsupportedAnnotation;
 }
@@ -172,17 +181,13 @@ interface VariableRef {
 ```
 
 A `FunctionAnnotation` represents a _function_ _annotation_.
-In a `FunctionAnnotation`,
-the `kind` corresponds to the starting sigil of a _function_:
-`'open'` for `+`, `'close'` for `-`, and `'value'` for `:`.
-The `name` does not include this starting sigil.
+The `name` does not include the `:` starting sigil.
 
 Each _option_ is represented by an `Option`.
 
 ```ts
 interface FunctionAnnotation {
   type: "function";
-  kind: "open" | "close" | "value";
   name: string;
   options?: Option[];
 }
@@ -214,8 +219,41 @@ that the implementation attaches to that _annotation_.
 ```ts
 interface UnsupportedAnnotation {
   type: "unsupported-annotation";
-  sigil: "!" | "@" | "#" | "%" | "^" | "&" | "*" | "<" | ">" | "/" | "?" | "~";
+  sigil: "!" | "@" | "%" | "^" | "&" | "*" | "+" | "<" | ">" | "?" | "~";
   source: string;
+}
+```
+
+## Markup
+
+A `Markup` object is either `MarkupOpen`, `MarkupStandalone`, or `MarkupClose`,
+which are differentiated by `kind`.
+The `name` in these does not include the starting sigils `#` and `/` 
+or the ending sigil `/`.
+The optional `options` for open and standalone markup use the same `Option`
+as `FunctionAnnotation`.
+
+```ts
+type Markup = MarkupOpen | MarkupStandalone | MarkupClose;
+
+interface MarkupOpen {
+  type: "markup";
+  kind: "open";
+  name: string;
+  options?: Option[];
+}
+
+interface MarkupStandalone {
+  type: "markup";
+  kind: "standalone";
+  name: string;
+  options?: Option[];
+}
+
+interface MarkupClose {
+  type: "markup";
+  kind: "close";
+  name: string;
 }
 ```
 

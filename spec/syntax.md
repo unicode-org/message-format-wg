@@ -311,11 +311,11 @@ Otherwise, care must be taken to ensure that pattern-significant whitespace is p
 
 ### Placeholder
 
-A **_<dfn>placeholder</dfn>_** is an _expression_ that appears inside of a _pattern_
+A **_<dfn>placeholder</dfn>_** is an _expression_ or _markup_ that appears inside of a _pattern_
 and which will be replaced during the formatting of a _message_.
 
 ```abnf
-placeholder = expression
+placeholder = expression / markup
 ```
 
 ## Matcher
@@ -448,7 +448,7 @@ All _expressions_ share a common syntax. The types of _expression_ are:
 
 1. The value of a _local-declaration_
 2. A _selector_
-3. A _placeholder_ in a _pattern_
+3. A kind of _placeholder_ in a _pattern_
 
 Additionally, an _input-declaration_ can contain a _variable-expression_.
 
@@ -483,7 +483,7 @@ a _function_ together with its associated _options_, or
 a _private-use annotation_ or a _reserved annotation_.
 
 ```abnf
-annotation = (function *(s option))
+annotation = function
            / private-use-annotation
            / reserved-annotation
 ```
@@ -509,37 +509,19 @@ what _options_ and _option_ values are valid,
 and what outputs might result.
 See [function registry](./) for more information.
 
-_Functions_ can be _standalone_, or can be an _opening element_ or _closing element_.
-
-A **_<dfn>standalone</dfn>_** _function_ is not expected to be paired with another _function_.
-An **_<dfn>opening element</dfn>_** is a _function_ that SHOULD be paired with a _closing element_.
-A **_<dfn>closing element</dfn>_** is a _function_ that SHOULD be paired with an _opening element_.
-
-An _opening element_ MAY be present in a message without a corresponding _closing element_,
-and vice versa.
-
-> A _message_ with a _standalone_ _function_ operating on the _variable_ `$now`:
->
-> ```
-> {$now :datetime}
-> ```
->
-> A _message_ with two markup-like _functions_, `button` and `link`,
-> which the runtime can use to construct a document tree structure for a UI framework:
->
-> ```
-> {+button}Submit{-button} or {+link}cancel{-link}.
-> ```
-
-A _function_ consists of a prefix sigil followed by an _identifier_.
-The following sigils are used for _functions_:
-
-- `:` for a _standalone_ function
-- `+` for an _opening element_
-- `-` for a _closing element_
-
-A _function_ MAY be followed by one or more _options_.
+A _function_ starts with a prefix sigil `:` followed by an _identifier_.
+The _identifier_ MAY be followed by one or more _options_.
 _Options_ are not required.
+
+```abnf
+function = ":" identifier *(s option)
+```
+
+> A _message_ with a _function_ operating on the _variable_ `$now`:
+>
+> ```
+> It is now {$now :datetime}
+> ```
 
 ##### Options
 
@@ -656,8 +638,8 @@ unrecognized _reserved-annotations_ or _private-use-annotations_ have no meaning
 
 ```abnf
 reserved-annotation = reserved-annotation-start reserved-body
-reserved-annotation-start = "!" / "@" / "#" / "%" / "*"
-                          / "<" / ">" / "/" / "?" / "~"
+reserved-annotation-start = "!" / "@" / "%" / "*" / "+"
+                          / "<" / ">" / "?" / "~"
 
 reserved-body = *([s] 1*(reserved-char / reserved-escape / quoted))
 reserved-char = %x00-08        ; omit HTAB and LF
@@ -668,6 +650,46 @@ reserved-char = %x00-08        ; omit HTAB and LF
               / %x7E-D7FF      ; omit surrogates
               / %xE000-10FFFF
 ```
+
+## Markup
+
+**_<dfn>Markup</dfn>_** _placeholders_ are _pattern_ parts
+that can be used to represent non-language parts of a _message_,
+such as inline elements or styling that should apply to a span of parts.
+Markup comes in three forms:
+
+**_<dfn>Markup-open</dfn>_** starts with U+0023 NUMBER SIGN `#` and
+represents an opening element within the _message_,
+such as markup used to start a span.
+It MAY include _options_.
+
+**_<dfn>Markup-standalone</dfn>_** starts with U+0023 NUMBER SIGN `#`
+and has a U+002F SOLIDUS `/` immediately before its closing `}`
+representing a self-closing or standalone element within the _message_.
+It MAY include _options_.
+
+**_<dfn>Markup-close</dfn>_** starts with U+002F SOLIDUS `/` and
+is a _pattern_ part ending a span.
+Unlike the other forms, it does not include _options_.
+
+```abnf
+markup       = "{" [s] markup-open [s] ["/"] "}"
+             / "{" [s] markup-close [s] "}"
+markup-open  = "#" identifier *(s option)
+markup-close = "/" identifier
+```
+
+> A _message_ with one `button` markup span and a standalone `img` markup element.
+>
+> ```
+> {#button}Submit{/button} or {#img alt=|Cancel| /}.}
+> ```
+
+A _markup-open_ can appear without a corresponding _markup-close_.
+A _markup-close_ can appear without a corresponding _markup-open_.
+_Markup_ _placeholders_ can appear in any order without making the _message_ invalid.
+However, specifications or implementations defining _markup_ might impose requirements
+on the pairing, ordering, or contents of _markup_ during _formatting_.
 
 ## Other Syntax Elements
 
@@ -732,14 +754,15 @@ number-literal = ["-"] (0 / ([1-9] *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*D
 ### Names and Identifiers
 
 An **_<dfn>identifier</dfn>_** is a character sequence that
-identifies a _function_ or _option_.
+identifies a _function_, _markup_, or _option_.
 Each _identifier_ consists of a _name_ optionally preceeded by
 a _namespace_. 
 When present, the _namespace_ is separated from the _name_ by a
 U+003A COLON `:`.
 Built-in _functions_ and their _options_ do not have a _namespace_ identifier.
 
-_Function_ _identifiers_ are prefixed with `:`, `+`, or `-`.
+_Function_ _identifiers_ are prefixed with `:`.
+_Markup_ _identifiers_ are prefixed with `#` or `/`.
 _Option_ _identifiers_ have no prefix.
 
 A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_ 
@@ -747,7 +770,6 @@ or as the name for a _variable_
 or the value of an _unquoted_ _literal_.
 
 _Variable_ names are prefixed with `$`.
-_Function_ names are prefixed with `:`, `+` or `-`.
 
 Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
 [NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
@@ -783,7 +805,6 @@ in this release.
 
 ```abnf
 variable = "$" name
-function = (":" / "+" / "-") identifier
 option = identifier [s] "=" [s] (literal / variable)
 
 identifier = [namespace ":"] name
