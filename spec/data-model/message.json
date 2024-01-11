@@ -22,21 +22,18 @@
       },
       "required": ["type", "name"]
     },
-    "options": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "value": {
-            "oneOf": [
-              { "$ref": "#/$defs/literal" },
-              { "$ref": "#/$defs/variable" }
-            ]
-          }
-        },
-        "required": ["name", "value"]
-      }
+    "option": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "value": {
+          "oneOf": [
+            { "$ref": "#/$defs/literal" },
+            { "$ref": "#/$defs/variable" }
+          ]
+        }
+      },
+      "required": ["name", "value"]
     },
 
     "function-annotation": {
@@ -147,20 +144,10 @@
     },
 
     "pattern": {
-      "type": "object",
-      "properties": {
-        "body": {
-          "type": "array",
-          "items": {
-            "oneOf": [
-              { "type": "string" },
-              { "$ref": "#/$defs/expression" },
-              { "$ref": "#/$defs/markup" }
-            ]
-          }
-        }
-      },
-      "required": ["body"]
+      "type": "array",
+      "items": {
+        "oneOf": [{ "type": "string" }, { "$ref": "#/$defs/expression" }]
+      }
     },
 
     "input-declaration": {
