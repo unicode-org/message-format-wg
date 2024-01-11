@@ -14,14 +14,15 @@ host environments, their serializations and resource formats,
 that might be sufficient to prevent most problems.
 However, MessageFormat itself does not supply such a restriction.
 
-MessageFormat _messages_ permit nearly all Unicode characters, excepting surrogates,
-to appear in a _pattern_.
+MessageFormat _messages_ permit nearly all Unicode code points,
+with the exception of surrogates, to appear in a _pattern_.
 This means that it can be possible for a _message_ to contain invisible unquoted
 control characters that abnormally affect the display of the _message_
 but do not generate errors from MessageFormat parsers or processing APIs.
 
-
-Users are also reminded that, since MessageFormat 2.0's syntax makes use of 
+Bidirectional text containing right-to-left characters (such as used for Arabic or Hebrew) 
+also poses a potential source of confusion for users. 
+Since MessageFormat 2.0's syntax makes use of 
 keywords and symbols that are left-to-right or consist of neutral characters 
 (including characters subject to mirroring under the Unicode Bidirectional Algorithm), 
 it is possible to create messages that,
