@@ -146,7 +146,11 @@
     "pattern": {
       "type": "array",
       "items": {
-        "oneOf": [{ "type": "string" }, { "$ref": "#/$defs/expression" }]
+        "oneOf": [
+          { "type": "string" },
+          { "$ref": "#/$defs/expression" },
+          { "$ref": "#/$defs/markup" }
+        ]
       }
     },
 
