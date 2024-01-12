@@ -15,7 +15,8 @@ that might be sufficient to prevent most problems.
 However, MessageFormat itself does not supply such a restriction.
 
 MessageFormat _messages_ permit nearly all Unicode code points,
-with the exception of surrogates, to appear in a _pattern_.
+with the exception of surrogates, 
+to appear in _literals_, including the text portions of a _pattern_
 This means that it can be possible for a _message_ to contain invisible unquoted
 control characters that abnormally affect the display of the _message_
 but do not generate errors from MessageFormat parsers or processing APIs.
