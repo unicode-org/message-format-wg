@@ -22,18 +22,21 @@
       },
       "required": ["type", "name"]
     },
-    "option": {
-      "type": "object",
-      "properties": {
-        "name": { "type": "string" },
-        "value": {
-          "oneOf": [
-            { "$ref": "#/$defs/literal" },
-            { "$ref": "#/$defs/variable" }
-          ]
-        }
-      },
-      "required": ["name", "value"]
+    "options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "value": {
+            "oneOf": [
+              { "$ref": "#/$defs/literal" },
+              { "$ref": "#/$defs/variable" }
+            ]
+          }
+        },
+        "required": ["name", "value"]
+      }
     },
 
     "function-annotation": {
