@@ -427,6 +427,7 @@ An _expression_ MUST begin with U+007B LEFT CURLY BRACKET `{`
 and end with U+007D RIGHT CURLY BRACKET `}`.
 An _expression_ MUST NOT be empty.
 An _expression_ cannot contain another _expression_.
+An _expression_ MAY contain one more _attributes_.
 
 A **_<dfn>literal-expression</dfn>_** contains a _literal_,
 optionally followed by an _annotation_.
@@ -438,9 +439,9 @@ An **_<dfn>annotation-expression</dfn>_** contains an _annotation_ without an _o
 
 ```abnf
 expression = literal-expression / variable-expression / annotation-expression
-literal-expression = "{" [s] literal [s annotation] [s] "}"
-variable-expression = "{" [s] variable [s annotation] [s] "}"
-annotation-expression = "{" [s] annotation [s] "}"
+literal-expression = "{" [s] literal [s annotation] *(s attribute) [s] "}"
+variable-expression = "{" [s] variable [s annotation] *(s attribute) [s] "}"
+annotation-expression = "{" [s] annotation *(s attribute) [s] "}"
 ```
 
 There are several types of _expression_ that can appear in a _message_.
@@ -638,14 +639,14 @@ unrecognized _reserved-annotations_ or _private-use-annotations_ have no meaning
 
 ```abnf
 reserved-annotation = reserved-annotation-start reserved-body
-reserved-annotation-start = "!" / "@" / "%" / "*" / "+"
-                          / "<" / ">" / "?" / "~"
+reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
 reserved-body = *([s] 1*(reserved-char / reserved-escape / quoted))
 reserved-char = %x00-08        ; omit HTAB and LF
               / %x0B-0C        ; omit CR
               / %x0E-19        ; omit SP
-              / %x21-5B        ; omit \
+              / %x21-3F        ; omit @
+              / %x41-5B        ; omit \
               / %x5D-7A        ; omit { | }
               / %x7E-D7FF      ; omit surrogates
               / %xE000-10FFFF
@@ -656,7 +657,12 @@ reserved-char = %x00-08        ; omit HTAB and LF
 **_<dfn>Markup</dfn>_** _placeholders_ are _pattern_ parts
 that can be used to represent non-language parts of a _message_,
 such as inline elements or styling that should apply to a span of parts.
-Markup comes in three forms:
+
+_Markup_ MUST begin with U+007B LEFT CURLY BRACKET `{`
+and end with U+007D RIGHT CURLY BRACKET `}`.
+_Markup_ MAY contain one more _attributes_.
+
+_Markup_ comes in three forms:
 
 **_<dfn>Markup-open</dfn>_** starts with U+0023 NUMBER SIGN `#` and
 represents an opening element within the _message_,
@@ -673,8 +679,8 @@ is a _pattern_ part ending a span.
 Unlike the other forms, it does not include _options_.
 
 ```abnf
-markup       = "{" [s] markup-open [s] ["/"] "}"
-             / "{" [s] markup-close [s] "}"
+markup       = "{" [s] markup-open *(s attribute) [s] ["/"] "}"
+             / "{" [s] markup-close *(s attribute) [s] "}"
 markup-open  = "#" identifier *(s option)
 markup-close = "/" identifier
 ```
@@ -690,6 +696,42 @@ A _markup-close_ can appear without a corresponding _markup-open_.
 _Markup_ _placeholders_ can appear in any order without making the _message_ invalid.
 However, specifications or implementations defining _markup_ might impose requirements
 on the pairing, ordering, or contents of _markup_ during _formatting_.
+
+## Attributes
+
+**_Attributes_ are reserved for standardization by future versions of this specification.**
+Examples in this section are meant to be illustrative and
+might not match future requirements or usage.
+
+An **_<dfn>attribute</dfn>_** is an _identifier_ with an optional value
+that appears in an _expression_ or in _markup_.
+
+_Attributes_ are prefixed by a U+0040 COMMERCIAL AT `@` sign,
+followed by an _identifier_.
+An _attribute_ MAY have a _value_ which is separated from the _identifier_
+by an U+003D EQUALS SIGN `=` along with optional whitespace.
+The _value_ of an _attribute_ can be either a _literal_ or a _variable_.
+
+Multiple _attributes_ are permitted in an _expression_ or _markup_.
+Each _attribute_ is separated by whitespace.
+
+```abnf
+attribute = "@" identifier [[s] "=" [s] (literal / variable)]
+```
+
+> Examples of _expressions_ and _markup_ with _attributes_:
+>
+> A _message_ including a _literal_ that should not be translated:
+>
+> ```
+> In French, "{|bonjour| @translate=no}" is a greeting
+> ```
+>
+> A _message_ with _markup_ that should not be copied:
+>
+> ```
+> Have a {+span @can-copy}great and wonderful{-span @can-copy} birthday!
+> ```
 
 ## Other Syntax Elements
 

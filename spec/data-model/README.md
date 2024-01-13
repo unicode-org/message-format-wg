@@ -136,24 +136,33 @@ interface LiteralExpression {
   type: "expression";
   arg: Literal;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
+  attributes?: Attribute[];
 }
 
 interface VariableExpression {
   type: "expression";
   arg: VariableRef;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
+  attributes?: Attribute[];
 }
 
 interface FunctionExpression {
   type: "expression";
   arg?: never;
   annotation: FunctionAnnotation;
+  attributes?: Attribute[];
 }
 
 interface UnsupportedExpression {
   type: "expression";
   arg?: never;
   annotation: UnsupportedAnnotation;
+  attributes?: Attribute[];
+}
+
+interface Attribute {
+  name: string;
+  value?: Literal | VariableRef;
 }
 ```
 
@@ -220,7 +229,7 @@ that the implementation attaches to that _annotation_.
 ```ts
 interface UnsupportedAnnotation {
   type: "unsupported-annotation";
-  sigil: "!" | "@" | "%" | "^" | "&" | "*" | "+" | "<" | ">" | "?" | "~";
+  sigil: "!" | "%" | "^" | "&" | "*" | "+" | "<" | ">" | "?" | "~";
   source: string;
 }
 ```
@@ -242,6 +251,7 @@ interface MarkupOpen {
   kind: "open";
   name: string;
   options?: Option[];
+  attributes?: Attribute[];
 }
 
 interface MarkupStandalone {
@@ -249,12 +259,14 @@ interface MarkupStandalone {
   kind: "standalone";
   name: string;
   options?: Option[];
+  attributes?: Attribute[];
 }
 
 interface MarkupClose {
   type: "markup";
   kind: "close";
   name: string;
+  attributes?: Attribute[];
 }
 ```
 
