@@ -1,7 +1,7 @@
 # MessageFormat 2.0 Errors
 
 Errors in messages and their formatting MAY occur and be detected
-at multiple different stages of their processing.
+at different stages of processing.
 Where available,
 the use of validation tools is recommended,
 as early detection of errors makes their correction easier.
