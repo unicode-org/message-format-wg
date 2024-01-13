@@ -652,10 +652,9 @@ MUST be an empty string.
 Implementations MAY offer functionality for customizing this,
 such as by emitting XML-ish tags for each _markup_.
 
-_Attributes_ MUST NOT have any impact on message formatting,
-and MUST NOT be available in the formatted output.
-_Variables_ in _attribute_ _values_ are not resolved,
-and no errors are emitted for them.
+_Attributes_ are reserved for future standardization.
+Other than checking for valid syntax, they SHOULD NOT 
+affect the processing or output of a _message_.
 
 ### Examples
 
