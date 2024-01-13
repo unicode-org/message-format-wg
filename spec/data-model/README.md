@@ -111,11 +111,12 @@ interface CatchallKey {
 
 Each `Pattern` contains a linear sequence of text and placeholders corresponding to potential output of a message.
 
-Each element of the `Pattern` MUST either be a non-empty string or an `Expression` object.
+Each element of the `Pattern` MUST either be a non-empty string, an `Expression`, or a `Markup` object.
 String values represent literal _text_.
 String values include all processing of the underlying _text_ values,
 including escape sequence processing.
-`Expression` values wrap each of the _expression_ shapes.
+`Expression` wraps each of the potential _expression_ shapes.
+`Markup` wraps each of the potential _markup_ shapes.
 
 Implementations MUST NOT rely on the set of `Expression` and 
 `Markup` interfaces defined in this document being exhaustive.
@@ -123,7 +124,7 @@ Future versions of this specification might define additional
 expressions or markup.
 
 ```ts
-type Pattern = Array<string | Expression>;
+type Pattern = Array<string | Expression | Markup>;
 
 type Expression =
   | LiteralExpression
