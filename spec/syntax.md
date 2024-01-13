@@ -699,13 +699,16 @@ on the pairing, ordering, or contents of _markup_ during _formatting_.
 
 ## Attributes
 
-An **_<dfn>attribute</dfn>_** is a key with an optional value that
-is attached to the _expression_ or _markup_ as a whole.
-_Attributes_ are reserved for use by future specification versions.
+An **_<dfn>attribute</dfn>_** is an _identifier_ with an optional value
+that appears in an _expression_ or in _markup_.
+
+**_Attributes_ are reserved for standardization by future versions of this specification.**
+Examples in this section are meant to be illustrative and
+might not match future requirements or usage.
 
 _Attributes_ are prefixed by a U+0040 COMMERCIAL AT `@` sign,
 followed by an _identifier_.
-An _attribute_ MAY have a _value_ separated from the _identifier_
+An _attribute_ MAY have a _value_ which is separated from the _identifier_
 by an U+003D EQUALS SIGN `=` along with optional whitespace.
 The _value_ of an _attribute_ can be either a _literal_ or a _variable_.
 
