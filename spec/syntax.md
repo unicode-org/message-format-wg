@@ -699,12 +699,12 @@ on the pairing, ordering, or contents of _markup_ during _formatting_.
 
 ## Attributes
 
-An **_<dfn>attribute</dfn>_** is an _identifier_ with an optional value
-that appears in an _expression_ or in _markup_.
-
 **_Attributes_ are reserved for standardization by future versions of this specification.**
 Examples in this section are meant to be illustrative and
 might not match future requirements or usage.
+
+An **_<dfn>attribute</dfn>_** is an _identifier_ with an optional value
+that appears in an _expression_ or in _markup_.
 
 _Attributes_ are prefixed by a U+0040 COMMERCIAL AT `@` sign,
 followed by an _identifier_.
