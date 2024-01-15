@@ -312,11 +312,11 @@ Otherwise, care must be taken to ensure that pattern-significant whitespace is p
 
 ### Placeholder
 
-A **_<dfn>placeholder</dfn>_** is an _expression_ that appears inside of a _pattern_
+A **_<dfn>placeholder</dfn>_** is an _expression_ or _markup_ that appears inside of a _pattern_
 and which will be replaced during the formatting of a _message_.
 
 ```abnf
-placeholder = expression
+placeholder = expression / markup
 ```
 
 ## Matcher
@@ -428,6 +428,7 @@ An _expression_ MUST begin with U+007B LEFT CURLY BRACKET `{`
 and end with U+007D RIGHT CURLY BRACKET `}`.
 An _expression_ MUST NOT be empty.
 An _expression_ cannot contain another _expression_.
+An _expression_ MAY contain one more _attributes_.
 
 A **_<dfn>literal-expression</dfn>_** contains a _literal_,
 optionally followed by an _annotation_.
@@ -439,9 +440,9 @@ An **_<dfn>annotation-expression</dfn>_** contains an _annotation_ without an _o
 
 ```abnf
 expression = literal-expression / variable-expression / annotation-expression
-literal-expression = "{" [s] literal [s annotation] [s] "}"
-variable-expression = "{" [s] variable [s annotation] [s] "}"
-annotation-expression = "{" [s] annotation [s] "}"
+literal-expression = "{" [s] literal [s annotation] *(s attribute) [s] "}"
+variable-expression = "{" [s] variable [s annotation] *(s attribute) [s] "}"
+annotation-expression = "{" [s] annotation *(s attribute) [s] "}"
 ```
 
 There are several types of _expression_ that can appear in a _message_.
@@ -449,7 +450,7 @@ All _expressions_ share a common syntax. The types of _expression_ are:
 
 1. The value of a _local-declaration_
 2. A _selector_
-3. A _placeholder_ in a _pattern_
+3. A kind of _placeholder_ in a _pattern_
 
 Additionally, an _input-declaration_ can contain a _variable-expression_.
 
@@ -484,7 +485,7 @@ a _function_ together with its associated _options_, or
 a _private-use annotation_ or a _reserved annotation_.
 
 ```abnf
-annotation = (function *(s option))
+annotation = function
            / private-use-annotation
            / reserved-annotation
 ```
@@ -510,37 +511,19 @@ what _options_ and _option_ values are valid,
 and what outputs might result.
 See [function registry](./) for more information.
 
-_Functions_ can be _standalone_, or can be an _opening element_ or _closing element_.
-
-A **_<dfn>standalone</dfn>_** _function_ is not expected to be paired with another _function_.
-An **_<dfn>opening element</dfn>_** is a _function_ that SHOULD be paired with a _closing element_.
-A **_<dfn>closing element</dfn>_** is a _function_ that SHOULD be paired with an _opening element_.
-
-An _opening element_ MAY be present in a message without a corresponding _closing element_,
-and vice versa.
-
-> A _message_ with a _standalone_ _function_ operating on the _variable_ `$now`:
->
-> ```
-> {$now :datetime}
-> ```
->
-> A _message_ with two markup-like _functions_, `button` and `link`,
-> which the runtime can use to construct a document tree structure for a UI framework:
->
-> ```
-> {+button}Submit{-button} or {+link}cancel{-link}.
-> ```
-
-A _function_ consists of a prefix sigil followed by an _identifier_.
-The following sigils are used for _functions_:
-
-- `:` for a _standalone_ function
-- `+` for an _opening element_
-- `-` for a _closing element_
-
-A _function_ MAY be followed by one or more _options_.
+A _function_ starts with a prefix sigil `:` followed by an _identifier_.
+The _identifier_ MAY be followed by one or more _options_.
 _Options_ are not required.
+
+```abnf
+function = ":" identifier *(s option)
+```
+
+> A _message_ with a _function_ operating on the _variable_ `$now`:
+>
+> ```
+> It is now {$now :datetime}
+> ```
 
 ##### Options
 
@@ -555,7 +538,7 @@ The value of an _option_ can be either a _literal_ or a _variable_.
 Multiple _options_ are permitted in an _annotation_.
 _Options_ are separated from the preceding _function_ _identifier_
 and from each other by whitespace.
-Each _option_'s _identifier_ MUST be unique within the _annotation_: 
+Each _option_'s _identifier_ MUST be unique within the _annotation_:
 an _annotation_ with duplicate _option_ _identifiers_ is not valid.
 
 ```abnf
@@ -660,18 +643,99 @@ unrecognized _reserved-annotations_ or _private-use-annotations_ have no meaning
 
 ```abnf
 reserved-annotation = reserved-annotation-start reserved-body
-reserved-annotation-start = "!" / "@" / "#" / "%" / "*"
-                          / "<" / ">" / "/" / "?" / "~"
+reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
 reserved-body = *([s] 1*(reserved-char / reserved-escape / quoted))
 reserved-char = %x00-08        ; omit HTAB and LF
               / %x0B-0C        ; omit CR
               / %x0E-19        ; omit SP
-              / %x21-5B        ; omit \
+              / %x21-3F        ; omit @
+              / %x41-5B        ; omit \
               / %x5D-7A        ; omit { | }
               / %x7E-D7FF      ; omit surrogates
               / %xE000-10FFFF
 ```
+
+## Markup
+
+**_<dfn>Markup</dfn>_** _placeholders_ are _pattern_ parts
+that can be used to represent non-language parts of a _message_,
+such as inline elements or styling that should apply to a span of parts.
+
+_Markup_ MUST begin with U+007B LEFT CURLY BRACKET `{`
+and end with U+007D RIGHT CURLY BRACKET `}`.
+_Markup_ MAY contain one more _attributes_.
+
+_Markup_ comes in three forms:
+
+**_<dfn>Markup-open</dfn>_** starts with U+0023 NUMBER SIGN `#` and
+represents an opening element within the _message_,
+such as markup used to start a span.
+It MAY include _options_.
+
+**_<dfn>Markup-standalone</dfn>_** starts with U+0023 NUMBER SIGN `#`
+and has a U+002F SOLIDUS `/` immediately before its closing `}`
+representing a self-closing or standalone element within the _message_.
+It MAY include _options_.
+
+**_<dfn>Markup-close</dfn>_** starts with U+002F SOLIDUS `/` and
+is a _pattern_ part ending a span.
+Unlike the other forms, it does not include _options_.
+
+```abnf
+markup       = "{" [s] markup-open *(s attribute) [s] ["/"] "}"
+             / "{" [s] markup-close *(s attribute) [s] "}"
+markup-open  = "#" identifier *(s option)
+markup-close = "/" identifier
+```
+
+> A _message_ with one `button` markup span and a standalone `img` markup element.
+>
+> ```
+> {#button}Submit{/button} or {#img alt=|Cancel| /}.}
+> ```
+
+A _markup-open_ can appear without a corresponding _markup-close_.
+A _markup-close_ can appear without a corresponding _markup-open_.
+_Markup_ _placeholders_ can appear in any order without making the _message_ invalid.
+However, specifications or implementations defining _markup_ might impose requirements
+on the pairing, ordering, or contents of _markup_ during _formatting_.
+
+## Attributes
+
+**_Attributes_ are reserved for standardization by future versions of this specification.**
+Examples in this section are meant to be illustrative and
+might not match future requirements or usage.
+
+An **_<dfn>attribute</dfn>_** is an _identifier_ with an optional value
+that appears in an _expression_ or in _markup_.
+
+_Attributes_ are prefixed by a U+0040 COMMERCIAL AT `@` sign,
+followed by an _identifier_.
+An _attribute_ MAY have a _value_ which is separated from the _identifier_
+by an U+003D EQUALS SIGN `=` along with optional whitespace.
+The _value_ of an _attribute_ can be either a _literal_ or a _variable_.
+
+Multiple _attributes_ are permitted in an _expression_ or _markup_.
+Each _attribute_ is separated by whitespace.
+
+```abnf
+attribute = "@" identifier [[s] "=" [s] (literal / variable)]
+```
+
+> Examples of _expressions_ and _markup_ with _attributes_:
+>
+> A _message_ including a _literal_ that should not be translated:
+>
+> ```
+> In French, "{|bonjour| @translate=no}" is a greeting
+> ```
+>
+> A _message_ with _markup_ that should not be copied:
+>
+> ```
+> Have a {+span @can-copy}great and wonderful{-span @can-copy} birthday!
+> ```
 
 ## Other Syntax Elements
 
@@ -736,14 +800,15 @@ number-literal = ["-"] (0 / ([1-9] *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*D
 ### Names and Identifiers
 
 An **_<dfn>identifier</dfn>_** is a character sequence that
-identifies a _function_ or _option_.
+identifies a _function_, _markup_, or _option_.
 Each _identifier_ consists of a _name_ optionally preceeded by
 a _namespace_. 
 When present, the _namespace_ is separated from the _name_ by a
 U+003A COLON `:`.
 Built-in _functions_ and their _options_ do not have a _namespace_ identifier.
 
-_Function_ _identifiers_ are prefixed with `:`, `+`, or `-`.
+_Function_ _identifiers_ are prefixed with `:`.
+_Markup_ _identifiers_ are prefixed with `#` or `/`.
 _Option_ _identifiers_ have no prefix.
 
 A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_ 
@@ -751,7 +816,6 @@ or as the name for a _variable_
 or the value of an _unquoted_ _literal_.
 
 _Variable_ names are prefixed with `$`.
-_Function_ names are prefixed with `:`, `+` or `-`.
 
 Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
 [NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
@@ -787,7 +851,6 @@ in this release.
 
 ```abnf
 variable = "$" name
-function = (":" / "+" / "-") identifier
 option = identifier [s] "=" [s] (literal / variable)
 
 identifier = [namespace ":"] name
@@ -797,8 +860,8 @@ name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
            / %x370-37D / %x37F-1FFF / %x200C-200D
            / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
-           / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
-name-char  = name-start / DIGIT / "-" / "." / ":"
+           / %xF900-FDCF / %xFDF0-FFFC / %x10000-EFFFF
+name-char  = name-start / DIGIT / "-" / "."
            / %xB7 / %x300-36F / %x203F-2040
 ```
 

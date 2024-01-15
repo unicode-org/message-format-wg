@@ -3,7 +3,7 @@ message = simple-message / complex-message
 simple-message = [simple-start pattern]
 simple-start = simple-start-char / text-escape / placeholder
 pattern = *(text-char / text-escape / placeholder)
-placeholder = expression
+placeholder = expression / markup
 
 complex-message = *(declaration [s]) complex-body
 declaration = input-declaration / local-declaration / reserved-statement
@@ -19,18 +19,26 @@ selector = expression
 variant = key *(s key) [s] quoted-pattern
 key = literal / "*"
 
-expression = literal-expression / variable-expression / annotation-expression
-literal-expression = "{" [s] literal [s annotation] [s] "}"
-variable-expression = "{" [s] variable [s annotation] [s] "}"
-annotation-expression = "{" [s] annotation [s] "}"
-annotation = (function *(s option))
+expression = literal-expression
+           / variable-expression
+           / annotation-expression
+literal-expression = "{" [s] literal [s annotation] *(s attribute) [s] "}"
+variable-expression = "{" [s] variable [s annotation] *(s attribute) [s] "}"
+annotation-expression = "{" [s] annotation *(s attribute) [s] "}"
+annotation = function
            / private-use-annotation
            / reserved-annotation
 
+markup       = "{" [s] markup-open *(s attribute) [s] ["/"] "}"
+             / "{" [s] markup-close *(s attribute) [s] "}"
+markup-open  = "#" identifier *(s option)
+markup-close = "/" identifier
+
 literal = quoted / unquoted
 variable = "$" name
-function = (":" / "+" / "-") identifier
+function = ":" identifier *(s option)
 option = identifier [s] "=" [s] (literal / variable)
+attribute = "@" identifier [[s] "=" [s] (literal / variable)]
 
 input = %s".input"
 local = %s".local"
@@ -65,14 +73,14 @@ reserved-keyword = "." name
 
 ; Reserve additional sigils for use by future versions of this specification.
 reserved-annotation = reserved-annotation-start reserved-body
-reserved-annotation-start = "!" / "@" / "#" / "%" / "*"
-                          / "<" / ">" / "/" / "?" / "~"
+reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
 reserved-body  = *([s] 1*(reserved-char / reserved-escape / quoted))
 reserved-char  = %x00-08        ; omit HTAB and LF
                / %x0B-0C        ; omit CR
                / %x0E-19        ; omit SP
-               / %x21-5B        ; omit \
+               / %x21-3F        ; omit @
+               / %x41-5B        ; omit \
                / %x5D-7A        ; omit { | }
                / %x7E-2FFF      ; omit IDEOGRAPHIC SPACE
                / %x3001-D7FF    ; omit surrogates
@@ -91,7 +99,7 @@ name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
            / %x370-37D / %x37F-1FFF / %x200C-200D
            / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
-           / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
+           / %xF900-FDCF / %xFDF0-FFFC / %x10000-EFFFF
 name-char  = name-start / DIGIT / "-" / "."
            / %xB7 / %x300-36F / %x203F-2040
 

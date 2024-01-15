@@ -109,41 +109,60 @@ interface CatchallKey {
 
 ## Patterns
 
-Each `Pattern` represents a linear sequence, without selectors.
-Each element of the `body` array MUST either be a non-empty string or an `Expression` object.
-String values represent literal _text_,
-while `Expression` wraps each of the potential _expression_ shapes.
-The `body` strings are the "cooked" _text_ values, i.e. escape sequences are processed.
+Each `Pattern` contains a linear sequence of text and placeholders corresponding to potential output of a message.
 
-Implementations MUST NOT rely on the set of `Expression` interfaces being exhaustive,
-as future versions of this specification MAY define additional expressions.
+Each element of the `Pattern` MUST either be a non-empty string, an `Expression`, or a `Markup` object.
+String values represent literal _text_.
+String values include all processing of the underlying _text_ values,
+including escape sequence processing.
+`Expression` wraps each of the potential _expression_ shapes.
+`Markup` wraps each of the potential _markup_ shapes.
+
+Implementations MUST NOT rely on the set of `Expression` and 
+`Markup` interfaces defined in this document being exhaustive.
+Future versions of this specification might define additional
+expressions or markup.
 
 ```ts
-interface Pattern {
-  body: Array<string | Expression>;
-}
+type Pattern = Array<string | Expression | Markup>;
 
-type Expression = LiteralExpression | VariableExpression | FunctionExpression |
-                  UnsupportedExpression;
+type Expression =
+  | LiteralExpression
+  | VariableExpression
+  | FunctionExpression
+  | UnsupportedExpression;
 
 interface LiteralExpression {
+  type: "expression";
   arg: Literal;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
+  attributes?: Attribute[];
 }
 
 interface VariableExpression {
+  type: "expression";
   arg: VariableRef;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
+  attributes?: Attribute[];
 }
 
 interface FunctionExpression {
+  type: "expression";
   arg?: never;
   annotation: FunctionAnnotation;
+  attributes?: Attribute[];
 }
 
 interface UnsupportedExpression {
+  type: "expression";
   arg?: never;
   annotation: UnsupportedAnnotation;
+  attributes?: Attribute[];
+}
+
+interface Attribute {
+  name: string;
+  value?: Literal | VariableRef;
 }
 ```
 
@@ -172,17 +191,13 @@ interface VariableRef {
 ```
 
 A `FunctionAnnotation` represents a _function_ _annotation_.
-In a `FunctionAnnotation`,
-the `kind` corresponds to the starting sigil of a _function_:
-`'open'` for `+`, `'close'` for `-`, and `'value'` for `:`.
-The `name` does not include this starting sigil.
+The `name` does not include the `:` starting sigil.
 
 Each _option_ is represented by an `Option`.
 
 ```ts
 interface FunctionAnnotation {
   type: "function";
-  kind: "open" | "close" | "value";
   name: string;
   options?: Option[];
 }
@@ -214,8 +229,44 @@ that the implementation attaches to that _annotation_.
 ```ts
 interface UnsupportedAnnotation {
   type: "unsupported-annotation";
-  sigil: "!" | "@" | "#" | "%" | "^" | "&" | "*" | "<" | ">" | "/" | "?" | "~";
+  sigil: "!" | "%" | "^" | "&" | "*" | "+" | "<" | ">" | "?" | "~";
   source: string;
+}
+```
+
+## Markup
+
+A `Markup` object is either `MarkupOpen`, `MarkupStandalone`, or `MarkupClose`,
+which are differentiated by `kind`.
+The `name` in these does not include the starting sigils `#` and `/` 
+or the ending sigil `/`.
+The optional `options` for open and standalone markup use the same `Option`
+as `FunctionAnnotation`.
+
+```ts
+type Markup = MarkupOpen | MarkupStandalone | MarkupClose;
+
+interface MarkupOpen {
+  type: "markup";
+  kind: "open";
+  name: string;
+  options?: Option[];
+  attributes?: Attribute[];
+}
+
+interface MarkupStandalone {
+  type: "markup";
+  kind: "standalone";
+  name: string;
+  options?: Option[];
+  attributes?: Attribute[];
+}
+
+interface MarkupClose {
+  type: "markup";
+  kind: "close";
+  name: string;
+  attributes?: Attribute[];
 }
 ```
 
