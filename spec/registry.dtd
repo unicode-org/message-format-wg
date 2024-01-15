@@ -55,17 +55,10 @@
     locales        NMTOKENS  #REQUIRED
 >
 
-<!ELEMENT alias (description,(mapOption|setOption)*,override*)>
+<!ELEMENT alias (description,setOption*,override*)>
 <!ATTLIST alias
     name           NMTOKEN  #REQUIRED
     supports       (format|match|all)  "all"
->
-
-<!ELEMENT mapOption EMPTY>
-<!ATTLIST mapOption
-    alias          NMTOKEN #REQUIRED
-    name           NMTOKEN #REQUIRED
-    default        CDATA #IMPLIED
 >
 
 <!ELEMENT setOption EMPTY>

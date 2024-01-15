@@ -135,18 +135,74 @@
         </description>
       </option>
     </formatSignature>
+  </function>
 
-    <alias name="date">
-      <description>Date formatting</description>
-      <mapOption alias="style" name="dateStyle" default="short" />
-      <setOption name="timeStyle" value="" />
-    </alias>
+  <function name="date">
+    <description>
+      Date formatting
+    </description>
 
-    <alias name="time">
-      <description>Time formatting</description>
-      <mapOption alias="style" name="timeStyle" default="short" />
-      <setOption name="dateStyle" value="" />
-    </alias>
+    <formatSignature>
+      <input validationRule="iso8601"/>
+      <option name="style" values="full long medium short">
+        <description>
+          The predefined date formatting style to use.
+        </description>
+      </option>
+      <option name="calendar" values="buddhist chinese coptic dangi ethioaa ethiopic gregory hebrew indian islamic islamic-umalqura islamic-tbla islamic-civil islamic-rgsa iso8601 japanese persian roc">
+        <description>
+          Calendar to use.
+        </description>
+      </option>
+      <option name="numberingSystem" values="arab arabext bali beng deva fullwide gujr guru hanidec khmr knda laoo latn limb mlym mong mymr orya tamldec telu thai tibt">
+        <description>
+          Numbering system to use.
+        </description>
+      </option>
+      <option name="timeZone" validationRule="timeZoneId">
+        <description>
+          The time zone to use.
+          The only value implementations must recognize is "UTC";
+          the default is the runtime's default time zone.
+          Implementations may also recognize the time zone names of the IANA time zone database,
+          such as "Asia/Shanghai", "Asia/Kolkata", "America/New_York".
+        </description>
+      </option>
+    </formatSignature>
+  </function>
+
+  <function name="time">
+    <description>
+      Time formatting
+    </description>
+
+    <formatSignature>
+      <input validationRule="iso8601"/>
+      <option name="style" values="full long medium short">
+        <description>
+          The predefined time formatting style to use.
+        </description>
+      </option>
+      <option name="calendar" values="buddhist chinese coptic dangi ethioaa ethiopic gregory hebrew indian islamic islamic-umalqura islamic-tbla islamic-civil islamic-rgsa iso8601 japanese persian roc">
+        <description>
+          Calendar to use.
+        </description>
+      </option>
+      <option name="numberingSystem" values="arab arabext bali beng deva fullwide gujr guru hanidec khmr knda laoo latn limb mlym mong mymr orya tamldec telu thai tibt">
+        <description>
+          Numbering system to use.
+        </description>
+      </option>
+      <option name="timeZone" validationRule="timeZoneId">
+        <description>
+          The time zone to use.
+          The only value implementations must recognize is "UTC";
+          the default is the runtime's default time zone.
+          Implementations may also recognize the time zone names of the IANA time zone database,
+          such as "Asia/Shanghai", "Asia/Kolkata", "America/New_York".
+        </description>
+      </option>
+    </formatSignature>
   </function>
 
   <function name="number">
