@@ -808,10 +808,9 @@ These are divided into the following categories:
     > * {{Value is not one}}
     > ```
 
-  - A **Duplicate Declaration error** occurs when a _variable_ appears in two _declarations_.
-    This includes when an _input-declaration_ binds a _variable_ that appears in a previous _declaration_,
-    when a _local-declaration_ binds a _variable_ that appears in a previous _declaration_,
-    or when a _local-declaration_ refers to its bound _variable_ in its _expression_.
+  - A **Duplicate Declaration error** occurs when a _variable_ is declared more than once.
+    Note that an input _variable_ is implicitly declared when it is first used,
+    so explicitly declaring it after such use is also an error.
 
     > Examples of invalid messages resulting in a Duplicate Declaration error:
     >
@@ -827,6 +826,10 @@ These are divided into the following categories:
     > .input {$var :number minFractionDigits=0}
     > .local $var = {$ext :number maxFractionDigits=0}
     > {{Redeclaration of an input variable}}
+    >
+    > .input {$var :number minFractionDigits=$var2}
+    > .input {$var2 :number}
+    > {{Redeclaration of an implicit input variable}}
     >
     > .local $var = {$ext :someFunction}
     > .local $var = {$error}
