@@ -1,6 +1,6 @@
 # Default Registry and MF1 Compatibility
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -23,6 +23,12 @@ along with their _operands_ and _options_.
 It also contains a section comparing MF1 (as embodied by ICU4J) and MF2
 to ensure that we don't forget something.
 
+Implementations MAY provide other selectors or functions using the mechanisms defined by MF2
+but these will not be considered for the LDML45 default registry.
+The default registry is a foundational set of selectors and functions that an implementation
+claiming MF2 compatibility is required to supply.
+Therefore, addition to this list requires a higher level of rigor.
+
 ## Default Registry Entries
 
 ### Numbers
@@ -31,8 +37,6 @@ Function name: `:number`
 
 Aliases: 
 - `:integer` (implies: `maximumFractionDigits=0`)
-- `:currency` (implies: `style=currency`)
-- `:percent` (implies: `style=percent`)
 - `:plural` (no format, implies `select=plural` which is default)
 - `:ordinal` (implies: `select=ordinal`; we are missing `style=ordinal`)
 
@@ -64,7 +68,7 @@ Options:
 Function name: `:datetime`
 
 Aliases:
-- (none currently; should there be `:date` and `:time` aliases to shorthand getting particularly timeStyle?)
+- `:date` and `:time` have been proposed and will be considered for 45
 
 Operand: "iso8601"
 
@@ -103,6 +107,16 @@ Options:
 
 
 ### Other
+
+
+### Deliberately Excluded
+
+The following functionality was deliberately excluded:
+* Spellout
+* Duration
+* ChoiceFormat
+* Percent (as an alias of `:number`)
+* Currency (as an alias of `:number`)
 
 
 ## Compatibility Matrix
