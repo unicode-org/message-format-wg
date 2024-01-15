@@ -19,16 +19,18 @@ selector = expression
 variant = key *(s key) [s] quoted-pattern
 key = literal / "*"
 
-expression = literal-expression / variable-expression / annotation-expression
-literal-expression = "{" [s] literal [s annotation] [s] "}"
-variable-expression = "{" [s] variable [s annotation] [s] "}"
-annotation-expression = "{" [s] annotation [s] "}"
+expression = literal-expression
+           / variable-expression
+           / annotation-expression
+literal-expression = "{" [s] literal [s annotation] *(s attribute) [s] "}"
+variable-expression = "{" [s] variable [s annotation] *(s attribute) [s] "}"
+annotation-expression = "{" [s] annotation *(s attribute) [s] "}"
 annotation = function
            / private-use-annotation
            / reserved-annotation
 
-markup       = "{" [s] markup-open [s] ["/"] "}"
-             / "{" [s] markup-close [s] "}"
+markup       = "{" [s] markup-open *(s attribute) [s] ["/"] "}"
+             / "{" [s] markup-close *(s attribute) [s] "}"
 markup-open  = "#" identifier *(s option)
 markup-close = "/" identifier
 
@@ -36,6 +38,7 @@ literal = quoted / unquoted
 variable = "$" name
 function = ":" identifier *(s option)
 option = identifier [s] "=" [s] (literal / variable)
+attribute = "@" identifier [[s] "=" [s] (literal / variable)]
 
 input = %s".input"
 local = %s".local"
@@ -70,14 +73,14 @@ reserved-keyword = "." name
 
 ; Reserve additional sigils for use by future versions of this specification.
 reserved-annotation = reserved-annotation-start reserved-body
-reserved-annotation-start = "!" / "@" / "%" / "*" / "+"
-                          / "<" / ">" / "?" / "~"
+reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
 reserved-body  = *([s] 1*(reserved-char / reserved-escape / quoted))
 reserved-char  = %x00-08        ; omit HTAB and LF
                / %x0B-0C        ; omit CR
                / %x0E-19        ; omit SP
-               / %x21-5B        ; omit \
+               / %x21-3F        ; omit @
+               / %x41-5B        ; omit \
                / %x5D-7A        ; omit { | }
                / %x7E-2FFF      ; omit IDEOGRAPHIC SPACE
                / %x3001-D7FF    ; omit surrogates
