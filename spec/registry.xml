@@ -6,6 +6,7 @@
   <validationRule id="positiveInteger" regex="0|([1-9]\d*)"/>
   <validationRule id="currencyCode" regex="[A-Z]{3}"/>
   <validationRule id="timeZoneId" regex="[a-zA-Z/]+"/>
+  <validationRule id="anything" regex=".*"/>
   <validationRule id="anythingNotEmpty" regex=".+"/>
   <validationRule id="iso8601" regex="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}"/>
 
@@ -250,4 +251,18 @@
     </alias>
   </function>
 
+  <function name="string">
+    <description>
+      Formatting of strings as a literal and selection based on string equality
+    </description>
+
+    <formatSignature>
+      <input validationRule="anything" />
+    </formatSignature>
+
+    <matchSignature>
+      <input validationRule="anything" />
+      <match validationRule="anything" />
+    </matchSignature>
+  </function>
 </registry>
