@@ -1,6 +1,6 @@
 # Design Proposal Template
 
-Status: **Proposed**
+Status: **Acctepted**
 
 <details>
 	<summary>Metadata</summary>
