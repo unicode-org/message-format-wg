@@ -68,7 +68,8 @@ Options:
 Function name: `:datetime`
 
 Aliases:
-- `:date` and `:time` have been proposed and will be considered for 45
+- `:date` (with `style=...` option corresponding to `:datetime dateStyle=...`)
+- `:time` (with `style=...` option corresponding to `:datetime timeStyle=...`)
 
 Operand: "iso8601"
 
