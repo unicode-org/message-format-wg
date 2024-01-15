@@ -174,7 +174,7 @@ local-declaration = local s variable [s] "=" [s] expression
 
 _Variables_, once declared, MUST NOT be redeclared. 
 A _message_ that does any of the following is not _valid_ and will produce a 
-Duplicate Declaration error during formatting:
+_Duplicate Declaration_ error during processing:
 - An _input-declaration_ MUST NOT bind a _variable_ that appears as a _variable_ in a previous 
   _declaration_.
 - A _local-declaration_ MUST NOT bind a _variable_ that appears as a _variable_ in a previous
@@ -195,7 +195,7 @@ external input value does not appear in a _declaration_.
 > 0 {{The selector can apply a different annotation to {$var} for the purposes of selection}}
 > * {{A placeholder in a pattern can apply a different annotation to {$var :number maxFractionDigits=3}}}
 > ```
-> (See [Error Handling](./formatting.md#error-handling) for examples of invalid messages)
+> (See the [Errors](./errors.md) section for examples of invalid messages)
 
 #### Reserved Statements
 
