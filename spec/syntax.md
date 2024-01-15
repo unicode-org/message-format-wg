@@ -281,18 +281,23 @@ In the ABNF, _text_ is represented by non-empty sequences of
 `simple-start-char`, `text-char`, and `text-escape`.
 The first of these is used at the start of a _simple message_,
 and matches `text-char` except for not allowing U+002E FULL STOP `.`.
+The ABNF uses `content-char` as a shared base for _text_ and _quoted literal_ characters.
 
 Whitespace in _text_, including tabs, spaces, and newlines is significant and MUST
 be preserved during formatting.
 
 ```abnf
-simple-start-char = %x0-2D         ; omit .
-                  / %x2F-5B        ; omit \
-                  / %x5D-7A        ; omit {
-                  / %x7C           ; omit }
+simple-start-char = content-char / s / "@" / "|"
+text-char         = content-char / s / "." / "@" / "|"
+content-char      = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
+                  / %x0B-0C        ; omit CR (%x0D)
+                  / %x0E-19        ; omit SP (%x20)
+                  / %x21-2D        ; omit . (%x2E)
+                  / %x2F-3F        ; omit @ (%x40)
+                  / %x41-5B        ; omit \ (%x5C)
+                  / %x5D-7A        ; omit { | } (%x7B-7D)
                   / %x7E-D7FF      ; omit surrogates
                   / %xE000-10FFFF
-text-char = simple-start-char / "."
 ```
 
 When a _pattern_ is quoted by embedding the _pattern_ in curly brackets, the
@@ -646,14 +651,7 @@ reserved-annotation = reserved-annotation-start reserved-body
 reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
 reserved-body = *([s] 1*(reserved-char / reserved-escape / quoted))
-reserved-char = %x00-08        ; omit HTAB and LF
-              / %x0B-0C        ; omit CR
-              / %x0E-19        ; omit SP
-              / %x21-3F        ; omit @
-              / %x41-5B        ; omit \
-              / %x5D-7A        ; omit { | }
-              / %x7E-D7FF      ; omit surrogates
-              / %xE000-10FFFF
+reserved-char = content-char / "."
 ```
 
 ## Markup
@@ -787,10 +785,7 @@ of number values in _operands_ or _options_, or as _keys_ for _variants_.
 literal = quoted / unquoted
 
 quoted         = "|" *(quoted-char / quoted-escape) "|"
-quoted-char    = %x0-5B         ; omit \
-               / %x5D-7B        ; omit |
-               / %x7D-D7FF      ; omit surrogates
-               / %xE000-10FFFF
+quoted-char    = content-char / s / "." / "@" / "{" / "}"
 
 unquoted       = name
                / number-literal
