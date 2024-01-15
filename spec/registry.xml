@@ -253,7 +253,7 @@
 
   <function name="string">
     <description>
-      String formatting and selection
+      Formatting of strings as a literal and selection based on string equality
     </description>
 
     <formatSignature>
