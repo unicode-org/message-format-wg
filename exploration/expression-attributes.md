@@ -36,20 +36,63 @@ At least the following expression attributes should be considered:
 
 - Attributes with a formatting runtime impact:
 
-  - `fallback` — A value to use instead of the default fallback,
-    should the expression's primary formatting fail in some way.
+  - `id` — An identifier for the expression.
+    This is included in the formatted part,
+    and allows the parts of an expression to be explicitly addressed.
+
+    > Example identifying two literal numbers:
+    >
+    > ```
+    > The first number was {1234 :number @id=first} and the second {56789 :number @id=second}.
+    > ```
+
   - `locale` — An override for the locale used to format the expression.
     Should be expressed as a non-empty sequence of BCP 47 language codes.
+
+    > Example embedding a French literal in an English message:
+    >
+    > ```
+    > In French, “{|bonjour| @locale=fr}” is a greeting
+    > ```
+
   - `dir` — An override for the LTR/RTL/auto directionality of the expression.
+
+    > Example explicitly isolating the directionality of a placeholder:
+    >
+    > ```
+    > Welcome, {$username @dir=auto}
+    > ```
 
 - Attributes relevant for translators, tools, and other message operations,
   but with no runtime impact:
 
   - `example` — A literal value representing
     what the expression's formatted value will look like.
+
+    > Example providing a translator with an example for `$place`:
+    >
+    > ```
+    > Hello {$place @example=world}
+    > ```
+
   - `note` — A comment on the expression for translators.
+
+    > Example providing a translator with an example for `$place`:
+    >
+    > ```
+    > Welcome to {$place @note=|The user's current location|}
+    > ```
+
   - `translate` — A boolean `yes`/`no` indicator communicating to translators
     whether the expression should or should not be localised.
+    The values here correspond to those used for this property in HTML and elsewhere.
+
+    > Example embedding a non-translatable French literal in an English message:
+    >
+    > ```
+    > In French, "{|bonjour| @locale=fr @translate=no}" is a greeting
+    > ```
+
   - `canCopy`, `canDelete`, `canOverlap`, `canReorder`, etc. — Flags supported by
     XLIFF 2 inline elements
 
@@ -102,7 +145,7 @@ Define the meaning and supported values of some expression attributes in the spe
 including at least `@dir` and `@locale`.
 
 To support later extension of the specified set of attributes while allowing user extensibility,
-require custom attribute names to include a U+002D Hyphen-Minus `-`.
+suggest custom attribute names to include a U+002D Hyphen-Minus `-`.
 Examples: `@can-copy=no`, `@note-link=|https://...|`.
 
 Allow expression attributes to influence the formatting context,
@@ -133,7 +176,40 @@ esp. if a similar expression is used in multiple variants.
 
 Comments should not influence the runtime behaviour of a formatter.
 
-### Define `@attributes` as above, but do not namespace custom attributes
+### Define `@attributes` as above, but explicitly namespace custom attributes
 
-Later spec versions will not be able to define _any_ new attributes
-without a danger of breaking implementations or users already using those names.
+As namespacing may also be required for function names and function option names,
+and because we want to allow at least for custom function options
+to be definable on default formatters,
+the namespace rules for parts of the specification would end up differing.
+
+By suggesting instead of requiring,
+we rely on our stability policy to guide implementations to keep clear of the namespace
+that may be claimed by later versions of the specification.
+
+### Enable function chaining within a single expression
+
+By allowing for multiple annotation functions on a single expression,
+it becomes possible to consider some of them to have passthrough behaviour during formatting
+but have an impact during translation.
+
+For example, with an expression like
+
+```
+{42 :locale set=fr :number :xliff can-copy=yes}
+```
+
+the locale may be set separately from other options,
+and a custom attribute applied during a conversion to XLIFF.
+
+This approach may produce the same result as the proposed design,
+but has a few caveats:
+
+- The order of operations matters,
+  and an attribute such as the locale must be set before others that are influenced by it.
+- It's not clear whether the functions will be evaluated
+  left-to-right or right-to-left.
+- During formatting,
+  passthrough functions such as `:xliff` must be explicitly provided.
+- Localization tools need to be aware and understand named functions,
+  rather than being able to detect un-namespaced `@` attributes.

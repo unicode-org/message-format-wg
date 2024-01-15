@@ -1,6 +1,6 @@
 # Open/Close Placeholders
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -17,6 +17,7 @@ Status: **Proposed**
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/517">#517</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/535">#535</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/540">#540</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/541">#541</a></dd>
 	</dl>
 </details>
 
@@ -50,7 +51,7 @@ _What context is helpful to understand this proposal?_
   On runtime, I expect these markup elements to produce live UI elements.
 
   > ```
-  > This is a giraffe: {#img src=giraffe.gif}.
+  > This is a giraffe: {#img src=giraffe.gif/}.
   > ```
 
 - I want to be able to use minimal markup to inform XLIFF interchange.
@@ -140,6 +141,8 @@ such as `Click <a title="Link tooltip">here</a> to continue`.
 As with function options,
 markup options should be defined in a registry so that they can be validated.
 
+Provide a way to tell open and standalone elements apart.
+
 ## Constraints
 
 Due to segmentation,
@@ -148,6 +151,10 @@ markup may be split across messages so that it opens in one and closes in anothe
 Following previously established consensus,
 the resolution of the value of a _placeholder_ may only depend on its own contents,
 without access to the other parts of the selected pattern.
+
+Any information stored in the registry is not available at runtime
+unless reflected in the implementation's behaviour,
+and may be unavailable in tooling.
 
 ## Proposed Design
 
@@ -163,30 +170,29 @@ in parallel with _expression_:
 pattern = "{" *(text / placeholder) "}"
 placeholder = expression / markup
 
-markup       = "{" [s] markup-body [s] "}"
-markup-body  = (markup-open *(s option))
-             / markup-close
-markup-open  = "#" name
+markup       = "{" [s] markup-open [s] ["/"] "}"
+             / "{" [s] markup-close [s] "}"
+markup-open  = "#" name *(s option)
 markup-close = "/" name
 ```
 
 This is similar to [Mustache](http://mustache.github.io/mustache.5.html)'s control flow syntax.
 
 ```
-This is {#strong}bold{/strong} and this is {#img alt=|an image|}.
+This is {#strong}bold{/strong} and this is {#img alt=|an image| /}.
 ```
 
-Markup names are _namespaced_ by their use of the pound sign `#` and the forward slash `/` sigils.
+Markup names are _namespaced_ by their use of the U+0023 NUMBER SIGN `#` and the U+002F SOLIDUS `/` sigils.
 They are distinct from `$variables`, `:functions`, and `|literals|`.
 
-This allows for placeholders like `{#b}`, `{#img}`, and `{#a title=|Link tooltip|}`.
+This allows for placeholders like `{#b}`, `{#img/}`, and `{#a title=|Link tooltip|}`.
 Unlike annotations, markup _placeholders_ may not have operands.
 
 Markup is not valid in _declarations_ or _selectors_.
 
 #### Pros
 
-* Leverages the familiarity of the forward slash `/` used for closing spans.
+* Leverages the familiarity of the forward slash (U+002F SOLIDUS `/`) for closing spans.
 
 * Doesn't conflict with any other placeholder expressions.
 
@@ -194,14 +200,44 @@ Markup is not valid in _declarations_ or _selectors_.
 
 #### Cons
 
-* Introduces two new sigils, the pound sign `#` and the forward slash `/`.
+* Introduces two new sigils, U+0023 NUMBER SIGN `#` and the U+002F SOLIDUS `/`.
 
-* As in HTML, differentiating "open" and "standalone" elements relies on registry information,
-  or in translations matching the structure used in the source
-  A rather clunky `{#foo/}` syntax was considered for explicitly-standalone elements,
-  but this did not reach consensus support.
+* Introduces a new sigil position at the end of a placeholder for the self-closing standalone markup.
 
 * In Mustache, the `{{#foo}}`...`{{/foo}}` syntax is used for *control flow* statements rather than printable data.
+
+### Standalone Markup
+
+_Standalone_ markup is supported by syntax inspired by XML: `{#foo/}`.
+
+This approach encodes the _standalone_ aspect in the data model,
+and doesn't rely on external sources of truth,
+at the expense of introducing new syntax, which is admittedly a bit clunky.
+
+It also creates a dichotomy between standalone _markup_ and regular _placeholders_,
+which can be argued to be _standalone_ as well.
+
+Two alternatives have been suggested, and were considered insufficient:
+
+* Differentiate _open_ and _standalone_ elements based on the information stored in the registry,
+  or based on some other external source of truth
+  (e.g. the structure of the source to which the message is applied).
+
+  This approach offers a cleaner syntax at the expense of relying on external sources of truth for telling open and standalone elements apart.
+  Without the access to these sources of truth (e.g. a custom registry), standalone markup will be interpreted as open elements.
+
+* Re-use regular placeholders with regular function calls: `{:img src=logo.png}`.
+
+  This approach leverages the fact that regular placeholders can also be thought of as being _standalone_.
+  It also doesn't introduce any new syntax, instead relying on the function call syntax: `:img`.
+
+  Namespacing is a concern: to ensure forward compatibility, implementations and users should avoid introducing new symbols to the default, anonymous namespace.
+  Thus, a custom function representing a standalone element should be namespaced: `:html:img` or `:moz:img`.
+  While a good practice in general, it results in more verbose syntax,
+  possibly also for the _open_ and _close_ markup, which would be namespaced for consistency: `{#html:link}...{/html:link}`.
+
+  In this approach there's also no way to enforce the lack of operands to standalone markup at the syntax level.
+  Instead, access to a custom registry is required to know that `:img` does not accept any operands.
 
 ### Runtime Behavior
 
@@ -217,7 +253,7 @@ e.g. emitting XML-ish tags for each open/close placeholder.
 When formatting to parts (as proposed in <a href="https://github.com/unicode-org/message-format-wg/pull/463">#463</a>),
 markup placeholders format to an object including the following properties:
 
-- The `type` of the markup: `"markup" | "markup-close"`
+- The `type` of the markup: `"markup-open" | "markup-standalone" | "markup-close"`
 - The `name` of the markup, e.g. `"b"` for `{#b}`
 - For _markup_,
   the `options` with the resolved key-value pairs of the placeholder options
@@ -236,7 +272,7 @@ would format to parts as
 ```coffee
 [
   { type: "text", value: "Click " },
-  { type: "markup", name: "a", options: { title: "Link tooltip" } },
+  { type: "markup-open", name: "a", options: { title: "Link tooltip" } },
   { type: "text", value: "here" },
   { type: "markup-close", name: "a" },
   { type: "text", value: " to continue" }
@@ -423,10 +459,10 @@ This is [html:strong]bold[/html:strong] and this is [html:img alt=|an image|/].
 
 * Concise and less noisy than the alternatives.
 
-* Doesn't add new sigils except for the forward slash `/`,
+* Doesn't add new sigils except for the forward slash (U+002F SOLIDUS `/`),
   which is universally known thanks to the wide-spread use of HTML.
 
-* Leverages the familiarity of the forward slash `/` used for closing spans.
+* Leverages the familiarity of the forward slash (U+002F SOLIDUS `/`) used for closing spans.
 
 * Makes it clear that `{42}` and `[foo]` are different concepts:
   one is a standalone placeholder and the other is an open-span element.

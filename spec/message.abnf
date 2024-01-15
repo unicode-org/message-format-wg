@@ -3,7 +3,7 @@ message = simple-message / complex-message
 simple-message = [simple-start pattern]
 simple-start = simple-start-char / text-escape / placeholder
 pattern = *(text-char / text-escape / placeholder)
-placeholder = expression
+placeholder = expression / markup
 
 complex-message = *(declaration [s]) complex-body
 declaration = input-declaration / local-declaration / reserved-statement
@@ -19,20 +19,28 @@ selector = expression
 variant = key *(s key) [s] quoted-pattern
 key = literal / "*"
 
-expression = literal-expression / variable-expression / annotation-expression
-literal-expression = "{" [s] literal [s annotation] [s] "}"
-variable-expression = "{" [s] variable [s annotation] [s] "}"
-annotation-expression = "{" [s] annotation [s] "}"
-annotation = (function *(s option))
+expression = literal-expression
+           / variable-expression
+           / annotation-expression
+literal-expression = "{" [s] literal [s annotation] *(s attribute) [s] "}"
+variable-expression = "{" [s] variable [s annotation] *(s attribute) [s] "}"
+annotation-expression = "{" [s] annotation *(s attribute) [s] "}"
+annotation = function
            / private-use-annotation
            / reserved-annotation
+
+markup       = "{" [s] markup-open *(s attribute) [s] ["/"] "}"
+             / "{" [s] markup-close *(s attribute) [s] "}"
+markup-open  = "#" identifier *(s option)
+markup-close = "/" identifier
 
 literal = quoted / unquoted
 quoted = "|" *(quoted-char / quoted-escape) "|"
 unquoted = name / number-literal
 variable = "$" name
-function = (":" / "+" / "-") identifier
+function = ":" identifier *(s option)
 option = identifier [s] "=" [s] (literal / variable)
+attribute = "@" identifier [[s] "=" [s] (literal / variable)]
 
 input = %s".input"
 local = %s".local"
@@ -47,8 +55,7 @@ reserved-keyword = "." name
 
 ; Reserve additional sigils for use by future versions of this specification.
 reserved-annotation = reserved-annotation-start reserved-body
-reserved-annotation-start = "!" / "@" / "#" / "%" / "*"
-                          / "<" / ">" / "/" / "?" / "~"
+reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
 reserved-body = *([s] 1*(reserved-char / reserved-escape / quoted))
 
@@ -69,26 +76,27 @@ name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
            / %x370-37D / %x37F-1FFF / %x200C-200D
            / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
-           / %xF900-FDCF / %xFDF0-FFFD / %x10000-EFFFF
+           / %xF900-FDCF / %xFDF0-FFFC / %x10000-EFFFF
 name-char  = name-start / DIGIT / "-" / "."
            / %xB7 / %x300-36F / %x203F-2040
 
-simple-start-char = content-char / s / "|"
-text-char         = content-char / s / "." / "|"
-quoted-char       = content-char / s / "." / "{" / "}"
+simple-start-char = content-char / s / "@" / "|"
+text-char         = content-char / s / "." / "@" / "|"
+quoted-char       = content-char / s / "." / "@" / "{" / "}"
 reserved-char     = content-char / "."
-content-char = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
-             / %x0B-0C        ; omit CR (%x0D)
-             / %x0E-19        ; omit SP (%x20)
-             / %x21-2D        ; omit . (%x2E)
-             / %x2F-5B        ; omit \ (%x5C)
-             / %x5D-7A        ; omit { | } (%x7B-7D)
-             / %x7E-D7FF      ; omit surrogates
-             / %xE000-10FFFF
+content-char      = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
+                  / %x0B-0C        ; omit CR (%x0D)
+                  / %x0E-19        ; omit SP (%x20)
+                  / %x21-2D        ; omit . (%x2E)
+                  / %x2F-3F        ; omit @ (%x40)
+                  / %x41-5B        ; omit \ (%x5C)
+                  / %x5D-7A        ; omit { | } (%x7B-7D)
+                  / %x7E-D7FF      ; omit surrogates
+                  / %xE000-10FFFF
 
 text-escape     = backslash ( backslash / "{" / "}" )
 quoted-escape   = backslash ( backslash / "|" )
 reserved-escape = backslash ( backslash / "{" / "|" / "}" )
 backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
 
-s = 1*( SP / HTAB / CR / LF )
+s = 1*( SP / HTAB / CR / LF / %x3000 )
