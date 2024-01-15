@@ -829,7 +829,7 @@ These are divided into the following categories:
     >
     > .input {$var :number minFractionDigits=$var2}
     > .input {$var2 :number}
-    > {{Redeclaration of an implicit input variable}}
+    > {{Redeclaration of the implicit input variable $var2}}
     >
     > .local $var = {$ext :someFunction}
     > .local $var = {$error}
