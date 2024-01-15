@@ -129,10 +129,9 @@ or contains a _variable_ that does not directly or indirectly reference a _decla
 
 ### Duplicate Declaration
 
-A **_<dfn>Duplicate Declaration</dfn>_** error occurs when a _variable_ appears in two _declarations_.
-This includes when an _input-declaration_ binds a _variable_ that appears in a previous _declaration_,
-when a _local-declaration_ binds a _variable_ that appears in a previous _declaration_,
-or when a _local-declaration_ refers to its bound _variable_ in its _expression_.
+A **_<dfn>Duplicate Declaration</dfn>_** error occurs when a _variable_ is declared more than once.
+Note that an input _variable_ is implicitly declared when it is first used,
+so explicitly declaring it after such use is also an error.
 
 > Examples of invalid messages resulting in a _Duplicate Declaration_ error:
 >
@@ -148,6 +147,10 @@ or when a _local-declaration_ refers to its bound _variable_ in its _expression_
 > .input {$var :number minFractionDigits=0}
 > .local $var = {$ext :number maxFractionDigits=0}
 > {{Redeclaration of an input variable}}
+>
+> .input {$var :number minFractionDigits=$var2}
+> .input {$var2 :number}
+> {{Redeclaration of the implicit input variable $var2}}
 >
 > .local $var = {$ext :someFunction}
 > .local $var = {$error}

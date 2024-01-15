@@ -175,14 +175,14 @@ local-declaration = local s variable [s] "=" [s] expression
 _Variables_, once declared, MUST NOT be redeclared. 
 A _message_ that does any of the following is not _valid_ and will produce a 
 _Duplicate Declaration_ error during processing:
-- An _input-declaration_ MUST NOT bind a _variable_ that appears as a _variable_ in a previous 
-  _declaration_.
-- A _local-declaration_ MUST NOT bind a _variable_ that appears as a _variable_ in a previous
-  _declaration_.
+- A _declaration_ MUST NOT bind a _variable_
+  that appears as a _variable_ anywhere within a previous _declaration_.
+- An _input-declaration_ MUST NOT bind a _variable_
+  that appears anywhere within the _annotation_ of its _variable-expression_.
 - A _local-declaration_ MUST NOT bind a _variable_ that appears in its _expression_.
 
 A _local-declaration_ MAY overwrite an external input value as long as the
-external input value does not appear in a _declaration_.
+external input value does not appear in a previous _declaration_.
 
 > [!Note]
 > These restrictions only apply to _declarations_.
