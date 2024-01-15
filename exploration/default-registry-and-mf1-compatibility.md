@@ -23,9 +23,9 @@ along with their _operands_ and _options_.
 It also contains a section comparing MF1 (as embodied by ICU4J) and MF2
 to ensure that we don't forget something.
 
-Implementations MAY provide other selectors or functions using the mechanisms defined by MF2
+Implementations MAY provide other selectors or formatters using the mechanisms defined by MF2
 but these will not be considered for the LDML45 default registry.
-The default registry is a foundational set of selectors and functions that an implementation
+The default registry is a foundational set of selectors and formatters that an implementation
 claiming MF2 compatibility is required to supply.
 Therefore, addition to this list requires a higher level of rigor.
 
