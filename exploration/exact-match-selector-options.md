@@ -1,6 +1,6 @@
 # Design Proposal Template
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -127,6 +127,7 @@ Pros:
 
 Cons:
 - Somewhat generic name.
+  All selectors "select", not just this one.
 
 ### Option B. `:exact`
 
@@ -147,6 +148,7 @@ Cons:
 - Implies object or value equality, which may not be correct in all implementations
   or programming languages.
   The implications might be confusing to users in those cases.
+- See `:exact`: doesn't specify that the equality is string-based.
 
 ### Option D. `:string`
 
@@ -158,9 +160,26 @@ Cons:
 - Might confuse users who are comparing e.g. two numbers or two dates.
   In typed languages, the values being compared might not actually be strings.
 - Depends on the serialization.
+- Doesn't sound like it's doing selection.
 
+### Option E. `:stringified`
 
-### Option E. Something else
+Pros:
+- Says how the match is performed.
+- Clearer than `:string`?
 
-It is possible that we haven't landed the best name yet. 
-If you don't like any of these, what **_do_** you like?!?
+Cons:
+- Longer than `:string`.
+  Perhaps `:stringify` would be more appropriate?
+- Follows a different convention than `:number`, `:datetime`, etc.
+
+### Option F. `:enum`
+
+Pros:
+- Explains that the match is performed against a predefined set of enumerated values.
+
+Cons:
+- Somewhat generic.
+- Doesn't explain how numeric keys are compared.
+- May confuse users into thinking that string keys have underlying numeric values.
+- Unclear what happens to non-integer numeric keys.
