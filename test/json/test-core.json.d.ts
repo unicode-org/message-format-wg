@@ -1,5 +1,5 @@
 export type TestMessage = {
-  /** The MF2 syntax source. */
+ /** The MF2 message to be tested. */
   src: string;
   /** The locale to use for formatting. Defaults to 'en-US'. */
   locale?: string;
