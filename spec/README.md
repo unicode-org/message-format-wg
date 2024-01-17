@@ -10,6 +10,13 @@
    1. [Productions](syntax.md#productions)
    1. [Tokens](syntax.md#tokens)
    1. [`message.abnf`](message.abnf)
+1. [Errors](errors.md)
+   1. [Error Handling](errors.md#error-handling)
+   1. [Syntax Errors](errors.md#syntax-errors)
+   1. [Data Model Errors](errors.md#data-model-errors)
+   1. [Resolution Errors](errors.md#resolution-errors)
+   1. [Selection Errors](errors.md#selection-errors)
+   1. [Formatting Errors](errors.md#formatting-errors)
 1. [Registry](registry.md)
    1. [`registry.dtd`](registry.dtd)
 1. [Formatting](formatting.md)
@@ -70,6 +77,10 @@ A reference to a _term_ looks like this.
 
 ### Stability Policy
 
+> [!IMPORTANT]
+> The provisions of the stability policy are not in effect until
+> the conclusion of the technical preview and adoption of this specification.
+
 Updates to this specification will not change
 the syntactical meaning, the runtime output, or other behaviour
 of valid messages written for earlier versions of this specification
@@ -79,7 +90,8 @@ Future versions MAY add additional structure or meaning to existing syntax.
 
 Updates to this specification will not remove any reserved keywords or sigils.
 
-> Note: future versions may define new keywords.
+> [!NOTE]
+> Future versions may define new keywords.
 
 Updates to this specification will not reserve or assign meaning to
 any character "sigils" except for those in the `reserved` production.
