@@ -692,9 +692,8 @@ isolating such parts to ensure that the formatted value displays correctly in a 
 > The code point sequence for this string, as produced by the ICU4J `NumberFormat` function,
 > includes **U+200F U+200E** at the start and **U+200F** at the end of the string.
 > If it did not do this, the same string would appear like this instead:
-> ```
+> 
 > ![image](https://github.com/unicode-org/message-format-wg/assets/69082/6cc7f16f-8d9b-400b-a333-ae2ddb316edb)
->```
 
 A **_bidirectional isolation strategy_** is functionality in the formatter's
 processing of a _message_ that produces bidirectional output text that is ready for display.
