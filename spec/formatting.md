@@ -686,7 +686,7 @@ and a U+007D RIGHT CURLY BRACKET `}`.
 ### Handling Bidirectional Text
 
 _Messages_ contain text. Any text can be 
-<a href="https://w3c.github.io/i18n-glossary/#dfn-bidirectional-text">bidirectional text</a>.
+<a href="https://www.w3.org/TR/i18n-glossary/#dfn-bidirectional-text">bidirectional text</a>.
 That is, the text can can consist of a mixture of left-to-right and right-to-left spans of text.
 The [Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9], aka "UBA",
 is used to determine how bidirectional text is displayed.
@@ -697,9 +697,9 @@ When a _message_ is formatted, _placeholders_ are replaced
 with their formatted representation.
 When UBA is applied to the text of a formatted _message_ (including its formatted parts)
 there can be unexpected or undesirable 
-<a href="https://w3c.github.io/i18n-glossary/#dfn-spillover-effects">spillover effects</a>.
-Applying <a href="https://w3c.github.io/i18n-glossary/#dfn-bidi-isolation">bidi isolation</a>
-to the formatted values helps avoid this type of problem.
+<a href="https://www.w3.org/TR/i18n-glossary/#dfn-spillover-effects">spillover effects</a>.
+Applying <a href="https://www.w3.org/TR/i18n-glossary/#dfn-bidi-isolation">bidi isolation</a>
+to the formatted values helps avoid spillover in a formatted _message_.
 
 The reference data model includes direction for both the _message_ and, separately,
 for each _placeholder_.
