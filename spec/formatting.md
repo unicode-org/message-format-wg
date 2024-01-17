@@ -67,7 +67,7 @@ At a minimum, it includes:
   potentially including a fallback chain of locales.
   This will be passed on to formatting functions.
 
-- Information on the base directionality of the message and its _text_ tokens.
+- Information on the base directionality of the _message_ and its _text_ tokens.
   This will be used by strategies for bidirectional isolation,
   and can be used to set the base direction of the _message_ upon display.
 
@@ -654,22 +654,27 @@ and a U+007D RIGHT CURLY BRACKET `}`.
 
 ### Handling Bidirectional Text
 
-_Messages_ contain text which can be bidirectional,
-consisting of a mixture of left-to-right and right-to-left spans of text.
+_Messages_ contain text. Any text can be 
+<a href="https://w3c.github.io/i18n-glossary/#dfn-bidirectional-text">bidirectional text</a>.
+That is, the text can can consist of a mixture of left-to-right and right-to-left spans of text.
+The [Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9], aka "UBA",
+is used to determine how bidirectional text is displayed.
 
-When producing a formatted _message_, the replacement of
-_placeholders_ with formatted text can result in spans of text that,
-when the [Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9]
-is applied, produce unexpected or undesirable effects, such as "spillover".
-To avoid problems, formatted values SHOULD be bidirectionally isolated,
-so that the directionality of a formatted _expression_
-does not negatively affect the presentation of the overall formatted _message_.
-
-An implementation MUST define methods for
-determining the directionality of each formatted _expression_.
-The method of determining the directionality of a formatted _expression_
-MAY rely on the introspection of its contents, or on other means.
 The directionality of the message as a whole is provided by the _formatting context_.
+
+When a _message_ is formatted, _placeholders_ are replaced
+with their formatted representation.
+When UBA is applied to the text of a formatted _message_ (including its formatted parts)
+there can be unexpected or undesirable 
+<a href="https://w3c.github.io/i18n-glossary/#dfn-spillover-effects">spillover effects</a>.
+Applying <a href="https://w3c.github.io/i18n-glossary/#dfn-bidi-isolation">bidi isolation</a>
+to the formatted values helps avoid this type of problem.
+
+The reference data model includes direction for both the _message_ and, separately,
+for each _placeholder_.
+If an implementation supports formatting to something other than a string
+(such as a sequence of parts),
+the directionality of each _placeholder_ needs to be available to the caller.
 
 If a formatted _expression_ itself contains spans with differing directionality,
 its formatter SHOULD perform any necessary processing, such as inserting controls or
@@ -686,16 +691,24 @@ isolating such parts to ensure that the formatted value displays correctly in a 
 > ```
 > The code point sequence for this string, as produced by the ICU4J `NumberFormat` function,
 > includes **U+200F U+200E** at the start and **U+200F** at the end of the string.
+> If it did not do this, the same string would appear like this instead:
+> ```
+> ![image](https://github.com/unicode-org/message-format-wg/assets/69082/6cc7f16f-8d9b-400b-a333-ae2ddb316edb)
+>```
 
-Implementations formatting messages as a concatenated string or a sequence of strings
-MUST provide one or more strategies for bidirectional isolation.
+A **_bidirectional isolation strategy_** is functionality in the formatter's
+processing of a _message_ that produces bidirectional output text that is ready for display.
 
-The **_Default Bidi Strategy_** is a bidirectional isolation strategy that uses
-isolating Unicode control characters around placeholders.
+The **_Default Bidi Strategy_** is a _bidirectional isolation strategy_ that uses
+isolating Unicode control characters around _placeholder_'s formatted values.
 It is intended for use in plain-text strings, where markup or other mechanisms
 are not available.
 Implementations MUST provide the _Default Bidi Strategy_ as one of the 
-bidirectional isolation strategies.
+_bidirectional isolation strategies_.
+
+Implementations MAY provide others _bidirectional isolation strategies_.
+
+Implementations MAY supply a _bidirectional isolation strategy_ that performs no processing.
 
 The _Default Bidi Strategy_ is defined as follows:
 
@@ -725,16 +738,6 @@ The _Default Bidi Strategy_ is defined as follows:
       1. In the formatted output,
          prefix `fmt` with U+2068 FIRST STRONG ISOLATE
          and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
-
-Alternatives to this strategy MAY be provided by implementations.
-
-In particular, implementations MAY introspect the _pattern_'s _text_ values
-and identify situations where isolate characters are not needed
-or where additional or different isolation would produce better results.
-
-If an implementation provides formatting to non-string result types,
-it SHOULD provide similar strategies for enabling bidirectional isolation,
-where appropriate.
 
 ## Error Handling
 
