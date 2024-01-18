@@ -19,38 +19,36 @@ Messages can be simple strings:
 
     Hello, world!
 
-Messages can interpolate arguments formatted using _formatting functions_:
+Messages can interpolate arguments:
 
+    Hello {$user}!
+
+Messages can transform those arguments using _formatting functions_.
+Functions can optionally take _options_:
+
+    Today is {$date :datetime}
     Today is {$date :datetime weekday=long}.
 
-Messages can define variants which correspond to the grammatical (or other) requirements of the language:
+Messages can use a _selector_ to choose between different _variants_,
+which correspond to the grammatical (or other) requirements of the language:
 
-    .match {$count :number}
-    1 {{You have one notification.}}
-    * {{You have {$count} notifications.}}
+    .match {$count :integer}
+    0   {{You have no notifications.}}
+    one {{You have {$count} notification.}}
+    *   {{You have {$count} notifications.}}
 
-The message syntax is also capable of expressing more complex translation, for example:
+Messages can annotate arguments with formatting instructions
+or assign local values for use in the formatted message:
 
-    .local $hostName = {$host :person firstName=long}
-    .local $guestName = {$guest :person firstName=long}
-    .local $guestsOther = {$guestCount :number offset=1}
+    .input {$date :datetime weekday=long month=medium day=short}
+    .local $numPigs = {$pigs :integer}
+    {{On {$date} you had this many pigs: {$numPigs}}}
 
-    .match {$host :gender} {$guestOther :number}
-
-    female 0 {{{$hostName} does not give a party.}}
-    female 1 {{{$hostName} invites {$guestName} to her party.}}
-    female 2 {{{$hostName} invites {$guestName} and one other person to her party.}}
-    female * {{{$hostName} invites {$guestName} and {$guestsOther} other people to her party.}}
-
-    male 0 {{{$hostName} does not give a party.}}
-    male 1 {{{$hostName} invites {$guestName} to his party.}}
-    male 2 {{{$hostName} invites {$guestName} and one other person to his party.}}
-    male * {{{$hostName} invites {$guestName} and {$guestsOther} other people to his party.}}
-
-    * 0 {{{$hostName} does not give a party.}}
-    * 1 {{{$hostName} invites {$guestName} to their party.}}
-    * 2 {{{$hostName} invites {$guestName} and one other person to their party.}}
-    * * {{{$hostName} invites {$guestName} and {$guestsOther} other people to their party.}}
+The message syntax support using multiple _selectors_ and other features
+to build complex messages.
+It is designed so that implementations can extend the set of functions or their options
+using the same syntax. 
+Implementations may even support users creating their own functions.
 
 See more examples and the formal definition of the grammar in [spec/syntax.md](./spec/syntax.md).
 
@@ -76,7 +74,7 @@ To join in:
 
 ### Copyright & Licenses
 
-Copyright © 2019-2023 Unicode, Inc. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the United States and other countries.
+Copyright © 2019-2024 Unicode, Inc. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the United States and other countries.
 
 The project is released under [LICENSE](./LICENSE).
 
