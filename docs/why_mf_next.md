@@ -92,7 +92,8 @@ But the stability requirements prevent any major cleanup.
 
 ### 3. Hard to map to the existing localization core structures
 
-The format is not easy to support in localization tooling.
+While MessageFormat 1.0 and its syntax are widely supported by runtime environments,
+the same cannot be said for localization tooling.
 The root cause of that is not it is difficult to parse.
 Because it is not. And ICU4J has public API for parsing.
 
