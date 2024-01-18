@@ -18,14 +18,14 @@ The design goals are listed below.
     features, the presentation media, context, circumstance, and other factors.
     _Note: not part of the LDML45 release._
 
-4.  Express formattable data, such as numbers, dates, currencies, or units,
+3.  Express formattable data, such as numbers, dates, currencies, or units,
     in a locale-appropriate way.
 
-5.  Represent structured data alongside translations, such as markup.
+4.  Represent structured data alongside translations, such as markup.
 
-6.  Be capable of localization roundtrip.
+5.  Be capable of localization roundtrip.
 
-7.  Enable the creation of implementations, frameworks and tools building on
+6.  Enable the creation of implementations, frameworks and tools building on
     top of the standard, manifesting different ideas and programming paradigms,
     and optimized for different uses and audiences.
 
@@ -35,20 +35,20 @@ The design goals are listed below.
     localizable _dynamic message strings_.
     _Note: not part of the LDML45 release._
 
-3.  A formal definition of the canonical syntax for representing the data
+2.  A formal definition of the canonical syntax for representing the data
     model, with well defined rules for handling text, special characters,
     escape sequences, whitespace, markup, as well as parsing errors.
 
-4.  A specification for a one-to-one mapping between the data model and XLIFF.
+3.  A specification for a one-to-one mapping between the data model and XLIFF.
     _Note: not part of the LDML45 release._
 
-5.  A specification for resolving messages at runtime, including
+4.  A specification for resolving messages at runtime, including
     runtime errors.
 
-6.  A conformance test suite for parsing and formatting messages sufficient to
+5.  A conformance test suite for parsing and formatting messages sufficient to
     ensure implementations can validate conformance to the specification(s) provided.
 
-7.  A determination that there are at least two interoperable independent implementations
+6.  A determination that there are at least two interoperable independent implementations
     compliant with the conformance test suite in order to demonstrate that the
     specification(s) are practical and meet requirements.
 
