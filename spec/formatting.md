@@ -688,7 +688,7 @@ and a U+007D RIGHT CURLY BRACKET `}`.
 _Messages_ contain text. Any text can be 
 <a href="https://www.w3.org/TR/i18n-glossary/#dfn-bidirectional-text">bidirectional text</a>.
 That is, the text can can consist of a mixture of left-to-right and right-to-left spans of text.
-The [Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9], aka "UBA",
+The [Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9]
 is used to determine how bidirectional text is displayed.
 
 The directionality of the message as a whole is provided by the _formatting context_.
