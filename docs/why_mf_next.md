@@ -8,8 +8,8 @@ Intro
 
 - `MessageFormat` is the Unicode API for software localization
 - It is 20 years old, well designed, proven solution
-- Its design is optimized for the software development model of 20y ago and its
-  shortcomings result in mixed reception and adoption by the industry.
+- Its design is optimized for the software development model of 20y ago,
+  and implementers struggle with its shortcomings.
 
 The current wave of software development uses dynamic languages, modern UI
 frameworks and new forms of user interactions (voice, VR etc.).
@@ -21,7 +21,7 @@ suitable for current generation of software, and adoption by Web Standards.
 Other efforts: [Fluent](https://projectfluent.org/),
 [FBT](https://facebook.github.io/fbt/)
 
-## Core problems with the current `MessageFormat`
+## Core problems with the current `MessageFormat`(aka ‘MessageFormat 1.0’)
 
 1. The design is not modular enough
    - Does not have any “extension points”
@@ -44,20 +44,21 @@ It also means most tools used to process these messages are built rigidly,
 and are unprepared to handle changes
 (think localization tools, linters, friendly UIs, etc.).
 
-The most basic functionality would be adding a new formatter. Meantime ICU
-added other formatters: time intervals, measurement, lists. But MessageFormat
-did not keep up. And adding support for any of these new formats risks to break
+The most basic functionality would be adding a new formatter.
+There are a relatively small number of supported formatters, while over the years ICU
+added other formatters: date and time intervals, measurement units, lists, person names, and many others. 
+But MessageFormat did not keep up. And adding support for any of these new formats risks to break
 existing tools.
 
 ### 1.2. Can't deprecate anything, even if now we know better
 
 ICU is old, but also very popular (right now it is the core i18n library
-for all major operating systems, and many products).
+for all major operating systems, browsers, and many other products).
 
-This is how he have both numeric and named parameters, partial strings in
-plural / select (technically concatenation, which is bad i18n), date / time
-patterns (bad i18n, when skeletons are the better way), nesting selectors,
-unfriendly escaping (think doubling the apostrophe `''` ), `#` in plurals.
+This is how it has both numeric and named parameters, allows partial strings in
+plural / select (technically concatenation, which is bad i18n), uses date / time
+patterns (bad i18n, when skeletons are the better way), has nesting selectors,
+and unfriendly escaping (think doubling the apostrophe `''` ), `#` in plurals.
 
 Most of it can't be “blamed” directly on a bad decision, it is just time
 teaching us what works (for instance skeletons did not exist when the
@@ -74,9 +75,11 @@ But the stability requirements prevent any major cleanup.
   grammatical agreement requires words outside select / plural to change.
   See https://en.wikipedia.org/wiki/Agreement_(linguistics)
 - Patterns in the date / time / number placeholders are bad i18n, should use skeletons
-- No official support for gender. It can be done with `select`, but it
-  is not the same thing (same as the difference between an `enum` and integer/strings). Developers can use masculine/feminine, masc/fem, male/female, etc.
-- Formatting for “parameters” known at compile time
+- No official support for gender. It can be done with `select`, but that has problems for localization tooling:
+  strings can't account for the difference in gender categories across languages, and there are no standard “enum” identifiers:
+  developers use masculine/feminine, masc/fem, male/female, etc.
+- Formatting for “literals” known at compile time.
+  For example, literal numbers in a message need to be adjusted for the user's preferences for native vs ASCII digits and format.
 - Escaping with apostrophe is error prone. There is no reliable way to tell if
   it has to be doubled or not.
 - The # is used in plural format instead of {...}, but does not work for nesting unless the plural is the innermost selector. But named placeholders don't work
@@ -85,17 +88,17 @@ But the stability requirements prevent any major cleanup.
 
 ### 3. Hard to map to the existing localization core structures
 
-The format is not well supported by any major localization system. \
+The format is not easy to support in localization tooling.
 The root cause of that is not it is difficult to parse.
 Because it is not. And ICU4J has public API for parsing.
 
 Most translation tools take a string (with placeholders) in a source language
-and gives back a translated string, usually with the same placeholders
+and give back a translated string, usually with the same placeholders
 (with some degree of flexibility).
 
-It makes it very difficult to translate things like plurals, where the input
-has (for example) 2 “message variants” (English, 1 / many, singular / plural),
-and return 4 message variants for Russian, for example.
+It requires that the translation software expand plurals, where the input
+has (for example) 2 “message variants” (English, singular / plural),
+but the message presented to a Arabic translator needs 6 message variants.
 
 This is not a superficial problem. It affects most steps in the normal
 localization flow:
@@ -108,23 +111,16 @@ localization flow:
 
 ### 4. Designed to be API only, plain text, UI, “imperative style”
 
-The main (only?) use case for `MessageFormat` is: load the string from resources,
+The typical use case for `MessageFormat` is: load the string from resources,
 replace placeholders, and return the string result with placeholders replaced. \
 An i18n-aware `printf`, basically.
 
-It does not play well with binding, formatting tags (think `html`),
+It does not account for formatting tags (think `html`),
 or “document-like” content (for example templating systems like
 [freemarker](https://freemarker.apache.org/),
 [mustache](https://mustache.github.io/), even JSP, PHP, etc.)
 
-Because it is API only it has no standard way to store the stings in a
-serialized format and to carry info or directives for translators or
-localization tools. \
-So there is no way for a message to reference another message, or to fallback
-to a different locale. That is all left to the "host resource manager"
-(whatever that is for the given tech stack)
-
-There is also no metadata: comments, length limits, example, links,
+There is also no metadata “packaging”: comments, length limits, example, links,
 protecting non-translatable sections of text, etc.
 
 But this is also an advantage.
