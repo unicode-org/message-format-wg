@@ -44,7 +44,7 @@ or assign local values for use in the formatted message:
     .local $numPigs = {$pigs :integer}
     {{On {$date} you had this many pigs: {$numPigs}}}
 
-The message syntax support using multiple _selectors_ and other features
+The message syntax supports using multiple _selectors_ and other features
 to build complex messages.
 It is designed so that implementations can extend the set of functions or their options
 using the same syntax. 
