@@ -57,10 +57,12 @@ with existing tools.
 ICU is old, but also very popular (right now it is the core i18n library
 for all major operating systems, browsers, and many other products).
 
-This is how it has both numeric and named parameters, allows partial strings in
-plural / select (technically concatenation, which is bad i18n), uses date / time
-patterns (bad i18n, when skeletons are the better way), has nesting selectors,
-and unfriendly escaping (think doubling the apostrophe `''` ), `#` in plurals.
+As a result of its age and design, MessageFormat 1.0 has both numeric (positional)
+ and named parameters.
+It still provides date and time patterns (picture strings), when skeletons or option
+bags provide far superior results.
+It allows selectors (such as plural and select) around only part of the overall message,
+which is a form of non-internationalized string concatenation.
 
 Most of it can't be “blamed” directly on a bad decision, it is just time
 teaching us what works (for instance skeletons did not exist when the
