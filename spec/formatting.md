@@ -705,7 +705,7 @@ The reference data model includes direction for both the _message_ and, separate
 for each _placeholder_.
 If an implementation supports formatting to something other than a string
 (such as a sequence of parts),
-the directionality of each _placeholder_ needs to be available to the caller.
+the directionality of each formatted _placeholder_ needs to be available to the caller.
 
 If a formatted _expression_ itself contains spans with differing directionality,
 its formatter SHOULD perform any necessary processing, such as inserting controls or
