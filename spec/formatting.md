@@ -695,7 +695,7 @@ The directionality of the message as a whole is provided by the _formatting cont
 
 When a _message_ is formatted, _placeholders_ are replaced
 with their formatted representation.
-When UBA is applied to the text of a formatted _message_ (including its formatted parts)
+When the Unicode Bidirectional Algorithm is applied to the text of a formatted _message_ (including its formatted parts)
 there can be unexpected or undesirable 
 <a href="https://www.w3.org/TR/i18n-glossary/#dfn-spillover-effects">spillover effects</a>.
 Applying <a href="https://www.w3.org/TR/i18n-glossary/#dfn-bidi-isolation">bidi isolation</a>
