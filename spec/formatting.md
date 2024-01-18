@@ -686,23 +686,24 @@ and a U+007D RIGHT CURLY BRACKET `}`.
 ### Handling Bidirectional Text
 
 _Messages_ contain text. Any text can be 
-<a href="https://www.w3.org/TR/i18n-glossary/#dfn-bidirectional-text">bidirectional text</a>.
+[bidirectional text](https://www.w3.org/TR/i18n-glossary/#dfn-bidirectional-text).
 That is, the text can can consist of a mixture of left-to-right and right-to-left spans of text.
-The [Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9]
-is used to determine how bidirectional text is displayed.
+The display of bidirectional text is defined by the
+[Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9].
 
 The directionality of the message as a whole is provided by the _formatting context_.
 
 When a _message_ is formatted, _placeholders_ are replaced
 with their formatted representation.
-When the Unicode Bidirectional Algorithm is applied to the text of a formatted _message_ (including its formatted parts)
-there can be unexpected or undesirable 
-<a href="https://www.w3.org/TR/i18n-glossary/#dfn-spillover-effects">spillover effects</a>.
-Applying <a href="https://www.w3.org/TR/i18n-glossary/#dfn-bidi-isolation">bidi isolation</a>
-to the formatted values helps avoid spillover in a formatted _message_.
+Applying the Unicode Bidirectional Algorithm to the text of a formatted _message_ 
+(including its formatted parts)
+can result in unexpected or undesirable 
+[spillover effects](https://www.w3.org/TR/i18n-glossary/#dfn-spillover-effects).
+Applying [bidi isolation](https://www.w3.org/TR/i18n-glossary/#dfn-bidi-isolation)
+to each affected formatted value helps avoid this spillover in a formatted _message_.
 
-The reference data model includes direction for both the _message_ and, separately,
-for each _placeholder_.
+Note that both the _message_ and, separately, each _placeholder_ need to have
+direction metadata for this to work.
 If an implementation supports formatting to something other than a string
 (such as a sequence of parts),
 the directionality of each formatted _placeholder_ needs to be available to the caller.
