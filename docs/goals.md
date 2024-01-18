@@ -12,20 +12,20 @@ of some data value or values.
 
 The design goals are listed below.
 
-1.  Express grammatical features, such as plurals, genders, and inflections.
+1.  Express grammatical features, such as plurals and genders.
 
 2.  Express other variance in translation, due to linguistic and regional
     features, the presentation media, context, circumstance, and other factors.
+    _Note: not part of the LDML45 release._
 
-3.  Express formattable data, such as numbers, dates, currencies, or units,
+4.  Express formattable data, such as numbers, dates, currencies, or units,
     in a locale-appropriate way.
 
-4.  Represent structured data alongside translations, such as markup, comments,
-    and metadata.
+5.  Represent structured data alongside translations, such as markup.
 
-5.  Be capable of localization roundtrip.
+6.  Be capable of localization roundtrip.
 
-6.  Enable the creation of implementations, frameworks and tools building on
+7.  Enable the creation of implementations, frameworks and tools building on
     top of the standard, manifesting different ideas and programming paradigms,
     and optimized for different uses and audiences.
 
@@ -33,22 +33,22 @@ The design goals are listed below.
 
 1.  A formal definition of the canonical data model for representing
     localizable _dynamic message strings_.
+    _Note: not part of the LDML45 release._
 
-2.  A formal definition of the canonical syntax for representing the data
+3.  A formal definition of the canonical syntax for representing the data
     model, with well defined rules for handling text, special characters,
     escape sequences, whitespace, markup, as well as parsing errors.
 
-3.  A specification for a one-to-one mapping between the data model and XLIFF.
-    _Note that this deliverable is "at risk" and not expected to be part of the
-    LDML45 release._
+4.  A specification for a one-to-one mapping between the data model and XLIFF.
+    _Note: not part of the LDML45 release._
 
-4.  A specification for resolving messages at runtime, including
-    interpolated data types and runtime errors.
+5.  A specification for resolving messages at runtime, including
+    runtime errors.
 
-5.  A conformance test suite for parsing and formatting messages sufficient to
+6.  A conformance test suite for parsing and formatting messages sufficient to
     ensure implementations can validate conformance to the specification(s) provided.
 
-6.  A determination that there are at least two interoperable independent implementations
+7.  A determination that there are at least two interoperable independent implementations
     compliant with the conformance test suite in order to demonstrate that the
     specification(s) are practical and meet requirements.
 
