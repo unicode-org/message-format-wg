@@ -79,9 +79,11 @@ But the stability requirements prevent any major cleanup.
   grammatical agreement requires words outside select / plural to change.
   See https://en.wikipedia.org/wiki/Agreement_(linguistics)
 - Patterns in the date / time / number placeholders are bad i18n, should use skeletons
-- No official support for gender. It can be done with `select`, but that has problems for localization tooling:
-  strings can't account for the difference in gender categories across languages, and there are no standard “enum” identifiers:
-  developers use masculine/feminine, masc/fem, male/female, etc.
+- Unable to support gender selection. 
+  Using existing formatters such as `select` doesn't account
+  for the grammatical needs of different gender categories across languages.
+  Tools have no way to know what modifications are needed
+  and developers have to understand the needs of current and future languages to succeed.
 - Formatting for “literals” known at compile time.
   For example, literal numbers in a message need to be adjusted for the user's preferences for native vs ASCII digits and format.
 - Escaping with apostrophe is error prone. There is no reliable way to tell if
