@@ -44,11 +44,13 @@ It also means most tools used to process these messages are built rigidly,
 and are unprepared to handle changes
 (think localization tools, linters, friendly UIs, etc.).
 
-The most basic functionality would be adding a new formatter.
-There are a relatively small number of supported formatters, while over the years ICU
-added other formatters: date and time intervals, measurement units, lists, person names, and many others. 
-But MessageFormat did not keep up. And adding support for any of these new formats risks to break
-existing tools.
+The most basic functionality would be adding a new formatting function.
+MessageFormat 1.0 only supported a small number of basic formatting functions,
+while over the years ICU added many new capabilities: date and time intervals,
+measurement units, lists, person names, and many more.
+Developers also sometimes want to define their own formatting functions.
+Supporting additional formats risks breaking interoperability or compatibility
+with existing tools.
 
 ### 1.2. Can't deprecate anything, even if now we know better
 
