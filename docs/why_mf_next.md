@@ -79,7 +79,7 @@ But the stability requirements prevent any major cleanup.
   grammatical agreement requires words outside select / plural to change.
   See https://en.wikipedia.org/wiki/Agreement_(linguistics)
 - Patterns in the date / time / number placeholders are bad i18n, should use skeletons
-- Unable to support gender selection. 
+- Unable to support gender selection well. 
   Using existing formatters such as `select` doesn't account
   for the grammatical needs of different gender categories across languages.
   Tools have no way to know what modifications are needed
