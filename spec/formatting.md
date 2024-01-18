@@ -67,7 +67,7 @@ At a minimum, it includes:
   potentially including a fallback chain of locales.
   This will be passed on to formatting functions.
 
-- Information on the base directionality of the message and its _text_ tokens.
+- Information on the base directionality of the _message_ and its _text_ tokens.
   This will be used by strategies for bidirectional isolation,
   and can be used to set the base direction of the _message_ upon display.
 
@@ -685,33 +685,63 @@ and a U+007D RIGHT CURLY BRACKET `}`.
 
 ### Handling Bidirectional Text
 
-_Messages_ contain text which can be bidirectional,
-consisting of a mixture of left-to-right and right-to-left spans of text.
+_Messages_ contain text. Any text can be 
+[bidirectional text](https://www.w3.org/TR/i18n-glossary/#dfn-bidirectional-text).
+That is, the text can can consist of a mixture of left-to-right and right-to-left spans of text.
+The display of bidirectional text is defined by the
+[Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9].
 
-When concatenating formatted values,
-the [Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9]
-can produce unexpected or undesirable effects, such as "spillover".
-Formatted values SHOULD be bidirectionally isolated
-so that the directionality of a formatted _expression_
-does not negatively affect the presentation of the overall formatted result.
-
-An implementation MUST define methods for
-determining the directionality of each formatted _expression_.
-The method of determining the directionality of a formatted _expression_
-MAY rely on the introspection of its contents, or on other means.
 The directionality of the message as a whole is provided by the _formatting context_.
 
+When a _message_ is formatted, _placeholders_ are replaced
+with their formatted representation.
+Applying the Unicode Bidirectional Algorithm to the text of a formatted _message_ 
+(including its formatted parts)
+can result in unexpected or undesirable 
+[spillover effects](https://www.w3.org/TR/i18n-glossary/#dfn-spillover-effects).
+Applying [bidi isolation](https://www.w3.org/TR/i18n-glossary/#dfn-bidi-isolation)
+to each affected formatted value helps avoid this spillover in a formatted _message_.
+
+Note that both the _message_ and, separately, each _placeholder_ need to have
+direction metadata for this to work.
+If an implementation supports formatting to something other than a string
+(such as a sequence of parts),
+the directionality of each formatted _placeholder_ needs to be available to the caller.
+
 If a formatted _expression_ itself contains spans with differing directionality,
-its formatter SHOULD isolate such parts to avoid
-negatively affecting the presentation of the overall formatted result.
+its formatter SHOULD perform any necessary processing, such as inserting controls or
+isolating such parts to ensure that the formatted value displays correctly in a plain text context.
 
-> For example, an implementation could provide a `:number` formatting function
-> which would always produce output matching the message's locale,
-> allowing for its formatted string representation to never need isolation.
+> For example, an implementation could provide a `:currency` formatting function
+> which inserts strongly directional characters, such as U+200F RIGHT-TO-LEFT MARK (RLM),
+> U+200E LEFT-TO-RIGHT MARK (LRM), or U+061C ARABIC LETTER MARKER (ALM), 
+> to coerce proper display of the sign and currency symbol next to a formatted number.
+> An example of this is formatting the value `-1234.56` as the currency `AED`
+> in the `ar-AE` locale. The formatted value appears like this:
+> ```
+> ‎-1,234.56 د.إ.‏
+> ```
+> The code point sequence for this string, as produced by the ICU4J `NumberFormat` function,
+> includes **U+200F U+200E** at the start and **U+200F** at the end of the string.
+> If it did not do this, the same string would appear like this instead:
+> 
+> ![image](https://github.com/unicode-org/message-format-wg/assets/69082/6cc7f16f-8d9b-400b-a333-ae2ddb316edb)
 
-Implementations formatting messages as a concatenated string or a sequence of strings
-MUST provide one or more strategies for bidirectional isolation.
-One such strategy MUST behave as follows:
+A **_bidirectional isolation strategy_** is functionality in the formatter's
+processing of a _message_ that produces bidirectional output text that is ready for display.
+
+The **_Default Bidi Strategy_** is a _bidirectional isolation strategy_ that uses
+isolating Unicode control characters around _placeholder_'s formatted values.
+It is primarily intended for use in plain-text strings, where markup or other mechanisms
+are not available.
+Implementations MUST provide the _Default Bidi Strategy_ as one of the 
+_bidirectional isolation strategies_.
+
+Implementations MAY provide other _bidirectional isolation strategies_.
+
+Implementations MAY supply a _bidirectional isolation strategy_ that performs no processing.
+
+The _Default Bidi Strategy_ is defined as follows:
 
 1. Let `msgdir` be the directionality of the whole message,
    one of « `'LTR'`, `'RTL'`, `'unknown'` ».
@@ -721,24 +751,19 @@ One such strategy MUST behave as follows:
    1. Let `fmt` be the formatted string representation of the resolved value of `exp`.
    1. Let `dir` be the directionality of `fmt`,
       one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
-   1. If `dir` is `'unknown'`:
-      1. In the formatted output,
-         prefix `fmt` with U+2068 FIRST STRONG ISOLATE
-         and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
-   1. Else, if `dir` is `'LTR'` and `msgdir` is not `'LTR'`:
-      1. In the formatted output,
+   1. If `dir` is `'LTR'`:
+      1. If `msgdir` is `'LTR'`
+         in the formatted output, let `fmt` be itself
+      1. Else, in the formatted output,
          prefix `fmt` with U+2066 LEFT-TO-RIGHT ISOLATE
          and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
-   1. Else, if `dir` is `'RTL'` and `msgdir` is not `'RTL'`:
+   1. Else, if `dir` is `'RTL'`:
       1. In the formatted output,
          prefix `fmt` with U+2067 RIGHT-TO-LEFT ISOLATE
          and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
+   1. Else:
+      1. In the formatted output,
+         prefix `fmt` with U+2068 FIRST STRONG ISOLATE
+         and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
 
-Alternatives to this "compatibility" strategy MAY be provided by implementations,
-which MAY also introspect the _pattern_'s _text_ values
-and identify situations where isolate characters are not needed
-or where additional or different isolation would produce better results.
 
-If an implementation provides formatting to non-string result types,
-it SHOULD provide similar strategies for enabling bidirectional isolation,
-where appropriate.
