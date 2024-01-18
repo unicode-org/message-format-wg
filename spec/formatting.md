@@ -731,12 +731,12 @@ processing of a _message_ that produces bidirectional output text that is ready 
 
 The **_Default Bidi Strategy_** is a _bidirectional isolation strategy_ that uses
 isolating Unicode control characters around _placeholder_'s formatted values.
-It is intended for use in plain-text strings, where markup or other mechanisms
+It is primarily intended for use in plain-text strings, where markup or other mechanisms
 are not available.
 Implementations MUST provide the _Default Bidi Strategy_ as one of the 
 _bidirectional isolation strategies_.
 
-Implementations MAY provide others _bidirectional isolation strategies_.
+Implementations MAY provide other _bidirectional isolation strategies_.
 
 Implementations MAY supply a _bidirectional isolation strategy_ that performs no processing.
 
