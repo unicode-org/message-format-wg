@@ -101,9 +101,12 @@ Most translation tools take a string (with placeholders) in a source language
 and give back a translated string, usually with the same placeholders
 (with some degree of flexibility).
 
-It requires that the translation software expand plurals, where the input
-has (for example) 2 “message variants” (English, singular / plural),
-but the message presented to a Arabic translator needs 6 message variants.
+To get the right results, translation software needs to understand the message syntax.
+For example, it needs to adjust the number of translated "patterns" to match the
+grammatical needs of the target language.
+Where the English input might have only two patterns (singular and plural),
+the Arabic translator needs to supply six message variants,
+and the Japanese translator only one.
 
 This is not a superficial problem. It affects most steps in the normal
 localization flow:
