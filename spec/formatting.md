@@ -16,13 +16,15 @@ Formatting of a _message_ is defined by the following operations:
   with reference to the current _formatting context_.
   This can include multiple steps,
   such as looking up the value of a variable and calling formatting functions.
-  The resolved value is not necessarily in the shape it will finally take,
-  but is "formattable", i.e. it contains everything required by the eventual formatting.
+  The form of the resolved value is implementation defined and the
+  value might not be evaluated or formatted yet.
+  However, it needs to be "formattable", i.e. it contains everything required
+  by the eventual formatting.
 
-  The resolution of _text_ is rather straighforward,
+  The resolution of _text_ is rather straightforward,
   and is detailed under _literal resolution_.
 
-  > **Note**
+  > [!NOTE]
   >
   > **This specification does not require either eager or lazy _expression resolution_ of _message_
   > parts; do not construe any requirement in this document as requiring either.**
@@ -101,7 +103,7 @@ In _selectors_, the resolved value of an _expression_ is used for _pattern selec
 
 In a _pattern_, the resolved value of an _expression_ or _markup_ is used in its _formatting_.
 
-The shapes of resolved values are implementation-dependent,
+The form that resolved values take is implementation-dependent,
 and different implementations MAY choose to perform different levels of resolution.
 
 > For example, the resolved value of the _expression_ `{|0.40| :number style=percent}`
@@ -219,7 +221,7 @@ the following steps are taken:
    - The resolved mapping of _options_.
    - If the _expression_ includes an _operand_, its resolved value.
 
-   The shapes of the resolved _operand_ and _option_ values are implementation-defined.
+   The form that resolved _operand_ and _option_ values take is implementation-defined.
 
    An implementation MAY pass additional arguments to the function,
    as long as reasonable precautions are taken to keep the function interface
@@ -412,7 +414,7 @@ First, resolve the values of each _selector_:
       1. Append `nomatch` as the last element of the list `res`.
       1. Emit a _Selection Error_.
 
-The shape of the resolved values is determined by each implementation,
+The form of the resolved values is determined by each implementation,
 along with the manner of determining their support for selection.
 
 ### Resolve Preferences
@@ -622,10 +624,6 @@ one {{Category match}}
 
 After _pattern selection_,
 each _text_ and _placeholder_ part of the selected _pattern_ is resolved and formatted.
-
-_Formatting_ is a mostly implementation-defined process,
-as it depends on the implementation's shape for resolved values
-and the result type of the formatting.
 
 Resolved values cannot always be formatted by a given implementation.
 When such an error occurs during _formatting_,
