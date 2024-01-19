@@ -12,7 +12,9 @@ of some data value or values.
 
 The design goals are listed below.
 
-1. Express grammatical features. For example: plurals.
+1. Allow users to write messages that are both grammatically
+   correct and can be translated in a grammatically correct manner
+   to languages that have different requirements. For example, plurals.
 
 3.  Express formattable data, such as numbers, dates, currencies, or units,
     in a locale-appropriate way.
