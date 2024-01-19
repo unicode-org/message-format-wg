@@ -14,7 +14,9 @@ The design goals are listed below.
 
 1. Allow users to write messages that are both grammatically
    correct and can be translated in a grammatically correct manner
-   to languages that have different requirements. For example, plurals.
+   to languages that have different requirements.
+   For example, providing a mechanism that uses CLDR's plural rules
+   to select between various strings to use based on a numeric input value.
 
 3.  Express formattable data, such as numbers, dates, currencies, or units,
     in a locale-appropriate way.
