@@ -14,10 +14,6 @@ The design goals are listed below.
 
 1. Express grammatical features. For example: plurals.
 
-2.  Express other variance in translation, due to linguistic and regional
-    features, the presentation media, context, circumstance, and other factors.
-    _Note: not part of the LDML45 release._
-
 3.  Express formattable data, such as numbers, dates, currencies, or units,
     in a locale-appropriate way.
 
