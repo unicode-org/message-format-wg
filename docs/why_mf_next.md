@@ -84,8 +84,6 @@ But the stability requirements prevent any major cleanup.
   for the grammatical needs of different gender categories across languages.
   Tools have no way to know what modifications are needed
   and developers have to understand the needs of current and future languages to succeed.
-- Formatting for “literals” known at compile time.
-  For example, literal numbers in a message need to be adjusted for the user's preferences for native vs ASCII digits and format.
 - Escaping with apostrophe is error prone. There is no reliable way to tell if
   it has to be doubled or not.
 - The # is used in plural format instead of {...}, but does not work for nesting unless the plural is the innermost selector. But named placeholders don't work
