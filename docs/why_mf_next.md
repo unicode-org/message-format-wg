@@ -74,12 +74,17 @@ But the stability requirements prevent any major cleanup.
 ### 2. Some existing problems
 
 - ICU added new formatters, but MessageFormat does not support them
-- Combined selectors (select + plural) results in unreadable and error
-  prone nesting
-- Select and plurals inside the message are difficult to translate because of
-  grammatical agreement requires words outside select / plural to change.
+- Messages with selectors (`select` and/or `plural`) are difficult to create
+  and edit because of the complex nesting requirements of the syntax.
+- `select` and `plural` placeholders inside of a message are difficult to translate
+  grammatical agreement requires words _outside_ the `select`/`plural` to change.
   See https://en.wikipedia.org/wiki/Agreement_(linguistics)
-- Patterns in the date / time / number placeholders are bad i18n, should use skeletons
+- Placeholders for `date`, `time`, and `number` can include picture strings
+  that require translators to alter the "code" portion of a message
+  and to understand arcane software-developer oriented syntaxes.
+  While more-modern solutions such as skeletons have been added,
+  there are no guardrails to keep people from using these poorly
+  internationalized features.
 - Unable to support gender selection well. 
   Using existing formatters such as `select` doesn't account
   for the grammatical needs of different gender categories across languages.
@@ -87,7 +92,7 @@ But the stability requirements prevent any major cleanup.
   and developers have to understand the needs of current and future languages to succeed.
 - Escaping with apostrophe is error prone. There is no reliable way to tell if
   it has to be doubled or not.
-- The # is used in plural format instead of {...}, but does not work for nesting unless the plural is the innermost selector. But named placeholders don't work
+- The `#` is used in plural format instead of {...}, but does not work for nesting unless the plural is the innermost selector. But named placeholders don't work
   properly for plurals with offset. So there are 2 ways to do the same thing that work in 98% of cases, but in special situations only one of the ways works.
 - Does not support inflections, and it would be hard to add without breaking existing tools.
 
