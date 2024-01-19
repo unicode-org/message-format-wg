@@ -86,7 +86,7 @@ But the stability requirements prevent any major cleanup.
   there are no guardrails to keep people from using these poorly
   internationalized features.
 - Unable to support grammatical or personal gender selection well. 
-  Using existing formatters such as `select` doesn't account
+  Existing selectors such as `select` cannot account
   for the grammatical needs of different gender categories across languages.
   Tools have no way to know what modifications are needed
   and developers have to understand the needs of current and future languages to succeed.
