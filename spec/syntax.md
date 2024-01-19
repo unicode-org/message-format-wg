@@ -71,7 +71,7 @@ or it might be due to a combination of the two.
 
 MessageFormat calls the template for a given formatting operation a _message_.
 
-The values passed in at runtime (which are to be place into the content or used
+The values passed in at runtime (which are to be placed into the content or used
 to select between different content items) are called _external variables_.
 The author of a _message_ can also assign _local variables_, including
 variables that modify _external variables_.
