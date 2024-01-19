@@ -12,7 +12,7 @@ of some data value or values.
 
 The design goals are listed below.
 
-1.  Express grammatical features, such as plurals and genders.
+1. Express grammatical features. For example: plurals.
 
 2.  Express other variance in translation, due to linguistic and regional
     features, the presentation media, context, circumstance, and other factors.
