@@ -8,8 +8,9 @@ Intro
 
 - `MessageFormat` is the Unicode API for software localization
 - It is 20 years old, well designed, proven solution
-- Its design is optimized for the software development model of 20y ago,
-  and implementers struggle with its shortcomings.
+Its design was optimized for the software development model
+of twenty years ago.
+Implementers, developers, and translators struggle with its shortcomings.
 
 The current wave of software development uses dynamic languages, modern UI
 frameworks and new forms of user interactions (voice, VR etc.).
