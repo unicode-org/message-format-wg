@@ -139,10 +139,9 @@ or “document-like” content (for example templating systems like
 [freemarker](https://freemarker.apache.org/),
 [mustache](https://mustache.github.io/), even JSP, PHP, etc.)
 
-Because it is only an API, it has no standard way to store strings in a
-serialized format or to carry information or directives for translators
-or localization tools.
-
+The format defined by the API provides no standard way to carry the necessary 
+information or directives for translators or localization tools, 
+so implementations have had to develop their own, with no interoperability.
 There is also no metadata “packaging”: comments, length limits, example, links,
 protecting non-translatable sections of text, etc.
 
