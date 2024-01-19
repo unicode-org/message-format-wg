@@ -31,7 +31,6 @@ The design goals are listed below.
 
 1.  A formal definition of the canonical data model for representing
     localizable _dynamic message strings_.
-    _Note: not part of the LDML45 release._
 
 2.  A formal definition of the canonical syntax for representing the data
     model, with well defined rules for handling text, special characters,
