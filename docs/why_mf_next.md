@@ -126,13 +126,17 @@ localization flow:
 ### 4. Designed to be API only, plain text, UI, “imperative style”
 
 The typical use case for `MessageFormat` is: load the string from resources,
-replace placeholders, and return the string result with placeholders replaced. \
+replace placeholders, and return the string result with placeholders replaced.
 An i18n-aware `printf`, basically.
 
 It does not account for formatting tags (such as HTML),
 or “document-like” content (for example templating systems like
 [freemarker](https://freemarker.apache.org/),
 [mustache](https://mustache.github.io/), even JSP, PHP, etc.)
+
+Because it is only an API, it has no standard way to store strings in a
+serialized format or to carry information or directives for translators
+or localization tools.
 
 There is also no metadata “packaging”: comments, length limits, example, links,
 protecting non-translatable sections of text, etc.
@@ -146,9 +150,9 @@ Applications don't need to migrate all the strings to a new format and resource
 resolution only to support some more advanced features in a few messages.
 
 And since the string loading is left to the underlying tech stack it means that
-the locale resolution and fallback is consistent with everything else. \
-For example in Android there is locale based selection (with fallback) for
-styles, images, sounds, any kind of assets. \
+the locale resolution and fallback is consistent with everything else. 
+For example in Android there is locale-based selection (with fallback) for
+styles, images, sounds, any kind of assets. 
 So there is no risk that the string fallback is different than the sound
 fallback, for example.
 
