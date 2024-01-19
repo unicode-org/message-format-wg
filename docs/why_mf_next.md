@@ -8,9 +8,9 @@ Intro
 
 - `MessageFormat` is the Unicode API for software localization
 - It is 20 years old, well designed, proven solution
-Its design was optimized for the software development model
-of twenty years ago.
-Implementers, developers, and translators struggle with its shortcomings.
+  Its design was optimized for the software development model
+  of twenty years ago.
+  Implementers, developers, and translators struggle with its shortcomings.
 
 The current wave of software development uses dynamic languages, modern UI
 frameworks and new forms of user interactions (voice, VR etc.).
@@ -22,7 +22,7 @@ suitable for current generation of software, and adoption by Web Standards.
 Other efforts: [Fluent](https://projectfluent.org/),
 [FBT](https://facebook.github.io/fbt/)
 
-## Core problems with the current `MessageFormat`(aka ‘MessageFormat 1.0’)
+## Core problems with the current `MessageFormat`(aka "MessageFormat 1.0")
 
 1. The design is not modular enough
    - Does not have any “extension points”
@@ -58,8 +58,8 @@ with existing tools.
 ICU is old, but also very popular (right now it is the core i18n library
 for all major operating systems, browsers, and many other products).
 
-As a result of its age and design, MessageFormat 1.0 has both numeric (positional)
- and named parameters.
+As a result of its age and design,
+MessageFormat 1.0 has both numeric (positional) and named parameters.
 It still provides date and time patterns (picture strings), when skeletons or option
 bags provide far superior results.
 It allows selectors (such as plural and select) around only part of the overall message,
@@ -76,8 +76,8 @@ But the stability requirements prevent any major cleanup.
 - ICU added new formatters, but MessageFormat does not support them
 - Messages with selectors (`select` and/or `plural`) are difficult to create
   and edit because of the complex nesting requirements of the syntax.
-- `select` and `plural` placeholders inside of a message are difficult to translate
-  grammatical agreement requires words _outside_ the `select`/`plural` to change.
+- `select` and `plural` placeholders inside a message are difficult to translate as
+  grammatical agreement may require words _outside_ the `select`/`plural` to change.
   See https://en.wikipedia.org/wiki/Agreement_(linguistics)
 - Placeholders for `date`, `time`, and `number` can include picture strings
   that require translators to alter the "code" portion of a message
@@ -85,14 +85,14 @@ But the stability requirements prevent any major cleanup.
   While more-modern solutions such as skeletons have been added,
   there are no guardrails to keep people from using these poorly
   internationalized features.
-- Unable to support gender selection well. 
+- Unable to support grammatical or personal gender selection well. 
   Using existing formatters such as `select` doesn't account
   for the grammatical needs of different gender categories across languages.
   Tools have no way to know what modifications are needed
   and developers have to understand the needs of current and future languages to succeed.
 - Escaping with apostrophe is error prone. There is no reliable way to tell if
   it has to be doubled or not.
-- The `#` is used in plural format instead of {...}, but does not work for nesting unless the plural is the innermost selector. But named placeholders don't work
+- The `#` is used in plural format instead of `{...}`, but does not work for nesting unless the plural is the innermost selector. But named placeholders don't work
   properly for plurals with offset. So there are 2 ways to do the same thing that work in 98% of cases, but in special situations only one of the ways works.
 - Does not support inflections, and it would be hard to add without breaking existing tools.
 
@@ -129,7 +129,7 @@ The typical use case for `MessageFormat` is: load the string from resources,
 replace placeholders, and return the string result with placeholders replaced. \
 An i18n-aware `printf`, basically.
 
-It does not account for formatting tags (think `html`),
+It does not account for formatting tags (such as HTML),
 or “document-like” content (for example templating systems like
 [freemarker](https://freemarker.apache.org/),
 [mustache](https://mustache.github.io/), even JSP, PHP, etc.)
