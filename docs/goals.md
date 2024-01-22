@@ -12,16 +12,16 @@ of some data value or values.
 
 The design goals are listed below.
 
-1.  Express grammatical features, such as plurals, genders, and inflections.
-
-2.  Express other variance in translation, due to linguistic and regional
-    features, the presentation media, context, circumstance, and other factors.
+1. Allow users to write messages that are both grammatically
+   correct and can be translated in a grammatically correct manner
+   to languages that have different requirements.
+   For example, providing a mechanism that uses CLDR's plural rules
+   to select between various strings to use based on a numeric input value.
 
 3.  Express formattable data, such as numbers, dates, currencies, or units,
     in a locale-appropriate way.
 
-4.  Represent structured data alongside translations, such as markup, comments,
-    and metadata.
+4.  Represent structured data alongside translations, such as markup.
 
 5.  Be capable of localization roundtrip.
 
@@ -39,11 +39,10 @@ The design goals are listed below.
     escape sequences, whitespace, markup, as well as parsing errors.
 
 3.  A specification for a one-to-one mapping between the data model and XLIFF.
-    _Note that this deliverable is "at risk" and not expected to be part of the
-    LDML45 release._
+    _Note: not part of the LDML45 release._
 
 4.  A specification for resolving messages at runtime, including
-    interpolated data types and runtime errors.
+    runtime errors.
 
 5.  A conformance test suite for parsing and formatting messages sufficient to
     ensure implementations can validate conformance to the specification(s) provided.
