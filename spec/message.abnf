@@ -32,7 +32,7 @@ annotation            = function
                       / private-use-annotation
                       / reserved-annotation
 
-; Markup. Note that standalone markup is part of the 
+; Markup. Note that standalone markup is part of the first line
 markup       = "{" [s] markup-open *(s attribute) [s] ["/"] "}"
              / "{" [s] markup-close *(s attribute) [s] "}"
 markup-open  = "#" identifier *(s option)
