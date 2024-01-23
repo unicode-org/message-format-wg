@@ -39,14 +39,15 @@ markup-open  = "#" identifier *(s option)
 markup-close = "/" identifier
 
 ; Expression and literal parts
-literal        = quoted / unquoted
-quoted         = "|" *(quoted-char / quoted-escape) "|"
-unquoted       = name / number-literal
-variable       = "$" name
 function       = ":" identifier *(s option)
 option         = identifier [s] "=" [s] (literal / variable)
 ; Attributes are reserved for future standardization
 attribute      = "@" identifier [[s] "=" [s] (literal / variable)]
+
+variable       = "$" name
+literal        = quoted / unquoted
+quoted         = "|" *(quoted-char / quoted-escape) "|"
+unquoted       = name / number-literal
 ; number-literal matches JSON number (https://www.rfc-editor.org/rfc/rfc8259#section-6)
 number-literal = ["-"] (0 / ([1-9] *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
 
