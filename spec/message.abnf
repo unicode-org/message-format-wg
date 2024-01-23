@@ -49,7 +49,7 @@ literal        = quoted / unquoted
 quoted         = "|" *(quoted-char / quoted-escape) "|"
 unquoted       = name / number-literal
 ; number-literal matches JSON number (https://www.rfc-editor.org/rfc/rfc8259#section-6)
-number-literal = ["-"] (0 / ([1-9] *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
+number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
 
 ; Keywords; Note that these are case-sensitive
 input = %s".input"
