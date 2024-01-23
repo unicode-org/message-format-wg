@@ -32,7 +32,7 @@ annotation            = function
                       / private-use-annotation
                       / reserved-annotation
 
-; Markup. Note that standalone markup is part of the first line
+; Markup; Note that standalone markup is part of the first line
 markup       = "{" [s] markup-open *(s attribute) [s] ["/"] "}"
              / "{" [s] markup-close *(s attribute) [s] "}"
 markup-open  = "#" identifier *(s option)
@@ -57,7 +57,7 @@ match = %s".match"
 
 ; Reserve additional .keywords for use by future versions of this specification.
 reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
-; Note that the following expression is a simplification,
+; Note that the following production is a simplification,
 ; as this rule MUST NOT be considered to match existing keywords
 ; (`.input`, `.local`, and `.match`).
 reserved-keyword   = "." name
@@ -69,10 +69,9 @@ reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 ; Reserve sigils for private-use by implementations.
 private-use-annotation    = private-start reserved-body
 private-start             = "^" / "&"
-
-; The body of a private-use or reserved annotation is highly permissive
 reserved-body             = *([s] 1*(reserved-char / reserved-escape / quoted))
 
+; Names and identifiers
 ; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName
 ; name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName
 identifier = [namespace ":"] name
@@ -101,6 +100,7 @@ content-char      = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
                   / %x7E-D7FF      ; omit surrogates
                   / %xE000-10FFFF
 
+; Character escapes
 text-escape     = backslash ( backslash / "{" / "}" )
 quoted-escape   = backslash ( backslash / "|" )
 reserved-escape = backslash ( backslash / "{" / "|" / "}" )
