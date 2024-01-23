@@ -1,72 +1,78 @@
-message = simple-message / complex-message
+message           = simple-message / complex-message
 
-simple-message = [simple-start pattern]
-simple-start = simple-start-char / text-escape / placeholder
-pattern = *(text-char / text-escape / placeholder)
-placeholder = expression / markup
+simple-message    = [simple-start pattern]
+simple-start      = simple-start-char / text-escape / placeholder
+pattern           = *(text-char / text-escape / placeholder)
+placeholder       = expression / markup
 
-complex-message = *(declaration [s]) complex-body
-declaration = input-declaration / local-declaration / reserved-statement
+complex-message   = *(declaration [s]) complex-body
+declaration       = input-declaration / local-declaration / reserved-statement
+complex-body      = quoted-pattern / matcher
+
 input-declaration = input [s] variable-expression
 local-declaration = local s variable [s] "=" [s] expression
 
-complex-body = quoted-pattern / matcher
-quoted-pattern = "{{" pattern "}}"
+quoted-pattern    = "{{" pattern "}}"
 
-matcher = match-statement 1*([s] variant)
-match-statement = match 1*([s] selector)
-selector = expression
-variant = key *(s key) [s] quoted-pattern
-key = literal / "*"
+matcher           = match-statement 1*([s] variant)
+match-statement   = match 1*([s] selector)
+selector          = expression
+variant           = key *(s key) [s] quoted-pattern
+key               = literal / "*"
 
-expression = literal-expression
-           / variable-expression
-           / annotation-expression
-literal-expression = "{" [s] literal [s annotation] *(s attribute) [s] "}"
-variable-expression = "{" [s] variable [s annotation] *(s attribute) [s] "}"
+; Expressions
+expression            = literal-expression
+                      / variable-expression
+                      / annotation-expression
+literal-expression    = "{" [s] literal [s annotation] *(s attribute) [s] "}"
+variable-expression   = "{" [s] variable [s annotation] *(s attribute) [s] "}"
 annotation-expression = "{" [s] annotation *(s attribute) [s] "}"
-annotation = function
-           / private-use-annotation
-           / reserved-annotation
 
+annotation            = function
+                      / private-use-annotation
+                      / reserved-annotation
+
+; Markup; Note that standalone markup is part of the first line
 markup       = "{" [s] markup-open *(s attribute) [s] ["/"] "}"
              / "{" [s] markup-close *(s attribute) [s] "}"
 markup-open  = "#" identifier *(s option)
 markup-close = "/" identifier
 
-literal = quoted / unquoted
-quoted = "|" *(quoted-char / quoted-escape) "|"
-unquoted = name / number-literal
-variable = "$" name
-function = ":" identifier *(s option)
-option = identifier [s] "=" [s] (literal / variable)
-attribute = "@" identifier [[s] "=" [s] (literal / variable)]
+; Expression and literal parts
+function       = ":" identifier *(s option)
+option         = identifier [s] "=" [s] (literal / variable)
+; Attributes are reserved for future standardization
+attribute      = "@" identifier [[s] "=" [s] (literal / variable)]
 
+variable       = "$" name
+literal        = quoted / unquoted
+quoted         = "|" *(quoted-char / quoted-escape) "|"
+unquoted       = name / number-literal
+; number-literal matches JSON number (https://www.rfc-editor.org/rfc/rfc8259#section-6)
+number-literal = ["-"] (0 / ([1-9] *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
+
+; Keywords; Note that these are case-sensitive
 input = %s".input"
 local = %s".local"
 match = %s".match"
 
 ; Reserve additional .keywords for use by future versions of this specification.
 reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
-; Note that the following expression is a simplification,
+; Note that the following production is a simplification,
 ; as this rule MUST NOT be considered to match existing keywords
 ; (`.input`, `.local`, and `.match`).
-reserved-keyword = "." name
+reserved-keyword   = "." name
 
 ; Reserve additional sigils for use by future versions of this specification.
-reserved-annotation = reserved-annotation-start reserved-body
+reserved-annotation       = reserved-annotation-start reserved-body
 reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
-reserved-body = *([s] 1*(reserved-char / reserved-escape / quoted))
-
 ; Reserve sigils for private-use by implementations.
-private-use-annotation = private-start reserved-body
-private-start = "^" / "&"
+private-use-annotation    = private-start reserved-body
+private-start             = "^" / "&"
+reserved-body             = *([s] 1*(reserved-char / reserved-escape / quoted))
 
-; number-literal matches JSON number
-; https://www.rfc-editor.org/rfc/rfc8259#section-6
-number-literal = ["-"] (0 / ([1-9] *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
-
+; Names and identifiers
 ; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName
 ; name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName
 identifier = [namespace ":"] name
@@ -80,6 +86,7 @@ name-start = ALPHA / "_"
 name-char  = name-start / DIGIT / "-" / "."
            / %xB7 / %x300-36F / %x203F-2040
 
+; Restrictions on characters in various contexts
 simple-start-char = content-char / s / "@" / "|"
 text-char         = content-char / s / "." / "@" / "|"
 quoted-char       = content-char / s / "." / "@" / "{" / "}"
@@ -94,9 +101,11 @@ content-char      = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
                   / %x7E-D7FF      ; omit surrogates
                   / %xE000-10FFFF
 
+; Character escapes
 text-escape     = backslash ( backslash / "{" / "}" )
 quoted-escape   = backslash ( backslash / "|" )
 reserved-escape = backslash ( backslash / "{" / "|" / "}" )
 backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
 
+; Whitespace
 s = 1*( SP / HTAB / CR / LF / %x3000 )
