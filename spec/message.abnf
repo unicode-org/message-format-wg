@@ -1,9 +1,9 @@
-message        = simple-message / complex-message
+message           = simple-message / complex-message
 
-simple-message = [simple-start pattern]
-simple-start   = simple-start-char / text-escape / placeholder
-pattern        = *(text-char / text-escape / placeholder)
-placeholder    = expression / markup
+simple-message    = [simple-start pattern]
+simple-start      = simple-start-char / text-escape / placeholder
+pattern           = *(text-char / text-escape / placeholder)
+placeholder       = expression / markup
 
 complex-message   = *(declaration [s]) complex-body
 declaration       = input-declaration / local-declaration / reserved-statement
@@ -14,11 +14,11 @@ local-declaration = local s variable [s] "=" [s] expression
 
 quoted-pattern    = "{{" pattern "}}"
 
-matcher         = match-statement 1*([s] variant)
-match-statement = match 1*([s] selector)
-selector        = expression
-variant         = key *(s key) [s] quoted-pattern
-key             = literal / "*"
+matcher           = match-statement 1*([s] variant)
+match-statement   = match 1*([s] selector)
+selector          = expression
+variant           = key *(s key) [s] quoted-pattern
+key               = literal / "*"
 
 ; Expressions
 expression            = literal-expression
