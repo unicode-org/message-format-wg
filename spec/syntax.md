@@ -789,7 +789,7 @@ quoted-char    = content-char / s / "." / "@" / "{" / "}"
 
 unquoted       = name
                / number-literal
-number-literal = ["-"] (0 / ([1-9] *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
+number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
 ```
 
 ### Names and Identifiers
