@@ -131,7 +131,7 @@ How to write an MF1 format or selector in MF2:
 | Number             | `{num,number}`                 | `{$num :number}`                                                    |                                 |
 | Integer            | `{num,number,integer}`         | `{$num :integer}`<br/>`{$num :number maximumFractionDigits=0}`      |                                 |
 | Percent            | `{num,number,percent}`         | `{$num :number style=percent}`                                      |                                 |
-| Currency           | `{num,number,currency}`        | `{$num :number currency=$code}`                                     |                                 |
+| Currency           | `{num,number,currency}`        | `{$num :number style=currency currency=$code}`                      |                                 |
 | Plural (selector)  | `{num,plural, ...}`            | `.match {$num :plural}`<br/>`.match {$num :number}`                 |                                 |
 | Ordinal (selector) | `{num,selectordinal, ...}`     | `.match {$num :ordinal}`<br/>`.match {$num :number select=ordinal}` |                                 |
 | Ordinal (format)   | `{num,ordinal}`                |                                                                     | missing                         |
