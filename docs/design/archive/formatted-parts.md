@@ -14,8 +14,9 @@ and could serve as the basis for a reasonable implementation.
 		<dd>@eemeli</dd>
 		<dt>First proposed</dt>
 		<dd>2023-08-29</dd>
-		<dt>Pull Request</dt>
+		<dt>Pull Requests</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/463">#463</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/550">#550</a></dd>
 	</dl>
 </details>
 

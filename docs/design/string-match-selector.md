@@ -1,4 +1,4 @@
-# Design Proposal Template
+# String Match Selector
 
 Status: **Accepted**
 
@@ -7,8 +7,13 @@ Status: **Accepted**
 	<dl>
 		<dt>Contributors</dt>
 		<dd>@aphillips</dd>
+		<dd>@stasm</dd>
 		<dt>First proposed</dt>
 		<dd>2023-12-08</dd>
+		<dt>Pull Requests</dt>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/557">#557</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/581">#581</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/594">#594</a></dd>
 	</dl>
 </details>
 
