@@ -124,23 +124,23 @@ The following functionality was deliberately excluded:
 
 How to write an MF1 format or selector in MF2:
 
-| MF1      | Syntax               | MF2                                                          | Comment |
-|----------|----------------------|--------------------------------------------------------------|---------|
-| String   | {var}                | {$var} {$var :string}                                        |         |
-| Select   | {var,select...}      | .match {$var :string}                                        |         |
-| Number   | {num,number}         | {$num :number}                                               |         |
-| Integer  | {num,number,integer} | {$num :number maximumFractionDigits=0}<br/>{$num :integer}      |         |
-| Percent  | {num,number,percent} | {$num :number style=percent}<br/>{$num :percent}                 |         |
-| Currency | {num,number,currency} | {$num :number currency=$code}<br/>{$num :currency}              |         |
-| Plural (selector)  | {num,plural, ...}    | .match {$num :number} {$num :plural}               |         |
-| Ordinal (selector) | {num,selectordinal, ...} | .match {$num :ordinal}                         |         |
-| Ordinal (format)   | {num,ordinal} |                                                           | missing |
-| Date     | {date,date}          | {$date :datetime}                                            | short date is default |
-| Date     | {date,date,short}    | {$date :datetime dateStyle=short}                            | also medium,long,full |
-| Time     | {date,time}          | {$date :datetime timeStyle=short}                            | timeStyle required    |
-| Date     | {date,time,short}    | {$date :datetime timeStyle=short}                            | also medium,long,full |
-| Datetime | (requires picture or skeleton) | {$date :datetime dateStyle=short timeStyle=short}  | also medium,long,full |
-| Datetime | {date,time,::skeleton} | {$date :datetime weekday=short etc.}                       | supported through options bag |
-| Spellout | {num,spellout}       |                                                              | missing |
-| Duration | {num,duration}       |                                                              | missing |
-| Choice   | {num,choice, ...}    |                                                              | deprecated in MF1 |
+| MF1                | Syntax                         | MF2                                                                 | Comment                         |
+| ------------------ | ------------------------------ | ------------------------------------------------------------------- | ------------------------------- |
+| String             | `{var}`                        | `{$var}`<br/>`{$var :string}`                                       |                                 |
+| Select             | `{var,select, ...}`            | `.match {$var :string}`<br/>`.match {$num :number select=exact}`    |                                 |
+| Number             | `{num,number}`                 | `{$num :number}`                                                    |                                 |
+| Integer            | `{num,number,integer}`         | `{$num :integer}`<br/>`{$num :number maximumFractionDigits=0}`      |                                 |
+| Percent            | `{num,number,percent}`         | `{$num :number style=percent}`                                      |                                 |
+| Currency           | `{num,number,currency}`        | `{$num :number style=currency currency=$code}`                      |                                 |
+| Plural (selector)  | `{num,plural, ...}`            | `.match {$num :plural}`<br/>`.match {$num :number}`                 |                                 |
+| Ordinal (selector) | `{num,selectordinal, ...}`     | `.match {$num :ordinal}`<br/>`.match {$num :number select=ordinal}` |                                 |
+| Ordinal (format)   | `{num,ordinal}`                |                                                                     | missing                         |
+| Date               | `{date,date}`                  | `{$date :date}`<br/>`{$date :datetime}`                             | short date is default           |
+| Date               | `{date,date,short}`            | `{$date :date style=short}`<br/>`{$date :datetime dateStyle=short}` | also medium,long,full           |
+| Time               | `{date,time}`                  | `{$date :time}`<br/>`{$date :datetime timeStyle=short}`             | shorthand or timeStyle required |
+| Date               | `{date,time,short}`            | `{$date :time style=short}`<br/>`{$date :datetime timeStyle=short}` | also medium,long,full           |
+| Datetime           | (requires picture or skeleton) | `{$date :datetime dateStyle=short timeStyle=short}`                 | also medium,long,full           |
+| Datetime           | `{date,time,::skeleton}`       | `{$date :datetime weekday=short ...}`                               | supported through options bag   |
+| Spellout           | `{num,spellout}`               |                                                                     | missing                         |
+| Duration           | `{num,duration}`               |                                                                     | missing                         |
+| Choice             | `{num,choice, ...}`            |                                                                     | deprecated in MF1               |
