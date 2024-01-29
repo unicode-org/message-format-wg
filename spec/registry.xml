@@ -147,7 +147,7 @@
   <function name="number">
     <!-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat -->
     <description>
-      Locale-sensitive number formatting
+      Number selection and formatting
     </description>
 
     <formatSignature>
@@ -249,10 +249,72 @@
       </option>
     </formatSignature>
 
+    <matchSignature>
+      <input validationRule="anyNumber"/>
+      <option name="select" values="plural ordinal exact" default="plural">
+        <description>
+          The number selection type.
+
+          One of three selection models for numeric values, defaulting to "plural".
+
+          Each selector type matches numeric values to keys using the "number-literal" 
+          production from the ABNF.
+          The "plural" and "ordinal" selectors also use plural or ordinal rules from CLDR
+          to match categories "zero", "one", "two", "few", "many" and "other" with a lower
+          match quality than exact numeric match.
+        </description>
+      </option>
+      <option name="minimumIntegerDigits" values="positiveInteger" default="1">
+        <description>
+          The minimum number of integer digits to use.
+          A value with a smaller number of integer digits than this number will be
+          left-padded with zeros (to the specified length) when formatted.
+        </description>
+      </option>
+      <option name="minimumFractionDigits" values="positiveInteger">
+        <description>
+          The minimum number of fraction digits to use.
+          The default for plain number and percent formatting is 0;
+          the default for currency formatting is the number of minor unit digits provided by
+          the ISO 4217 currency code list (2 if the list doesn't provide that information).
+        </description>
+      </option>
+      <option name="maximumFractionDigits" values="positiveInteger">
+        <description>
+          The maximum number of fraction digits to use.
+          The default for plain number formatting is the larger of minimumFractionDigits and 3;
+          the default for currency formatting is the larger of minimumFractionDigits and the number of minor
+          unit digits provided by the ISO 4217 currency code list (2 if the list doesn't provide that information);
+          the default for percent formatting is the larger of minimumFractionDigits and 0.
+        </description>
+      </option>
+      <option name="minimumSignificantDigits" values="positiveInteger" default="1">
+        <description>
+          The minimum number of significant digits to use.
+        </description>
+      </option>
+      <option name="maximumSignificantDigits" values="positiveInteger" default="21">
+        <description>
+          The maximum number of significant digits to use.
+        </description>
+      </option>
+      <match validationRule="anyNumber" values="zero one two few many other" />
+    </matchSignature>
+
     <alias name="integer">
-      <description>Locale-sensitive integral number formatting</description>
+      <description>Integer selection and formatting</description>
       <setOption name="maximumFractionDigits" value="0" />
       <setOption name="style" value="decimal" />
+    </alias>
+
+    <alias name="ordinal" supports="match">
+      <description>Ordinal number selection</description>
+      <setOption name="select" value="ordinal" />
+    </alias>
+
+    <alias name="plural" supports="match">
+      <description>Plural number selection</description>
+      <setOption name="select" value="plural" />
     </alias>
   </function>
 
