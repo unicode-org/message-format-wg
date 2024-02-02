@@ -242,7 +242,7 @@
         "declarations": { "$ref": "#/$defs/declarations" },
         "pattern": { "$ref": "#/$defs/pattern" }
       },
-      "required": ["type", "declarations", "pattern"]
+      "required": ["type", "pattern"]
     },
     "select": {
       "type": "object",
@@ -268,7 +268,7 @@
           }
         }
       },
-      "required": ["type", "declarations", "selectors", "variants"]
+      "required": ["type", "selectors", "variants"]
     }
   }
 }

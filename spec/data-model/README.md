@@ -34,13 +34,13 @@ type Message = PatternMessage | SelectMessage;
 
 interface PatternMessage {
   type: "message";
-  declarations: Declaration[];
+  declarations?: Declaration[];
   pattern: Pattern;
 }
 
 interface SelectMessage {
   type: "select";
-  declarations: Declaration[];
+  declarations?: Declaration[];
   selectors: Expression[];
   variants: Variant[];
 }
