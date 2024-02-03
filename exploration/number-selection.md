@@ -102,7 +102,7 @@ Number selection has three modes:
 - `ordinal` selection matches the operand to explicit numeric keys exactly
   or to ordinal rule categories if there is no explicit match
 
-The default selector function for numeric types or vlaues is called `:number`.
+The default selector function for numeric types or values is called `:number`.
 
 The operand of `:number` is either a literal that matches the `number-literal`
 production in the [ABNF](/main/spec/message.abnf) and which is parsed by the 
@@ -158,8 +158,8 @@ The result of such a comparison can be one of the following:
   - If the keyword value of running plural(operand) or ordinal(operand)
     equals the key, the key matches the selector with a level of match
     lower than the highest level, but higher than the default.
-    > [!NOTE]
-    > The default keyword `other` can produce this level of match.
+> [!NOTE]
+> The default keyword `other` can produce this level of match.
 - Else, if the value of the key is `*`
   - The key matches the selector at the lowest (default) level of match.
 - Else, return `no_match` (eliminating the variant from the selection operation)
@@ -187,17 +187,19 @@ The function `:plural` operates identically to `:number`, except:
 - the `option` of `select` is not valid
 - the `select` type of this selector is always `plural`
 - the function is not valid as a formatter
+
 The function `:ordinal` operates identically to `:number`, except:
 - the `option` of `select` is not valid
 - the `select` type of this selector is always `ordinal`
   (This function is valid as a formatter)
+
 The function `:integer` operates identically to `:number`, except:
 - the `minimumFractionDigits` and `maximumFranctionDigits` options
   default to `0` even for floating point numeric types
-  > [!NOTE]
-  > The fraction digits can be overridden for the purposes of formatting
-  > and selection, but the result must be that any fractional part of
-  > the operand is reduced to `0`
+> [!NOTE]
+> The fraction digits can be overridden for the purposes of formatting
+> and selection, but the result must be that any fractional part of
+> the operand is reduced to `0`
 
 ### Plural/Ordinal Keywords
 The _plural/ordinal keywords_ are: `zero`, `one`, `two`, `few`, `many`, and
