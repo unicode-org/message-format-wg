@@ -7,10 +7,12 @@ Status: **Accepted**
 	<dl>
 		<dt>Contributors</dt>
 		<dd>@eemeli</dd>
+		<dd>@aphillips</dd>
 		<dt>First proposed</dt>
 		<dd>2023-09-06</dd>
 		<dt>Pull Request</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/471">#471</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/621">#621</a></dd>
 	</dl>
 </details>
 
@@ -45,6 +47,7 @@ but ordinal rules use `one` (_1st_, _21st_, etc.), `few` (_2nd_, _22nd_, etc.),
 Additionally,
 MF1 provides `ChoiceFormat` selection based on a complex rule set
 (and which allows determining if a number falls into a specific range).
+This capability is deprecated.
 
 Both JS and ICU PluralRules implementations provide for determining the plural category
 of a range based on its start and end values.
@@ -92,16 +95,78 @@ ICU MF1 messages using `plural` and `selectordinal` should be representable in M
 
 ## Proposed Design
 
-Given that we already have a `:number`,
-it makes sense to add a `<matchSignature>` to it with an option
+Number selection has three modes:
+- `exact` selection matches the operand to explicit numeric keys exactly
+- `plural` selection matches the operand to explicit numeric keys exactly
+  or to plural rule categories if there is no explicit match
+- `ordinal` selection matches the operand to explicit numeric keys exactly
+  or to ordinal rule categories if there is no explicit match
 
-```xml
-<option name="select" values="plural ordinal exact" default="plural" />
-```
+The default selector function for numeric types or vlaues is called `:number`.
 
-The default `plural` value is presumed to be the most common use case,
-and it affords the least bad fallback when used incorrectly:
-Using "plural" for "exact" still selects exactly matching cases,
+The operand of `:number` is either a literal that matches the `number-literal`
+production in the [ABNF](/main/spec/message.abnf) and which is parsed by the 
+implementation into a number; or an implementation-defined numeric type; 
+or is some serialization of a number that the implementation recognizes.
+
+> For example, in Java, any subclass of `java.lang.Number` plus the primitive
+> types (`boolean`, `byte`, `short`, `int`, `long`, `float`, `double`, etc.) 
+> might be considered as the "implementation-defined numeric types".
+> Implementations in other programming languages would define different types
+> or classes according to their local needs.
+
+Implementations SHOULD treat numeric literals that produce parse errors as
+non-numeric string literals.
+That is, numeric selection MUST emit a _Selection Error_ for these values.
+
+The function `:number` has the following options:
+- `select` (`plural`, `ordinal`, `exact`; default: `plural`)
+- `compactDisplay` (`short`, `long`; default: `short`)
+- `currency` (ISO 4712 currency code)
+- `currencyDisplay` (`symbol` `narrowSymbol` `code` `name`; default: `symbol`)
+- `currencySign` (`accounting`, `standard`; default: `standard`)
+- `notation` (`standard` `scientific` `engineering` `compact`; default: `standard`)
+- `numberingSystem` (arab arabext bali beng deva fullwide gujr guru hanidec khmr knda laoo latn 
+   limb mlym mong mymr orya tamldec telu thai tibt)
+- `signDisplay` (`auto` `always` `exceptZero` `never`; default=`auto`)
+- `style` (`decimal` `currency` `percent` `unit`; default=`decimal`)
+- `unit` (anything not empty)
+- `unitDisplay` (`long` `short` `narrow`; default=`short`)
+- `minimumIntegerDigits`, (positive integer, default: `1`)
+- `minimumFractionDigits`, (positive integer)
+- `maximumFractionDigits`, (positive integer)
+- `minimumSignificantDigits`, (positive integer, default: `1`)
+- `maximumSignificantDigits`, (positive integer, default: `21`)
+
+> [!NOTE]
+> We have a requirement for `offset` but have not provided for it yet??
+
+### Selection
+
+When performing selection, the resolved value of the `operand` is compared to 
+each of the variant keys.
+The result of such a comparison can be one of the following:
+
+- If the value of the key does not match the production `number-literal`
+  or is not one of the plural/ordinal keywords, the key is invalid;
+  return a _Selection Error_.
+- If the value of the key matches the production `number-literal`:
+  - If the parsed value of the key is an [exact match](#determining-exact-literal-match)
+    of the value of the operand, then the key matches the selector with the highest
+    level match supported by the selector.
+- Else, if the value of the key is a keyword and the value of `select` is not `exact`:
+  - If the keyword value of running plural(operand) or ordinal(operand)
+    equals the key, the key matches the selector with a level of match
+    lower than the highest level, but higher than the default.
+    > [!NOTE]
+    > The default keyword `other` can produce this level of match.
+- Else, if the value of the key is `*`
+  - The key matches the selector at the lowest (default) level of match.
+- Else, return `no_match` (eliminating the variant from the selection operation)
+
+The `select` type `plural` is the default because this value is presumed to be the most common use case.
+It affords the least bad fallback when used incorrectly:
+using "plural" isntead of "exact" still selects exactly matching cases,
 whereas using "exact" for "plural" will not select LDML category matches.
 This might not be noticeable in the source language,
 but can cause problems in target locales that the original developer is not considering.
@@ -116,20 +181,50 @@ but can cause problems in target locales that the original developer is not cons
 > [*] {{You have {$var} chances remaining}}
 > ```
 
-Additional options such as `minimumFractionDigits` and others already supported by `:number`
-should also be supported.
+### Other Numeric Selector Functions
 
-If PR [#532](https://github.com/unicode-org/message-format-wg/pull/532) is accepted,
-also add the following `<alias>` definitions to `<function name="number">`:
+The function `:plural` operates identically to `:number`, except:
+- the `option` of `select` is not valid
+- the `select` type of this selector is always `plural`
+- the function is not valid as a formatter
+The function `:ordinal` operates identically to `:number`, except:
+- the `option` of `select` is not valid
+- the `select` type of this selector is always `ordinal`
+  (This function is valid as a formatter)
+The function `:integer` operates identically to `:number`, except:
+- the `minimumFractionDigits` and `maximumFranctionDigits` options
+  default to `0` even for floating point numeric types
+  > [!NOTE]
+  > The fraction digits can be overridden for the purposes of formatting
+  > and selection, but the result must be that any fractional part of
+  > the operand is reduced to `0`
 
-```xml
-<alias name="plural" supports="match">
-	<setOption name="select" value="plural"/>
-</alias>
-<alias name="ordinal" supports="match">
-	<setOption name="select" value="ordinal"/>
-</alias>
+### Plural/Ordinal Keywords
+The _plural/ordinal keywords_ are: `zero`, `one`, `two`, `few`, `many`, and
+`other`.
+The value `other` is both a valid output of plural or ordinal rule functions
+and a default value.
+
+### Determining Exact Literal Match
+A numeric literal key value exactly matches the resolved value of an operand as follows:
+
+> this is still in progress, but basically has to consider:
+
+- signs match
+- minimum fraction digits match
+- scientific notation?
+- other formatting gorp doesn't apply (e.g. currency or measure unit)
+- no grouping
+
+test case:
 ```
+.match {$num :number}
+1.0 {{...}}
+1   {{...}}
+one {{...}}
+*   {{...}}
+```
+
 
 ## Alternatives Considered
 
