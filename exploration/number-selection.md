@@ -135,8 +135,8 @@ The function `:number` has the following options:
 - `minimumIntegerDigits`, (positive integer, default: `1`)
 - `minimumFractionDigits`, (positive integer)
 - `maximumFractionDigits`, (positive integer)
-- `minimumSignificantDigits`, (positive integer, default: `1`)
-- `maximumSignificantDigits`, (positive integer, default: `21`)
+- `minimumSignificantDigits`, (positive integer)
+- `maximumSignificantDigits`, (positive integer)
 
 > [!NOTE]
 > We have a requirement for `offset` but have not provided for it yet??
@@ -166,7 +166,7 @@ The result of such a comparison can be one of the following:
 
 The `select` type `plural` is the default because this value is presumed to be the most common use case.
 It affords the least bad fallback when used incorrectly:
-using "plural" isntead of "exact" still selects exactly matching cases,
+using "plural" instead of "exact" still selects exactly matching cases,
 whereas using "exact" for "plural" will not select LDML category matches.
 This might not be noticeable in the source language,
 but can cause problems in target locales that the original developer is not considering.
@@ -194,7 +194,7 @@ The function `:ordinal` operates identically to `:number`, except:
   (This function is valid as a formatter)
 
 The function `:integer` operates identically to `:number`, except:
-- the `minimumFractionDigits` and `maximumFranctionDigits` options
+- the `minimumFractionDigits` and `maximumFractionDigits` options
   default to `0` even for floating point numeric types
 > [!NOTE]
 > The fraction digits can be overridden for the purposes of formatting
