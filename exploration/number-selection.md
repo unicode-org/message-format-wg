@@ -95,6 +95,8 @@ ICU MF1 messages using `plural` and `selectordinal` should be representable in M
 
 ## Proposed Design
 
+### Number Selection
+
 Number selection has three modes:
 - `exact` selection matches the operand to explicit numeric keys exactly
 - `plural` selection matches the operand to explicit numeric keys exactly
@@ -102,9 +104,30 @@ Number selection has three modes:
 - `ordinal` selection matches the operand to explicit numeric keys exactly
   or to ordinal rule categories if there is no explicit match
 
-The default selector function for numeric types or values is called `:number`.
 
-The operand of `:number` is either a literal that matches the `number-literal`
+### Functions
+
+The following functions use numeric selection:
+
+The function `:number` is the default selector for numeric values.
+
+The function `:plural` operates identically to `:number`, except:
+- the `select` type of this selector is always `plural`
+- the function is **not** valid as a formatter
+
+The function `:ordinal` operates identically to `:number`, except:
+- the `select` type of this selector is always `ordinal`
+  (This function is valid as a formatter)
+
+The function `:integer` operates identically to `:number`, except:
+- the `minimumFractionDigits` and `maximumFractionDigits` options
+  default to `0` for all values
+- the _options_ `minimumFractionDigits` and `maximumFractionDigits`
+  are invalid.
+
+### Operands
+
+The operand of a number selector is either a literal that matches the `number-literal`
 production in the [ABNF](/main/spec/message.abnf) and which is parsed by the 
 implementation into a number; or an implementation-defined numeric type; 
 or is some serialization of a number that the implementation recognizes.
@@ -115,60 +138,86 @@ or is some serialization of a number that the implementation recognizes.
 > Implementations in other programming languages would define different types
 > or classes according to their local needs.
 
-Implementations SHOULD treat numeric literals that produce parse errors as
+Implementations MUST treat literals that do not match `number-literal` as
 non-numeric string literals.
-That is, numeric selection MUST emit a _Selection Error_ for these values.
+Non-numeric values, including non-numeric string literals, result in
+a _Selection Error_.
 
-The function `:number` has the following options:
-- `select` (`plural`, `ordinal`, `exact`; default: `plural`)
-- `compactDisplay` (`short`, `long`; default: `short`)
-- `currency` (ISO 4712 currency code)
-- `currencyDisplay` (`symbol` `narrowSymbol` `code` `name`; default: `symbol`)
-- `currencySign` (`accounting`, `standard`; default: `standard`)
-- `notation` (`standard` `scientific` `engineering` `compact`; default: `standard`)
-- `numberingSystem` (arab arabext bali beng deva fullwide gujr guru hanidec khmr knda laoo latn 
-   limb mlym mong mymr orya tamldec telu thai tibt)
-- `signDisplay` (`auto` `always` `exceptZero` `never`; default=`auto`)
-- `style` (`decimal` `currency` `percent` `unit`; default=`decimal`)
-- `unit` (anything not empty)
-- `unitDisplay` (`long` `short` `narrow`; default=`short`)
-- `minimumIntegerDigits`, (positive integer, default: `1`)
-- `minimumFractionDigits`, (positive integer)
-- `maximumFractionDigits`, (positive integer)
-- `minimumSignificantDigits`, (positive integer)
-- `maximumSignificantDigits`, (positive integer)
+> _Ed note:_ Alternatively we can require that non-numeric values result in `*`
+
+### Options
+
+All number selectors have the following options internally.
+Unless otherwise specified in [functions](#functions) all of these options
+can be used in _annotations_.
+
+> [!IMPORTANT]
+> Some functions do not expose one or more of these options.
+> Some functions have different defaults.
+> See [functions](#functions) above.
+
+- `select`
+   -  `plural` (default)
+   -  `ordinal`
+   -  `exact`
+- `compactDisplay`
+   - `short` (default)
+   - `long`
+- `currency`
+   -  (`alpha3` ISO 4217 currency code)
+- `currencyDisplay`
+   - `symbol` (default)
+   - `narrowSymbol`
+   - `code`
+   - `name`
+- `currencySign`
+  - `accounting`
+  - `standard` (default)
+- `notation`
+   - `standard` (default)
+   - `scientific`
+   - `engineering`
+   -  `compact`
+- `numberingSystem`
+   -  (one of the ISO15927 script codes or extensions defined by ICU and/or Intl.NumberFormat
+      e.g. arab arabext bali beng deva fullwide gujr guru hanidec khmr knda laoo latn 
+      limb mlym mong mymr orya tamldec telu thai tibt)
+- `signDisplay`
+   -  `auto` (default)
+   -  `always`
+   -  `exceptZero`
+   -  `never`
+- `style`
+  - `decimal` (default)
+  - `currency`
+  - `percent`
+  - `unit`
+- `unit`
+   - (anything not empty)
+- `unitDisplay`
+   - `long`
+   - `short` (default)
+   - `narrow`
+- `minimumIntegerDigits`
+  - (positive integer, default: `1`)
+- `minimumFractionDigits`
+  - (positive integer)
+- `maximumFractionDigits`
+  - (positive integer)
+- `minimumSignificantDigits`
+  - (positive integer)
+- `maximumSignificantDigits`
+  - (positive integer)
+
 
 > [!NOTE]
 > We have a requirement for `offset` but have not provided for it yet??
 
-### Selection
-
-When performing selection, the resolved value of the `operand` is compared to 
-each of the variant keys.
-The result of such a comparison can be one of the following:
-
-- If the value of the key does not match the production `number-literal`
-  or is not one of the plural/ordinal keywords, the key is invalid;
-  return a _Selection Error_.
-- If the value of the key matches the production `number-literal`:
-  - If the parsed value of the key is an [exact match](#determining-exact-literal-match)
-    of the value of the operand, then the key matches the selector with the highest
-    level match supported by the selector.
-- Else, if the value of the key is a keyword and the value of `select` is not `exact`:
-  - If the keyword value of running plural(operand) or ordinal(operand)
-    equals the key, the key matches the selector with a level of match
-    lower than the highest level, but higher than the default.
-> [!NOTE]
-> The default keyword `other` can produce this level of match.
-- Else, if the value of the key is `*`
-  - The key matches the selector at the lowest (default) level of match.
-- Else, return `no_match` (eliminating the variant from the selection operation)
-
-The `select` type `plural` is the default because this value is presumed to be the most common use case.
-It affords the least bad fallback when used incorrectly:
-using "plural" instead of "exact" still selects exactly matching cases,
-whereas using "exact" for "plural" will not select LDML category matches.
-This might not be noticeable in the source language,
+The value `plural` is default for the option `select` 
+because it is the most common use case for numeric selection.
+It can be used for exact value matches but also allows for the grammatical needs of other 
+languages using CLDR's plural rules.
+This might not be noticeable in the source language (particularly English), 
 but can cause problems in target locales that the original developer is not considering.
 
 > For example, a naive developer might use a special message for the value `1` without
@@ -176,36 +225,86 @@ but can cause problems in target locales that the original developer is not cons
 >
 > ```
 > .match {$var}
-> [1] {{You have one last chance}}
-> [one] {{You have {$var} chance remaining}} // needed by languages such as Polish or Russian
-> [*] {{You have {$var} chances remaining}}
+> 1   {{You have one last chance}}
+> one {{You have {$var} chance remaining}} // needed by languages such as Polish or Russian
+> *   {{You have {$var} chances remaining}}
 > ```
 
-### Other Numeric Selector Functions
+### Selection
 
-The function `:plural` operates identically to `:number`, except:
-- the `option` of `select` is not valid
-- the `select` type of this selector is always `plural`
-- the function is not valid as a formatter
+When implementing [`MatchSelectorKeys`](spec/formatting.md#resolve-preferences), 
+numeric selectors perform as described below.
 
-The function `:ordinal` operates identically to `:number`, except:
-- the `option` of `select` is not valid
-- the `select` type of this selector is always `ordinal`
-  (This function is valid as a formatter)
-
-The function `:integer` operates identically to `:number`, except:
-- the `minimumFractionDigits` and `maximumFractionDigits` options
-  default to `0` even for floating point numeric types
-> [!NOTE]
-> The fraction digits can be overridden for the purposes of formatting
-> and selection, but the result must be that any fractional part of
-> the operand is reduced to `0`
+- Let `operand` be the resolve value of the _operand_.
+  If the `operand` is not a number type, emit a _Selection Error_.
+- Let `keys` be a list of strings containing keys to match.
+- Let `return_value` be a new empty list of strings.
+- For each string `key` in `keys`, perform a match:
+   - If the value of `key` does not match the production `number-literal`
+     or is not one of the plural/ordinal keywords, `key` is invalid;
+     emit a _Selection Error_.
+     `key` is not added to the `return_value`.
+   - If the value of `key` matches the production `number-literal`:
+     - If the parsed value of `key` is an [exact match](#determining-exact-literal-match)
+       of the value of the `operand`, then `key` matches the selector.
+       Add `key` to the front of the `return_value` list.
+   - Else, if the value of `key` is a keyword:
+      - Let `keyword` be a string which is the result of [rule selection](#rule-selection).
+      - If `keyword` equals `key`, then `key` matches the selector.
+        Append `key` to the end of the `return_value` list.
+   - Else, `key` is not a match.
+     Do not add `key` to `return_value`
+- Return `return_value`
 
 ### Plural/Ordinal Keywords
 The _plural/ordinal keywords_ are: `zero`, `one`, `two`, `few`, `many`, and
 `other`.
-The value `other` is both a valid output of plural or ordinal rule functions
-and a default value.
+The value `other` is both a valid output of [rule selection](#rule-selection)
+and serves a default value.
+
+### Rule Selection
+
+If the option `select` is set to `exact`, rule-based selection is not used.
+Return the empty string.
+
+> [!NOTE]
+> Since keys cannot be the empty string in a numeric selector, returning the
+> empty string disables keyword selection
+
+If the option `select` is set to `plural`, selection should be based on CLDR plural rule data
+of type `cardinal`. See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
+for examples.
+
+If the option `select` is set to `ordinal`, selection should be based on CLDR plural rule data
+of type `ordinal`. See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
+for examples.
+
+Apply the rules defined by CLDR to the resolved value of the operand and return the resulting keyword.
+If no rules match, return `other`.
+
+> **Example.**
+> In CLDR 44, the Czech (`cs`) plural rule set can be found
+> [here](https://www.unicode.org/cldr/charts/44/supplemental/language_plural_rules.html#cs).
+>
+> A message in Czech might be:
+> ```
+> .match {$numDays :number}
+> one  {{{$numDays} den}}
+> few  {{{$numDays} dny}}
+> many {{{$numDays} dne}}
+> *    {{{$numDays} dní}}
+> ```
+> Using the rules found above, the results of various `operand` values might look like:
+> | Operand value | Result |
+> |---|---|
+> | 1 | 1 den |
+> | 2 | 2 dny |
+> | 5 | 5 dní |
+> | 22 | 22 dny |
+> | 27 | 27 dní |
+> | 2.4 | 2,4 dne |
+
+
 
 ### Determining Exact Literal Match
 A numeric literal key value exactly matches the resolved value of an operand as follows:
