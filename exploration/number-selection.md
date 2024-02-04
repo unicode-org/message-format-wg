@@ -235,10 +235,12 @@ but can cause problems in target locales that the original developer is not cons
 When implementing [`MatchSelectorKeys`](spec/formatting.md#resolve-preferences), 
 numeric selectors perform as described below.
 
-- Let `operand` be the resolve value of the _operand_.
-  If the `operand` is not a number type, emit a _Selection Error_.
-- Let `keys` be a list of strings containing keys to match.
 - Let `return_value` be a new empty list of strings.
+- Let `operand` be the resolve value of the _operand_.
+  If the `operand` is not a number type, emit a _Selection Error_
+  and return `return_value`.
+  > This might result in the fallback message (logo) being rendered.
+- Let `keys` be a list of strings containing keys to match.
 - For each string `key` in `keys`, perform a match:
    - If the value of `key` does not match the production `number-literal`
      or is not one of the plural/ordinal keywords, `key` is invalid;
