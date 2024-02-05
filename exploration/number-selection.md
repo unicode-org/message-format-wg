@@ -331,7 +331,7 @@ If two keys have the same parsed literal value, the longest matching keys takes 
 >1.0 {{...}}
 >1   {{...}}
 >one {{...}}
-*>   {{...}}
+>*   {{...}}
 >```
 
 
