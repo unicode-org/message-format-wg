@@ -313,9 +313,9 @@ If no rules match, return `other`.
 
 Number literals in the MessageFormat v2 syntax use the 
 [format defined for a JSON number](https://www.rfc-editor.org/rfc/rfc8259#section-6).
-A numeric literal `key` value exactly matches the resolved vlaue of an `operand` if,
-when the `key` is parsed into a number, the value of the `operand` is equal to that of
-the parsed `key`.
+A numeric literal `key` value exactly matches the resolved value of an `operand` if,
+when the `key` is parsed into a number using this syntax, the value of the `operand` is 
+equal to that of the parsed `key`.
 
 > [!NOTE]
 > This might involve casting or converting the value of the parsed `key` or the `operand`
