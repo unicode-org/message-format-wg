@@ -164,7 +164,8 @@ can be used in _annotations_.
    - `short` (default)
    - `long`
 - `currency`
-   -  (`alpha3` ISO 4217 currency code)
+   - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+     (no default)
 - `currencyDisplay`
    - `symbol` (default)
    - `narrowSymbol`
@@ -179,9 +180,8 @@ can be used in _annotations_.
    - `engineering`
    -  `compact`
 - `numberingSystem`
-   -  (one of the ISO15927 script codes or extensions defined by ICU and/or Intl.NumberFormat
-      e.g. arab arabext bali beng deva fullwide gujr guru hanidec khmr knda laoo latn 
-      limb mlym mong mymr orya tamldec telu thai tibt)
+   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+     (default is locale-specific)
 - `signDisplay`
    -  `auto` (default)
    -  `always`
