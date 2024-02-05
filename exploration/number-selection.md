@@ -313,26 +313,53 @@ If no rules match, return `other`.
 
 Number literals in the MessageFormat v2 syntax use the 
 [format defined for a JSON number](https://www.rfc-editor.org/rfc/rfc8259#section-6).
-A numeric literal `key` value exactly matches the resolved value of an `operand` if,
-when the `key` is parsed into a number using this syntax, the value of the `operand` is 
-equal to that of the parsed `key`.
+The resolved value of an `operand` exactly matches a numeric literal `key`
+if, when the `operand` is serialized using the format for a JSON number
+including the exact number of fraction digits specified by the selector
+function or its options, the two strings are equal.
 
 > [!NOTE]
-> This might involve casting or converting the value of the parsed `key` or the `operand`
-> so that they use the same numeric types when comparing for equality.
-> Implementers should use care to avoid difficulties arising from, for example,
-> loss of precision in certain floating point formats.
+> Implementations are not expected to implement this exactly as written,
+> as there are clearly optimizations that can be applied.
 
-If two keys have the same parsed literal value, the longest matching keys takes priority.
-
->Test case:
->```
->.match {$num :number}
->1.0 {{...}}
->1   {{...}}
->one {{...}}
->*   {{...}}
->```
+> **Examples.**
+> ```
+> .local $num = {|1.0| :number}
+> .match {$num :number}
+> 1     {{Matches}}
+> 1.0   {{Does not match}}
+> 1.00  {{Does not match}}
+>
+> .local $num = {|1.0| :number}
+> .match {$num :number minimumFractionDigits=1}
+> 1     {{Does not match}
+> 1.0   {{Matches}}
+> 1.00  {{Does not match}}
+>
+> .local $num = {|1.0| :number}
+> .match {$num :number minimumFractionDigits=2}
+> 1     {{Does not match}
+> 1.0   {{Does not match}}
+> 1.00  {{Matches}}
+> 
+> .local $num = {|-1.00001| :number}
+> .match {$num :integer}
+> -1     {{Matches}}
+> -1.0   {{Does not match}}
+> -1.00  {{Does not match}}
+>
+> .local $num = {|-1.00001| :number}
+> .match {$num :number minimumFractionDigits=1}
+> -1        {{Does not match}
+> -1.0      {{Matches}}
+> -1.00001  {{Does not match}}
+> 
+> .local $num = {|-1.00001| :number}
+> .match {$num :number}
+> -1        {{Does not match}
+> -1.0      {{Does not match}}
+> -1.00001  {{Matches}}
+> ```
 
 
 ## Alternatives Considered
