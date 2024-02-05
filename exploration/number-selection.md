@@ -310,24 +310,29 @@ If no rules match, return `other`.
 
 
 ### Determining Exact Literal Match
-A numeric literal key value exactly matches the resolved value of an operand as follows:
 
-> this is still in progress, but basically has to consider:
+Number literals in the MessageFormat v2 syntax use the 
+[format defined for a JSON number](https://www.rfc-editor.org/rfc/rfc8259#section-6).
+A numeric literal `key` value exactly matches the resolved vlaue of an `operand` if,
+when the `key` is parsed into a number, the value of the `operand` is equal to that of
+the parsed `key`.
 
-- signs match
-- minimum fraction digits match
-- scientific notation?
-- other formatting gorp doesn't apply (e.g. currency or measure unit)
-- no grouping
+> [!NOTE]
+> This might involve casting or converting the value of the parsed `key` or the `operand`
+> so that they use the same numeric types when comparing for equality.
+> Implementers should use care to avoid difficulties arising from, for example,
+> loss of precision in certain floating point formats.
 
-test case:
-```
-.match {$num :number}
-1.0 {{...}}
-1   {{...}}
-one {{...}}
-*   {{...}}
-```
+If two keys have the same parsed literal value, the longest matching keys takes priority.
+
+>Test case:
+>```
+>.match {$num :number}
+>1.0 {{...}}
+>1   {{...}}
+>one {{...}}
+*>   {{...}}
+>```
 
 
 ## Alternatives Considered
