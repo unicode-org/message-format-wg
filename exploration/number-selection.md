@@ -227,6 +227,8 @@ but can cause problems in target locales that the original developer is not cons
 > .match {$var}
 > 1   {{You have one last chance}}
 > one {{You have {$var} chance remaining}} // needed by languages such as Polish or Russian
+>                                          // such locales typically require other keywords
+>                                          // such as two, few, many, and so forth
 > *   {{You have {$var} chances remaining}}
 > ```
 
