@@ -298,14 +298,14 @@ If no rules match, return `other`.
 > *    {{{$numDays} dní}}
 > ```
 > Using the rules found above, the results of various `operand` values might look like:
-> | Operand value | Result |
+> | Operand value | Keyword | Formatted Message |
 > |---|---|
-> | 1 | 1 den |
-> | 2 | 2 dny |
-> | 5 | 5 dní |
-> | 22 | 22 dny |
-> | 27 | 27 dní |
-> | 2.4 | 2,4 dne |
+> | 1 | `one` | 1 den |
+> | 2 | `few` | 2 dny |
+> | 5 | `other` | 5 dní |
+> | 22 | `few` | 22 dny |
+> | 27 | `other` | 27 dní |
+> | 2.4 | `many` | 2,4 dne |
 
 
 
