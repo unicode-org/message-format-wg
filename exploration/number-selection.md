@@ -299,7 +299,7 @@ If no rules match, return `other`.
 > ```
 > Using the rules found above, the results of various `operand` values might look like:
 > | Operand value | Keyword | Formatted Message |
-> |---|---|
+> |---|---|---|
 > | 1 | `one` | 1 den |
 > | 2 | `few` | 2 dny |
 > | 5 | `other` | 5 dní |
