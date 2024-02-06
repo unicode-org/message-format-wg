@@ -514,7 +514,7 @@ whether an _operand_ is required,
 what form the values of an _operand_ can take,
 what _options_ and _option_ values are valid,
 and what outputs might result.
-See [function registry](./) for more information.
+See [function registry](./registry.md) for more information.
 
 A _function_ starts with a prefix sigil `:` followed by an _identifier_.
 The _identifier_ MAY be followed by one or more _options_.
