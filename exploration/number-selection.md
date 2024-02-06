@@ -127,10 +127,9 @@ The function `:integer` operates identically to `:number`, except:
 
 ### Operands
 
-The operand of a number selector is either a literal that matches the `number-literal`
+The operand of a number function is either a literal that matches the `number-literal`
 production in the [ABNF](/main/spec/message.abnf) and which is parsed by the 
-implementation into a number; or an implementation-defined numeric type; 
-or is some serialization of a number that the implementation recognizes.
+implementation into a number; or an implementation-defined numeric type.
 
 > For example, in Java, any subclass of `java.lang.Number` plus the primitive
 > types (`byte`, `short`, `int`, `long`, `float`, `double`, etc.) 
@@ -147,7 +146,7 @@ a _Selection Error_.
 
 ### Options
 
-All number selectors have the following options internally.
+All number functions have the following options internally.
 Unless otherwise specified in [functions](#functions) all of these options
 can be used in _annotations_.
 
@@ -178,7 +177,7 @@ can be used in _annotations_.
    - `standard` (default)
    - `scientific`
    - `engineering`
-   -  `compact`
+   - `compact`
 - `numberingSystem`
    - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
      (default is locale-specific)
@@ -199,15 +198,15 @@ can be used in _annotations_.
    - `short` (default)
    - `narrow`
 - `minimumIntegerDigits`
-  - (positive integer, default: `1`)
+  - (non-negative integer, default: `1`)
 - `minimumFractionDigits`
-  - (positive integer)
+  - (non-negative integer)
 - `maximumFractionDigits`
-  - (positive integer)
+  - (non-negative integer)
 - `minimumSignificantDigits`
-  - (positive integer)
+  - (non-negative integer)
 - `maximumSignificantDigits`
-  - (positive integer)
+  - (non-negative integer)
 
 
 > [!NOTE]
@@ -241,14 +240,9 @@ numeric selectors perform as described below.
 - Let `operand` be the resolved value of the _operand_.
   If the `operand` is not a number type, emit a _Selection Error_
   and return `return_value`.
-  > This might result in the fallback message (logo) being rendered.
 - Let `keys` be a list of strings containing keys to match.
   (Hint: this list is an argument to `MatchSelectorKeys`)
 - For each string `key` in `keys`:
-   - If the value of `key` does not match the production `number-literal`
-     or is not one of the plural/ordinal keywords, `key` is invalid;
-     emit a _Selection Error_.
-     `key` is not added to the `return_value`.
    - If the value of `key` matches the production `number-literal`:
      - If the parsed value of `key` is an [exact match](#determining-exact-literal-match)
        of the value of the `operand`, then `key` matches the selector.
@@ -257,15 +251,14 @@ numeric selectors perform as described below.
       - Let `keyword` be a string which is the result of [rule selection](#rule-selection).
       - If `keyword` equals `key`, then `key` matches the selector.
         Append `key` to the end of the `return_value` list.
-   - Else, `key` is not a match.
+   - Else, `key` is invalid;
+     emit a _Selection Error_.
      Do not add `key` to `return_value`
 - Return `return_value`
 
 ### Plural/Ordinal Keywords
 The _plural/ordinal keywords_ are: `zero`, `one`, `two`, `few`, `many`, and
 `other`.
-The value `other` is both a valid output of [rule selection](#rule-selection)
-and serves a default value.
 
 ### Rule Selection
 
@@ -313,7 +306,7 @@ If no rules match, return `other`.
 
 ### Determining Exact Literal Match
 
-Number literals in the MessageFormat v2 syntax use the 
+Number literals in the MessageFormat 2 syntax use the 
 [format defined for a JSON number](https://www.rfc-editor.org/rfc/rfc8259#section-6).
 The resolved value of an `operand` exactly matches a numeric literal `key`
 if, when the `operand` is serialized using the format for a JSON number
