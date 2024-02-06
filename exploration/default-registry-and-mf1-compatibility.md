@@ -135,7 +135,7 @@ The following options provide high-level control over date/time formats:
   - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
 - `numberingSystem` (default is locale-specific)
    - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
-- `timezone` (default is system default time zone or UTC)
+- `timeZone` (default is system default time zone or UTC)
   - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
 - `hourCycle` (default is locale-specific)
   - `h11`
