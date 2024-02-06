@@ -282,7 +282,7 @@ or an internally inconsistent set of options.
 > match the expectations of the formatting function:
 >
 > ```
-> {{Hello, {horse :time} is not a date/time value!}}
+> Hello, {horse :time} is not a date/time value!
 > ```
 > Attempting to format a non-numeric string as a number:
 > ```
