@@ -190,10 +190,10 @@ external input value does not appear in a previous _declaration_.
 > than one applied to the same _variable_ named in a _declaration_.
 > For example, this message is _valid_:
 > ```
-> .input {$var :number maxFractionDigits=0}
-> .match {$var :plural maxFractionDigits=2}
+> .input {$var :number maximumFractionDigits=0}
+> .match {$var :plural maximumFractionDigits=2}
 > 0 {{The selector can apply a different annotation to {$var} for the purposes of selection}}
-> * {{A placeholder in a pattern can apply a different annotation to {$var :number maxFractionDigits=3}}}
+> * {{A placeholder in a pattern can apply a different annotation to {$var :number maximumFractionDigits=3}}}
 > ```
 > (See the [Errors](./errors.md) section for examples of invalid messages)
 
@@ -354,8 +354,8 @@ match-statement = match 1*([s] selector)
 >
 > ```
 > .match {$count :number}
-> 1 {{You have one notification.}}
-> * {{You have {$count} notifications.}}
+> one {{You have {$count} notification.}}
+> *   {{You have {$count} notifications.}}
 > ```
 
 > A _message_ containing a _matcher_ formatted on a single line:
@@ -378,8 +378,9 @@ selector = expression
 There MUST be at least one _selector_ in a _matcher_.
 There MAY be any number of additional _selectors_.
 
-> A _message_ with a single _selector_ that uses a custom `:hasCase` _function_,
-> allowing the _message_ to choose a _pattern_ based on grammatical case:
+> A _message_ with a single _selector_ that uses a custom _function_
+> `:hasCase` which is a _selector_ that allows the _message_ to choose a _pattern_
+> based on grammatical case:
 >
 > ```
 > .match {$userName :hasCase}
@@ -391,13 +392,16 @@ There MAY be any number of additional _selectors_.
 > A message with two _selectors_:
 >
 > ```
-> .match {$photoCount :number} {$userGender :equals}
-> 1 masculine {{{$userName} added a new photo to his album.}}
-> 1 feminine  {{{$userName} added a new photo to her album.}}
-> 1 *         {{{$userName} added a new photo to their album.}}
-> * masculine {{{$userName} added {$photoCount} photos to his album.}}
-> * feminine  {{{$userName} added {$photoCount} photos to her album.}}
-> * *         {{{$userName} added {$photoCount} photos to their album.}}
+> .match {$numLikes :number} {$numShares :number}
+> 0   0   {{Your item has no likes and has not been shared.}}
+> 0   one {{Your item has no likes and has been shared {$numShares} time.}}
+> 0   *   {{Your item has no likes and has been shared {$numShares} times.}}
+> one 0   {{Your item has {$numLikes} like and has not been shared.}}
+> one one {{Your item has {$numLikes} like and has been shared {$numShares} time.}}
+> one *   {{Your item has {$numLikes} like and has been shared {$numShares} times.}}
+> *   0   {{Your item has {$numLikes} likes and has not been shared.}}
+> *   one {{Your item has {$numLikes} likes and has been shared {$numShares} time.}}
+> *   *   {{Your item has {$numLikes} likes and has been shared {$numShares} times.}}
 > ```
 
 ### Variant
@@ -527,7 +531,7 @@ function = ":" identifier *(s option)
 > A _message_ with a _function_ operating on the _variable_ `$now`:
 >
 > ```
-> It is now {$now :datetime}
+> {{It is now {$now :datetime}.}}
 > ```
 
 ##### Options
@@ -552,34 +556,18 @@ option = identifier [s] "=" [s] (literal / variable)
 
 > Examples of _functions_ with _options_
 >
-> A _message_ with a `$date` _variable_ formatted with the `:datetime` _function_:
+> A _message_ using the `:datetime` function.
+> The _option_ `weekday` has the literal `long` as its value:
 >
 > ```
-> Today is {$date :datetime weekday=long}.
+> {{Today is {$date :datetime weekday=long}!}}
 > ```
 
-> A _message_ with a `$userName` _variable_ formatted with
-> the custom `:person` _function_ capable of
-> declension (using either a fixed dictionary, algorithmic declension, ML, etc.):
+> A _message_ using the `:datetime` function.
+> The _option_ `weekday` has a variable `$dateStyle` as its value:
 >
 > ```
-> Hello, {$userName :person case=vocative}!
-> ```
-
-> A _message_ with a `$userObj` _variable_ formatted with
-> the custom `:person` _function_ capable of
-> plucking the first name from the object representing a person:
->
-> ```
-> Hello, {$userObj :person firstName=long}!
-> ```
-
-> A _message_ formatted with the custom _function_ `:list`
-> that has an option `maxEntries`
-> that has a _variable_ as its value:
->
-> ```
-> Hello, {$userList :list maxEntries=$maxEntries}!
+> {{Today is {$date :datetime weekday=$dateStyle}!}}
 > ```
 
 #### Private-Use Annotations
@@ -828,7 +816,7 @@ Examples:
 >```
 >This has a {$variable}
 >```
->A function:
+> A function:
 > ```
 > This has a {:function}
 > ```
