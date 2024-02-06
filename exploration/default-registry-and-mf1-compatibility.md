@@ -125,12 +125,12 @@ The following options provide high-level control over date/time formats:
   - `full`
   - `long`
   - `medium`
-  - `short` (default)
+  - `short`
 - `timeStyle`
   - `full`
   - `long`
   - `medium`
-  - `short` (default)
+  - `short`
 - `calendar` (default is locale-specific)
   - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
 - `numberingSystem` (default is locale-specific)
