@@ -63,37 +63,123 @@ Options:
 
 (When no default is given, the default depends on the locale or implementation)
 
+---
+
 ### Dates and Times
 
-Function name: `:datetime`
+This subsection describes the functions and options for date/time formatting.
 
-Aliases:
-- `:date` (with `style=...` option corresponding to `:datetime dateStyle=...`)
-- `:time` (with `style=...` option corresponding to `:datetime timeStyle=...`)
+#### Functions
 
-Operand: "iso8601"
+Dates and times have the following functions:
 
-Options:
-- `dateStyle` (`full` `long` `medium` `short`)
-- `timeStyle` (`full` `long` `medium` `short`)
-- `calendar` (buddhist chinese coptic dangi ethioaa ethiopic gregory hebrew indian islamic islamic-umalqura 
-   islamic-tbla islamic-civil islamic-rgsa iso8601 japanese persian roc)
-- `numberingSystem` (arab arabext bali beng deva fullwide gujr guru hanidec khmr knda laoo latn 
-   limb mlym mong mymr orya tamldec telu thai tibt)
-- `timezone` (tzid)
-- `hourCycle` (`h11` `h12` `h23` `h24`)
-- `weekday` (`long` `short` `narrow`)
-- `era` (`long` `short` `narrow`)
-- `year` (`numeric` `2-digit`)
-- `month` (`numeric` `2-digit` `long` `short` `narrow`)
-- `day` (`numeric` `2-digit`)
-- `hour` (`numeric` `2-digit`)
-- `minute` (`numeric` `2-digit`)
-- `second` (`numeric` `2-digit`)
-- `fractionalSecondDigits` (`1`, `2`, `3`)
-- `timeZoneName` (`long` `short` `shortOffset` `longOffset` `shortGeneric` `longGeneric`)
+- `:datetime`
+  - defaults to `dateStyle=short timeStyle=short`
+- `:date`
+  - defaults to `dateStyle=short`
+  - Does not permit any of these options:
+    - `timeStyle`
+    - `hour`
+    - `minute`
+    - `second`
+    - `fractionalSecondDigits`
+    - `hourCycle`
+- `:time`
+  - defaults to `timeStyle=short`
+  - Does not permit any of these options:
+    - `dateStyle`
+    - `weekday`
+    - `era`
+    - `year`
+    - `month`
+    - `day`
 
-(When no default is given, the default depends on the locale or implementation)
+#### Operands
+
+> [!IMPORTANT]
+> The list of serializations needs more work.
+
+The operand of a date/time function is either a literal that any of the serializations 
+defined by RFC3339 or SEDATE and which is parsed by the 
+implementation into an implementation defined date/time type; 
+or any implementation-defined date/time types.
+
+#### Options
+
+The following options provide high-level control over date/time formats:
+- `dateStyle`
+  - `full`
+  - `long`
+  - `medium`
+  - `short` (default)
+- `timeStyle`
+  - `full`
+  - `long`
+  - `medium`
+  - `short` (default)
+- `calendar` (default is locale-specific)
+  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
+- `numberingSystem` (default is locale-specific)
+   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+- `timezone` (default is system default time zone or UTC)
+  - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
+- `hourCycle` (default is locale-specific)
+  - `h11`
+  - `h12`
+  - `h23`
+  - `h24`
+ 
+The following options are used to construct date/time formats in a manner analogous to skeletons. 
+They do not have default values because the value must be specified.
+- `weekday`
+  - `long`
+  - `short`
+  - `narrow`
+- `era`
+  - `long`
+  - `short`
+  - `narrow`
+- `year`
+  - `numeric`
+  - `2-digit`
+- `month`
+  - `numeric`
+  - `2-digit`
+  - `long`
+  - `short`
+  - `narrow`
+- `day`
+  - `numeric`
+  - `2-digit`
+- `hour`
+  - `numeric`
+  - `2-digit`
+- `minute`
+  - `numeric`
+  - `2-digit`
+- `second`
+  - `numeric`
+  - `2-digit`
+- `fractionalSecondDigits`
+  - `1`
+  - `2`
+  - `3`
+- `timeZoneName`
+  - `long`
+  - `short`
+  - `shortOffset`
+  - `longOffset`
+  - `shortGeneric`
+  - `longGeneric`
+
+#### Selection
+
+Selection based on date/time types is not required by MFv2.
+Implementations should use care when defining selectors based on date/time types.
+The types of queries found in implementations such as `java.time.TemporalAccessor`
+are complex and user expectations may be inconsistent with good I18N practices.
+
+---
 
 ### Strings
 
