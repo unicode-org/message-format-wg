@@ -96,13 +96,27 @@ Dates and times have the following functions:
 
 #### Operands
 
-> [!IMPORTANT]
-> The list of serializations needs more work.
+The operand of a date/time function is either 
+an implementation-defined date/time type (passed in as an argument)
+or a literal that can be parsed to an implementation-defined date/time type.
 
-The operand of a date/time function is either a literal that any of the serializations 
-defined by RFC3339 or SEDATE and which is parsed by the 
-implementation into an implementation defined date/time type; 
-or any implementation-defined date/time types.
+Date/time literals are required to be an XMLSchema 
+[dateTime](https://www.w3.org/TR/xmlschema11-2/#dateTime),
+[time](https://www.w3.org/TR/xmlschema11-2/#time),
+or [date](https://www.w3.org/TR/xmlschema11-2/#date).
+The `timezoneOffset` of each of these formats is optional. 
+When the offset is not present, conversion to incremental time types is required
+to treat the offset identically to UTC.
+Conversion of such values to floating time types
+(such as Java's `java.time.LocalDateTime`) should omit time zone.
+For more information, see [Working with Timezones](https://w3c.github.io/timezone).
+
+> [!NOTE]
+> True time zone support in serializations is expected to coincide with the adoption
+> of Temporal in JavaScript.
+> The form of these serializations is known and is a de facto standard.
+> Support for these extensions is expected to be required in the post-tech preview.
+> See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
 
 #### Options
 
