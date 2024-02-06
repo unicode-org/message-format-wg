@@ -560,14 +560,14 @@ option = identifier [s] "=" [s] (literal / variable)
 > The _option_ `weekday` has the literal `long` as its value:
 >
 > ```
-> {{Today is {$date :datetime weekday=long}!}}
+> Today is {$date :datetime weekday=long}!
 > ```
 
 > A _message_ using the `:datetime` function.
 > The _option_ `weekday` has a variable `$dateStyle` as its value:
 >
 > ```
-> {{Today is {$date :datetime weekday=$dateStyle}!}}
+> Today is {$date :datetime weekday=$dateStyle}!
 > ```
 
 #### Private-Use Annotations
@@ -814,7 +814,7 @@ Otherwise, the set of characters allowed in a _name_ is large.
 Examples:
 > A variable:
 >```
->This has a {$variable}
+> This has a {$variable}
 >```
 > A function:
 > ```
