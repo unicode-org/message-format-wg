@@ -133,7 +133,7 @@ implementation into a number; or an implementation-defined numeric type;
 or is some serialization of a number that the implementation recognizes.
 
 > For example, in Java, any subclass of `java.lang.Number` plus the primitive
-> types (`boolean`, `byte`, `short`, `int`, `long`, `float`, `double`, etc.) 
+> types (`byte`, `short`, `int`, `long`, `float`, `double`, etc.) 
 > might be considered as the "implementation-defined numeric types".
 > Implementations in other programming languages would define different types
 > or classes according to their local needs.
