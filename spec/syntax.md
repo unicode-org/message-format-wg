@@ -531,7 +531,7 @@ function = ":" identifier *(s option)
 > A _message_ with a _function_ operating on the _variable_ `$now`:
 >
 > ```
-> {{It is now {$now :datetime}.}}
+> It is now {$now :datetime}.
 > ```
 
 ##### Options
