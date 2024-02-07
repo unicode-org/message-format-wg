@@ -88,9 +88,11 @@ If no options are specified, each of the functions defaults to the following:
 
 #### Operands
 
-The operand of a date/time function is either 
+The _operand_ of a date/time function is either 
 an implementation-defined date/time type (passed in as an argument)
 or a _date/time literal value_, as defined below.
+All other _operand_ values produce a _Selection Error_ when evaluated for selection
+or a _Formatting Error_ when formatting the value.
 
 A **_<dfn>date/time literal value</dfn>_** is a non-empty string consisting of 
 one of the following:
@@ -104,7 +106,7 @@ When the offset is not present, implementations should use a floating time type
 For more information, see [Working with Timezones](https://w3c.github.io/timezone).
 
 > [!IMPORTANT]
-> The [ABNF](./spec/message.abnf) and [syntax](./spec/syntax.md) of MFv2
+> The [ABNF](/main/spec/message.abnf) and [syntax](/main/spec/syntax.md) of MFv2
 > do not formally define date/time literals. 
 > This means that a _message_ can be syntactically valid but produce
 > runtime errors due to what amounts to a "type mismatch".
