@@ -318,7 +318,8 @@ Number literals in the MessageFormat 2 syntax use the
 [format defined for a JSON number](https://www.rfc-editor.org/rfc/rfc8259#section-6).
 The resolved value of an `operand` exactly matches a numeric literal `key`
 if, when the `operand` is serialized using the format for a JSON number
-including the exact number of fraction digits specified by the selector
+including the exact number of fraction digits 
+and the exact number of significant digits specified by the selector
 function or its options, the two strings are equal.
 
 > [!NOTE]
@@ -362,6 +363,18 @@ function or its options, the two strings are equal.
 > -1        {{Does not match}
 > -1.0      {{Does not match}}
 > -1.00001  {{Matches}}
+>
+> .local $num = {|-1.00001|}
+> .match {$num :number maximumSignificantDigits=1}
+> -1        {{Matches}}
+> -1.0      {{Does not match}}
+> -1.00001  {{Does not match}}
+>
+> .local $num = {1.3}
+> .match {$num :number minimumSignificantDigits=3}
+> 1    {{Does not match}}
+> 1.3  {{Does not match}}
+> 1.30 {{Matches}}
 > ```
 
 
