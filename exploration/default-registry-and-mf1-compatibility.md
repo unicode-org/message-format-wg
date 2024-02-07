@@ -71,28 +71,20 @@ This subsection describes the functions and options for date/time formatting.
 
 #### Functions
 
-Dates and times have the following functions:
+Functions for formatting [date/time values](#operands) in the default registry are:
 
 - `:datetime`
-  - defaults to `dateStyle=short timeStyle=short`
 - `:date`
-  - defaults to `dateStyle=short`
-  - Does not permit any of these options:
-    - `timeStyle`
-    - `hour`
-    - `minute`
-    - `second`
-    - `fractionalSecondDigits`
-    - `hourCycle`
 - `:time`
-  - defaults to `timeStyle=short`
-  - Does not permit any of these options:
-    - `dateStyle`
-    - `weekday`
-    - `era`
-    - `year`
-    - `month`
-    - `day`
+
+If no options are specified, each of the functions defaults to the following:
+- `{$d :datetime}` is the same as `{$d :datetime dateStyle=short timeStyle=short}`
+- `{$d :date}` is the same as `{$d :date style=short}`
+- `{$t :time}` is the same as `{$t :time style=short}`
+
+> [!NOTE]
+> Pattern selection based on date/time values is a complex topic and no support for this
+> is required in this release.
 
 #### Operands
 
@@ -139,7 +131,21 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 
 #### Options
 
-The following options provide high-level control over date/time formats:
+All date/time functions support the following options, which 
+provide high-level control over date/time formats:
+- `calendar` (default is locale-specific)
+  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
+- `numberingSystem` (default is locale-specific)
+   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+- `timeZone` (default is system default time zone or UTC)
+  - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
+
+In addition to the above high-level options, a function can use either the appropriate
+_style_ options for that function
+or can use a collection of _field options_ (but not both) to control the formatted 
+output.
+
+The function `:datetime` has these function-specific _style_ options.
 - `dateStyle`
   - `full`
   - `long`
@@ -150,20 +156,33 @@ The following options provide high-level control over date/time formats:
   - `long`
   - `medium`
   - `short`
-- `calendar` (default is locale-specific)
-  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
-- `numberingSystem` (default is locale-specific)
-   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
-- `timeZone` (default is system default time zone or UTC)
-  - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
-- `hourCycle` (default is locale-specific)
-  - `h11`
-  - `h12`
-  - `h23`
-  - `h24`
- 
-The following options are used to construct date/time formats in a manner analogous to skeletons. 
-They do not have default values because the value must be specified.
+
+The function `:date` has these function-specific _style_ options:
+- `style`
+  - `full`
+  - `long`
+  - `medium`
+  - `short`
+
+The function `:time` has these function-specific _style_ options:
+- `style`
+  - `full`
+  - `long`
+  - `medium`
+  - `short`
+
+The _field_ options are defined as follows:
+
+All functions have the following option:
+- `timeZoneName`
+  - `long`
+  - `short`
+  - `shortOffset`
+  - `longOffset`
+  - `shortGeneric`
+  - `longGeneric`
+
+The functions `:datetime` and `:date` have the following options:
 - `weekday`
   - `long`
   - `short`
@@ -184,6 +203,8 @@ They do not have default values because the value must be specified.
 - `day`
   - `numeric`
   - `2-digit`
+ 
+The functions `:datetime` and `:time` have the following options:
 - `hour`
   - `numeric`
   - `2-digit`
@@ -197,13 +218,12 @@ They do not have default values because the value must be specified.
   - `1`
   - `2`
   - `3`
-- `timeZoneName`
-  - `long`
-  - `short`
-  - `shortOffset`
-  - `longOffset`
-  - `shortGeneric`
-  - `longGeneric`
+- `hourCycle` (default is locale-specific)
+  - `h11`
+  - `h12`
+  - `h23`
+  - `h24`
+
 
 #### Selection
 
