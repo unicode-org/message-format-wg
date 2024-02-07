@@ -63,37 +63,178 @@ Options:
 
 (When no default is given, the default depends on the locale or implementation)
 
+---
+
 ### Dates and Times
 
-Function name: `:datetime`
+This subsection describes the functions and options for date/time formatting.
 
-Aliases:
-- `:date` (with `style=...` option corresponding to `:datetime dateStyle=...`)
-- `:time` (with `style=...` option corresponding to `:datetime timeStyle=...`)
+#### Functions
 
-Operand: "iso8601"
+Functions for formatting [date/time values](#operands) in the default registry are:
 
-Options:
-- `dateStyle` (`full` `long` `medium` `short`)
-- `timeStyle` (`full` `long` `medium` `short`)
-- `calendar` (buddhist chinese coptic dangi ethioaa ethiopic gregory hebrew indian islamic islamic-umalqura 
-   islamic-tbla islamic-civil islamic-rgsa iso8601 japanese persian roc)
-- `numberingSystem` (arab arabext bali beng deva fullwide gujr guru hanidec khmr knda laoo latn 
-   limb mlym mong mymr orya tamldec telu thai tibt)
-- `timezone` (tzid)
-- `hourCycle` (`h11` `h12` `h23` `h24`)
-- `weekday` (`long` `short` `narrow`)
-- `era` (`long` `short` `narrow`)
-- `year` (`numeric` `2-digit`)
-- `month` (`numeric` `2-digit` `long` `short` `narrow`)
-- `day` (`numeric` `2-digit`)
-- `hour` (`numeric` `2-digit`)
-- `minute` (`numeric` `2-digit`)
-- `second` (`numeric` `2-digit`)
-- `fractionalSecondDigits` (`1`, `2`, `3`)
-- `timeZoneName` (`long` `short` `shortOffset` `longOffset` `shortGeneric` `longGeneric`)
+- `:datetime`
+- `:date`
+- `:time`
 
-(When no default is given, the default depends on the locale or implementation)
+If no options are specified, each of the functions defaults to the following:
+- `{$d :datetime}` is the same as `{$d :datetime dateStyle=short timeStyle=short}`
+- `{$d :date}` is the same as `{$d :date style=short}`
+- `{$t :time}` is the same as `{$t :time style=short}`
+
+> [!NOTE]
+> Pattern selection based on date/time values is a complex topic and no support for this
+> is required in this release.
+
+#### Operands
+
+The _operand_ of a date/time function is either 
+an implementation-defined date/time type (passed in as an argument)
+or a _date/time literal value_, as defined below.
+All other _operand_ values produce a _Selection Error_ when evaluated for selection
+or a _Formatting Error_ when formatting the value.
+
+A **_<dfn>date/time literal value</dfn>_** is a non-empty string consisting of 
+one of the following:
+- an XMLSchema 1.1 [dateTime](https://www.w3.org/TR/xmlschema11-2/#dateTime)
+- an XMLSchema 1.1 [time](https://www.w3.org/TR/xmlschema11-2/#time)
+- an XMLSchema 1.1 [date](https://www.w3.org/TR/xmlschema11-2/#date)
+
+The `timezoneOffset` of each of these formats is optional. 
+When the offset is not present, implementations should use a floating time type
+(such as Java's `java.time.LocalDateTime`) to represent the time value.
+For more information, see [Working with Timezones](https://w3c.github.io/timezone).
+
+> [!IMPORTANT]
+> The [ABNF](/main/spec/message.abnf) and [syntax](/main/spec/syntax.md) of MFv2
+> do not formally define date/time literals. 
+> This means that a _message_ can be syntactically valid but produce
+> runtime errors due to what amounts to a "type mismatch".
+
+> [!NOTE]
+> String values passed as variables in the _formatting context_'s
+> _input mapping_ can be formatted as date/time values as long as their
+> contents are date/time literals.
+>
+> For example, if the value of the variable `now` were the string
+> `2024-02-06T16:40:00Z`, it would behave identically to the local
+> variable in this example:
+> ```
+> .local $example = {|2024-02-06T16:40:00Z| :datetime}
+> {{{$now :datetime} == {$example}}}
+> ```
+
+> [!NOTE]
+> True time zone support in serializations is expected to coincide with the adoption
+> of Temporal in JavaScript.
+> The form of these serializations is known and is a de facto standard.
+> Support for these extensions is expected to be required in the post-tech preview.
+> See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
+
+#### Options
+
+All date/time functions support the following options, which 
+provide high-level control over date/time formats:
+- `calendar` (default is locale-specific)
+  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
+- `numberingSystem` (default is locale-specific)
+   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+- `timeZone` (default is system default time zone or UTC)
+  - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
+
+In addition to the above high-level options, a function can use either the appropriate
+_style_ options for that function
+or can use a collection of _field options_ (but not both) to control the formatted 
+output.
+
+The function `:datetime` has these function-specific _style_ options.
+- `dateStyle`
+  - `full`
+  - `long`
+  - `medium`
+  - `short`
+- `timeStyle`
+  - `full`
+  - `long`
+  - `medium`
+  - `short`
+
+The function `:date` has these function-specific _style_ options:
+- `style`
+  - `full`
+  - `long`
+  - `medium`
+  - `short`
+
+The function `:time` has these function-specific _style_ options:
+- `style`
+  - `full`
+  - `long`
+  - `medium`
+  - `short`
+
+The _field_ options are defined as follows:
+
+All functions have the following option:
+- `timeZoneName`
+  - `long`
+  - `short`
+  - `shortOffset`
+  - `longOffset`
+  - `shortGeneric`
+  - `longGeneric`
+
+The functions `:datetime` and `:date` have the following options:
+- `weekday`
+  - `long`
+  - `short`
+  - `narrow`
+- `era`
+  - `long`
+  - `short`
+  - `narrow`
+- `year`
+  - `numeric`
+  - `2-digit`
+- `month`
+  - `numeric`
+  - `2-digit`
+  - `long`
+  - `short`
+  - `narrow`
+- `day`
+  - `numeric`
+  - `2-digit`
+ 
+The functions `:datetime` and `:time` have the following options:
+- `hour`
+  - `numeric`
+  - `2-digit`
+- `minute`
+  - `numeric`
+  - `2-digit`
+- `second`
+  - `numeric`
+  - `2-digit`
+- `fractionalSecondDigits`
+  - `1`
+  - `2`
+  - `3`
+- `hourCycle` (default is locale-specific)
+  - `h11`
+  - `h12`
+  - `h23`
+  - `h24`
+
+
+#### Selection
+
+Selection based on date/time types is not required by MFv2.
+Implementations should use care when defining selectors based on date/time types.
+The types of queries found in implementations such as `java.time.TemporalAccessor`
+are complex and user expectations may be inconsistent with good I18N practices.
+
+---
 
 ### Strings
 
