@@ -131,12 +131,11 @@ its resolved value is defined according to the implementation's specification.
 Else, if the _expression_ contains an _annotation_,
 its resolved value is defined by _function resolution_.
 
-Else, the _expression_ will contain only either a _literal_ or a _variable_.
-
-If the _expression_ consists of a _variable_,
+Else, if the _expression_ consists of a _variable_,
 its resolved value is defined by _variable resolution_.
 An implementation MAY perform additional processing
-when resolving the value of the _expression_.
+when resolving the value of an _expression_
+that consists only of a _variable_.
 
 > For example, it could apply _function resolution_ using a _function_
 > and a set of _options_ chosen based on the value or type of the _variable_.
@@ -151,8 +150,8 @@ when resolving the value of the _expression_.
 > the implementation could interpret the _placeholder_ `{$date}` as if
 > the pattern included the function `:datetime` with some set of default options.
 
-Else, if the _expression_ consists of a _literal_,
-its resolved value is defined by _literal resolution_.
+Else, the _expression_ consists of a _literal_.
+Its resolved value is defined by _literal resolution_.
 
 > **Note**
 > This means that a _literal_ value with no _annotation_
