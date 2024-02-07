@@ -284,7 +284,8 @@ If the option `select` is set to `ordinal`, selection should be based on CLDR pl
 of type `ordinal`. See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
 for examples.
 
-Apply the rules defined by CLDR to the resolved value of the operand and return the resulting keyword.
+Apply the rules defined by CLDR to the resolved value of the operand and the function options,
+and return the resulting keyword.
 If no rules match, return `other`.
 
 > **Example.**
