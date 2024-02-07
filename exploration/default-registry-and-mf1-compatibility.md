@@ -106,7 +106,7 @@ When the offset is not present, implementations should use a floating time type
 For more information, see [Working with Timezones](https://w3c.github.io/timezone).
 
 > [!IMPORTANT]
-> The [ABNF](/main/spec/message.abnf) and [syntax](/main/spec/syntax.md) of MFv2
+> The [ABNF](/spec/message.abnf) and [syntax](/spec/syntax.md) of MFv2
 > do not formally define date/time literals. 
 > This means that a _message_ can be syntactically valid but produce
 > runtime errors due to what amounts to a "type mismatch".
