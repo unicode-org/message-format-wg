@@ -150,7 +150,7 @@ that consists only of a _variable_.
 > the implementation could interpret the _placeholder_ `{$date}` as if
 > the pattern included the function `:datetime` with some set of default options.
 
-Else, the _expression_ must consist of a _literal_.
+Else, the _expression_ consists of a _literal_.
 Its resolved value is defined by _literal resolution_.
 
 > **Note**
