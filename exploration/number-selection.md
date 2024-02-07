@@ -127,9 +127,10 @@ The function `:integer` operates identically to `:number`, except:
 
 ### Operands
 
-The operand of a number function is either a literal that matches the `number-literal`
-production in the [ABNF](/main/spec/message.abnf) and which is parsed by the 
-implementation into a number; or an implementation-defined numeric type.
+The _operand_ of a number function is either an implementation-defined numeric type or
+a literal that matches the `number-literal` production in the [ABNF](/main/spec/message.abnf).
+All other values produce a _Selection Error_ when evaluated for selection
+or a _Formatting Error_ when attempting to format the value.
 
 > For example, in Java, any subclass of `java.lang.Number` plus the primitive
 > types (`byte`, `short`, `int`, `long`, `float`, `double`, etc.) 
@@ -137,12 +138,18 @@ implementation into a number; or an implementation-defined numeric type.
 > Implementations in other programming languages would define different types
 > or classes according to their local needs.
 
-Implementations MUST treat literals that do not match `number-literal` as
-non-numeric string literals.
-Non-numeric values, including non-numeric string literals, result in
-a _Selection Error_.
-
-> _Ed note:_ Alternatively we can require that non-numeric values result in `*`
+> [!NOTE]
+> String values passed as variables in the _formatting context_'s
+> _input mapping_ can be formatted as numeric values as long as their
+> contents match the `number-literal` production in the [ABNF](/main/spec/message.abnf).
+>
+> For example, if the value of the variable `num` were the string
+> `-1234.567`, it would behave identically to the local
+> variable in this example:
+> ```
+> .local $example = {|-1234.567| :number}
+> {{{$num :number} == {$example}}}
+> ```
 
 ### Options
 
