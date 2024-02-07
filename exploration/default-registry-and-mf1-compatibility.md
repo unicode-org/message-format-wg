@@ -98,18 +98,37 @@ Dates and times have the following functions:
 
 The operand of a date/time function is either 
 an implementation-defined date/time type (passed in as an argument)
-or a literal that can be parsed to an implementation-defined date/time type.
+or a _date/time literal value_, as defined below.
 
-Date/time literals are required to be an XMLSchema 
-[dateTime](https://www.w3.org/TR/xmlschema11-2/#dateTime),
-[time](https://www.w3.org/TR/xmlschema11-2/#time),
-or [date](https://www.w3.org/TR/xmlschema11-2/#date).
+A **_<dfn>date/time literal value</dfn>_** is a non-empty string consisting of 
+one of the following:
+- an XMLSchema 1.1 [dateTime](https://www.w3.org/TR/xmlschema11-2/#dateTime)
+- an XMLSchema 1.1 [time](https://www.w3.org/TR/xmlschema11-2/#time)
+- an XMLSchema 1.1 [date](https://www.w3.org/TR/xmlschema11-2/#date)
+
 The `timezoneOffset` of each of these formats is optional. 
-When the offset is not present, conversion to incremental time types is required
-to treat the offset identically to UTC.
-Conversion of such values to floating time types
-(such as Java's `java.time.LocalDateTime`) should omit time zone.
+When the offset is not present, implementations should use a floating time type
+(such as Java's `java.time.LocalDateTime`) to represent the time value.
 For more information, see [Working with Timezones](https://w3c.github.io/timezone).
+
+> [!IMPORTANT]
+> The [ABNF](./spec/message.abnf) and [syntax](./spec/syntax.md) of MFv2
+> do not formally define date/time literals. 
+> This means that a _message_ can be syntactically valid but produce
+> runtime errors due to what amounts to a "type mismatch".
+
+> [!NOTE]
+> String values passed as variables in the _formatting context_'s
+> _input mapping_ can be formatted as date/time values as long as their
+> contents are date/time literals.
+>
+> For example, if the value of the variable `now` were the string
+> `2024-02-06T16:40:00Z`, it would behave identically to the local
+> variable in this example:
+> ```
+> .local $example = {|2024-02-06T16:40:00Z| :datetime}
+> {{{$now :datetime} == {$example}}}
+> ```
 
 > [!NOTE]
 > True time zone support in serializations is expected to coincide with the adoption
