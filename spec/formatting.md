@@ -237,8 +237,17 @@ the following steps are taken:
 
 5. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
+
    If the call fails or does not return a valid value,
-   emit a _Resolution Error_ and use a _fallback value_ for the _expression_.
+   emit a _Invalid Expression_ error.
+
+   Implementations MAY provide a mechanism for the _function_ to provide
+   additional detail about internal failures.
+   Specifically, if the cause of the failure was that the datatype, value, or format of the
+   _operand_ did not match that expected by the _function_,
+   the _function_ might cause a _Type Mismatch Error_ to be emitted.
+  
+   In all failure cases, use the _fallback value_ for the _expression_ as the resolved value.
 
 #### Option Resolution
 
