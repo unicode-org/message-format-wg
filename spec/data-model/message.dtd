@@ -24,8 +24,8 @@
 <!ELEMENT pattern (#PCDATA | expression | markup)*>
 
 <!ELEMENT expression (
-  ((literal | variable), (functionAnnotation | unsupportedAnnotation)?, attribute*) |
-  ((functionAnnotation | unsupportedAnnotation), attribute*)
+  ((literal | variable), (functionAnnotation | unsupportedAnnotation)?) |
+  functionAnnotation | unsupportedAnnotation
 )>
 
 <!ELEMENT literal (#PCDATA)>
@@ -43,11 +43,8 @@
 <!ELEMENT unsupportedAnnotation (#PCDATA)>
 <!ATTLIST unsupportedAnnotation sigil CDATA #REQUIRED>
 
-<!ELEMENT attribute (literal | variable)?>
-<!ATTLIST attribute name NMTOKEN #REQUIRED>
-
 <!-- A <markup kind="close"> MUST NOT contain any <option> elements -->
-<!ELEMENT markup (option*, attribute*)>
+<!ELEMENT markup (option)*>
 <!ATTLIST markup
   kind (open | standalone | close) #REQUIRED
   name NMTOKEN #REQUIRED

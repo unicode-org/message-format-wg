@@ -38,22 +38,6 @@
         "required": ["name", "value"]
       }
     },
-    "attributes": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "value": {
-            "oneOf": [
-              { "$ref": "#/$defs/literal" },
-              { "$ref": "#/$defs/variable" }
-            ]
-          }
-        },
-        "required": ["name"]
-      }
-    },
 
     "function-annotation": {
       "type": "object",
@@ -87,8 +71,7 @@
       "properties": {
         "type": { "const": "expression" },
         "arg": { "$ref": "#/$defs/literal" },
-        "annotation": { "$ref": "#/$defs/annotation" },
-        "attributes": { "$ref": "#/$defs/attributes" }
+        "annotation": { "$ref": "#/$defs/annotation" }
       },
       "required": ["type", "arg"]
     },
@@ -97,8 +80,7 @@
       "properties": {
         "type": { "const": "expression" },
         "arg": { "$ref": "#/$defs/variable" },
-        "annotation": { "$ref": "#/$defs/annotation" },
-        "attributes": { "$ref": "#/$defs/attributes" }
+        "annotation": { "$ref": "#/$defs/annotation" }
       },
       "required": ["type", "arg"]
     },
@@ -106,8 +88,7 @@
       "type": "object",
       "properties": {
         "type": { "const": "expression" },
-        "annotation": { "$ref": "#/$defs/function-annotation" },
-        "attributes": { "$ref": "#/$defs/attributes" }
+        "annotation": { "$ref": "#/$defs/function-annotation" }
       },
       "required": ["type", "annotation"]
     },
@@ -115,8 +96,7 @@
       "type": "object",
       "properties": {
         "type": { "const": "expression" },
-        "annotation": { "$ref": "#/$defs/unsupported-annotation" },
-        "attributes": { "$ref": "#/$defs/attributes" }
+        "annotation": { "$ref": "#/$defs/unsupported-annotation" }
       },
       "required": ["type", "annotation"]
     },
@@ -135,8 +115,7 @@
         "type": { "const": "markup" },
         "kind": { "const": "open" },
         "name": { "type": "string" },
-        "options": { "$ref": "#/$defs/options" },
-        "attributes": { "$ref": "#/$defs/attributes" }
+        "options": { "$ref": "#/$defs/options" }
       },
       "required": ["type", "kind", "name"]
     },
@@ -146,8 +125,7 @@
         "type": { "const": "markup" },
         "kind": { "const": "standalone" },
         "name": { "type": "string" },
-        "options": { "$ref": "#/$defs/options" },
-        "attributes": { "$ref": "#/$defs/attributes" }
+        "options": { "$ref": "#/$defs/options" }
       },
       "required": ["type", "kind", "name"]
     },
@@ -156,8 +134,7 @@
       "properties": {
         "type": { "const": "markup" },
         "kind": { "const": "close" },
-        "name": { "type": "string" },
-        "attributes": { "$ref": "#/$defs/attributes" }
+        "name": { "type": "string" }
       },
       "required": ["type", "kind", "name"]
     },
