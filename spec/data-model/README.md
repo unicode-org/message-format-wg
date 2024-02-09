@@ -136,28 +136,28 @@ interface LiteralExpression {
   type: "expression";
   arg: Literal;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
-  attributes?: Attribute[];
+  attributes: Attribute[];
 }
 
 interface VariableExpression {
   type: "expression";
   arg: VariableRef;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
-  attributes?: Attribute[];
+  attributes: Attribute[];
 }
 
 interface FunctionExpression {
   type: "expression";
   arg?: never;
   annotation: FunctionAnnotation;
-  attributes?: Attribute[];
+  attributes: Attribute[];
 }
 
 interface UnsupportedExpression {
   type: "expression";
   arg?: never;
   annotation: UnsupportedAnnotation;
-  attributes?: Attribute[];
+  attributes: Attribute[];
 }
 
 interface Attribute {
@@ -199,7 +199,7 @@ Each _option_ is represented by an `Option`.
 interface FunctionAnnotation {
   type: "function";
   name: string;
-  options?: Option[];
+  options: Option[];
 }
 
 interface Option {
@@ -250,23 +250,23 @@ interface MarkupOpen {
   type: "markup";
   kind: "open";
   name: string;
-  options?: Option[];
-  attributes?: Attribute[];
+  options: Option[];
+  attributes: Attribute[];
 }
 
 interface MarkupStandalone {
   type: "markup";
   kind: "standalone";
   name: string;
-  options?: Option[];
-  attributes?: Attribute[];
+  options: Option[];
+  attributes: Attribute[];
 }
 
 interface MarkupClose {
   type: "markup";
   kind: "close";
   name: string;
-  attributes?: Attribute[];
+  attributes: Attribute[];
 }
 ```
 
