@@ -117,7 +117,16 @@ The function `:plural` operates identically to `:number`, except:
 
 The function `:ordinal` operates identically to `:number`, except:
 - the `select` type of this selector is always `ordinal`
-  (This function is valid as a formatter)
+- formatting behavior of this function is implementation defined
+
+> [!NOTE]
+> CLDR data has known shortcomings related to automatic formatting
+> of numbers as ordinals.
+> The default registry does not require implementations to support
+> formatting of numeric values as ordinals.
+> Users are cautioned to avoid using `:ordinal` for formatting in this release
+> in cases where message portability is a concern,
+> as many implementations will emit an error.
 
 The function `:integer` operates identically to `:number`, except:
 - the `minimumFractionDigits` and `maximumFractionDigits` options
@@ -375,6 +384,12 @@ function or its options, the two strings are equal.
 > 1    {{Does not match}}
 > 1.3  {{Does not match}}
 > 1.30 {{Matches}}
+>
+> .local $num = {1234}
+> .match {$num :number maximumSignificantDigits=2}
+> 1200   {{Matches}}
+> 1234   {{Does not match}}
+> 1200.0 {{Does not match}}
 > ```
 
 
