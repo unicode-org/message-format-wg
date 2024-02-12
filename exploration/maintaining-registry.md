@@ -30,18 +30,32 @@ _What context is helpful to understand this proposal?_
 
 MessageFormat v2 envisions providing a "default registry" that all conformant
 implementations are required to implement.
+Our goal is to be as universal as possible, 
+making MFv2's message syntax available to developers in many different
+runtimes in a wholly consistent manner.
 Because we want broad adoption in many different programming environments
-and because the capabilities and functionality available in this vary widely,
+and because the capabilities 
+and functionality available in these environments varies widely,
 the default function registry must be conservative in what it required.
 
 At the same time, we want to promote message interoperability.
-When a feature can be adopted by many (but not all) platforms,
+Even though a feature cannot be adopted by all platforms,
 diversity in the function names, operands, options, error behavior,
-and so forth is undesirable.
-This suggests that there exist a registry at a lower level of normativeness.
+and so forth remains undesirable.
+This suggests that there exist a registry at a lower level of normativeness
+with "templates" for functions that implementations can implement 
+when they have the wherewithal to support them.
+
+An example of this might be "personal name formatting",
+whose functionality is new in CLDR and ICU.
+Few if any non-ICU implementations are currently prepared to implement
+a function such as `:person`
+and implementation and usage experience is limited in ICU.
+Where functionality is made available, we don't want it to vary from
+platform to platform.
 
 Finally, we need to establish mechanisms for managing proposals
-for either of these registries.
+for the various types of function registry.
 
 ## Use-Cases
 
@@ -70,7 +84,9 @@ There would be three levels of expected maturity:
   Such entries will be limited in scope to functions that can be
   implemented in nearly any programming environment.
   > Examples: `:string`, `:number`, `:date`
-- **Recommend for General Implementation** includes functions that are not
+- **Recommended for General Implementation**
+  ("RGI", deliberately similar to RGI in emoji, tho' we may want to change the name)
+  includes functions that are not
   normatively required but whose names, operands, and options are recommended.
   Implementations are _strongly_ encouraged to use these function signatures
   when implementing the described functionality.
