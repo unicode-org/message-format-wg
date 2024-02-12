@@ -245,7 +245,7 @@ the following steps are taken:
    additional detail about internal failures.
    Specifically, if the cause of the failure was that the datatype, value, or format of the
    _operand_ did not match that expected by the _function_,
-   the _function_ might cause a _Type Mismatch Error_ to be emitted.
+   the _function_ might cause an _Operand Mismatch Error_ to be emitted.
   
    In all failure cases, use the _fallback value_ for the _expression_ as the resolved value.
 
