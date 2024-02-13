@@ -124,16 +124,29 @@ All other names in these categories are reserved for the use of implementations 
 > Users defining custom names SHOULD include at least one character outside these ranges
 > to ensure that they will be compatible with future versions of this specification.
 
-The data model is not _forward_ compatible. That is, later versions of this specification MAY introduce changes in the data model that
-are incompatible with the data model in this version of the specification.
+Later versions of this specification will not introduce changes
+to the data model that would result in a data model representation
+based on this version being invalid.
 
-> For example, a future version of this spec might introduce a new keyword
-> which is represented by a new `interface` in the data model.
-> Such a data model could not be processed by the data model in this spec.
+> For example, existing interfaces or fields will not be removed.
 
-The data model is backwards compatible. That is, later versions of this specification will not introduce changes to the data model
-that make existing data model representations invalid.
+Later versions of this specification MAY introduce changes
+to the data model that would result in future data model representations
+not being valid for implementations of this version of the data model.
 
-> For example, a future version of this specification could add additional fields
-> to an existing `interface`, but could not remove any fields or change their
-> names.
+> For example, a future version could introduce a new keyword,
+> whose data model representation would be a new interface
+> that is not recognized by this version's data model.
+
+Later specification versions will not introduce syntax that cannot be
+processed by this version of the data model.
+However, the results of such processing might not be the same as that produced
+but future version of the data model.
+
+> For example, a future version could introduce a new keyword.
+> The future version's data model would provide an interface for that keyword
+> while this version of the data model would parse the value into
+> the interface `Unsupported_Statement`.
+> Both data models would be "valid" in their context,
+> but this version's would be missing any functionality for the new statement type.
+
