@@ -101,6 +101,8 @@ _What context is helpful to understand this proposal?_
 
 - As a CAT tool, I want to use the concepts of open, close, and standalone that I am already familiar with, to provide certain functionalities above.
 
+- As a CAT tool, I want to pair open and close markup even when there are multiple elements of the same type and even when they overlap each other.
+
 - As a developer, I want to connect message markup with existing element instances in the UI.
 
 - As a developer, I want to sanitize translations without removing the markup important to the message.
@@ -135,7 +137,18 @@ a non-empty sequence of pattern parts (text, placeholders).
 Markup spans may be nested,
 as in `<b>Bold and <i>also italic</i></b>`.
 
-Markup may have localisable options,
+Markup placeholders can contain options.
+
+Some option values might require translation themselves. 
+For example, `Click <a title="Link tooltip">here</a> to continue.`
+
+The meaning of markup options is externally defined.
+Some uses might require specific values
+such as when used by tools to associate markup values
+in pairs: `Click {#a id=a1}here{/a ref=a1} to {#a id=a2}continue{/a ref=a2}`.
+
+> [!NOTE]
+> Many markup systems do not use or permit options on close values.
 such as `Click <a title="Link tooltip">here</a> to continue`.
 
 As with function options,
@@ -173,7 +186,7 @@ placeholder = expression / markup
 markup       = "{" [s] markup-open [s] ["/"] "}"
              / "{" [s] markup-close [s] "}"
 markup-open  = "#" name *(s option)
-markup-close = "/" name
+markup-close = "/" name *(s option)
 ```
 
 This is similar to [Mustache](http://mustache.github.io/mustache.5.html)'s control flow syntax.
