@@ -123,3 +123,17 @@ All other names in these categories are reserved for the use of implementations 
 > [!NOTE]
 > Users defining custom names SHOULD include at least one character outside these ranges
 > to ensure that they will be compatible with future versions of this specification.
+
+Later versions of this specification MAY introduce changes in the data model that
+are incompatible with the data model in this version of the specification.
+
+> For example, a future version of this spec might introduce a new keyword
+> which is represented by a new `interface` in the data model.
+> Such a data model could not be processed by the data model in this spec.
+
+Later versions of this specification will not introduce changes to the data model
+that make existing data model representations invalid.
+
+> For example, a future version of this specification could add additional fields
+> to an existing `interface`, but could not remove any fields or change their
+> names.
