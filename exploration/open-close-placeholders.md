@@ -151,9 +151,6 @@ in pairs: `Click {#a id=a1}here{/a ref=a1} to {#a id=a2}continue{/a ref=a2}`.
 > Many markup systems do not use or permit options on close values.
 such as `Click <a title="Link tooltip">here</a> to continue`.
 
-Open, close and standalone markup may have non-localisable options,
-such as `Click {#a id=a1}here{/a ref=a1} to {#a id=a2}continue{/a ref=a2}`.
-
 As with function options,
 markup options should be defined in a registry so that they can be validated.
 
