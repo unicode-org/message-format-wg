@@ -23,7 +23,7 @@ This data model provides these capabilities:
 
 This data model might also be used to:
 - parse a non-MessageFormat 2 message into a data model
-  (and therefore re-serialized as MessageFormat 2).
+  (and therefore re-serialize it as MessageFormat 2).
   Note that this depends on compatibility between the two syntaxes.
 - re-serialize a MessageFormat 2 message into some other format
   including (but not limited to) other formatting syntaxes
