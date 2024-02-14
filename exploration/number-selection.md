@@ -183,6 +183,12 @@ function `:number`:
   - `false`
   - `min2`
   - `always`
+
+> [!NOTE]
+> The following options do not have default values because they are only to be used
+> as overrides for an existing locale-and-value dependent implementation-defined
+> default
+
 - `minimumIntegerDigits`
   - (non-negative integer, default: `1`)
 - `minimumFractionDigits`
@@ -218,12 +224,15 @@ function `:integer`:
   - `false`
   - `min2`
   - `always`
+
+> [!NOTE]
+> The following options do not have default values because they are only to be used
+> as overrides for an existing locale-and-value dependent implementation-defined
+> default
+
 - `minimumIntegerDigits`
   - (non-negative integer, default: `1`)
-- `minimumSignificantDigits`
-  - (non-negative integer)
-- `maximumSignificantDigits`
-  - (non-negative integer)
+
 
 > [!NOTE]
 > The following options or option values are being developed during the Technical Preview
