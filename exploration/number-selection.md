@@ -183,14 +183,14 @@ function `:number`:
   - `false`
   - `min2`
   - `always`
-
+- `minimumIntegerDigits`
+  - (non-negative integer, default: `1`)
+  - 
 > [!NOTE]
 > The following options do not have default values because they are only to be used
 > as overrides for an existing locale-and-value dependent implementation-defined
 > default
 
-- `minimumIntegerDigits`
-  - (non-negative integer, default: `1`)
 - `minimumFractionDigits`
   - (non-negative integer)
 - `maximumFractionDigits`
@@ -224,12 +224,6 @@ function `:integer`:
   - `false`
   - `min2`
   - `always`
-
-> [!NOTE]
-> The following options do not have default values because they are only to be used
-> as overrides for an existing locale-and-value dependent implementation-defined
-> default
-
 - `minimumIntegerDigits`
   - (non-negative integer, default: `1`)
 
