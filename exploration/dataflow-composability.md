@@ -10,8 +10,9 @@ Status: **Proposed**
         <dd>@stasm</dd>
         <dt>First proposed</dt>
         <dd>2024-02-13</dd>
-        <dt>Pull Request</dt>
+        <dt>Pull Requests</dt>
         <dd><a href="https://github.com/unicode-org/message-format-wg/pull/645">#645</a></dd>
+        <dd><a href="https://github.com/unicode-org/message-format-wg/pull/646">#646</a></dd>
 	</dl>
 </details>
 
@@ -32,7 +33,17 @@ Making the underlying structure of its inputs,
 as well as requiring formatters to return structured outputs,
 makes it possible to specify how different functions
 can be _composed_ together
-(as shown in example 1.1 before)
+(as shown in example 1.1 below).
+
+### Pull Requests
+
+The pull request for this design document itself is [#645](https://github.com/unicode-org/message-format-wg/pull/645).
+
+A draft pull request, [#646](https://github.com/unicode-org/message-format-wg/pull/646),
+shows what the [formatting spec](https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md)
+would look like if this design document were accepted.
+(As of this writing, #646 reflects a slightly older version
+of this design document, so some of the names used are different.)
 
 ## Background
 
