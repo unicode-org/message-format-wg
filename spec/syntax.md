@@ -690,7 +690,7 @@ markup-close = "/" identifier
 > A _message_ with one `button` markup span and a standalone `img` markup element.
 >
 > ```
-> {#button}Submit{/button} or {#img alt=|Cancel| /}.}
+> {#button}Submit{/button} or {#img alt=|Cancel| /}.
 > ```
 
 A _markup-open_ can appear without a corresponding _markup-close_.
@@ -704,6 +704,18 @@ on the pairing, ordering, or contents of _markup_ during _formatting_.
 **_Attributes_ are reserved for standardization by future versions of this specification.**
 Examples in this section are meant to be illustrative and
 might not match future requirements or usage.
+
+During the specification's "tech preview" phase,
+implementations SHOULD NOT implement functionality using function or markup options
+that might later be replaced by attributes or some other solution.
+This includes:
+- Specifying the locale of an expression or markup part that is different from the message's overall locale.
+- Explicitly linking opening and closing markup parts using option values,
+  such as a `startRef` on a closing markup part matching the `id` or `ref` value of an opening markup part.
+- Defining a namespace of options that have no formatting runtime impact,
+  and are used to communicate information to translators or translation tools.
+
+The above restrictions will be reviewed and removed before the end of the tech preview.
 
 An **_<dfn>attribute</dfn>_** is an _identifier_ with an optional value
 that appears in an _expression_ or in _markup_.
