@@ -36,7 +36,7 @@ runtimes in a wholly consistent manner.
 Because we want broad adoption in many different programming environments
 and because the capabilities 
 and functionality available in these environments varies widely,
-the default function registry must be conservative in what it required.
+the default function registry must be conservative in what it requires.
 
 At the same time, we want to promote message interoperability.
 Even though a feature cannot be adopted by all platforms,
