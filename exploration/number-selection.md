@@ -360,7 +360,7 @@ If no rules match, return `other`.
 ### Determining Exact Literal Match
 
 > [!IMPORTANT]
-> The exact behavior of extact literal match is only defined for non-zero filled
+> The exact behavior of exact literal match is only defined for non-zero-filled
 > integer values.
 > Annotations that use fraction digits or significant digits might work in specific
 > implementation-defined ways.
