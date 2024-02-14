@@ -33,6 +33,9 @@ Therefore, addition to this list requires a higher level of rigor.
 
 ### Numbers
 
+> [!IMPORTANT]
+> This section is replaced by the design for number selection
+
 Function name: `:number`
 
 Aliases: 
@@ -86,6 +89,11 @@ If no options are specified, each of the functions defaults to the following:
 > Pattern selection based on date/time values is a complex topic and no support for this
 > is required in this release.
 
+> [!NOTE]
+> The default formatting behavior of `:datetime` is inconsistent with `Intl.DateTimeFormat`
+> in JavaScript and with `{d,date}` in MessageFormat v1.
+> This is because, unlike those implementations, `:datetime` is distinct from `:date` and `:time`.
+
 #### Operands
 
 The _operand_ of a date/time function is either 
@@ -133,19 +141,13 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 
 #### Options
 
-All date/time functions support the following options, which 
-provide high-level control over date/time formats:
-- `calendar` (default is locale-specific)
-  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
-- `numberingSystem` (default is locale-specific)
-   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
-- `timeZone` (default is system default time zone or UTC)
-  - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
-
-In addition to the above high-level options, a function can use either the appropriate
-_style_ options for that function
+A function can use either the appropriate _style_ options for that function
 or can use a collection of _field options_ (but not both) to control the formatted 
 output.
+
+If both are specified, the _style_ option takes precedence.
+
+##### Style Options
 
 The function `:datetime` has these function-specific _style_ options.
 - `dateStyle`
@@ -173,6 +175,12 @@ The function `:time` has these function-specific _style_ options:
   - `medium`
   - `short`
 
+##### Field Options
+
+Field options describe which fields to include in the formatted output
+and what format to use for that field.
+Only those fields specified in the _annotation_ appear in the formatted output.
+
 The _field_ options are defined as follows:
 
 All functions have the following option:
@@ -184,7 +192,7 @@ All functions have the following option:
   - `shortGeneric`
   - `longGeneric`
 
-The functions `:datetime` and `:date` have the following options:
+The function `:datetime` has the following options:
 - `weekday`
   - `long`
   - `short`
@@ -205,8 +213,6 @@ The functions `:datetime` and `:date` have the following options:
 - `day`
   - `numeric`
   - `2-digit`
- 
-The functions `:datetime` and `:time` have the following options:
 - `hour`
   - `numeric`
   - `2-digit`
@@ -225,6 +231,23 @@ The functions `:datetime` and `:time` have the following options:
   - `h12`
   - `h23`
   - `h24`
+
+The function `:time` has following option, whose purpose is to override the default hour cycle:
+- `hourCycle` (default is locale-specific)
+  - `h11`
+  - `h12`
+  - `h23`
+  - `h24`
+
+The followind date/time options are *not* part of the default registry.
+Implementations SHOULD avoid creating options that conflict with these, but
+are encouraged to track development of these options during Tech Preview:
+- `calendar` (default is locale-specific)
+  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
+- `numberingSystem` (default is locale-specific)
+   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+- `timeZone` (default is system default time zone or UTC)
+  - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
 
 
 #### Selection
