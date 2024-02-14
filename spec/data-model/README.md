@@ -20,6 +20,11 @@ Two equivalent definitions of the data model are also provided:
 - [`message.dtd`](./message.dtd) is a document type definition (DTD),
   for use with message data encoded as XML.
 
+Note that while the data model description below is the canonical one,
+the JSON and DTD definitions are intended for interchange between systems and processors.
+To that end, they include some relaxations such as the declarations, options, and attributes
+being optional rather than required properties.
+
 ## Messages
 
 A `SelectMessage` corresponds to a syntax message that includes _selectors_.
