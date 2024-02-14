@@ -266,6 +266,7 @@ interface MarkupClose {
   type: "markup";
   kind: "close";
   name: string;
+  options?: Option[];
   attributes?: Attribute[];
 }
 ```

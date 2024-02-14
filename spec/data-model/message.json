@@ -157,6 +157,7 @@
         "type": { "const": "markup" },
         "kind": { "const": "close" },
         "name": { "type": "string" },
+        "options": { "$ref": "#/$defs/options" },
         "attributes": { "$ref": "#/$defs/attributes" }
       },
       "required": ["type", "kind", "name"]

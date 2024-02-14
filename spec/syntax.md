@@ -678,19 +678,23 @@ It MAY include _options_.
 
 **_<dfn>Markup-close</dfn>_** starts with U+002F SOLIDUS `/` and
 is a _pattern_ part ending a span.
-Unlike the other forms, it does not include _options_.
 
 ```abnf
-markup       = "{" [s] markup-open *(s attribute) [s] ["/"] "}"
-             / "{" [s] markup-close *(s attribute) [s] "}"
-markup-open  = "#" identifier *(s option)
-markup-close = "/" identifier
+markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] "}"  ; open
+       / "{" [s] "#" identifier *(s option) *(s attribute) [s] "/}" ; standalone
+       / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}"  ; close
 ```
 
-> A _message_ with one `button` markup span and a standalone `img` markup element.
+> A _message_ with one `button` markup span and a standalone `img` markup element:
 >
 > ```
 > {#button}Submit{/button} or {#img alt=|Cancel| /}.}
+> ```
+
+> A _message_ with attributes in the closing tag:
+>
+> ```
+> {#ansi attr=|bold,italic|}Bold and italic{/ansi attr=|bold|} italic only {/ansi attr=|italic|} no formatting.}
 > ```
 
 A _markup-open_ can appear without a corresponding _markup-close_.
@@ -726,13 +730,13 @@ attribute = "@" identifier [[s] "=" [s] (literal / variable)]
 > A _message_ including a _literal_ that should not be translated:
 >
 > ```
-> In French, "{|bonjour| @translate=no}" is a greeting
+> In French, "{|bonjour| @translate=no/}" is a greeting
 > ```
 >
 > A _message_ with _markup_ that should not be copied:
 >
 > ```
-> Have a {+span @can-copy}great and wonderful{-span @can-copy} birthday!
+> Have a {#span @can-copy}great and wonderful{/span @can-copy} birthday!
 > ```
 
 ## Other Syntax Elements
