@@ -157,7 +157,7 @@ function `:number`:
    -  `plural` (default)
    -  `ordinal`
    -  `exact`
-- `compactDisplay`
+- `compactDisplay` // this option only had meaning with the option `notation=compact`
    - `short` (default)
    - `long`
 - `notation`
@@ -177,8 +177,11 @@ function `:number`:
   - `decimal` (default)
   - `percent` (see [Percent Style](#percent-style) below)
 - `useGrouping`
-  - `true` (default)
+  - `auto` (default)
+  - `true`
   - `false`
+  - `min2`
+  - `always`
 - `minimumIntegerDigits`
   - (non-negative integer, default: `1`)
 - `minimumFractionDigits`
@@ -196,9 +199,6 @@ function `:integer`:
    -  `plural` (default)
    -  `ordinal`
    -  `exact`
-- `compactDisplay`
-   - `short` (default)
-   - `long`
 - `numberingSystem`
    - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
      (default is locale-specific)
@@ -211,8 +211,11 @@ function `:integer`:
   - `decimal` (default)
   - `percent` (see [Percent Style](#percent-style) below)
 - `useGrouping`
-  - `true` (default)
+  - `auto` (default)
+  - `true`
   - `false`
+  - `min2`
+  - `always`
 - `minimumIntegerDigits`
   - (non-negative integer, default: `1`)
 - `minimumSignificantDigits`
