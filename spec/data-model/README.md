@@ -22,8 +22,8 @@ Two equivalent definitions of the data model are also provided:
 
 Note that while the data model description below is the canonical one,
 the JSON and DTD definitions are intended for interchange between systems and processors.
-To that end, they include some relaxations such as the declarations, options, and attributes
-being optional rather than required properties.
+To that end, they relax some aspects of the data model, such as allowing
+declarations, options, and attributes to be optional rather than required properties.
 
 ## Messages
 
