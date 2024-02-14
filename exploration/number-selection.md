@@ -172,6 +172,7 @@ function `:number`:
    -  `auto` (default)
    -  `always`
    -  `exceptZero`
+   -  `negative`
    -  `never`
 - `style`
   - `decimal` (default)
@@ -206,6 +207,7 @@ function `:integer`:
    -  `auto` (default)
    -  `always`
    -  `exceptZero`
+   -  `negative`
    -  `never`
 - `style`
   - `decimal` (default)
