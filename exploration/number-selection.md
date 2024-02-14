@@ -111,28 +111,8 @@ The following functions use numeric selection:
 
 The function `:number` is the default selector for numeric values.
 
-The function `:plural` operates identically to `:number`, except:
-- the `select` type of this selector is always `plural`
-- the function is **not** valid as a formatter
-
-The function `:ordinal` operates identically to `:number`, except:
-- the `select` type of this selector is always `ordinal`
-- formatting behavior of this function is implementation defined
-
-> [!NOTE]
-> CLDR data has known shortcomings related to automatic formatting
-> of numbers as ordinals.
-> The default registry does not require implementations to support
-> formatting of numeric values as ordinals.
-> Users are cautioned to avoid using `:ordinal` for formatting in this release
-> in cases where message portability is a concern,
-> as many implementations will emit an error.
-
-The function `:integer` operates identically to `:number`, except:
-- the `minimumFractionDigits` and `maximumFractionDigits` options
-  default to `0` for all values
-- the _options_ `minimumFractionDigits` and `maximumFractionDigits`
-  are invalid.
+The function `:integer` provides a reduced set of options for selecting
+and formatting numeric values as integers.
 
 ### Operands
 
@@ -162,15 +142,8 @@ or a _Formatting Error_ when attempting to format the value.
 
 ### Options
 
-All number functions have the following options internally.
-Unless otherwise specified in [functions](#functions) all of these options
-can be used in _annotations_.
-
-> [!IMPORTANT]
-> Some functions do not expose one or more of these options.
-> Some functions have different defaults.
-> See [functions](#functions) above.
-
+The following options and their values are required in the default registry to be available on the 
+function `:number`:
 - `select`
    -  `plural` (default)
    -  `ordinal`
@@ -178,17 +151,6 @@ can be used in _annotations_.
 - `compactDisplay`
    - `short` (default)
    - `long`
-- `currency`
-   - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
-     (no default)
-- `currencyDisplay`
-   - `symbol` (default)
-   - `narrowSymbol`
-   - `code`
-   - `name`
-- `currencySign`
-  - `accounting`
-  - `standard` (default)
 - `notation`
    - `standard` (default)
    - `scientific`
@@ -204,15 +166,10 @@ can be used in _annotations_.
    -  `never`
 - `style`
   - `decimal` (default)
-  - `currency`
-  - `percent`
-  - `unit`
-- `unit`
-   - (anything not empty)
-- `unitDisplay`
-   - `long`
-   - `short` (default)
-   - `narrow`
+  - `percent` (see [Percent Style](#percent-style) below)
+- `useGrouping`
+  - `true` (default)
+  - `false`
 - `minimumIntegerDigits`
   - (non-negative integer, default: `1`)
 - `minimumFractionDigits`
@@ -224,9 +181,72 @@ can be used in _annotations_.
 - `maximumSignificantDigits`
   - (non-negative integer)
 
+The following options and their values are required in the default registry to be available on the 
+function `:integer`:
+- `select`
+   -  `plural` (default)
+   -  `ordinal`
+   -  `exact`
+- `compactDisplay`
+   - `short` (default)
+   - `long`
+- `numberingSystem`
+   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+     (default is locale-specific)
+- `signDisplay`
+   -  `auto` (default)
+   -  `always`
+   -  `exceptZero`
+   -  `never`
+- `style`
+  - `decimal` (default)
+  - `percent` (see [Percent Style](#percent-style) below)
+- `useGrouping`
+  - `true` (default)
+  - `false`
+- `minimumIntegerDigits`
+  - (non-negative integer, default: `1`)
+- `minimumFractionDigits`
+  - (non-negative integer)
+- `maximumFractionDigits`
+  - (non-negative integer)
+- `minimumSignificantDigits`
+  - (non-negative integer)
+- `maximumSignificantDigits`
+  - (non-negative integer)
 
 > [!NOTE]
-> We have a requirement for `offset` but have not provided for it yet??
+> The following options or option values are being developed during the Technical Preview
+> period.
+
+The following values for the option `style` are _not_ part of the default registry.
+Implementations SHOULD avoid creating options that conflict with these, but
+are encouraged to track development of these options during Tech Preview:
+- `currency`
+- `unit`
+
+The following options are _not_ part of the default registry.
+Implementations SHOULD avoid creating options that conflict with these, but
+are encouraged to track development of these options during Tech Preview:
+- `currency`
+   - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+     (no default)
+- `currencyDisplay`
+   - `symbol` (default)
+   - `narrowSymbol`
+   - `code`
+   - `name`
+- `currencySign`
+  - `accounting`
+  - `standard` (default)
+- `unit`
+   - (anything not empty)
+- `unitDisplay`
+   - `long`
+   - `short` (default)
+   - `narrow`
+
+### Default Value of `select` Option
 
 The value `plural` is default for the option `select` 
 because it is the most common use case for numeric selection.
@@ -246,6 +266,12 @@ but can cause problems in target locales that the original developer is not cons
 >                                          // such as two, few, many, and so forth
 > *   {{You have {$var} chances remaining}}
 > ```
+
+
+### Percent Style
+
+When implementing `style=percent`, the numeric value of the operand
+MUST be divided by 100 for the purposes of formatting.
 
 ### Selection
 
@@ -323,13 +349,22 @@ If no rules match, return `other`.
 
 ### Determining Exact Literal Match
 
+> [!IMPORTANT]
+> The exact behavior of extact literal match is only defined for non-zero filled
+> integer values.
+> Annotations that use fraction digits or significant digits might work in specific
+> implementation-defined ways.
+> Users should avoid depending on these types of keys in message selection.
+
+
 Number literals in the MessageFormat 2 syntax use the 
 [format defined for a JSON number](https://www.rfc-editor.org/rfc/rfc8259#section-6).
 The resolved value of an `operand` exactly matches a numeric literal `key`
 if, when the `operand` is serialized using the format for a JSON number
-including the exact number of fraction digits 
+the two strings are equal.
+Implementations SHOULD take into account including the exact number of fraction digits 
 and the exact number of significant digits specified by the selector
-function or its options, the two strings are equal.
+function or its options. 
 
 > [!NOTE]
 > Implementations are not expected to implement this exactly as written,
