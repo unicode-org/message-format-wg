@@ -139,7 +139,7 @@ not being valid for implementations of this version of the data model.
 > that is not recognized by this version's data model.
 
 Later specification versions will not introduce syntax that cannot be
-processed by this version of the data model.
+represented by this version of the data model.
 However, the results of such processing might not be the same as that produced
 but future version of the data model.
 
