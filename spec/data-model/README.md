@@ -6,7 +6,7 @@ Implementations are not required to use this data model for their internal repre
 Neither are they required to provide an interface that accepts or produces
 representations of this data model.
 
-The reason this specification provides a data model is to allow interchange of 
+The major reason this specification provides a data model is to allow interchange of 
 the logical representation of a _message_ between different implementations.
 This includes mapping legacy formatting syntaxes (such as MessageFormat 1)
 to a MessageFormat 2 implementation.
