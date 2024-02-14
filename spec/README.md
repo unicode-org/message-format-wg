@@ -140,8 +140,6 @@ not being valid for implementations of this version of the data model.
 
 Later specification versions will not introduce syntax that cannot be
 represented by this version of the data model.
-However, the results of such processing might not be the same as that produced
-but future version of the data model.
 
 > For example, a future version could introduce a new keyword.
 > The future version's data model would provide an interface for that keyword
