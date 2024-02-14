@@ -17,8 +17,9 @@ Implementations that expose APIs supporting the production or consumption of a
 _message_ as a data structure are encouraged to use this data model.
 
 This data model provides these capabilities:
-- any MessageFormat 2 message can be parsed into this representation
-- any well-formed data model representation can be serialized as a well-formed
+- any MessageFormat 2 message (including future versions)
+  can be parsed into this representation
+- this data model representation can be serialized as a well-formed
   MessageFormat 2 message
 
 This data model might also be used to:
