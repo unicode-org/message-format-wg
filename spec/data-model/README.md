@@ -20,7 +20,9 @@ This data model provides these capabilities:
 - any MessageFormat 2 message (including future versions)
   can be parsed into this representation
 - this data model representation can be serialized as a well-formed
-  MessageFormat 2 message
+MessageFormat 2 message
+- parsing a MessageFormat 2 message into a data model representation
+  and then serializing it results in an equivalently functional message
 
 This data model might also be used to:
 - parse a non-MessageFormat 2 message into a data model
