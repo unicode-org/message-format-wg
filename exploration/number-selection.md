@@ -116,7 +116,7 @@ and formatting numeric values as integers.
 
 ### Operands
 
-The _operand_ of a number function is either an implementation-defined numeric type or
+The _operand_ of a number function is either an implementation-defined type or
 a literal that matches the `number-literal` production in the [ABNF](/main/spec/message.abnf).
 All other values produce a _Selection Error_ when evaluated for selection
 or a _Formatting Error_ when attempting to format the value.
@@ -139,6 +139,15 @@ or a _Formatting Error_ when attempting to format the value.
 > .local $example = {|-1234.567| :number}
 > {{{$num :number} == {$example}}}
 > ```
+
+> [!NOTE]
+> Implementations are encouraged to provide support for compound types or data structures
+> that provide additional semantic meaning to the formatting of number-like values.
+> For example, in ICU4J, the type `com.ibm.icu.util.Measure` can be used to communicate
+> a value that include a unit
+> or the type `com.ibm.icu.util.CurrencyAmount` can be used to set the currency and related
+> options (such as the number of fraction digits).
+
 
 ### Options
 
