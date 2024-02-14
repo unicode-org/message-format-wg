@@ -144,7 +144,7 @@ represented by this version of the data model.
 > For example, a future version could introduce a new keyword.
 > The future version's data model would provide an interface for that keyword
 > while this version of the data model would parse the value into
-> the interface `Unsupported_Statement`.
+> the interface `UnsupportedStatement`.
 > Both data models would be "valid" in their context,
 > but this version's would be missing any functionality for the new statement type.
 
