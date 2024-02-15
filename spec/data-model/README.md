@@ -236,36 +236,18 @@ interface UnsupportedAnnotation {
 
 ## Markup
 
-A `Markup` object is either `MarkupOpen`, `MarkupStandalone`, or `MarkupClose`,
-which are differentiated by `kind`.
+A `Markup` object has a `kind` of either `"open"`, `"standalone"`, or `"close"`,
+each corresponding to _open_, _standalone_, and _close_ _markup_.
 The `name` in these does not include the starting sigils `#` and `/` 
 or the ending sigil `/`.
-The optional `options` for open and standalone markup use the same `Option`
-as `FunctionAnnotation`.
+The optional `options` for markup use the same `Option` as `FunctionAnnotation`.
 
 ```ts
-type Markup = MarkupOpen | MarkupStandalone | MarkupClose;
-
-interface MarkupOpen {
+interface Markup {
   type: "markup";
-  kind: "open";
+  kind: "open" | "standalone" | "close";
   name: string;
   options?: Option[];
-  attributes?: Attribute[];
-}
-
-interface MarkupStandalone {
-  type: "markup";
-  kind: "standalone";
-  name: string;
-  options?: Option[];
-  attributes?: Attribute[];
-}
-
-interface MarkupClose {
-  type: "markup";
-  kind: "close";
-  name: string;
   attributes?: Attribute[];
 }
 ```
