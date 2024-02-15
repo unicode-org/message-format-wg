@@ -188,8 +188,6 @@ Only those fields specified in the _annotation_ appear in the formatted output.
 
 The _field_ options are defined as follows:
 
-All functions have the following option:
-
 The function `:datetime` has the following options:
 - `weekday`
   - `long`
