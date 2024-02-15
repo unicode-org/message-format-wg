@@ -155,12 +155,12 @@ The function `:datetime` has these function-specific _style_ options.
   - `full`
   - `long`
   - `medium`
-  - `short` (default)
+  - `short`
 - `timeStyle`
   - `full`
   - `long`
   - `medium`
-  - `short` (default)
+  - `short`
 
 The function `:date` has these function-specific _style_ options:
 - `style`
