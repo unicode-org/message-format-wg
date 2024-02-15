@@ -226,6 +226,13 @@ function `:integer`:
 - `minimumIntegerDigits`
   - (non-negative integer, default: `1`)
 
+> [!NOTE]
+> The following option does not have a default value because it is only to be used
+> as an override for an existing locale-and-value dependent implementation-defined
+> default
+
+- `maximumSignificantDigits`
+  - (non-negative integer)
 
 > [!NOTE]
 > The following options or option values are being developed during the Technical Preview
