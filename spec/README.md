@@ -123,3 +123,28 @@ All other names in these categories are reserved for the use of implementations 
 > [!NOTE]
 > Users defining custom names SHOULD include at least one character outside these ranges
 > to ensure that they will be compatible with future versions of this specification.
+
+Later versions of this specification will not introduce changes
+to the data model that would result in a data model representation
+based on this version being invalid.
+
+> For example, existing interfaces or fields will not be removed.
+
+Later versions of this specification MAY introduce changes
+to the data model that would result in future data model representations
+not being valid for implementations of this version of the data model.
+
+> For example, a future version could introduce a new keyword,
+> whose data model representation would be a new interface
+> that is not recognized by this version's data model.
+
+Later specification versions will not introduce syntax that cannot be
+represented by this version of the data model.
+
+> For example, a future version could introduce a new keyword.
+> The future version's data model would provide an interface for that keyword
+> while this version of the data model would parse the value into
+> the interface `UnsupportedStatement`.
+> Both data models would be "valid" in their context,
+> but this version's would be missing any functionality for the new statement type.
+

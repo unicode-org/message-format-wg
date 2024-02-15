@@ -46,7 +46,6 @@
 <!ELEMENT attribute (literal | variable)?>
 <!ATTLIST attribute name NMTOKEN #REQUIRED>
 
-<!-- A <markup kind="close"> MUST NOT contain any <option> elements -->
 <!ELEMENT markup (option*, attribute*)>
 <!ATTLIST markup
   kind (open | standalone | close) #REQUIRED
