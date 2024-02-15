@@ -117,7 +117,7 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 > The [ABNF](/spec/message.abnf) and [syntax](/spec/syntax.md) of MFv2
 > do not formally define date/time literals. 
 > This means that a _message_ can be syntactically valid but produce
-> runtime errors due to what amounts to a "type mismatch".
+> an _Operand Mismatch Error_ at runtime.
 
 > [!NOTE]
 > String values passed as variables in the _formatting context_'s
