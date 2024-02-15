@@ -41,7 +41,6 @@
 <!ATTLIST option name NMTOKEN #REQUIRED>
 
 <!ELEMENT unsupportedAnnotation (#PCDATA)>
-<!ATTLIST unsupportedAnnotation sigil CDATA #REQUIRED>
 
 <!ELEMENT attribute (literal | variable)?>
 <!ATTLIST attribute name NMTOKEN #REQUIRED>

@@ -68,12 +68,9 @@
       "type": "object",
       "properties": {
         "type": { "const": "unsupported-annotation" },
-        "sigil": {
-          "enum": ["!", "#", "%", "^", "&", "*", "<", ">", "/", "?", "~"]
-        },
         "source": { "type": "string" }
       },
-      "required": ["type", "sigil", "source"]
+      "required": ["type", "source"]
     },
     "annotation": {
       "oneOf": [
