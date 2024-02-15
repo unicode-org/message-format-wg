@@ -13,7 +13,7 @@ to a MessageFormat 2 implementation.
 Another use would be in converting to or from translation formats without 
 the need to continually parse and serialize all or part of a message.
 
-Implementations that expose APIs supporting the production or consumption of a
+Implementations that expose APIs supporting the production, consumption, or transformation of a
 _message_ as a data structure are encouraged to use this data model.
 
 This data model provides these capabilities:
