@@ -145,7 +145,8 @@ A function can use either the appropriate _style_ options for that function
 or can use a collection of _field options_ (but not both) to control the formatted 
 output.
 
-If both are specified, the _style_ option takes precedence.
+If both are specified, an _Invalid Expression_ error MUST be emitted
+and a _fallback value_ used as the resolved value of the _expression_.
 
 ##### Style Options
 
