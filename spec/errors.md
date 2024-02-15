@@ -278,28 +278,29 @@ for example when encountering a value with an unsupported type
 or an internally inconsistent set of options.
 
 > For example, attempting to format any of the following messages
-> might result in a _Formatting Error_ because the `operand` type doesn't
-> match the expectations of the formatting function:
+> might result in a _Formatting Error_ if done within a context that
+>
+> 1. provides for the variable reference `$user` to resolve to
+>    an object `{ name: 'Kat', id: 1234 }`,
+> 2. provides for the variable reference `$field` to resolve to
+>    a string `'address'`, and
+> 3. uses a `:get` formatting function which requires its argument to be an object and
+>    an option `field` to be provided with a string value,
 >
 > ```
-> Hello, {horse :time} is not a date/time value!
+> Hello, {horse :get field=name}!
 > ```
-> Attempting to format a non-numeric string as a number:
+>
 > ```
-> .local $user = {|horse|}
-> {{Hello, {$user :number} is not a number!}}
+> Hello, {$user :get}!
 > ```
-> Attempting to format a number as a date:
+>
 > ```
-> .local $num = {$arg :number}
-> {{Hello, {$num :date}!}}
+> .local $id = {$user :get field=id}
+> {{Hello, {$id :get field=name}!}}
 > ```
-> Attempting to format year and month of a time value.
-> (This may not be an error on all implementations, as some may
-> convert `$time` to an incremental time value,
-> e.g. the year would be 1970 and the month January):
+>
 > ```
-> .local $time = {|20:13:27.333Z| :time}
-> {{Today is {$time :datetime year=numeric month=long}}}
+> Your {$field} is {$id :get field=$field}
 > ```
 
