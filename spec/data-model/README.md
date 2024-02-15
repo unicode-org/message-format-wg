@@ -236,15 +236,8 @@ interface Option {
 
 An `UnsupportedAnnotation` represents a
 _private-use annotation_ not supported by the implementation or a _reserved annotation_.
-The `sigil` corresponds to the starting sigil of the _annotation_.
-The `source` is the "raw" value (i.e. escape sequences are not processed)
-and does not include the starting `sigil`.
-
-> **Note**
-> Be aware that future versions of this specification
-> might assign meaning to _reserved annotation_ `sigil` values.
-> This would result in new interfaces being added to
-> this data model.
+The `source` is the "raw" value (i.e. escape sequences are not processed),
+including the starting sigil.
 
 When parsing the syntax of a _message_ that includes a _private-use annotation_
 supported by the implementation,
@@ -255,7 +248,6 @@ that the implementation attaches to that _annotation_.
 ```ts
 interface UnsupportedAnnotation {
   type: "unsupported-annotation";
-  sigil: "!" | "%" | "^" | "&" | "*" | "+" | "<" | ">" | "?" | "~";
   source: string;
 }
 ```
