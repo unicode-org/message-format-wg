@@ -729,7 +729,7 @@ attribute = "@" identifier [[s] "=" [s] (literal / variable)]
 > A _message_ including a _literal_ that should not be translated:
 >
 > ```
-> In French, "{|bonjour| @translate=no/}" is a greeting
+> In French, "{|bonjour| @translate=no}" is a greeting
 > ```
 >
 > A _message_ with _markup_ that should not be copied:
