@@ -680,8 +680,7 @@ It MAY include _options_.
 is a _pattern_ part ending a span.
 
 ```abnf
-markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] "}"  ; open
-       / "{" [s] "#" identifier *(s option) *(s attribute) [s] "/}" ; standalone
+markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"  ; open and standalone
        / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}"  ; close
 ```
 
