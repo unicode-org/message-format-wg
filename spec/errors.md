@@ -238,6 +238,34 @@ or for private implementation use that is not supported by the current implement
 > * {{The value is not one.}}
 > ```
 
+### Invalid Expression
+
+An **_<dfn>Invalid Expression</dfn>_** error occurs when a _message_ includes an _expression_
+whose implementation-defined internal requirements produce an error during _function resolution_
+or when a _function_ returns a value (such as `null`) that the implementation does not support.
+
+An **_<dfn>Operand Mismatch Error</dfn>_** is an _Invalid Expression_ error that occurs when
+an _operand_ provided to a _function_ during _function resolution_ does not match one of the
+expected implementation-defined types for that function;
+or in which a literal _operand_ value does not have the required format
+and thus cannot be processed into one of the expected implementation-defined types
+for that specific _function_.
+
+> For example, the following _message_ produces an _Operand Mismatch Error_
+> (a type of _Invalid Expression_ error)
+> because the literal `|horse|` does not match the production `number-literal`,
+> which is a requirement of the function `:number` for its operand:
+> ```
+> .local $horse = {horse :number}
+> {{You have a {$horse}.}}
+> ```
+> The following _message_ might produce an _Invalid Expression_ error if the
+> the function `:function` threw an exception or otherwise emitted an error
+> rather than returning a valid value:
+>```
+> {{This has an invalid expression {$var :function} because it has a bug in it.}}
+>```
+
 ### Unsupported Statement
 
 An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a _reserved statement_.
