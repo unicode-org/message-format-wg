@@ -180,7 +180,8 @@ The function `:time` has these function-specific _style_ options:
 
 Field options describe which fields to include in the formatted output
 and what format to use for that field.
-Only those fields specified in the _annotation_ appear in the formatted output.
+The implementation may use this _annotation_ to configure which fields
+appear in the formatted output.
 
 > [!NOTE]
 > Field options do not have default values because they are only to be used
