@@ -185,7 +185,6 @@ Only those fields specified in the _annotation_ appear in the formatted output.
 > [!NOTE]
 > Field options do not have default values because they are only to be used
 > to compose the formatter.
-> Each value must be specified.
 
 The _field_ options are defined as follows:
 
