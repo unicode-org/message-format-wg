@@ -157,7 +157,7 @@ function `:number`:
    -  `plural` (default)
    -  `ordinal`
    -  `exact`
-- `compactDisplay` // this option only had meaning with the option `notation=compact`
+- `compactDisplay` // this option only has meaning when combined with the option `notation=compact`
    - `short` (default)
    - `long`
 - `notation`
