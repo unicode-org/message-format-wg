@@ -239,20 +239,6 @@ The function `:datetime` has the following options:
 > The following options do not have default values because they are only to be used
 > as overrides for locale-and-value dependent implementation-defined defaults.
 
-The function `:time` has following options:
-- `hourCycle` (default is locale-specific)
-  - `h11`
-  - `h12`
-  - `h23`
-  - `h24`
-- `timeZoneName`
-  - `long`
-  - `short`
-  - `shortOffset`
-  - `longOffset`
-  - `shortGeneric`
-  - `longGeneric`
-  
 The followind date/time options are *not* part of the default registry.
 Implementations SHOULD avoid creating options that conflict with these, but
 are encouraged to track development of these options during Tech Preview:
