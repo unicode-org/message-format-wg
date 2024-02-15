@@ -191,7 +191,7 @@ external input value does not appear in a previous _declaration_.
 > For example, this message is _valid_:
 > ```
 > .input {$var :number maximumFractionDigits=0}
-> .match {$var :plural maximumFractionDigits=2}
+> .match {$var :number maximumFractionDigits=2}
 > 0 {{The selector can apply a different annotation to {$var} for the purposes of selection}}
 > * {{A placeholder in a pattern can apply a different annotation to {$var :number maximumFractionDigits=3}}}
 > ```
