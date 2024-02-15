@@ -241,7 +241,7 @@ The function `:datetime` has the following options:
 > The following options do not have default values because they are only to be used
 > as overrides for locale-and-value dependent implementation-defined defaults.
 
-The function `:time` has following additional options:
+The function `:time` has following options:
 - `hourCycle` (default is locale-specific)
   - `h11`
   - `h12`
