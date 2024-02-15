@@ -705,17 +705,35 @@ on the pairing, ordering, or contents of _markup_ during _formatting_.
 Examples in this section are meant to be illustrative and
 might not match future requirements or usage.
 
-During the specification's "tech preview" phase,
-implementations SHOULD NOT implement functionality using function or markup options
-that might later be replaced by attributes or some other solution.
-This includes:
-- Specifying the locale of an expression or markup part that is different from the message's overall locale.
-- Explicitly linking opening and closing markup parts using option values,
-  such as a `startRef` on a closing markup part matching the `id` or `ref` value of an opening markup part.
-- Defining a namespace of options that have no formatting runtime impact,
-  and are used to communicate information to translators or translation tools.
-
-The above restrictions will be reviewed and removed before the end of the tech preview.
+> [!NOTE]
+> The Tech Preview does not provide a built-in mechanism for overriding
+> values in the _formatting context_ (most notably the locale)
+> Nor does it provide a mechanism for identifying specific expressions
+> such as by assigning a name or id.
+> The utility of these types of mechanisms has been debated.
+> There are at least two proposed mechanisms for implementing support for
+> these. 
+> Specifically, one mechanism would be to reserve specifically-named options, 
+> possibly using a Unicode namespace (i.e. `locale=xxx` or `u:locale=xxx`).
+> Such options would be reserved for use in any and all functions or markup.
+> The other mechanism would be to use the reserved "expression attribute" syntax
+> for this purpose (i.e. `@locale=xxx` or `@id=foo`)
+> Neither mechanism was included in this Tech Preview.
+> Feedback on the preferred mechanism for managing these features
+> is strongly desired.
+> 
+> In the meantime, function authors and other implementers are cautioned to avoid creating 
+> function-specific or implementation-specific option values for this purpose.
+> One workaround would be to use the implementation's namespace for these 
+> features to insure later interoperability when such a mechanism is finalized 
+> during the Tech Preview period.
+> Specifically:
+> - Avoid specifying an option for setting the locale of an expression as different from
+>   that of the overall _message_ locale, or use a namespace that later maps to the final
+>   mechanism.
+> - Avoid specifying an option to link opening and closing markup expressions
+>   such as a `startRef` on closing markup or matching `id` or `ref` values in paired
+>   markup.
 
 An **_<dfn>attribute</dfn>_** is an _identifier_ with an optional value
 that appears in an _expression_ or in _markup_.
