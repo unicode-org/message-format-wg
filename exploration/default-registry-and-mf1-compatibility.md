@@ -154,26 +154,26 @@ The function `:datetime` has these function-specific _style_ options.
   - `full`
   - `long`
   - `medium`
-  - `short`
+  - `short` (default)
 - `timeStyle`
   - `full`
   - `long`
   - `medium`
-  - `short`
+  - `short` (default)
 
 The function `:date` has these function-specific _style_ options:
 - `style`
   - `full`
   - `long`
   - `medium`
-  - `short`
+  - `short` (default)
 
 The function `:time` has these function-specific _style_ options:
 - `style`
   - `full`
   - `long`
   - `medium`
-  - `short`
+  - `short` (default)
 
 ##### Field Options
 
@@ -181,16 +181,14 @@ Field options describe which fields to include in the formatted output
 and what format to use for that field.
 Only those fields specified in the _annotation_ appear in the formatted output.
 
+> [!NOTE]
+> Field options do not have default values because they are only to be used
+> to compose the formatter.
+> Each value must be specified.
+
 The _field_ options are defined as follows:
 
 All functions have the following option:
-- `timeZoneName`
-  - `long`
-  - `short`
-  - `shortOffset`
-  - `longOffset`
-  - `shortGeneric`
-  - `longGeneric`
 
 The function `:datetime` has the following options:
 - `weekday`
@@ -231,14 +229,32 @@ The function `:datetime` has the following options:
   - `h12`
   - `h23`
   - `h24`
+- `timeZoneName`
+  - `long`
+  - `short`
+  - `shortOffset`
+  - `longOffset`
+  - `shortGeneric`
+  - `longGeneric`
 
-The function `:time` has following option, whose purpose is to override the default hour cycle:
+> [!NOTE]
+> The following options do not have default values because they are only to be used
+> as overrides for locale-and-value dependent implementation-defined defaults.
+
+The function `:time` has following additional options:
 - `hourCycle` (default is locale-specific)
   - `h11`
   - `h12`
   - `h23`
   - `h24`
-
+- `timeZoneName`
+  - `long`
+  - `short`
+  - `shortOffset`
+  - `longOffset`
+  - `shortGeneric`
+  - `longGeneric`
+  
 The followind date/time options are *not* part of the default registry.
 Implementations SHOULD avoid creating options that conflict with these, but
 are encouraged to track development of these options during Tech Preview:
