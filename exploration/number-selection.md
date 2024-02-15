@@ -47,7 +47,7 @@ but ordinal rules use `one` (_1st_, _21st_, etc.), `few` (_2nd_, _22nd_, etc.),
 Additionally,
 MF1 provides `ChoiceFormat` selection based on a complex rule set
 (and which allows determining if a number falls into a specific range).
-This capability is deprecated.
+This capability is not supported by the default functions of MF2.
 
 Both JS and ICU PluralRules implementations provide for determining the plural category
 of a range based on its start and end values.
