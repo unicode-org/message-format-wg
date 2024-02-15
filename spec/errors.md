@@ -256,16 +256,16 @@ An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a
 
 > For example, attempting to format either of the following messages
 > might result in a _Selection Error_ if done within a context that
-> uses a `:plural` selector function which requires its input to be numeric:
+> uses a `:number` selector function which requires its input to be numeric:
 >
 > ```
-> .match {|horse| :plural}
+> .match {|horse| :number}
 > 1 {{The value is one.}}
 > * {{The value is not one.}}
 > ```
 >
 > ```
-> .local $sel = {|horse| :plural}
+> .local $sel = {|horse| :number}
 > .match {$sel}
 > 1 {{The value is one.}}
 > * {{The value is not one.}}
