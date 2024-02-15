@@ -390,64 +390,7 @@ the two strings are equal.
 > Only integer matching is required in the Technical Preview.
 > Feedback describing use cases for fractional and significant digits-based
 > selection would be helpful.
-> Otherwise, users should avoid using matching such as the following examples.
-
-> **Examples.**
-> ```
-> .local $num = {|1.0| :number}
-> .match {$num :number}
-> 1     {{Matches}}
-> 1.0   {{Does not match}}
-> 1.00  {{Does not match}}
->
-> .local $num = {|1.0| :number}
-> .match {$num :number minimumFractionDigits=1}
-> 1     {{Does not match}
-> 1.0   {{Matches}}
-> 1.00  {{Does not match}}
->
-> .local $num = {|1.0| :number}
-> .match {$num :number minimumFractionDigits=2}
-> 1     {{Does not match}
-> 1.0   {{Does not match}}
-> 1.00  {{Matches}}
-> 
-> .local $num = {|-1.00001| :number}
-> .match {$num :integer}
-> -1     {{Matches}}
-> -1.0   {{Does not match}}
-> -1.00  {{Does not match}}
->
-> .local $num = {|-1.00001| :number}
-> .match {$num :number minimumFractionDigits=1}
-> -1        {{Does not match}
-> -1.0      {{Matches}}
-> -1.00001  {{Does not match}}
-> 
-> .local $num = {|-1.00001| :number}
-> .match {$num :number}
-> -1        {{Does not match}
-> -1.0      {{Does not match}}
-> -1.00001  {{Matches}}
->
-> .local $num = {|-1.00001|}
-> .match {$num :number maximumSignificantDigits=1}
-> -1        {{Matches}}
-> -1.0      {{Does not match}}
-> -1.00001  {{Does not match}}
->
-> .local $num = {1.3}
-> .match {$num :number minimumSignificantDigits=3}
-> 1    {{Does not match}}
-> 1.3  {{Does not match}}
-> 1.30 {{Matches}}
->
-> .local $num = {1234}
-> .match {$num :number maximumSignificantDigits=2}
-> 1200   {{Matches}}
-> 1234   {{Does not match}}
-> 1200.0 {{Does not match}}
-> ```
+Otherwise, users should avoid using matching with fractional numbers or significant digits.
 
 
 ## Alternatives Considered
