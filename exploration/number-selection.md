@@ -381,13 +381,16 @@ Number literals in the MessageFormat 2 syntax use the
 The resolved value of an `operand` exactly matches a numeric literal `key`
 if, when the `operand` is serialized using the format for a JSON number
 the two strings are equal.
-Implementations SHOULD take into account including the exact number of fraction digits 
-and the exact number of significant digits specified by the selector
-function or its options. 
 
 > [!NOTE]
 > Implementations are not expected to implement this exactly as written,
 > as there are clearly optimizations that can be applied.
+
+> [!NOTE]
+> Only integer matching is required in the Technical Preview.
+> Feedback describing use cases for fractional and significant digits-based
+> selection would be helpful.
+> Otherwise, users should avoid using matching such as the following examples.
 
 > **Examples.**
 > ```
