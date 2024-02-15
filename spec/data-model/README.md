@@ -41,6 +41,11 @@ Two equivalent definitions of the data model are also provided:
 - [`message.dtd`](./message.dtd) is a document type definition (DTD),
   for use with message data encoded as XML.
 
+Note that while the data model description below is the canonical one,
+the JSON and DTD definitions are intended for interchange between systems and processors.
+To that end, they relax some aspects of the data model, such as allowing
+declarations, options, and attributes to be optional rather than required properties.
+
 ## Messages
 
 A `SelectMessage` corresponds to a syntax message that includes _selectors_.
@@ -157,28 +162,28 @@ interface LiteralExpression {
   type: "expression";
   arg: Literal;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
-  attributes?: Attribute[];
+  attributes: Attribute[];
 }
 
 interface VariableExpression {
   type: "expression";
   arg: VariableRef;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
-  attributes?: Attribute[];
+  attributes: Attribute[];
 }
 
 interface FunctionExpression {
   type: "expression";
   arg?: never;
   annotation: FunctionAnnotation;
-  attributes?: Attribute[];
+  attributes: Attribute[];
 }
 
 interface UnsupportedExpression {
   type: "expression";
   arg?: never;
   annotation: UnsupportedAnnotation;
-  attributes?: Attribute[];
+  attributes: Attribute[];
 }
 
 interface Attribute {
@@ -220,7 +225,7 @@ Each _option_ is represented by an `Option`.
 interface FunctionAnnotation {
   type: "function";
   name: string;
-  options?: Option[];
+  options: Option[];
 }
 
 interface Option {
@@ -268,8 +273,8 @@ interface Markup {
   type: "markup";
   kind: "open" | "standalone" | "close";
   name: string;
-  options?: Option[];
-  attributes?: Attribute[];
+  options: Option[];
+  attributes: Attribute[];
 }
 ```
 
