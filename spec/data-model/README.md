@@ -1,15 +1,36 @@
 # DRAFT MessageFormat 2.0 Data Model
 
-To work with messages defined in other syntaxes than that of MessageFormat 2,
-an equivalent data model representation is also defined.
-Implementations MAY provide interfaces which allow
-for MessageFormat 2 syntax to be parsed into this representation,
-for this representation to be serialized into MessageFormat 2 syntax
-or any other syntax,
-for messages presented in this representation to be formatted,
-or for other operations to be performed on or with messages in this representation.
+This section defines a data model representation of MessageFormat 2 _messages_.
 
 Implementations are not required to use this data model for their internal representation of messages.
+Neither are they required to provide an interface that accepts or produces
+representations of this data model.
+
+The major reason this specification provides a data model is to allow interchange of 
+the logical representation of a _message_ between different implementations.
+This includes mapping legacy formatting syntaxes (such as MessageFormat 1)
+to a MessageFormat 2 implementation.
+Another use would be in converting to or from translation formats without 
+the need to continually parse and serialize all or part of a message.
+
+Implementations that expose APIs supporting the production, consumption, or transformation of a
+_message_ as a data structure are encouraged to use this data model.
+
+This data model provides these capabilities:
+- any MessageFormat 2 message (including future versions)
+  can be parsed into this representation
+- this data model representation can be serialized as a well-formed
+MessageFormat 2 message
+- parsing a MessageFormat 2 message into a data model representation
+  and then serializing it results in an equivalently functional message
+
+This data model might also be used to:
+- parse a non-MessageFormat 2 message into a data model
+  (and therefore re-serialize it as MessageFormat 2).
+  Note that this depends on compatibility between the two syntaxes.
+- re-serialize a MessageFormat 2 message into some other format
+  including (but not limited to) other formatting syntaxes
+  or translation formats.
 
 To ensure compatibility across all platforms,
 this interchange data model is defined here using TypeScript notation.
