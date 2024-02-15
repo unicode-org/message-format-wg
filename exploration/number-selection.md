@@ -179,10 +179,9 @@ function `:number`:
   - `percent` (see [Percent Style](#percent-style) below)
 - `useGrouping`
   - `auto` (default)
-  - `true`
-  - `false`
-  - `min2`
   - `always`
+  - `never`
+  - `min2`
 - `minimumIntegerDigits`
   - (non-negative integer, default: `1`)
   - 
