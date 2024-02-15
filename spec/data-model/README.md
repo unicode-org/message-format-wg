@@ -236,8 +236,8 @@ interface UnsupportedAnnotation {
 
 ## Markup
 
-A `Markup` object is either can be _open_, _standalone_, or _close_,
-and that information is stored in `kind`.
+A `Markup` object has a `kind` of either `"open"`, `"standalone"`, or `"close"`,
+each corresponding to _open_, _standalone_, and _close_ _markup_.
 The `name` in these does not include the starting sigils `#` and `/` 
 or the ending sigil `/`.
 The optional `options` for markup use the same `Option` as `FunctionAnnotation`.
