@@ -32,8 +32,7 @@ annotation            = function
                       / private-use-annotation
                       / reserved-annotation
 
-markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] "}"  ; open
-       / "{" [s] "#" identifier *(s option) *(s attribute) [s] "/}" ; standalone
+markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"  ; open and standalone
        / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}"  ; close
 
 ; Expression and literal parts
