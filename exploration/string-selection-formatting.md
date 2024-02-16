@@ -16,7 +16,7 @@ Status: **Proposed**
 
 ## Objective
 
-Define how selection and formatting of string literals takes place.
+Define how selection and formatting of string values takes place.
 
 ## Background
 
