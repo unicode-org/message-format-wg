@@ -127,7 +127,7 @@ A **_<dfn>message</dfn>_** is the complete template for a specific message forma
 A _message_ can be a _simple message_ or it can be a _complex message_.
 
 ```abnf
-message = simple-message / complex-message
+message           = simple-message / complex-message
 ```
 
 A **_<dfn>simple message</dfn>_** contains a single _pattern_,
@@ -135,8 +135,8 @@ with restrictions on its first character.
 An empty string is a valid _simple message_.
 
 ```abnf
-simple-message = [simple-start pattern]
-simple-start = simple-start-char / text-escape / placeholder
+simple-message    = [simple-start pattern]
+simple-start      = simple-start-char / text-escape / placeholder
 ```
 
 A **_<dfn>complex message</dfn>_** is any _message_ that contains _declarations_,
@@ -148,7 +148,7 @@ and consists of:
 2. a _complex body_
 
 ```abnf
-complex-message = *(declaration [s]) complex-body
+complex-message   = *(declaration [s]) complex-body
 ```
 
 ### Declarations
@@ -167,7 +167,7 @@ For compatibility with later MessageFormat 2 specification versions,
 _declarations_ MAY also include _reserved statements_.
 
 ```abnf
-declaration = input-declaration / local-declaration / reserved-statement
+declaration       = input-declaration / local-declaration / reserved-statement
 input-declaration = input [s] variable-expression
 local-declaration = local s variable [s] "=" [s] expression
 ```
@@ -209,8 +209,8 @@ a similarly wide range of content as _reserved annotations_,
 but it MUST end with one or more _expressions_.
 
 ```abnf
-reserved-statement = reserved-keyword [s reserved-body] 1*expression
-reserved-keyword = "." 2*(%x61-7A)
+reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
+reserved-keyword   = "." name
 ```
 
 > [!Note]
@@ -232,7 +232,7 @@ The **_<dfn>complex body</dfn>_** of a _complex message_ is the part that will b
 The _complex body_ consists of either a _quoted pattern_ or a _matcher_.
 
 ```abnf
-complex-body = quoted-pattern / matcher
+complex-body      = quoted-pattern / matcher
 ```
 
 ## Pattern
@@ -242,7 +242,7 @@ Unless there is an error, resolving a _message_ always results in the formatting
 of a single _pattern_.
 
 ```abnf
-pattern = *(text-char / text-escape / placeholder)
+pattern           = *(text-char / text-escape / placeholder)
 ```
 A _pattern_ MAY be empty.
 
@@ -257,7 +257,7 @@ A _quoted pattern_ starts with a sequence of two U+007B LEFT CURLY BRACKET `{{`
 and ends with a sequence of two U+007D RIGHT CURLY BRACKET `}}`.
 
 ```abnf
-quoted-pattern = "{{" pattern "}}"
+quoted-pattern    = "{{" pattern "}}"
 ```
 
 A _quoted pattern_ MAY be empty.
@@ -289,6 +289,8 @@ be preserved during formatting.
 ```abnf
 simple-start-char = content-char / s / "@" / "|"
 text-char         = content-char / s / "." / "@" / "|"
+quoted-char       = content-char / s / "." / "@" / "{" / "}"
+reserved-char     = content-char / "."
 content-char      = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
                   / %x0B-0C        ; omit CR (%x0D)
                   / %x0E-19        ; omit SP (%x20)
@@ -321,7 +323,7 @@ A **_<dfn>placeholder</dfn>_** is an _expression_ or _markup_ that appears insid
 and which will be replaced during the formatting of a _message_.
 
 ```abnf
-placeholder = expression / markup
+placeholder       = expression / markup
 ```
 
 ## Matcher
@@ -346,8 +348,8 @@ satisfied:
   or contain a _variable_ that directly or indirectly references a _declaration_ with an _annotation_.
 
 ```abnf
-matcher = match-statement 1*([s] variant)
-match-statement = match 1*([s] selector)
+matcher           = match-statement 1*([s] variant)
+match-statement   = match 1*([s] selector)
 ```
 
 > A _message_ with a _matcher_:
@@ -411,8 +413,8 @@ Each _key_ is separated from each other by whitespace.
 Whitespace is permitted but not required between the last _key_ and the _quoted pattern_.
 
 ```abnf
-variant = key *(s key) [s] quoted-pattern
-key = literal / "*"
+variant           = key *(s key) [s] quoted-pattern
+key               = literal / "*"
 ```
 
 #### Key
@@ -444,9 +446,11 @@ optionally followed by an _annotation_.
 An **_<dfn>annotation-expression</dfn>_** contains an _annotation_ without an _operand_.
 
 ```abnf
-expression = literal-expression / variable-expression / annotation-expression
-literal-expression = "{" [s] literal [s annotation] *(s attribute) [s] "}"
-variable-expression = "{" [s] variable [s annotation] *(s attribute) [s] "}"
+expression            = literal-expression
+                      / variable-expression
+                      / annotation-expression
+literal-expression    = "{" [s] literal [s annotation] *(s attribute) [s] "}"
+variable-expression   = "{" [s] variable [s annotation] *(s attribute) [s] "}"
 annotation-expression = "{" [s] annotation *(s attribute) [s] "}"
 ```
 
@@ -490,9 +494,9 @@ a _function_ together with its associated _options_, or
 a _private-use annotation_ or a _reserved annotation_.
 
 ```abnf
-annotation = function
-           / private-use-annotation
-           / reserved-annotation
+annotation            = function
+                      / private-use-annotation
+                      / reserved-annotation
 ```
 
 An **_<dfn>operand</dfn>_** is the _literal_ of a _literal-expression_ or
@@ -521,7 +525,7 @@ The _identifier_ MAY be followed by one or more _options_.
 _Options_ are not required.
 
 ```abnf
-function = ":" identifier *(s option)
+function       = ":" identifier *(s option)
 ```
 
 > A _message_ with a _function_ operating on the _variable_ `$now`:
@@ -547,7 +551,7 @@ Each _option_'s _identifier_ MUST be unique within the _annotation_:
 an _annotation_ with duplicate _option_ _identifiers_ is not valid.
 
 ```abnf
-option = identifier [s] "=" [s] (literal / variable)
+option         = identifier [s] "=" [s] (literal / variable)
 ```
 
 > Examples of _functions_ with _options_
@@ -604,8 +608,8 @@ wish to use a syntax exactly like other functions. Specifically:
 A _private-use annotation_ MAY be empty after its introducing sigil.
 
 ```abnf
-private-use-annotation = private-start reserved-body
-private-start = "^" / "&"
+private-use-annotation    = private-start reserved-body
+private-start             = "^" / "&"
 ```
 
 > [!Note]
@@ -647,11 +651,10 @@ While a reserved sequence is technically "well-formed",
 unrecognized _reserved-annotations_ or _private-use-annotations_ have no meaning.
 
 ```abnf
-reserved-annotation = reserved-annotation-start reserved-body
+reserved-annotation       = reserved-annotation-start reserved-body
 reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
-reserved-body = *([s] 1*(reserved-char / reserved-escape / quoted))
-reserved-char = content-char / "."
+reserved-body             = *([s] 1*(reserved-char / reserved-escape / quoted))
 ```
 
 ## Markup
@@ -721,7 +724,7 @@ Multiple _attributes_ are permitted in an _expression_ or _markup_.
 Each _attribute_ is separated by whitespace.
 
 ```abnf
-attribute = "@" identifier [[s] "=" [s] (literal / variable)]
+attribute      = "@" identifier [[s] "=" [s] (literal / variable)]
 ```
 
 > Examples of _expressions_ and _markup_ with _attributes_:
@@ -785,13 +788,9 @@ A _number-literal_ uses the same syntax as JSON and is intended for the encoding
 of number values in _operands_ or _options_, or as _keys_ for _variants_.
 
 ```abnf
-literal = quoted / unquoted
-
+literal        = quoted / unquoted
 quoted         = "|" *(quoted-char / quoted-escape) "|"
-quoted-char    = content-char / s / "." / "@" / "{" / "}"
-
-unquoted       = name
-               / number-literal
+unquoted       = name / number-literal
 number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
 ```
 
@@ -848,8 +847,8 @@ Support for _namespaces_ and their interpretation is implementation-defined
 in this release.
 
 ```abnf
-variable = "$" name
-option = identifier [s] "=" [s] (literal / variable)
+variable       = "$" name
+option         = identifier [s] "=" [s] (literal / variable)
 
 identifier = [namespace ":"] name
 namespace  = name
@@ -873,10 +872,10 @@ in the body of _text_, _quoted_, or _reserved_ (which includes, in this case,
 _private-use_) sequences respectively:
 
 ```abnf
-text-escape    = backslash ( backslash / "{" / "}" )
-quoted-escape  = backslash ( backslash / "|" )
-reserve-escape = backslash ( backslash / "{" / "|" / "}" )
-backslash      = %x5C ; U+005C REVERSE SOLIDUS "\"
+text-escape     = backslash ( backslash / "{" / "}" )
+quoted-escape   = backslash ( backslash / "|" )
+reserved-escape = backslash ( backslash / "{" / "|" / "}" )
+backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
 ```
 
 ### Whitespace
