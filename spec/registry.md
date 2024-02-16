@@ -449,12 +449,14 @@ are encouraged to track development of these options during Tech Preview:
 
 ### Percent Style
 When implementing `style=percent`, the numeric value of the _operand_ 
-MUST be divided by 100 for the purposes of formatting.
+MUST be multiplied by 100 for the purposes of formatting.
 
 > For example,
-> `The total was {|100| :number style=percent}.` should format
-> in a manner similar to:
-> > The total was 1%.
+> ```
+> The total was {0.5 :number style=percent}.
+> ```
+> should format in a manner similar to:
+> > The total was 50%.
 
 ### Selection
 
