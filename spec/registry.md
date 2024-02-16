@@ -256,10 +256,10 @@ which only expects the `accord` option:
 > {{You see {$color :adjective article=indefinite accord=$object} {$object}!}}
 >```
 
-# Default Registry for LDML45
+# Default Registry
 
 This section describes the functions which each implementation MUST provide to be conformant with
-the LDML45 Technical Preview of MessageFormat v2.
+this specification.
 
 ## String Value Selection and Formatting
 
@@ -269,9 +269,7 @@ the LDML45 Technical Preview of MessageFormat v2.
 
 ### Functions
 
-The following functions use numeric selection:
-
-The function `:number` is the default selector for numeric values.
+The function `:number` is the default selector and formatter for numeric values.
 
 The function `:integer` provides a reduced set of options for selecting
 and formatting numeric values as integers.
@@ -279,7 +277,7 @@ and formatting numeric values as integers.
 ### Operands
 
 The _operand_ of a number function is either an implementation-defined type or
-a literal that matches the `number-literal` production in the [ABNF](/main/spec/message.abnf).
+a literal that matches the `number-literal` production in the [ABNF](/spec/message.abnf).
 All other values produce a _Selection Error_ when evaluated for selection
 or a _Formatting Error_ when attempting to format the value.
 
@@ -331,19 +329,19 @@ function `:number`:
 > This might not be noticeable in the source language (particularly English), 
 > but can cause problems in target locales that the original developer is not considering.
 >
-> > For example, a naive developer might use a special message for the value `1` without
-> > considering other locale's need for a `one` plural:
-> >
-> >```
-> > .match {$var}
-> > 1   {{You have one last chance}}
-> > one {{You have {$var} chance remaining}} // needed by languages such as Polish or Russian
-> >                                          // such locales typically require other keywords
-> >                                          // such as two, few, many, and so forth
-> > *   {{You have {$var} chances remaining}}
-> >```
+> For example, a naive developer might use a special message for the value `1` without
+> considering other locale's need for a `one` plural:
+>
+>```
+> .match {$var}
+> 1   {{You have one last chance}}
+> one {{You have {$var} chance remaining}} // needed by languages such as Polish or Russian
+>                                          // such locales typically require other keywords
+>                                          // such as two, few, many, and so forth
+> *   {{You have {$var} chances remaining}}
+>```
 
-- `compactDisplay` // this option only has meaning when combined with the option `notation=compact`
+- `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
    - `short` (default)
    - `long`
 - `notation`
@@ -370,7 +368,6 @@ function `:number`:
   - `min2`
 - `minimumIntegerDigits`
   - (non-negative integer, default: `1`)
-  - 
 > [!NOTE]
 > The following options do not have default values because they are only to be used
 > as overrides for an existing locale-and-value dependent implementation-defined
@@ -421,7 +418,7 @@ function `:integer`:
   - (non-negative integer)
 
 > [!NOTE]
-> The following options or option values are being developed during the Technical Preview
+> The following options and option values are being developed during the Technical Preview
 > period.
 
 The following values for the option `style` are _not_ part of the default registry.
@@ -469,7 +466,7 @@ Number selection has three modes:
 - `ordinal` selection matches the operand to explicit numeric keys exactly
   or to ordinal rule categories if there is no explicit match
 
-When implementing [`MatchSelectorKeys`](spec/formatting.md#resolve-preferences), 
+When implementing [`MatchSelectorKeys`](formatting.md#resolve-preferences), 
 numeric selectors perform as described below.
 
 - Let `return_value` be a new empty list of strings.
@@ -496,7 +493,7 @@ numeric selectors perform as described below.
 The _plural/ordinal keywords_ are: `zero`, `one`, `two`, `few`, `many`, and
 `other`.
 
-### Rule Selection
+#### Rule Selection
 
 If the option `select` is set to `exact`, rule-based selection is not used.
 Return the empty string.
@@ -570,7 +567,7 @@ the two strings are equal.
 This subsection describes the functions and options for date/time formatting.
 Selection based on date and time values is not required in this release.
 
-#### Functions
+### Functions
 
 Functions for formatting [date/time values](#operands) in the default registry are:
 
@@ -589,7 +586,7 @@ If no options are specified, each of the functions defaults to the following:
 
 > [!NOTE]
 > The default formatting behavior of `:datetime` is inconsistent with `Intl.DateTimeFormat`
-> in JavaScript and with `{d,date}` in MessageFormat v1.
+> in JavaScript and with `{d,date}` in ICU MessageFormat 1.0.
 > This is because, unlike those implementations, `:datetime` is distinct from `:date` and `:time`.
 
 #### Operands
@@ -612,7 +609,7 @@ When the offset is not present, implementations should use a floating time type
 For more information, see [Working with Timezones](https://w3c.github.io/timezone).
 
 > [!IMPORTANT]
-> The [ABNF](/spec/message.abnf) and [syntax](/spec/syntax.md) of MFv2
+> The [ABNF](/spec/message.abnf) and [syntax](/spec/syntax.md) of MF2
 > do not formally define date/time literals. 
 > This means that a _message_ can be syntactically valid but produce
 > an _Operand Mismatch Error_ at runtime.
@@ -637,7 +634,7 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 > Support for these extensions is expected to be required in the post-tech preview.
 > See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
 
-#### Options
+### Options
 
 A function can use either the appropriate _style_ options for that function
 or can use a collection of _field options_ (but not both) to control the formatted 
@@ -646,7 +643,7 @@ output.
 If both are specified, an _Invalid Expression_ error MUST be emitted
 and a _fallback value_ used as the resolved value of the _expression_.
 
-##### Style Options
+#### Style Options
 
 The function `:datetime` has these function-specific _style_ options.
 - `dateStyle`
@@ -674,7 +671,7 @@ The function `:time` has these function-specific _style_ options:
   - `medium`
   - `short` (default)
 
-##### Field Options
+#### Field Options
 
 Field options describe which fields to include in the formatted output
 and what format to use for that field.
@@ -738,7 +735,7 @@ The function `:datetime` has the following options:
 > The following options do not have default values because they are only to be used
 > as overrides for locale-and-value dependent implementation-defined defaults.
 
-The followind date/time options are *not* part of the default registry.
+The following date/time options are **not** part of the default registry.
 Implementations SHOULD avoid creating options that conflict with these, but
 are encouraged to track development of these options during Tech Preview:
 - `calendar` (default is locale-specific)
@@ -748,9 +745,9 @@ are encouraged to track development of these options during Tech Preview:
 - `timeZone` (default is system default time zone or UTC)
   - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
 
-#### Selection
+### Selection
 
-Selection based on date/time types is not required by MFv2.
+Selection based on date/time types is not required by MF2.
 Implementations should use care when defining selectors based on date/time types.
 The types of queries found in implementations such as `java.time.TemporalAccessor`
 are complex and user expectations may be inconsistent with good I18N practices.
