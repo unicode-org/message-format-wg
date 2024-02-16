@@ -734,6 +734,12 @@ might not match future requirements or usage.
 > - Avoid specifying an option to link opening and closing markup expressions
 >   such as a `startRef` on closing markup or matching `id` or `ref` values in paired
 >   markup.
+> - Avoid specifying generic options to communicate with translators and 
+>   translation tooling (i.e. implementation-specific options that apply to all
+>   functions.
+> The above are all desirable features.
+> We welcome contributions to and proposals for such features during the
+> Technical Preview.
 
 An **_<dfn>attribute</dfn>_** is an _identifier_ with an optional value
 that appears in an _expression_ or in _markup_.
