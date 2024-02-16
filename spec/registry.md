@@ -588,7 +588,7 @@ If no options are specified, each of the functions defaults to the following:
 > in JavaScript and with `{d,date}` in ICU MessageFormat 1.0.
 > This is because, unlike those implementations, `:datetime` is distinct from `:date` and `:time`.
 
-#### Operands
+### Operands
 
 The _operand_ of a date/time function is either 
 an implementation-defined date/time type (passed in as an argument)
