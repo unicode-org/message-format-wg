@@ -278,8 +278,7 @@ and formatting numeric values as integers.
 
 The _operand_ of a number function is either an implementation-defined type or
 a literal that matches the `number-literal` production in the [ABNF](/spec/message.abnf).
-All other values produce a _Selection Error_ when evaluated for selection
-or a _Formatting Error_ when attempting to format the value.
+All other values produce a _Resolution Error_.
 
 > For example, in Java, any subclass of `java.lang.Number` plus the primitive
 > types (`byte`, `short`, `int`, `long`, `float`, `double`, etc.) 
