@@ -61,8 +61,7 @@ character-sequence types.
 > This should probably include individual character types, such as `char`.
 
 In addition, implementations MAY perform formatting and selection on 
-`operand` values that do not otherwise have a formatting function registered, 
-although emitting an `Unsupported Expression` error is RECOMMENDED.
+`operand` values that do not otherwise have a formatting function registered.
 
 ### Options
 
