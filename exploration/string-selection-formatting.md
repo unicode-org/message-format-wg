@@ -98,15 +98,16 @@ the `:string` selector performs as described below.
 
 > [!NOTE]
 > Unquoted string literals in a _variant_ do not include spaces.
-> If users wish to match strings that begin or end with spaces
+> If users wish to match strings that include whitespace
 > (including U+3000 `IDEOGRAPHIC SPACE`)
-> to a key, the `key` needs to have the spaces quoted.
-> > For example:
-> >```
-> > .match {$string :string}
-> > | space key | {{Matches the string " space key "}}
-> > *             {{Matches the string "space key"}}
-> >```
+> to a key, the `key` needs to be quoted.
+>
+> For example:
+>```
+> .match {$string :string}
+> | space key | {{Matches the string " space key "}}
+> *             {{Matches the string "space key"}}
+>```
 
 ### Formatting
 
