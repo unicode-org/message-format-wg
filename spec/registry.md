@@ -447,7 +447,7 @@ are encouraged to track development of these options during Tech Preview:
    - `short` (default)
    - `narrow`
 
-### Percent Style
+#### Percent Style
 When implementing `style=percent`, the numeric value of the _operand_ 
 MUST be multiplied by 100 for the purposes of formatting.
 
@@ -490,7 +490,7 @@ numeric selectors perform as described below.
      Do not add `key` to `return_value`
 - Return `return_value`
 
-### Plural/Ordinal Keywords
+#### Plural/Ordinal Keywords
 The _plural/ordinal keywords_ are: `zero`, `one`, `two`, `few`, `many`, and
 `other`.
 
