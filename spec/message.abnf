@@ -1,7 +1,7 @@
 message           = simple-message / complex-message
 
-simple-message    = [simple-start pattern]
-simple-start      = simple-start-char / text-escape / placeholder
+simple-message    = [simple-begin pattern]
+simple-begin      = simple-start / text-escape / placeholder
 pattern           = *(text-char / text-escape / placeholder)
 placeholder       = expression / markup
 
@@ -84,19 +84,19 @@ name-char  = name-start / DIGIT / "-" / "."
            / %xB7 / %x300-36F / %x203F-2040
 
 ; Restrictions on characters in various contexts
-simple-start-char = content-char / s / "@" / "|"
-text-char         = content-char / s / "." / "@" / "|"
-quoted-char       = content-char / s / "." / "@" / "{" / "}"
-reserved-char     = content-char / "."
-content-char      = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
-                  / %x0B-0C        ; omit CR (%x0D)
-                  / %x0E-19        ; omit SP (%x20)
-                  / %x21-2D        ; omit . (%x2E)
-                  / %x2F-3F        ; omit @ (%x40)
-                  / %x41-5B        ; omit \ (%x5C)
-                  / %x5D-7A        ; omit { | } (%x7B-7D)
-                  / %x7E-D7FF      ; omit surrogates
-                  / %xE000-10FFFF
+simple-start  = content-char / s / "@" / "|"
+text-char     = content-char / s / "." / "@" / "|"
+quoted-char   = content-char / s / "." / "@" / "{" / "}"
+reserved-char = content-char / "."
+content-char  = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
+              / %x0B-0C        ; omit CR (%x0D)
+              / %x0E-19        ; omit SP (%x20)
+              / %x21-2D        ; omit . (%x2E)
+              / %x2F-3F        ; omit @ (%x40)
+              / %x41-5B        ; omit \ (%x5C)
+              / %x5D-7A        ; omit { | } (%x7B-7D)
+              / %x7E-D7FF      ; omit surrogates
+              / %xE000-10FFFF
 
 ; Character escapes
 text-escape     = backslash ( backslash / "{" / "}" )
