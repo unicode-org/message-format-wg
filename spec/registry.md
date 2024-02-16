@@ -535,7 +535,7 @@ If no rules match, return `other`.
 > | 27 | `other` | 27 dní |
 > | 2.4 | `many` | 2,4 dne |
 
-### Determining Exact Literal Match
+#### Determining Exact Literal Match
 
 > [!IMPORTANT]
 > The exact behavior of exact literal match is only defined for non-zero-filled
