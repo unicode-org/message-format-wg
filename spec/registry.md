@@ -277,7 +277,7 @@ and formatting numeric values as integers.
 ### Operands
 
 The _operand_ of a number function is either an implementation-defined type or
-a literal that matches the `number-literal` production in the [ABNF](/spec/message.abnf).
+a literal whose contents match the `number-literal` production in the [ABNF](/spec/message.abnf).
 All other values produce a _Resolution Error_.
 
 > For example, in Java, any subclass of `java.lang.Number` plus the primitive
@@ -303,7 +303,7 @@ All other values produce a _Resolution Error_.
 > Implementations are encouraged to provide support for compound types or data structures
 > that provide additional semantic meaning to the formatting of number-like values.
 > For example, in ICU4J, the type `com.ibm.icu.util.Measure` can be used to communicate
-> a value that include a unit
+> a value that includes a unit
 > or the type `com.ibm.icu.util.CurrencyAmount` can be used to set the currency and related
 > options (such as the number of fraction digits).
 
@@ -323,13 +323,13 @@ function `:number`:
 >
 > The value `plural` is default for the option `select` 
 > because it is the most common use case for numeric selection.
-> It can be used for exact value matches but also allows for the grammatical needs of other 
+> It can be used for exact value matches but also allows for the grammatical needs of 
 > languages using CLDR's plural rules.
 > This might not be noticeable in the source language (particularly English), 
 > but can cause problems in target locales that the original developer is not considering.
 >
 > For example, a naive developer might use a special message for the value `1` without
-> considering other locale's need for a `one` plural:
+> considering a locale's need for a `one` plural:
 >
 >```
 > .match {$var}
@@ -550,7 +550,7 @@ If no rules match, return `other`.
 Number literals in the MessageFormat 2 syntax use the 
 [format defined for a JSON number](https://www.rfc-editor.org/rfc/rfc8259#section-6).
 The resolved value of an `operand` exactly matches a numeric literal `key`
-if, when the `operand` is serialized using the format for a JSON number
+if, when the `operand` is serialized using the format for a JSON number,
 the two strings are equal.
 
 > [!NOTE]
@@ -582,10 +582,6 @@ If no options are specified, each of the functions defaults to the following:
 - `{$t :time}` is the same as `{$t :time style=short}`
 
 > [!NOTE]
-> Pattern selection based on date/time values is a complex topic and no support for this
-> is required in this release.
-
-> [!NOTE]
 > The default formatting behavior of `:datetime` is inconsistent with `Intl.DateTimeFormat`
 > in JavaScript and with `{d,date}` in ICU MessageFormat 1.0.
 > This is because, unlike those implementations, `:datetime` is distinct from `:date` and `:time`.
@@ -595,8 +591,7 @@ If no options are specified, each of the functions defaults to the following:
 The _operand_ of a date/time function is either 
 an implementation-defined date/time type (passed in as an argument)
 or a _date/time literal value_, as defined below.
-All other _operand_ values produce a _Selection Error_ when evaluated for selection
-or a _Formatting Error_ when formatting the value.
+All other _operand_ values produce a _Selection Error_.
 
 A **_<dfn>date/time literal value</dfn>_** is a non-empty string consisting of 
 one of the following:
