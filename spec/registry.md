@@ -59,7 +59,7 @@ tailored versions of the registry for consumption by tools
 and to encourage any add-on or plug-in functionality to provide
 a registry to support localization tooling.
 
-## Data Model
+## Registry Data Model
 
 _This section is non-normative._
 
@@ -263,7 +263,72 @@ this specification.
 
 ## String Value Selection and Formatting
 
-(Pending)
+### Functions
+
+The following functions are provided:
+
+The function `:string` provides string selection and formatting.
+
+### Operands
+
+The _operand_ is any literal or an implementation-defined set of string or
+character-sequence types.
+
+> [!NOTE]
+> This should probably include individual character types, such as `char`.
+
+In addition, implementations MAY perform formatting and selection on 
+`operand` values that do not otherwise have a formatting function registered.
+
+### Options
+
+The function `:string` has no options.
+
+> [!NOTE]
+> Proposals for string transformation options or implementation
+> experience with user requirements is desired during the Tech Preview.
+
+### Selection
+
+When implementing [`MatchSelectorKeys`](spec/formatting.md#resolve-preferences), 
+the `:string` selector performs as described below.
+
+- Let `return_value` be a new empty list of strings.
+- Let `operand` be the resolved value of the _operand_.
+  If the `operand` is not a string literal, convert the value to a string literal,
+  or, optionally: emit a _Selection Error_ and return `return_value`.
+- Let `keys` be a list of strings containing keys to match.
+  (Hint: this list is an argument to `MatchSelectorKeys`)
+- For each string `key` in `keys`:
+   - If the value of `key` is equal to the string value of `operand`
+     then `key` matches the selector.
+     A `key` and an `operand` are equal if they consist of the same
+     sequence of Unicode code points.
+     Add `key` to the front of the `return_value` list.
+- Return `return_value`
+
+> [!NOTE]
+> Matching of `key` and `operand` values is sensitive to the sequence of code points
+> in each string.
+> As a result, variations in how text can be encoded can affect the performance of matching.
+> The function `:string` does not perform case folding or Unicode Normalization of string values.
+
+> [!NOTE]
+> Unquoted string literals in a _variant_ do not include spaces.
+> If users wish to match strings that include whitespace
+> (including U+3000 `IDEOGRAPHIC SPACE`)
+> to a key, the `key` needs to be quoted.
+>
+> For example:
+>```
+> .match {$string :string}
+> | space key | {{Matches the string " space key "}}
+> *             {{Matches the string "space key"}}
+>```
+
+### Formatting
+
+The `:string` function returns the string value of the resolved value of the _operand_.
 
 ## Numeric Value Selection and Formatting
 
