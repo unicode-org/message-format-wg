@@ -591,8 +591,8 @@ foo bar {{Foo and bar}}
 
 A more-complex example is the matching found in selection APIs
 such as ICU's `PluralFormat`.
-Suppose that this API is represented here by the function `:plural`.
-This `:plural` function can match a given numeric value to a specific number _literal_
+Suppose that this API is represented here by the function `:number`.
+This `:number` function can match a given numeric value to a specific number _literal_
 and **_also_** to a plural category (`zero`, `one`, `two`, `few`, `many`, `other`)
 according to locale rules defined in CLDR.
 
@@ -601,7 +601,7 @@ and an `en` (English) locale,
 the pattern selection proceeds as follows for this message:
 
 ```
-.match {$count :plural}
+.match {$count :number}
 one {{Category match}}
 1   {{Exact match}}
 *   {{Other match}}

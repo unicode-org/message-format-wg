@@ -136,19 +136,19 @@ so explicitly declaring it after such use is also an error.
 > Examples of invalid messages resulting in a _Duplicate Declaration_ error:
 >
 > ```
-> .input {$var :number maxFractionDigits=0}
-> .input {$var :number minFractionDigits=0}
+> .input {$var :number maximumFractionDigits=0}
+> .input {$var :number minimumFractionDigits=0}
 > {{Redeclaration of the same variable}}
 >
-> .local $var = {$ext :number maxFractionDigits=0}
-> .input {$var :number minFractionDigits=0}
+> .local $var = {$ext :number maximumFractionDigits=0}
+> .input {$var :number minimumFractionDigits=0}
 > {{Redeclaration of a local variable}}
 >
-> .input {$var :number minFractionDigits=0}
-> .local $var = {$ext :number maxFractionDigits=0}
+> .input {$var :number minimumFractionDigits=0}
+> .local $var = {$ext :number maximumFractionDigits=0}
 > {{Redeclaration of an input variable}}
 >
-> .input {$var :number minFractionDigits=$var2}
+> .input {$var :number minimumFractionDigits=$var2}
 > .input {$var2 :number}
 > {{Redeclaration of the implicit input variable $var2}}
 >
@@ -284,16 +284,16 @@ An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a
 
 > For example, attempting to format either of the following messages
 > might result in a _Selection Error_ if done within a context that
-> uses a `:plural` selector function which requires its input to be numeric:
+> uses a `:number` selector function which requires its input to be numeric:
 >
 > ```
-> .match {|horse| :plural}
+> .match {|horse| :number}
 > 1 {{The value is one.}}
 > * {{The value is not one.}}
 > ```
 >
 > ```
-> .local $sel = {|horse| :plural}
+> .local $sel = {|horse| :number}
 > .match {$sel}
 > 1 {{The value is one.}}
 > * {{The value is not one.}}
@@ -331,3 +331,4 @@ or an internally inconsistent set of options.
 > ```
 > Your {$field} is {$id :get field=$field}
 > ```
+
