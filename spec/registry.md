@@ -310,36 +310,17 @@ All other values produce a _Resolution Error_.
 
 ### Options
 
+Some options do not have default values defined in this specification.
+The defaults for these options are implementation-dependent.
+In general, the default values for such options depend on the locale, 
+the value of other options, or both.
+
 The following options and their values are required in the default registry to be available on the 
 function `:number`:
 - `select`
-   -  `plural` (default)
+   -  `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
    -  `ordinal`
    -  `exact`
-
- 
-> [!IMPORTANT]
-> **Default Value of `select` Option**
->
-> The value `plural` is default for the option `select` 
-> because it is the most common use case for numeric selection.
-> It can be used for exact value matches but also allows for the grammatical needs of 
-> languages using CLDR's plural rules.
-> This might not be noticeable in the source language (particularly English), 
-> but can cause problems in target locales that the original developer is not considering.
->
-> For example, a naive developer might use a special message for the value `1` without
-> considering a locale's need for a `one` plural:
->
->```
-> .match {$var}
-> 1   {{You have one last chance}}
-> one {{You have {$var} chance remaining}} // needed by languages such as Polish or Russian
->                                          // such locales typically require other keywords
->                                          // such as two, few, many, and so forth
-> *   {{You have {$var} chances remaining}}
->```
-
 - `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
    - `short` (default)
    - `long`
@@ -367,11 +348,6 @@ function `:number`:
   - `min2`
 - `minimumIntegerDigits`
   - (non-negative integer, default: `1`)
-> [!NOTE]
-> The following options do not have default values because they are only to be used
-> as overrides for an existing locale-and-value dependent implementation-defined
-> default
-
 - `minimumFractionDigits`
   - (non-negative integer)
 - `maximumFractionDigits`
@@ -401,18 +377,10 @@ function `:integer`:
   - `percent` (see [Percent Style](#percent-style) below)
 - `useGrouping`
   - `auto` (default)
-  - `true`
-  - `false`
-  - `min2`
   - `always`
+  - `min2`
 - `minimumIntegerDigits`
   - (non-negative integer, default: `1`)
-
-> [!NOTE]
-> The following option does not have a default value because it is only to be used
-> as an override for an existing locale-and-value dependent implementation-defined
-> default
-
 - `maximumSignificantDigits`
   - (non-negative integer)
 
@@ -446,6 +414,26 @@ are encouraged to track development of these options during Tech Preview:
    - `long`
    - `short` (default)
    - `narrow`
+
+#### Default Value of `select` Option
+
+The value `plural` is default for the option `select` 
+because it is the most common use case for numeric selection.
+It can be used for exact value matches but also allows for the grammatical needs of 
+languages using CLDR's plural rules.
+This might not be noticeable in the source language (particularly English), 
+but can cause problems in target locales that the original developer is not considering.
+
+For example, a naive developer might use a special message for the value `1` without
+considering a locale's need for a `one` plural:
+```
+.match {$var}
+1   {{You have one last chance}}
+one {{You have {$var} chance remaining}} // needed by languages such as Polish or Russian
+                                         // such locales typically require other keywords
+                                         // such as two, few, many, and so forth
+*   {{You have {$var} chances remaining}}
+```
 
 #### Percent Style
 When implementing `style=percent`, the numeric value of the _operand_ 
