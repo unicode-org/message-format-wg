@@ -372,6 +372,18 @@ to provide the _pattern_ for the formatting operation.
 This is done by ordering and filtering the available _variant_ statements
 according to their _key_ values and selecting the first one.
 
+> [!NOTE]
+> At least one _variant_ is required to have all of its _keys_ consist of
+> the fallback value `*`.
+> Some _selectors_ might be implemented in a way that this _variant_
+> cannot be selected in a _valid_ _message_.
+> In other cases, this _variant_ might be unreachable only in certain locales.
+>
+> In the Tech Preview, feedback from users and implementers is desired about
+> whether to relax the requirement that such a "fallback _variant_" appear in
+> every message, versus the potential for a _message_ to fail at runtime
+> because no matching _variant_ is available.
+
 The number of _keys_ in each _variant_ MUST equal the number of _selectors_.
 
 Each _key_ corresponds to a _selector_ by its position in the _variant_.
