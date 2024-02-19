@@ -293,7 +293,7 @@ quoted-char       = content-char / s / "." / "@" / "{" / "}"
 reserved-char     = content-char / "."
 content-char      = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
                   / %x0B-0C        ; omit CR (%x0D)
-                  / %x0E-19        ; omit SP (%x20)
+                  / %x0E-1F        ; omit SP (%x20)
                   / %x21-2D        ; omit . (%x2E)
                   / %x2F-3F        ; omit @ (%x40)
                   / %x41-5B        ; omit \ (%x5C)
