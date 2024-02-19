@@ -925,8 +925,17 @@ intelligibly in a left-to-right context.
 
 This definition of _whitespace_ implements 
 [UTR#31 Rule 3a-2](https://www.unicode.org/reports/tr31/#R3a-2).
-It is a profile of R3a-1 in that specification because only the
-whitespace characters listed are permitted as whitespace.
+It is a profile of R3a-1 in that specification because:
+the following pattern whitespace characters are not allowed:
+`U+000B LINE FEED`, 
+`U+000C VERTICAL TABULATION`, 
+`U+0085 NEXT LINE`, 
+`U+2028 LINE SEPARATOR` and 
+`U+2029 PARAGRAPH SEPARATOR`;
+the character `U+3000 IDEOGRAPHIC SPACE`
+_is_ included in pattern whitespace;
+ and the following character is not included in ignorable format controls:
+`U+200F RIGHT-TO-LEFT MARK`. 
 
 > [!NOTE]
 > The character U+3000 IDEOGRAPHIC SPACE is included in whitespace for
@@ -934,7 +943,7 @@ whitespace characters listed are permitted as whitespace.
 > in which users might accidentally create these characters in a _message_.
 
 ```abnf
-s = 1*( SP / HTAB / CR / LF / %x3000 )
+s = [%x200E] 1*( SP / HTAB / CR / LF / %x3000 )
 ```
 
 ## Complete ABNF
