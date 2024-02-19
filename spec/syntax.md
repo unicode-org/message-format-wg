@@ -927,7 +927,7 @@ This definition of _whitespace_ implements
 [UTR#31 Rule 3a-2](https://www.unicode.org/reports/tr31/#R3a-2).
 It is a profile of R3a-1 in that specification because:
 the following pattern whitespace characters are not allowed:
-`U+000B LINE FEED`, 
+`U+000B FORM FEED`, 
 `U+000C VERTICAL TABULATION`, 
 `U+0085 NEXT LINE`, 
 `U+2028 LINE SEPARATOR` and 
