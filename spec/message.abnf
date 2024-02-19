@@ -104,5 +104,5 @@ quoted-escape   = backslash ( backslash / "|" )
 reserved-escape = backslash ( backslash / "{" / "|" / "}" )
 backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
 
-; Whitespace
-s = 1*( SP / HTAB / CR / LF / %x3000 )
+; Whitespace, optionally prepended with LRM
+s = [%x200E] 1*( SP / HTAB / CR / LF / %x3000 )
