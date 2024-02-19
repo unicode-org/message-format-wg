@@ -17,26 +17,26 @@ quoted-pattern    = "{{" pattern "}}"
 matcher           = match-statement 1*(owsp variant)
 match-statement   = match 1*(owsp selector)
 selector          = expression
-variant           = key *(s key) owsp quoted-pattern
+variant           = key *(wsp key) owsp quoted-pattern
 key               = literal / "*"
 
 ; Expressions
 expression            = literal-expression
                       / variable-expression
                       / annotation-expression
-literal-expression    = "{" owsp literal [s annotation] *(s attribute) owsp "}"
-variable-expression   = "{" owsp variable [s annotation] *(s attribute) owsp "}"
-annotation-expression = "{" owsp annotation *(s attribute) owsp "}"
+literal-expression    = "{" owsp literal [s annotation] *(wsp attribute) owsp "}"
+variable-expression   = "{" owsp variable [s annotation] *(wsp attribute) owsp "}"
+annotation-expression = "{" owsp annotation *(wsp attribute) owsp "}"
 
 annotation            = function
                       / private-use-annotation
                       / reserved-annotation
 
-markup = "{" owsp "#" identifier *(s option) *(s attribute) owsp ["/"] "}"  ; open and standalone
-       / "{" owsp "/" identifier *(s option) *(s attribute) owsp "}"  ; close
+markup = "{" owsp "#" identifier *(wsp option) *(wsp attribute) owsp ["/"] "}"  ; open and standalone
+       / "{" owsp "/" identifier *(wsp option) *(wsp attribute) owsp "}"  ; close
 
 ; Expression and literal parts
-function       = ":" identifier *(s option)
+function       = ":" identifier *(wsp option)
 option         = identifier owsp "=" owsp (literal / variable)
 ; Attributes are reserved for future standardization
 attribute      = "@" identifier [owsp "=" owsp (literal / variable)]
@@ -108,4 +108,7 @@ backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
 owsp = *( SP/ HTAB / CR / LF / %x3000 / %x200E / %x200F )
 
 ; required whitespace
-s = [ (%x200E / %x200F) ] 1*( SP / HTAB / CR / LF / %x3000) [ (%x200E / %x200F) ]
+wsp = [ (%x200E / %x200F) ] 1*s [ (%x200E / %x200F) ]
+
+; whitespace characters
+s = ( SP / HTAB / CR / LF / %x3000 )
