@@ -905,25 +905,28 @@ backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
 
 ### Whitespace
 
-**_<dfn>Whitespace</dfn>_** is defined as one or more of
+The syntax limits whitespace characters outside of a _pattern_ to the following:
 `U+0009 CHARACTER TABULATION` (tab), 
 `U+000A LINE FEED` (new line),
 `U+000D CARRIAGE RETURN`, 
 `U+3000 IDEOGRAPHIC SPACE`, 
-or `U+0020 SPACE`,
-optionally prepended with `U+200E LEFT-TO-RIGHT MARK`.
+or `U+0020 SPACE`.
 
 Inside _patterns_ and _quoted literals_,
 whitespace is part of the content and is recorded and stored verbatim.
 Whitespace is not significant outside translatable text, except where required by the syntax.
 
-The character `U+200E LEFT-TO-RIGHT MARK` (LRM) MAY be prepended to _whitespace_ outside
-_patterns_ and _quoted literals_ to assist with presentation to users.
-Tools SHOULD generate these LRM characters following _identifiers_, _unquoted literals_, or 
-_option_ values that use right-to-left characters so that the _message_ displays
-intelligibly in a left-to-right context.
+There are two whitespace productions in the syntax.
+**_<dfn>Optional whitespace</dfn>_** is whitespace that is not required by the syntax, 
+but which users might want to include to increase the readability of a _message_.
+**_<dfn>Required whitespace</dfn>_** is whitespace that is required by the syntax.
 
-This definition of _whitespace_ implements 
+Tools SHOULD generate `U+200E LEFT-TO-RIGHT MARK` or `U+200F RIGHT-TO-LEFT MARK` 
+characters where permitted by the syntax before or following _identifiers_,
+_unquoted literals_, or _option_ values that use right-to-left characters 
+so that the _message_ displays intelligibly.
+
+These definitions of _whitespace_ implement
 [UTR#31 Rule 3a-2](https://www.unicode.org/reports/tr31/#R3a-2).
 It is a profile of R3a-1 in that specification because:
 the following pattern whitespace characters are not allowed:
@@ -943,7 +946,14 @@ _is_ included in pattern whitespace;
 > in which users might accidentally create these characters in a _message_.
 
 ```abnf
-s = [%x200E] 1*( SP / HTAB / CR / LF / %x3000 )
+; optional whitespace
+owsp = *( s / %x200E / %x200F )
+
+; required whitespace
+wsp = [ (%x200E / %x200F) ] 1*s [ (%x200E / %x200F) ]
+
+; whitespace characters
+s = ( SP / HTAB / CR / LF / %x3000 )
 ```
 
 ## Complete ABNF
