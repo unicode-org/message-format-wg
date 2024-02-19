@@ -29,7 +29,6 @@
 )>
 
 <!ELEMENT literal (#PCDATA)>
-<!ATTLIST literal quoted (true | false) #REQUIRED>
 
 <!ELEMENT variable (EMPTY)>
 <!ATTLIST variable name NMTOKEN #REQUIRED>

@@ -9,10 +9,9 @@
       "type": "object",
       "properties": {
         "type": { "const": "literal" },
-        "quoted": { "type": "boolean" },
         "value": { "type": "string" }
       },
-      "required": ["type", "quoted", "value"]
+      "required": ["type", "value"]
     },
     "variable": {
       "type": "object",
