@@ -731,9 +731,10 @@ might not match future requirements or usage.
 > - Avoid specifying an option for setting the locale of an expression as different from
 >   that of the overall _message_ locale, or use a namespace that later maps to the final
 >   mechanism.
-> - Avoid specifying an option to link opening and closing markup expressions
->   such as a `startRef` on closing markup or matching `id` or `ref` values in paired
->   markup.
+> - Avoid specifying options for the purpose of linking placeholders
+>   (such as to pair opening markup to closing markup) 
+>   or require that such options use an implementation-specific namespace
+>   while cautioning users that such option might be replaced or unavailable later.
 > - Avoid specifying generic options to communicate with translators and 
 >   translation tooling (i.e. implementation-specific options that apply to all
 >   functions.
