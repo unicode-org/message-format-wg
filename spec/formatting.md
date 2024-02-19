@@ -375,9 +375,21 @@ according to their _key_ values and selecting the first one.
 > [!NOTE]
 > At least one _variant_ is required to have all of its _keys_ consist of
 > the fallback value `*`.
-> Some _selectors_ might be implemented in a way that this _variant_
+> Some _selectors_ might be implemented in a way that the key value `*`
 > cannot be selected in a _valid_ _message_.
-> In other cases, this _variant_ might be unreachable only in certain locales.
+> In other cases, this key value might be unreachable only in certain locales.
+> This could result in the need in some locales to create
+> one or more _variants_ that do not make sense grammatically for that language.
+> > For example, in the `pl` (Polish) locale, this _message_ cannot reach
+> > the `*` _variant_:
+> > ```
+> > .match {$num :integer}
+> > 0    {{ }}
+> > one  {{ }}
+> > few  {{ }}
+> > many {{ }}
+> > *    {{Only used by fractions in Polish.}}
+> > ```
 >
 > In the Tech Preview, feedback from users and implementers is desired about
 > whether to relax the requirement that such a "fallback _variant_" appear in
