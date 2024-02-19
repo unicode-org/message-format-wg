@@ -906,15 +906,27 @@ backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
 ### Whitespace
 
 **_<dfn>Whitespace</dfn>_** is defined as one or more of
-U+0009 CHARACTER TABULATION (tab), 
-U+000A LINE FEED (new line),
-U+000D CARRIAGE RETURN, 
-U+3000 IDEOGRAPHIC SPACE, 
-or U+0020 SPACE.
+`U+0009 CHARACTER TABULATION` (tab), 
+`U+000A LINE FEED` (new line),
+`U+000D CARRIAGE RETURN`, 
+`U+3000 IDEOGRAPHIC SPACE`, 
+or `U+0020 SPACE`,
+optionally prepended with `U+200E LEFT-TO-RIGHT MARK`.
 
 Inside _patterns_ and _quoted literals_,
 whitespace is part of the content and is recorded and stored verbatim.
 Whitespace is not significant outside translatable text, except where required by the syntax.
+
+The character `U+200E LEFT-TO-RIGHT MARK` (LRM) MAY be prepended to _whitespace_ outside
+_patterns_ and _quoted literals_ to assist with presentation to users.
+Tools SHOULD generate these LRM characters following _identifiers_, _unquoted literals_, or 
+_option_ values that use right-to-left characters so that the _message_ displays
+intelligibly in a left-to-right context.
+
+This definition of _whitespace_ implements 
+[UTR#31 Rule 3a-2](https://www.unicode.org/reports/tr31/#R3a-2).
+It is a profile of R3a-1 in that specification because only the
+whitespace characters listed are permitted as whitespace.
 
 > [!NOTE]
 > The character U+3000 IDEOGRAPHIC SPACE is included in whitespace for
