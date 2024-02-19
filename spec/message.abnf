@@ -105,7 +105,7 @@ reserved-escape = backslash ( backslash / "{" / "|" / "}" )
 backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
 
 ; optional whitespace
-owsp = *( SP/ HTAB / CR / LF / %x3000 / %x200E / %x200F )
+owsp = *( s / %x200E / %x200F )
 
 ; required whitespace
 wsp = [ (%x200E / %x200F) ] 1*s [ (%x200E / %x200F) ]
