@@ -46,8 +46,6 @@ the JSON and DTD definitions are intended for interchange between systems and pr
 To that end, they relax some aspects of the data model, such as allowing
 declarations, options, and attributes to be optional rather than required properties.
 
-## Messages
-
 > [!IMPORTANT]
 > The data model uses the field name `name` to denote various interface identifiers.
 > In the MessageFormat 2 syntax, the source for these `name` fields sometimes uses
@@ -57,6 +55,8 @@ declarations, options, and attributes to be optional rather than required proper
 > In the Tech Preview, feedback on whether to separate the `namespace` from the `name`
 > and represent both separately, or just, as here, use an opaque single field `name`
 > is desired.
+
+## Messages
 
 A `SelectMessage` corresponds to a syntax message that includes _selectors_.
 A message without _selectors_ and with a single _pattern_ is represented by a `PatternMessage`.
