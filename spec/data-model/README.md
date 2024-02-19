@@ -48,8 +48,8 @@ declarations, options, and attributes to be optional rather than required proper
 
 > [!IMPORTANT]
 > The data model uses the field name `name` to denote various interface identifiers.
-> In the MessageFormat 2 syntax, the source for these `name` fields sometimes uses
-> the production `identifier`.
+> In the MessageFormat 2 [syntax](/spec/syntax.md), the source for these `name` fields
+> sometimes uses the production `identifier`.
 > This happens when the named item, such as a _function_, supports namespacing.
 >
 > In the Tech Preview, feedback on whether to separate the `namespace` from the `name`
