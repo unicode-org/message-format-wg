@@ -678,7 +678,7 @@ markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"  ; open
 > A _message_ with one `button` markup span and a standalone `img` markup element:
 >
 > ```
-> {#button}Submit{/button} or {#img alt=|Cancel| /}.}
+> {#button}Submit{/button} or {#img alt=|Cancel| /}.
 > ```
 
 > A _message_ with attributes in the closing tag:
@@ -698,6 +698,43 @@ on the pairing, ordering, or contents of _markup_ during _formatting_.
 **_Attributes_ are reserved for standardization by future versions of this specification.**
 Examples in this section are meant to be illustrative and
 might not match future requirements or usage.
+
+> [!NOTE]
+> The Tech Preview does not provide a built-in mechanism for overriding
+> values in the _formatting context_ (most notably the locale)
+> Nor does it provide a mechanism for identifying specific expressions
+> such as by assigning a name or id.
+> The utility of these types of mechanisms has been debated.
+> There are at least two proposed mechanisms for implementing support for
+> these. 
+> Specifically, one mechanism would be to reserve specifically-named options, 
+> possibly using a Unicode namespace (i.e. `locale=xxx` or `u:locale=xxx`).
+> Such options would be reserved for use in any and all functions or markup.
+> The other mechanism would be to use the reserved "expression attribute" syntax
+> for this purpose (i.e. `@locale=xxx` or `@id=foo`)
+> Neither mechanism was included in this Tech Preview.
+> Feedback on the preferred mechanism for managing these features
+> is strongly desired.
+> 
+> In the meantime, function authors and other implementers are cautioned to avoid creating 
+> function-specific or implementation-specific option values for this purpose.
+> One workaround would be to use the implementation's namespace for these 
+> features to insure later interoperability when such a mechanism is finalized 
+> during the Tech Preview period.
+> Specifically:
+> - Avoid specifying an option for setting the locale of an expression as different from
+>   that of the overall _message_ locale, or use a namespace that later maps to the final
+>   mechanism.
+> - Avoid specifying options for the purpose of linking placeholders
+>   (such as to pair opening markup to closing markup) 
+>   or require that such options use an implementation-specific namespace
+>   while cautioning users that such option might be replaced or unavailable later.
+> - Avoid specifying generic options to communicate with translators and 
+>   translation tooling (i.e. implementation-specific options that apply to all
+>   functions.
+> The above are all desirable features.
+> We welcome contributions to and proposals for such features during the
+> Technical Preview.
 
 An **_<dfn>attribute</dfn>_** is an _identifier_ with an optional value
 that appears in an _expression_ or in _markup_.
