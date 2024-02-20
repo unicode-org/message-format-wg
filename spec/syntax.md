@@ -927,7 +927,7 @@ _unquoted literals_, or _option_ values that use right-to-left characters
 so that the _message_ displays intelligibly.
 
 These definitions of _whitespace_ implement
-[UTR#31 Rule 3a-2](https://www.unicode.org/reports/tr31/#R3a-2).
+[UAX#31 Requirement R3a-2](https://www.unicode.org/reports/tr31/#R3a-2).
 It is a profile of R3a-1 in that specification because:
 the following pattern whitespace characters are not allowed:
 `U+000B FORM FEED`, 
