@@ -483,7 +483,7 @@ are encouraged to track development of these options during Tech Preview:
 
 #### Default Value of `select` Option
 
-The value `plural` is default for the option `select` 
+The value `plural` is the default for the option `select` 
 because it is the most common use case for numeric selection.
 It can be used for exact value matches but also allows for the grammatical needs of 
 languages using CLDR's plural rules.
@@ -542,7 +542,7 @@ numeric selectors perform as described below.
    - Else, `key` is invalid;
      emit a _Selection Error_.
      Do not add `key` to `return_value`.
-- Return `return_value`
+- Return `return_value`.
 
 #### Plural/Ordinal Keywords
 The _plural/ordinal keywords_ are: `zero`, `one`, `two`, `few`, `many`, and
@@ -609,7 +609,8 @@ the two strings are equal.
 
 > [!NOTE]
 > Implementations are not expected to implement this exactly as written,
-> as there are clearly optimizations that can be applied.
+as there are clearly optimizations that can be applied.
+However, the observed behavior must be consistent with what is described here.
 
 > [!NOTE]
 > Only integer matching is required in the Technical Preview.
