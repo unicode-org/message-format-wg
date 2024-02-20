@@ -344,7 +344,7 @@ and formatting numeric values as integers.
 
 The _operand_ of a number function is either an implementation-defined type or
 a literal whose contents match the `number-literal` production in the [ABNF](/spec/message.abnf).
-All other values produce an _Invalid Expression Error_.
+All other values produce an _Invalid Expression_ error.
 
 > For example, in Java, any subclass of `java.lang.Number` plus the primitive
 > types (`byte`, `short`, `int`, `long`, `float`, `double`, etc.) 
@@ -645,7 +645,7 @@ If no options are specified, each of the functions defaults to the following:
 The _operand_ of a date/time function is either 
 an implementation-defined date/time type (passed in as an argument)
 or a _date/time literal value_, as defined below.
-All other _operand_ values produce a _Selection Error_.
+All other _operand_ values produce an _Invalid Expression_ error.
 
 A **_<dfn>date/time literal value</dfn>_** is a non-empty string consisting of 
 one of the following:
