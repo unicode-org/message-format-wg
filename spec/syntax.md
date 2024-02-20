@@ -937,7 +937,8 @@ the following pattern whitespace characters are not allowed:
 `U+2029 PARAGRAPH SEPARATOR`;
 the character `U+3000 IDEOGRAPHIC SPACE`
 _is_ interpreted as whitespace;
- and the following character is not included in ignorable format controls:
+and the following character is not interpreted as whitespace
+(in particular, it is not treated as an ignorable format control):
 `U+200F RIGHT-TO-LEFT MARK`. 
 
 > [!NOTE]
