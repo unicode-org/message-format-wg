@@ -555,7 +555,7 @@ Return the empty string.
 
 > [!NOTE]
 > Since keys cannot be the empty string in a numeric selector, returning the
-> empty string disables keyword selection
+> empty string disables keyword selection.
 
 If the option `select` is set to `plural`, selection should be based on CLDR plural rule data
 of type `cardinal`. See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
