@@ -258,8 +258,8 @@ which only expects the `accord` option:
 
 # Default Registry
 
-This section describes the functions which each implementation MUST provide to be conformant with
-this specification.
+This section describes the functions which each implementation MUST provide
+to be conformant with this specification.
 
 ## String Value Selection and Formatting
 
@@ -290,12 +290,13 @@ The function `:string` has no options.
 
 ### Selection
 
-When implementing [`MatchSelectorKeys`](spec/formatting.md#resolve-preferences), 
+When implementing [`MatchSelectorKeys(rv, keys)`](spec/formatting.md#resolve-preferences), 
 the `:string` selector performs as described below.
 
 - Let `return_value` be a new empty list of strings.
-- Let `operand` be the resolved value of the _operand_.
-  If the `operand` is not a string literal, convert the value to a string literal,
+- Let `operand` be _rv_.
+If `operand` is not a string literal, let `operand` be
+the result of converting `operand` to a string literal.
   or, optionally: emit a _Selection Error_ and return `return_value`.
 - Let `keys` be a list of strings containing keys to match.
   (Hint: this list is an argument to `MatchSelectorKeys`)
@@ -305,7 +306,7 @@ the `:string` selector performs as described below.
      A `key` and an `operand` are equal if they consist of the same
      sequence of Unicode code points.
      Add `key` to the front of the `return_value` list.
-- Return `return_value`
+- Return `return_value`.
 
 > [!NOTE]
 > Matching of `key` and `operand` values is sensitive to the sequence of code points
@@ -343,7 +344,7 @@ and formatting numeric values as integers.
 
 The _operand_ of a number function is either an implementation-defined type or
 a literal whose contents match the `number-literal` production in the [ABNF](/spec/message.abnf).
-All other values produce a _Resolution Error_.
+All other values produce an _Invalid Expression Error_.
 
 > For example, in Java, any subclass of `java.lang.Number` plus the primitive
 > types (`byte`, `short`, `int`, `long`, `float`, `double`, etc.) 
