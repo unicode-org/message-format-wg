@@ -541,7 +541,7 @@ numeric selectors perform as described below.
         Append `key` to the end of the `return_value` list.
    - Else, `key` is invalid;
      emit a _Selection Error_.
-     Do not add `key` to `return_value`
+     Do not add `key` to `return_value`.
 - Return `return_value`
 
 #### Plural/Ordinal Keywords
