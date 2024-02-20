@@ -609,8 +609,8 @@ the two strings are equal.
 
 > [!NOTE]
 > Implementations are not expected to implement this exactly as written,
-as there are clearly optimizations that can be applied.
-However, the observed behavior must be consistent with what is described here.
+> as there are clearly optimizations that can be applied.
+> However, the observed behavior must be consistent with what is described here.
 
 > [!NOTE]
 > Only integer matching is required in the Technical Preview.
