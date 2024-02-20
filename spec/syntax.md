@@ -923,7 +923,8 @@ but which users might want to include to increase the readability of a _message_
 
 Tools SHOULD generate `U+200E LEFT-TO-RIGHT MARK` or `U+200F RIGHT-TO-LEFT MARK` 
 characters where permitted by the syntax before or following _identifiers_,
-_unquoted literals_, or _option_ values that use right-to-left characters 
+_literals_ (taking care not to include the mark inside any quotes), 
+or _option_ values that use right-to-left characters 
 so that the _message_ displays intelligibly.
 
 These definitions of _whitespace_ implement
