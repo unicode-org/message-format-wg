@@ -942,21 +942,32 @@ There are two whitespace productions in the syntax.
 but which users might want to include to increase the readability of a _message_.
 **_<dfn>Required whitespace</dfn>_** is whitespace that is required by the syntax.
 
-Tools or users SHOULD insert paired isolating controls `U+2066 LEFT-TO-RIGHT ISOLATE`
-and `U+2069 POP DIRECTIONAL ISOLATE` as permitted by the ABNF _inside_
-of _placeholder_ markers `{` and `}` 
-and _outside_ _quoted-pattern_ markers `{{` and `}}`,
+_Messages_ SHOULD include paired isolating controls `U+2066 LEFT-TO-RIGHT ISOLATE`
+and `U+2069 POP DIRECTIONAL ISOLATE` as permitted by the ABNF
+_inside_ of _placeholder_ markers `{` and `}` 
+and _outside_ _quoted-pattern_ markers `{{` and `}}`
+if either of these contain right-to-left characters,
 as well as around _identifiers_,
 _literals_ (taking care not to include the mark inside any quotes), 
-or _option_ values that use right-to-left characters 
+or _option_ values that use right-to-left characters,
 so that the _message_ displays intelligibly.
-_Literals_, especially each individual _key_ in a variant, SHOULD be isolated 
-using these paired controls.
-Tools or users MAY also insert `U+200E LEFT-TO-RIGHT MARK` or `U+200F RIGHT-TO-LEFT MARK`
+_Literals_, especially each individual _key_ in a variant, that use right-to-left
+characters SHOULD be isolated using these paired controls.
+
+_Messages_ MAY also include `U+200E LEFT-TO-RIGHT MARK` or `U+200F RIGHT-TO-LEFT MARK`
 characters where permitted by the syntax before or following _identifiers_,
 _literals_ (taking care not to include the mark inside any quotes), 
 or _option_ values that use right-to-left characters 
 so that the _message_ displays intelligibly.
+
+> [!NOTE]
+> Users cannot be expected to create or manage bidirectional controls or
+> marks in _messages_, since the characters are invisible and can be difficult
+> to manage.
+> Tools (such as resource editors or translation editors)
+> and other implementations of MessageFormat 2 serialization are strongly
+> encouraged to provide paired isolates around any right-to-left
+> syntax as described above so that _messages_ display appropriately as plain text.
 
 These definitions of _whitespace_ implement
 [UAX#31 Requirement R3a-2](https://www.unicode.org/reports/tr31/#R3a-2).
