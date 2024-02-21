@@ -977,10 +977,10 @@ _is_ interpreted as whitespace.
 
 ```abnf
 ; optional whitespace
-owsp = *( s / %x200E / %x200F )
+owsp = *( s / %x200E / %x200F / %x2066-2069 )
 
 ; required whitespace
-wsp = [ (%x200E / %x200F) ] 1*s [ (%x200E / %x200F) ]
+wsp = [ (%x200E / %x200F / %x2066-2069 ) ] 1*s [ (%x200E / %x200F / %x2066-2069 ) ]
 
 ; whitespace characters
 s = ( SP / HTAB / CR / LF / %x3000 )
