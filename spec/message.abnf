@@ -10,7 +10,7 @@ declaration       = input-declaration / local-declaration / reserved-statement
 complex-body      = quoted-pattern / matcher
 
 input-declaration = input owsp variable-expression
-local-declaration = local s variable owsp "=" owsp expression
+local-declaration = local wsp variable owsp "=" owsp expression
 
 quoted-pattern    = "{{" pattern "}}"
 
@@ -24,8 +24,8 @@ key               = literal / "*"
 expression            = literal-expression
                       / variable-expression
                       / annotation-expression
-literal-expression    = "{" owsp literal [s annotation] *(wsp attribute) owsp "}"
-variable-expression   = "{" owsp variable [s annotation] *(wsp attribute) owsp "}"
+literal-expression    = "{" owsp literal [wsp annotation] *(wsp attribute) owsp "}"
+variable-expression   = "{" owsp variable [wsp annotation] *(wsp attribute) owsp "}"
 annotation-expression = "{" owsp annotation *(wsp attribute) owsp "}"
 
 annotation            = function
