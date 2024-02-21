@@ -942,23 +942,25 @@ There are two whitespace productions in the syntax.
 but which users might want to include to increase the readability of a _message_.
 **_<dfn>Required whitespace</dfn>_** is whitespace that is required by the syntax.
 
-_Messages_ SHOULD include paired isolating controls `U+2066 LEFT-TO-RIGHT ISOLATE`
-and `U+2069 POP DIRECTIONAL ISOLATE` as permitted by the ABNF
-_inside_ of _placeholder_ markers `{` and `}` 
-and _outside_ _quoted-pattern_ markers `{{` and `}}`
-if either of these contain right-to-left characters,
-as well as around _identifiers_,
-_literals_ (taking care not to include the mark inside any quotes), 
-or _option_ values that use right-to-left characters,
-so that the _message_ displays intelligibly.
-_Literals_, especially each individual _key_ in a variant, that use right-to-left
-characters SHOULD be isolated using these paired controls.
+_Messages_ that contain right-to-left (aka RTL) characters should use one of the following mechanisms to make messages displays intelligibly in plain-text editors.
 
-_Messages_ MAY also include `U+200E LEFT-TO-RIGHT MARK` or `U+200F RIGHT-TO-LEFT MARK`
-characters where permitted by the syntax before or following _identifiers_,
-_literals_ (taking care not to include the mark inside any quotes), 
-or _option_ values that use right-to-left characters 
-so that the _message_ displays intelligibly.
+1. Use paired isolating bidi controls `U+2066 LEFT-TO-RIGHT ISOLATE`
+and `U+2069 POP DIRECTIONAL ISOLATE` as permitted by the ABNF around parts of the message containing RTL characters:
+  - _inside_ of _placeholder_ markers `{` and `}` 
+  - _outside_ _quoted-pattern_ markers `{{` and `}}`
+  - _identifiers_
+  - _literals_ (This is especially important for individual _key_s in a variant)
+  - _option_ values
+2. Use the 'local-effect' bidi controls`U+200E LEFT-TO-RIGHT MARK` or `U+200F RIGHT-TO-LEFT MARK` as permitted by the ABNF around parts of the message containing RTL characters:
+-  _identifiers_
+- _literals_ (taking care not to include the mark inside any quotes), 
+- _option_ values
+
+Always take care **not** to add a bidi control where it is semantically significant:
+- put them outside of quotes, such as `<LRM>|...|<LRM>`
+    - never inside, such as `|<LRM>...<LRM>|`
+- put them outside message variant, such as `<LRI>{{...}}<PDI>`
+    - never inside, such as `{{<LRI>...<PDI>}}`, except within _placeholder_ markers
 
 > [!NOTE]
 > Users cannot be expected to create or manage bidirectional controls or
