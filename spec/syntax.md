@@ -97,14 +97,14 @@ Attempting to parse a _message_ that is not _valid_ will result in a _Data Model
 
 A **_<dfn>message</dfn>_** is the complete template for a specific message formatting request.
 
-> **Note**
+> [!NOTE]
 > This syntax is designed to be embeddable into many different programming languages and formats.
 > As such, it avoids constructs, such as character escapes, that are specific to any given file
 > format or processor.
 > In particular, it avoids using quote characters common to many file formats and formal languages
 > so that these do not need to be escaped in the body of a _message_.
 
-> **Note**
+> [!NOTE]
 > In general (and except where required by the syntax), whitespace carries no meaning in the structure
 > of a _message_. While many of the examples in this spec are written on multiple lines, the formatting
 > shown is primarily for readability.
@@ -123,6 +123,27 @@ A **_<dfn>message</dfn>_** is the complete template for a specific message forma
 > > ```
 > >
 > > An exception to this is: whitespace inside a _pattern_ is **always** significant.
+
+> [!NOTE]
+> The MessageFormat 2 syntax assumes that each _message_ will be displayed
+> with a left-to-right display order
+> and be processed in the logical character order
+> while permitting the use of right-to-left characters in _identifiers_,
+> _literals_, and other values.
+> This can result in confusion when viewing the message
+> or in users incorrectly inserting controls that negatively affect the output
+> of the message.
+>
+> To assist with this, the syntax permits the use of various controls and
+> strongly-directional markers in both optional and required _whitespace_
+> in a _message_, as well was encouraging the use of isolating controls
+> with _expressions_ and _quoted patterns_.
+> See: [whitespace](#whitespace) (below) for more information.
+> 
+> Additional restrictions or requirements might be added during the
+> Tech Preview to better manage bidirectional text.
+> Feedback on the creation and management of _messages_
+> containing bidirectional tokens is strongly desired.
 
 A _message_ can be a _simple message_ or it can be a _complex message_.
 
@@ -921,7 +942,17 @@ There are two whitespace productions in the syntax.
 but which users might want to include to increase the readability of a _message_.
 **_<dfn>Required whitespace</dfn>_** is whitespace that is required by the syntax.
 
-Tools SHOULD generate `U+200E LEFT-TO-RIGHT MARK` or `U+200F RIGHT-TO-LEFT MARK` 
+Tools or users SHOULD insert paired isolating controls `U+2066 LEFT-TO-RIGHT ISOLATE`
+and `U+2069 POP DIRECTIONAL ISOLATE` as permitted by the ABNF _inside_
+of _placeholder_ markers `{` and `}` 
+and _outside_ _quoted-pattern_ markers `{{` and `}}`,
+as well as around _identifiers_,
+_literals_ (taking care not to include the mark inside any quotes), 
+or _option_ values that use right-to-left characters 
+so that the _message_ displays intelligibly.
+_Literals_, especially each individual _key_ in a variant, SHOULD be isolated 
+using these paired controls.
+Tools or user MAY also insert `U+200E LEFT-TO-RIGHT MARK` or `U+200F RIGHT-TO-LEFT MARK` 
 characters where permitted by the syntax before or following _identifiers_,
 _literals_ (taking care not to include the mark inside any quotes), 
 or _option_ values that use right-to-left characters 
