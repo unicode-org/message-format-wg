@@ -942,25 +942,33 @@ There are two whitespace productions in the syntax.
 but which users might want to include to increase the readability of a _message_.
 **_<dfn>Required whitespace</dfn>_** is whitespace that is required by the syntax.
 
-_Messages_ that contain right-to-left (aka RTL) characters should use one of the following mechanisms to make messages displays intelligibly in plain-text editors.
+_Messages_ that contain right-to-left (aka RTL) characters SHOULD use one of the 
+following mechanisms to make messages display intelligibly in plain-text editors:
 
 1. Use paired isolating bidi controls `U+2066 LEFT-TO-RIGHT ISOLATE`
-and `U+2069 POP DIRECTIONAL ISOLATE` as permitted by the ABNF around parts of the message containing RTL characters:
-  - _inside_ of _placeholder_ markers `{` and `}` 
-  - _outside_ _quoted-pattern_ markers `{{` and `}}`
-  - _identifiers_
-  - _literals_ (This is especially important for individual _key_s in a variant)
-  - _option_ values
-2. Use the 'local-effect' bidi controls`U+200E LEFT-TO-RIGHT MARK` or `U+200F RIGHT-TO-LEFT MARK` as permitted by the ABNF around parts of the message containing RTL characters:
--  _identifiers_
-- _literals_ (taking care not to include the mark inside any quotes), 
-- _option_ values
+   and `U+2069 POP DIRECTIONAL ISOLATE` as permitted by the ABNF around
+   parts of any _message_ containing RTL characters:
+   - _inside_ of _placeholder_ markers `{` and `}` 
+   - _outside_ _quoted-pattern_ markers `{{` and `}}`
+   - _identifiers_
+   - _literals_ (This is especially important for individual _keys_ in a _variant_)
+   - _option_ values
+2. Use the 'local-effect' bidi controls`U+200E LEFT-TO-RIGHT MARK` or
+   `U+200F RIGHT-TO-LEFT MARK` as permitted by the ABNF around
+   parts of any _message_ containing RTL characters:
+   -  _identifiers_
+   - _literals_ (taking care not to include the mark inside any quotes), 
+   - _option_ values
 
-Always take care **not** to add a bidi control where it is semantically significant:
-- put them outside of quotes, such as `<LRM>|...|<LRM>`
-    - never inside, such as `|<LRM>...<LRM>|`
-- put them outside message variant, such as `<LRI>{{...}}<PDI>`
-    - never inside, such as `{{<LRI>...<PDI>}}`, except within _placeholder_ markers
+> [!IMPORTANT]
+> Always take care **not** to add a bidi control where it is semantically significant:
+> - put them outside of _literal_ quotes, such as `<LRM>|...|<LRM>`
+> - put them outside of quoted _patterns_, such as `<LRI>{{...}}<PDI>`
+> Controls placed inside _literal_ quotes or quoted _patterns_ are part of the literal
+> or pattern.
+> Controls in a _pattern_ will appear in the output of the message.
+> Controls inside _literal_ quotes are part of the _literal_ and
+> will be considered in operations such as matching a _key_ to a _selector_.
 
 > [!NOTE]
 > Users cannot be expected to create or manage bidirectional controls or
