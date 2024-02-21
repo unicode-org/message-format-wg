@@ -952,7 +952,7 @@ or _option_ values that use right-to-left characters
 so that the _message_ displays intelligibly.
 _Literals_, especially each individual _key_ in a variant, SHOULD be isolated 
 using these paired controls.
-Tools or user MAY also insert `U+200E LEFT-TO-RIGHT MARK` or `U+200F RIGHT-TO-LEFT MARK` 
+Tools or users MAY also insert `U+200E LEFT-TO-RIGHT MARK` or `U+200F RIGHT-TO-LEFT MARK`
 characters where permitted by the syntax before or following _identifiers_,
 _literals_ (taking care not to include the mark inside any quotes), 
 or _option_ values that use right-to-left characters 
