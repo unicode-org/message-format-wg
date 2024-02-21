@@ -3,7 +3,8 @@ message           = simple-message / complex-message
 simple-message    = [simple-start pattern]
 simple-start      = simple-start-char / text-escape / placeholder
 pattern           = *(text-char / text-escape / placeholder)
-placeholder       = expression / markup
+placeholder       = "{" (expression / markup) "}"
+                  / "{" %x2066 (expression / markup) %x2069 "}"
 
 complex-message   = *(declaration owsp) complex-body
 declaration       = input-declaration / local-declaration / reserved-statement
@@ -13,6 +14,7 @@ input-declaration = input owsp variable-expression
 local-declaration = local wsp variable owsp "=" owsp expression
 
 quoted-pattern    = "{{" pattern "}}"
+                  / %x2066 "{{" pattern "}}" %x2069
 
 matcher           = match-statement 1*(owsp variant)
 match-statement   = match 1*(owsp selector)
@@ -24,16 +26,16 @@ key               = literal / "*"
 expression            = literal-expression
                       / variable-expression
                       / annotation-expression
-literal-expression    = "{" owsp literal [wsp annotation] *(wsp attribute) owsp "}"
-variable-expression   = "{" owsp variable [wsp annotation] *(wsp attribute) owsp "}"
-annotation-expression = "{" owsp annotation *(wsp attribute) owsp "}"
+literal-expression    = owsp literal [wsp annotation] *(wsp attribute) owsp
+variable-expression   = owsp variable [wsp annotation] *(wsp attribute) owsp
+annotation-expression = owsp annotation *(wsp attribute) owsp
 
 annotation            = function
                       / private-use-annotation
                       / reserved-annotation
 
-markup = "{" owsp "#" identifier *(wsp option) *(wsp attribute) owsp ["/"] "}"  ; open and standalone
-       / "{" owsp "/" identifier *(wsp option) *(wsp attribute) owsp "}"  ; close
+markup = owsp "#" identifier *(wsp option) *(wsp attribute) owsp ["/"]  ; open and standalone
+       / owsp "/" identifier *(wsp option) *(wsp attribute) owsp        ; close
 
 ; Expression and literal parts
 function       = ":" identifier *(wsp option)
@@ -105,10 +107,10 @@ reserved-escape = backslash ( backslash / "{" / "|" / "}" )
 backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
 
 ; optional whitespace
-owsp = *( s / %x200E / %x200F )
+owsp = *( s / %x200E / %x200F / %x2066-2069 )
 
 ; required whitespace
-wsp = [ (%x200E / %x200F) ] 1*s [ (%x200E / %x200F) ]
+wsp = [ (%x200E / %x200F / %2066-2069 ) ] 1*s [ (%x200E / %x200F / %x2066-2069 ) ]
 
 ; whitespace characters
 s = ( SP / HTAB / CR / LF / %x3000 )
