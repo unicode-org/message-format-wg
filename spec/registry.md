@@ -271,8 +271,21 @@ The function `:string` provides string selection and formatting.
 
 ### Operands
 
-The _operand_ is any literal or an implementation-defined set of string or
-character-sequence types.
+The _operand_ is any _literal_ value
+or an implementation-defined set of string or character-sequence types.
+The value of a _literal_ does not include any quotes around the _literal_ and 
+has converted any `quoted-escape` sequences to the escaped characters.
+It does include any enclosed spaces or control characters.
+
+> Examples of _literals_ and their values:
+> | Literal | Value | Notes |
+> |---|---|---|
+> | \|1\| | `1` | Does not include quotes `\|` |
+> | \|ab\\\|cd\| | `ab\|cd` | Unescape escaped `\|` |
+> | hello | `hello` | Unquoted literal |
+> | -13.2 | `-13.2` | Unquoted number-literal |
+> | \| spaces \| | ` spaces ` | Includes one space before and after |
+
 
 > [!NOTE]
 > This should probably include individual character types, such as `char`.
