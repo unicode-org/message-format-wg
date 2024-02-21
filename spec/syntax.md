@@ -726,9 +726,11 @@ might not match future requirements or usage.
 >   that of the overall _message_ locale, or use a namespace that later maps to the final
 >   mechanism.
 > - Avoid specifying options for the purpose of linking placeholders
->   (such as to pair opening markup to closing markup) 
->   or require that such options use an implementation-specific namespace
->   while cautioning users that such option might be replaced or unavailable later.
+>   (such as to pair opening markup to closing markup).
+>   If such an option is created, the implementer should use an
+>   implementation-specific namespace.
+>   Users and implementers are cautioned that such options might be
+>   replaced with a standard mechanism in a future version.
 > - Avoid specifying generic options to communicate with translators and 
 >   translation tooling (i.e. implementation-specific options that apply to all
 >   functions.
