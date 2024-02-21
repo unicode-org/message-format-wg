@@ -979,7 +979,9 @@ the following pattern whitespace characters are not allowed:
 `U+2028 LINE SEPARATOR` and 
 `U+2029 PARAGRAPH SEPARATOR`;
 the character `U+3000 IDEOGRAPHIC SPACE`
-_is_ interpreted as whitespace.
+_is_ interpreted as whitespace,
+ and the directional isolates U+2066..U+2069
+ are treated as ignorable format controls.
 
 > [!NOTE]
 > The character U+3000 IDEOGRAPHIC SPACE is included in whitespace for
