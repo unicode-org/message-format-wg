@@ -110,7 +110,7 @@ backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
 owsp = *( s / %x200E / %x200F / %x2066-2069 )
 
 ; required whitespace
-wsp = [ (%x200E / %x200F / %2066-2069 ) ] 1*s [ (%x200E / %x200F / %x2066-2069 ) ]
+wsp = [ (%x200E / %x200F / %x2066-2069 ) ] 1*s [ (%x200E / %x200F / %x2066-2069 ) ]
 
 ; whitespace characters
 s = ( SP / HTAB / CR / LF / %x3000 )
