@@ -342,7 +342,7 @@ The function `:number` is a selector and formatter for numeric values.
 
 #### Operands
 
-The function `:integer` requires a [Number Operand](#number-operands) as its _operand_.
+The function `:number` requires a [Number Operand](#number-operands) as its _operand_.
 
 #### Options
 
@@ -435,7 +435,7 @@ but can cause problems in target locales that the original developer is not cons
 > For example, a naive developer might use a special message for the value `1` without
 > considering a locale's need for a `one` plural:
 > ```
-> .match {$var}
+> .match {$var :number}
 > 1   {{You have one last chance}}
 > one {{You have {$var} chance remaining}}
 > *   {{You have {$var} chances remaining}}
