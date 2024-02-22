@@ -719,7 +719,7 @@ The function `:date` has these function-specific _style options_:
   - `medium`
   - `short` (default)
 
-The function `:time` has these function-specific _options_ for _style_:
+The function `:time` has these function-specific _style options_:
 - `style`
   - `full`
   - `long`
