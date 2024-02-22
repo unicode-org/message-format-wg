@@ -19,7 +19,7 @@
 <!ELEMENT selectors (expression)+>
 <!ELEMENT variant (key+,pattern)>
 <!ELEMENT key (#PCDATA)>
-<!ATTLIST key default (true | false) "false">
+<!ATTLIST key catchall (true | false) "false">
 
 <!ELEMENT pattern (#PCDATA | expression | markup)*>
 
