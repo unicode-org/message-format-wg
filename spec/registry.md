@@ -276,10 +276,16 @@ that is a string or for which conversion to a string is supported,
 or any _literal_ value.
 All other values produce an _Invalid Expression_ error.
 
-> For example, in Java, any subclass of `java.lang.String` plus the primitive
-> type `char` might be considered as the "implementation-defined type".
-> Implementations in other programming languages would define different types
-> or classes according to their local needs.
+> For example, in Java, implementations of the `java.lang.CharSequence` interface
+> (such as `java.lang.String` or `java.lang.StringBuilder`),
+> the type `char`, or the class `java.lang.Character` might be considered
+> as the "implementation-defined types".
+> Such an implementation might also support other classes via the method `toString()`.
+> This might be used to enable selection of a `enum` value by name, for example.
+>
+> Other programming languages would define string and character sequence types or
+> classes according to their local needs, including, where appropriate,
+> coercion to string.
 
 ### Options
 
