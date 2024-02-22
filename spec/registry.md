@@ -303,26 +303,20 @@ The function `:string` has no options.
 
 ### Selection
 
-When implementing [`MatchSelectorKeys(rv, keys)`](spec/formatting.md#resolve-preferences), 
+When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
+where `resolvedSelector` is the resolved value of a _selector_ _expression_
+and `keys` is a list of strings,
 the `:string` selector performs as described below.
 
-- Let `return_value` be a new empty list of strings.
-- Let `operand` be _rv_.
-If `operand` is not a string literal, let `operand` be
-the result of converting `operand` to a string literal.
-  or, optionally: emit a _Selection Error_ and return `return_value`.
-- Let `keys` be a list of strings containing keys to match.
-  (Hint: this list is an argument to `MatchSelectorKeys`)
-- For each string `key` in `keys`:
-   - If the value of `key` is equal to the string value of `operand`
-     then `key` matches the selector.
-     A `key` and an `operand` are equal if they consist of the same
-     sequence of Unicode code points.
-     Add `key` to the front of the `return_value` list.
-- Return `return_value`.
+1. Let `compare` be the string value of `resolvedSelector`.
+1. Let `result` be a new empty list of strings.
+1. For each string `key` in `keys`:
+   1. If `key` and `compare` consist of the same sequence of Unicode code points, then
+      1. Append `key` as the last element of the list `result`.
+1. Return `result`.
 
 > [!NOTE]
-> Matching of `key` and `operand` values is sensitive to the sequence of code points
+> Matching of `key` and `compare` values is sensitive to the sequence of code points
 > in each string.
 > As a result, variations in how text can be encoded can affect the performance of matching.
 > The function `:string` does not perform case folding or Unicode Normalization of string values.
