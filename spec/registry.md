@@ -366,7 +366,7 @@ All other values produce an _Invalid Expression_ error.
 > [!NOTE]
 > String values passed as variables in the _formatting context_'s
 > _input mapping_ can be formatted as numeric values as long as their
-> contents match the `number-literal` production in the [ABNF](/main/spec/message.abnf).
+> contents match the `number-literal` production in the [ABNF](/spec/message.abnf).
 >
 > For example, if the value of the variable `num` were the string
 > `-1234.567`, it would behave identically to the local
