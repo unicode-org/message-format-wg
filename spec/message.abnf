@@ -3,8 +3,7 @@ message           = simple-message / complex-message
 simple-message    = [simple-start pattern]
 simple-start      = simple-start-char / text-escape / placeholder
 pattern           = *(text-char / text-escape / placeholder)
-placeholder       = "{" (expression / markup) "}"
-                  / "{" %x2066 (expression / markup) %x2069 "}"
+placeholder       = expression / markup
 
 complex-message   = *(declaration owsp) complex-body
 declaration       = input-declaration / local-declaration / reserved-statement
@@ -23,9 +22,8 @@ variant           = key *(wsp key) owsp quoted-pattern
 key               = literal / "*"
 
 ; Expressions
-expression            = literal-expression
-                      / variable-expression
-                      / annotation-expression
+expression            = "{" (literal-expression / variable-expression / annotation-expression) "}"
+                      / "{" %x2066 (literal-expression / variable-expression / annotation-expression) %x2069 "}"
 literal-expression    = owsp literal [wsp annotation] *(wsp attribute) owsp
 variable-expression   = owsp variable [wsp annotation] *(wsp attribute) owsp
 annotation-expression = owsp annotation *(wsp attribute) owsp
@@ -34,8 +32,11 @@ annotation            = function
                       / private-use-annotation
                       / reserved-annotation
 
-markup = owsp "#" identifier *(wsp option) *(wsp attribute) owsp ["/"]  ; open and standalone
-       / owsp "/" identifier *(wsp option) *(wsp attribute) owsp        ; close
+markup                = "{" markup-body "}"
+                      / "{" %x2066 markup-body %x2069 "}"
+
+markup-body          = owsp "#" identifier *(wsp option) *(wsp attribute) owsp ["/"]  ; open and standalone
+                     / owsp "/" identifier *(wsp option) *(wsp attribute) owsp        ; close
 
 ; Expression and literal parts
 function       = ":" identifier *(wsp option)
@@ -106,11 +107,15 @@ quoted-escape   = backslash ( backslash / "|" )
 reserved-escape = backslash ( backslash / "{" / "|" / "}" )
 backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
 
+; bidi controls
+; LRM / RLM / LRI / RLI / FSI / PDI
+bidi = %x200E / %x200F / %x2066-2069
+
 ; optional whitespace
-owsp = *( s / %x200E / %x200F / %x2066-2069 )
+owsp = *( s / bidi )
 
 ; required whitespace
-wsp = [ (%x200E / %x200F / %x2066-2069 ) ] 1*s [ (%x200E / %x200F / %x2066-2069 ) ]
+wsp = [ bidi ] 1*s [ bidi ]
 
 ; whitespace characters
 s = ( SP / HTAB / CR / LF / %x3000 )
