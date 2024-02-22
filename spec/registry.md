@@ -346,7 +346,7 @@ The `:string` function returns the string value of the resolved value of the _op
 
 ### Functions
 
-The function `:number` is the default selector and formatter for numeric values.
+The function `:number` is a selector and formatter for numeric values.
 
 The function `:integer` provides a reduced set of options for selecting
 and formatting numeric values as integers.
