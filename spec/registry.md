@@ -332,11 +332,11 @@ the `:string` selector performs as described below.
 > to a key, the `key` needs to be quoted.
 >
 > For example:
->```
+> ```
 > .match {$string :string}
 > | space key | {{Matches the string " space key "}}
 > *             {{Matches the string "space key"}}
->```
+> ```
 
 ### Formatting
 
