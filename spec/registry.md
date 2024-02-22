@@ -30,7 +30,7 @@ in order to support the following goals and use-cases:
 _This section is normative._
 
 To be conformant with MessageFormat 2.0, an implementation MUST implement
-the _functions_/_selectors_, _options_ and _option_ values, _operands_ and outputs
+the _functions_, _options_ and _option_ values, _operands_ and outputs
 described in the section [Default Registry](#default-registry) below.
 
 Implementations MAY implement additional _functions_ or additional _options_.
@@ -271,7 +271,7 @@ which only expects the `accord` option:
 # Default Registry
 
 > [!IMPORTANT]
-> That part of the specification is part of the Tech Preview
+> This part of the specification is part of the Tech Preview
 > and is **_NORMATIVE_**.
 
 This section describes the functions which each implementation MUST provide
