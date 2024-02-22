@@ -735,16 +735,16 @@ The function `:time` has these function-specific _options_ for _style_:
 
 #### Field Options
 
-Field options describe which fields to include in the formatted output
+_Field options_ describe which fields to include in the formatted output
 and what format to use for that field.
 The implementation may use this _annotation_ to configure which fields
 appear in the formatted output.
 
 > [!NOTE]
-> Field options do not have default values because they are only to be used
+> _Field options_ do not have default values because they are only to be used
 > to compose the formatter.
 
-The _field_ options are defined as follows:
+The _field options_ are defined as follows:
 
 The function `:datetime` has the following options:
 - `weekday`
