@@ -546,7 +546,7 @@ but can cause problems in target locales that the original developer is not cons
 > For example, a naive developer might use a special message for the value `1` without
 > considering a locale's need for a `one` plural:
 > ```
-> .match {$var}
+> .match {$var :integer}
 > 1   {{You have one last chance}}
 > one {{You have {$var} chance remaining}}
 > *   {{You have {$var} chances remaining}}
