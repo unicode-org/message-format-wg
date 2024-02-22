@@ -2,7 +2,7 @@
 
 Implementations and tooling can greatly benefit from a
 structured definition of formatting and matching functions available to messages at runtime.
-The _registry_ is a mechanism for storing such declarations in a portable manner.
+This specification is intended to provide a mechanism for storing such declarations in a portable manner.
 
 ## Goals
 
@@ -30,12 +30,21 @@ in order to support the following goals and use-cases:
 _This section is normative._
 
 To be conformant with MessageFormat 2.0, an implementation MUST implement
-all of the formatting and selection _functions_ described in the default registry,
-including all of the _options_ and _option_ values, _operands_ and outputs
-described by the default registry.
+the _functions_/_selectors_, _options_ and _option_ values, _operands_ and outputs
+described in the section [Default Registry](#default-registry) below.
 
-Implementations are not required to provide a registry nor to read or interpret
-a copy of this registry in order to be conformant.
+Implementations MAY implement additional _functions_ or additional _options_.
+In particular, implementations are encouraged to provide feedback on proposed
+_options_ and their values.
+
+> [!IMPORTANT]
+> In the Tech Preview, the [registry data model](#registry-data-model) should
+> be regarded as experimental.
+> Changes to the format are expected during this period.
+> Feedback on the registry's format and implementation is encouraged!
+
+Implementations are not required to provide a machine-readable registry 
+nor to read or interpret the registry data model in order to be conformant.
 
 The MessageFormat 2.0 Registry was created to describe
 the core set of formatting and selection _functions_,
@@ -62,6 +71,9 @@ a registry to support localization tooling.
 ## Registry Data Model
 
 _This section is non-normative._
+
+> [!IMPORTANT]
+> This part of the specification is not part of the Tech Preview.
 
 The registry contains descriptions of function signatures.
 [`registry.dtd`](./registry.dtd) describes its data model.
@@ -257,6 +269,10 @@ which only expects the `accord` option:
 >```
 
 # Default Registry
+
+> [!IMPORTANT]
+> That part of the specification is part of the Tech Preview
+> and is **_NORMATIVE_**.
 
 This section describes the functions which each implementation MUST provide
 to be conformant with this specification.
