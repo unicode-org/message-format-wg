@@ -326,6 +326,10 @@ the result of converting `operand` to a string literal.
 > in each string.
 > As a result, variations in how text can be encoded can affect the performance of matching.
 > The function `:string` does not perform case folding or Unicode Normalization of string values.
+> Users SHOULD encode _messages_ and their parts (such as _keys_ and _operands_),
+> in Unicode Normalization Form C (NFC) unless there is a very good reason
+> not to.
+> See also: [String Matching](https://www.w3.org/TR/charmod-norm)
 
 > [!NOTE]
 > Unquoted string literals in a _variant_ do not include spaces.
