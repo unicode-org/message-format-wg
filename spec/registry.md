@@ -263,13 +263,11 @@ to be conformant with this specification.
 
 ## String Value Selection and Formatting
 
-### Functions
-
-The following functions are provided:
+### The `:string` function
 
 The function `:string` provides string selection and formatting.
 
-### Operands
+#### Operands
 
 The _operand_ of `:string` is either any implementation-defined type
 that is a string or for which conversion to a string is supported,
@@ -287,7 +285,7 @@ All other values produce an _Invalid Expression_ error.
 > classes according to their local needs, including, where appropriate,
 > coercion to string.
 
-### Options
+#### Options
 
 The function `:string` has no options.
 
@@ -295,7 +293,7 @@ The function `:string` has no options.
 > Proposals for string transformation options or implementation
 > experience with user requirements is desired during the Tech Preview.
 
-### Selection
+#### Selection
 
 When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
 where `resolvedSelector` is the resolved value of a _selector_ _expression_
@@ -332,62 +330,28 @@ the `:string` selector performs as described below.
 > *             {{Matches the string "space key"}}
 > ```
 
-### Formatting
+#### Formatting
 
 The `:string` function returns the string value of the resolved value of the _operand_.
 
 ## Numeric Value Selection and Formatting
 
-### Functions
+### The `:number` function
 
 The function `:number` is a selector and formatter for numeric values.
 
-The function `:integer` provides a reduced set of options for selecting
-and formatting numeric values as integers.
+#### Operands
 
-### Operands
+The function `:integer` requires a [Number Operand](#number-operands) as its _operand_.
 
-The _operand_ of a number function is either an implementation-defined type or
-a literal whose contents match the `number-literal` production in the [ABNF](/spec/message.abnf).
-All other values produce an _Invalid Expression_ error.
-
-> For example, in Java, any subclass of `java.lang.Number` plus the primitive
-> types (`byte`, `short`, `int`, `long`, `float`, `double`, etc.) 
-> might be considered as the "implementation-defined numeric types".
-> Implementations in other programming languages would define different types
-> or classes according to their local needs.
-
-> [!NOTE]
-> String values passed as variables in the _formatting context_'s
-> _input mapping_ can be formatted as numeric values as long as their
-> contents match the `number-literal` production in the [ABNF](/spec/message.abnf).
->
-> For example, if the value of the variable `num` were the string
-> `-1234.567`, it would behave identically to the local
-> variable in this example:
-> ```
-> .local $example = {|-1234.567| :number}
-> {{{$num :number} == {$example}}}
-> ```
-
-> [!NOTE]
-> Implementations are encouraged to provide support for compound types or data structures
-> that provide additional semantic meaning to the formatting of number-like values.
-> For example, in ICU4J, the type `com.ibm.icu.util.Measure` can be used to communicate
-> a value that includes a unit
-> or the type `com.ibm.icu.util.CurrencyAmount` can be used to set the currency and related
-> options (such as the number of fraction digits).
-
-
-### Options
+#### Options
 
 Some options do not have default values defined in this specification.
 The defaults for these options are implementation-dependent.
 In general, the default values for such options depend on the locale, 
 the value of other options, or both.
 
-The following options and their values are required in the default registry to be available on the 
-function `:number`:
+The following options and their values are required to be available on the function `:number`:
 - `select`
    -  `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
    -  `ordinal`
@@ -427,6 +391,90 @@ function `:number`:
   - (non-negative integer)
 - `maximumSignificantDigits`
   - (non-negative integer)
+
+> [!NOTE]
+> The following options and option values are being developed during the Technical Preview
+> period.
+
+The following values for the option `style` are _not_ part of the default registry.
+Implementations SHOULD avoid creating options that conflict with these, but
+are encouraged to track development of these options during Tech Preview:
+- `currency`
+- `unit`
+
+The following options are _not_ part of the default registry.
+Implementations SHOULD avoid creating options that conflict with these, but
+are encouraged to track development of these options during Tech Preview:
+- `currency`
+   - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+     (no default)
+- `currencyDisplay`
+   - `symbol` (default)
+   - `narrowSymbol`
+   - `code`
+   - `name`
+- `currencySign`
+  - `accounting`
+  - `standard` (default)
+- `unit`
+   - (anything not empty)
+- `unitDisplay`
+   - `long`
+   - `short` (default)
+   - `narrow`
+
+##### Default Value of `select` Option
+
+The value `plural` is the default for the option `select` 
+because it is the most common use case for numeric selection.
+It can be used for exact value matches but also allows for the grammatical needs of 
+languages using CLDR's plural rules.
+This might not be noticeable in the source language (particularly English), 
+but can cause problems in target locales that the original developer is not considering.
+
+> For example, a naive developer might use a special message for the value `1` without
+> considering a locale's need for a `one` plural:
+> ```
+> .match {$var}
+> 1   {{You have one last chance}}
+> one {{You have {$var} chance remaining}}
+> *   {{You have {$var} chances remaining}}
+> ```
+>
+> The `one` variant is needed by languages such as Polish or Russian.
+> Such locales typically also require other keywords such as `two`, `few`, and `many`.
+
+##### Percent Style
+When implementing `style=percent`, the numeric value of the _operand_ 
+MUST be multiplied by 100 for the purposes of formatting.
+
+> For example,
+> ```
+> The total was {0.5 :number style=percent}.
+> ```
+> should format in a manner similar to:
+> > The total was 50%.
+
+#### Selection
+
+The _function_ `:number` performs selection as described in [Number Selection](#number-selection) below.
+
+### The `:integer` function
+
+The function `:integer` is a selector and formatter for matching or formatting numeric 
+values as integers.
+
+#### Operands
+
+The function `:integer` requires a [Number Operand](#number-operands) as its _operand_.
+
+
+#### Options
+
+Some options do not have default values defined in this specification.
+The defaults for these options are implementation-dependent.
+In general, the default values for such options depend on the locale, 
+the value of other options, or both.
 
 The following options and their values are required in the default registry to be available on the 
 function `:integer`:
@@ -486,7 +534,7 @@ are encouraged to track development of these options during Tech Preview:
    - `short` (default)
    - `narrow`
 
-#### Default Value of `select` Option
+##### Default Value of `select` Option
 
 The value `plural` is the default for the option `select` 
 because it is the most common use case for numeric selection.
@@ -507,7 +555,7 @@ but can cause problems in target locales that the original developer is not cons
 > The `one` variant is needed by languages such as Polish or Russian.
 > Such locales typically also require other keywords such as `two`, `few`, and `many`.
 
-#### Percent Style
+##### Percent Style
 When implementing `style=percent`, the numeric value of the _operand_ 
 MUST be multiplied by 100 for the purposes of formatting.
 
@@ -518,7 +566,46 @@ MUST be multiplied by 100 for the purposes of formatting.
 > should format in a manner similar to:
 > > The total was 50%.
 
-### Selection
+#### Selection
+
+The _function_ `:integer` performs selection as described in [Number Selection](#number-selection) below.
+
+### Number Operands
+
+The _operand_ of a number function is either an implementation-defined type or
+a literal whose contents match the `number-literal` production in the [ABNF](/spec/message.abnf).
+All other values produce an _Invalid Expression_ error.
+
+> For example, in Java, any subclass of `java.lang.Number` plus the primitive
+> types (`byte`, `short`, `int`, `long`, `float`, `double`, etc.) 
+> might be considered as the "implementation-defined numeric types".
+> Implementations in other programming languages would define different types
+> or classes according to their local needs.
+
+> [!NOTE]
+> String values passed as variables in the _formatting context_'s
+> _input mapping_ can be formatted as numeric values as long as their
+> contents match the `number-literal` production in the [ABNF](/spec/message.abnf).
+>
+> For example, if the value of the variable `num` were the string
+> `-1234.567`, it would behave identically to the local
+> variable in this example:
+> ```
+> .local $example = {|-1234.567| :number}
+> {{{$num :number} == {$example}}}
+> ```
+
+> [!NOTE]
+> Implementations are encouraged to provide support for compound types or data structures
+> that provide additional semantic meaning to the formatting of number-like values.
+> For example, in ICU4J, the type `com.ibm.icu.util.Measure` can be used to communicate
+> a value that includes a unit
+> or the type `com.ibm.icu.util.CurrencyAmount` can be used to set the currency and related
+> options (such as the number of fraction digits).
+
+
+
+### Number Selection
 
 Number selection has three modes:
 - `exact` selection matches the operand to explicit numeric keys exactly
@@ -621,80 +708,44 @@ the two strings are equal.
 This subsection describes the functions and options for date/time formatting.
 Selection based on date and time values is not required in this release.
 
-### Functions
+> [!NOTE]
+> Selection based on date/time types is not required by MF2.
+> Implementations should use care when defining selectors based on date/time types.
+> The types of queries found in implementations such as `java.time.TemporalAccessor`
+> are complex and user expectations may be inconsistent with good I18N practices.
 
-Functions for formatting [date/time values](#operands) in the default registry are:
+### The `:datetime` function
 
-- `:datetime`
-- `:date`
-- `:time`
+The function `:datetime` is used to format format date/time values, including 
+the ability to compose user-specified combinations of fields.
 
-If no options are specified, each of the functions defaults to the following:
+If no options are specified, this function defaults to the following:
 - `{$d :datetime}` is the same as `{$d :datetime dateStyle=short timeStyle=short}`
-- `{$d :date}` is the same as `{$d :date style=short}`
-- `{$t :time}` is the same as `{$t :time style=short}`
 
 > [!NOTE]
 > The default formatting behavior of `:datetime` is inconsistent with `Intl.DateTimeFormat`
 > in JavaScript and with `{d,date}` in ICU MessageFormat 1.0.
 > This is because, unlike those implementations, `:datetime` is distinct from `:date` and `:time`.
 
-### Operands
+#### Operands
 
-The _operand_ of a date/time function is either 
+The _operand_ of the `:datetime` function is either 
 an implementation-defined date/time type
-or a _date/time literal value_, as defined below.
+or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
 All other _operand_ values produce an _Invalid Expression_ error.
 
-A **_<dfn>date/time literal value</dfn>_** is a non-empty string consisting of 
-one of the following:
-- an XMLSchema 1.1 [dateTime](https://www.w3.org/TR/xmlschema11-2/#dateTime)
-- an XMLSchema 1.1 [time](https://www.w3.org/TR/xmlschema11-2/#time)
-- an XMLSchema 1.1 [date](https://www.w3.org/TR/xmlschema11-2/#date)
+#### Options
 
-The `timezoneOffset` of each of these formats is optional. 
-When the offset is not present, implementations should use a floating time type
-(such as Java's `java.time.LocalDateTime`) to represent the time value.
-For more information, see [Working with Timezones](https://w3c.github.io/timezone).
-
-> [!IMPORTANT]
-> The [ABNF](/spec/message.abnf) and [syntax](/spec/syntax.md) of MF2
-> do not formally define date/time literals. 
-> This means that a _message_ can be syntactically valid but produce
-> an _Operand Mismatch Error_ at runtime.
-
-> [!NOTE]
-> String values passed as variables in the _formatting context_'s
-> _input mapping_ can be formatted as date/time values as long as their
-> contents are date/time literals.
->
-> For example, if the value of the variable `now` were the string
-> `2024-02-06T16:40:00Z`, it would behave identically to the local
-> variable in this example:
-> ```
-> .local $example = {|2024-02-06T16:40:00Z| :datetime}
-> {{{$now :datetime} == {$example}}}
-> ```
-
-> [!NOTE]
-> True time zone support in serializations is expected to coincide with the adoption
-> of Temporal in JavaScript.
-> The form of these serializations is known and is a de facto standard.
-> Support for these extensions is expected to be required in the post-tech preview.
-> See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
-
-### Options
-
-A function can use either the appropriate _style options_ for that function
+The `:datetime` function can use either the appropriate _style options_ 
 or can use a collection of _field options_ (but not both) to control the formatted 
 output.
 
 If both are specified, an _Invalid Expression_ error MUST be emitted
 and a _fallback value_ used as the resolved value of the _expression_.
 
-#### Style Options
+##### Style Options
 
-The function `:datetime` has these function-specific _style options_.
+The function `:datetime` has these _style options_.
 - `dateStyle`
   - `full`
   - `long`
@@ -706,21 +757,7 @@ The function `:datetime` has these function-specific _style options_.
   - `medium`
   - `short`
 
-The function `:date` has these function-specific _style options_:
-- `style`
-  - `full`
-  - `long`
-  - `medium`
-  - `short` (default)
-
-The function `:time` has these function-specific _style options_:
-- `style`
-  - `full`
-  - `long`
-  - `medium`
-  - `short` (default)
-
-#### Field Options
+##### Field Options
 
 _Field options_ describe which fields to include in the formatted output
 and what format to use for that field.
@@ -793,10 +830,96 @@ are encouraged to track development of these options during Tech Preview:
    - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
 - `timeZone` (default is system default time zone or UTC)
   - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
+ 
+### The `:date` function
 
-### Selection
+The function `:date` is used to format format the date portion of date/time values.
 
-Selection based on date/time types is not required by MF2.
-Implementations should use care when defining selectors based on date/time types.
-The types of queries found in implementations such as `java.time.TemporalAccessor`
-are complex and user expectations may be inconsistent with good I18N practices.
+If no options are specified, this function defaults to the following:
+- `{$d :date}` is the same as `{$d :date style=short}`
+
+#### Operands
+
+The _operand_ of the `:date` function is either 
+an implementation-defined date/time type
+or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
+All other _operand_ values produce an _Invalid Expression_ error.
+
+#### Options
+
+The function `:time` has these _options_:
+- `style`
+  - `full`
+  - `long`
+  - `medium`
+  - `short` (default)
+
+### The `:time` function
+
+The function `:time` is used to format format the time portion of date/time values.
+
+If no options are specified, this function defaults to the following:
+- `{$t :time}` is the same as `{$t :time style=short}`
+
+#### Operands
+
+The _operand_ of the `:time` function is either 
+an implementation-defined date/time type
+or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
+All other _operand_ values produce an _Invalid Expression_ error.
+
+#### Options
+
+The function `:time` has these _options_:
+- `style`
+  - `full`
+  - `long`
+  - `medium`
+  - `short` (default)
+
+
+### Date and Time Operands
+
+The _operand_ of a date/time function is either 
+an implementation-defined date/time type
+or a _date/time literal value_, as defined below.
+All other _operand_ values produce an _Invalid Expression_ error.
+
+A **_<dfn>date/time literal value</dfn>_** is a non-empty string consisting of 
+one of the following:
+- an XMLSchema 1.1 [dateTime](https://www.w3.org/TR/xmlschema11-2/#dateTime)
+- an XMLSchema 1.1 [time](https://www.w3.org/TR/xmlschema11-2/#time)
+- an XMLSchema 1.1 [date](https://www.w3.org/TR/xmlschema11-2/#date)
+
+The `timezoneOffset` of each of these formats is optional. 
+When the offset is not present, implementations should use a floating time type
+(such as Java's `java.time.LocalDateTime`) to represent the time value.
+For more information, see [Working with Timezones](https://w3c.github.io/timezone).
+
+> [!IMPORTANT]
+> The [ABNF](/spec/message.abnf) and [syntax](/spec/syntax.md) of MF2
+> do not formally define date/time literals. 
+> This means that a _message_ can be syntactically valid but produce
+> an _Operand Mismatch Error_ at runtime.
+
+> [!NOTE]
+> String values passed as variables in the _formatting context_'s
+> _input mapping_ can be formatted as date/time values as long as their
+> contents are date/time literals.
+>
+> For example, if the value of the variable `now` were the string
+> `2024-02-06T16:40:00Z`, it would behave identically to the local
+> variable in this example:
+> ```
+> .local $example = {|2024-02-06T16:40:00Z| :datetime}
+> {{{$now :datetime} == {$example}}}
+> ```
+
+> [!NOTE]
+> True time zone support in serializations is expected to coincide with the adoption
+> of Temporal in JavaScript.
+> The form of these serializations is known and is a de facto standard.
+> Support for these extensions is expected to be required in the post-tech preview.
+> See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
+
+
