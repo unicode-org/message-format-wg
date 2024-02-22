@@ -501,16 +501,17 @@ languages using CLDR's plural rules.
 This might not be noticeable in the source language (particularly English), 
 but can cause problems in target locales that the original developer is not considering.
 
-For example, a naive developer might use a special message for the value `1` without
-considering a locale's need for a `one` plural:
-```
-.match {$var}
-1   {{You have one last chance}}
-one {{You have {$var} chance remaining}} // needed by languages such as Polish or Russian
-                                         // such locales typically require other keywords
-                                         // such as two, few, many, and so forth
-*   {{You have {$var} chances remaining}}
-```
+> For example, a naive developer might use a special message for the value `1` without
+> considering a locale's need for a `one` plural:
+> ```
+> .match {$var}
+> 1   {{You have one last chance}}
+> one {{You have {$var} chance remaining}}
+> *   {{You have {$var} chances remaining}}
+> ```
+>
+> The `one` variant is needed by languages such as Polish or Russian.
+> Such locales typically also require other keywords such as `two`, `few`, and `many`.
 
 #### Percent Style
 When implementing `style=percent`, the numeric value of the _operand_ 
@@ -532,32 +533,29 @@ Number selection has three modes:
 - `ordinal` selection matches the operand to explicit numeric keys exactly
   or to ordinal rule categories if there is no explicit match
 
-When implementing [`MatchSelectorKeys`](formatting.md#resolve-preferences), 
+When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
+where `resolvedSelector` is the resolved value of a _selector_ _expression_
+and `keys` is a list of strings,
 numeric selectors perform as described below.
 
-- Let `return_value` be a new empty list of strings.
-- Let `operand` be the resolved value of the _operand_.
-  If the `operand` is not a number type, emit a _Selection Error_
-  and return `return_value`.
-- Let `keys` be a list of strings containing keys to match.
-  (Hint: this list is an argument to `MatchSelectorKeys`)
-- For each string `key` in `keys`:
-   - If the value of `key` matches the production `number-literal`:
-     - If the parsed value of `key` is an [exact match](#determining-exact-literal-match)
-       of the value of the `operand`, then `key` matches the selector.
-       Add `key` to the front of the `return_value` list.
-   - Else, if the value of `key` is a keyword:
-      - Let `keyword` be a string which is the result of [rule selection](#rule-selection).
-      - If `keyword` equals `key`, then `key` matches the selector.
-        Append `key` to the end of the `return_value` list.
-   - Else, `key` is invalid;
-     emit a _Selection Error_.
-     Do not add `key` to `return_value`.
-- Return `return_value`.
+1. Let `exact` be the JSON string representation of the numeric value of `resolvedSelector`.
+   (See [Determining Exact Literal Match](#determining-exact-literal-match) for details)
+1. Let `keyword` be a string which is the result of [rule selection](#rule-selection) on `resolvedSelector`.
+1. Let `resultExact` be a new empty list of strings.
+1. Let `resultKeyword` be a new empty list of strings.
+1. For each string `key` in `keys`:
+   1. If the value of `key` matches the production `number-literal`, then
+      1. If `key` and `exact` consist of the same sequence of Unicode code points, then
+         1. Append `key` as the last element of the list `resultExact`.
+   1. Else if `key` is one of the keywords `zero`, `one`, `two`, `few`, `many`, or `other`, then
+      1. If `key` and `keyword` consist of the same sequence of Unicode code points, then
+         1. Append `key` as the last element of the list `resultKeyword`.
+   1. Else, emit a _Selection Error_.
+1. Return a new list whose elements are the concatenation of the elements (in order) of `resultExact` followed by the elements (in order) of `resultKeyword`.
 
-#### Plural/Ordinal Keywords
-The _plural/ordinal keywords_ are: `zero`, `one`, `two`, `few`, `many`, and
-`other`.
+> [!NOTE]
+> Implementations are not required to implement this exactly as written.
+> However, the observed behavior must be consistent with what is described here.
 
 #### Rule Selection
 
@@ -565,7 +563,7 @@ If the option `select` is set to `exact`, rule-based selection is not used.
 Return the empty string.
 
 > [!NOTE]
-> Since keys cannot be the empty string in a numeric selector, returning the
+> Since valid keys cannot be the empty string in a numeric expression, returning the
 > empty string disables keyword selection.
 
 If the option `select` is set to `plural`, selection should be based on CLDR plural rule data
@@ -592,7 +590,7 @@ If no rules match, return `other`.
 > many {{{$numDays} dne}}
 > *    {{{$numDays} dní}}
 > ```
-> Using the rules found above, the results of various `operand` values might look like:
+> Using the rules found above, the results of various _operand_ values might look like:
 > | Operand value | Keyword | Formatted Message |
 > |---|---|---|
 > | 1 | `one` | 1 den |
@@ -614,14 +612,9 @@ If no rules match, return `other`.
 
 Number literals in the MessageFormat 2 syntax use the 
 [format defined for a JSON number](https://www.rfc-editor.org/rfc/rfc8259#section-6).
-The resolved value of an `operand` exactly matches a numeric literal `key`
-if, when the `operand` is serialized using the format for a JSON number,
+A `resolvedSelector` exactly matches a numeric literal `key`
+if, when the numeric value of `resolvedSelector` is serialized using the format for a JSON number,
 the two strings are equal.
-
-> [!NOTE]
-> Implementations are not expected to implement this exactly as written,
-> as there are clearly optimizations that can be applied.
-> However, the observed behavior must be consistent with what is described here.
 
 > [!NOTE]
 > Only integer matching is required in the Technical Preview.
@@ -655,7 +648,7 @@ If no options are specified, each of the functions defaults to the following:
 ### Operands
 
 The _operand_ of a date/time function is either 
-an implementation-defined date/time type (passed in as an argument)
+an implementation-defined date/time type
 or a _date/time literal value_, as defined below.
 All other _operand_ values produce an _Invalid Expression_ error.
 
@@ -698,7 +691,7 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 
 ### Options
 
-A function can use either the appropriate _style_ options for that function
+A function can use either the appropriate _style options_ for that function
 or can use a collection of _field options_ (but not both) to control the formatted 
 output.
 
@@ -707,7 +700,7 @@ and a _fallback value_ used as the resolved value of the _expression_.
 
 #### Style Options
 
-The function `:datetime` has these function-specific _style_ options.
+The function `:datetime` has these function-specific _style options_.
 - `dateStyle`
   - `full`
   - `long`
@@ -719,7 +712,7 @@ The function `:datetime` has these function-specific _style_ options.
   - `medium`
   - `short`
 
-The function `:date` has these function-specific _style_ options:
+The function `:date` has these function-specific _style options_:
 - `style`
   - `full`
   - `long`
