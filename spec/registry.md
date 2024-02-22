@@ -271,27 +271,15 @@ The function `:string` provides string selection and formatting.
 
 ### Operands
 
-The _operand_ is any _literal_ value
-or an implementation-defined set of string or character-sequence types.
-The value of a _literal_ does not include any quotes around the _literal_ and 
-has converted any `quoted-escape` sequences to the escaped characters.
-It does include any enclosed spaces or control characters.
+The _operand_ of `:string` is either any implementation-defined type
+that is a string or for which conversion to a string is supported,
+or any _literal_ value.
+All other values produce an _Invalid Expression_ error.
 
-> Examples of _literals_ and their values:
-> | Literal | Value | Notes |
-> |---|---|---|
-> | \|1\| | `1` | Does not include quotes `\|` |
-> | \|ab\\\|cd\| | `ab\|cd` | Unescape escaped `\|` |
-> | hello | `hello` | Unquoted literal |
-> | -13.2 | `-13.2` | Unquoted number-literal |
-> | \| spaces \| | ` spaces ` | Includes one space before and after |
-
-
-> [!NOTE]
-> This should probably include individual character types, such as `char`.
-
-In addition, implementations MAY perform formatting and selection on 
-`operand` values that do not otherwise have a formatting function registered.
+> For example, in Java, any subclass of `java.lang.String` plus the primitive
+> type `char` might be considered as the "implementation-defined type".
+> Implementations in other programming languages would define different types
+> or classes according to their local needs.
 
 ### Options
 
