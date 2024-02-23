@@ -646,13 +646,18 @@ an implementation-defined date/time type
 or a _date/time literal value_, as defined below.
 All other _operand_ values produce an _Invalid Expression_ error.
 
-A **_<dfn>date/time literal value</dfn>_** is a non-empty string consisting of 
-one of the following:
-- an XMLSchema 1.1 [dateTime](https://www.w3.org/TR/xmlschema11-2/#dateTime)
-- an XMLSchema 1.1 [time](https://www.w3.org/TR/xmlschema11-2/#time)
-- an XMLSchema 1.1 [date](https://www.w3.org/TR/xmlschema11-2/#date)
+A **_<dfn>date/time literal value</dfn>_** is a non-empty string consisting of an ISO 8601 date,
+or an ISO 8601 datetime optionally followed by a timezone offset.
+As implementations differ slightly in their parsing of such strings,
+ISO 8601 date and datetime values not matching the following regular expression MAY also be supported.
+Furthermore, matching this regular expression does not guarantee validity,
+given the variable number of days in each month.
 
-The `timezoneOffset` of each of these formats is optional. 
+```regexp
+(?!0000)[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]{1,3})?(Z|[+-]((0[0-9]|1[0-3]):[0-5][0-9]|14:00))?)?
+```
+
+When the time is not present, implementations should use `00:00:00` as the time.
 When the offset is not present, implementations should use a floating time type
 (such as Java's `java.time.LocalDateTime`) to represent the time value.
 For more information, see [Working with Timezones](https://w3c.github.io/timezone).
