@@ -222,6 +222,11 @@ the following steps are taken:
 
    The form that resolved _operand_ and _option_ values take is implementation-defined.
 
+   Since the result of a function call can be bound to a _variable_,
+   the output of one _function_ may be the input of another _function_.
+   Thus, formatting functions SHOULD use a structure for the resolved _operand_ value
+   that is interconvertible with the structure for the result of the _function_.
+
    An implementation MAY pass additional arguments to the function,
    as long as reasonable precautions are taken to keep the function interface
    simple and minimal, and avoid introducing potential security vulnerabilities.
