@@ -831,6 +831,9 @@ When present, the _namespace_ is separated from the _name_ by a
 U+003A COLON `:`.
 Built-in _functions_ and their _options_ do not have a _namespace_ identifier.
 
+The single-character U+0075 LATIN SMALL LETTER U `u` _namespace_
+is reserved for future standardization.
+
 _Function_ _identifiers_ are prefixed with `:`.
 _Markup_ _identifiers_ are prefixed with `#` or `/`.
 _Option_ _identifiers_ have no prefix.
