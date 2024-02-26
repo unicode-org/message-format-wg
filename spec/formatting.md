@@ -225,9 +225,49 @@ the following steps are taken:
    A _local-declaration_ binds the resolved value of an _expression_
    to a _variable_.
    Thus, the output of one _function_ is potentially the _operand_
-   of another _function_.
-   Thus, formatting functions SHOULD use a structure for the resolved _operand_ value
-   that is interconvertible with the structure for the result of the _function_.
+   of another _function_. In other words, formatting functions
+   compose with each other.
+   For example, in
+   ```
+   .input {$n :number minIntegerDigits=3}
+   .local {$n1 :number maxFractionDigits=3}
+   ```
+   the second call to `:number` composes with the first call.
+
+   Implementations SHOULD provide a means for formatting functions
+   to compose with each other.
+   Implementations that provide a means for defining custom functions
+   SHOULD provide a means for those functions to return values
+   that contain enough information
+   (e.g. the resolved _operand_ and _option_ values
+   that the function was called with)
+   to be used as inputs to subsequent function calls.
+   For example, an implementation in a typed programming language
+   MAY define an interface that custom functions implement.
+   Such an interface SHOULD define an implementation-specific
+   argument type `T` and return type `U` for custom functions
+   such that `U` can be coerced to `T` without loss of information.
+
+> [!NOTE]
+> In the Tech Preview, the spec leaves the behavior of the previous
+> example implementation-dependent. Supposing that
+> the external input variable `n` is bound to the string `"1"`,
+> and that the implementation formats to a string,
+> the formatted result of the following message:
+>
+> ```
+> .input {$n :number minIntegerDigits=3}
+> .local {$n1 :number maxFractionDigits=3}
+> {{$n1}}
+> ```
+>
+> is implementation-dependent.
+> Depending on whether the options are preserved across
+> the two calls to `:number`, a conformant implementation
+> could produce either "001.000" or "1.000"
+> Feedback from users and implementers is desired
+> about whether to require one interpretation or the other
+> in the spec.
 
    An implementation MAY pass additional arguments to the function,
    as long as reasonable precautions are taken to keep the function interface
