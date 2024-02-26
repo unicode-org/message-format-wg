@@ -97,14 +97,14 @@ Attempting to parse a _message_ that is not _valid_ will result in a _Data Model
 
 A **_<dfn>message</dfn>_** is the complete template for a specific message formatting request.
 
-> **Note**
+> [!NOTE]
 > This syntax is designed to be embeddable into many different programming languages and formats.
 > As such, it avoids constructs, such as character escapes, that are specific to any given file
 > format or processor.
 > In particular, it avoids using quote characters common to many file formats and formal languages
 > so that these do not need to be escaped in the body of a _message_.
 
-> **Note**
+> [!NOTE]
 > In general (and except where required by the syntax), whitespace carries no meaning in the structure
 > of a _message_. While many of the examples in this spec are written on multiple lines, the formatting
 > shown is primarily for readability.
@@ -123,6 +123,19 @@ A **_<dfn>message</dfn>_** is the complete template for a specific message forma
 > > ```
 > >
 > > An exception to this is: whitespace inside a _pattern_ is **always** significant.
+
+> [!NOTE]
+> The syntax assumes that each _message_ will be displayed with a left-to-right display order
+> and be processed in the logical character order.
+> The syntax also permits the use of right-to-left characters in _identifiers_,
+> _literals_, and other values.
+> This can result in confusion when viewing the _message_.
+> 
+> Additional restrictions or requirements,
+> such as permitting the use of certain bidirectional control characters in the syntax,
+> might be added during the Tech Preview to better manage bidirectional text.
+> Feedback on the creation and management of _messages_
+> containing bidirectional tokens is strongly desired.
 
 A _message_ can be a _simple message_ or it can be a _complex message_.
 
