@@ -234,8 +234,13 @@ the following steps are taken:
    ```
    the second call to `:number` composes with the first call.
 
+   In addition, selector functions compose with formatting functions
+   in the sense that a selector function's _operand_
+   may be the output of any formatting function.
+
    Implementations SHOULD provide a means for formatting functions
-   to compose with each other.
+   to compose with each other
+   and for formatting functions to compose with selector functions.
    Implementations that provide a means for defining custom functions
    SHOULD provide a means for those functions to return values
    that contain enough information
@@ -245,8 +250,11 @@ the following steps are taken:
    For example, an implementation in a typed programming language
    MAY define an interface that custom functions implement.
    Such an interface SHOULD define an implementation-specific
-   argument type `T` and return type `U` for custom functions
+   argument type `T` and return type `U` for custom formatting functions
    such that `U` can be coerced to `T` without loss of information.
+   The type `U`
+   (or a type that `U` can be coerced to without loss of information)
+   SHOULD also be the input type of custom selector functions.
 
 > [!NOTE]
 > In the Tech Preview, the spec leaves the behavior of the previous
