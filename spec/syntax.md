@@ -271,8 +271,8 @@ A _quoted pattern_ MAY be empty.
 ### Text
 
 **_<dfn>text</dfn>_** is the translateable content of a _pattern_.
-Any Unicode code point is allowed, except for surrogate code points U+D800
-through U+DFFF inclusive.
+Any Unicode code point is allowed, except for U+0000 NUL
+and the surrogate code points U+D800 through U+DFFF inclusive.
 The characters U+005C REVERSE SOLIDUS `\`,
 U+007B LEFT CURLY BRACKET `{`, and U+007D RIGHT CURLY BRACKET `}`
 MUST be escaped as `\\`, `\{`, and `\}` respectively.
@@ -291,7 +291,7 @@ simple-start-char = content-char / s / "@" / "|"
 text-char         = content-char / s / "." / "@" / "|"
 quoted-char       = content-char / s / "." / "@" / "{" / "}"
 reserved-char     = content-char / "."
-content-char      = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
+content-char      = %x01-08        ; omit NUL (%x00), HTAB (%x09) and LF (%x0A)
                   / %x0B-0C        ; omit CR (%x0D)
                   / %x0E-1F        ; omit SP (%x20)
                   / %x21-2D        ; omit . (%x2E)
@@ -794,7 +794,7 @@ as a _key_ value,
 as the _operand_ of a _literal-expression_,
 or in the value of an _option_.
 A _literal_ MAY include any Unicode code point
-except for surrogate code points U+D800 through U+DFFF.
+except for U+0000 NUL or the surrogate code points U+D800 through U+DFFF.
 
 All code points are preserved.
 
