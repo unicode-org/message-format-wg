@@ -999,11 +999,15 @@ _is_ interpreted as whitespace,
 > in which users might accidentally create these characters in a _message_.
 
 ```abnf
+; bidi controls
+; LRM / RLM / LRI / RLI / FSI / PDI
+bidi = %x200E / %x200F / %x2066-2069
+
 ; optional whitespace
-owsp = *( s / %x200E / %x200F / %x2066-2069 )
+owsp = *( s / bidi )
 
 ; required whitespace
-wsp = [ (%x200E / %x200F / %x2066-2069 ) ] 1*s [ (%x200E / %x200F / %x2066-2069 ) ]
+wsp = [ bidi ] 1*s [ bidi ]
 
 ; whitespace characters
 s = ( SP / HTAB / CR / LF / %x3000 )
