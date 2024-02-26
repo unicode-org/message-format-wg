@@ -222,8 +222,10 @@ the following steps are taken:
 
    The form that resolved _operand_ and _option_ values take is implementation-defined.
 
-   Since the result of a function call can be bound to a _variable_,
-   the output of one _function_ may be the input of another _function_.
+   A _local-declaration_ binds the resolved value of an _expression_
+   to a _variable_.
+   Thus, the output of one _function_ is potentially the _operand_
+   of another _function_.
    Thus, formatting functions SHOULD use a structure for the resolved _operand_ value
    that is interconvertible with the structure for the result of the _function_.
 
