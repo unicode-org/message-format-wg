@@ -50,9 +50,9 @@ declarations, options, and attributes to be optional rather than required proper
 > Users relying on XML representations of messages should note that
 > XML 1.0 does not allow for the representation of all C0 control characters (U+0000-U+001F).
 > Except for U+0000 NULL , these characters are allowed in MessageFormat 2 messages,
-> so systems and users relying on XML as a resource format might need to
-> apply additional restrictions on message characters
-> or provide an alternative escape mechanism for these characters.
+> so systems and users relying on this XML representation for interchange
+> might need to supply an alternate escape mechanism to support messages
+> that contain these characters.
 
 > [!IMPORTANT]
 > The data model uses the field name `name` to denote various interface identifiers.
