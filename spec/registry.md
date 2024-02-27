@@ -787,7 +787,7 @@ appear in the formatted output.
 The _field options_ are defined as follows:
 
 > [!IMPORTANT]
-> The value `2-digit` for some _field options_ **_must_** be quoted
+> The value `2-digit` for some _field options_ **must** be quoted
 > in the MessageFormat syntax.
 > ```
 > .local $correct = {$someDate :datetime year=|2-digit|}
