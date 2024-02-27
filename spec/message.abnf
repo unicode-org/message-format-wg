@@ -5,41 +5,44 @@ simple-start      = simple-start-char / text-escape / placeholder
 pattern           = *(text-char / text-escape / placeholder)
 placeholder       = expression / markup
 
-complex-message   = *(declaration [s]) complex-body
+complex-message   = *(declaration owsp) complex-body
 declaration       = input-declaration / local-declaration / reserved-statement
 complex-body      = quoted-pattern / matcher
 
-input-declaration = input [s] variable-expression
-local-declaration = local s variable [s] "=" [s] expression
+input-declaration = input owsp variable-expression
+local-declaration = local wsp variable owsp "=" owsp expression
 
 quoted-pattern    = "{{" pattern "}}"
+                  / %x2066 "{{" pattern "}}" %x2069
 
-matcher           = match-statement 1*([s] variant)
-match-statement   = match 1*([s] selector)
+matcher           = match-statement 1*(owsp variant)
+match-statement   = match 1*(owsp selector)
 selector          = expression
-variant           = key *(s key) [s] quoted-pattern
+variant           = key *(wsp key) owsp quoted-pattern
 key               = literal / "*"
 
 ; Expressions
-expression            = literal-expression
-                      / variable-expression
-                      / annotation-expression
-literal-expression    = "{" [s] literal [s annotation] *(s attribute) [s] "}"
-variable-expression   = "{" [s] variable [s annotation] *(s attribute) [s] "}"
-annotation-expression = "{" [s] annotation *(s attribute) [s] "}"
+expression            = "{" (literal-expression / variable-expression / annotation-expression) "}"
+                      / "{" %x2066 (literal-expression / variable-expression / annotation-expression) %x2069 "}"
+literal-expression    = owsp literal [wsp annotation] *(wsp attribute) owsp
+variable-expression   = owsp variable [wsp annotation] *(wsp attribute) owsp
+annotation-expression = owsp annotation *(wsp attribute) owsp
 
 annotation            = function
                       / private-use-annotation
                       / reserved-annotation
 
-markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"  ; open and standalone
-       / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}"  ; close
+markup                = "{" markup-body "}"
+                      / "{" %x2066 markup-body %x2069 "}"
+
+markup-body          = owsp "#" identifier *(wsp option) *(wsp attribute) owsp ["/"]  ; open and standalone
+                     / owsp "/" identifier *(wsp option) *(wsp attribute) owsp        ; close
 
 ; Expression and literal parts
-function       = ":" identifier *(s option)
-option         = identifier [s] "=" [s] (literal / variable)
+function       = ":" identifier *(wsp option)
+option         = identifier owsp "=" owsp (literal / variable)
 ; Attributes are reserved for future standardization
-attribute      = "@" identifier [[s] "=" [s] (literal / variable)]
+attribute      = "@" identifier [owsp "=" owsp (literal / variable)]
 
 variable       = "$" name
 literal        = quoted / unquoted
@@ -54,7 +57,7 @@ local = %s".local"
 match = %s".match"
 
 ; Reserve additional .keywords for use by future versions of this specification.
-reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
+reserved-statement = reserved-keyword [s reserved-body] 1*(owsp expression)
 ; Note that the following production is a simplification,
 ; as this rule MUST NOT be considered to match existing keywords
 ; (`.input`, `.local`, and `.match`).
@@ -67,7 +70,7 @@ reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 ; Reserve sigils for private-use by implementations.
 private-use-annotation    = private-start reserved-body
 private-start             = "^" / "&"
-reserved-body             = *([s] 1*(reserved-char / reserved-escape / quoted))
+reserved-body             = *(owsp 1*(reserved-char / reserved-escape / quoted))
 
 ; Names and identifiers
 ; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName
@@ -104,5 +107,15 @@ quoted-escape   = backslash ( backslash / "|" )
 reserved-escape = backslash ( backslash / "{" / "|" / "}" )
 backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
 
-; Whitespace
-s = 1*( SP / HTAB / CR / LF / %x3000 )
+; bidi controls
+; LRM / RLM / LRI / RLI / FSI / PDI
+bidi = %x200E / %x200F / %x2066-2069
+
+; optional whitespace
+owsp = *( s / bidi )
+
+; required whitespace
+wsp = [ bidi ] 1*s [ bidi ]
+
+; whitespace characters
+s = ( SP / HTAB / CR / LF / %x3000 )
