@@ -222,7 +222,7 @@ the following steps are taken:
 
    The form that resolved _operand_ and _option_ values take is implementation-defined.
 
-   A _local-declaration_ binds the resolved value of an _expression_
+   A _declaration_ binds the resolved value of an _expression_
    to a _variable_.
    Thus, the output of one _function_ is potentially the _operand_
    of another _function_,
