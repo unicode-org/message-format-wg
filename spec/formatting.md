@@ -250,10 +250,9 @@ the following steps are taken:
    argument type `T` and return type `U`
    for implementations of functions
    such that `U` can be coerced to `T` without loss of information.
-   Implementations of specific functions MAY
-   signal errors if supplied an _operand_ that
-   does not make sense for the particular function
-   being implemented.
+   Implementations of a _function_ SHOULD emit an 
+   _Invalid Expression_ error for _operands_ whose resolved value
+   or type is not supported.
 
 > [!NOTE]
 > The behavior of the previous example is
