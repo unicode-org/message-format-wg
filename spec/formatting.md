@@ -249,7 +249,7 @@ the following steps are taken:
    Such an interface SHOULD define an implementation-specific
    argument type `T` and return type `U`
    for implementations of functions
-   such that `U` can be coerced to `T` without loss of information.
+   such that `U` can be coerced to `T`.
    Implementations of a _function_ SHOULD emit an 
    _Invalid Expression_ error for _operands_ whose resolved value
    or type is not supported.
