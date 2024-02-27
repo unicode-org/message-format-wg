@@ -786,6 +786,15 @@ appear in the formatted output.
 
 The _field options_ are defined as follows:
 
+> [!IMPORTANT]
+> The value `2-digit` for some _field options_ **must** be quoted
+> in the MessageFormat syntax because it starts with a digit
+> but does not match the `number-literal` production in the ABNF.
+> ```
+> .local $correct = {$someDate :datetime year=|2-digit|}
+> .local $syntaxError = {$someDate :datetime year=2-digit}
+> ```
+
 The function `:datetime` has the following options:
 - `weekday`
   - `long`
