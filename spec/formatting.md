@@ -247,12 +247,8 @@ the following steps are taken:
    MAY define an interface for custom function implementations.
    Such an interface SHOULD define an implementation-specific
    argument type `T` and return type `U`
-   for implementations of formatting functions
+   for implementations of functions
    such that `U` can be coerced to `T` without loss of information.
-   The type `U`
-   (or a type that `U` can be coerced to without loss of information)
-   SHOULD also be the input type of implementations of
-   custom selector functions.
    Implementations of specific functions MAY
    signal errors if supplied an _operand_ that
    does not make sense for the particular function
