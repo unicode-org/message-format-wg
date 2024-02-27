@@ -230,7 +230,7 @@ the following steps are taken:
    For example, in
    ```
    .input {$n :number minIntegerDigits=3}
-   .local {$n1 :number maxFractionDigits=3}
+   .local $n1 = {$n :number maxFractionDigits=3}
    ```
    the second call to `:number` composes with the first call.
 
