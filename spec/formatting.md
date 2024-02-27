@@ -224,7 +224,7 @@ the following steps are taken:
 
    A _declaration_ binds the resolved value of an _expression_
    to a _variable_.
-   Thus, the output of one _function_ is potentially the _operand_
+   Thus, the result of one _function_ is potentially the _operand_
    of another _function_,
    or the value of one of the _options_ for another function.
    For example, in
@@ -232,8 +232,10 @@ the following steps are taken:
    .input {$n :number minIntegerDigits=3}
    .local $n1 = {$n :number maxFractionDigits=3}
    ```
-   the output of the first call to `:number`
-   is the input of the second call to `:number`.
+   the value bound to `$n` is the
+   resolved value used as the _operand_
+   of the `:number` _function_
+   when resolving the value of the _variable_ `$n1`.
 
    Implementations that provide a means for defining custom functions
    SHOULD provide a means for function implementations
