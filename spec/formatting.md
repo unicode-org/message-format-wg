@@ -274,9 +274,13 @@ the following steps are taken:
 > a conformant implementation
 > could produce either "001.000" or "1.000"
 >
-> Each function implementation MAY have
+> Each function **specification** MAY have
 > its own rules to preserve some options in the returned structure
-> and discard others.
+> and discard others. 
+> In instances where a function specification does not determine whether an option is preserved or discarded,
+> each function **implementation** of that specification MAY have
+> its own rules to preserve some options in the returned structure
+> and discard others. 
 >
 >
 > [!NOTE]
