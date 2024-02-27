@@ -46,6 +46,14 @@ the JSON and DTD definitions are intended for interchange between systems and pr
 To that end, they relax some aspects of the data model, such as allowing
 declarations, options, and attributes to be optional rather than required properties.
 
+> [!NOTE]
+> Users relying on XML representations of messages should note that
+> XML 1.0 does not allow for the representation of all C0 control characters (U+0000-U+001F).
+> Except for U+0000 NULL , these characters are allowed in MessageFormat 2 messages,
+> so systems and users relying on this XML representation for interchange
+> might need to supply an alternate escape mechanism to support messages
+> that contain these characters.
+
 > [!IMPORTANT]
 > The data model uses the field name `name` to denote various interface identifiers.
 > In the MessageFormat 2 [syntax](/spec/syntax.md), the source for these `name` fields
