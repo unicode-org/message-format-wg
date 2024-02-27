@@ -266,7 +266,7 @@ the following steps are taken:
 >
 > ```
 > .input {$n :number minIntegerDigits=3}
-> .local {$n1 :number maxFractionDigits=3}
+> .local $n1 = {$n :number maxFractionDigits=3}
 > {{$n1}}
 > ```
 >
