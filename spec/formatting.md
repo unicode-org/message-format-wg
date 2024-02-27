@@ -245,8 +245,7 @@ the following steps are taken:
    that the function was called with)
    to be used as arguments to subsequent calls
    to the function implementations.
-   For example, a MessageFormat implementation in a typed programming language
-   MAY define an interface for custom function implementations.
+   For example, an implementation might define an interface that allows custom function implementation.
    Such an interface SHOULD define an implementation-specific
    argument type `T` and return type `U`
    for implementations of functions
