@@ -267,7 +267,7 @@ the following steps are taken:
 > {{$n1}}
 > ```
 >
-> is implementation-dependent.
+> is currently implementation-dependent.
 > Depending on whether the options are preserved
 > between the resolution of the first `:number` _annotation_
 > and the resolution of the second `:number` _annotation_,
