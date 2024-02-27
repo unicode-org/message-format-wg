@@ -238,7 +238,8 @@ the following steps are taken:
    Implementations that provide a means for defining custom functions
    SHOULD provide a means for function implementations
    to return values that contain enough information
-   (e.g. the resolved _operand_ and _option_ values
+   (e.g. a representation of
+   the resolved _operand_ and _option_ values
    that the function was called with)
    to be used as arguments to subsequent calls
    to the function implementations.
