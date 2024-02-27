@@ -256,7 +256,7 @@ the following steps are taken:
 
 > [!NOTE]
 > The behavior of the previous example is
-> implementation-dependent. Supposing that
+> currently implementation-dependent. Supposing that
 > the external input variable `n` is bound to the string `"1"`,
 > and that the implementation formats to a string,
 > the formatted result of the following message:
