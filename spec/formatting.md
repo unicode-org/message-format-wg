@@ -225,40 +225,41 @@ the following steps are taken:
    A _local-declaration_ binds the resolved value of an _expression_
    to a _variable_.
    Thus, the output of one _function_ is potentially the _operand_
-   of another _function_. In other words, formatting functions
-   compose with each other.
+   of another _function_,
+   or the value of one of the _options_ for another function.
    For example, in
    ```
    .input {$n :number minIntegerDigits=3}
    .local $n1 = {$n :number maxFractionDigits=3}
    ```
-   the second call to `:number` composes with the first call.
+   the output of the first call to `:number`
+   is the input of the second call to `:number`.
 
-   In addition, selector functions compose with formatting functions
-   in the sense that a selector function's _operand_
-   may be the output of any formatting function.
-
-   Implementations SHOULD provide a means for formatting functions
-   to compose with each other
-   and for formatting functions to compose with selector functions.
    Implementations that provide a means for defining custom functions
-   SHOULD provide a means for those functions to return values
-   that contain enough information
+   SHOULD provide a means for function implementations
+   to return values that contain enough information
    (e.g. the resolved _operand_ and _option_ values
    that the function was called with)
-   to be used as inputs to subsequent function calls.
-   For example, an implementation in a typed programming language
-   MAY define an interface that custom functions implement.
+   to be used as arguments to subsequent calls
+   to the function implementations.
+   For example, a MessageFormat implementation in a typed programming language
+   MAY define an interface for custom function implementations.
    Such an interface SHOULD define an implementation-specific
-   argument type `T` and return type `U` for custom formatting functions
+   argument type `T` and return type `U`
+   for implementations of formatting functions
    such that `U` can be coerced to `T` without loss of information.
    The type `U`
    (or a type that `U` can be coerced to without loss of information)
-   SHOULD also be the input type of custom selector functions.
+   SHOULD also be the input type of implementations of
+   custom selector functions.
+   Implementations of specific functions MAY
+   signal errors if supplied an _operand_ that
+   does not make sense for the particular function
+   being implemented.
 
 > [!NOTE]
-> In the Tech Preview, the spec leaves the behavior of the previous
-> example implementation-dependent. Supposing that
+> The behavior of the previous example is
+> implementation-dependent. Supposing that
 > the external input variable `n` is bound to the string `"1"`,
 > and that the implementation formats to a string,
 > the formatted result of the following message:
@@ -270,12 +271,24 @@ the following steps are taken:
 > ```
 >
 > is implementation-dependent.
-> Depending on whether the options are preserved across
-> the two calls to `:number`, a conformant implementation
+> Depending on whether the options are preserved
+> between the resolution of the first `:number` _annotation_
+> and the resolution of the second `:number` _annotation_,
+> a conformant implementation
 > could produce either "001.000" or "1.000"
-> Feedback from users and implementers is desired
-> about whether to require one interpretation or the other
-> in the spec.
+>
+> Each function implementation MAY have
+> its own rules to preserve some options in the returned structure
+> and discard others.
+>
+>
+> [!NOTE]
+> During the Technical Preview,
+> feedback on how the registry describes
+> the flow of _resolved values_ and _options_
+> from one _function_ to another,
+> and on what requirements this specification should impose,
+> is highly desired.
 
    An implementation MAY pass additional arguments to the function,
    as long as reasonable precautions are taken to keep the function interface
