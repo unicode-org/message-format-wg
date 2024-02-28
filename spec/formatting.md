@@ -282,7 +282,7 @@ the following steps are taken:
 > its own rules to preserve some options in the returned structure
 > and discard others. 
 >
->
+
 > [!NOTE]
 > During the Technical Preview,
 > feedback on how the registry describes
