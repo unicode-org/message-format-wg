@@ -222,6 +222,75 @@ the following steps are taken:
 
    The form that resolved _operand_ and _option_ values take is implementation-defined.
 
+   A _declaration_ binds the resolved value of an _expression_
+   to a _variable_.
+   Thus, the result of one _function_ is potentially the _operand_
+   of another _function_,
+   or the value of one of the _options_ for another function.
+   For example, in
+   ```
+   .input {$n :number minIntegerDigits=3}
+   .local $n1 = {$n :number maxFractionDigits=3}
+   ```
+   the value bound to `$n` is the
+   resolved value used as the _operand_
+   of the `:number` _function_
+   when resolving the value of the _variable_ `$n1`.
+
+   Implementations that provide a means for defining custom functions
+   SHOULD provide a means for function implementations
+   to return values that contain enough information
+   (e.g. a representation of
+   the resolved _operand_ and _option_ values
+   that the function was called with)
+   to be used as arguments to subsequent calls
+   to the function implementations.
+   For example, an implementation might define an interface that allows custom function implementation.
+   Such an interface SHOULD define an implementation-specific
+   argument type `T` and return type `U`
+   for implementations of functions
+   such that `U` can be coerced to `T`.
+   Implementations of a _function_ SHOULD emit an 
+   _Invalid Expression_ error for _operands_ whose resolved value
+   or type is not supported.
+
+> [!NOTE]
+> The behavior of the previous example is
+> currently implementation-dependent. Supposing that
+> the external input variable `n` is bound to the string `"1"`,
+> and that the implementation formats to a string,
+> the formatted result of the following message:
+>
+> ```
+> .input {$n :number minIntegerDigits=3}
+> .local $n1 = {$n :number maxFractionDigits=3}
+> {{$n1}}
+> ```
+>
+> is currently implementation-dependent.
+> Depending on whether the options are preserved
+> between the resolution of the first `:number` _annotation_
+> and the resolution of the second `:number` _annotation_,
+> a conformant implementation
+> could produce either "001.000" or "1.000"
+>
+> Each function **specification** MAY have
+> its own rules to preserve some options in the returned structure
+> and discard others. 
+> In instances where a function specification does not determine whether an option is preserved or discarded,
+> each function **implementation** of that specification MAY have
+> its own rules to preserve some options in the returned structure
+> and discard others. 
+>
+>
+> [!NOTE]
+> During the Technical Preview,
+> feedback on how the registry describes
+> the flow of _resolved values_ and _options_
+> from one _function_ to another,
+> and on what requirements this specification should impose,
+> is highly desired.
+
    An implementation MAY pass additional arguments to the function,
    as long as reasonable precautions are taken to keep the function interface
    simple and minimal, and avoid introducing potential security vulnerabilities.
