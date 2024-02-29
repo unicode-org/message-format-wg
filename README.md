@@ -37,7 +37,7 @@ The MFWG specifically requests feedback on the following issues:
 
 MessageFormat 2 defines the data model, syntax, processing, and conformance requirements 
 for the next generation of dynamic messages. 
-It is intended for adoption by programming languages and APIs. 
+It is intended for adoption by programming languages, software libraries, and software localization tooling.
 It enables the integration of internationalization APIs (such as date and number formats), 
 grammatical matching (such as plurals or genders), 
 as well as user-defined formats and message selectors,
