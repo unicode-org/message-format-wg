@@ -14,7 +14,7 @@ The Message Format Working Group (MFWG) is tasked with developing an industry st
 
 The MessageFormat 2 specification is a new part of
 the [LDML](https://www.unicode.org/reports/tr35/) specification.
-This specification is being released as a "Tech Preview", 
+This specification is initially released as a "Tech Preview", 
 which means that the stability policy is not in effect and feedback from
 users and implementers might result in changes to the syntax, data model,
 functions, or other normative aspects of MessageFormat 2.
