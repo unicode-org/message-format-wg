@@ -44,6 +44,7 @@ It enables the integration of internationalization APIs (such as date or number 
 and grammatical matching (such as plurals or genders). 
 It is extensible, allowing software developers to create formatting
 or message selection logic that add on to the core capabilities.
+
 The goal is to allow developers and translators to create natural-sounding, grammatically-correct,
 user interfaces that can appear in any language and support the needs of diverse cultures.
 
