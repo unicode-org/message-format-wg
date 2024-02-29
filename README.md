@@ -12,8 +12,8 @@ The Message Format Working Group (MFWG) is tasked with developing an industry st
 
 ## MessageFormat 2 Technical Preview
 
-The MessageFormat 2 specification was accepted by the CLDR-TC on 2024-02-28
-as a new part of the LDML specification.
+The MessageFormat 2 specification is a new part of
+the [LDML](https://www.unicode.org/reports/tr35/) specification.
 This specification is being released as a "Tech Preview", 
 which means that the stability policy is not in effect and feedback from
 users and implementers might result in changes to the syntax, data model,
