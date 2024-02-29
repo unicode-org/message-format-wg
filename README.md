@@ -10,7 +10,45 @@ The Message Format Working Group (MFWG) is tasked with developing an industry st
 - [Goals and Non-Goals](docs/goals.md)
 - [Record of Consensus Decisions](docs/consensus_decisions.md)
 
-## MessageFormat 2 Draft Syntax
+## MessageFormat 2 Technical Preview
+
+The MessageFormat 2 specification was accepted by the CLDR-TC on 2024-02-28
+as a new part of the LDML specification.
+This specification is being released as a "Tech Preview", 
+which means that the stability policy is not in effect and feedback from
+users and implementers might result in changes to the syntax, data model,
+functions, or other normative aspects of MessageFormat 2.
+Such changes are expected to be minor and, to the extent possible,
+to be compatible with what is defined in the Tech Preview.
+
+The MFWG welcomes any and all feedback, including bugs reports, implementation
+reports, success stories, feature requests, requests for clarification, 
+or anything that would be helpful in stabilizing the specification and
+promoting widespread adoption.
+
+The MFWG specifically requests feedback on the following issues:
+- How to perform non-integer exact number selection (#675)
+- Whether `markup` should support additional spaces (#650)
+- Whether "attribute-like" behavior is needed and what form it should take (#642)
+- Whether to relax constraints on complex message start (#610)
+- Whether omitting the `*` variant key should be permitted (#603)
+
+## What is MessageFormat 2?
+
+MessageFormat 2 defines the data model, syntax, processing, and conformance requirements 
+for the next generation of dynamic messages. 
+It is intended for adoption by programming languages and APIs. 
+It enables the integration of internationalization APIs (such as date and number formats), 
+grammatical matching (such as plurals or genders), 
+as well as user-defined formats and message selectors,
+so that developers and translators can create natural, grammatically-correct,
+fluent user interfaces.
+
+## MessageFormat 2 Specification and Syntax
+
+The current specification starts [here](spec/README.md) and may have changed since the publication
+of the Tech Preview version.
+The Tech Preview specification is [here](tr35-messageformat.md) (link to follow).
 
 The current draft syntax for defining messages can be found in [spec/syntax.md](./spec/syntax.md).
 The syntax is formally described in [ABNF](spec/message.abnf).
@@ -58,6 +96,8 @@ See more examples and the formal definition of the grammar in [spec/syntax.md](.
 - JavaScript: [`messageformat`](https://github.com/messageformat/messageformat/tree/master/packages/mf2-messageformat) 4.0 implements the MessageFormat 2 syntax, together with a polyfill of the runtime API proposed for ECMA-402.
 
 ## Sharing Feedback
+
+Technical Preview Feedback: [file an issue here](https://github.com/unicode-org/message-format-wg/issues/new?labels=Preview-Feedback&projects=&template=tech-preview-feedback.md&title=%5BFEEDBACK%5D+)
 
 We invite feedback about the current syntax draft, as well as the real-life use-cases, requirements, tooling, runtime APIs, localization workflows, and other topics.
 
