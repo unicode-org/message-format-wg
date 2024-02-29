@@ -27,22 +27,25 @@ or anything that would be helpful in stabilizing the specification and
 promoting widespread adoption.
 
 The MFWG specifically requests feedback on the following issues:
-- How to perform non-integer exact number selection (#675)
-- Whether `markup` should support additional spaces (#650)
-- Whether "attribute-like" behavior is needed and what form it should take (#642)
-- Whether to relax constraints on complex message start (#610)
-- Whether omitting the `*` variant key should be permitted (#603)
+- How to perform non-integer exact number selection [#675](https://github.com/unicode-org/message-format-wg/issues/675)
+- Whether `markup` should support additional spaces [#650](https://github.com/unicode-org/message-format-wg/issues/650)
+- Whether "attribute-like" behavior is needed and what form it should take [#642](https://github.com/unicode-org/message-format-wg/issues/642)
+- Whether to relax constraints on complex message start [#610](https://github.com/unicode-org/message-format-wg/issues/610)
+- Whether omitting the `*` variant key should be permitted [#603](https://github.com/unicode-org/message-format-wg/issues/603)
 
 ## What is MessageFormat 2?
 
+Software needs to construct messages that incorporate various pieces of information. 
+The complexities of the world's languages make this challenging.
 MessageFormat 2 defines the data model, syntax, processing, and conformance requirements 
 for the next generation of dynamic messages. 
 It is intended for adoption by programming languages, software libraries, and software localization tooling.
-It enables the integration of internationalization APIs (such as date and number formats), 
-grammatical matching (such as plurals or genders), 
-as well as user-defined formats and message selectors,
-so that developers and translators can create natural, grammatically-correct,
-fluent user interfaces.
+It enables the integration of internationalization APIs (such as date or number formats),
+and grammatical matching (such as plurals or genders). 
+It is extensible, allowing software developers to create formatting
+or message selection logic that add on to the core capabilities.
+The goal is to allow developers and translators to create natural-sounding, grammatically-correct,
+user interfaces that can appear in any language and support the needs of diverse cultures.
 
 ## MessageFormat 2 Specification and Syntax
 
