@@ -8,7 +8,6 @@ The Message Format Working Group (MFWG) is tasked with developing an industry st
 
 - [Why ICU MessageFormat Needs a Successor](docs/why_mf_next.md)
 - [Goals and Non-Goals](docs/goals.md)
-- [Record of Consensus Decisions](docs/consensus_decisions.md)
 
 ## MessageFormat 2 Technical Preview
 
