@@ -27,6 +27,7 @@ or anything that would be helpful in stabilizing the specification and
 promoting widespread adoption.
 
 The MFWG specifically requests feedback on the following issues:
+- How best to define value resolution [#678](https://github.com/unicode-org/message-format-wg/issues/678)
 - How to perform non-integer exact number selection [#675](https://github.com/unicode-org/message-format-wg/issues/675)
 - Whether `markup` should support additional spaces [#650](https://github.com/unicode-org/message-format-wg/issues/650)
 - Whether "attribute-like" behavior is needed and what form it should take [#642](https://github.com/unicode-org/message-format-wg/issues/642)
