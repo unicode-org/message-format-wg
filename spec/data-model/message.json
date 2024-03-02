@@ -61,7 +61,7 @@
         "name": { "type": "string" },
         "options": { "$ref": "#/$defs/options" }
       },
-      "required": ["type", "kind", "name"]
+      "required": ["type", "name"]
     },
     "unsupported-annotation": {
       "type": "object",
