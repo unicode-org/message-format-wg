@@ -96,7 +96,19 @@ Implementations may even support users creating their own functions.
 
 See more examples and the formal definition of the grammar in [spec/syntax.md](./spec/syntax.md).
 
-### Implementations
+## Known Issues
+
+The technical preview includes some known issues.
+The Working Group continues to address feedback
+and develop portions of the specification not completed for the LDML45 release.
+The `main` branch of this repository contains changes implemented since the technical preview.
+
+Implementers should be aware of the following normative changes during the tech preview period:
+- Support for UAX31 bidi whitespace conformance \[[#673](https://github.com/unicode-org/message-format-wg/pulls/673)\]
+
+## Implementations
+
+(The working group expects that ICU75 will include both Java and C/C++ implementations of the tech preview specification)
 
 - Java: [`com.ibm.icu.message2`](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/index.html?com/ibm/icu/message2/package-summary.html), part of ICU 72 released in October 2022, is a _tech preview_ implementation of the MessageFormat 2 syntax, together with a formatting API. See the [ICU User Guide](https://unicode-org.github.io/icu/userguide/format_parse/messages/mf2.html) for examples and a quickstart guide.
 - JavaScript: [`messageformat`](https://github.com/messageformat/messageformat/tree/master/packages/mf2-messageformat) 4.0 implements the MessageFormat 2 syntax, together with a polyfill of the runtime API proposed for ECMA-402.
