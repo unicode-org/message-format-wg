@@ -96,15 +96,14 @@ Implementations may even support users creating their own functions.
 
 See more examples and the formal definition of the grammar in [spec/syntax.md](./spec/syntax.md).
 
-## Known Issues
+## Normative Changes during Tech Preview
 
-The technical preview includes some known issues.
 The Working Group continues to address feedback
-and develop portions of the specification not completed for the LDML45 release.
+and develop portions of the specification not completed for the LDML45 Tech Preview release.
 The `main` branch of this repository contains changes implemented since the technical preview.
 
 Implementers should be aware of the following normative changes during the tech preview period:
-- Support for UAX31 bidi whitespace conformance \[[#673](https://github.com/unicode-org/message-format-wg/pulls/673)\]
+- Support for UAX31 bidi whitespace conformance \[[#673](https://github.com/unicode-org/message-format-wg/pulls/673)\] _Example only_
 
 ## Implementations
 
