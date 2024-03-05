@@ -8,6 +8,7 @@ when formatting a message for display in a user interface, or for some later pro
 To start, parse the _message_ from its syntax or create it from a data model description.
 
 If the message being formatted has any _Syntax Errors_ or _Data Model Errors_,
+an appropriate error MUST be emitted and
 the result of formatting the _message_ MUST be a pattern resolving to a single _fallback value_
 using the message's fallback string defined in the _formatting context_
 or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER `�`.
