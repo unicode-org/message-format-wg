@@ -103,7 +103,7 @@ and develop portions of the specification not completed for the LDML45 Tech Prev
 The `main` branch of this repository contains changes implemented since the technical preview.
 
 Implementers should be aware of the following normative changes during the tech preview period:
-- Support for UAX31 bidi whitespace conformance \[[#673](https://github.com/unicode-org/message-format-wg/pulls/673)\] _Example only_
+- _(list to be updated during tech preview)_
 
 ## Implementations
 
