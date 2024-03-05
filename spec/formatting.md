@@ -2,13 +2,15 @@
 
 ## Introduction
 
-This document defines the behaviour of a MessageFormat 2.0 implementation
+This document defines the behavior of a MessageFormat 2.0 implementation
 when formatting a message for display in a user interface, or for some later processing.
 
-To start, we presume that a _message_ has either been parsed from its syntax
-or created from a data model description.
-If this construction has encountered any _Syntax Errors_ or _Data Model Errors_,
-an appropriate error MUST be emitted and a _fallback value_ MAY be used as the formatting result.
+To start, parse the _message_ from its syntax or create it from a data model description.
+
+If the message being formatted has any _Syntax Errors_ or _Data Model Errors_,
+the result of formatting the _message_ MUST be a pattern resolving to a single _fallback value_
+using the message's fallback string defined in the _formatting context_
+or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER `�`.
 
 Formatting of a _message_ is defined by the following operations:
 
@@ -494,11 +496,6 @@ the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
 This selection method is defined in more detail below.
 An implementation MAY use any pattern selection method,
 as long as its observable behavior matches the results of the method defined here.
-
-If the message being formatted has any _Syntax Errors_ or _Data Model Errors_,
-the result of pattern selection MUST be a pattern resolving to a single _fallback value_
-using the message's fallback string defined in the _formatting context_
-or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER `�`.
 
 ### Resolve Selectors
 
