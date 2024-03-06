@@ -1,0 +1,47 @@
+[
+    {
+        "error": "Variant Key Mismatch",
+        "tests": [
+            ".match {$foo :x} * * {{foo}}",
+            ".match {$foo :x} {$bar :x} * {{foo}}"
+        ]
+    },
+    {
+        "error": "Missing Fallback Variant",
+        "tests": [
+            ".match {:foo} 1 {{_}}",
+            ".match {:foo} other {{_}}",
+            ".match {:foo} {:bar} * 1 {{_}} 1 * {{_}}"
+        ]
+    },
+    {
+        "error": "Missing Selector Annotation",
+        "tests": [
+            ".match {$foo} one {{one}} * {{other}}",
+            ".input {$foo} .match {$foo} one {{one}} * {{other}}",
+            ".local $foo = {$bar} .match {$foo} one {{one}} * {{other}}"
+        ]
+    },
+    {
+        "error": "Duplicate Declaration",
+        "tests": [
+            ".input {$foo} .input {$foo} {{_}}",
+            ".input {$foo} .local $foo = {42} {{_}}",
+            ".local $foo = {42} .input {$foo} {{_}}",
+            ".local $foo = {:unknown} .local $foo = {42} {{_}}",
+            ".local $foo = {$bar} .local $bar = {42} {{_}}",
+            ".local $foo = {$foo} {{_}}",
+            ".local $foo = {$bar} .local $bar = {$baz} {{_}}",
+            ".local $foo = {$bar :func} .local $bar = {$baz} {{_}}",
+            ".local $foo = {42 :func opt=$foo} {{_}}",
+            ".local $foo = {42 :func opt=$bar} .local $bar = {42} {{_}}",
+        ]
+    },
+    {
+        "error": "Duplicate Option Name",
+        "tests": [
+            "bad {:placeholder option=x option=x}",
+            "bad {:placeholder ns:option=x ns:option=y}"
+        ]
+    }
+]

@@ -3,7 +3,13 @@ and are here relicensed by their original author (Eemeli Aro) under the Unicode 
 
 These test files are intended to be useful for testing multiple different message processors in different ways:
 
-- `syntax-errors.json` — An array of strings that should produce a Syntax Error or a Data Model Error when parsed.
+- `syntax-errors.json` — An array of strings that should produce a Syntax Error when parsed.
+
+- `data-model-errors.json` - An array of pairs of error names and arrays of strings:
+    - `error: string` (required) - The name of the error; names are defined in
+        ["MessageFormat 2.0 Errors"](https://github.com/unicode-org/message-format-wg/blob/main/spec/errors.md)
+        in the spec.
+    - `tests: string[]` (required): An array of strings that should produce `error` when processed.
 
 - `test-core.json` — An array of test cases that do not depend on any registry definitions.
   Each test may include some of the following fields:
