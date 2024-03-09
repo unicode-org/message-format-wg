@@ -49,5 +49,5 @@
   ".match * {{foo}}",
   ".match {|x| :x} * foo",
   ".match {|x| :x} * {{foo}} extra",
-  ".match |x| * {{foo}}",
+  ".match |x| * {{foo}}"
 ]
