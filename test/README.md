@@ -3,7 +3,12 @@ and are here relicensed by their original author (Eemeli Aro) under the Unicode 
 
 These test files are intended to be useful for testing multiple different message processors in different ways:
 
-- `syntax-errors.json` — An array of strings that should produce a Syntax Error or a Data Model Error when parsed.
+- `syntax-errors.json` — An array of strings that should produce a Syntax Error when parsed.
+
+- `data-model-errors.json` - An object with string keys and arrays of strings as values,
+     where each key is the name of an error and its value is array of strings that
+     should produce `error` when processed.
+     Error names are defined in ["MessageFormat 2.0 Errors"](../spec/errors.md) in the spec.
 
 - `test-core.json` — An array of test cases that do not depend on any registry definitions.
   Each test may include some of the following fields:
