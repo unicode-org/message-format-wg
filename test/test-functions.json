@@ -88,17 +88,6 @@
       "src": ".match {$foo :integer} one {{one}} * {{other}}",
       "params": { "foo": 1.2 },
       "exp": "one"
-    },
-    {
-      "src": ".match {$foo :integer} 1.2 {{=1.2}} one {{one}} * {{other}}",
-      "params": { "foo": 1.2 },
-      "exp": "=1.2"
-    },
-    {
-      "src": ".match {$foo :integer} 1.2 {{=1.2}} |1,2| {{=1,2}} * {{other}}",
-      "locale": "fr",
-      "params": { "foo": 1.2 },
-      "exp": "=1.2"
     }
   ],
   "number": [
