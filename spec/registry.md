@@ -872,7 +872,7 @@ All other _operand_ values produce an _Invalid Expression_ error.
 
 #### Options
 
-The function `:time` has these _options_:
+The function `:date` has these _options_:
 - `style`
   - `full`
   - `long`
