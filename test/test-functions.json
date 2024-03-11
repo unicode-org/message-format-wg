@@ -4,7 +4,7 @@
     {
       "src": "{horse :date}",
       "exp": "{|horse|}",
-      "errors": [{ "name": "RangeError" }]
+      "errors": [{ "name": "bad-input" }]
     },
     { "src": "{|2006-01-02| :date}", "exp": "1/2/06" },
     { "src": "{|2006-01-02T15:04:06| :date}", "exp": "1/2/06" },
@@ -23,7 +23,7 @@
     {
       "src": "{horse :time}",
       "exp": "{|horse|}",
-      "errors": [{ "name": "RangeError" }]
+      "errors": [{ "name": "bad-input" }]
     },
     { "src": "{|2006-01-02T15:04:06| :time}", "exp": "3:04 PM" },
     {
