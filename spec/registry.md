@@ -732,7 +732,7 @@ Selection based on date and time values is not required in this release.
 
 ### The `:datetime` function
 
-The function `:datetime` is used to format format date/time values, including 
+The function `:datetime` is used to format date/time values, including
 the ability to compose user-specified combinations of fields.
 
 If no options are specified, this function defaults to the following:
@@ -858,7 +858,7 @@ are encouraged to track development of these options during Tech Preview:
  
 ### The `:date` function
 
-The function `:date` is used to format format the date portion of date/time values.
+The function `:date` is used to format the date portion of date/time values.
 
 If no options are specified, this function defaults to the following:
 - `{$d :date}` is the same as `{$d :date style=short}`
@@ -872,7 +872,7 @@ All other _operand_ values produce an _Invalid Expression_ error.
 
 #### Options
 
-The function `:time` has these _options_:
+The function `:date` has these _options_:
 - `style`
   - `full`
   - `long`
@@ -881,7 +881,7 @@ The function `:time` has these _options_:
 
 ### The `:time` function
 
-The function `:time` is used to format format the time portion of date/time values.
+The function `:time` is used to format the time portion of date/time values.
 
 If no options are specified, this function defaults to the following:
 - `{$t :time}` is the same as `{$t :time style=short}`
