@@ -12,14 +12,15 @@ an appropriate error MUST be emitted and a _fallback value_ MAY be used as the f
 
 Formatting of a _message_ is defined by the following operations:
 
-- **_Expression and Markup Resolution_** determines the value of an _expression_ or _markup_,
+- **_Expression and Markup Resolution_** determines the resolved value of an _expression_ or _markup_,
   with reference to the current _formatting context_.
   This can include multiple steps,
   such as looking up the value of a variable and calling formatting functions.
   The form of the resolved value is implementation defined and the
   value might not be evaluated or formatted yet.
-  However, it needs to be "formattable", i.e. it contains everything required
-  by the eventual formatting.
+  However, if it is the resolved value of an expression with a function
+  1. if the function is a formatting function, it needs to be "formattable", i.e. it contains everything required by the eventual formatting.
+  2. if the function is a selection function, it needs to be "selectable", i.e. it contains everything required required by the eventual matching and ordering of keys.
 
   The resolution of _text_ is rather straightforward,
   and is detailed under _literal resolution_.
@@ -216,7 +217,7 @@ the following steps are taken:
 
 4. Call the function implementation with the following arguments:
 
-   - The current _locale_.
+   - The current _formatting context_.
    - The resolved mapping of _options_.
    - If the _expression_ includes an _operand_, its resolved value.
 
