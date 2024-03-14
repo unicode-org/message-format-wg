@@ -85,10 +85,16 @@ At a minimum, it includes:
 
 Implementations MAY include additional fields in their _formatting context_.
 
-## Expression and Markup Resolution
+## Resolved Values
 
-_Expressions_ are used in _declarations_, _selectors_, and _patterns_.
-_Markup_ is only used in _patterns_.
+This specification allows for the same value to be used for:
+- formatting in a _placeholder_,
+- selection in a _selector_ _expression_,
+- as the _operand_ of another _expression_, or
+- as the _option_ value of another _expression_,
+
+To support this, the _**resolved value**_ of each _expression_
+is an implementation-dependent value that supports some or all of the above use cases.
 
 In a _declaration_, the resolved value of the _expression_ is bound to a _variable_,
 which is available for use by later _expressions_.
@@ -106,16 +112,44 @@ In a _pattern_, the resolved value of an _expression_ or _markup_ is used in its
 The form that resolved values take is implementation-dependent,
 and different implementations MAY choose to perform different levels of resolution.
 
-> For example, the resolved value of the _expression_ `{|0.40| :number style=percent}`
-> could be an object such as
+> While this specification does not require it,
+> a _resolved value_ could be implemented by requiring each function implementation to
+> return a value matching the following interface:
 >
-> ```
-> { value: Number('0.40'),
->   formatter: NumberFormat(locale, { style: 'percent' }) }
+> ```ts
+> interface MessageValue {
+>   formatToString(): string
+>   formatToX(): X // where X is an implementation-defined type
+>   getValue(): unknown
+>   resolvedOptions(): { [key: string]: unknown }
+>   selectKeys(keys: string[]): string[]
+> }
 > ```
 >
-> Alternatively, it could be an instance of an ICU4J `FormattedNumber`,
-> or some other locally appropriate value.
+> With this approach:
+> - An _expression_ could be used as a _placeholder_ if
+>   calling the `formatToString()` or `formatToX()` method of its _resolved value_
+>   did not throw an error.
+> - An _expression_ could be used as a _selector_ _expression_ if
+>   calling the `selectKeys(keys)` method of its _resolved value_
+>   did not throw an error.
+> - An _expression_ could be used as an _operand_ or _option_ value if
+>   calling the `getValue()` method of its _resolved value_ did not throw an error.
+>   In this use case, the `resolvedOptions()` method could also
+>   provide a set of option values that could be taken into account by the called function.
+>
+> Extensions of the base `MessageValue` interface could be provided for different data types,
+> such as numbers or strings,
+> for which the `unknown` return types of `getValue()` and `resolvedOptions()`
+> could be narrowed appropriately.
+> An implementation could also allow `MessageValue` values to be passed in as input variables,
+> or automatically wrap each variable as a `MessageValue` to provide a uniform interface
+> for custom functions.
+
+## Expression and Markup Resolution
+
+_Expressions_ are used in _declarations_, _selectors_, and _patterns_.
+_Markup_ is only used in _patterns_.
 
 Depending on the presence or absence of a _variable_ or _literal_ operand
 and a _function_, _private-use annotation_, or _reserved annotation_,
