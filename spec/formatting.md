@@ -133,7 +133,8 @@ and different implementations MAY choose to perform different levels of resoluti
 > - An _expression_ could be used as a _selector_ _expression_ if
 >   calling the `selectKeys(keys)` method of its _resolved value_
 >   did not throw an error.
-> - An _expression_ could be used as an _operand_ or _option_ value if
+> - Using a _variable reference_, the resolved value of an _expression_
+>   could be used as an _operand_ or _option_ value if
 >   calling the `getValue()` method of its _resolved value_ did not throw an error.
 >   In this use case, the `resolvedOptions()` method could also
 >   provide a set of option values that could be taken into account by the called function.
