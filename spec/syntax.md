@@ -222,8 +222,10 @@ a similarly wide range of content as _reserved annotations_,
 but it MUST end with one or more _expressions_.
 
 ```abnf
-reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
+reserved-statement = reserved-keyword [s reserved-body-in-statement] 1*([s] expression)
 reserved-keyword   = "." name
+reserved-body-in-statement = reserved-body-in-statement-start *([s] 1*reserved-body-part)
+reserved-body-in-statement-start = reserved-body-part
 ```
 
 > [!Note]
@@ -656,7 +658,8 @@ unrecognized _reserved-annotations_ or _private-use-annotations_ have no meaning
 reserved-annotation       = reserved-annotation-start reserved-body
 reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
-reserved-body             = *([s] 1*(reserved-char / reserved-escape / quoted))
+reserved-body             = *([s] 1*reserved-body-part)
+reserved-body-part        = reserved-char / reserved-escape / quoted
 ```
 
 ## Markup

@@ -54,11 +54,13 @@ local = %s".local"
 match = %s".match"
 
 ; Reserve additional .keywords for use by future versions of this specification.
-reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
+reserved-statement = reserved-keyword [s reserved-body-in-statement] 1*([s] expression)
 ; Note that the following production is a simplification,
 ; as this rule MUST NOT be considered to match existing keywords
 ; (`.input`, `.local`, and `.match`).
 reserved-keyword   = "." name
+reserved-body-in-statement = reserved-body-in-statement-start *([s] 1*reserved-body-part)
+reserved-body-in-statement-start = reserved-body-part
 
 ; Reserve additional sigils for use by future versions of this specification.
 reserved-annotation       = reserved-annotation-start reserved-body
@@ -67,7 +69,8 @@ reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 ; Reserve sigils for private-use by implementations.
 private-use-annotation    = private-start reserved-body
 private-start             = "^" / "&"
-reserved-body             = *([s] 1*(reserved-char / reserved-escape / quoted))
+reserved-body             = *([s] 1*reserved-body-part)
+reserved-body-part        = reserved-char / reserved-escape / quoted
 
 ; Names and identifiers
 ; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName
