@@ -610,7 +610,7 @@ wish to use a syntax exactly like other functions. Specifically:
 A _private-use annotation_ MAY be empty after its introducing sigil.
 
 ```abnf
-private-use-annotation = private-start reserved-body
+private-use-annotation = private-start [[s] reserved-body]
 private-start          = "^" / "&"
 ```
 
@@ -653,10 +653,11 @@ While a reserved sequence is technically "well-formed",
 unrecognized _reserved-annotations_ or _private-use-annotations_ have no meaning.
 
 ```abnf
-reserved-annotation       = reserved-annotation-start reserved-body
+reserved-annotation       = reserved-annotation-start [[s] reserved-body]
 reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
-reserved-body             = *([s] 1*(reserved-char / reserved-escape / quoted))
+reserved-body             = reserved-body-part *([s] reserved-body-part)
+reserved-body-part        = reserved-char / reserved-escape / quoted
 ```
 
 ## Markup
