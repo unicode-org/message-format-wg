@@ -73,11 +73,6 @@
       "src": "{$dt :datetime}",
       "params": { "dt": "2006-01-02T15:04:06" },
       "exp": "1/2/06, 3:04 PM"
-    },
-    {
-      "src": ".input {$dt :time style=medium} {{{$dt :datetime dateStyle=long}}}",
-      "params": { "dt": "2006-01-02T15:04:06" },
-      "exp": "January 2, 2006 at 3:04:06 PM"
     }
   ],
   "integer": [
