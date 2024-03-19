@@ -72,7 +72,7 @@ Markus Scherer,
 Zibi Braniecki, 
 Matt Radbourne, 
 Bruno Haible,
-Rafael Xavier de Souza
+and Rafael Xavier de Souza.
 
 Addison Phillips was chair of the working group from January 2023.
 Prior to 2023, the group was governed by a chair group, consisting of
