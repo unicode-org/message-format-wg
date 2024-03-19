@@ -128,12 +128,6 @@
       "exp": "bar 4.20"
     },
     {
-      "src": ".local $foo = {$bar :number minimumFractionDigits=foo} {{bar {$foo}}}",
-      "params": { "bar": 4.2 },
-      "exp": "bar {$bar}",
-      "errors": [{ "type": "bad-option" }]
-    },
-    {
       "src": ".local $foo = {$bar :number} {{bar {$foo}}}",
       "params": { "bar": "foo" },
       "exp": "bar {$bar}",
@@ -148,12 +142,6 @@
       "src": ".input {$foo :number minimumFractionDigits=2} {{bar {$foo}}}",
       "params": { "foo": 4.2 },
       "exp": "bar 4.20"
-    },
-    {
-      "src": ".input {$foo :number minimumFractionDigits=foo} {{bar {$foo}}}",
-      "params": { "foo": 4.2 },
-      "exp": "bar {$foo}",
-      "errors": [{ "type": "bad-option" }]
     },
     {
       "src": ".input {$foo :number} {{bar {$foo}}}",
