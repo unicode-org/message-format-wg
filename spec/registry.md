@@ -398,15 +398,15 @@ The following options and their values are required to be available on the funct
   - `never`
   - `min2`
 - `minimumIntegerDigits`
-  - (non-negative integer, default: `1`)
+  - ([non-negative integer](#non-negative-integer-options), default: `1`)
 - `minimumFractionDigits`
-  - (non-negative integer)
+  - ([non-negative integer](#non-negative-integer-options))
 - `maximumFractionDigits`
-  - (non-negative integer)
+  - ([non-negative integer](#non-negative-integer-options))
 - `minimumSignificantDigits`
-  - (non-negative integer)
+  - ([non-negative integer](#non-negative-integer-options))
 - `maximumSignificantDigits`
-  - (non-negative integer)
+  - ([non-negative integer](#non-negative-integer-options))
 
 > [!NOTE]
 > The following options and option values are being developed during the Technical Preview
@@ -515,9 +515,9 @@ function `:integer`:
   - `always`
   - `min2`
 - `minimumIntegerDigits`
-  - (non-negative integer, default: `1`)
+  - ([non-negative integer](#non-negative-integer-options), default: `1`)
 - `maximumSignificantDigits`
-  - (non-negative integer)
+  - ([non-negative integer](#non-negative-integer-options))
 
 > [!NOTE]
 > The following options and option values are being developed during the Technical Preview
@@ -619,7 +619,17 @@ All other values produce an _Invalid Expression_ error.
 > or the type `com.ibm.icu.util.CurrencyAmount` can be used to set the currency and related
 > options (such as the number of fraction digits).
 
+### Non-Negative Integer Options
 
+Some _options_ of number _functions_ are defined to take a "non-negative integer".
+In most cases, these control the number of various kinds of digits.
+
+A "non-negative integer" is one of:
+- an implementation-defined integer numeric type where the value of the 
+  encoded number is not less than zero
+- a literal consisting only of ASCII digits U+0030 through U+0039;
+  An implementation MAY define an upper limit on the length of such a literal
+  or of the value encoded by such a literal.
 
 ### Number Selection
 
