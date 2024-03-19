@@ -622,7 +622,8 @@ All other values produce an _Invalid Expression_ error.
 ### Non-Negative Integer Options
 
 Some _options_ of number _functions_ are defined to take a "non-negative integer".
-In most cases, these control the number of various kinds of digits.
+In this specification, these _options_ are used to control aspects of numeric display
+such as the number of fraction, integer, or significant digits.
 
 A "non-negative integer" is a variable reference or literal whose value evaluates 
 as an integer greater than or equal to zero.
