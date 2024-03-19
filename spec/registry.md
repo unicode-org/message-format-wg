@@ -624,12 +624,21 @@ All other values produce an _Invalid Expression_ error.
 Some _options_ of number _functions_ are defined to take a "non-negative integer".
 In most cases, these control the number of various kinds of digits.
 
-A "non-negative integer" is one of:
-- an implementation-defined integer numeric type where the value of the 
-  encoded number is not less than zero
-- a literal consisting only of ASCII digits U+0030 through U+0039;
-  An implementation MAY define an upper limit on the length of such a literal
-  or of the value encoded by such a literal.
+A "non-negative integer" is a variable reference or literal whose value evaluates 
+as an integer greater than or equal to zero.
+If the value is passed as a literal
+it MUST contain only the ASCII digits U+0030 through U+0039.
+Implementations MAY define an upper limit on the length of such a literal.
+Implementations MAY define an upper limit on the resolved value 
+of a non-negative integer option consistent with that implementation's practical limits.
+
+> **Examples of literal non-negative integer options**
+> ```
+> {$n :number maximumFractionDigits=12}
+> {$n :number maximumFractionDigits=|12|}
+> {$n :number maximumFractionDigits=123456}
+> {$n :number maximumFractionDigits=|0123|}
+> ```
 
 ### Number Selection
 
