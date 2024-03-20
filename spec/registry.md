@@ -622,23 +622,39 @@ All other values produce an _Invalid Expression_ error.
 ### Non-Negative Integer Options
 
 Some _options_ of number _functions_ are defined to take a "non-negative integer".
-In this specification, these _options_ are used to control aspects of numeric display
+Implementations of number _functions_ use these _options_ to control aspects of numeric display
 such as the number of fraction, integer, or significant digits.
 
-A "non-negative integer" is a variable reference or literal whose value evaluates 
-as an integer greater than or equal to zero.
-If the value is passed as a literal
-it MUST contain only the ASCII digits U+0030 through U+0039.
-Implementations MAY define an upper limit on the length of such a literal.
+A "non-negative integer" is an _option_ value that the _function_ evaluates as an integer 
+greater than or equal to zero.
 Implementations MAY define an upper limit on the resolved value 
 of a non-negative integer option consistent with that implementation's practical limits.
 
-> **Examples of literal non-negative integer options**
+The implementation MAY accept any implementation-defined type as the value.
+Implementations MUST accept the value as a _literal_.
+When the value is a _literal_,
+it MUST consist of a sequence of ASCII digits in the range U+0030 through U+0039.
+
+> **Examples of  non-negative integer options**
+> 
+> Here are some examples of valid literals:
 > ```
 > {$n :number maximumFractionDigits=12}
 > {$n :number maximumFractionDigits=|12|}
 > {$n :number maximumFractionDigits=123456}
 > {$n :number maximumFractionDigits=|0123|}
+> ```
+> Note that the value can be passed as an input variable or defined via a declaration.
+> For example, the following _messages_ might be valid in an implementation that
+> accepted the type `int` and the variable `min` were passed as input:
+> ```
+> .local $max = {1 :integer}
+> {{You have {$n :number maximumFractionDigits=$max}}}
+>
+> {{{$n :number minimumFractionDigits=$min} where 'min' is an 'int' >= 0}}
+>
+> .local $max = {|2|}
+> {{{$n :number maximumFractionDigits=$max} where 'max' is a literal}}
 > ```
 
 ### Number Selection
