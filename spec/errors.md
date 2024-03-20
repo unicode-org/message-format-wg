@@ -226,7 +226,7 @@ or for private implementation use that is not supported by the current implement
 > would always result in an _Unsupported Expression_ error:
 >
 > ```
-> The value is {@horse}.
+> The value is {!horse}.
 > ```
 >
 > Attempting to format this message would result in an _Unsupported Expression_ error
