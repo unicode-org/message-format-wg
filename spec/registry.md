@@ -637,27 +637,6 @@ When the value is a _literal_, it MUST match `non-negative` in this ABNF:
 >non-negative = "0" / (("1"-"9") *DIGIT)
 >```
 
-> **Examples of  non-negative integer options**
-> 
-> Here are some examples of valid literals:
-> ```
-> {$n :number maximumFractionDigits=12}
-> {$n :number maximumFractionDigits=|12|}
-> {$n :number maximumFractionDigits=123456}
-> {$n :number maximumFractionDigits=|0123|}
-> ```
-> Note that the value can be passed as an input variable or defined via a declaration.
-> For example, the following _messages_ might be valid in an implementation that
-> accepted the type `int` and the variable `min` were passed as input:
-> ```
-> .local $max = {1 :integer}
-> {{You have {$n :number maximumFractionDigits=$max}}}
->
-> {{{$n :number minimumFractionDigits=$min} where 'min' is an 'int' >= 0}}
->
-> .local $max = {|2|}
-> {{{$n :number maximumFractionDigits=$max} where 'max' is a literal}}
-> ```
 
 ### Number Selection
 
