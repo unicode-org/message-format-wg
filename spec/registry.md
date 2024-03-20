@@ -632,8 +632,10 @@ of a non-negative integer option consistent with that implementation's practical
 
 The implementation MAY accept any implementation-defined type as the value.
 Implementations MUST accept the value as a _literal_.
-When the value is a _literal_,
-it MUST consist of a sequence of ASCII digits in the range U+0030 through U+0039.
+When the value is a _literal_, it MUST match `non-negative` in this ABNF:
+>```abnf
+>non-negative = "0" / (("1"-"9") *DIGIT)
+>```
 
 > **Examples of  non-negative integer options**
 > 
