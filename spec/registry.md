@@ -631,7 +631,7 @@ Implementations MAY define an upper limit on the resolved value
 of a non-negative integer option consistent with that implementation's practical limits.
 
 The implementation MAY accept any implementation-defined type as the value.
-Implementations MUST accept the value as a _literal_.
+Implementations MUST accept a _literal_ as the value.
 When the value is a _literal_, it MUST match `non-negative` in this ABNF:
 >```abnf
 >non-negative = "0" / (("1"-"9") *DIGIT)
