@@ -149,7 +149,7 @@ An empty string is a valid _simple message_.
 
 ```abnf
 simple-message = [simple-start pattern]
-simple-start   = simple-start-char / text-escape / placeholder
+simple-start   = simple-start-char / escaped-char / placeholder
 ```
 
 A **_<dfn>complex message</dfn>_** is any _message_ that contains _declarations_,
@@ -255,7 +255,7 @@ Unless there is an error, resolving a _message_ always results in the formatting
 of a single _pattern_.
 
 ```abnf
-pattern = *(text-char / text-escape / placeholder)
+pattern = *(text-char / escaped-char / placeholder)
 ```
 A _pattern_ MAY be empty.
 
@@ -291,7 +291,7 @@ U+007B LEFT CURLY BRACKET `{`, and U+007D RIGHT CURLY BRACKET `}`
 MUST be escaped as `\\`, `\{`, and `\}` respectively.
 
 In the ABNF, _text_ is represented by non-empty sequences of
-`simple-start-char`, `text-char`, and `text-escape`.
+`simple-start-char`, `text-char`, and `escaped-char`.
 The first of these is used at the start of a _simple message_,
 and matches `text-char` except for not allowing U+002E FULL STOP `.`.
 The ABNF uses `content-char` as a shared base for _text_ and _quoted literal_ characters.
@@ -656,7 +656,7 @@ unrecognized _reserved-annotations_ or _private-use-annotations_ have no meaning
 reserved-annotation       = reserved-annotation-start reserved-body
 reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
-reserved-body             = *([s] 1*(reserved-char / reserved-escape / quoted))
+reserved-body             = *([s] 1*(reserved-char / escaped-char / quoted))
 ```
 
 ## Markup
@@ -830,7 +830,7 @@ of number values in _operands_ or _options_, or as _keys_ for _variants_.
 
 ```abnf
 literal        = quoted / unquoted
-quoted         = "|" *(quoted-char / quoted-escape) "|"
+quoted         = "|" *(quoted-char / escaped-char) "|"
 unquoted       = name / number-literal
 number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
 ```
@@ -912,14 +912,13 @@ An **_<dfn>escape sequence</dfn>_** is a two-character sequence starting with
 U+005C REVERSE SOLIDUS `\`.
 
 An _escape sequence_ allows the appearance of lexically meaningful characters
-in the body of _text_, _quoted_, or _reserved_ (which includes, in this case,
-_private-use_) sequences respectively:
+in the body of _text_, _quoted_, or _reserved_
+(which includes, in this case, _private-use_) sequences.
+Each _escape sequence_ represents the literal character immediately following the initial `\`.
 
 ```abnf
-text-escape     = backslash ( backslash / "{" / "}" )
-quoted-escape   = backslash ( backslash / "|" )
-reserved-escape = backslash ( backslash / "{" / "|" / "}" )
-backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
+escaped-char = backslash ( backslash / "{" / "|" / "}" )
+backslash    = %x5C ; U+005C REVERSE SOLIDUS "\"
 ```
 
 ### Whitespace
