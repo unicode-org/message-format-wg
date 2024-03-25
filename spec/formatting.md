@@ -319,7 +319,7 @@ the following steps are taken:
 
 #### Option Resolution
 
-The result of resolving _option_ values is a mapping of string identifiers to values.
+The result of resolving _option_ values is an unordered mapping of string identifiers to values.
 
 For each _option_:
 
