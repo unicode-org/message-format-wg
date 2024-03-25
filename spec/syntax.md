@@ -648,8 +648,10 @@ on the contents of these _annotations_.
 Implementations MUST NOT assign meaning or semantics to
 an _annotation_ starting with `reserved-annotation-start`:
 these are reserved for future standardization.
-Implementations MUST trim whitespace around a _reserved body_,
-but MUST NOT remove or alter the contents of a _reserved body_.
+Whitespace before or after a _reserved body_ is not part of the _reserved body_.
+Implementations MUST NOT remove or alter the contents of a _reserved body_,
+including any interior whitespace,
+but MAY remove or alter whitespace before or after the _reserved body_.
 
 While a reserved sequence is technically "well-formed",
 unrecognized _reserved-annotations_ or _private-use-annotations_ have no meaning.
