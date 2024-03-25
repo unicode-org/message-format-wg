@@ -369,7 +369,8 @@ match-statement = match 1*([s] selector)
 > A _message_ with a _matcher_:
 >
 > ```
-> .match {$count :number}
+> .input {$count :number}
+> .match {$count}
 > one {{You have {$count} notification.}}
 > *   {{You have {$count} notifications.}}
 > ```
@@ -408,7 +409,9 @@ There MAY be any number of additional _selectors_.
 > A message with two _selectors_:
 >
 > ```
-> .match {$numLikes :number} {$numShares :number}
+> .input {$numLikes :integer}
+> .input {$numShares :integer}
+> .match {$numLikes} {$numShares}
 > 0   0   {{Your item has no likes and has not been shared.}}
 > 0   one {{Your item has no likes and has been shared {$numShares} time.}}
 > 0   *   {{Your item has no likes and has been shared {$numShares} times.}}
