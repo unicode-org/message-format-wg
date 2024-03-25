@@ -347,7 +347,7 @@ of the _pattern_ to use for formatting.
 This allows the form or content of a _message_ to vary based on values
 determined at runtime.
 
-A _matcher_ consists of the keyword `match` followed by at least one _selector_
+A _matcher_ consists of the keyword `.match` followed by at least one _selector_
 and at least one _variant_.
 
 When the _matcher_ is processed, the result will be a single _pattern_ that serves
@@ -637,17 +637,19 @@ A **_<dfn>reserved annotation</dfn>_** is an _annotation_ whose syntax is reserv
 for future standardization.
 
 A _reserved annotation_ starts with a reserved character.
-A _reserved annotation_ MAY be empty or contain arbitrary text after its first character.
+The remaining part of a _reserved annotation_, called a _reserved body_,
+MAY be empty or contain arbitrary text that starts and ends with
+a non-whitespace character.
 
 This allows maximum flexibility in future standardization,
 as future definitions MAY define additional semantics and constraints
 on the contents of these _annotations_.
-A _reserved annotation_ does not include trailing whitespace.
 
 Implementations MUST NOT assign meaning or semantics to
-an _annotation_ starting with `reserved-start`:
+an _annotation_ starting with `reserved-annotation-start`:
 these are reserved for future standardization.
-Implementations MUST NOT remove or alter the contents of a _reserved annotation_.
+Implementations MUST trim whitespace around a _reserved body_,
+but MUST NOT remove or alter the contents of a _reserved body_.
 
 While a reserved sequence is technically "well-formed",
 unrecognized _reserved-annotations_ or _private-use-annotations_ have no meaning.
