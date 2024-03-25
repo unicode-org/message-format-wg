@@ -44,3 +44,45 @@ including buffer overflow, code injection, user tracking,
 fingerprinting, and other types of bad behavior.
 Any installed code needs to be appropriately sandboxed.
 In addition, end-users need to be aware of the risks involved.
+
+## Acknowledgements
+
+Special thanks to the following people for their contributions to making MessageFormat v2.
+The following people contributed to our github repo and are listed in order by contribution size:
+
+Addison Phillips, 
+Eemeli Aro, 
+Romulo Cintra, 
+Stanisław Małolepszy, 
+Elango Cheran, 
+Richard Gibson, 
+Tim Chevalier, 
+Mihai Niță, 
+Shane F. Carr, 
+Mark Davis, 
+Stephen R. Loomis, 
+Caleb Maclennan, 
+David Filip, 
+Daniel Minor, 
+Christopher Dieringer, 
+George Rhoten, 
+Ujjwal Sharma, 
+Daniel Ehrenberg, 
+Markus Scherer, 
+Zibi Braniecki, 
+Matt Radbourne, 
+Bruno Haible,
+and Rafael Xavier de Souza.
+
+Addison Phillips was chair of the working group from January 2023.
+Prior to 2023, the group was governed by a chair group, consisting of
+Romulo Cintra,
+Elango Cheran,
+Mihai Niță,
+David Filip,
+Nicolas Bouvrette,
+Stanisław Małolepszy,
+Rafael Xavier de Souza,
+Addison Phillips,
+and Daniel Minor.
+Romulo Cintra chaired the chair group.
