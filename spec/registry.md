@@ -630,10 +630,10 @@ as a small integer value greater than or equal to zero.
 Implementations MAY define an upper limit on the resolved value 
 of a digit size option option consistent with that implementation's practical limits.
 
-In most cases, the value of a digit size option will be a string literal that
+In most cases, the value of a digit size option will be a string that
 encodes the value as a decimal integer.
 Implementations MAY also accept implementation-defined types as the value.
-The _literal_ representation of a digit size option matches the following ABNF:
+When provided as a string, the representation of a digit size option matches the following ABNF:
 >```abnf
 > digit-size-option = "0" / (("1"-"9") [DIGIT])
 >```
