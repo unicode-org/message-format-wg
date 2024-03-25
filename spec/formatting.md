@@ -489,6 +489,12 @@ Earlier _selectors_ in the _matcher_'s list of _selectors_ have a higher priorit
 When all of the _selectors_ have been processed,
 the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
 
+> [!NOTE]
+> A _selector_ _expression_ is not a _declaration_,
+> and its _annotation_ has no effect on the value of its _operand_ during formatting.
+> To use the same value for selection and formatting,
+> set its value with a `.input` or `.local` _declaration_.
+
 This selection method is defined in more detail below.
 An implementation MAY use any pattern selection method,
 as long as its observable behavior matches the results of the method defined here.
@@ -692,10 +698,11 @@ and an `en` (English) locale,
 the pattern selection proceeds as follows for this message:
 
 ```
-.match {$count :number}
-one {{Category match}}
-1   {{Exact match}}
-*   {{Other match}}
+.input {$count :number}
+.match {$count}
+one {{Category match for {$count}}}
+1   {{Exact match for {$count}}}
+*   {{Other match for {$count}}}
 ```
 
 1. For the selector:<br>
@@ -716,7 +723,7 @@ one {{Category match}}
    This is then sorted as:<br>
    « ( 0, `1` ), ( 1, `one` ), ( 2, `*` ) »<br>
 
-4. The pattern `Exact match` of the most preferred `1` variant is selected.
+4. The pattern `Exact match for {$count}` of the most preferred `1` variant is selected.
 
 ## Formatting
 
