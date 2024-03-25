@@ -398,15 +398,15 @@ The following options and their values are required to be available on the funct
   - `never`
   - `min2`
 - `minimumIntegerDigits`
-  - ([non-negative integer](#non-negative-integer-options), default: `1`)
+  - ([digit size option](#digit-size-options), default: `1`)
 - `minimumFractionDigits`
-  - ([non-negative integer](#non-negative-integer-options))
+  - ([digit size option](#digit-size-options))
 - `maximumFractionDigits`
-  - ([non-negative integer](#non-negative-integer-options))
+  - ([digit size option](#digit-size-options))
 - `minimumSignificantDigits`
-  - ([non-negative integer](#non-negative-integer-options))
+  - ([digit size option](#digit-size-options))
 - `maximumSignificantDigits`
-  - ([non-negative integer](#non-negative-integer-options))
+  - ([digit size option](#digit-size-options))
 
 > [!NOTE]
 > The following options and option values are being developed during the Technical Preview
@@ -515,9 +515,9 @@ function `:integer`:
   - `always`
   - `min2`
 - `minimumIntegerDigits`
-  - ([non-negative integer](#non-negative-integer-options), default: `1`)
+  - ([digit size option](#digit-size-options), default: `1`)
 - `maximumSignificantDigits`
-  - ([non-negative integer](#non-negative-integer-options))
+  - ([digit size option](#digit-size-options))
 
 > [!NOTE]
 > The following options and option values are being developed during the Technical Preview
@@ -619,22 +619,23 @@ All other values produce an _Invalid Expression_ error.
 > or the type `com.ibm.icu.util.CurrencyAmount` can be used to set the currency and related
 > options (such as the number of fraction digits).
 
-### Non-Negative Integer Options
+### Digit Size Options
 
-Some _options_ of number _functions_ are defined to take a "non-negative integer".
+Some _options_ of number _functions_ are defined to take a "digit size option".
 Implementations of number _functions_ use these _options_ to control aspects of numeric display
 such as the number of fraction, integer, or significant digits.
 
-A "non-negative integer" is an _option_ value that the _function_ evaluates as an integer 
-greater than or equal to zero.
+A "digit size option" is an _option_ value that the _function_ interprets
+as a small integer value greater than or equal to zero.
 Implementations MAY define an upper limit on the resolved value 
-of a non-negative integer option consistent with that implementation's practical limits.
+of a digit size option option consistent with that implementation's practical limits.
 
-The implementation MAY accept any implementation-defined type as the value.
-Implementations MUST accept a _literal_ as the value.
-When the value is a _literal_, it MUST match `non-negative` in this ABNF:
+In most cases, the value of a digit size option will be a string literal that
+encodes the value as a decimal integer.
+Implementations MAY also accept implementation-defined types as the value.
+The _literal_ representation of a digit size option matches the following ABNF:
 >```abnf
->non-negative = "0" / (("1"-"9") *DIGIT)
+> digit-size-option = "0" / (("1"-"9") [DIGIT])
 >```
 
 
