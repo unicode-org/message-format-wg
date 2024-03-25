@@ -490,8 +490,11 @@ When all of the _selectors_ have been processed,
 the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
 
 > [!NOTE]
-> A _selector_ _expression_ is not a _declaration_,
-> and its _annotation_ has no effect on the value of its _operand_ during formatting.
+> A _selector_ is not a _declaration_.
+> Even when the same _function_ can be used for both formatting and selection
+> of a given _operand_
+> the _annotation_ that appears in a _selector_ has no effect on subsequent
+> _selectors_ nor on the formatting used in _placeholders_.
 > To use the same value for selection and formatting,
 > set its value with a `.input` or `.local` _declaration_.
 

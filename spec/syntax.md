@@ -409,8 +409,8 @@ There MAY be any number of additional _selectors_.
 > A message with two _selectors_:
 >
 > ```
-> .input {$numLikes :number}
-> .input {$numShares :number}
+> .input {$numLikes :integer}
+> .input {$numShares :integer}
 > .match {$numLikes} {$numShares}
 > 0   0   {{Your item has no likes and has not been shared.}}
 > 0   one {{Your item has no likes and has been shared {$numShares} time.}}
