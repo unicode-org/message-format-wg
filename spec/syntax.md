@@ -766,8 +766,6 @@ The _value_ of an _attribute_ can be either a _literal_ or a _variable_.
 
 Multiple _attributes_ are permitted in an _expression_ or _markup_.
 Each _attribute_ is separated by whitespace.
-Each _attribute_'s _identifier_ MUST be unique within the _expression_ or _markup_:
-an _expression_ or _markup_ with duplicate _attribute_ _identifiers_ is not valid.
 
 The order of _attributes_ is not significant.
 
