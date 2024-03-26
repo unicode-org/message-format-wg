@@ -398,15 +398,15 @@ The following options and their values are required to be available on the funct
   - `never`
   - `min2`
 - `minimumIntegerDigits`
-  - (non-negative integer, default: `1`)
+  - ([digit size option](#digit-size-options), default: `1`)
 - `minimumFractionDigits`
-  - (non-negative integer)
+  - ([digit size option](#digit-size-options))
 - `maximumFractionDigits`
-  - (non-negative integer)
+  - ([digit size option](#digit-size-options))
 - `minimumSignificantDigits`
-  - (non-negative integer)
+  - ([digit size option](#digit-size-options))
 - `maximumSignificantDigits`
-  - (non-negative integer)
+  - ([digit size option](#digit-size-options))
 
 > [!NOTE]
 > The following options and option values are being developed during the Technical Preview
@@ -515,9 +515,9 @@ function `:integer`:
   - `always`
   - `min2`
 - `minimumIntegerDigits`
-  - (non-negative integer, default: `1`)
+  - ([digit size option](#digit-size-options), default: `1`)
 - `maximumSignificantDigits`
-  - (non-negative integer)
+  - ([digit size option](#digit-size-options))
 
 > [!NOTE]
 > The following options and option values are being developed during the Technical Preview
@@ -619,6 +619,24 @@ All other values produce an _Invalid Expression_ error.
 > or the type `com.ibm.icu.util.CurrencyAmount` can be used to set the currency and related
 > options (such as the number of fraction digits).
 
+### Digit Size Options
+
+Some _options_ of number _functions_ are defined to take a "digit size option".
+Implementations of number _functions_ use these _options_ to control aspects of numeric display
+such as the number of fraction, integer, or significant digits.
+
+A "digit size option" is an _option_ value that the _function_ interprets
+as a small integer value greater than or equal to zero.
+Implementations MAY define an upper limit on the resolved value 
+of a digit size option option consistent with that implementation's practical limits.
+
+In most cases, the value of a digit size option will be a string that
+encodes the value as a decimal integer.
+Implementations MAY also accept implementation-defined types as the value.
+When provided as a string, the representation of a digit size option matches the following ABNF:
+>```abnf
+> digit-size-option = "0" / (("1"-"9") [DIGIT])
+>```
 
 
 ### Number Selection
