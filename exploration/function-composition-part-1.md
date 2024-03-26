@@ -8,7 +8,7 @@ Status: **Proposed**
 		<dt>Contributors</dt>
 		<dd>@catamorphism (also see Acknowledgments)</dd>
 		<dt>First proposed</dt>
-		<dd>2024-03-xx</dd>
+		<dd>2024-03-26</dd>
 		<dt>Pull Requests</dt>
 		<dd>#000</dd>
 	</dl>
