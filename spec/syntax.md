@@ -571,6 +571,8 @@ and from each other by whitespace.
 Each _option_'s _identifier_ MUST be unique within the _annotation_:
 an _annotation_ with duplicate _option_ _identifiers_ is not valid.
 
+The order of _options_ is not significant.
+
 ```abnf
 option = identifier [s] "=" [s] (literal / variable)
 ```
@@ -771,6 +773,9 @@ The _value_ of an _attribute_ can be either a _literal_ or a _variable_.
 
 Multiple _attributes_ are permitted in an _expression_ or _markup_.
 Each _attribute_ is separated by whitespace.
+
+The order of _attributes_ is not significant.
+
 
 ```abnf
 attribute = "@" identifier [[s] "=" [s] (literal / variable)]
