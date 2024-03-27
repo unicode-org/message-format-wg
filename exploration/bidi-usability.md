@@ -87,8 +87,9 @@ it should be possible to bidi isolate a _quoted-pattern_.
 > isolate {{البحرين مصر الكويت!}}
 >```
 
-To prevent _placeholders_ or _expressions_ from having spillover effects with other parts of a _message_
-it should be possible to bidi isolate the contents of an _expression_.
+To prevent _markup_, _placeholders_, or _expressions_ from having spillover effects 
+with other parts of a _message_
+it should be possible to bidi isolate the contents of a _markup_ or an _expression_.
 
 >```
 > You can find it in {$مصر}.
@@ -121,6 +122,18 @@ syntax as described in this design so that _messages_ display appropriately as p
 ## Proposed Design
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
+
+Permit isolating bidi controls to be used on the **outside** of the following:
+- unquoted literals
+- quoted literals
+- quoted patterns
+
+Permit the use of LRM or RLM controls immediately following:
+- name (note that this includes _identifiers_ as well as names of
+  _functions_, _variables_, and _unquoted_ literals
+
+> The one tricky part with `name` is whether we permit it between the `namespace` and `name`
+> part of an `identifier`.
 
 ## Alternatives Considered
 
