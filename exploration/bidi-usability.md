@@ -64,7 +64,7 @@ or in the whitespace portions of a _message_.
 
 Permitting the **isolate** controls and the standalone strongly-directional markers
 would enable tools, including translation tools, and users who speak RTL languages
-to format a _message_ so that it's plain-text representation and its function
+to format a _message_ so that its plain-text representation and its function
 are unambiguous.
 
 The isolate controls are paired invisible control characters inserted around a portion of a string.
