@@ -784,8 +784,6 @@ The question is how to craft the spec in a way that is consistent with expectati
 
 ## Requirements
 
-_What properties does the solution have to manifest to enable the use-cases above?_
-
 In the rest of this document, we assume some version of Model 2.
 However, if Model 1 is more desired, the questions arise of how to
 forbid compositions of functions that would do surprising things
@@ -815,6 +813,20 @@ when functions can compose with each other.
 
 Other requirements:
 
+### Identify a set of use cases that must be supported
+
+Some use cases for composition are given in this document,
+and others are yet to be identified.
+
+One of the outcomes of the design process
+should be to agree on a set of use cases involving function composition
+that implementations must support in order to be spec-compliant.
+
+This does not rule out the possibility of deciding
+_not_ to support any of these use cases
+(that is, a solution that heavily restricts function composition
+rather than giving it meaning).
+
 ### Avoid over-constraining implementations
 
 An implementation is free to use any types
@@ -829,6 +841,10 @@ for "resolved values"
 clear enough so that implementors can
 make a well-informed decision
 on what these types and operations should be.
+
+The proposed solution might involve normative changes to the spec,
+or it might be sufficient to define a set of examples
+and how they should work.
 
 ## Constraints
 
@@ -856,6 +872,17 @@ seems difficult and potentially unpredictable.
 These sections are omitted from this document and will be added in
 a future follow-up document,
 given the length so far and need to agree on a common vocabulary.
+
+We expect that any proposed design
+would fall into one of the following categories:
+
+1. Provide a general mechanism for custom function authors
+to specify how functions compose with each other.
+2. Specify composition rules for built-in functions,
+but not in general, allowing custom functions
+to cooperate in an _ad hoc_ way.
+3. Restrict function composition for built-in functions
+(in order to prevent unintuitive behavior).
 
 ## Acknowledgments
 
