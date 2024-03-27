@@ -45,6 +45,27 @@ If you are unfamiliar with bidirectional or right-to-left text, there is a basic
 
 _What use-cases do we see? Ideally, quote concrete examples._
 
+Presentation of keys can change if values are not isolated:
+```
+.match {$م2صر :string}{$num :integer}
+م2صر 0 {{The {$م2صر} is actually the first key}}
+م2صر * {{This one appears okay}}
+```
+
+Presentation in an expression can change if values are not isolated or restore LTR order:
+> In the following example, we use the same string with a number inserted into the middle of
+> the string to make the bidi effects visible.
+> The numbers correspond to:
+> 1. operand
+> 2. function
+> 3. option name
+> 4. option value
+
+```
+You have {$م1صر :م2صر م3صر=م4صر} <- no controls
+You have {$م1صر‎ :م2صر‎ م3صر‎=م4صر‎} <- LRM after each RTL token
+```
+
 ## Requirements
 
 _What properties does the solution have to manifest to enable the use-cases above?_
@@ -69,6 +90,10 @@ it should be possible to bidi isolate a _quoted-pattern_.
 To prevent _placeholders_ or _expressions_ from having spillover effects with other parts of a _message_
 it should be possible to bidi isolate the contents of an _expression_.
 
+>```
+> You can find it in {$مصر}.
+>```
+
 To prevent RTL identifiers from having spillover effects with other parts of an _expression_,
 it should be possible to include "local effect" bidi controls following an _identifier_,
 _name_,
@@ -76,6 +101,10 @@ _option value_,
 or _literal_.
 These controls must not be included into the _identifier_, _name_, _option value_, or _literal_,
 that is, it must be possible to distinguish these characters from the value in question.
+
+>```
+> You can use {$م1صر‎ :م2صر‎ م3صر‎=م4صر‎}
+>```
 
 ## Constraints
 
