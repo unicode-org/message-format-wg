@@ -846,6 +846,18 @@ The proposed solution might involve normative changes to the spec,
 or it might be sufficient to define a set of examples
 and how they should work.
 
+### Stay aligned with user needs
+
+It may be that in practice, MessageFormat users will not
+find it useful to compose functions in complex ways.
+MessageFormat was not initially meant to be
+a general-purpose programming language.
+If supporting function composition in its full generality
+leads to an excessively complex or restrictive spec,
+and if user feedback suggests such use cases are rare in practice,
+it might be more desirable to rule out ambiguous examples
+by means of syntactic restrictions and/or runtime errors.
+
 ## Constraints
 
 _What prior decisions and existing conditions limit the possible design?_
