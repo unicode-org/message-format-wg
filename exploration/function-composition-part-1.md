@@ -418,6 +418,38 @@ when discussing the function interface.
 However, in some implementations, the same questions arise
 for built-in functions.
 
+### Formattable and formatted values
+
+In implementing the custom function registry,
+it might be natural to suppose that
+conceptually, the type signature of a function implementation
+is:
+
+```
+Formattable -> FormattedValue
+```
+
+
+The names of these two types are taken from the ICU4C
+implementation. A `Formattable` is a value
+tagged with a type (for example, doubles, integers,
+strings, and pointers to arbitrary objects).
+A `FormattedValue` represents something that
+already contains all the information needed
+to either render it as a string,
+or convert it to a "part" according to a hypothetical
+"format to parts" interface.
+
+It would be tempting to use the existing `Formattable`
+type for the input of a function implementation,
+and use the existing `FormattedValue` type for the output.
+However, functions with this signature
+can't compose with each other.
+
+When the following text refers to `Formattable` or
+`FormattedValue`, it should be taken to refer to
+abstract "input" and "output" types.
+
 ### Ambiguous examples
 
 Returning to Example Y1, consider two possible models
@@ -730,10 +762,11 @@ with incorrect uses of functions being resolution errors.
 
 ### Summarizing use cases
 
-There seem to be two areas of ambiguity:
+There seem to be several areas of ambiguity:
 
-* Are named values essentially strings with metadata,
-or are they structured? (Model 1 vs. Model 2)
+* Are named values essentially `FormattedValue`s,
+or do they have additional structure that is used
+internally in the formatter? (Model 1 vs. Model 2)
 * In Model 2, some functions "look back" for the original value,
 (like `number`)
 while others return a new "source value"
