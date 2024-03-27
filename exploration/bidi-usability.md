@@ -52,9 +52,19 @@ _What properties does the solution have to manifest to enable the use-cases abov
 To prevent RTL _literals_ from having spillover effects with surrounding syntax,
 it should be possible to bidi isolate a _quoted_ or _unquoted_ _literal_.
 
+>```
+> .local $title = {|البحرين مصر الكويت!|}
+> .local $egypt = {مصر :string}
+>```
+
 To prevent _patterns_ from having spillover effects with other parts of a _message_,
 particularly with _keys_ in a _variant_,
 it should be possible to bidi isolate a _quoted-pattern_.
+
+>```
+> .match {$foo :string}
+> isolate {{البحرين مصر الكويت!}}
+>```
 
 To prevent _placeholders_ or _expressions_ from having spillover effects with other parts of a _message_
 it should be possible to bidi isolate the contents of an _expression_.
