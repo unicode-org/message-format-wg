@@ -126,7 +126,7 @@ it should be possible to bidi isolate a _quoted_ or _unquoted_ _literal_.
 
 To prevent _patterns_ from having spillover effects with other parts of a _message_,
 particularly with _keys_ in a _variant_,
-it should be possible to bidi isolate a _quoted-pattern_.
+it should be possible to bidi-isolate a _quoted-pattern_.
 
 >```
 > .match {$foo :string}
