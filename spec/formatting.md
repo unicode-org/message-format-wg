@@ -2,13 +2,15 @@
 
 ## Introduction
 
-This document defines the behaviour of a MessageFormat 2.0 implementation
+This document defines the behavior of a MessageFormat 2.0 implementation
 when formatting a message for display in a user interface, or for some later processing.
 
-To start, we presume that a _message_ has either been parsed from its syntax
-or created from a data model description.
-If this construction has encountered any _Syntax Errors_ or _Data Model Errors_,
-an appropriate error MUST be emitted and a _fallback value_ MAY be used as the formatting result.
+To start, parse the _message_ from its syntax or create it from a data model description.
+
+If _Syntax Errors_ are encountered, emit those errors.
+The result of formatting a _message_ with a _Syntax Error_ is a single _fallback value_
+that uses the _message_'s fallback string defined in the _formatting context_
+or, if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER `�`.
 
 Formatting of a _message_ is defined by the following operations:
 
@@ -464,6 +466,10 @@ according to their _key_ values and selecting the first one.
 > because no matching _variant_ is available.
 
 The number of _keys_ in each _variant_ MUST equal the number of _selectors_.
+If it does not, emit a _Variant Key Mismatch_ error
+and return a _pattern_ consisting of a single _fallback value_
+that uses the _message_'s fallback string defined in the _formatting context_
+or, if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER `�`.
 
 Each _key_ corresponds to a _selector_ by its position in the _variant_.
 
@@ -501,11 +507,6 @@ the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
 This selection method is defined in more detail below.
 An implementation MAY use any pattern selection method,
 as long as its observable behavior matches the results of the method defined here.
-
-If the message being formatted has any _Syntax Errors_ or _Data Model Errors_,
-the result of pattern selection MUST be a pattern resolving to a single _fallback value_
-using the message's fallback string defined in the _formatting context_
-or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER `�`.
 
 ### Resolve Selectors
 
