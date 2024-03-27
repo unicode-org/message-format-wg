@@ -879,10 +879,74 @@ resembles the idea of specifying a type system for functions.
 Specifying rules for function composition, while also remaining typeless,
 seems difficult and potentially unpredictable.
 
-## Past work
+## Prior work
 
-[PR #198](https://github.com/unicode-org/message-format-wg/pull/198) -- attempt to define resolved values in the spec, from 2021
-["A Modular and Extensible MessageFormat 2.0"](https://github.com/unicode-org/message-format-wg/discussions/190) -- discussion that includes this topic, also from 2021 ("runtime model")
+In a previous iteration of the spec,
+[PR #198](https://github.com/unicode-org/message-format-wg/pull/198) (September 2021)
+proposed to add a general `Formattable` interface to represent runtime values.
+This proposal was not merged, and eventually, the term "resolved value"
+was incorporated into the spec instead to abstract over this interface.
+
+Currently, custom functions are passed their argument
+(_operand_ in MessageFormat syntax)
+and a mapping of option names to option values separately.
+In PR 198, a `Formattable` would have encapsulated
+both the argument and options.
+A variation on this idea might make it simpler
+to return values with options:
+if a function implementation has type `Formattable -> Formattable`,
+then it can preserve some options in the returned value,
+omit them, or add new ones.
+
+A wiki page from August 2021,
+["Data and Execution Model Differences"](https://github.com/unicode-org/message-format-wg/wiki/Data-&-Execution-Model-Differences#formatting-function-dependencies),
+includes a section on "Formatting Function Dependencies",
+which includes the question:
+"When implementing a formatting function,
+what values/arguments does it need to have access to?"
+
+A GitHub discussion also from August 2021,
+["A Modular and Extensible MessageFormat 2.0"](https://github.com/unicode-org/message-format-wg/discussions/190),
+includes discussion of the "runtime model" for values;
+a proposed design based on this document
+might also specify a runtime model for values.
+At the time, "pattern element formatters"
+and "formatting functions" were conceived
+as separate categories of functions.
+This document also suggests
+introducing more categories of functions,
+but split in a different way.
+The August 2021 discussion suggests giving
+"pattern element formatters" more access to message context.
+Such a distinction might be useful again:
+it might be desirable to allow function authors
+to declare either simple functions that
+don't compose with each other,
+and more complex functions with a richer interface
+that can compose with each other.
+
+There are some common elements between those past discussions
+and this document.
+But in contrast with previous proposals that give functions
+access to message context,
+this document suggests a purely functional approach
+in which values the function needs to have access to
+are encapsulated in a single argument type
+and values the function needs to return
+are encapsulated in a single return type.
+
+Another notable difference with some of the prior work
+is that in the current spec, the data model
+is completely separate from the model for values
+that functions operate on.
+That is, functions operate on values
+without needing to know or care
+whether those values were obtained from
+evaluating a MessageFormat _literal_ or _variable_.
+We do not propose changing that.
+Hence, revisiting the extensibility of the runtime model
+now that the data model is settled
+may result in a more workable solution.
 
 ## Proposed design and alternatives considered
 
