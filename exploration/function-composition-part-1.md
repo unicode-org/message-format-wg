@@ -136,6 +136,11 @@ Part of the process of discussing this design document
 includes deciding on whether any of them should
 be explicitly disallowed.
 
+Several of the following examples use the `:number` built-in function.
+However, the issues illustrated in the examples are general.
+Most of the issues identified with `:number` also apply
+to **any** function with multiple named options.
+
 _This document includes examples contributed by Markus Scherer and Elango Cheran_
 
 ### Composition
