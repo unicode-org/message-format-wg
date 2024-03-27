@@ -879,6 +879,11 @@ resembles the idea of specifying a type system for functions.
 Specifying rules for function composition, while also remaining typeless,
 seems difficult and potentially unpredictable.
 
+## Past work
+
+[PR #198](https://github.com/unicode-org/message-format-wg/pull/198) -- attempt to define resolved values in the spec, from 2021
+["A Modular and Extensible MessageFormat 2.0"](https://github.com/unicode-org/message-format-wg/discussions/190) -- discussion that includes this topic, also from 2021 ("runtime model")
+
 ## Proposed design and alternatives considered
 
 These sections are omitted from this document and will be added in
