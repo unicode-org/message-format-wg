@@ -70,7 +70,7 @@ are unambiguous.
 The isolate controls are paired invisible control characters inserted around a portion of a string.
 The start of an isolate sequence is one of:
 - U+2066 LEFT-TO-RIGHT ISOLATE (LRI)
-- U+2067 RIGHT-TO-LEFT ISOALTE (RLI)
+- U+2067 RIGHT-TO-LEFT ISOLATE (RLI)
 - U+2068 FIRST-STRONG ISOLATE (FSI)
 
 The end of an isolate sequence is U+2069 POP DIRECTIONAL ISOLATE (PDI).
