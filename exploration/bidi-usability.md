@@ -18,7 +18,7 @@ Status: **Proposed**
 
 _What is this proposal trying to achieve?_
 
-The MessageFormat v2 syntax uses whitespace as a required delimiter
+The MessageFormat 2 syntax uses whitespace as a required delimiter
 as well as permitting the use of whitespace to make _messages_ easier to read.
 In addition, a _message_ can include bidirectional text in identifiers and literal values.
 
@@ -44,7 +44,7 @@ If you are unfamiliar with bidirectional or right-to-left text, there is a basic
 MessageFormat _message_ strings are created and edited primarily by humans.
 The original _message_ is often written by a software developer or user experience designer.
 Translators need to work with the target-language versions of each _message_.
-Like many templating or domain-specific languages, MFv2 uses neutrally-directional symbols
+Like many templating or domain-specific languages, MF2 uses neutrally-directional symbols
 to form portions of the syntax.
 When the _message_ contains right-to-left (RTL) translations or uses values that are RTL,
 the plain-text of the message and the Unicode Bidirectional Algorithm (UBA, UAX#9)
@@ -91,14 +91,14 @@ This means that the surrounding text treats it as-if the sequence were a single 
 
 _What use-cases do we see? Ideally, quote concrete examples._
 
-Presentation of keys can change if values are not isolated:
+1. Presentation of keys can change if values are not isolated:
 ```
 .match {$م2صر :string}{$num :integer}
 م2صر 0 {{The {$م2صر} is actually the first key}}
 م2صر * {{This one appears okay}}
 ```
 
-Presentation in an expression can change if values are not isolated or restore LTR order:
+2. Presentation in an expression can change if values are not isolated or restore LTR order:
 > In the following example, we use the same string with a number inserted into the middle of
 > the string to make the bidi effects visible.
 > The numbers correspond to:
@@ -111,6 +111,14 @@ Presentation in an expression can change if values are not isolated or restore L
 You have {$م1صر :م2صر م3صر=م4صر} <- no controls
 You have {$م1صر‎ :م2صر‎ م3صر‎=م4صر‎} <- LRM after each RTL token
 ```
+
+3. As a developer or translator, I want to make RTL literal or names appear correctly
+   in my plain-text editing environment.
+   I don't want to have to manage a lot of paired controls, when I can get the right effect using
+   strongly directional mark characters (LRM, RLM, ALM)
+
+4. As a translation tool or MF2 implementation, I want to automatically generate normalized
+   _messages_ that display correctly in RTL languages or containing RTL substrings with minimal user intervention.
 
 ## Requirements
 
@@ -188,9 +196,9 @@ close-isolate  = %x2069
 > [!IMPORTANT]
 > The isolating controls go on the **_outside_** of the various _literal_ and _pattern_
 > productions because characters on the **_inside_** of these are part of the normal text.
-> We need to allow users to include bidi controls in the output of MFv2.
+> We need to allow users to include bidi controls in the output of MF2.
 
-Permit the use of LRM or RLM controls immediately following:
+Permit the use of LRM, RLM, or ALM controls immediately following:
 - name (note that this includes _identifiers_ as well as names of
   _functions_, _variables_, and _unquoted_ literals
 
@@ -200,11 +208,11 @@ Permit the use of LRM or RLM controls immediately following:
 This would change the ABNF as follows:
 ```abnf
 namespace = name-start *name-char ; same as name but lacks bidi close
-name      = name-start *name-char [%x200E-200F]
+name      = name-start *name-char [%x200E-200F / %x061C]
 ```
 
 > [!NOTE]
-> Ideally we do not want RLM/LRM to be part of the `name` or part of any
+> Ideally we do not want RLM/LRM/ALM to be part of the `name` or part of any
 > production that consumes `name` (such as `variable`, `reserved-keyword`, or `unquoted`).
 > This is complicated to do in ABNF because each of these tokens is followed either by
 > whitespace or by some closing marker such as `}`.
