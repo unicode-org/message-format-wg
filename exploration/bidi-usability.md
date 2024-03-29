@@ -88,6 +88,17 @@ This means that the surrounding text treats it as-if the sequence were a single 
 > This is an additional reason not to change over to quote marks (which are not enclosing)
 > around patterns.
 
+This design also allows for the use of strongly directional marker characters.
+These include:
+- U+200E LEFT-TO-RIGHT MARK (LRM)
+- U+200F RIGHT-TO-LEFT MARK (RLM)
+- U+061C ARABIC LETTER MARK (ALM)
+
+These characters are invisible strongly-directional characters used in bidirectional
+text to coerce certain directional behavior (usually to mark the end of 
+a sequence of characters that would otherwise be ambiguous or interact with
+neutrals or opposite direction runs in an unhelpful way).
+
 ## Use-Cases
 
 _What use-cases do we see? Ideally, quote concrete examples._
@@ -98,6 +109,13 @@ _What use-cases do we see? Ideally, quote concrete examples._
 م2صر 0 {{The {$م2صر} is actually the first key}}
 م2صر * {{This one appears okay}}
 ```
+
+> ![NOTE]
+> The first _variant_ in the use case above is actually:
+>```
+> \u06452\u0635\u0631 0 {{The {$\u06452\u0635\u0631} is actually the first key}}
+>```
+
 
 2. Presentation in an expression can change if portions of the expression
    are not isolated or do not restore LTR order:
@@ -119,8 +137,8 @@ You have {$م1صر‎ :م2صر‎ م3صر‎=م4صر‎} <- LRM after each RTL t
    I don't want to have to manage a lot of paired controls, when I can get the right effect using
    strongly directional mark characters (LRM, RLM, ALM)
 
-4. As a translation tool or MF2 implementation, I want to automatically generate normalized
-   _messages_ that display correctly in RTL languages or containing RTL substrings with minimal user intervention.
+4. As a translation tool or MF2 implementation, I want to automatically generate 
+   _messages_ which display correctly when they contain RTL text or substring with minimal user intervention.
 
 ## Requirements
 
@@ -158,7 +176,7 @@ _option value_,
 or _literal_.
 These controls must not be included into the _identifier_, _name_, _option value_, or _literal_,
 that is, it must be possible to distinguish these characters from the identifier,
-name, value, or literal in question.
+name, option value, or literal in question.
 
 >```
 > You can use {$م1صر‎ :م2صر‎ م3صر‎=م4صر‎}
@@ -201,18 +219,29 @@ close-isolate  = %x2069
 > productions because characters on the **_inside_** of these are part of the normal text.
 > We need to allow users to include bidi controls in the output of MF2.
 
-Permit the use of LRM, RLM, or ALM controls immediately following:
-- name (note that this includes _identifiers_ as well as names of
-  _functions_, _variables_, and _unquoted_ literals
-
-> The one tricky part with `name` is whether we permit it between the `namespace` and `name`
-> part of an `identifier`.
+Permit the use of LRM, RLM, or ALM controls immediately following any of the items that
+**end** with the `name` production the ABNF. 
+This includes _identifiers_ found in the names of
+_functions_ 
+and _options_,
+plus the names of _variables_,
+as well as the contents of _unquoted_ literals.
 
 This would change the ABNF as follows:
 ```abnf
 namespace = name-start *name-char ; same as name but lacks bidi close
 name      = name-start *name-char [%x200E-200F / %x061C]
 ```
+
+> The one tricky part with `name` is whether we permit it between the `namespace` and `name`
+> part of an `identifier`.
+> Consider:
+>```
+> {$a1 :b2:c3}
+> {⁦$م1‎ :م2:ن⁩3‎}
+>```
+> Notice that the namespace is `:م2` and the name is `:ن⁩3`, but the sequence is displayed
+> with a spillover effect.
 
 > [!NOTE]
 > Ideally we do not want RLM/LRM/ALM to be part of the parsed
