@@ -959,10 +959,14 @@ would fall into one of the following categories:
 
 1. Provide a general mechanism for custom function authors
 to specify how functions compose with each other.
-2. Specify composition rules for built-in functions,
+1. Specify composition rules for built-in functions,
 but not in general, allowing custom functions
 to cooperate in an _ad hoc_ way.
-3. Restrict function composition for built-in functions
+1. Recommend a rich representation of resolved values
+without specifying any constraints on how these values
+are used.
+(This is the approach in [PR 645](https://github.com/unicode-org/message-format-wg/pull/645).)
+1. Restrict function composition for built-in functions
 (in order to prevent unintuitive behavior).
 
 ## Acknowledgments
