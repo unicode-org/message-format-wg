@@ -20,7 +20,7 @@ _What is this proposal trying to achieve?_
 
 The MessageFormat 2 syntax uses whitespace as a required delimiter
 as well as permitting the use of whitespace to make _messages_ easier to read.
-In addition, a _message_ can include bidirectional text in identifiers and literal values.
+In addition, a _message_ can include bidirectional text in identifiers and literals.
 
 MessageFormat's syntax also uses a variety of "sigils" and markers to form the structure of a _message_.
 These sigils are ASCII punctuation characters that have neutral directionality.
@@ -46,9 +46,10 @@ The original _message_ is often written by a software developer or user experien
 Translators need to work with the target-language versions of each _message_.
 Like many templating or domain-specific languages, MF2 uses neutrally-directional symbols
 to form portions of the syntax.
-When the _message_ contains right-to-left (RTL) translations or uses values that are RTL,
+When the _message_ contains right-to-left (RTL) characters in translations or
+in portions of the syntax,
 the plain-text of the message and the Unicode Bidirectional Algorithm (UBA, UAX#9)
-interact in ways that make the _message_ unintelligible or difficult to parse visually.
+can interact in ways that make the _message_ unintelligible or difficult to parse visually.
 
 Machines do not have a problem parsing _messages_ that contain RTL characters,
 but users need to be able to discern what a _message_ does,
@@ -59,11 +60,11 @@ In addition, it is possible to construct messages that use bidi characters to sp
 users into believing that a _message_ does something different than what it actually does.
 
 The current syntax does not permit bidi controls in _name_ tokens,
-_unquoted_ literal values,
+_unquoted_ literals,
 or in the whitespace portions of a _message_.
 
 Permitting the **isolate** controls and the standalone strongly-directional markers
-would enable tools, including translation tools, and users who speak RTL languages
+would enable tools, including translation tools, and users who are writing in RTL languages
 to format a _message_ so that its plain-text representation and its function
 are unambiguous.
 
@@ -91,14 +92,15 @@ This means that the surrounding text treats it as-if the sequence were a single 
 
 _What use-cases do we see? Ideally, quote concrete examples._
 
-1. Presentation of keys can change if values are not isolated:
+1. Presentation of _keys_ can change if the text of the _key's_ _literal_ is not isolated:
 ```
 .match {$م2صر :string}{$num :integer}
 م2صر 0 {{The {$م2صر} is actually the first key}}
 م2صر * {{This one appears okay}}
 ```
 
-2. Presentation in an expression can change if values are not isolated or restore LTR order:
+2. Presentation in an expression can change if portions of the expression
+   are not isolated or do not restore LTR order:
 > In the following example, we use the same string with a number inserted into the middle of
 > the string to make the bidi effects visible.
 > The numbers correspond to:
@@ -155,7 +157,8 @@ _name_,
 _option value_,
 or _literal_.
 These controls must not be included into the _identifier_, _name_, _option value_, or _literal_,
-that is, it must be possible to distinguish these characters from the value in question.
+that is, it must be possible to distinguish these characters from the identifier,
+name, value, or literal in question.
 
 >```
 > You can use {$م1صر‎ :م2صر‎ م3صر‎=م4صر‎}
@@ -243,3 +246,16 @@ the _message_ would still be functional and would emit no undesired characters.
 ### Deeper Syntax Changes
 We could alter the syntax to make it more "bidi robust", 
 such as by using strongly directional instead of neutrals.
+
+### Forbid RTL characters in `name` and/or `unquoted`
+We could alter the syntax to forbid using RTL characters in names and unquoted literals.
+This would make the syntax consist solely of LTR and neutral characters.
+One flavor of this would be to restrict tokens to US ASCII.
+
+Cons:
+- This would break compatibility with NCName/QName; we would be back to
+  defining our own idiosyncratic namespace
+- Unicode could define more RTL characters in the future, making the syntax
+  brittle
+- This is not friendly to non-English/non-Latin users and represents a usability
+  restriction in environments in which names can be non-ASCII values
