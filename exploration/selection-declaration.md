@@ -79,6 +79,16 @@ If a user writes multiple selectors for the same operand, which one formats the 
 
 If both formats are needed in the message, how does one reference one or the other?
 
+**Selection Different From Format**
+We don't support selection on dates in LDML45, but it's easy to conceptualize.
+How can a user write a _selector_ that doesn't mess up a _formatter_?
+
+```
+.input {$d :datetime skeleton=yMMMdjm}
+.match {$d :datetime month=numeric}
+1 {{Today is {$d} in cold cold January}}
+* {{Today is {$d}}}
+```
 
 ## Requirements
 
