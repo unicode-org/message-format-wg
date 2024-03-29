@@ -231,7 +231,7 @@ _What other properties they have?_
 We could do nothing.
 
 A likely outcome of doing nothing is that RTL users would insert bidi controls into
-_messages_ in an attempt to make the _pattern_ and/or _placeholders_ to display correctly.
+_messages_ in an attempt to make the _pattern_ and/or _placeholders_ display correctly.
 These controls would become part of the output of the _message_,
 showing up inappropriately at runtime.
 Because these characters are invisible, users might be very frustrated trying to manage
