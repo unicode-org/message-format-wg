@@ -25,24 +25,41 @@ that access the same _operand_ value.
 
 _What context is helpful to understand this proposal?_
 
-In MFv2, we require that all _selectors_ have an _annotation_.
+In MF2, we require that all _selectors_ have an _annotation_.
+The purpose of this requirement is to help ensure that a _selector_ on a given _operand_
+is working with the same value as the _formatter_ eventually used for presentation
+of that _operand_.
+This is needed because the format of a value can have an effect on the grammar used
+in the localized _message_.
 
-Ideally, a _selector_ and a _formatter_ for the same _function_ operating on the same _operand_ 
-use the same options.
+For example, in English:
+
+> You have 1 mile to go.
+> You have 1.0 miles to go.
+
+These messages might be written as:
 
 ```
-.input {$num :number minimumFractionDigits=2}
-.match {$num}
-one {{Unreachable in English locale}}
-*   {{This prints {$num} with two decimal places.}}
+.input {$togo :integer}
+.match {$togo}
+0   {{You have arrived.}}
+one {{You have {$togo} mile to go.}}
+*   {{You have {$togo} miles to go.}}
+
+.input {$togo :number minimumFractionDigits=1}
+.match {$togo}
+0   {{You have arrived.}}
+one {{Unreachable in an English locale.}}
+*   {{You have {$togo} miles to go.}}
 ```
 
-It is tempting to want to write this as a shorthand:
+It is tempting to want to write these as a shorthand, with the _annotation_ in the _selector_:
 
 ```
-.match {$num :number minimumFractionDigits=2}
-one {{Unreachable...}}
-*   {{This prints {$num} with two decimal places.}}
+.match {$togo :integer}
+0   {{You have arrived.}}
+one {{You have {$togo} mile to go.}}
+*   {{You have {$togo} miles to go.}}
 ```
 
 ## Use-Cases
@@ -54,11 +71,14 @@ If a user writes multiple selectors for the same operand, which one formats the 
 
 ```
 .match {$num :integer} {$num :number minimumFractionDigits=2}
-* * {{What is printed for {$num}?}}
+* * {{Which selector formats {$num}?}}
 
 .match {$num :number minimumFractionDigits=2} {$num :integer}
-* * {{What is printed for {$num}?}}
+* * {{Which selector formats {$num}?}}
 ```
+
+If both formats are needed in the message, how does one reference one or the other?
+
 
 ## Requirements
 
