@@ -110,7 +110,8 @@ _What use-cases do we see? Ideally, quote concrete examples._
 م2صر * {{This one appears okay}}
 ```
 
-> ![NOTE]
+> [!NOTE]
+> 
 > The first _variant_ in the use case above is actually:
 >```
 > \u06452\u0635\u0631 0 {{The {$\u06452\u0635\u0631} is actually the first key}}
@@ -241,7 +242,7 @@ name      = name-start *name-char [%x200E-200F / %x061C]
 > {⁦$م1‎ :م2:ن⁩3‎}
 >```
 > Notice that the namespace is `:م2` and the name is `:ن⁩3`, but the sequence is displayed
-> with a spillover effect.
+> with a spillover effect (the number, in each case, _trails_ the Arabic letter).
 
 > [!NOTE]
 > Ideally we do not want RLM/LRM/ALM to be part of the parsed
