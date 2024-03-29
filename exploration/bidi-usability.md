@@ -53,7 +53,7 @@ interact in ways that make the _message_ unintelligible or difficult to parse vi
 Machines do not have a problem parsing _messages_ that contain RTL characters,
 but users need to be able to discern what a _message_ does,
 what _variant_ will be selected,
-or what a _placeholder_ will evaluate into.
+or what a _placeholder_ will evaluate to.
 
 In addition, it is possible to construct messages that use bidi characters to spoof
 users into believing that a _message_ does something different than what it actually does.
