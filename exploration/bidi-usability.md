@@ -212,8 +212,9 @@ name      = name-start *name-char [%x200E-200F / %x061C]
 ```
 
 > [!NOTE]
-> Ideally we do not want RLM/LRM/ALM to be part of the `name` or part of any
-> production that consumes `name` (such as `variable`, `reserved-keyword`, or `unquoted`).
+> Ideally we do not want RLM/LRM/ALM to be part of the parsed
+> `name`, `variable`, `reserved-keyword`, `unquoted`, or any other term
+> defined in terms of `name`.
 > This is complicated to do in ABNF because each of these tokens is followed either by
 > whitespace or by some closing marker such as `}`.
 > The workaround in #763 is to permit these characters _before_ or _after_ whitespace
