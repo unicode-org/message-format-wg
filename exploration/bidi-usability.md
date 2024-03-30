@@ -191,7 +191,8 @@ it should be possible to include "local effect" strongly directional marks in an
 > string is RTL!).
 >```
 > {$a1 :b2:c3}
-> {⁦$م1‎ :م2:ن⁩3‎}
+> {⁦$م1‎ :م2:ن⁩3‎} bad
+> {⁦$م1‎ :م2‎:ن3‎⁩} with isolates and LRMs
 >```
 
 
