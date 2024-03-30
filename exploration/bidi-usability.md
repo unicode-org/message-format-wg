@@ -183,6 +183,18 @@ name, option value, or literal in question.
 > You can use {$م1صر‎ :م2صر‎ م3صر‎=م4صر‎}
 >```
 
+To prevent RTL _namespace_ names from having spillover effects with _function_ names,
+it should be possible to include "local effect" strongly directional marks in an _identifier_:
+> In this example, the _namespace_ is `:م2` and the _name_ is `:ن⁩3`, but the sequence is displayed
+> with a spillover effect.
+> (Note that the number in each name _trails_ the Arabic letter: it appears to the left because the
+> string is RTL!).
+>```
+> {$a1 :b2:c3}
+> {⁦$م1‎ :م2:ن⁩3‎}
+>```
+
+
 ## Constraints
 
 _What prior decisions and existing conditions limit the possible design?_
@@ -195,6 +207,15 @@ and other implementations of MessageFormat 2 serialization are strongly
 encouraged to provide paired isolates around any right-to-left
 syntax as described in this design so that _messages_ display appropriately as plain text.
 
+Ideally we do not want RLM/LRM/ALM to be part of the parsed
+`name`, `variable`, `reserved-keyword`, `unquoted`, or any other term
+defined in terms of `name`.
+This is complicated to do in ABNF because each of these tokens is followed either by
+whitespace or by some closing marker such as `}`.
+The workaround in #763 was to permit these characters _before_ or _after_ whitespace
+using the various whitespace productions.
+This works at the cost of allowing spurious markers.
+
 ## Proposed Design
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
@@ -205,9 +226,11 @@ Permit isolating bidi controls to be used on the **outside** of the following:
 - quoted patterns
 
 This would change the ABNF as follows:
+(Notice that this change includes a production `bidi` described further down
+in this document)
 ```abnf
-literal        = ( open-isolate (quoted / unquoted) close-isolate)
-               / (quoted / unquoted)
+literal        = ( open-isolate (quoted / (unquoted [bidi])) close-isolate)
+               / (quoted / (unquoted [bidi]))
 quoted-pattern = ( open-isolate "{{" pattern "}}" close-isolate)
                / ("{{" pattern "}}")
 
@@ -228,31 +251,27 @@ and _options_,
 plus the names of _variables_,
 as well as the contents of _unquoted_ literals.
 
-This would change the ABNF as follows:
-```abnf
-namespace = name-start *name-char ; same as name but lacks bidi close
-name      = name-start *name-char [%x200E-200F / %x061C]
-```
-
-> The one tricky part with `name` is whether we permit it between the `namespace` and `name`
-> part of an `identifier`.
-> Consider:
->```
-> {$a1 :b2:c3}
-> {⁦$م1‎ :م2:ن⁩3‎}
->```
-> Notice that the namespace is `:م2` and the name is `:ن⁩3`, but the sequence is displayed
-> with a spillover effect (the number, in each case, _trails_ the Arabic letter).
+> [!NOTE]
+> Notice that _unquoted_ literals can also be surrounded by bidi isolates
+> using the previous syntax modification just above.
 
 > [!NOTE]
-> Ideally we do not want RLM/LRM/ALM to be part of the parsed
-> `name`, `variable`, `reserved-keyword`, `unquoted`, or any other term
-> defined in terms of `name`.
-> This is complicated to do in ABNF because each of these tokens is followed either by
-> whitespace or by some closing marker such as `}`.
-> The workaround in #763 is to permit these characters _before_ or _after_ whitespace
-> using the various whitespace productions.
-> This works at the cost of allowing spurious markers.
+> Notice that `reserved-annotation` is not in the ABNF changes because it already
+> permits the marks in question.
+> Any syntax derived from `reserved-annotation`
+> (i.e. when unreserving a new statement in a future addition)
+> would need to handle bidi explicitly using the model already established here.
+
+```abnf
+variable-expression   = "{" [s] variable [bidi] [s annotation] *(s attribute) [s] "}"
+function       = ":" identifier [bidi] *(s option)
+option         = identifier [bidi] [s] "=" [s] (literal / (variable [bidi])
+attribute      = "@" identifier [bidi] [[s] "=" [s] (literal / (variable [bidi])]
+markup         = "{" [s] "#" identifier [bidi] *(s option) *(s attribute) [s] ["/"] "}"  ; open and standalone
+               / "{" [s] "/" identifier [bidi] *(s option) *(s attribute) [s] "}"  ; close
+identifier     = [(namespace [bidi] ":")] name
+bidi           = [ %x200E-200F / %x061C ]
+```
 
 ## Alternatives Considered
 
