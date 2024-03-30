@@ -191,7 +191,7 @@ it should be possible to include "local effect" strongly directional marks in an
 > string is RTL!).
 >```
 > {$a1 :b2:c3}
-> {⁦$م1‎ :م2:ن⁩3‎} bad
+> {$م1 :م2:ن3} spillover effects
 > {⁦$م1‎ :م2‎:ن3‎⁩} with isolates and LRMs
 >```
 
@@ -241,11 +241,12 @@ close-isolate  = %x2069
 
 > [!IMPORTANT]
 > The isolating controls go on the **_outside_** of the various _literal_ and _pattern_
-> productions because characters on the **_inside_** of these are part of the normal text.
+> productions because characters on the **_inside_** of these are part of the _literal_'s
+> or _pattern_'s textual content.
 > We need to allow users to include bidi controls in the output of MF2.
 
-Permit the use of LRM, RLM, or ALM controls immediately following any of the items that
-**end** with the `name` production the ABNF. 
+Permit the use of LRM, RLM, or ALM stronly directional marks immediately following any of the items that
+**end** with the `name` production in the ABNF. 
 This includes _identifiers_ found in the names of
 _functions_ 
 and _options_,
