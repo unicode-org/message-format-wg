@@ -33,3 +33,53 @@ Feedback about implementation experience,
 syntax,
 functionality,
 or other parts of the specification is welcome!
+
+
+
+
+The goal is to allow developers and translators to create natural-sounding, grammatically-correct,
+user interfaces that can appear in any language and support the needs of diverse cultures.
+
+## MessageFormat 2 Specification and Syntax
+
+MessageFormat 2 messages can be simple strings:
+
+    Hello, world!
+
+A message can also include _placeholders_ that are replaced by user-provided values:
+
+    Hello {$user}!
+
+The user-provided values can be transformed or formatted using functions:
+
+    Today is {$date :datetime}
+    Today is {$date :datetime weekday=long}.
+
+Messages can use a function (called a _selector_) to choose between different
+different versions of a message.
+These allow messages to be tailored to the grammatical (or other) requirements of 
+a given language:
+
+    .match {$count :integer}
+    0   {{You have no notifications.}}
+    one {{You have {$count} notification.}}
+    *   {{You have {$count} notifications.}}
+
+The syntax also allows user to provide formatting instructions
+or assign local values for use in the formatted message:
+
+    .input {$date :datetime weekday=long month=medium day=short}
+    .local $numPigs = {$pigs :integer}
+    {{On {$date} you had this many pigs: {$numPigs}}}
+
+Unlike previous versions of MessageFormat, MessageFormat 2 is designed for
+extension by implementers and even end users.
+This means that new functionality can be added to messages without modifying
+either existing messages or, in some cases, even the core library containing the 
+MessageFormat 2 code.
+
+The message syntax supports using multiple _selectors_ and other features
+to build complex messages.
+It is designed so that implementations can extend the set of functions or their options
+using the same syntax. 
+Implementations may even support users creating their own functions.
