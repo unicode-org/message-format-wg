@@ -11,30 +11,50 @@ Such messages can be adjusted to meet the linguistic needs of each
 language and are designed to be translated easily and efficiently.
 
 Previously, software developers had to choose between many different
-APIs and templating languages to build user interface string.
+APIs and templating languages to build user interface strings.
 These solutions did not always provide for the features of different
-human languages, were not widely supported by translation tools,
-and were not extensible as new internationalization-aware APIs were developed.
+human languages. Support was limited to specific platforms
+and these formats were not widely supported by translation tools.
+Most significantly, message formatting was limited to a small
+number of built-in formats.
 
-In addition to a syntax for messages,
-the Technical Preview includes a default registry of functions,
-a mechanism for creating additional function descriptions for general use,
-a data model for interchange of messages with previoius standards,
+The Technical Preview is available for comment.
+The stable version of this specification is expected to be part of the 
+Fall 2024 release of CLDR (v46).
+Implementations are available in ICU4J (Java) and ICU4C (C/C++)
+as well as JavaScript.
+Feedback about implementation experience,
+syntax,
+functionality,
+or other parts of the specification is welcome!
+See the end of this article for details on participation and how to comment on this work.
+
+MessageFormat 2 consists of multiple parts: 
+a syntax, including a formal grammar, for writing messages;
+a data model for representing messages (including those ported from other APIs);
+a registry of required functions;
+a function description mechanism for use by implementations and tools;
 and a test suite.
+
+MessageFormat 2 provides a rich and extensible set of functionality
+to permit the creation of natural-sounding, grammatically-correct, translations.
+
+### Why is this important?
 
 One of the challenges in adapting software to work for
 users with different languages and cultures is the need for **_dynamic messages_**.
 Whenever a user interface needs to present data as part of a larger string,
-that data needs to be formatted (and the message may need to be altered)
-to make it culturally accepted and grammatically correct.
+that data needs to be formatted. 
+In addition, the message might need to be altered
+to make it grammatically correct.
 
-For example, if your US English interface has a message like:
+For example, if your US-English interface has a message like:
 
-> Your item had **1,023** views on **April 3, 2023**
+> Your item had **1,023** views on **April 3, 2023**.
 
 You want the translated message to be appropriately formatted into French:
 
-> Votre article a eu **1 023** vues le **3 avril 2023**
+> Votre article a eu **1 023** vues le **3 avril 2023**.
 
 Or Japanese:
 
@@ -54,48 +74,65 @@ and as existing formats provided only rudimentary support for managing
 the variations needed by other languages,
 it could be difficult for translators to do their work effectively.
 
-MessageFormat 2 provides a rich and extensible set of functionality
-to permit the creation of natural-sounding, grammatically-correct, translations.
+For example, if your English message might need to vary depending on how many "views" there were:
+```
+Your item had no _views_.
+Your item had 1 _view_.
+Your item had 1,043 _views_.
+```
 
+These variations can be more complex in other languages.
+For example, in Polish, the same message has different wording depending on
+the number:
+```
+Twój przedmiot nie _ma_ żadnych _wyświetleń_.
+Twój przedmiot _miał_ 1 _wyświetlenie_.
+Twój przedmiot _miał_ 2 _wyświetlenia_.
+Twój przedmiot _ma_ 5 _wyświetleń_.
+```
 
-The Technical Preview period is expected to last until the LDML46 release,
-in the fall of 2024.
-Feedback about implementation experience,
-syntax,
-functionality,
-or other parts of the specification is welcome!
+MessageFormat 2 makes it easy to write messages like this
+without developering needing to know about such language variation.
+In fact, developers don't need to learn about any of the language
+and formatting variations needed by languages other than their own
+nor write code that manipulates formatting.
 
-## MessageFormat 2 Specification and Syntax
+## About the syntax
 
 MessageFormat 2 messages can be simple strings:
-
+```
     Hello, world!
+```
 
 A message can also include _placeholders_ that are replaced by user-provided values:
-
+```
     Hello {$user}!
+```
 
 The user-provided values can be transformed or formatted using functions:
-
+```
     Today is {$date :datetime}
     Today is {$date :datetime weekday=long}.
+```
 
 Messages can use a function (called a _selector_) to choose between different
 different versions of a message.
 These allow messages to be tailored to the grammatical (or other) requirements of 
 a given language:
-
+```
     .match {$count :integer}
     0   {{You have no notifications.}}
     one {{You have {$count} notification.}}
     *   {{You have {$count} notifications.}}
+```
 
 The syntax also allows user to provide formatting instructions
 or assign local values for use in the formatted message:
-
+```
     .input {$date :datetime weekday=long month=medium day=short}
     .local $numPigs = {$pigs :integer}
     {{On {$date} you had this many pigs: {$numPigs}}}
+```
 
 Unlike previous versions of MessageFormat, MessageFormat 2 is designed for
 extension by implementers and even end users.
