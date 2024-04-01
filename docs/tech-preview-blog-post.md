@@ -16,16 +16,47 @@ These solutions did not always provide for the features of different
 human languages, were not widely supported by translation tools,
 and were not extensible as new internationalization-aware APIs were developed.
 
-MessageFormat 2 provides built-in support for the most basic formatting,
-plus is designed to be extended by specific programming languages and
-operating environments.
-In addition, users can create their own functions.
-
 In addition to a syntax for messages,
 the Technical Preview includes a default registry of functions,
 a mechanism for creating additional function descriptions for general use,
 a data model for interchange of messages with previoius standards,
 and a test suite.
+
+One of the challenges in adapting software to work for
+users with different languages and cultures is the need for **_dynamic messages_**.
+Whenever a user interface needs to present data as part of a larger string,
+that data needs to be formatted (and the message may need to be altered)
+to make it culturally accepted and grammatically correct.
+
+For example, if your US English interface has a message like:
+
+> Your item had **1,023** views on **April 3, 2023**
+
+You want the translated message to be appropriately formatted into French:
+
+> Votre article a eu **1 023** vues le **3 avril 2023**
+
+Or Japanese:
+
+> あなたのアイテムは **2023 年 4 月 3 日**に **1,023** 回閲覧されました。
+
+MessageFormat 2 provides built-in support for basic formatting,
+such as the dates and numbers in the examples above,
+plus it is designed to be extended.
+Not only can specific programming languages or platforms extend
+the basic functionality, 
+but users can create their own functions.
+
+Once messages have been created, they need to be translated into the various
+languages and adapted for the various cultures around the world.
+Previously, as there was not widely adopted standard
+and as existing formats provided only rudimentary support for managing
+the variations needed by other languages,
+it could be difficult for translators to do their work effectively.
+
+MessageFormat 2 provides a rich and extensible set of functionality
+to permit the creation of natural-sounding, grammatically-correct, translations.
+
 
 The Technical Preview period is expected to last until the LDML46 release,
 in the fall of 2024.
@@ -33,12 +64,6 @@ Feedback about implementation experience,
 syntax,
 functionality,
 or other parts of the specification is welcome!
-
-
-
-
-The goal is to allow developers and translators to create natural-sounding, grammatically-correct,
-user interfaces that can appear in any language and support the needs of diverse cultures.
 
 ## MessageFormat 2 Specification and Syntax
 
