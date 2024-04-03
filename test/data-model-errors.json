@@ -1,19 +1,23 @@
 [
-    "Variant Key Mismatch": [
+    {
+        "Variant Key Mismatch": [
         ".match {$foo :x} * * {{foo}}",
         ".match {$foo :x} {$bar :x} * {{foo}}"
-    ],
-    "Missing Fallback Variant": [
+    ]},
+    {
+        "Missing Fallback Variant": [
         ".match {:foo} 1 {{_}}",
         ".match {:foo} other {{_}}",
         ".match {:foo} {:bar} * 1 {{_}} 1 * {{_}}"
-    ],
-    "Missing Selector Annotation": [
+    ]},
+    {
+        "Missing Selector Annotation": [
         ".match {$foo} one {{one}} * {{other}}",
         ".input {$foo} .match {$foo} one {{one}} * {{other}}",
         ".local $foo = {$bar} .match {$foo} one {{one}} * {{other}}"
-    ],
-    "Duplicate Declaration": [
+    ]},
+    {
+        "Duplicate Declaration": [
         ".input {$foo} .input {$foo} {{_}}",
         ".input {$foo} .local $foo = {42} {{_}}",
         ".local $foo = {42} .input {$foo} {{_}}",
@@ -23,10 +27,11 @@
         ".local $foo = {$bar} .local $bar = {$baz} {{_}}",
         ".local $foo = {$bar :func} .local $bar = {$baz} {{_}}",
         ".local $foo = {42 :func opt=$foo} {{_}}",
-        ".local $foo = {42 :func opt=$bar} .local $bar = {42} {{_}}",
-    ],
+        ".local $foo = {42 :func opt=$bar} .local $bar = {42} {{_}}"
+    ]},
+    {
     "Duplicate Option Name": [
             "bad {:placeholder option=x option=x}",
             "bad {:placeholder ns:option=x ns:option=y}"
-    ]
+    ]}
 ]
