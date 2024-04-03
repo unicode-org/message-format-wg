@@ -5,9 +5,8 @@ These test files are intended to be useful for testing multiple different messag
 
 - `syntax-errors.json` — An array of strings that should produce a Syntax Error when parsed.
 
-- `data-model-errors.json` - An array of objects.
-   Each object has exactly one key, which is the name of the error, `error`.
-   The key's value is an array of strings that
+- `data-model-errors.json` - An object with string keys and arrays of strings as values,
+     where each key is the name of an error and its value is an array of strings that
      should produce `error` when processed.
      Error names are defined in ["MessageFormat 2.0 Errors"](../spec/errors.md) in the spec.
 
