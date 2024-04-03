@@ -1,4 +1,4 @@
-[
+{
     "Variant Key Mismatch": [
         ".match {$foo :x} * * {{foo}}",
         ".match {$foo :x} {$bar :x} * {{foo}}"
@@ -23,10 +23,10 @@
         ".local $foo = {$bar} .local $bar = {$baz} {{_}}",
         ".local $foo = {$bar :func} .local $bar = {$baz} {{_}}",
         ".local $foo = {42 :func opt=$foo} {{_}}",
-        ".local $foo = {42 :func opt=$bar} .local $bar = {42} {{_}}",
+        ".local $foo = {42 :func opt=$bar} .local $bar = {42} {{_}}"
     ],
     "Duplicate Option Name": [
             "bad {:placeholder option=x option=x}",
             "bad {:placeholder ns:option=x ns:option=y}"
     ]
-]
+}
