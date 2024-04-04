@@ -25,18 +25,18 @@
       "exp": "{|horse|}",
       "errors": [{ "type": "bad-input" }]
     },
-    { "src": "{|2006-01-02T15:04:06| :time}", "exp": "3:04 PM" },
+    { "src": "{|2006-01-02T15:04:06| :time}", "exp": "3:04\u202FPM" },
     {
       "src": "{|2006-01-02T15:04:06| :time style=medium}",
-      "exp": "3:04:06 PM"
+      "exp": "3:04:06\u202FPM"
     },
     {
       "src": ".local $t = {|2006-01-02T15:04:06| :time style=medium} {{{$t :time}}}",
-      "exp": "3:04:06 PM"
+      "exp": "3:04:06\u202FPM"
     },
     {
       "src": ".local $d = {|2006-01-02T15:04:06| :date} {{{$d :time}}}",
-      "exp": "3:04 PM"
+      "exp": "3:04\u202FPM"
     }
   ],
   "datetime": [
@@ -56,7 +56,7 @@
       "exp": "{|horse|}",
       "errors": [{ "name": "RangeError" }]
     },
-    { "src": "{|2006-01-02T15:04:06| :datetime}", "exp": "1/2/06, 3:04 PM" },
+    { "src": "{|2006-01-02T15:04:06| :datetime}", "exp": "1/2/06, 3:04\u202FPM" },
     {
       "src": "{|2006-01-02T15:04:06| :datetime year=numeric month=|2-digit|}",
       "exp": "01/2006"
@@ -67,12 +67,12 @@
     },
     {
       "src": "{|2006-01-02T15:04:06| :datetime timeStyle=medium}",
-      "exp": "3:04:06 PM"
+      "exp": "3:04:06\u202FPM"
     },
     {
       "src": "{$dt :datetime}",
       "params": { "dt": "2006-01-02T15:04:06" },
-      "exp": "1/2/06, 3:04 PM"
+      "exp": "1/2/06, 3:04\u202FPM"
     }
   ],
   "integer": [
