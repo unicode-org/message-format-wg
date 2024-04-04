@@ -14,90 +14,58 @@ Previously, software developers had to choose between many different
 APIs and templating languages to build user interface strings.
 These solutions did not always provide for the features of different
 human languages. Support was limited to specific platforms
-and these formats were not widely supported by translation tools.
+and these formats were not widely supported by translation tools,
+making translation and adaptation to specific cultures costly
+and time consuming.
 Most significantly, message formatting was limited to a small
 number of built-in formats.
-
-The Technical Preview is available for comment.
-The stable version of this specification is expected to be part of the 
-Fall 2024 release of CLDR (v46).
-Implementations are available in ICU4J (Java) and ICU4C (C/C++)
-as well as JavaScript.
-Feedback about implementation experience,
-syntax,
-functionality,
-or other parts of the specification is welcome!
-See the end of this article for details on participation and how to comment on this work.
-
-MessageFormat 2 consists of multiple parts: 
-a syntax, including a formal grammar, for writing messages;
-a data model for representing messages (including those ported from other APIs);
-a registry of required functions;
-a function description mechanism for use by implementations and tools;
-and a test suite.
-
-MessageFormat 2 provides a rich and extensible set of functionality
-to permit the creation of natural-sounding, grammatically-correct, translations.
-
-### Why is this important?
 
 One of the challenges in adapting software to work for
 users with different languages and cultures is the need for **_dynamic messages_**.
 Whenever a user interface needs to present data as part of a larger string,
 that data needs to be formatted. 
-In addition, the message might need to be altered
+In many languages, including English, the message itself needs to be altered
 to make it grammatically correct.
 
-For example, if your US-English interface has a message like:
+For example, if a message in English might read:
 
-> Your item had **1,023** views on **April 3, 2023**.
+> Your item had **1,023** views on **April 8, 2024**.
 
-You want the translated message to be appropriately formatted into French:
+The equivalent message in French might read:
 
-> Votre article a eu **1 023** vues le **3 avril 2023**.
+> Votre article a eu **1 023** vues le **8 avril 2024**.
 
 Or Japanese:
 
-> あなたのアイテムは **2023 年 4 月 3 日**に **1,023** 回閲覧されました。
+> あなたのアイテムは **2024 年 4 月 8 日**に **1,023** 回閲覧されました。
 
-MessageFormat 2 provides built-in support for basic formatting,
-such as the dates and numbers in the examples above,
-plus it is designed to be extended.
-Not only can specific programming languages or platforms extend
-the basic functionality, 
-but users can create their own functions.
+But even in English, there are grammatical variations required:
+
+> Your item had _no views_...
+> Your item had 1 _view_...
+> Your item had 1,043 _views_...
 
 Once messages have been created, they need to be translated into the various
 languages and adapted for the various cultures around the world.
-Previously, as there was not widely adopted standard
-and as existing formats provided only rudimentary support for managing
+Previously there was not widely adopted standard
+and existing formats provided only rudimentary support for managing
 the variations needed by other languages,
 it could be difficult for translators to do their work effectively.
 
-For example, if your English message might need to vary depending on how many "views" there were:
-```
-Your item had no _views_.
-Your item had 1 _view_.
-Your item had 1,043 _views_.
-```
+For example, the same message shown above, needs a different set of variations
+in order to support Polish:
 
-These variations can be more complex in other languages.
-For example, in Polish, the same message has different wording depending on
-the number:
-```
-Twój przedmiot nie _ma_ żadnych _wyświetleń_.
-Twój przedmiot _miał_ 1 _wyświetlenie_.
-Twój przedmiot _miał_ 2 _wyświetlenia_.
-Twój przedmiot _ma_ 5 _wyświetleń_.
-```
+> Twój przedmiot nie _ma_ żadnych _wyświetleń_.
+> Twój przedmiot _miał_ 1 _wyświetlenie_.
+> Twój przedmiot _miał_ 2 _wyświetlenia_.
+> Twój przedmiot _ma_ 5 _wyświetleń_.
+
 
 MessageFormat 2 makes it easy to write messages like this
 without developering needing to know about such language variation.
 In fact, developers don't need to learn about any of the language
 and formatting variations needed by languages other than their own
 nor write code that manipulates formatting.
-
-## About the syntax
 
 MessageFormat 2 messages can be simple strings:
 ```
@@ -121,17 +89,9 @@ These allow messages to be tailored to the grammatical (or other) requirements o
 a given language:
 ```
     .match {$count :integer}
-    0   {{You have no notifications.}}
-    one {{You have {$count} notification.}}
-    *   {{You have {$count} notifications.}}
-```
-
-The syntax also allows user to provide formatting instructions
-or assign local values for use in the formatted message:
-```
-    .input {$date :datetime weekday=long month=medium day=short}
-    .local $numPigs = {$pigs :integer}
-    {{On {$date} you had this many pigs: {$numPigs}}}
+    0   {{You have no views.}}
+    one {{You have {$count} view.}}
+    *   {{You have {$count} views.}}
 ```
 
 Unlike previous versions of MessageFormat, MessageFormat 2 is designed for
@@ -140,8 +100,26 @@ This means that new functionality can be added to messages without modifying
 either existing messages or, in some cases, even the core library containing the 
 MessageFormat 2 code.
 
-The message syntax supports using multiple _selectors_ and other features
-to build complex messages.
-It is designed so that implementations can extend the set of functions or their options
-using the same syntax. 
-Implementations may even support users creating their own functions.
+MessageFormat 2 provides a rich and extensible set of functionality
+to permit the creation of natural-sounding, grammatically-correct, 
+messages, while enabling rapid, accurate translation
+and extension using new and improved internationalization functionality
+in any computing system.
+
+The Technical Preview is available for comment.
+The stable version of this specification is expected to be part of the 
+Fall 2024 release of CLDR (v46).
+Implementations are available in ICU4J (Java) and ICU4C (C/C++)
+as well as JavaScript.
+Feedback about implementation experience,
+syntax,
+functionality,
+or other parts of the specification is welcome!
+See the end of this article for details on participation and how to comment on this work.
+
+MessageFormat 2 consists of multiple parts: 
+a syntax, including a formal grammar, for writing messages;
+a data model for representing messages (including those ported from other APIs);
+a registry of required functions;
+a function description mechanism for use by implementations and tools;
+and a test suite.
