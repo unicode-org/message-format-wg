@@ -42,7 +42,9 @@ Or Japanese:
 But even in English, there are grammatical variations required:
 
 > Your item had _no views_...
+> 
 > Your item had 1 _view_...
+> 
 > Your item had 1,043 _views_...
 
 Once messages have been created, they need to be translated into the various
@@ -56,8 +58,11 @@ For example, the same message shown above, needs a different set of variations
 in order to support Polish:
 
 > Twój przedmiot nie _ma_ żadnych _wyświetleń_.
+> 
 > Twój przedmiot _miał_ 1 _wyświetlenie_.
+> 
 > Twój przedmiot _miał_ 2 _wyświetlenia_.
+> 
 > Twój przedmiot _ma_ 5 _wyświetleń_.
 
 
