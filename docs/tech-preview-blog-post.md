@@ -1,7 +1,5 @@
 # Blog Post for Technical Preview
 
-# DRAFT DRAFT DRAFT
-
 Unicode announced today the Technical Preview of MessageFormat 2,
 a new standard for creating and managing user interface strings.
 These messages can dynamically include data values formatted
@@ -67,7 +65,7 @@ in order to support Polish:
 
 
 MessageFormat 2 makes it easy to write messages like this
-without developering needing to know about such language variation.
+without developers needing to know about such language variation.
 In fact, developers don't need to learn about any of the language
 and formatting variations needed by languages other than their own
 nor write code that manipulates formatting.
@@ -84,7 +82,7 @@ A message can also include _placeholders_ that are replaced by user-provided val
 
 The user-provided values can be transformed or formatted using functions:
 ```
-    Today is {$date :datetime}
+    Today is {$date :date}
     Today is {$date :datetime weekday=long}.
 ```
 
