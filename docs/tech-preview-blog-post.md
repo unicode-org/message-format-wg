@@ -49,8 +49,8 @@ Once messages have been created, they need to be translated into the various
 languages and adapted for the various cultures around the world.
 Previously, there was no widely adopted standard,
 and existing formats provided only rudimentary support for managing
-the variations needed by other languages,
-it could be difficult for translators to do their work effectively.
+the variations needed by other languages.
+Thus, it could be difficult for translators to do their work effectively.
 
 For example, the same message shown above needs a different set of variations
 in order to support Polish:
