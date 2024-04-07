@@ -95,6 +95,31 @@
       "errors": [{ "type": "bad-input" }]
     },
     {
+      "src": "invalid number literal {.1 :number}",
+      "exp": "invalid number literal {|.1|}",
+      "errors": [{ "type": "bad-input" }]
+    },
+    {
+      "src": "invalid number literal {1. :number}",
+      "exp": "invalid number literal {|1.|}",
+      "errors": [{ "type": "bad-input" }]
+    },
+    {
+      "src": "invalid number literal {01 :number}",
+      "exp": "invalid number literal {|01|}",
+      "errors": [{ "type": "bad-input" }]
+    },
+    {
+      "src": "invalid number literal {|+1| :number}",
+      "exp": "invalid number literal {|+1|}",
+      "errors": [{ "type": "bad-input" }]
+    },
+    {
+      "src": "invalid number literal {0x1 :number}",
+      "exp": "invalid number literal {|0x1|}",
+      "errors": [{ "type": "bad-input" }]
+    },
+    {
       "src": "hello {:number}",
       "exp": "hello {:number}",
       "errors": [{ "type": "bad-input" }]
