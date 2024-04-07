@@ -1,6 +1,6 @@
 # Blog Post for Technical Preview
 
-Unicode announced today the Technical Preview of MessageFormat 2,
+Today, Unicode announced the Technical Preview of MessageFormat 2,
 a new standard for creating and managing user interface strings.
 These messages can dynamically include data values formatted
 (using information in the Common Locale Data Repository [CLDR])
@@ -20,7 +20,7 @@ number of built-in formats.
 
 One of the challenges in adapting software to work for
 users with different languages and cultures is the need for **_dynamic messages_**.
-Whenever a user interface needs to present data as part of a larger string,
+Whenever a user interface needs to present data as part of a larger message,
 that data needs to be formatted. 
 In many languages, including English, the message itself needs to be altered
 to make it grammatically correct.
@@ -47,12 +47,12 @@ But even in English, there are grammatical variations required:
 
 Once messages have been created, they need to be translated into the various
 languages and adapted for the various cultures around the world.
-Previously there was not widely adopted standard
+Previously, there was no widely adopted standard,
 and existing formats provided only rudimentary support for managing
 the variations needed by other languages,
 it could be difficult for translators to do their work effectively.
 
-For example, the same message shown above, needs a different set of variations
+For example, the same message shown above needs a different set of variations
 in order to support Polish:
 
 > Twój przedmiot nie _ma_ żadnych _wyświetleń_.
@@ -86,7 +86,7 @@ The user-provided values can be transformed or formatted using functions:
     Today is {$date :datetime weekday=long}.
 ```
 
-Messages can use a function (called a _selector_) to choose between different
+Messages can use a function (called a _selector_) to choose between
 different versions of a message.
 These allow messages to be tailored to the grammatical (or other) requirements of 
 a given language:
@@ -97,7 +97,7 @@ a given language:
     *   {{You have {$count} views.}}
 ```
 
-Unlike previous versions of MessageFormat, MessageFormat 2 is designed for
+Unlike the previous version of MessageFormat, MessageFormat 2 is designed for
 extension by implementers and even end users.
 This means that new functionality can be added to messages without modifying
 either existing messages or, in some cases, even the core library containing the 
