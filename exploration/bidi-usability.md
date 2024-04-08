@@ -245,6 +245,23 @@ close-isolate  = %x2069
 > or _pattern_'s textual content.
 > We need to allow users to include bidi controls in the output of MF2.
 
+Permit isolating bidi controls to be used **immediately inside** the following:
+- expressions
+- markup
+
+This would change the ABNF as follows (assuming the above changes are also incorporated):
+```abnf
+expression            = "{" open-isolate (literal-expression / variable-expression / annotation-expression) close-isolate "}"
+                      / "{" (literal-expression / variable-expression / annotation-expression) "}"
+literal-expression    = [s] literal [s annotation] *(s attribute) [s]
+variable-expression   = [s] variable [s annotation] *(s attribute) [s]
+annotation-expression = [s] annotation *(s attribute) [s]
+markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"                             ; open and standalone
+       / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}"                                   ; close
+       / "{" open-isolate [s] "#" identifier *(s option) *(s attribute) [s] ["/"] close-isolate "}"  ; open and standalone
+       / "{" open-isolate [s] "/" identifier *(s option) *(s attribute) [s] close-isolate "}"        ; close
+```
+
 Permit the use of LRM, RLM, or ALM stronly directional marks immediately following any of the items that
 **end** with the `name` production in the ABNF. 
 This includes _identifiers_ found in the names of
