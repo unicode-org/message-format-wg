@@ -19,11 +19,15 @@ These test files are intended to be useful for testing multiple different messag
   - `parts: object[]` — The expected result of formatting the message to parts.
   - `cleanSrc: string` — A normalixed form of `src`, for testing stringifiers.
   - `errors: { type: string }[]` — The runtime errors expected to be emitted when formatting the message.
+     If `errors` is either absent or empty, the message must be formatted without errors.
   - `only: boolean` — Normally not set. A flag to use during development to only run one or more specific tests.
 
 - `test-function.json` — An object with string keys and arrays of test cases as values,
   using the same definition as for `test-core.json`.
   The keys each correspond to a function that is used in the tests.
+  Since the behavior of built-in formatters is implementation-specific,
+  the `exp` field should generally be omitted,
+  except for error cases.
 
 TypeScript `.d.ts` files are included for `test-core.json` and `test-function.json` with the above definition.
 
