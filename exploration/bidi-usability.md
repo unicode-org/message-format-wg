@@ -195,6 +195,17 @@ it should be possible to include "local effect" strongly directional marks in an
 > {⁦$م1‎ :م2‎:ن3‎⁩} with isolates and LRMs
 >```
 
+Newlines inside of messages should not harm later syntax.
+
+```
+* * {{\u0645<br>\u0646}} 123 456 {{ No LRM==bad }}
+* * {{م
+ن}} 123 456 {{  No LRM==bad }}
+
+* * {{\u0645<br>\u0646}}\u200e 123 456 {{ LRM }}
+* * {{م
+ن}}‎ 123 456 {{ LRM }}
+```
 
 ## Constraints
 
@@ -220,6 +231,16 @@ This works at the cost of allowing spurious markers.
 ## Proposed Design
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
+
+To start with, we should establish that _message_ editing should always use a left-to-right
+base direction.
+Further, each _line_ of a message should be displayed for editing with a base paragraph direction of LTR.
+This is because the syntax of a _message_ depends on LTR word tokens,
+as well as token ordering (as in a placeholder or with variant keys).
+This is not the disadvantage to RTL languages that it might first appear:
+- Bidi inside of patterns works normally;
+  only placeholders/markup have special usage of bidi controls and this usage is isolated
+  so that placeholders and markup are treated as neutrals.
 
 Permit isolating bidi controls to be used on the **outside** of the following:
 - unquoted literals
