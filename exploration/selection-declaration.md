@@ -199,7 +199,7 @@ It is also an error for a selector to modify a previous selector
 - Doesn't allow multiple selection on the same operand, e.g.
   ```
   .input {$date :datetime skeleton=yMdjm}
-  .match {$date :datetime field=month} {{$date ::datetime field=dayOfWeek}
+  .match {$date :datetime field=month} {$date :datetime field=dayOfWeek}
   * * {{This message produces a Duplicate Declaration error
         even though selection is separate from formatting.}}
   ```
