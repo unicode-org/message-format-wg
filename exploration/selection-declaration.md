@@ -66,6 +66,44 @@ one {{You have {$togo} mile to go.}}
 
 _What use-cases do we see? Ideally, quote concrete examples._
 
+1. As a user, I want my formatting to match my selector.
+   This is one of the reasons why MF2 requires that selectors be annotated.
+   When I write a selector, the point is to choose the pattern to use as a template
+   for formatting the value being selected on.
+   Mismatches between these are undesirable.
+
+   ```
+   .match {$num :number minimumFractionDigits=1}
+   one {{This case can never happen in an English locale}}
+   *   {{I expect this formats num with one decimal place: {$num}}}
+   ```
+
+2. As a user, I want to use the least amount of MF special syntax possible.
+3. As a user, I don't want to repeat formatting, particularly in large selection matrices.
+   ```
+   .match {$num1 :integer} {$num2 :number minimumFractionDigits=1}
+   0    0    {{You have {$num1 :integer} ({$num2 :number minimumFractionDigits=1}) wildebeest.}}
+   0    one  {{You have {$num1 :integer} ({$num2 :number minimumFractionDigits=1}) wildebeest.}}
+   0    *    {{You have {$num1 :integer} ({$num2 :number minimumFractionDigits=1}) wildebeest.}}
+   one  0    {{ }}
+   one  one  {{ }}
+   one  *    {{ }}
+   // more cases for other locales that use two/few/many
+   *    0    {{ }}
+   *    one  {{ }}
+   *    *    {{ }}
+   ```
+
+4. As a user (especially as a translator), I don't want to have to modify
+   declarations and selectors to keep them in sync.
+   ```
+   .input {$num :number minimumFractionDigits=1}
+   .match {$num}
+   * {{Shouldn't have to modify the selector}}
+   ```
+   > Note that this is currently provided for by the spec.
+
+
 **Multiple Selection Conflicts**
 If a user writes multiple selectors for the same operand, which one formats the placeholder?
 
@@ -77,9 +115,15 @@ If a user writes multiple selectors for the same operand, which one formats the 
 * * {{Which selector formats {$num}?}}
 ```
 
-If both formats are needed in the message, how does one reference one or the other?
+If both formats are needed in the message (presumably they are or why the selector), 
+how does one reference one or the other?
 
 **Selection Different From Format**
+If a user wants to separate selection and formatting, 
+but selectors have a formatting side-effect,
+how do I write a selector that doesn't interfere with the formatting of the _same_ operand?
+(Note that users could do this using a `.local` declaration to split the operand)
+
 We don't support selection on dates in LDML45, but it's easy to conceptualize.
 How can a user write a _selector_ that doesn't mess up a _formatter_?
 
@@ -107,3 +151,91 @@ _Describe the proposed solution. Consider syntax, formatting, errors, registry, 
 _What other solutions are available?_
 _How do they compare against the requirements?_
 _What other properties they have?_
+
+#### Do What Comes Last
+
+In this alternative, selectors override declarations.
+
+```
+.input {$num :integer}
+.match {$num :number minimumFractionDigits=1}
+* {{Formats {$num} like 1.0}}
+```
+
+**Pros**
+- ... thinking, thinking...
+
+**Cons**
+- Violates immutability that we've established everywhere else
+
+#### Declaring Selectors with Immutability
+
+In this alternative, selectors are treated as declaration-selectors.
+That is, an annotation in a selector works like a `.input`.
+However, it is an error for the selector to try to modify a previous declaration
+(just as it is an error for a declaration to try to modify a previous declaration).
+This permits `.match` selectors to be a shorthand when no declarations exist.
+
+It is also an error for a selector to modify a previous selector
+
+```
+.match {$num :integer}
+* {{Formats {$num} as integer}}
+
+.input {$num :integer}
+.match {$num :number maximumFractionDigits=0}
+* {{This message produces a Duplicate Declaration error}}
+
+.input {$num :integer} {$num :number}
+* * {{This message produces a Duplicate Declaration error}}
+```
+
+**Pros**
+- Shorthand version works intuitively with minimal typing
+
+**Cons**
+- Selectors can't provide additional selection-specific options
+  if the value has already been annotated
+- Doesn't allow multiple selection on the same operand, e.g.
+  ```
+  .input {$date :datetime skeleton=yMdjm}
+  .match {$date :datetime field=month} {{$date ::datetime field=dayOfWeek}
+  * * {{This message produces a Duplicate Declaration error
+        even though selection is separate from formatting.}}
+  ```
+
+#### Provide a `#`-like Feature
+
+(Copy-pasta adapted from @eemeli's proposal in #736)
+
+Make the `.match` expression also act as implicit declarations accessed by index position:
+
+```
+.match {$count :number}
+one {{You have {$0} apple}}
+* {{You have {$0} apples}}
+```
+
+Assigning values to `$0`, `$1`, ... would not conflict with any input values, 
+as numbers are invalid `name-start` characters.
+That's by design so that we encourage at least _some_ name for each variable; 
+here that's effectively provided by the `.match` expressions.
+
+ABNF would be modified:
+```diff
+-variable = "$" name
++variable = "$" (name / %x30-39)
+```
+
+...with accompanying spec language making numeric variables resolve to the `.match` selectors in placeholders, 
+and a data model error otherwise.
+
+**Pros**
+- More ergonomic for most `.input` cases
+- Enables representation of many messages without any declarations
+
+**Cons**
+- Confusing that the operand name can't be used in the pattern?
+  Removes some self-documentation from the pattern.
+- Requires the pattern to change if the selectors are modified.
+- Limits number of referenceable selectors to 10 (in the current form)
