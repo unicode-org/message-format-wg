@@ -1,65 +1,45 @@
 // Work in progress: tooling to linkify the HTML produced from
-// the MessageFormat v2 markdown.
+// the MessageFormat 2 markdown.
 // this has been tested on the tr35-messageformat.html file
 // but not implemented in LDML45
-
-const terms = new Array();
-var missing = new Set();
-
+const terms = new Set();
+const missing = new Set();
 function findTerms() {
-  document.querySelectorAll("dfn").forEach(generateAnchor);
+  terms.clear();
+  document.querySelectorAll("dfn").forEach((item) => {
+    // console.log(index + ": " + item.textContent);
+    const term = generateId(item.textContent);
+    terms.add(term);
+    item.setAttribute("id", term);
+  });
   // console.log(terms.length);
 }
 
-function generateAnchor(item, index) {
-  // console.log(index + ": " + item.textContent);
-  let t = generateId(item.textContent);
-  terms.push(t);
-  item.setAttribute("id", t);
-}
-
 function linkify() {
+  missing.clear();
   const links = document.querySelectorAll("em");
-  links.forEach(checkLink);
-  // debugging
+  links.forEach((item) => {
+    const target = generateId(item.textContent);
+    if (terms.has(target)) {
+      const el = item.lastElementChild ?? item;
+      el.innerHTML = `<a href="#${target}">${item.textContent}</a>`;
+    } else {
+      missing.add(target);
+    }
+  });
   // console.log(terms.length);
   // console.log(missing.length);
   // console.log(missing);
 }
 
-function checkLink(item) {
-  var t = generateId(item.textContent);
-  if (terms.includes(t)) {
-    link(item, t);
-  } else {
-    missing.add(t);
-  }
-}
-
-function link(item, target) {
-  var a = document.createElement("a");
-  a.appendChild(document.createTextNode(item.textContent));
-  a.href = "#" + target;
-
-  var el = item.lastElementChild;
-  if (el) {
-    el.innerHTML = "";
-    el.appendChild(a);
-  } else {
-    item.innerHTML = "";
-    item.appendChild(a);
-  }
-}
-
 function generateId(term) {
-  var retval = term.toLowerCase();
-
-  if (retval.endsWith("rategies")) {
+  const id = term.toLowerCase().replaceAll(" ", "-");
+  if (id.endsWith("rategies")) {
     // found in the bidi isolation strategies
-    retval = retval.substring(0, term.length - 3) + "y";
-  } else if (retval.endsWith("s") && retval !== "status") {
+    return id.slice(0, -3) + "y";
+  } else if (id.endsWith("s") && id !== "status") {
     // regular English plurals
-    retval = retval.substring(0, term.length - 1);
+    return id.slice(0, -1);
   }
-  return retval.replaceAll(/ /g, "-");
+  return id;
 }
