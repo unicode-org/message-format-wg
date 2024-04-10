@@ -197,7 +197,7 @@ _Duplicate Declaration_ error during processing:
 A _local-declaration_ MAY overwrite an external input value as long as the
 external input value does not appear in a previous _declaration_.
 
-> [!Note]
+> [!NOTE]
 > These restrictions only apply to _declarations_.
 > A _placeholder_ or _selector_ can apply a different annotation to a _variable_
 > than one applied to the same _variable_ named in a _declaration_.
@@ -226,7 +226,7 @@ reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
 reserved-keyword   = "." name
 ```
 
-> [!Note]
+> [!NOTE]
 > The `reserved-keyword` ABNF rule is a simplification,
 > as it MUST NOT be considered to match any of the existing keywords
 > `.input`, `.local`, or `.match`.
@@ -619,7 +619,7 @@ private-use-annotation = private-start [[s] reserved-body]
 private-start          = "^" / "&"
 ```
 
-> [!Note]
+> [!NOTE]
 > Users are cautioned that _private-use annotations_ cannot be reliably exchanged
 > and can result in errors during formatting.
 > It is generally a better idea to use the function registry
