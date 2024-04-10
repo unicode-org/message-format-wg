@@ -25,7 +25,7 @@
 ## Introduction
 
 One of the challenges in adapting software to work for
-users with different languages and cultures is the need for **_dynamic messages_**.
+users with different languages and cultures is the need for **_<dfn>dynamic messages</dfn>_**.
 Whenever a user interface needs to present data as part of a larger string,
 that data needs to be formatted (and the message may need to be altered)
 to make it culturally accepted and grammatically correct.
