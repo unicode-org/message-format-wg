@@ -833,10 +833,10 @@ isolating such parts to ensure that the formatted value displays correctly in a 
 > 
 > ![image](https://github.com/unicode-org/message-format-wg/assets/69082/6cc7f16f-8d9b-400b-a333-ae2ddb316edb)
 
-A **_bidirectional isolation strategy_** is functionality in the formatter's
+A **_<dfn>bidirectional isolation strategy<dfn>_** is functionality in the formatter's
 processing of a _message_ that produces bidirectional output text that is ready for display.
 
-The **_Default Bidi Strategy_** is a _bidirectional isolation strategy_ that uses
+The **_<dfn>Default Bidi Strategy<dfn>_** is a _bidirectional isolation strategy_ that uses
 isolating Unicode control characters around _placeholder_'s formatted values.
 It is primarily intended for use in plain-text strings, where markup or other mechanisms
 are not available.
