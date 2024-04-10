@@ -12,7 +12,7 @@ an appropriate error MUST be emitted and a _fallback value_ MAY be used as the f
 
 Formatting of a _message_ is defined by the following operations:
 
-- **_Expression and Markup Resolution_** determines the value of an _expression_ or _markup_,
+- **_<dfn>Expression and Markup Resolution</dfn>_** determines the value of an _expression_ or _markup_,
   with reference to the current _formatting context_.
   This can include multiple steps,
   such as looking up the value of a variable and calling formatting functions.
@@ -39,7 +39,7 @@ Formatting of a _message_ is defined by the following operations:
 > have already been evaluated in the order in which the relevant _declarations_
 > and _selectors_ appear in the _message_.
 
-- **_Pattern Selection_** determines which of a message's _patterns_ is formatted.
+- **_<dfn>Pattern Selection</dfn>_** determines which of a message's _patterns_ is formatted.
   For a message with no _selectors_, this is simple as there is only one _pattern_.
   With _selectors_, this will depend on their resolution.
   
@@ -47,7 +47,7 @@ Formatting of a _message_ is defined by the following operations:
   if the _message_ contains any _reserved statements_,
   emit an _Unsupported Statement_ error.
 
-- **_Formatting_** takes the resolved values of the selected _pattern_,
+- **_<dfn>Formatting</dfn>_** takes the resolved values of the selected _pattern_,
   and produces the formatted result for the _message_.
   Depending on the implementation, this result could be a single concatenated string,
   an array of objects, an attributed string, or some other locally appropriate data type.
@@ -60,7 +60,7 @@ and the observable behavior of the formatter matches that described here.
 
 ## Formatting Context
 
-A message's **_formatting context_** represents the data and procedures that are required
+A message's **_<dfn>formatting context</dfn>_** represents the data and procedures that are required
 for the message's _expression resolution_, _pattern selection_ and _formatting_.
 
 At a minimum, it includes:
@@ -348,7 +348,7 @@ The resolution of _markup_ MUST always succeed.
 
 ### Fallback Resolution
 
-A **_fallback value_** is the resolved value for an _expression_ that fails to resolve.
+A **_<dfn>fallback value</dfn>_** is the resolved value for an _expression_ that fails to resolve.
 
 An _expression_ fails to resolve when:
 
