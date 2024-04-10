@@ -719,7 +719,7 @@ on the pairing, ordering, or contents of _markup_ during _formatting_.
 
 ## Attributes
 
-**_Attributes_ are reserved for standardization by future versions of this specification.**
+**_Attributes_ are reserved for standardization by future versions of this specification._**
 Examples in this section are meant to be illustrative and
 might not match future requirements or usage.
 
