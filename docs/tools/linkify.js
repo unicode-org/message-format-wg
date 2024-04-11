@@ -2,21 +2,9 @@
 // the MessageFormat 2 markdown.
 // this has been tested on the tr35-messageformat.html file
 // but not implemented in LDML45
-const terms = new Set();
-const missing = new Set();
-function findTerms() {
-  terms.clear();
-  document.querySelectorAll("dfn").forEach((item) => {
-    // console.log(index + ": " + item.textContent);
-    const term = generateId(item.textContent);
-    terms.add(term);
-    item.setAttribute("id", term);
-  });
-  // console.log(terms.length);
-}
-
 function linkify() {
-  missing.clear();
+  const terms = findTerms();
+  const missing = new Set();
   const links = document.querySelectorAll("em");
   links.forEach((item) => {
     const target = generateId(item.textContent);
@@ -27,9 +15,26 @@ function linkify() {
       missing.add(target);
     }
   });
-  // console.log(terms.length);
-  // console.log(missing.length);
-  // console.log(missing);
+  // report missing terms
+  // (leave out sort if you want it in file order)
+  Array.from(missing).sort().forEach((item)=> {
+      console.log(item);
+  });
+}
+
+function findTerms() {
+  const terms = new Set();
+  document.querySelectorAll("dfn").forEach((item) => {
+    // console.log(index + ": " + item.textContent);
+    const term = generateId(item.textContent);
+    // guard against duplicates
+    if (terms.has(term)) {
+        console.log("Duplicate term: " + term);
+    }
+    terms.add(term);
+    item.setAttribute("id", term);
+  });
+  return terms;
 }
 
 function generateId(term) {
