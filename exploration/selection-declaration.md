@@ -104,7 +104,7 @@ _What use-cases do we see? Ideally, quote concrete examples._
    > Note that this is currently provided for by the spec.
 
 
-**Multiple Selection Conflicts**
+### Multiple Selection Conflicts
 If a user writes multiple selectors for the same operand, which one formats the placeholder?
 
 ```
@@ -118,7 +118,7 @@ If a user writes multiple selectors for the same operand, which one formats the 
 If both formats are needed in the message (presumably they are or why the selector), 
 how does one reference one or the other?
 
-**Selection Different From Format**
+### Selection Is Different From Format
 If a user wants to separate selection and formatting, 
 but selectors have a formatting side-effect,
 how do I write a selector that doesn't interfere with the formatting of the _same_ operand?
@@ -130,7 +130,7 @@ How can a user write a _selector_ that doesn't mess up a _formatter_?
 ```
 .input {$d :datetime skeleton=yMMMdjm}
 .match {$d :datetime month=numeric}
-1 {{Today is {$d} in cold cold January}}
+1 {{Today is {$d} in cold cold {$d :datetime month=long}}}
 * {{Today is {$d}}}
 ```
 
@@ -152,9 +152,14 @@ _What other solutions are available?_
 _How do they compare against the requirements?_
 _What other properties they have?_
 
-#### Do What Comes Last
+#### Allow "Declarative" Selectors with _Mutability_
 
-In this alternative, selectors override declarations.
+In this alternative, selectors are treated as declaration-selectors.
+That is, an annotation in a selector works like a `.input`.
+This permits `.match` selectors to be a shorthand when no declarations exist.
+
+It is not an error to overwrite a previous annotation.
+Instead the selector's annotation replaces what came before.
 
 ```
 .input {$num :integer}
@@ -163,12 +168,12 @@ In this alternative, selectors override declarations.
 ```
 
 **Pros**
-- ... thinking, thinking...
+- Shorthand version works intuitively with minimal typing.
 
 **Cons**
 - Violates immutability that we've established everywhere else
 
-#### Declaring Selectors with Immutability
+#### Allow "Declarative" Selectors with _Immutability_
 
 In this alternative, selectors are treated as declaration-selectors.
 That is, an annotation in a selector works like a `.input`.
@@ -176,7 +181,8 @@ However, it is an error for the selector to try to modify a previous declaration
 (just as it is an error for a declaration to try to modify a previous declaration).
 This permits `.match` selectors to be a shorthand when no declarations exist.
 
-It is also an error for a selector to modify a previous selector
+It is also an error for a selector to modify a previous selector.
+This implies that multiple selecton on the same operand is pointless.
 
 ```
 .match {$num :integer}
@@ -192,6 +198,8 @@ It is also an error for a selector to modify a previous selector
 
 **Pros**
 - Shorthand version works intuitively with minimal typing
+- Preserves immutability
+- Produces an error when users inappropriately annotate some items
 
 **Cons**
 - Selectors can't provide additional selection-specific options
