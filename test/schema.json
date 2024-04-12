@@ -1,0 +1,475 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MessageFormat 2 data-driven tests source",
+  "description": "This documents the format of MessageFormat 2 source test data.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "scenario",
+    "tests"
+  ],
+  "properties": {
+    "scenario": {
+      "type": "string",
+      "description": "Identifier for the tests in the file"
+    },
+    "description": {
+      "type": "string",
+      "description": "Information about the test scenario."
+    },
+    "defaultTestParams": {
+      "$ref": "#/$defs/defaultTestParams"
+    },
+    "tests": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/test"
+      },
+      "minItems": 1
+    }
+  },
+  "$comment": "This allOf specifies required test properties that allow a default. A value will be required in 'defaultTestParams' if one is not provided for every individual test.",
+  "allOf": [
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "defaultTestParams": {
+              "required": [
+                "testType"
+              ]
+            }
+          }
+        },
+        {
+          "properties": {
+            "tests": {
+              "type": "array",
+              "items": {
+                "required": [
+                  "testType"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "defaultTestParams": {
+              "required": [
+                "locale"
+              ]
+            }
+          }
+        },
+        {
+          "properties": {
+            "tests": {
+              "type": "array",
+              "items": {
+                "required": [
+                  "locale"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "defaultTestParams": {
+              "required": [
+                "src"
+              ]
+            }
+          }
+        },
+        {
+          "properties": {
+            "tests": {
+              "type": "array",
+              "items": {
+                "required": [
+                  "src"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "$comment": "Only one assertion is required. It doesn't matter which type.",
+      "anyOf": [
+        {
+          "properties": {
+            "defaultTestParams": {
+              "$ref": "#/$defs/anyExp"
+            }
+          }
+        },
+        {
+          "properties": {
+            "tests": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/anyExp"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "$defs": {
+    "defaultTestParams": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "testType": {
+          "$ref": "#/$defs/testType"
+        },
+        "locale": {
+          "$ref": "#/$defs/locale"
+        },
+        "src": {
+          "$ref": "#/$defs/src"
+        },
+        "params": {
+          "$ref": "#/$defs/params"
+        },
+        "exp": {
+          "$ref": "#/$defs/exp"
+        },
+        "expCleanSrc": {
+          "$ref": "#/$defs/expCleanSrc"
+        },
+        "expParts": {
+          "$ref": "#/$defs/expParts"
+        },
+        "expErrors": {
+          "$ref": "#/$defs/expErrors"
+        }
+      }
+    },
+    "test": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "testType": {
+          "$ref": "#/$defs/testType"
+        },
+        "locale": {
+          "$ref": "#/$defs/locale"
+        },
+        "src": {
+          "$ref": "#/$defs/src"
+        },
+        "params": {
+          "$ref": "#/$defs/params"
+        },
+        "exp": {
+          "$ref": "#/$defs/exp"
+        },
+        "expCleanSrc": {
+          "$ref": "#/$defs/expCleanSrc"
+        },
+        "expParts": {
+          "$ref": "#/$defs/expParts"
+        },
+        "expErrors": {
+          "$ref": "#/$defs/expErrors"
+        },
+        "only": {
+          "type": "boolean",
+          "description": "Normally not set. A flag to use during development to only run one or more specific tests."
+        }
+      }
+    },
+    "description": {
+      "type": "string",
+      "description": "Information about the test."
+    },
+    "testType": {
+      "description": "The category of test.",
+      "enum": [
+        "syntax",
+        "function"
+      ]
+    },
+    "locale": {
+      "description": "The locale to use for formatting.",
+      "type": "string"
+    },
+    "src": {
+      "description": "The MF2 syntax source.",
+      "type": "string"
+    },
+    "params": {
+      "description": "Parameters to pass in to the formatter for resolving external variables.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/var"
+      }
+    },
+    "var": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "boolean",
+            "datetime",
+            "null",
+            "number",
+            "string"
+          ]
+        },
+        "value": {}
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "type": {
+              "const": "boolean"
+            },
+            "value": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "datetime"
+            },
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "null"
+            },
+            "value": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "number"
+            },
+            "value": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "exp": {
+      "description": "The expected result of formatting the message to a string.",
+      "type": "string"
+    },
+    "expCleanSrc": {
+      "description": "The expected normalized form of `src`, for testing stringifiers.",
+      "type": "string"
+    },
+    "expParts": {
+      "description": "The expected result of formatting the message to parts.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "enum": [
+              "markup",
+              "literal",
+              "fallback"
+            ]
+          },
+          "kind": {},
+          "name": {},
+          "value": {},
+          "source": {}
+        },
+        "oneOf": [
+          {
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "name"
+            ],
+            "properties": {
+              "type": {
+                "const": "markup"
+              },
+              "kind": {
+                "enum": [
+                  "standalone",
+                  "open",
+                  "close"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "options": {
+                "$ref": "#/$defs/expPartOptions"
+              }
+            }
+          },
+          {
+            "additionalProperties": false,
+            "required": [
+              "value",
+              "valueType"
+            ],
+            "properties": {
+              "type": {
+                "const": "literal"
+              },
+              "value": {
+                "type": "number"
+              },
+              "valueType": {
+                "enum": [
+                  "integer"
+                ]
+              },
+              "options": {
+                "$ref": "#/$defs/expPartOptions"
+              }
+            }
+          },
+          {
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "type": {
+                "const": "literal"
+              },
+              "value": {
+                "type": "string"
+              },
+              "options": {
+                "$ref": "#/$defs/expPartOptions"
+              }
+            }
+          },
+          {
+            "additionalProperties": false,
+            "required": [
+              "source"
+            ],
+            "properties": {
+              "type": {
+                "const": "fallback"
+              },
+              "source": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "expPartOptions": {
+      "description": "Expected option value within a part.",
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "number"
+        ]
+      }
+    },
+    "expErrors": {
+      "description": "The runtime errors expected to be emitted when formatting the message. If errors is either absent or empty, the message must be formatted without errors.",
+      "type": [
+        "array",
+        "boolean"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "enum": [
+              "bad-input",
+              "bad-option",
+              "missing-func",
+              "not-selectable",
+              "range-error",
+              "unresolved-var",
+              "unsupported-annotation",
+              "unsupported-statement"
+            ]
+          }
+        }
+      }
+    },
+    "anyExp": {
+      "anyOf": [
+        {
+          "required": [
+            "exp"
+          ]
+        },
+        {
+          "required": [
+            "expCleanSrc"
+          ]
+        },
+        {
+          "required": [
+            "expParts"
+          ]
+        },
+        {
+          "required": [
+            "expErrors"
+          ]
+        }
+      ]
+    }
+  }
+}

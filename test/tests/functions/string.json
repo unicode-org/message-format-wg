@@ -1,0 +1,51 @@
+{
+  "scenario": "functions",
+  "defaultTestParams": {
+    "testType": "function",
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+      "src": ".match {$foo :string} |1| {{one}} * {{other}}",
+      "params": [
+        {
+          "type": "string",
+          "name": "foo",
+          "value": "1"
+        }
+      ],
+      "exp": "one"
+    },
+    {
+      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "params": [
+        {
+          "type": "number",
+          "name": "foo",
+          "value": 1
+        }
+      ],
+      "exp": "one"
+    },
+    {
+      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "params": [
+        {
+          "type": "null",
+          "name": "foo",
+          "value": null
+        }
+      ],
+      "exp": "other"
+    },
+    {
+      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "exp": "other",
+      "expErrors": [
+        {
+          "type": "unresolved-var"
+        }
+      ]
+    }
+  ]
+}

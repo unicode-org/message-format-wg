@@ -1,0 +1,67 @@
+{
+  "scenario": "Datetime functions",
+  "description": "The behaviour of built-in formatters is implementation-specific so the `exp` field is often omitted and assertions are made on error cases.",
+  "defaultTestParams": {
+    "testType": "function",
+    "locale": "en-US",
+    "expErrors": false
+  },
+  "tests": [
+    {
+      "src": "{:datetime}",
+      "exp": "{:datetime}",
+      "expErrors": [
+        {
+          "type": "bad-input"
+        }
+      ]
+    },
+    {
+      "src": "{$x :datetime}",
+      "exp": "{$x}",
+      "params": [
+        {
+          "type": "boolean",
+          "name": "x",
+          "value": true
+        }
+      ],
+      "expErrors": [
+        {
+          "type": "bad-input"
+        }
+      ]
+    },
+    {
+      "src": "{horse :datetime}",
+      "exp": "{|horse|}",
+      "expErrors": [
+        {
+          "type": "range-error"
+        }
+      ]
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :datetime}"
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :datetime year=numeric month=|2-digit|}"
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :datetime dateStyle=long}"
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :datetime timeStyle=medium}"
+    },
+    {
+      "src": "{$dt :datetime}",
+      "params": [
+        {
+          "type": "datetime",
+          "name": "dt",
+          "value": "2006-01-02T15:04:06"
+        }
+      ]
+    }
+  ]
+}

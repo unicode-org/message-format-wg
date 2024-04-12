@@ -1,0 +1,32 @@
+{
+  "scenario": "Integer functions",
+  "defaultTestParams": {
+    "testType": "function",
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+      "src": "hello {4.2 :integer}",
+      "exp": "hello 4"
+    },
+    {
+      "src": "hello {-4.20 :integer}",
+      "exp": "hello -4"
+    },
+    {
+      "src": "hello {0.42e+1 :integer}",
+      "exp": "hello 4"
+    },
+    {
+      "src": ".match {$foo :integer} one {{one}} * {{other}}",
+      "params": [
+        {
+          "type": "number",
+          "name": "foo",
+          "value": 1.2
+        }
+      ],
+      "exp": "one"
+    }
+  ]
+}

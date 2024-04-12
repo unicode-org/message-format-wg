@@ -1,0 +1,91 @@
+{
+    "scenario": "Data model errors",
+    "description": "Each description is the name of an error and its src is a string that should produce `error` when processed. Error names are defined in the spec.",
+    "defaultTestParams": {
+        "testType": "syntax",
+        "locale": "en-US",
+        "expErrors": true
+    },
+    "tests": [
+        {
+            "description": "Variant Key Mismatch",
+            "src": ".match {$foo :x} * * {{foo}}"
+        },
+        {
+            "description": "Variant Key Mismatch",
+            "src": ".match {$foo :x} {$bar :x} * {{foo}}"
+        },
+        {
+            "description": "Missing Fallback Variant",
+            "src": ".match {:foo} 1 {{_}}"
+        },
+        {
+            "description": "Missing Fallback Variant",
+            "src": ".match {:foo} other {{_}}"
+        },
+        {
+            "description": "Missing Fallback Variant",
+            "src": ".match {:foo} {:bar} * 1 {{_}} 1 * {{_}}"
+        },
+        {
+            "description": "Missing Selector Annotation",
+            "src": ".match {$foo} one {{one}} * {{other}}"
+        },
+        {
+            "description": "Missing Selector Annotation",
+            "src": ".input {$foo} .match {$foo} one {{one}} * {{other}}"
+        },
+        {
+            "description": "Missing Selector Annotation",
+            "src": ".local $foo = {$bar} .match {$foo} one {{one}} * {{other}}"
+        },
+        {
+            "description": "Duplicate Declaration",
+            "src": ".input {$foo} .input {$foo} {{_}}"
+        },
+        {
+            "description": "Duplicate Declaration",
+            "src": ".input {$foo} .local $foo = {42} {{_}}"
+        },
+        {
+            "description": "Duplicate Declaration",
+            "src": ".local $foo = {42} .input {$foo} {{_}}"
+        },
+        {
+            "description": "Duplicate Declaration",
+            "src": ".local $foo = {:unknown} .local $foo = {42} {{_}}"
+        },
+        {
+            "description": "Duplicate Declaration",
+            "src": ".local $foo = {$bar} .local $bar = {42} {{_}}"
+        },
+        {
+            "description": "Duplicate Declaration",
+            "src": ".local $foo = {$foo} {{_}}"
+        },
+        {
+            "description": "Duplicate Declaration",
+            "src": ".local $foo = {$bar} .local $bar = {$baz} {{_}}"
+        },
+        {
+            "description": "Duplicate Declaration",
+            "src": ".local $foo = {$bar :func} .local $bar = {$baz} {{_}}"
+        },
+        {
+            "description": "Duplicate Declaration",
+            "src": ".local $foo = {42 :func opt=$foo} {{_}}"
+        },
+        {
+            "description": "Duplicate Declaration",
+            "src": ".local $foo = {42 :func opt=$bar} .local $bar = {42} {{_}}"
+        },
+        {
+            "description": "Duplicate Option Name",
+            "src": "bad {:placeholder option=x option=x}"
+        },
+        {
+            "description": "Duplicate Option Name",
+            "src": "bad {:placeholder ns:option=x ns:option=y}"
+        }
+    ]
+}
