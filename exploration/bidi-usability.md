@@ -10,7 +10,7 @@ Status: **Proposed**
 		<dt>First proposed</dt>
 		<dd>2024-03-27</dd>
 		<dt>Pull Requests</dt>
-		<dd>#000</dd>
+		<dd>#754</dd>
 	</dl>
 </details>
 
@@ -232,20 +232,28 @@ This works at the cost of allowing spurious markers.
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
 
-To start with, we should establish that _message_ editing should always use a left-to-right
-base direction.
-Further, each _line_ of a message should be displayed for editing with a base paragraph direction of LTR.
-This is because the syntax of a _message_ depends on LTR word tokens,
+Editing and display of a _message_ SHOULD always use a left-to-right base direction
+both for the complete text of the _message_ as well as for each line (paragraph)
+contained therein.
+
+We use LTR display because the syntax of a _message_ depends on LTR word tokens,
 as well as token ordering (as in a placeholder or with variant keys).
-This is not the disadvantage to RTL languages that it might first appear:
-- Bidi inside of patterns works normally;
-  only placeholders/markup have special usage of bidi controls and this usage is isolated
-  so that placeholders and markup are treated as neutrals.
+
+This is not the disadvantage to right-to-left languages that it might first appear:
+- Bidi inside of _patterns_ works normally
+- _Placeholders_ and _markup_ are isolated (treated as neutrals) so that they appear
+  in the correct location in an RTL _pattern_
+- _Expressions_ use isolates and directional marks to display internal tokens in the
+  correct order and without spillover effects
 
 Permit isolating bidi controls to be used on the **outside** of the following:
 - unquoted literals
 - quoted literals
 - quoted patterns
+
+We permit any of the isolate starting controls (LRI, RLI, FSI) because we want to allow
+the user to set the base direction of a _literal_ or _pattern_ according to its respective 
+actual contents.
 
 This would change the ABNF as follows:
 (Notice that this change includes a production `bidi` described further down
@@ -266,21 +274,27 @@ close-isolate  = %x2069
 > or _pattern_'s textual content.
 > We need to allow users to include bidi controls in the output of MF2.
 
-Permit isolating bidi controls to be used **immediately inside** the following:
+Permit **left-to-right** isolating bidi controls (`U+2066`...`U+2069`) to be used **immediately inside** the following:
 - expressions
 - markup
 
+We only permit the LTR isolates because the contents of an _expression_
+or _markup_ must be laid out left-to-right.
+_Literal_ values can be right-to-left isolated within that or use strongly
+directional marks to ensure correct display.
+
 This would change the ABNF as follows (assuming the above changes are also incorporated):
 ```abnf
-expression            = "{" open-isolate (literal-expression / variable-expression / annotation-expression) close-isolate "}"
+expression            = "{" LRI (literal-expression / variable-expression / annotation-expression) close-isolate "}"
                       / "{" (literal-expression / variable-expression / annotation-expression) "}"
 literal-expression    = [s] literal [s annotation] *(s attribute) [s]
 variable-expression   = [s] variable [s annotation] *(s attribute) [s]
 annotation-expression = [s] annotation *(s attribute) [s]
-markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"                             ; open and standalone
-       / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}"                                   ; close
-       / "{" open-isolate [s] "#" identifier *(s option) *(s attribute) [s] ["/"] close-isolate "}"  ; open and standalone
-       / "{" open-isolate [s] "/" identifier *(s option) *(s attribute) [s] close-isolate "}"        ; close
+markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"                    ; open and standalone
+       / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}"                          ; close
+       / "{" LRI [s] "#" identifier *(s option) *(s attribute) [s] ["/"] close-isolate "}"  ; open and standalone
+       / "{" LRI [s] "/" identifier *(s option) *(s attribute) [s] close-isolate "}"        ; close
+LRI = %x2066
 ```
 
 Permit the use of LRM, RLM, or ALM stronly directional marks immediately following any of the items that
@@ -348,3 +362,47 @@ Cons:
   brittle
 - This is not friendly to non-English/non-Latin users and represents a usability
   restriction in environments in which names can be non-ASCII values
+
+### Allow more permissive use of bidi controls
+
+We could permit RLI/FSI to be used inside _expressions_ and _markup_.
+This would be an advantage for simple _expressions_ containing only or primarily
+RTL content.
+For example:
+```
+{⁧لت-123-م...⁩} // RLI isolated
+{لت-123-م...}
+```
+
+We could also permit users/editors to use RTL base direction for editing.
+This is tricky, as the syntax promotes the use of left-to-right runs
+that will "stick together" unless isolated.
+This is most visible in _selectors_ and _variant_ _keys_.
+
+Consider this message:
+```
+.match {$\u06451\u0645}{$\u06462\u0646}
+one two {{normal LTR}}
+\u2067one\u2069 \u2067two\u2069 {{RLI around each key}}
+\u2066one\u2069 \u2066two\u2069 {{LRI around each key}}
+\u0645 \u0646 {{RTL}}
+* \u0646 {{star is first}}
+\u0645 * {{star is second}}
+```
+
+In an LTR context the _message_ displays like this (red lines around display errors):
+![image](https://github.com/unicode-org/message-format-wg/assets/69082/f19cbf99-94f2-4f36-805b-8da0750bc5f2)
+
+In an RTL context, there is an equivalent case:
+![image](https://github.com/unicode-org/message-format-wg/assets/69082/1b2e1c67-aebc-455b-98e9-99f9e620c543)
+
+Coercing proper display in both LTR and RTL contexts requires
+complex sets of controls.
+
+**Pros**
+- Can provide both LTR and RTL native editing experiences
+
+**Cons**
+- Requires complex sets of bidi controls
+- RTL editing/display is mostly a special case;
+  we already afford the ability to edit RTL in _patterns_ and _literals_
