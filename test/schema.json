@@ -163,7 +163,8 @@
       "additionalProperties": false,
       "properties": {
         "description": {
-          "$ref": "#/$defs/description"
+          "type": "string",
+          "description": "Information about the test."
         },
         "testType": {
           "$ref": "#/$defs/testType"
@@ -194,10 +195,6 @@
           "description": "Normally not set. A flag to use during development to only run one or more specific tests."
         }
       }
-    },
-    "description": {
-      "type": "string",
-      "description": "Information about the test."
     },
     "testType": {
       "description": "The category of test.",
@@ -419,7 +416,7 @@
       }
     },
     "expErrors": {
-      "description": "The runtime errors expected to be emitted when formatting the message. If errors is either absent or empty, the message must be formatted without errors.",
+      "description": "The runtime errors expected to be emitted when formatting the message. If expErrors is either absent or empty, the message must be formatted without errors.",
       "type": [
         "array",
         "boolean"
