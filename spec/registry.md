@@ -367,6 +367,11 @@ The defaults for these options are implementation-dependent.
 In general, the default values for such options depend on the locale, 
 the value of other options, or both.
 
+> [!NOTE]
+> The names of _options_ and their _values_ were derived from the
+> [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
+> in JavaScript's `Intl.NumberFormat`.
+
 The following options and their values are required to be available on the function `:number`:
 - `select`
    -  `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
@@ -491,6 +496,11 @@ Some options do not have default values defined in this specification.
 The defaults for these options are implementation-dependent.
 In general, the default values for such options depend on the locale, 
 the value of other options, or both.
+
+> [!NOTE]
+> The names of _options_ and their _values_ were derived from the
+> [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
+> in JavaScript's `Intl.NumberFormat`.
 
 The following options and their values are required in the default registry to be available on the 
 function `:integer`:
@@ -776,6 +786,11 @@ output.
 
 If both are specified, an _Invalid Expression_ error MUST be emitted
 and a _fallback value_ used as the resolved value of the _expression_.
+
+> [!NOTE]
+> The names of _options_ and their _values_ were derived from the
+> [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/resolvedOptions#description)
+> in JavaScript's `Intl.DateTimeFormat`.
 
 ##### Style Options
 
