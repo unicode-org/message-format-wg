@@ -35,7 +35,7 @@ making MFv2's message syntax available to developers in many different
 runtimes in a wholly consistent manner.
 Because we want broad adoption in many different programming environments
 and because the capabilities 
-and functionality available in these environments varies widely,
+and functionality available in these environments vary widely,
 the default function registry must be conservative in what it requires.
 
 At the same time, we want to promote message interoperability.
