@@ -61,6 +61,43 @@ for the various types of function registry.
 
 _What use-cases do we see? Ideally, quote concrete examples._
 
+As an implementer, I want to know what functions, options, and option values are
+required to claim support for MF2.
+I want to know what the options and their values mean.
+I also need to be able to implement all of the required functions in my runtime environment
+without difficulty.
+I don't want to be required to exactly follow CLDR or a specific release of CLDR,
+in case my local I18N support differs from what CLDR provides.
+
+As an implementer, user, translators, tools author I expect functions, options
+and option values to be stable.
+The meaning and use of these, once established, should never change.
+Messages that work today should work tomorrow.
+This doesn't mean that the output is stabilized or that selectors won't
+produce different results for a given input/locale.
+
+As an implementer, I want to track best practices for newer I18N APIs
+(such as implementing personal name formatting/selection)
+without being required to implement other APIs that I'm not ready for.
+
+As an implementer, I want to be assured that functions or options added in the future
+will not conflict with functions or options that I have created for my local users.
+
+As a developer, I want to be able to implement local functions or local options
+and be assured that these do not conflict with future additions by the core standard.
+
+As a tools developer, I want to track both required and optional function development
+so that I can produce consistent support for messages that use these features.
+
+As a translator, I want all messages to be consistent in their meaning.
+I want functions and options to work consistently.
+I don't want to relearn selection or formatting rules for different implementations.
+
+As a user, I want to be able to use required functions and their options.
+I want to be able to quickly adopt new additions as my implementation supports them
+or be able to choose plug-in or shim implementations.
+I never want to have to find/rewrite a message because a function or its option has changed.
+
 ## Requirements
 
 _What properties does the solution have to manifest to enable the use-cases above?_
@@ -85,8 +122,9 @@ There would be three levels of expected maturity:
   implemented in nearly any programming environment.
   > Examples: `:string`, `:number`, `:date`
 - **Recommended for General Implementation**
-  ("RGI", deliberately similar to RGI in emoji, tho' we may want to change the name)
-  includes functions that are not
+  ("RGI", deliberately similar to RGI in emoji, although we probably want to change the name
+  as the words inside the acronym are themselves different)
+  RGI includes functions that are not
   normatively required but whose names, operands, and options are recommended.
   Implementations are _strongly_ encouraged to use these function signatures
   when implementing the described functionality.
@@ -94,6 +132,14 @@ There would be three levels of expected maturity:
   and reduce the learning curve for developers, tools, and translators.
   > Examples: We don't currently have any, but potential work here
   > might includes personal name formatting, gender-based selectors, etc.
+
+  RGI also includes _options_ that are not normatively required,
+  but which are reserved for future standardization.
+  These should be used as test cases to populate RGI as soon as possible in the
+  Tech Preview period.
+  There are a number of these in the LDML45 Tech Preview:
+  - `:number`/`:integer` have: `currency`, `unit`, `currencyDisplay`, `currencySign`, and `unitDisplay`
+  - `:datetime` (et al) have: `calendar`, `numberingSystem`, and `timeZone`
 - **Unicode Extensions** includes optional functionality that implementations
   may adopt at their discretion.
   These are provided as a reference.
@@ -106,6 +152,11 @@ There would be three levels of expected maturity:
   > popular with some developers,
   > but it is not universally available and could represent a barrier to adoption
   > if normatively required.
+
+Having RGI means providing a process for developing and evaluating proposals.
+Since RGI functions and options are normative and stabilized,
+there should be a mechanism for making an RGI proposal
+that includes a beta period.
 
 ## Alternatives Considered
 
