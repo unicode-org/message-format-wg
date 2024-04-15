@@ -1,6 +1,6 @@
 {
   "scenario": "functions",
-  "defaultTestParams": {
+  "defaultTestProperties": {
     "testType": "function",
     "locale": "en-US",
     "expErrors": false

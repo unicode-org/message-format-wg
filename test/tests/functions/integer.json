@@ -1,6 +1,6 @@
 {
   "scenario": "Integer functions",
-  "defaultTestParams": {
+  "defaultTestProperties": {
     "testType": "function",
     "locale": "en-US"
   },

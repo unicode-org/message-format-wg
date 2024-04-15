@@ -16,8 +16,8 @@
       "type": "string",
       "description": "Information about the test scenario."
     },
-    "defaultTestParams": {
-      "$ref": "#/$defs/defaultTestParams"
+    "defaultTestProperties": {
+      "$ref": "#/$defs/defaultTestProperties"
     },
     "tests": {
       "type": "array",
@@ -27,13 +27,13 @@
       "minItems": 1
     }
   },
-  "$comment": "This allOf specifies required test properties that allow a default. A value will be required in 'defaultTestParams' if one is not provided for every individual test.",
+  "$comment": "This allOf specifies required test properties that allow a default. A value will be required in 'defaultTestProperties' if one is not provided for every individual test.",
   "allOf": [
     {
       "anyOf": [
         {
           "properties": {
-            "defaultTestParams": {
+            "defaultTestProperties": {
               "required": [
                 "testType"
               ]
@@ -58,7 +58,7 @@
       "anyOf": [
         {
           "properties": {
-            "defaultTestParams": {
+            "defaultTestProperties": {
               "required": [
                 "locale"
               ]
@@ -83,7 +83,7 @@
       "anyOf": [
         {
           "properties": {
-            "defaultTestParams": {
+            "defaultTestProperties": {
               "required": [
                 "src"
               ]
@@ -109,7 +109,7 @@
       "anyOf": [
         {
           "properties": {
-            "defaultTestParams": {
+            "defaultTestProperties": {
               "$ref": "#/$defs/anyExp"
             }
           }
@@ -128,7 +128,7 @@
     }
   ],
   "$defs": {
-    "defaultTestParams": {
+    "defaultTestProperties": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -222,7 +222,6 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "type",
         "value"
       ],
       "properties": {
@@ -230,13 +229,7 @@
           "type": "string"
         },
         "type": {
-          "enum": [
-            "boolean",
-            "datetime",
-            "null",
-            "number",
-            "string"
-          ]
+          "const": "datetime"
         },
         "value": {}
       },
@@ -244,47 +237,7 @@
         {
           "properties": {
             "type": {
-              "const": "boolean"
-            },
-            "value": {
-              "type": "boolean"
-            }
-          }
-        },
-        {
-          "properties": {
-            "type": {
               "const": "datetime"
-            },
-            "value": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "properties": {
-            "type": {
-              "const": "null"
-            },
-            "value": {
-              "type": "null"
-            }
-          }
-        },
-        {
-          "properties": {
-            "type": {
-              "const": "number"
-            },
-            "value": {
-              "type": "number"
-            }
-          }
-        },
-        {
-          "properties": {
-            "type": {
-              "const": "string"
             },
             "value": {
               "type": "string"

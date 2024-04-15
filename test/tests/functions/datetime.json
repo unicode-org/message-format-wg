@@ -1,7 +1,7 @@
 {
   "scenario": "Datetime functions",
   "description": "The behaviour of built-in formatters is implementation-specific so the `exp` field is often omitted and assertions are made on error cases.",
-  "defaultTestParams": {
+  "defaultTestProperties": {
     "testType": "function",
     "locale": "en-US",
     "expErrors": false

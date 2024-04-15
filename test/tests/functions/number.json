@@ -1,6 +1,6 @@
 {
   "scenario": "Number functions",
-  "defaultTestParams": {
+  "defaultTestProperties": {
     "testType": "function",
     "locale": "en-US"
   },
