@@ -1,6 +1,6 @@
 {
     "scenario": "Data model errors",
-    "description": "Each description is the name of an error and its src is a string that should produce `error` when processed. Error names are defined in the spec.",
+    "description": "Each `src` should produce an error when processed. each test description indicates the error reason, but this text should not be asserted against. Error names are defined in the spec.",
     "defaultTestParams": {
         "testType": "syntax",
         "locale": "en-US",
