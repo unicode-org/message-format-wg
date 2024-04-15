@@ -21,7 +21,6 @@
       "src": ".match {$foo :integer} one {{one}} * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 1.2
         }

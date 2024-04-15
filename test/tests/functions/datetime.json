@@ -21,7 +21,6 @@
       "exp": "{$x}",
       "params": [
         {
-          "type": "boolean",
           "name": "x",
           "value": true
         }

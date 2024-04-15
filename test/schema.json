@@ -220,22 +220,28 @@
     },
     "var": {
       "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "value"
-      ],
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "type": {
-          "const": "datetime"
-        },
-        "value": {}
-      },
       "oneOf": [
         {
+          "additionalProperties": false,
+          "required": [
+            "value"
+          ],
           "properties": {
+            "name": {
+              "type": "string"
+            },
+            "value": {}
+          }
+        },
+        {
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
             "type": {
               "const": "datetime"
             },

@@ -92,7 +92,6 @@
       "src": "hello {4.2 :number minimumFractionDigits=$foo}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 2
         }
@@ -103,7 +102,6 @@
       "src": "hello {|4.2| :number minimumFractionDigits=$foo}",
       "params": [
         {
-          "type": "string",
           "name": "foo",
           "value": "2"
         }
@@ -114,7 +112,6 @@
       "src": ".local $foo = {$bar :number} {{bar {$foo}}}",
       "params": [
         {
-          "type": "number",
           "name": "bar",
           "value": 4.2
         }
@@ -125,7 +122,6 @@
       "src": ".local $foo = {$bar :number minimumFractionDigits=2} {{bar {$foo}}}",
       "params": [
         {
-          "type": "number",
           "name": "bar",
           "value": 4.2
         }
@@ -136,7 +132,6 @@
       "src": ".local $foo = {$bar :number minimumFractionDigits=foo} {{bar {$foo}}}",
       "params": [
         {
-          "type": "number",
           "name": "bar",
           "value": 4.2
         }
@@ -152,7 +147,6 @@
       "src": ".local $foo = {$bar :number} {{bar {$foo}}}",
       "params": [
         {
-          "type": "string",
           "name": "bar",
           "value": "foo"
         }
@@ -168,7 +162,6 @@
       "src": ".input {$foo :number} {{bar {$foo}}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 4.2
         }
@@ -179,7 +172,6 @@
       "src": ".input {$foo :number minimumFractionDigits=2} {{bar {$foo}}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 4.2
         }
@@ -190,7 +182,6 @@
       "src": ".input {$foo :number minimumFractionDigits=foo} {{bar {$foo}}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 4.2
         }
@@ -206,7 +197,6 @@
       "src": ".input {$foo :number} {{bar {$foo}}}",
       "params": [
         {
-          "type": "string",
           "name": "foo",
           "value": "foo"
         }
@@ -222,7 +212,6 @@
       "src": ".match {$foo :number} one {{one}} * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 1
         }
@@ -233,7 +222,6 @@
       "src": ".match {$foo :number} 1 {{=1}} one {{one}} * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 1
         }
@@ -244,7 +232,6 @@
       "src": ".match {$foo :number} one {{one}} 1 {{=1}} * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 1
         }
@@ -255,12 +242,10 @@
       "src": ".match {$foo :number} {$bar :number} one one {{one one}} one * {{one other}} * * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 1
         },
         {
-          "type": "number",
           "name": "bar",
           "value": 1
         }
@@ -271,12 +256,10 @@
       "src": ".match {$foo :number} {$bar :number} one one {{one one}} one * {{one other}} * * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 1
         },
         {
-          "type": "number",
           "name": "bar",
           "value": 2
         }
@@ -287,12 +270,10 @@
       "src": ".match {$foo :number} {$bar :number} one one {{one one}} one * {{one other}} * * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 2
         },
         {
-          "type": "number",
           "name": "bar",
           "value": 2
         }
@@ -303,7 +284,6 @@
       "src": ".input {$foo :number} .match {$foo} one {{one}} * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 1
         }
@@ -314,7 +294,6 @@
       "src": ".local $foo = {$bar :number} .match {$foo} one {{one}} * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "bar",
           "value": 1
         }
@@ -325,7 +304,6 @@
       "src": ".input {$foo :number} .local $bar = {$foo} .match {$bar} one {{one}} * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 1
         }
@@ -336,7 +314,6 @@
       "src": ".input {$bar :number} .match {$bar} one {{one}} * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "bar",
           "value": 2
         }
@@ -347,7 +324,6 @@
       "src": ".input {$bar} .match {$bar :number} one {{one}} * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "bar",
           "value": 1
         }
@@ -358,7 +334,6 @@
       "src": ".input {$bar} .match {$bar :number} one {{one}} * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "bar",
           "value": 2
         }
@@ -369,7 +344,6 @@
       "src": ".input {$bar} .match {$bar :number} one {{one}} * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "bar",
           "value": 1
         }
@@ -380,7 +354,6 @@
       "src": ".input {$bar} .match {$bar :number} one {{one}} * {{other}}",
       "params": [
         {
-          "type": "number",
           "name": "bar",
           "value": 2
         }
@@ -391,7 +364,6 @@
       "src": ".input {$none} .match {$foo :number} one {{one}} * {{{$none}}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 1
         }
@@ -402,7 +374,6 @@
       "src": ".local $bar = {$none} .match {$foo :number} one {{one}} * {{{$bar}}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 1
         }
@@ -413,7 +384,6 @@
       "src": ".local $bar = {$none} .match {$foo :number} one {{one}} * {{{$bar}}}",
       "params": [
         {
-          "type": "number",
           "name": "foo",
           "value": 2
         }

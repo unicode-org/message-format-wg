@@ -36,7 +36,6 @@
       "src": "hello {$place}",
       "params": [
         {
-          "type": "string",
           "name": "place",
           "value": "world"
         }
@@ -47,7 +46,6 @@
       "src": "hello {$place-.}",
       "params": [
         {
-          "type": "string",
           "name": "place-.",
           "value": "world"
         }
@@ -67,12 +65,10 @@
       "src": "{$one} and {$two}",
       "params": [
         {
-          "type": "number",
           "name": "one",
           "value": 1.3
         },
         {
-          "type": "number",
           "name": "two",
           "value": 4.2
         }
@@ -84,12 +80,10 @@
       "locale": "fr",
       "params": [
         {
-          "type": "number",
           "name": "one",
           "value": 1.3
         },
         {
-          "type": "number",
           "name": "two",
           "value": 4.2
         }
@@ -108,7 +102,6 @@
       "src": ".local $foo = {|bar|} {{bar {$foo}}}",
       "params": [
         {
-          "type": "string",
           "name": "foo",
           "value": "foo"
         }
@@ -119,7 +112,6 @@
       "src": ".local $foo = {$bar} {{bar {$foo}}}",
       "params": [
         {
-          "type": "string",
           "name": "bar",
           "value": "foo"
         }
@@ -130,7 +122,6 @@
       "src": ".local $foo = {$baz} .local $bar = {$foo} {{bar {$bar}}}",
       "params": [
         {
-          "type": "string",
           "name": "baz",
           "value": "foo"
         }
@@ -141,7 +132,6 @@
       "src": ".input {$foo} {{bar {$foo}}}",
       "params": [
         {
-          "type": "string",
           "name": "foo",
           "value": "foo"
         }
@@ -152,7 +142,6 @@
       "src": ".input {$foo} .local $bar = {$foo} {{bar {$bar}}}",
       "params": [
         {
-          "type": "string",
           "name": "foo",
           "value": "foo"
         }
@@ -163,7 +152,6 @@
       "src": ".local $foo = {$baz} .local $bar = {$foo} {{bar {$bar}}}",
       "params": [
         {
-          "type": "string",
           "name": "baz",
           "value": "foo"
         }
@@ -268,7 +256,6 @@
       "src": "{#tag a:foo=|foo| b:bar=$bar}",
       "params": [
         {
-          "type": "string",
           "name": "bar",
           "value": "b a r"
         }
