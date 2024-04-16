@@ -152,6 +152,53 @@ _What other solutions are available?_
 _How do they compare against the requirements?_
 _What other properties they have?_
 
+### Allow both local and input declarative selectors with immutability
+
+In this alternative, we modify the syntax to allow selectors to 
+annotate an input variable (as with `.input`)
+or assign a local variable (as with `.local`).
+Either annotation is immutable and results in a Duplicate Declaration error
+if it attempts to annotate a variable previously annotated.
+
+Example:
+```
+.match {$input :function} $local = {$input :function}
+* * {{This annotates {$input} and assigns {$local} a value.}}
+
+.match $local1 = {$input :function} $local2 = {$input :function2}
+* * {{This assigns two locals}}
+
+.input {$input :function}
+.local $local = {$input :function}
+.match {$input :function} {$local :function}
+* * {{This produces two duplicate declaration errors.}}
+```
+
+The ABNF change looks like:
+```abnf
+selector          = expression / declaration
+declaration       = s variable [s] "=" [s] expression
+```
+
+**Pros**
+- Shorthand is consistent with the rest of the syntax
+- Shorthand version works intuitively with minimal input
+- Preserves immutability
+- Produces an error when users inappropriately annotate some items
+
+**Cons**
+- Selectors can't provide additional selection-specific options
+  if the value has already been annotated
+- Doesn't allow multiple selection on the same operand, e.g.
+  ```
+  .input {$date :datetime skeleton=yMdjm}
+  .match {$date :datetime field=month} {$date :datetime field=dayOfWeek}
+  * * {{This message produces a Duplicate Declaration error
+        even though selection is separate from formatting.}}
+  ```
+  However, this design does allow for a local variable to be easily created
+  for the purpose of selection.
+
 #### Allow "Declarative" Selectors with _Mutability_
 
 In this alternative, selectors are treated as declaration-selectors.
