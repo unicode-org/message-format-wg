@@ -210,7 +210,14 @@
     },
     "src": {
       "description": "The MF2 syntax source.",
-      "type": "string"
+      "$comment": "Array values should be concatenated into a single string. They are only included to help readability in the test JSON.",
+      "type": [
+        "string",
+        "array"
+      ],
+      "items": {
+        "type": "string"
+      }
     },
     "params": {
       "description": "Parameters to pass in to the formatter for resolving external variables.",
@@ -259,7 +266,14 @@
     },
     "expCleanSrc": {
       "description": "The expected normalized form of `src`, for testing stringifiers.",
-      "type": "string"
+      "$comment": "Array values should be concatenated into a single string. They are only included to help readability in the test JSON.",
+      "type": [
+        "string",
+        "array"
+      ],
+      "items": {
+        "type": "string"
+      }
     },
     "expParts": {
       "description": "The expected result of formatting the message to parts.",
