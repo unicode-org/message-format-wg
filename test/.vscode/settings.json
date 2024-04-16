@@ -4,7 +4,7 @@
             "fileMatch": [
                 "tests/**/*.json"
             ],
-            "url": "./schema.json"
+            "url": "./schemas/tests-schema-0.0.1.json"
         }
     ]
 }
