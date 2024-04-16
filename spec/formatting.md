@@ -12,7 +12,7 @@ an appropriate error MUST be emitted and a _fallback value_ MAY be used as the f
 
 Formatting of a _message_ is defined by the following operations:
 
-- **_Expression and Markup Resolution_** determines the value of an _expression_ or _markup_,
+- **_<dfn>Expression and Markup Resolution</dfn>_** determines the value of an _expression_ or _markup_,
   with reference to the current _formatting context_.
   This can include multiple steps,
   such as looking up the value of a variable and calling formatting functions.
@@ -39,7 +39,7 @@ Formatting of a _message_ is defined by the following operations:
 > have already been evaluated in the order in which the relevant _declarations_
 > and _selectors_ appear in the _message_.
 
-- **_Pattern Selection_** determines which of a message's _patterns_ is formatted.
+- **_<dfn>Pattern Selection</dfn>_** determines which of a message's _patterns_ is formatted.
   For a message with no _selectors_, this is simple as there is only one _pattern_.
   With _selectors_, this will depend on their resolution.
   
@@ -47,7 +47,7 @@ Formatting of a _message_ is defined by the following operations:
   if the _message_ contains any _reserved statements_,
   emit an _Unsupported Statement_ error.
 
-- **_Formatting_** takes the resolved values of the selected _pattern_,
+- **_<dfn>Formatting</dfn>_** takes the resolved values of the selected _pattern_,
   and produces the formatted result for the _message_.
   Depending on the implementation, this result could be a single concatenated string,
   an array of objects, an attributed string, or some other locally appropriate data type.
@@ -60,7 +60,7 @@ and the observable behavior of the formatter matches that described here.
 
 ## Formatting Context
 
-A message's **_formatting context_** represents the data and procedures that are required
+A message's **_<dfn>formatting context</dfn>_** represents the data and procedures that are required
 for the message's _expression resolution_, _pattern selection_ and _formatting_.
 
 At a minimum, it includes:
@@ -319,7 +319,7 @@ the following steps are taken:
 
 #### Option Resolution
 
-The result of resolving _option_ values is a mapping of string identifiers to values.
+The result of resolving _option_ values is an unordered mapping of string identifiers to values.
 
 For each _option_:
 
@@ -348,7 +348,7 @@ The resolution of _markup_ MUST always succeed.
 
 ### Fallback Resolution
 
-A **_fallback value_** is the resolved value for an _expression_ that fails to resolve.
+A **_<dfn>fallback value</dfn>_** is the resolved value for an _expression_ that fails to resolve.
 
 An _expression_ fails to resolve when:
 
@@ -488,6 +488,15 @@ Earlier _selectors_ in the _matcher_'s list of _selectors_ have a higher priorit
 
 When all of the _selectors_ have been processed,
 the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
+
+> [!NOTE]
+> A _selector_ is not a _declaration_.
+> Even when the same _function_ can be used for both formatting and selection
+> of a given _operand_
+> the _annotation_ that appears in a _selector_ has no effect on subsequent
+> _selectors_ nor on the formatting used in _placeholders_.
+> To use the same value for selection and formatting,
+> set its value with a `.input` or `.local` _declaration_.
 
 This selection method is defined in more detail below.
 An implementation MAY use any pattern selection method,
@@ -692,10 +701,11 @@ and an `en` (English) locale,
 the pattern selection proceeds as follows for this message:
 
 ```
-.match {$count :number}
-one {{Category match}}
-1   {{Exact match}}
-*   {{Other match}}
+.input {$count :number}
+.match {$count}
+one {{Category match for {$count}}}
+1   {{Exact match for {$count}}}
+*   {{Other match for {$count}}}
 ```
 
 1. For the selector:<br>
@@ -716,7 +726,7 @@ one {{Category match}}
    This is then sorted as:<br>
    « ( 0, `1` ), ( 1, `one` ), ( 2, `*` ) »<br>
 
-4. The pattern `Exact match` of the most preferred `1` variant is selected.
+4. The pattern `Exact match for {$count}` of the most preferred `1` variant is selected.
 
 ## Formatting
 
@@ -823,10 +833,10 @@ isolating such parts to ensure that the formatted value displays correctly in a 
 > 
 > ![image](https://github.com/unicode-org/message-format-wg/assets/69082/6cc7f16f-8d9b-400b-a333-ae2ddb316edb)
 
-A **_bidirectional isolation strategy_** is functionality in the formatter's
+A **_<dfn>bidirectional isolation strategy<dfn>_** is functionality in the formatter's
 processing of a _message_ that produces bidirectional output text that is ready for display.
 
-The **_Default Bidi Strategy_** is a _bidirectional isolation strategy_ that uses
+The **_<dfn>Default Bidi Strategy<dfn>_** is a _bidirectional isolation strategy_ that uses
 isolating Unicode control characters around _placeholder_'s formatted values.
 It is primarily intended for use in plain-text strings, where markup or other mechanisms
 are not available.

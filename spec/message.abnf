@@ -61,13 +61,14 @@ reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
 reserved-keyword   = "." name
 
 ; Reserve additional sigils for use by future versions of this specification.
-reserved-annotation       = reserved-annotation-start reserved-body
+reserved-annotation       = reserved-annotation-start [[s] reserved-body]
 reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
 ; Reserve sigils for private-use by implementations.
-private-use-annotation    = private-start reserved-body
+private-use-annotation    = private-start [[s] reserved-body]
 private-start             = "^" / "&"
-reserved-body             = *([s] 1*(reserved-char / escaped-char / quoted))
+reserved-body             = reserved-body-part *([s] reserved-body-part)
+reserved-body-part        = reserved-char / escaped-char / quoted
 
 ; Names and identifiers
 ; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName

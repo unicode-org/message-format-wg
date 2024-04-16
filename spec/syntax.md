@@ -197,7 +197,7 @@ _Duplicate Declaration_ error during processing:
 A _local-declaration_ MAY overwrite an external input value as long as the
 external input value does not appear in a previous _declaration_.
 
-> [!Note]
+> [!NOTE]
 > These restrictions only apply to _declarations_.
 > A _placeholder_ or _selector_ can apply a different annotation to a _variable_
 > than one applied to the same _variable_ named in a _declaration_.
@@ -226,7 +226,7 @@ reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
 reserved-keyword   = "." name
 ```
 
-> [!Note]
+> [!NOTE]
 > The `reserved-keyword` ABNF rule is a simplification,
 > as it MUST NOT be considered to match any of the existing keywords
 > `.input`, `.local`, or `.match`.
@@ -347,7 +347,7 @@ of the _pattern_ to use for formatting.
 This allows the form or content of a _message_ to vary based on values
 determined at runtime.
 
-A _matcher_ consists of the keyword `match` followed by at least one _selector_
+A _matcher_ consists of the keyword `.match` followed by at least one _selector_
 and at least one _variant_.
 
 When the _matcher_ is processed, the result will be a single _pattern_ that serves
@@ -369,7 +369,8 @@ match-statement = match 1*([s] selector)
 > A _message_ with a _matcher_:
 >
 > ```
-> .match {$count :number}
+> .input {$count :number}
+> .match {$count}
 > one {{You have {$count} notification.}}
 > *   {{You have {$count} notifications.}}
 > ```
@@ -408,7 +409,9 @@ There MAY be any number of additional _selectors_.
 > A message with two _selectors_:
 >
 > ```
-> .match {$numLikes :number} {$numShares :number}
+> .input {$numLikes :integer}
+> .input {$numShares :integer}
+> .match {$numLikes} {$numShares}
 > 0   0   {{Your item has no likes and has not been shared.}}
 > 0   one {{Your item has no likes and has been shared {$numShares} time.}}
 > 0   *   {{Your item has no likes and has been shared {$numShares} times.}}
@@ -568,6 +571,8 @@ and from each other by whitespace.
 Each _option_'s _identifier_ MUST be unique within the _annotation_:
 an _annotation_ with duplicate _option_ _identifiers_ is not valid.
 
+The order of _options_ is not significant.
+
 ```abnf
 option = identifier [s] "=" [s] (literal / variable)
 ```
@@ -610,11 +615,11 @@ wish to use a syntax exactly like other functions. Specifically:
 A _private-use annotation_ MAY be empty after its introducing sigil.
 
 ```abnf
-private-use-annotation = private-start reserved-body
+private-use-annotation = private-start [[s] reserved-body]
 private-start          = "^" / "&"
 ```
 
-> [!Note]
+> [!NOTE]
 > Users are cautioned that _private-use annotations_ cannot be reliably exchanged
 > and can result in errors during formatting.
 > It is generally a better idea to use the function registry
@@ -637,26 +642,31 @@ A **_<dfn>reserved annotation</dfn>_** is an _annotation_ whose syntax is reserv
 for future standardization.
 
 A _reserved annotation_ starts with a reserved character.
-A _reserved annotation_ MAY be empty or contain arbitrary text after its first character.
+The remaining part of a _reserved annotation_, called a _reserved body_,
+MAY be empty or contain arbitrary text that starts and ends with
+a non-whitespace character.
 
 This allows maximum flexibility in future standardization,
 as future definitions MAY define additional semantics and constraints
 on the contents of these _annotations_.
-A _reserved annotation_ does not include trailing whitespace.
 
 Implementations MUST NOT assign meaning or semantics to
-an _annotation_ starting with `reserved-start`:
+an _annotation_ starting with `reserved-annotation-start`:
 these are reserved for future standardization.
-Implementations MUST NOT remove or alter the contents of a _reserved annotation_.
+Whitespace before or after a _reserved body_ is not part of the _reserved body_.
+Implementations MUST NOT remove or alter the contents of a _reserved body_,
+including any interior whitespace,
+but MAY remove or alter whitespace before or after the _reserved body_.
 
 While a reserved sequence is technically "well-formed",
 unrecognized _reserved-annotations_ or _private-use-annotations_ have no meaning.
 
 ```abnf
-reserved-annotation       = reserved-annotation-start reserved-body
+reserved-annotation       = reserved-annotation-start [[s] reserved-body]
 reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
-reserved-body             = *([s] 1*(reserved-char / escaped-char / quoted))
+reserved-body             = reserved-body-part *([s] reserved-body-part)
+reserved-body-part        = reserved-char / escaped-char / quoted
 ```
 
 ## Markup
@@ -709,7 +719,7 @@ on the pairing, ordering, or contents of _markup_ during _formatting_.
 
 ## Attributes
 
-**_Attributes_ are reserved for standardization by future versions of this specification.**
+**_Attributes_ are reserved for standardization by future versions of this specification._**
 Examples in this section are meant to be illustrative and
 might not match future requirements or usage.
 
@@ -763,6 +773,9 @@ The _value_ of an _attribute_ can be either a _literal_ or a _variable_.
 
 Multiple _attributes_ are permitted in an _expression_ or _markup_.
 Each _attribute_ is separated by whitespace.
+
+The order of _attributes_ is not significant.
+
 
 ```abnf
 attribute = "@" identifier [[s] "=" [s] (literal / variable)]
