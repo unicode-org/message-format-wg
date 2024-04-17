@@ -38,23 +38,24 @@ Some examples of test harnesses using these tests, from the source repository:
 
 ## Test Functions
 
-As the behaviour of `:number`, `:datetime`, and other default message functions
+As the behaviour of some of the default registry functions
+such as `:number` and `:datetime`
 is dependent on locale-specific data and may vary between implementations,
 the following functions are defined for **test use only**:
 
-### `test:func`
+### `:test:function`
 
 This function is valid both as a selector and as a formatter.
 The only option it recognizes is `fd`,
 all other option values passed to it are ignored.
 
-When resolving a `test:func` expression,
+When resolving a `:test:function` expression,
 its _Input_ and _FD_ values are determined as follows:
 
 1. Let _FD_ be `0`.
-1. Let _arg_ be the resolved value of the expression argument.
+1. Let _arg_ be the resolved value of the expression operand.
 1. If _arg_ is the resolved value of an expression
-   with a `test:func`, `test:select`, or `test:format` annotation
+   with a `:test:function`, `:test:select`, or `:test:format` annotation
    for which resolution has succeeded, then
    1. Let _Input_ be the _Input_ value of _arg_.
    1. Set _FD_ to be _FD_ value of _arg_.
@@ -73,7 +74,7 @@ its _Input_ and _FD_ values are determined as follows:
       1. Emit "bad-option" Resolution Error.
       1. Use a fallback representation as the resolved value of the expression.
 
-When `test:func` is used as a selector,
+When `:test:function` is used as a selector,
 the behaviour of calling it as the `rv` value of MatchSelectorKeys(`rv`, `keys`)
 (see [Resolve Preferences](/spec/formatting.md#resolve-preferences) for more information)
 depends on its _Input_ and _FD_ values.
@@ -85,12 +86,12 @@ depends on its _Input_ and _FD_ values.
   the method will return the list « `'1'` » if `keys` includes `'1'`, or an empty list otherwise.
 - If the _Input_ is any other value, the method will return an empty list.
 
-When an expression with a `test:func` annotation is assigned to a variable by a declaration
+When an expression with a `:test:function` annotation is assigned to a variable by a declaration
 and that variable is used as an option value,
 its resolved value is the _Input_ value.
 
-When `test:func` is used as a formatter,
-a placeholder resolving to a value with a `test:func` expression
+When `:test:function` is used as a formatter,
+a placeholder resolving to a value with a `:test:function` expression
 is formatted as a concatenation of the following parts:
 
 1. If _Input_ is less than `0`, the character `-` U+002D Hyphen-Minus.
@@ -104,21 +105,21 @@ If the formatting target is a sequence of parts,
 each of the above parts will be emitted separately
 rather than being concatenated into a single string.
 
-Note that for purposes of clarity, the formatting of `test:func` does not perform any rounding.
+Note that for purposes of clarity, the formatting of `:test:function` does not perform any rounding.
 
-### `test:select`
+### `:test:select`
 
-This function behaves exactly the same as `test:func`,
+This function behaves exactly the same as `:test:function`,
 except that it cannot be used for formatting.
 
-When `test:select` is used as a formatter,
+When `:test:select` is used as a formatter,
 a "not-formattable" error is emitted and the placeholder is formatted with
 a fallback representation.
 
-### `test:format`
+### `:test:format`
 
-This function behaves exactly the same as `test:func`,
+This function behaves exactly the same as `:test:function`,
 except that it cannot be used for selection.
 
-When `test:format` is used as a selector,
+When `:test:format` is used as a selector,
 the steps under 2.iii. of [Resolve Selectors](/spec/formatting.md#resolve-selectors) are followed.
