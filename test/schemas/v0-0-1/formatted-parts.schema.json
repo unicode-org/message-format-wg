@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0-0-1/formatted-parts.schema.json",
+  "title": "Formatted parts",
+  "description": "The expected result of formatting the message to parts.",
+  "type": "array",
+  "items": {
+    "oneOf": [
+      {
+        "$ref": "#/$defs/messageLiteralPart"
+      },
+      {
+        "$ref": "#/$defs/messageMarkupPart"
+      },
+      {
+        "$ref": "#/$defs/messageExpressionPart"
+      }
+    ]
+  },
+  "$defs": {
+    "messageLiteralPart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "const": "literal"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "messageMarkupPart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "kind",
+        "name"
+      ],
+      "properties": {
+        "type": {
+          "const": "markup"
+        },
+        "kind": {
+          "enum": [
+            "open",
+            "standalone",
+            "close"
+          ]
+        },
+        "source": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "options": {
+          "type": "object"
+        }
+      }
+    },
+    "messageExpressionPart": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "datetime",
+            "fallback",
+            "number",
+            "string",
+            "unknown"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/messageDateTimePart"
+        },
+        {
+          "$ref": "#/$defs/messageFallbackPart"
+        },
+        {
+          "$ref": "#/$defs/messageNumberPart"
+        },
+        {
+          "$ref": "#/$defs/messageStringPart"
+        },
+        {
+          "$ref": "#/$defs/messageUnknownPart"
+        }
+      ]
+    },
+    "messageDateTimePart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "source",
+        "locale",
+        "parts"
+      ],
+      "properties": {
+        "type": {
+          "const": "datetime"
+        },
+        "source": {
+          "type": "string"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "parts": {
+          "type": "array",
+          "items": {}
+        }
+      }
+    },
+    "messageFallbackPart": {
+      "type": "object",
+      "required": [
+        "type",
+        "source"
+      ],
+      "properties": {
+        "type": {
+          "const": "fallback"
+        },
+        "source": {
+          "type": "string"
+        }
+      }
+    },
+    "messageNumberPart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "source",
+        "locale",
+        "parts"
+      ],
+      "properties": {
+        "type": {
+          "const": "number"
+        },
+        "source": {
+          "type": "string"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "parts": {
+          "type": "array",
+          "items": {}
+        }
+      }
+    },
+    "messageStringPart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "source",
+        "locale",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "const": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "messageUnknownPart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "source",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "const": "unknown"
+        },
+        "source": {
+          "type": "string"
+        },
+        "value": {}
+      }
+    }
+  }
+}

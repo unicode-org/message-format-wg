@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/tests-schema-0.0.1.json",
-  "title": "MessageFormat 2 data-driven tests source",
-  "description": "This documents the format of MessageFormat 2 source test data.",
+  "$id": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0-0-1/tests.schema.json",
+  "title": "MessageFormat 2 data-driven tests",
+  "description": "This is the main schema for MessageFormat 2 test source data.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -276,118 +276,7 @@
       }
     },
     "expParts": {
-      "description": "The expected result of formatting the message to parts.",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "enum": [
-              "markup",
-              "literal",
-              "fallback"
-            ]
-          },
-          "kind": {},
-          "name": {},
-          "value": {},
-          "source": {}
-        },
-        "oneOf": [
-          {
-            "additionalProperties": false,
-            "required": [
-              "kind",
-              "name"
-            ],
-            "properties": {
-              "type": {
-                "const": "markup"
-              },
-              "kind": {
-                "enum": [
-                  "standalone",
-                  "open",
-                  "close"
-                ]
-              },
-              "name": {
-                "type": "string"
-              },
-              "options": {
-                "$ref": "#/$defs/expPartOptions"
-              }
-            }
-          },
-          {
-            "additionalProperties": false,
-            "required": [
-              "value",
-              "valueType"
-            ],
-            "properties": {
-              "type": {
-                "const": "literal"
-              },
-              "value": {
-                "type": "number"
-              },
-              "valueType": {
-                "enum": [
-                  "integer"
-                ]
-              },
-              "options": {
-                "$ref": "#/$defs/expPartOptions"
-              }
-            }
-          },
-          {
-            "additionalProperties": false,
-            "required": [
-              "value"
-            ],
-            "properties": {
-              "type": {
-                "const": "literal"
-              },
-              "value": {
-                "type": "string"
-              },
-              "options": {
-                "$ref": "#/$defs/expPartOptions"
-              }
-            }
-          },
-          {
-            "additionalProperties": false,
-            "required": [
-              "source"
-            ],
-            "properties": {
-              "type": {
-                "const": "fallback"
-              },
-              "source": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "expPartOptions": {
-      "description": "Expected option value within a part.",
-      "type": "object",
-      "additionalProperties": {
-        "type": [
-          "string",
-          "number"
-        ]
-      }
+      "$ref": "formatted-parts.schema.json"
     },
     "expErrors": {
       "description": "The runtime errors expected to be emitted when formatting the message. If expErrors is either absent or empty, the message must be formatted without errors.",
