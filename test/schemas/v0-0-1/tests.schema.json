@@ -276,7 +276,99 @@
       }
     },
     "expParts": {
-      "$ref": "formatted-parts.schema.json"
+      "description": "The expected result of formatting the message to parts.",
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "description": "Message literal part.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "value"
+            ],
+            "properties": {
+              "type": {
+                "const": "literal"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "description": "Message markup part.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "kind",
+              "name"
+            ],
+            "properties": {
+              "type": {
+                "const": "markup"
+              },
+              "kind": {
+                "enum": [
+                  "open",
+                  "standalone",
+                  "close"
+                ]
+              },
+              "source": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "options": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "description": "Message expression part.",
+            "type": "object",
+            "additionalProperties": "false",
+            "required": [
+              "type",
+              "source"
+            ],
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "locale": {
+                "type": "string"
+              },
+              "parts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "type": "string"
+                    },
+                    "value": {}
+                  },
+                  "required": [
+                    "type"
+                  ]
+                }
+              },
+              "value": {}
+            }
+          }
+        ]
+      }
     },
     "expErrors": {
       "description": "The runtime errors expected to be emitted when formatting the message. If expErrors is either absent or empty, the message must be formatted without errors.",
