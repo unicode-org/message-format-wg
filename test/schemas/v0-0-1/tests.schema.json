@@ -232,6 +232,7 @@
         {
           "additionalProperties": false,
           "required": [
+            "name",
             "value"
           ],
           "properties": {
@@ -243,6 +244,7 @@
         },
         {
           "required": [
+            "name",
             "type",
             "value"
           ],
@@ -254,6 +256,7 @@
               "const": "datetime"
             },
             "value": {
+              "$comment": "Should be converted to a datetime.",
               "type": "string"
             }
           }
