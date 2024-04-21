@@ -102,7 +102,7 @@ At least the following expression attributes should be considered:
 
   - `source` — A literal value representing the source syntax of an expression.
 
-    > Example selector representing an Xcode strinsdict `NSStringLocalizedFormatKey` value:
+    > Example selector representing an Xcode stringsdict `NSStringLocalizedFormatKey` value:
     >
     > ```
     > .match {$count :number @source=|%#@count@|}
