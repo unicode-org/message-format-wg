@@ -156,7 +156,7 @@ _What other properties they have?_
 
 In this alternative, we modify the syntax to allow selectors to 
 annotate an input variable (as with `.input`)
-or assign a local variable (as with `.local`).
+or bind a local variable (as with `.local`).
 Either annotation is immutable and results in a Duplicate Declaration error
 if it attempts to annotate a variable previously annotated.
 
