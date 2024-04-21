@@ -259,6 +259,37 @@ This implies that multiple selecton on the same operand is pointless.
         even though selection is separate from formatting.}}
   ```
 
+#### Match on variables instead of expressions
+
+In this alternative, the `.match` syntax is simplified
+to work on variable references rather than expressions:
+
+```
+.input {$count :number}
+.match $count
+one {{You have {$count} apple}}
+* {{You have {$count} apples}}
+
+.local $empty = {$theList :isEmpty}
+.match $empty
+true {{You bought nothing}}
+* {{You bought {$theList}!}}
+```
+
+The ABNF change would look like:
+```diff
+ match-statement   = match 1*([s] selector)
+-selector          = expression
++selector          = variable
+```
+
+**Pros**
+- Overall the syntax is simplified.
+- Preserves immutability.
+
+**Cons**
+- A separate declaration is required for each selector.
+
 #### Provide a `#`-like Feature
 
 (Copy-pasta adapted from @eemeli's proposal in #736)
