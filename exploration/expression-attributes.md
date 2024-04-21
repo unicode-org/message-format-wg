@@ -96,6 +96,17 @@ At least the following expression attributes should be considered:
   - `canCopy`, `canDelete`, `canOverlap`, `canReorder`, etc. — Flags supported by
     XLIFF 2 inline elements
 
+- Attributes used to represent features of other localization syntaxes
+  when parsed to a MessageFormat 2 data model.
+
+  - `source` — A literal value representing the source syntax of an expression.
+
+    > Example selector representing an Xcode strinsdict `NSStringLocalizedFormatKey` value:
+    >
+    > ```
+    > .match {$count :number @source=|%#@count@|}
+    > ```
+
 ## Requirements
 
 Attributes can be assigned to any expression,
