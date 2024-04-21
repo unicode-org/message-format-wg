@@ -46,8 +46,19 @@ the following functions are defined for **test use only**:
 ### `:test:function`
 
 This function is valid both as a selector and as a formatter.
-The only option it recognizes is `fd`,
-all other option values passed to it are ignored.
+
+#### Operands
+
+The function `:test:function` requires a [Number Operand](/spec/registry.md#number-operands) as its _operand_.
+
+#### Options
+
+The only option `:test:function` recognizes is `fd`,
+a [digit size option](/spec/registry.md) for which only `0` and `1` are valid values.
+
+All other options and their values are ignored.
+
+#### Behavior
 
 When resolving a `:test:function` expression,
 its _Input_ and _FD_ values are determined as follows:
@@ -109,7 +120,8 @@ Note that for purposes of clarity, the formatting of `:test:function` does not p
 
 ### `:test:select`
 
-This function behaves exactly the same as `:test:function`,
+This function accepts the same operands and options,
+and behaves exactly the same as `:test:function`,
 except that it cannot be used for formatting.
 
 When `:test:select` is used as a formatter,
@@ -118,7 +130,8 @@ a fallback representation.
 
 ### `:test:format`
 
-This function behaves exactly the same as `:test:function`,
+This function accepts the same operands and options,
+and behaves exactly the same as `:test:function`,
 except that it cannot be used for selection.
 
 When `:test:format` is used as a selector,
