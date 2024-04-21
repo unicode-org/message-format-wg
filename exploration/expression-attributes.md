@@ -9,8 +9,9 @@ Status: **Proposed**
 		<dd>@eemeli</dd>
 		<dt>First proposed</dt>
 		<dd>2023-08-27</dd>
-		<dt>Pull Request</dt>
+		<dt>Pull Requests</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/458">#458</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/772">#772</a></dd>
 	</dl>
 </details>
 
