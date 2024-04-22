@@ -1,9 +1,12 @@
 # MessageFormat 2.0 Errors
 
-Errors in messages and their formatting MAY occur and be detected
-at different stages of processing.
-Where available,
-the use of validation tools is recommended,
+Errors can occur during the processing of a _message_.
+Some errors can be detected statically, 
+such as those due to problems with _message_ syntax,
+violations of requirements in the data model,
+or requirements defined by a _function_.
+Other errors might be detected during selection or formatting of a given _message_.
+Where available, the use of validation tools is recommended,
 as early detection of errors makes their correction easier.
 
 ## Error Handling
