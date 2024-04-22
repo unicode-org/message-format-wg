@@ -229,8 +229,8 @@ the following steps are taken:
    or the value of one of the _options_ for another function.
    For example, in
    ```
-   .input {$n :number minIntegerDigits=3}
-   .local $n1 = {$n :number maxFractionDigits=3}
+   .input {$n :number minimumIntegerDigits=3}
+   .local $n1 = {$n :number maximumFractionDigits=3}
    ```
    the value bound to `$n` is the
    resolved value used as the _operand_
@@ -262,8 +262,8 @@ the following steps are taken:
 > the formatted result of the following message:
 >
 > ```
-> .input {$n :number minIntegerDigits=3}
-> .local $n1 = {$n :number maxFractionDigits=3}
+> .input {$n :number minimumIntegerDigits=3}
+> .local $n1 = {$n :number maximumFractionDigits=3}
 > {{$n1}}
 > ```
 >
