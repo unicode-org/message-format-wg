@@ -56,7 +56,7 @@
       "src": "hello {$place}",
       "expErrors": [
         {
-          "type": "unresolved-var"
+          "type": "unresolved-variable"
         }
       ],
       "exp": "hello {$place}"
@@ -322,7 +322,7 @@
       ],
       "expErrors": [
         {
-          "type": "unsupported-annotation"
+          "type": "unsupported-expression"
         }
       ]
     },
@@ -341,7 +341,7 @@
       ],
       "expErrors": [
         {
-          "type": "unsupported-annotation"
+          "type": "unsupported-expression"
         }
       ]
     },
@@ -360,7 +360,7 @@
       ],
       "expErrors": [
         {
-          "type": "unsupported-annotation"
+          "type": "unsupported-expression"
         }
       ]
     },

@@ -4,7 +4,11 @@
   "defaultTestProperties": {
     "testType": "syntax",
     "locale": "en-US",
-    "expErrors": true
+    "expErrors": [
+      {
+        "type": "syntax-error"
+      }
+    ]
   },
   "tests": [
     {

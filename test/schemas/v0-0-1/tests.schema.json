@@ -388,14 +388,21 @@
         "properties": {
           "type": {
             "enum": [
-              "bad-input",
-              "bad-option",
-              "missing-func",
-              "not-selectable",
-              "range-error",
-              "unresolved-var",
-              "unsupported-annotation",
-              "unsupported-statement"
+              "syntax-error",
+              "variant-key-mismatch",
+              "missing-fallback-variant",
+              "missing-selector-annotation",
+              "duplicate-declaration",
+              "duplicate-option-name",
+              "unresolved-variable",
+              "unknown-function",
+              "unsupported-expression",
+              "invalid-expression",
+              "operand-mismatch",
+              "unsupported-statement",
+              "selection-error",
+              "formatting-error",
+              "bad-input"
             ]
           }
         }

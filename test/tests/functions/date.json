@@ -1,6 +1,6 @@
 {
-  "scenario": "Date functions",
-  "description": "The behaviour of built-in formatters is implementation-specific so the `exp` field is often omitted and assertions are made on error cases.",
+  "scenario": "Date function",
+  "description": "The built-in formatter for dates.",
   "defaultTestProperties": {
     "testType": "function",
     "locale": "en-US",
@@ -12,7 +12,7 @@
       "exp": "{:date}",
       "expErrors": [
         {
-          "type": "bad-input"
+          "type": "invalid-expression"
         }
       ]
     },
@@ -21,7 +21,7 @@
       "exp": "{|horse|}",
       "expErrors": [
         {
-          "type": "bad-input"
+          "type": "operand-mismatch"
         }
       ]
     },

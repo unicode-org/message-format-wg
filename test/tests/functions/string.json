@@ -1,5 +1,6 @@
 {
-  "scenario": "functions",
+  "scenario": "String function",
+  "description": "The built-in formatter for strings.",
   "defaultTestProperties": {
     "testType": "function",
     "locale": "en-US"
@@ -40,7 +41,7 @@
       "exp": "other",
       "expErrors": [
         {
-          "type": "unresolved-var"
+          "type": "unresolved-variable"
         }
       ]
     }

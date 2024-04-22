@@ -3,89 +3,168 @@
   "description": "Each `src` should produce an error when processed. Each test description indicates the error reason, but this text should not be asserted against. Error names are defined in the spec.",
   "defaultTestProperties": {
     "testType": "syntax",
-    "locale": "en-US",
-    "expErrors": true
+    "locale": "en-US"
   },
   "tests": [
     {
-      "description": "Variant Key Mismatch",
-      "src": ".match {$foo :x} * * {{foo}}"
+      "src": ".match {$foo :x} * * {{foo}}",
+      "expErrors": [
+        {
+          "type": "variant-key-mismatch"
+        }
+      ]
     },
     {
-      "description": "Variant Key Mismatch",
-      "src": ".match {$foo :x} {$bar :x} * {{foo}}"
+      "src": ".match {$foo :x} {$bar :x} * {{foo}}",
+      "expErrors": [
+        {
+          "type": "variant-key-mismatch"
+        }
+      ]
     },
     {
-      "description": "Missing Fallback Variant",
-      "src": ".match {:foo} 1 {{_}}"
+      "src": ".match {:foo} 1 {{_}}",
+      "expErrors": [
+        {
+          "type": "missing-fallback-variant"
+        }
+      ]
     },
     {
-      "description": "Missing Fallback Variant",
-      "src": ".match {:foo} other {{_}}"
+      "src": ".match {:foo} other {{_}}",
+      "expErrors": [
+        {
+          "type": "missing-fallback-variant"
+        }
+      ]
     },
     {
-      "description": "Missing Fallback Variant",
-      "src": ".match {:foo} {:bar} * 1 {{_}} 1 * {{_}}"
+      "src": ".match {:foo} {:bar} * 1 {{_}} 1 * {{_}}",
+      "expErrors": [
+        {
+          "type": "missing-fallback-variant"
+        }
+      ]
     },
     {
-      "description": "Missing Selector Annotation",
-      "src": ".match {$foo} one {{one}} * {{other}}"
+      "src": ".match {$foo} one {{one}} * {{other}}",
+      "expErrors": [
+        {
+          "type": "missing-selector-annotation"
+        }
+      ]
     },
     {
-      "description": "Missing Selector Annotation",
-      "src": ".input {$foo} .match {$foo} one {{one}} * {{other}}"
+      "src": ".input {$foo} .match {$foo} one {{one}} * {{other}}",
+      "expErrors": [
+        {
+          "type": "missing-selector-annotation"
+        }
+      ]
     },
     {
-      "description": "Missing Selector Annotation",
-      "src": ".local $foo = {$bar} .match {$foo} one {{one}} * {{other}}"
+      "src": ".local $foo = {$bar} .match {$foo} one {{one}} * {{other}}",
+      "expErrors": [
+        {
+          "type": "missing-selector-annotation"
+        }
+      ]
     },
     {
-      "description": "Duplicate Declaration",
-      "src": ".input {$foo} .input {$foo} {{_}}"
+      "src": ".input {$foo} .input {$foo} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
     },
     {
-      "description": "Duplicate Declaration",
-      "src": ".input {$foo} .local $foo = {42} {{_}}"
+      "src": ".input {$foo} .local $foo = {42} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
     },
     {
-      "description": "Duplicate Declaration",
-      "src": ".local $foo = {42} .input {$foo} {{_}}"
+      "src": ".local $foo = {42} .input {$foo} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
     },
     {
-      "description": "Duplicate Declaration",
-      "src": ".local $foo = {:unknown} .local $foo = {42} {{_}}"
+      "src": ".local $foo = {:unknown} .local $foo = {42} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
     },
     {
-      "description": "Duplicate Declaration",
-      "src": ".local $foo = {$bar} .local $bar = {42} {{_}}"
+      "src": ".local $foo = {$bar} .local $bar = {42} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
     },
     {
-      "description": "Duplicate Declaration",
-      "src": ".local $foo = {$foo} {{_}}"
+      "src": ".local $foo = {$foo} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
     },
     {
-      "description": "Duplicate Declaration",
-      "src": ".local $foo = {$bar} .local $bar = {$baz} {{_}}"
+      "src": ".local $foo = {$bar} .local $bar = {$baz} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
     },
     {
-      "description": "Duplicate Declaration",
-      "src": ".local $foo = {$bar :func} .local $bar = {$baz} {{_}}"
+      "src": ".local $foo = {$bar :func} .local $bar = {$baz} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
     },
     {
-      "description": "Duplicate Declaration",
-      "src": ".local $foo = {42 :func opt=$foo} {{_}}"
+      "src": ".local $foo = {42 :func opt=$foo} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
     },
     {
-      "description": "Duplicate Declaration",
-      "src": ".local $foo = {42 :func opt=$bar} .local $bar = {42} {{_}}"
+      "src": ".local $foo = {42 :func opt=$bar} .local $bar = {42} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
     },
     {
-      "description": "Duplicate Option Name",
-      "src": "bad {:placeholder option=x option=x}"
+      "src": "bad {:placeholder option=x option=x}",
+      "expErrors": [
+        {
+          "type": "duplicate-option-name"
+        }
+      ]
     },
     {
-      "description": "Duplicate Option Name",
-      "src": "bad {:placeholder ns:option=x ns:option=y}"
+      "src": "bad {:placeholder ns:option=x ns:option=y}",
+      "expErrors": [
+        {
+          "type": "duplicate-option-name"
+        }
+      ]
     }
   ]
 }

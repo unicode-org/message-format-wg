@@ -1,5 +1,6 @@
 {
-  "scenario": "Integer functions",
+  "scenario": "Integer function",
+  "description": "The built-in formatter for integers.",
   "defaultTestProperties": {
     "testType": "function",
     "locale": "en-US"
