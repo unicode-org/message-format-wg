@@ -2,7 +2,6 @@
   "scenario": "Time function",
   "description": "The built-in formatter for times.",
   "defaultTestProperties": {
-    "testType": "function",
     "locale": "en-US",
     "expErrors": false
   },

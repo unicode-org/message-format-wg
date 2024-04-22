@@ -2,7 +2,6 @@
   "scenario": "Syntax",
   "description": "Test cases that do not depend on any registry definitions.",
   "defaultTestProperties": {
-    "testType": "syntax",
     "locale": "en-US"
   },
   "tests": [

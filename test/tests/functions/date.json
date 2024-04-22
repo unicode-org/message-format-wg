@@ -2,7 +2,6 @@
   "scenario": "Date function",
   "description": "The built-in formatter for dates.",
   "defaultTestProperties": {
-    "testType": "function",
     "locale": "en-US",
     "expErrors": false
   },

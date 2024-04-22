@@ -2,7 +2,6 @@
   "scenario": "Number function",
   "description": "The built-in formatter for numbers.",
   "defaultTestProperties": {
-    "testType": "function",
     "locale": "en-US"
   },
   "tests": [

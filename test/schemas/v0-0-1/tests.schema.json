@@ -36,31 +36,6 @@
           "properties": {
             "defaultTestProperties": {
               "required": [
-                "testType"
-              ]
-            }
-          }
-        },
-        {
-          "properties": {
-            "tests": {
-              "type": "array",
-              "items": {
-                "required": [
-                  "testType"
-                ]
-              }
-            }
-          }
-        }
-      ]
-    },
-    {
-      "anyOf": [
-        {
-          "properties": {
-            "defaultTestProperties": {
-              "required": [
                 "locale"
               ]
             }
@@ -133,9 +108,6 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "testType": {
-          "$ref": "#/$defs/testType"
-        },
         "locale": {
           "$ref": "#/$defs/locale"
         },
@@ -167,9 +139,6 @@
           "type": "string",
           "description": "Information about the test."
         },
-        "testType": {
-          "$ref": "#/$defs/testType"
-        },
         "locale": {
           "$ref": "#/$defs/locale"
         },
@@ -196,13 +165,6 @@
           "description": "Normally not set. A flag to use during development to only run one or more specific tests."
         }
       }
-    },
-    "testType": {
-      "description": "The category of test.",
-      "enum": [
-        "syntax",
-        "function"
-      ]
     },
     "locale": {
       "description": "The locale to use for formatting.",

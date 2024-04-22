@@ -2,7 +2,6 @@
   "scenario": "Syntax errors",
   "description": "Strings that produce syntax errors when parsed.",
   "defaultTestProperties": {
-    "testType": "syntax",
     "locale": "en-US",
     "expErrors": [
       {

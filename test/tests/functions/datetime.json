@@ -2,7 +2,6 @@
   "scenario": "Datetime function",
   "description": "The built-in formatter for datetimes.",
   "defaultTestProperties": {
-    "testType": "function",
     "locale": "en-US",
     "expErrors": false
   },
