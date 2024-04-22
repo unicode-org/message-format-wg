@@ -296,7 +296,6 @@
           {
             "description": "Message expression part.",
             "type": "object",
-            "additionalProperties": "false",
             "required": [
               "type",
               "source"
