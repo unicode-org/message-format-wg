@@ -255,6 +255,10 @@ An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a
 
 ## Message Function Errors
 
+A **_<dfn>Message Function Error</dfn>_** is any error that occurs
+when calling a message function implementation
+or which depend on validation associated with a specific function.
+
 ### Bad Expression
 
 A **_<dfn>Bad Expression</dfn>_** error occurs when a _message_ includes an _expression_
@@ -289,15 +293,20 @@ for that specific _function_.
 
 ### Bad Option
 
-A **_<dfn>Bad Option</dfn>_** error is an error that occurs when
-an _option_ value provided to a _function_ during _function resolution_ does not match one of the
-expected implementation-defined types for that function;
-or in which a literal _option_ value does not have the required format
-and thus cannot be processed into one of the expected implementation-defined types
-for that specific _function_.
+A **_<dfn>Bad Option</dfn>_** error is an error that occurs when there is
+an implementation-defined error with an _option_ or its value.
+These might include:
+- A required _option_ is missing.
+- Mutually exclusive _options_ are supplied.
+- An _option_ value provided to a _function_ during _function resolution_
+   does not match one of the implementation-defined types for that _function_;
+   or in which the literal _option_ value does not have the required format
+   and thus cannot be processed into one of the expected
+   implementation-defined types for that specific _function_.
+- Any other implementation-defined errors related to _options_.
 
 > For example, the following _message_ might produce a _Bad Option_ error
-> because the literal `foo` does not match the production `number-literal`,
+> because the literal `foo` does not match the production `digit-size-option`,
 > which is a requirement of the function `:number` for its `minimumFractionDigits` _option_:
 >
 > ```
