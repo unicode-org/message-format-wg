@@ -400,8 +400,14 @@
       "exp": "42",
       "expParts": [
         {
-          "type": "literal",
-          "value": "42"
+          "type": "number",
+          "source": "|42|",
+          "parts": [
+            {
+              "type": "integer",
+              "value": "42"
+            }
+          ]
         }
       ]
     }
