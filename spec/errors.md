@@ -328,9 +328,7 @@ A **_<dfn>Selection Error</dfn>_** occurs when message selection fails.
 
 ### Formatting Error
 
-A **_<dfn>Formatting Error</dfn>_** occurs during the formatting of a resolved value,
-for example when encountering a value with an unsupported type
-or an internally inconsistent set of options.
+A **_<dfn>Formatting Error</dfn>_** occurs during the formatting of a resolved value.
 
 > For example, attempting to format any of the following messages
 > might result in a _Formatting Error_ if done within a context that
