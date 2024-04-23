@@ -265,14 +265,6 @@ A **_<dfn>Bad Expression</dfn>_** error occurs when a _message_ includes an _exp
 whose implementation-defined internal requirements produce an error during _function resolution_
 or when a _function_ returns a value (such as `null`) that the implementation does not support.
 
-> For example, the following _message_ might produce a _Bad Expression_ error if the
-> the function `:function` threw an exception or otherwise emitted an error
-> rather than returning a valid value:
->
-> ```
-> This has a bad expression {$var :function} because it has a bug in it.
-> ```
-
 ### Bad Operand
 
 A **_<dfn>Bad Operand</dfn>_** error is an error that occurs when
