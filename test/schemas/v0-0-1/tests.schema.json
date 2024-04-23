@@ -282,10 +282,6 @@
           {
             "description": "Message expression part.",
             "type": "object",
-            "required": [
-              "type",
-              "source"
-            ],
             "properties": {
               "type": {
                 "type": "string"
@@ -315,6 +311,16 @@
                 }
               },
               "value": {}
+            },
+            "required": [
+              "type",
+              "source"
+            ],
+            "not": {
+              "required": [
+                "parts",
+                "value"
+              ]
             }
           }
         ]
