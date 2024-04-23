@@ -16,10 +16,10 @@ and MUST be emitted as soon as possible.
 The other error categories are only emitted during formatting,
 but it might be possible to detect them with validation tools.
 
-During selection, an _expression_ handler MUST only emit _Resolution Errors_ and _Selection Errors_.
-During formatting, an _expression_ handler MUST only emit _Resolution Errors_ and _Formatting Errors_.
+During selection and formatting,
+_expression_ handlers MUST only emit _Message Function Errors_.
 
-_Resolution Errors_ and _Formatting Errors_ in _expressions_ that are not used
+_Resolution Errors_ and _Message Function Errors_ in _expressions_ that are not used
 in _pattern selection_ or _formatting_ MAY be ignored,
 as they do not affect the output of the formatter.
 
@@ -34,7 +34,7 @@ SHOULD prioritise _Syntax Errors_ and _Data Model Errors_ over others.
 
 When an error occurs within a _selector_,
 the _selector_ MUST NOT match any _variant_ _key_ other than the catch-all `*`
-and a _Resolution Error_ or a _Selection Error_ MUST be emitted.
+and a _Resolution Error_ or a _Message Function Error_ MUST be emitted.
 
 ## Syntax Errors
 
@@ -241,34 +241,6 @@ or for private implementation use that is not supported by the current implement
 > * {{The value is not one.}}
 > ```
 
-### Invalid Expression
-
-An **_<dfn>Invalid Expression</dfn>_** error occurs when a _message_ includes an _expression_
-whose implementation-defined internal requirements produce an error during _function resolution_
-or when a _function_ returns a value (such as `null`) that the implementation does not support.
-
-An **_<dfn>Operand Mismatch Error</dfn>_** is an _Invalid Expression_ error that occurs when
-an _operand_ provided to a _function_ during _function resolution_ does not match one of the
-expected implementation-defined types for that function;
-or in which a literal _operand_ value does not have the required format
-and thus cannot be processed into one of the expected implementation-defined types
-for that specific _function_.
-
-> For example, the following _message_ produces an _Operand Mismatch Error_
-> (a type of _Invalid Expression_ error)
-> because the literal `|horse|` does not match the production `number-literal`,
-> which is a requirement of the function `:number` for its operand:
-> ```
-> .local $horse = {horse :number}
-> {{You have a {$horse}.}}
-> ```
-> The following _message_ might produce an _Invalid Expression_ error if the
-> the function `:function` threw an exception or otherwise emitted an error
-> rather than returning a valid value:
->```
-> {{This has an invalid expression {$var :function} because it has a bug in it.}}
->```
-
 ### Unsupported Statement
 
 An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a _reserved statement_.
@@ -281,9 +253,60 @@ An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a
 > {{The message body}}
 > ```
 
-## Selection Errors
+## Message Function Errors
 
-**_<dfn>Selection Errors</dfn>_** occur when message selection fails.
+### Bad Expression
+
+A **_<dfn>Bad Expression</dfn>_** error occurs when a _message_ includes an _expression_
+whose implementation-defined internal requirements produce an error during _function resolution_
+or when a _function_ returns a value (such as `null`) that the implementation does not support.
+
+> For example, the following _message_ might produce a _Bad Expression_ error if the
+> the function `:function` threw an exception or otherwise emitted an error
+> rather than returning a valid value:
+>
+> ```
+> This has a bad expression {$var :function} because it has a bug in it.
+> ```
+
+### Bad Operand
+
+A **_<dfn>Bad Operand</dfn>_** error is an error that occurs when
+an _operand_ provided to a _function_ during _function resolution_ does not match one of the
+expected implementation-defined types for that function;
+or in which a literal _operand_ value does not have the required format
+and thus cannot be processed into one of the expected implementation-defined types
+for that specific _function_.
+
+> For example, the following _message_ produces a _Bad Operand_ error
+> because the literal `|horse|` does not match the production `number-literal`,
+> which is a requirement of the function `:number` for its operand:
+>
+> ```
+> .local $horse = {horse :number}
+> {{You have a {$horse}.}}
+> ```
+
+### Bad Option
+
+A **_<dfn>Bad Option</dfn>_** error is an error that occurs when
+an _option_ value provided to a _function_ during _function resolution_ does not match one of the
+expected implementation-defined types for that function;
+or in which a literal _option_ value does not have the required format
+and thus cannot be processed into one of the expected implementation-defined types
+for that specific _function_.
+
+> For example, the following _message_ might produce a _Bad Option_ error
+> because the literal `foo` does not match the production `number-literal`,
+> which is a requirement of the function `:number` for its `minimumFractionDigits` _option_:
+>
+> ```
+> The answer is {42 :number minimumFractionDigits=foo}.
+> ```
+
+### Selection Error
+
+A **_<dfn>Selection Error</dfn>_** occurs when message selection fails.
 
 > For example, attempting to format either of the following messages
 > might result in a _Selection Error_ if done within a context that
@@ -302,9 +325,9 @@ An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a
 > * {{The value is not one.}}
 > ```
 
-## Formatting Errors
+### Formatting Error
 
-**_<dfn>Formatting Errors</dfn>_** occur during the formatting of a resolved value,
+A **_<dfn>Formatting Error</dfn>_** occurs during the formatting of a resolved value,
 for example when encountering a value with an unsupported type
 or an internally inconsistent set of options.
 

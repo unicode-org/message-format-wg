@@ -288,7 +288,7 @@ The function `:string` provides string selection and formatting.
 The _operand_ of `:string` is either any implementation-defined type
 that is a string or for which conversion to a string is supported,
 or any _literal_ value.
-All other values produce an _Invalid Expression_ error.
+All other values produce a _Bad Operand_ error.
 
 > For example, in Java, implementations of the `java.lang.CharSequence` interface
 > (such as `java.lang.String` or `java.lang.StringBuilder`),
@@ -600,7 +600,7 @@ The _function_ `:integer` performs selection as described in [Number Selection](
 
 The _operand_ of a number function is either an implementation-defined type or
 a literal whose contents match the `number-literal` production in the [ABNF](/spec/message.abnf).
-All other values produce an _Invalid Expression_ error.
+All other values produce a _Bad Operand_ error.
 
 > For example, in Java, any subclass of `java.lang.Number` plus the primitive
 > types (`byte`, `short`, `int`, `long`, `float`, `double`, etc.) 
@@ -776,7 +776,7 @@ If no options are specified, this function defaults to the following:
 The _operand_ of the `:datetime` function is either 
 an implementation-defined date/time type
 or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
-All other _operand_ values produce an _Invalid Expression_ error.
+All other _operand_ values produce a _Bad Operand_ error.
 
 #### Options
 
@@ -784,7 +784,7 @@ The `:datetime` function can use either the appropriate _style options_
 or can use a collection of _field options_ (but not both) to control the formatted 
 output.
 
-If both are specified, an _Invalid Expression_ error MUST be emitted
+If both are specified, a _Bad Option_ error MUST be emitted
 and a _fallback value_ used as the resolved value of the _expression_.
 
 > [!NOTE]
@@ -901,7 +901,7 @@ If no options are specified, this function defaults to the following:
 The _operand_ of the `:date` function is either 
 an implementation-defined date/time type
 or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
-All other _operand_ values produce an _Invalid Expression_ error.
+All other _operand_ values produce a _Bad Operand_ error.
 
 #### Options
 
@@ -924,7 +924,7 @@ If no options are specified, this function defaults to the following:
 The _operand_ of the `:time` function is either 
 an implementation-defined date/time type
 or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
-All other _operand_ values produce an _Invalid Expression_ error.
+All other _operand_ values produce a _Bad Operand_ error.
 
 #### Options
 
@@ -941,7 +941,7 @@ The function `:time` has these _options_:
 The _operand_ of a date/time function is either 
 an implementation-defined date/time type
 or a _date/time literal value_, as defined below.
-All other _operand_ values produce an _Invalid Expression_ error.
+All other _operand_ values produce a _Bad Operand_ error.
 
 A **_<dfn>date/time literal value</dfn>_** is a non-empty string consisting of an ISO 8601 date,
 or an ISO 8601 datetime optionally followed by a timezone offset.
@@ -963,7 +963,7 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 > The [ABNF](/spec/message.abnf) and [syntax](/spec/syntax.md) of MF2
 > do not formally define date/time literals. 
 > This means that a _message_ can be syntactically valid but produce
-> an _Operand Mismatch Error_ at runtime.
+> a _Bad Operand_ error at runtime.
 
 > [!NOTE]
 > String values passed as variables in the _formatting context_'s

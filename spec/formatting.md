@@ -250,8 +250,8 @@ the following steps are taken:
    argument type `T` and return type `U`
    for implementations of functions
    such that `U` can be coerced to `T`.
-   Implementations of a _function_ SHOULD emit an 
-   _Invalid Expression_ error for _operands_ whose resolved value
+   Implementations of a _function_ SHOULD emit a
+   _Bad Operand_ error for _operands_ whose resolved value
    or type is not supported.
 
 > [!NOTE]
@@ -307,13 +307,13 @@ the following steps are taken:
    resolve the value of the _expression_ as the result of that function call.
 
    If the call fails or does not return a valid value,
-   emit a _Invalid Expression_ error.
+   emit a _Message Function Error_.
 
    Implementations MAY provide a mechanism for the _function_ to provide
    additional detail about internal failures.
    Specifically, if the cause of the failure was that the datatype, value, or format of the
    _operand_ did not match that expected by the _function_,
-   the _function_ might cause an _Operand Mismatch Error_ to be emitted.
+   the _function_ might cause a _Bad Operand_ error to be emitted.
   
    In all failure cases, use the _fallback value_ for the _expression_ as the resolved value.
 
@@ -519,7 +519,7 @@ First, resolve the values of each _selector_:
    1. Else:
       1. Let `nomatch` be a resolved value for which selection always fails.
       1. Append `nomatch` as the last element of the list `res`.
-      1. Emit a _Selection Error_.
+      1. Emit a _Message Function Error_.
 
 The form of the resolved values is determined by each implementation,
 along with the manner of determining their support for selection.
@@ -735,7 +735,7 @@ each _text_ and _placeholder_ part of the selected _pattern_ is resolved and for
 
 Resolved values cannot always be formatted by a given implementation.
 When such an error occurs during _formatting_,
-an implementation SHOULD emit a _Formatting Error_ and produce a
+an implementation SHOULD emit a _Message Function Error_ and produce a
 _fallback value_ for the _placeholder_ that produced the error.
 A formatting function MAY substitute a value to use instead of a _fallback value_.
 
