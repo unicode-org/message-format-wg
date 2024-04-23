@@ -97,9 +97,6 @@ Attempting to parse a _message_ that is not _valid_ will result in a _Data Model
 
 A **_<dfn>message</dfn>_** is the complete template for a specific message formatting request.
 
-The purpose of a _message_ is to insert _variable_ values into text
-or to select the most appropriate text according to the value of a _variable_
-(or both).
 
 A **_<dfn>variable</dfn>_** is a data value bound to a _name_.
 
