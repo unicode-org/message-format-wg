@@ -246,7 +246,7 @@ or for private implementation use that is not supported by the current implement
 An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a _reserved statement_.
 
 > For example, attempting to format this message
-> would always result in an _Unsupported Statement_ error:
+> would result in an _Unsupported Statement_ error:
 >
 > ```
 > .some {|horse|}
@@ -257,11 +257,11 @@ An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a
 
 A **_<dfn>Message Function Error</dfn>_** is any error that occurs
 when calling a message function implementation
-or which depend on validation associated with a specific function.
+or which depends on validation associated with a specific function.
 
-Implementations SHOULD provide a way for custom functions to specify
-which of the following errors ought to be emitted,
-as well as allowing for other implementation-defined _Message Function Errors_.
+Implementations SHOULD provide a way for _functions_ to emit 
+(or cause to be emitted) any of the types of error defined in this section.
+Implementations MAY also provide implementation-defined _Message Function Error_ types.
 
 ### Bad Operand
 
@@ -277,7 +277,7 @@ for that specific _function_.
 > which is a requirement of the function `:number` for its operand:
 >
 > ```
-> .local $horse = {horse :number}
+> .local $horse = {|horse| :number}
 > {{You have a {$horse}.}}
 > ```
 
