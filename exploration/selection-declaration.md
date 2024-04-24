@@ -186,7 +186,7 @@ Examples:
 In this alternative, we modify the syntax to allow selectors to 
 annotate an input variable (as with `.input`)
 or bind a local variable (as with `.local`).
-Either annotation is immutable and results in a Duplicate Declaration error
+Either variable binding is immutable and results in a Duplicate Declaration error
 if it attempts to annotate a variable previously annotated.
 
 Example:
