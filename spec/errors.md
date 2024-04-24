@@ -259,11 +259,9 @@ A **_<dfn>Message Function Error</dfn>_** is any error that occurs
 when calling a message function implementation
 or which depend on validation associated with a specific function.
 
-### Bad Expression
-
-A **_<dfn>Bad Expression</dfn>_** error occurs when a _message_ includes an _expression_
-whose implementation-defined internal requirements produce an error during _function resolution_
-or when a _function_ returns a value (such as `null`) that the implementation does not support.
+Implementations SHOULD provide a way for custom functions to specify
+which of the following errors ought to be emitted,
+as well as allowing for other implementation-defined _Message Function Errors_.
 
 ### Bad Operand
 
