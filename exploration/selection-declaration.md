@@ -103,7 +103,7 @@ _What use-cases do we see? Ideally, quote concrete examples._
    ```
    > Note that this is currently provided for by the spec.
 
-5. As a user, I want to write multiple selectors for the same operand.
+5. As a user, I want to write multiple selectors using the same variable with different annotations.
    How do I know which one will format the placeholder later?
    ```
    .match {$num :integer} {$num :number minimumFractionDigits=2}
