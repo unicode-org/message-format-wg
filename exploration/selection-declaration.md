@@ -176,6 +176,7 @@ Examples:
 - No changes required.
 - `.local` can be used to solve problems with variations in selection and formatting
 - Supports multiple selectors on the same operand
+
 **Cons**
 - May require the user to annotate the operand for both formatting and selection.
 - Can produce a mismatch between formatting and selection, since the operand's formatting
