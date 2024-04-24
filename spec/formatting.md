@@ -307,7 +307,7 @@ the following steps are taken:
    resolve the value of the _expression_ as the result of that function call.
 
    If the call fails or does not return a valid value,
-   emit a _Message Function Error_.
+   emit the appropriate _Message Function Error_ for the failure.
 
    Implementations MAY provide a mechanism for the _function_ to provide
    additional detail about internal failures.
@@ -735,7 +735,7 @@ each _text_ and _placeholder_ part of the selected _pattern_ is resolved and for
 
 Resolved values cannot always be formatted by a given implementation.
 When such an error occurs during _formatting_,
-an implementation SHOULD emit a _Message Function Error_ and produce a
+an implementation SHOULD emit an appropriate _Message Function Error_ and produce a
 _fallback value_ for the _placeholder_ that produced the error.
 A formatting function MAY substitute a value to use instead of a _fallback value_.
 
