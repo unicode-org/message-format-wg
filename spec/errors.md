@@ -226,7 +226,8 @@ syntax reserved for future standardization,
 or for private implementation use that is not supported by the current implementation.
 
 > For example, attempting to format this message
-> would result in an _Unsupported Expression_ error:
+> would result in an _Unsupported Expression_ error
+> because it includes a _reserved annotation_.
 >
 > ```
 > The value is {!horse}.
