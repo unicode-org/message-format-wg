@@ -19,7 +19,7 @@ Status: **Proposed**
 _What is this proposal trying to achieve?_
 
 Define what effect (if any) the _annotation_ of a _selector_ has on subsequent _placeholders_
-that access the same _operand_ value.
+that access the same _variable_.
 
 ## Background
 
@@ -103,36 +103,41 @@ _What use-cases do we see? Ideally, quote concrete examples._
    ```
    > Note that this is currently provided for by the spec.
 
+5. As a user, I want to write multiple selectors for the same operand.
+   How do I know which one will format the placeholder later?
+   ```
+   .match {$num :integer} {$num :number minimumFractionDigits=2}
+   * * {{Which selector formats {$num}?}}
 
-### Multiple Selection Conflicts
-If a user writes multiple selectors for the same operand, which one formats the placeholder?
+   .match {$num :number minimumFractionDigits=2} {$num :integer}
+   * * {{Which selector formats {$num}?}}
+   ```
 
-```
-.match {$num :integer} {$num :number minimumFractionDigits=2}
-* * {{Which selector formats {$num}?}}
+   If both formats are needed in the message (presumably they are or why the selector), 
+   how does one reference one or the other?
 
-.match {$num :number minimumFractionDigits=2} {$num :integer}
-* * {{Which selector formats {$num}?}}
-```
 
-If both formats are needed in the message (presumably they are or why the selector), 
-how does one reference one or the other?
+6. As a user I want to use the same operand for both formatting and selection,
+   but use different functions or options for each.
+   I don't want the options used for selection to mess up the formatting.
 
-### Selection Is Different From Format
-If a user wants to separate selection and formatting, 
-but selectors have a formatting side-effect,
-how do I write a selector that doesn't interfere with the formatting of the _same_ operand?
-(Note that users could do this using a `.local` declaration to split the operand)
+   For example, while LDML45 doesn't support selection on dates, 
+   it's easy to conceptualize a date selector at odds with the formatter:
+   ```
+   .input {$d :datetime skeleton=yMMMdjm}
+   .match {$d :datetime month=numeric}
+   1 {{Today is {$d} in cold cold {$d :datetime month=long} (trying to select on month)}}
+   * {{Today is {$d}}}
+   ```
 
-We don't support selection on dates in LDML45, but it's easy to conceptualize.
-How can a user write a _selector_ that doesn't mess up a _formatter_?
-
-```
-.input {$d :datetime skeleton=yMMMdjm}
-.match {$d :datetime month=numeric}
-1 {{Today is {$d} in cold cold {$d :datetime month=long}}}
-* {{Today is {$d}}}
-```
+   Note that users can achieve this effect using a `.local`:
+   ```
+   .input {$d :datetime skeleton=yMMMdjm}
+   .local $monthSelect = {$d :datetime month=numeric}
+   .match {$monthSelect}
+   1 {{No problem getting January and formatting {$d}}}
+   * {{...}}
+   ```
 
 ## Requirements
 
@@ -151,6 +156,30 @@ _Describe the proposed solution. Consider syntax, formatting, errors, registry, 
 _What other solutions are available?_
 _How do they compare against the requirements?_
 _What other properties they have?_
+
+### Do nothing
+
+In this alternative, selectors are independent of declarations.
+Selectors also do not affect the resolved value.
+
+Examples:
+```
+.input {$n :integer}
+.match {$n :number minimumFractionDigits=2}
+* {{Formats '$n' as an integer: {$n}}}
+
+.match {$n :integer}
+* {{If $n==1.2 formats {$n} as 1.2 in en-US}}
+```
+
+**Pros**
+- No changes required.
+- `.local` can be used to solve problems with variations in selection and formatting
+- Supports multiple selectors on the same operand
+**Cons**
+- May require the user to annotate the operand for both formatting and selection.
+- Can produce a mismatch between formatting and selection, since the operand's formatting
+  isn't visible to the selector.
 
 ### Allow both local and input declarative selectors with immutability
 
@@ -199,11 +228,12 @@ declaration       = s variable [s] "=" [s] expression
   However, this design does allow for a local variable to be easily created
   for the purpose of selection.
 
-#### Allow "Declarative" Selectors with _Mutability_
+### Allow _immutable_ input declarative selectors
 
 In this alternative, selectors are treated as declaration-selectors.
 That is, an annotation in a selector works like a `.input`.
 This permits `.match` selectors to be a shorthand when no declarations exist.
+The option does not permit local variable declaration.
 
 It is not an error to overwrite a previous annotation.
 Instead the selector's annotation replaces what came before.
@@ -220,7 +250,7 @@ Instead the selector's annotation replaces what came before.
 **Cons**
 - Violates immutability that we've established everywhere else
 
-#### Allow "Declarative" Selectors with _Immutability_
+### Allow _mutable_ input declarative selectors
 
 In this alternative, selectors are treated as declaration-selectors.
 That is, an annotation in a selector works like a `.input`.
@@ -259,10 +289,12 @@ This implies that multiple selecton on the same operand is pointless.
         even though selection is separate from formatting.}}
   ```
 
-#### Match on variables instead of expressions
+### Match on variables instead of expressions
 
 In this alternative, the `.match` syntax is simplified
-to work on variable references rather than expressions:
+to work on variable references rather than expressions.
+This requires users to declare any selector using a `.input` or `.local` declaration
+before writing the `.match`:
 
 ```
 .input {$count :number}
@@ -290,7 +322,7 @@ The ABNF change would look like:
 **Cons**
 - A separate declaration is required for each selector.
 
-#### Provide a `#`-like Feature
+### Provide a `#`-like Feature
 
 (Copy-pasta adapted from @eemeli's proposal in #736)
 
