@@ -235,7 +235,7 @@ That is, an annotation in a selector works like a `.input`.
 This permits `.match` selectors to be a shorthand when no declarations exist.
 The option does not permit local variable declaration.
 
-It is not an error to overwrite a previous annotation.
+It is not an error to re-declare a variable that is in scope.
 Instead the selector's annotation replaces what came before.
 
 ```
