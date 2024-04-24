@@ -217,7 +217,7 @@ declaration       = s variable [s] "=" [s] expression
 
 **Cons**
 - Selectors can't provide additional selection-specific options
-  if the value has already been annotated
+  if the variable name is already in scope
 - Doesn't allow multiple selection on the same operand, e.g.
   ```
   .input {$date :datetime skeleton=yMdjm}
