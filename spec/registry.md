@@ -277,6 +277,15 @@ which only expects the `accord` option:
 This section describes the functions which each implementation MUST provide
 to be conformant with this specification.
 
+> [!NOTE]
+> The [Stability Policy](/spec#stability-policy) allows for updates to
+> Default Registry functions to add support for new options.
+> As implementations are permitted to ignore options that they do not support,
+> it is possible to write messages using options not defined below
+> which currently format with no error, but which could produce errors
+> when formatted with a later edition of the Default Registry.
+> Therefore, using options not explicitly defined here is NOT RECOMMENDED.
+
 ## String Value Selection and Formatting
 
 ### The `:string` function
