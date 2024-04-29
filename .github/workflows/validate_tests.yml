@@ -1,0 +1,20 @@
+name: Validate test data
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: '**'
+
+jobs:
+  run_all:
+    name: Validate tests for specific schema version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Validate tests for schema v0
+        run: |
+            cd test
+            python3 validate.py --schema-dir ./schemas/v0/
