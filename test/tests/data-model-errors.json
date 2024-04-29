@@ -1,6 +1,5 @@
 {
   "scenario": "Data model errors",
-  "description": "Each `src` should produce an error when processed. Each test description indicates the error reason, but this text should not be asserted against. Error names are defined in the spec.",
   "defaultTestProperties": {
     "locale": "en-US"
   },
