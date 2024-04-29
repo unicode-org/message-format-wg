@@ -97,13 +97,14 @@ Attempting to parse a _message_ that is not _valid_ will result in a _Data Model
 
 A **_<dfn>message</dfn>_** is the complete template for a specific message formatting request.
 
+A **_<dfn>variable</dfn>_** is a _name_ associated to a resolved value.
 
-A **_<dfn>variable</dfn>_** is a data value bound to a _name_.
-
-An **_<dfn>external variable</dfn>_** is a _variable_ supplied by the caller
+An **_<dfn>external variable</dfn>_** is a _variable_ 
+whose _name_ and initial value are supplied by the caller
 to MessageFormat or available in the _formatting context_.
+Only an _external variable_ can appear as an _operand_ in an _input declaration_.
 
-A **_<dfn>local variable</dfn>_** is a _variable_ created by a _declaration_.
+A **_<dfn>local variable</dfn>_** is a _variable_ created as the result of a _local declaration_.
 
 > [!NOTE]
 > This syntax is designed to be embeddable into many different programming languages and formats.
