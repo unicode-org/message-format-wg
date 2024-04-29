@@ -42,7 +42,7 @@ The function `:test:function` requires a [Number Operand](/spec/registry.md#numb
 #### Options
 
 The only option `:test:function` recognizes is `fd`,
-a [digit size option](/spec/registry.md) for which only `0` and `1` are valid values.
+a _digit size option_ for which only `0` and `1` are valid values.
 
 All other options and their values are ignored.
 
@@ -95,7 +95,7 @@ is formatted as a concatenation of the following parts:
 
 1. If _Input_ is less than `0`, the character `-` U+002D Hyphen-Minus.
 1. The truncated absolute integer value of _Input_, i.e. floor(abs(_Input_)),
-   formatted as a sequence of decimal digit caharacters.
+   formatted as a sequence of decimal digit characters (U+0030...U+0039).
 1. If _FD_ is `1`, then
    1. The character `.` U+002E Full Stop.
    1. The single decimal digit character representing the value floor((abs(_Input_) - floor(abs(_Input_))) \* 10)
