@@ -226,7 +226,8 @@ syntax reserved for future standardization,
 or for private implementation use that is not supported by the current implementation.
 
 > For example, attempting to format this message
-> would always result in an _Unsupported Expression_ error:
+> would result in an _Unsupported Expression_ error
+> because it includes a _reserved annotation_.
 >
 > ```
 > The value is {!horse}.
@@ -274,7 +275,7 @@ for that specific _function_.
 An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a _reserved statement_.
 
 > For example, attempting to format this message
-> would always result in an _Unsupported Statement_ error:
+> would result in an _Unsupported Statement_ error:
 >
 > ```
 > .some {|horse|}
