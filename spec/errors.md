@@ -19,9 +19,10 @@ but it might be possible to detect them with validation tools.
 During selection and formatting,
 _expression_ handlers MUST only emit _Message Function Errors_.
 
-_Resolution Errors_ and _Message Function Errors_ in _expressions_ that are not used
-in _pattern selection_ or _formatting_ MAY be ignored,
-as they do not affect the output of the formatter.
+Implementations do not have to check for or emit _Resolution Errors_
+or _Message Function Errors_ in _expressions_ that are not otherwise used by the _message_,
+such as _placeholders_ in unselected _patterns_
+or _declarations_ that are never referenced during _formatting_.
 
 In all cases, when encountering a runtime error,
 a message formatter MUST provide some representation of the message.
