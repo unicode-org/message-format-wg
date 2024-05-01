@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+      - name: Install CLI tool for JSON Schema validation
+        run: npm install --global ajv-cli
       - name: Validate tests using the latest schema version
         run: |
             ajv validate --spec=draft2020 \
