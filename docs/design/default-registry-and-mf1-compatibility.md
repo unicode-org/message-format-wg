@@ -36,6 +36,9 @@ Therefore, addition to this list requires a higher level of rigor.
 
 ### Numbers
 
+> [!IMPORTANT]
+> This section is replaced by the design for number selection
+
 Function name: `:number`
 
 Aliases: 
@@ -66,37 +69,199 @@ Options:
 
 (When no default is given, the default depends on the locale or implementation)
 
+---
+
 ### Dates and Times
 
-Function name: `:datetime`
+This subsection describes the functions and options for date/time formatting.
 
-Aliases:
-- `:date` (with `style=...` option corresponding to `:datetime dateStyle=...`)
-- `:time` (with `style=...` option corresponding to `:datetime timeStyle=...`)
+#### Functions
 
-Operand: "iso8601"
+Functions for formatting [date/time values](#operands) in the default registry are:
 
-Options:
-- `dateStyle` (`full` `long` `medium` `short`)
-- `timeStyle` (`full` `long` `medium` `short`)
-- `calendar` (buddhist chinese coptic dangi ethioaa ethiopic gregory hebrew indian islamic islamic-umalqura 
-   islamic-tbla islamic-civil islamic-rgsa iso8601 japanese persian roc)
-- `numberingSystem` (arab arabext bali beng deva fullwide gujr guru hanidec khmr knda laoo latn 
-   limb mlym mong mymr orya tamldec telu thai tibt)
-- `timezone` (tzid)
-- `hourCycle` (`h11` `h12` `h23` `h24`)
-- `weekday` (`long` `short` `narrow`)
-- `era` (`long` `short` `narrow`)
-- `year` (`numeric` `2-digit`)
-- `month` (`numeric` `2-digit` `long` `short` `narrow`)
-- `day` (`numeric` `2-digit`)
-- `hour` (`numeric` `2-digit`)
-- `minute` (`numeric` `2-digit`)
-- `second` (`numeric` `2-digit`)
-- `fractionalSecondDigits` (`1`, `2`, `3`)
-- `timeZoneName` (`long` `short` `shortOffset` `longOffset` `shortGeneric` `longGeneric`)
+- `:datetime`
+- `:date`
+- `:time`
 
-(When no default is given, the default depends on the locale or implementation)
+If no options are specified, each of the functions defaults to the following:
+- `{$d :datetime}` is the same as `{$d :datetime dateStyle=short timeStyle=short}`
+- `{$d :date}` is the same as `{$d :date style=short}`
+- `{$t :time}` is the same as `{$t :time style=short}`
+
+> [!NOTE]
+> Pattern selection based on date/time values is a complex topic and no support for this
+> is required in this release.
+
+> [!NOTE]
+> The default formatting behavior of `:datetime` is inconsistent with `Intl.DateTimeFormat`
+> in JavaScript and with `{d,date}` in MessageFormat v1.
+> This is because, unlike those implementations, `:datetime` is distinct from `:date` and `:time`.
+
+#### Operands
+
+The _operand_ of a date/time function is either 
+an implementation-defined date/time type (passed in as an argument)
+or a _date/time literal value_, as defined below.
+All other _operand_ values produce a _Selection Error_ when evaluated for selection
+or a _Formatting Error_ when formatting the value.
+
+A **_<dfn>date/time literal value</dfn>_** is a non-empty string consisting of 
+one of the following:
+- an XMLSchema 1.1 [dateTime](https://www.w3.org/TR/xmlschema11-2/#dateTime)
+- an XMLSchema 1.1 [time](https://www.w3.org/TR/xmlschema11-2/#time)
+- an XMLSchema 1.1 [date](https://www.w3.org/TR/xmlschema11-2/#date)
+
+The `timezoneOffset` of each of these formats is optional. 
+When the offset is not present, implementations should use a floating time type
+(such as Java's `java.time.LocalDateTime`) to represent the time value.
+For more information, see [Working with Timezones](https://w3c.github.io/timezone).
+
+> [!IMPORTANT]
+> The [ABNF](/spec/message.abnf) and [syntax](/spec/syntax.md) of MFv2
+> do not formally define date/time literals. 
+> This means that a _message_ can be syntactically valid but produce
+> an _Operand Mismatch Error_ at runtime.
+
+> [!NOTE]
+> String values passed as variables in the _formatting context_'s
+> _input mapping_ can be formatted as date/time values as long as their
+> contents are date/time literals.
+>
+> For example, if the value of the variable `now` were the string
+> `2024-02-06T16:40:00Z`, it would behave identically to the local
+> variable in this example:
+> ```
+> .local $example = {|2024-02-06T16:40:00Z| :datetime}
+> {{{$now :datetime} == {$example}}}
+> ```
+
+> [!NOTE]
+> True time zone support in serializations is expected to coincide with the adoption
+> of Temporal in JavaScript.
+> The form of these serializations is known and is a de facto standard.
+> Support for these extensions is expected to be required in the post-tech preview.
+> See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
+
+#### Options
+
+A function can use either the appropriate _style_ options for that function
+or can use a collection of _field options_ (but not both) to control the formatted 
+output.
+
+If both are specified, an _Invalid Expression_ error MUST be emitted
+and a _fallback value_ used as the resolved value of the _expression_.
+
+##### Style Options
+
+The function `:datetime` has these function-specific _style_ options.
+- `dateStyle`
+  - `full`
+  - `long`
+  - `medium`
+  - `short`
+- `timeStyle`
+  - `full`
+  - `long`
+  - `medium`
+  - `short`
+
+The function `:date` has these function-specific _style_ options:
+- `style`
+  - `full`
+  - `long`
+  - `medium`
+  - `short` (default)
+
+The function `:time` has these function-specific _style_ options:
+- `style`
+  - `full`
+  - `long`
+  - `medium`
+  - `short` (default)
+
+##### Field Options
+
+Field options describe which fields to include in the formatted output
+and what format to use for that field.
+The implementation may use this _annotation_ to configure which fields
+appear in the formatted output.
+
+> [!NOTE]
+> Field options do not have default values because they are only to be used
+> to compose the formatter.
+
+The _field_ options are defined as follows:
+
+The function `:datetime` has the following options:
+- `weekday`
+  - `long`
+  - `short`
+  - `narrow`
+- `era`
+  - `long`
+  - `short`
+  - `narrow`
+- `year`
+  - `numeric`
+  - `2-digit`
+- `month`
+  - `numeric`
+  - `2-digit`
+  - `long`
+  - `short`
+  - `narrow`
+- `day`
+  - `numeric`
+  - `2-digit`
+- `hour`
+  - `numeric`
+  - `2-digit`
+- `minute`
+  - `numeric`
+  - `2-digit`
+- `second`
+  - `numeric`
+  - `2-digit`
+- `fractionalSecondDigits`
+  - `1`
+  - `2`
+  - `3`
+- `hourCycle` (default is locale-specific)
+  - `h11`
+  - `h12`
+  - `h23`
+  - `h24`
+- `timeZoneName`
+  - `long`
+  - `short`
+  - `shortOffset`
+  - `longOffset`
+  - `shortGeneric`
+  - `longGeneric`
+
+> [!NOTE]
+> The following options do not have default values because they are only to be used
+> as overrides for locale-and-value dependent implementation-defined defaults.
+
+The followind date/time options are *not* part of the default registry.
+Implementations SHOULD avoid creating options that conflict with these, but
+are encouraged to track development of these options during Tech Preview:
+- `calendar` (default is locale-specific)
+  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
+- `numberingSystem` (default is locale-specific)
+   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+- `timeZone` (default is system default time zone or UTC)
+  - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
+
+
+#### Selection
+
+Selection based on date/time types is not required by MFv2.
+Implementations should use care when defining selectors based on date/time types.
+The types of queries found in implementations such as `java.time.TemporalAccessor`
+are complex and user expectations may be inconsistent with good I18N practices.
+
+---
 
 ### Strings
 
@@ -127,23 +292,23 @@ The following functionality was deliberately excluded:
 
 How to write an MF1 format or selector in MF2:
 
-| MF1      | Syntax               | MF2                                                          | Comment |
-|----------|----------------------|--------------------------------------------------------------|---------|
-| String   | {var}                | {$var} {$var :string}                                        |         |
-| Select   | {var,select...}      | .match {$var :string}                                        |         |
-| Number   | {num,number}         | {$num :number}                                               |         |
-| Integer  | {num,number,integer} | {$num :number maximumFractionDigits=0}<br/>{$num :integer}      |         |
-| Percent  | {num,number,percent} | {$num :number style=percent}<br/>{$num :percent}                 |         |
-| Currency | {num,number,currency} | {$num :number currency=$code}<br/>{$num :currency}              |         |
-| Plural (selector)  | {num,plural, ...}    | .match {$num :number} {$num :plural}               |         |
-| Ordinal (selector) | {num,selectordinal, ...} | .match {$num :ordinal}                         |         |
-| Ordinal (format)   | {num,ordinal} |                                                           | missing |
-| Date     | {date,date}          | {$date :datetime}                                            | short date is default |
-| Date     | {date,date,short}    | {$date :datetime dateStyle=short}                            | also medium,long,full |
-| Time     | {date,time}          | {$date :datetime timeStyle=short}                            | timeStyle required    |
-| Date     | {date,time,short}    | {$date :datetime timeStyle=short}                            | also medium,long,full |
-| Datetime | (requires picture or skeleton) | {$date :datetime dateStyle=short timeStyle=short}  | also medium,long,full |
-| Datetime | {date,time,::skeleton} | {$date :datetime weekday=short etc.}                       | supported through options bag |
-| Spellout | {num,spellout}       |                                                              | missing |
-| Duration | {num,duration}       |                                                              | missing |
-| Choice   | {num,choice, ...}    |                                                              | deprecated in MF1 |
+| MF1                | Syntax                         | MF2                                                                 | Comment                         |
+| ------------------ | ------------------------------ | ------------------------------------------------------------------- | ------------------------------- |
+| String             | `{var}`                        | `{$var}`<br/>`{$var :string}`                                       |                                 |
+| Select             | `{var,select, ...}`            | `.match {$var :string}`<br/>`.match {$num :number select=exact}`    |                                 |
+| Number             | `{num,number}`                 | `{$num :number}`                                                    |                                 |
+| Integer            | `{num,number,integer}`         | `{$num :integer}`<br/>`{$num :number maximumFractionDigits=0}`      |                                 |
+| Percent            | `{num,number,percent}`         | `{$num :number style=percent}`                                      |                                 |
+| Currency           | `{num,number,currency}`        | `{$num :number style=currency currency=$code}`                      |                                 |
+| Plural (selector)  | `{num,plural, ...}`            | `.match {$num :plural}`<br/>`.match {$num :number}`                 |                                 |
+| Ordinal (selector) | `{num,selectordinal, ...}`     | `.match {$num :ordinal}`<br/>`.match {$num :number select=ordinal}` |                                 |
+| Ordinal (format)   | `{num,ordinal}`                |                                                                     | missing                         |
+| Date               | `{date,date}`                  | `{$date :date}`<br/>`{$date :datetime}`                             | short date is default           |
+| Date               | `{date,date,short}`            | `{$date :date style=short}`<br/>`{$date :datetime dateStyle=short}` | also medium,long,full           |
+| Time               | `{date,time}`                  | `{$date :time}`<br/>`{$date :datetime timeStyle=short}`             | shorthand or timeStyle required |
+| Date               | `{date,time,short}`            | `{$date :time style=short}`<br/>`{$date :datetime timeStyle=short}` | also medium,long,full           |
+| Datetime           | (requires picture or skeleton) | `{$date :datetime dateStyle=short timeStyle=short}`                 | also medium,long,full           |
+| Datetime           | `{date,time,::skeleton}`       | `{$date :datetime weekday=short ...}`                               | supported through options bag   |
+| Spellout           | `{num,spellout}`               |                                                                     | missing                         |
+| Duration           | `{num,duration}`               |                                                                     | missing                         |
+| Choice             | `{num,choice, ...}`            |                                                                     | deprecated in MF1               |

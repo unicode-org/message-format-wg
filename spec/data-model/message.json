@@ -9,10 +9,9 @@
       "type": "object",
       "properties": {
         "type": { "const": "literal" },
-        "quoted": { "type": "boolean" },
         "value": { "type": "string" }
       },
-      "required": ["type", "quoted", "value"]
+      "required": ["type", "value"]
     },
     "variable": {
       "type": "object",
@@ -62,18 +61,15 @@
         "name": { "type": "string" },
         "options": { "$ref": "#/$defs/options" }
       },
-      "required": ["type", "kind", "name"]
+      "required": ["type", "name"]
     },
     "unsupported-annotation": {
       "type": "object",
       "properties": {
         "type": { "const": "unsupported-annotation" },
-        "sigil": {
-          "enum": ["!", "#", "%", "^", "&", "*", "<", ">", "/", "?", "~"]
-        },
         "source": { "type": "string" }
       },
-      "required": ["type", "sigil", "source"]
+      "required": ["type", "source"]
     },
     "annotation": {
       "oneOf": [
@@ -129,44 +125,16 @@
       ]
     },
 
-    "markup-open": {
-      "type": "object",
-      "properties": {
-        "type": { "const": "markup" },
-        "kind": { "const": "open" },
-        "name": { "type": "string" },
-        "options": { "$ref": "#/$defs/options" },
-        "attributes": { "$ref": "#/$defs/attributes" }
-      },
-      "required": ["type", "kind", "name"]
-    },
-    "markup-standalone": {
-      "type": "object",
-      "properties": {
-        "type": { "const": "markup" },
-        "kind": { "const": "standalone" },
-        "name": { "type": "string" },
-        "options": { "$ref": "#/$defs/options" },
-        "attributes": { "$ref": "#/$defs/attributes" }
-      },
-      "required": ["type", "kind", "name"]
-    },
-    "markup-close": {
-      "type": "object",
-      "properties": {
-        "type": { "const": "markup" },
-        "kind": { "const": "close" },
-        "name": { "type": "string" },
-        "attributes": { "$ref": "#/$defs/attributes" }
-      },
-      "required": ["type", "kind", "name"]
-    },
     "markup": {
-      "oneOf": [
-        { "$ref": "#/$defs/markup-open" },
-        { "$ref": "#/$defs/markup-standalone" },
-        { "$ref": "#/$defs/markup-close" }
-      ]
+      "type": "object",
+      "properties": {
+        "type": { "const": "markup" },
+        "kind": { "oneOf": [ "open", "standalone", "close" ] },
+        "name": { "type": "string" },
+        "options": { "$ref": "#/$defs/options" },
+        "attributes": { "$ref": "#/$defs/attributes" }
+      },
+      "required": ["type", "kind", "name"]
     },
 
     "pattern": {

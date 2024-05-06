@@ -32,11 +32,8 @@ annotation            = function
                       / private-use-annotation
                       / reserved-annotation
 
-; Markup; Note that standalone markup is part of the first line
-markup       = "{" [s] markup-open *(s attribute) [s] ["/"] "}"
-             / "{" [s] markup-close *(s attribute) [s] "}"
-markup-open  = "#" identifier *(s option)
-markup-close = "/" identifier
+markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"  ; open and standalone
+       / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}"  ; close
 
 ; Expression and literal parts
 function       = ":" identifier *(s option)
@@ -64,13 +61,14 @@ reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
 reserved-keyword   = "." name
 
 ; Reserve additional sigils for use by future versions of this specification.
-reserved-annotation       = reserved-annotation-start reserved-body
+reserved-annotation       = reserved-annotation-start [[s] reserved-body]
 reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
 ; Reserve sigils for private-use by implementations.
-private-use-annotation    = private-start reserved-body
+private-use-annotation    = private-start [[s] reserved-body]
 private-start             = "^" / "&"
-reserved-body             = *([s] 1*(reserved-char / reserved-escape / quoted))
+reserved-body             = reserved-body-part *([s] reserved-body-part)
+reserved-body-part        = reserved-char / reserved-escape / quoted
 
 ; Names and identifiers
 ; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName
@@ -91,14 +89,15 @@ simple-start-char = content-char / s / "@" / "|"
 text-char         = content-char / s / "." / "@" / "|"
 quoted-char       = content-char / s / "." / "@" / "{" / "}"
 reserved-char     = content-char / "."
-content-char      = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
+content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %x0B-0C        ; omit CR (%x0D)
-                  / %x0E-19        ; omit SP (%x20)
+                  / %x0E-1F        ; omit SP (%x20)
                   / %x21-2D        ; omit . (%x2E)
                   / %x2F-3F        ; omit @ (%x40)
                   / %x41-5B        ; omit \ (%x5C)
                   / %x5D-7A        ; omit { | } (%x7B-7D)
-                  / %x7E-D7FF      ; omit surrogates
+                  / %x7E-2FFF      ; omit IDEOGRAPHIC SPACE (%x3000)
+                  / %x3001-D7FF    ; omit surrogates
                   / %xE000-10FFFF
 
 ; Character escapes

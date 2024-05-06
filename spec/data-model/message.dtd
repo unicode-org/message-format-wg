@@ -19,7 +19,7 @@
 <!ELEMENT selectors (expression)+>
 <!ELEMENT variant (key+,pattern)>
 <!ELEMENT key (#PCDATA)>
-<!ATTLIST key default (true | false) "false">
+<!ATTLIST key catchall (true | false) "false">
 
 <!ELEMENT pattern (#PCDATA | expression | markup)*>
 
@@ -29,7 +29,6 @@
 )>
 
 <!ELEMENT literal (#PCDATA)>
-<!ATTLIST literal quoted (true | false) #REQUIRED>
 
 <!ELEMENT variable (EMPTY)>
 <!ATTLIST variable name NMTOKEN #REQUIRED>
@@ -41,12 +40,10 @@
 <!ATTLIST option name NMTOKEN #REQUIRED>
 
 <!ELEMENT unsupportedAnnotation (#PCDATA)>
-<!ATTLIST unsupportedAnnotation sigil CDATA #REQUIRED>
 
 <!ELEMENT attribute (literal | variable)?>
 <!ATTLIST attribute name NMTOKEN #REQUIRED>
 
-<!-- A <markup kind="close"> MUST NOT contain any <option> elements -->
 <!ELEMENT markup (option*, attribute*)>
 <!ATTLIST markup
   kind (open | standalone | close) #REQUIRED

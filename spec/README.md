@@ -25,7 +25,7 @@
 ## Introduction
 
 One of the challenges in adapting software to work for
-users with different languages and cultures is the need for **_dynamic messages_**.
+users with different languages and cultures is the need for **_<dfn>dynamic messages</dfn>_**.
 Whenever a user interface needs to present data as part of a larger string,
 that data needs to be formatted (and the message may need to be altered)
 to make it culturally accepted and grammatically correct.
@@ -84,7 +84,7 @@ A reference to a _term_ looks like this.
 Updates to this specification will not change
 the syntactical meaning, the runtime output, or other behaviour
 of valid messages written for earlier versions of this specification
-that only use functions and expression attributes defined in this specification.
+that only use functions defined in this specification.
 Updates to this specification will not remove any syntax provided in this version.
 Future versions MAY add additional structure or meaning to existing syntax.
 
@@ -123,3 +123,28 @@ All other names in these categories are reserved for the use of implementations 
 > [!NOTE]
 > Users defining custom names SHOULD include at least one character outside these ranges
 > to ensure that they will be compatible with future versions of this specification.
+
+Later versions of this specification will not introduce changes
+to the data model that would result in a data model representation
+based on this version being invalid.
+
+> For example, existing interfaces or fields will not be removed.
+
+Later versions of this specification MAY introduce changes
+to the data model that would result in future data model representations
+not being valid for implementations of this version of the data model.
+
+> For example, a future version could introduce a new keyword,
+> whose data model representation would be a new interface
+> that is not recognized by this version's data model.
+
+Later specification versions will not introduce syntax that cannot be
+represented by this version of the data model.
+
+> For example, a future version could introduce a new keyword.
+> The future version's data model would provide an interface for that keyword
+> while this version of the data model would parse the value into
+> the interface `UnsupportedStatement`.
+> Both data models would be "valid" in their context,
+> but this version's would be missing any functionality for the new statement type.
+

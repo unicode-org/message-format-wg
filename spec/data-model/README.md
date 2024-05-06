@@ -1,15 +1,36 @@
 # DRAFT MessageFormat 2.0 Data Model
 
-To work with messages defined in other syntaxes than that of MessageFormat 2,
-an equivalent data model representation is also defined.
-Implementations MAY provide interfaces which allow
-for MessageFormat 2 syntax to be parsed into this representation,
-for this representation to be serialized into MessageFormat 2 syntax
-or any other syntax,
-for messages presented in this representation to be formatted,
-or for other operations to be performed on or with messages in this representation.
+This section defines a data model representation of MessageFormat 2 _messages_.
 
 Implementations are not required to use this data model for their internal representation of messages.
+Neither are they required to provide an interface that accepts or produces
+representations of this data model.
+
+The major reason this specification provides a data model is to allow interchange of 
+the logical representation of a _message_ between different implementations.
+This includes mapping legacy formatting syntaxes (such as MessageFormat 1)
+to a MessageFormat 2 implementation.
+Another use would be in converting to or from translation formats without 
+the need to continually parse and serialize all or part of a message.
+
+Implementations that expose APIs supporting the production, consumption, or transformation of a
+_message_ as a data structure are encouraged to use this data model.
+
+This data model provides these capabilities:
+- any MessageFormat 2 message (including future versions)
+  can be parsed into this representation
+- this data model representation can be serialized as a well-formed
+MessageFormat 2 message
+- parsing a MessageFormat 2 message into a data model representation
+  and then serializing it results in an equivalently functional message
+
+This data model might also be used to:
+- parse a non-MessageFormat 2 message into a data model
+  (and therefore re-serialize it as MessageFormat 2).
+  Note that this depends on compatibility between the two syntaxes.
+- re-serialize a MessageFormat 2 message into some other format
+  including (but not limited to) other formatting syntaxes
+  or translation formats.
 
 To ensure compatibility across all platforms,
 this interchange data model is defined here using TypeScript notation.
@@ -19,6 +40,29 @@ Two equivalent definitions of the data model are also provided:
   for use with message data encoded as JSON or compatible formats, such as YAML.
 - [`message.dtd`](./message.dtd) is a document type definition (DTD),
   for use with message data encoded as XML.
+
+Note that while the data model description below is the canonical one,
+the JSON and DTD definitions are intended for interchange between systems and processors.
+To that end, they relax some aspects of the data model, such as allowing
+declarations, options, and attributes to be optional rather than required properties.
+
+> [!NOTE]
+> Users relying on XML representations of messages should note that
+> XML 1.0 does not allow for the representation of all C0 control characters (U+0000-U+001F).
+> Except for U+0000 NULL , these characters are allowed in MessageFormat 2 messages,
+> so systems and users relying on this XML representation for interchange
+> might need to supply an alternate escape mechanism to support messages
+> that contain these characters.
+
+> [!IMPORTANT]
+> The data model uses the field name `name` to denote various interface identifiers.
+> In the MessageFormat 2 [syntax](/spec/syntax.md), the source for these `name` fields
+> sometimes uses the production `identifier`.
+> This happens when the named item, such as a _function_, supports namespacing.
+>
+> In the Tech Preview, feedback on whether to separate the `namespace` from the `name`
+> and represent both separately, or just, as here, use an opaque single field `name`
+> is desired.
 
 ## Messages
 
@@ -61,7 +105,7 @@ starting after the keyword and up to the first _expression_,
 not including leading or trailing whitespace.
 The non-empty `expressions` correspond to the trailing _expressions_ of the _reserved statement_.
 
-> **Note**
+> [!NOTE]
 > Be aware that future versions of this specification
 > might assign meaning to _reserved statement_ values.
 > This would result in new interfaces being added to
@@ -136,28 +180,28 @@ interface LiteralExpression {
   type: "expression";
   arg: Literal;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
-  attributes?: Attribute[];
+  attributes: Attribute[];
 }
 
 interface VariableExpression {
   type: "expression";
   arg: VariableRef;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
-  attributes?: Attribute[];
+  attributes: Attribute[];
 }
 
 interface FunctionExpression {
   type: "expression";
   arg?: never;
   annotation: FunctionAnnotation;
-  attributes?: Attribute[];
+  attributes: Attribute[];
 }
 
 interface UnsupportedExpression {
   type: "expression";
   arg?: never;
   annotation: UnsupportedAnnotation;
-  attributes?: Attribute[];
+  attributes: Attribute[];
 }
 
 interface Attribute {
@@ -199,7 +243,7 @@ Each _option_ is represented by an `Option`.
 interface FunctionAnnotation {
   type: "function";
   name: string;
-  options?: Option[];
+  options: Option[];
 }
 
 interface Option {
@@ -210,15 +254,8 @@ interface Option {
 
 An `UnsupportedAnnotation` represents a
 _private-use annotation_ not supported by the implementation or a _reserved annotation_.
-The `sigil` corresponds to the starting sigil of the _annotation_.
-The `source` is the "raw" value (i.e. escape sequences are not processed)
-and does not include the starting `sigil`.
-
-> **Note**
-> Be aware that future versions of this specification
-> might assign meaning to _reserved annotation_ `sigil` values.
-> This would result in new interfaces being added to
-> this data model.
+The `source` is the "raw" value (i.e. escape sequences are not processed),
+including the starting sigil.
 
 When parsing the syntax of a _message_ that includes a _private-use annotation_
 supported by the implementation,
@@ -229,44 +266,25 @@ that the implementation attaches to that _annotation_.
 ```ts
 interface UnsupportedAnnotation {
   type: "unsupported-annotation";
-  sigil: "!" | "%" | "^" | "&" | "*" | "+" | "<" | ">" | "?" | "~";
   source: string;
 }
 ```
 
 ## Markup
 
-A `Markup` object is either `MarkupOpen`, `MarkupStandalone`, or `MarkupClose`,
-which are differentiated by `kind`.
+A `Markup` object has a `kind` of either `"open"`, `"standalone"`, or `"close"`,
+each corresponding to _open_, _standalone_, and _close_ _markup_.
 The `name` in these does not include the starting sigils `#` and `/` 
 or the ending sigil `/`.
-The optional `options` for open and standalone markup use the same `Option`
-as `FunctionAnnotation`.
+The optional `options` for markup use the same `Option` as `FunctionAnnotation`.
 
 ```ts
-type Markup = MarkupOpen | MarkupStandalone | MarkupClose;
-
-interface MarkupOpen {
+interface Markup {
   type: "markup";
-  kind: "open";
+  kind: "open" | "standalone" | "close";
   name: string;
-  options?: Option[];
-  attributes?: Attribute[];
-}
-
-interface MarkupStandalone {
-  type: "markup";
-  kind: "standalone";
-  name: string;
-  options?: Option[];
-  attributes?: Attribute[];
-}
-
-interface MarkupClose {
-  type: "markup";
-  kind: "close";
-  name: string;
-  attributes?: Attribute[];
+  options: Option[];
+  attributes: Attribute[];
 }
 ```
 

@@ -1,6 +1,6 @@
 # Capabilities for built-in registry
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -9,8 +9,9 @@ Status: **Proposed**
 		<dd>@ryzokuken</dd>
 		<dt>First proposed</dt>
 		<dd>2023-08-22</dd>
-		<dt>Pull Request</dt>
+		<dt>Pull Requests</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/457">#457</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/617">#617</a></dd>
 	</dl>
 </details>
 
@@ -59,11 +60,12 @@ adding options that might conflict with future standardization.
 These include the following capabilities:
 
 - Formatting the following types of data in a locale-sensitive manner:
+  - Strings
   - Dates and times
   - Numbers
-  - Lists
 - Selecting between pattern strings in a locale-sensitive manner based on:
   - String equality
+  - Numerical equality
   - Plural rules
   - Ordinality
 

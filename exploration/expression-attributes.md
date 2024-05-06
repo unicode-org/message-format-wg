@@ -9,8 +9,9 @@ Status: **Proposed**
 		<dd>@eemeli</dd>
 		<dt>First proposed</dt>
 		<dd>2023-08-27</dd>
-		<dt>Pull Request</dt>
+		<dt>Pull Requests</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/458">#458</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/772">#772</a></dd>
 	</dl>
 </details>
 
@@ -95,6 +96,17 @@ At least the following expression attributes should be considered:
 
   - `canCopy`, `canDelete`, `canOverlap`, `canReorder`, etc. — Flags supported by
     XLIFF 2 inline elements
+
+- Attributes used to represent features of other localization syntaxes
+  when parsed to a MessageFormat 2 data model.
+
+  - `source` — A literal value representing the source syntax of an expression.
+
+    > Example selector representing an Xcode stringsdict `NSStringLocalizedFormatKey` value:
+    >
+    > ```
+    > .match {$count :number @source=|%#@count@|}
+    > ```
 
 ## Requirements
 
