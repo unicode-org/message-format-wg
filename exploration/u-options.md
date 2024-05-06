@@ -24,8 +24,16 @@ Function options may influence the resolution, selection, and formatting of anno
 These provide a great solution for options like `minFractionDigits`, `dateStyle`,
 or other similar factors that influence the formatted result.
 
-However, this single bag of options is not appropriate in all cases,
-in particular for options that change the formatting context for the function.
+Such options naturally correspond to function arguments or builder-style function constructors.
+Each option is specific to the associated API.
+Users (message authors, translators, developers) should not expect
+that a given option name has the same meaning between functions
+or that its behavior stays the same.
+
+To reduce the learning curve for users and improve consistency,
+it would be useful to have common options 
+(generally those related to the formatting context)
+shared between all functions.
 
 ## Use-Cases
 
@@ -42,12 +50,11 @@ At least the following function and markup options should be considered:
   > ```
 
 - An override for the locale used to format the expression.
-  Should be expressed as a non-empty sequence of BCP 47 language codes.
 
-  > Example embedding a French literal in an English message:
+  > Example embedding a French date in an English message:
   >
   > ```
-  > In French, “{|bonjour| :string u:locale=fr}” is a greeting
+  > In French, this date would be displayed as {|2024-05-06| :date u:locale=fr}
   > ```
 
 - An override for the LTR/RTL/auto directionality of the expression.
