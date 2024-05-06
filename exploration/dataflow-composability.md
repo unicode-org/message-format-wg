@@ -808,6 +808,13 @@ What if the output of formatter `F`, which was passed an option `a`,
 is passed back into another formatter `G` which also takes an option `a`,
 that has a different semantics from `F`'s semantics for `a`?
 
+### Restricting composition
+
+If composition of different functions was disallowed
+(made into a data model error), then
+there would be no need for a common representation of output values
+for all functions.
+
 ## Incidental notes
 
 The spec currently says:
