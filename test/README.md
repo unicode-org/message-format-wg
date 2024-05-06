@@ -104,7 +104,6 @@ If the formatting target is a sequence of parts,
 each of the above parts will be emitted separately
 rather than being concatenated into a single string.
 
-Note that for purposes of clarity, the formatting of `:test:function` does not perform any rounding.
 
 ### `:test:select`
 
