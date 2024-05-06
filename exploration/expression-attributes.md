@@ -12,6 +12,7 @@ Status: **Proposed**
 		<dt>Pull Requests</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/458">#458</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/772">#772</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/780">#780</a></dd>
 	</dl>
 </details>
 
@@ -34,35 +35,6 @@ For example, many of the [XLIFF 2 inline element] attributes don't really make s
 ## Use-Cases
 
 At least the following expression attributes should be considered:
-
-- Attributes with a formatting runtime impact:
-
-  - `id` — An identifier for the expression.
-    This is included in the formatted part,
-    and allows the parts of an expression to be explicitly addressed.
-
-    > Example identifying two literal numbers:
-    >
-    > ```
-    > The first number was {1234 :number @id=first} and the second {56789 :number @id=second}.
-    > ```
-
-  - `locale` — An override for the locale used to format the expression.
-    Should be expressed as a non-empty sequence of BCP 47 language codes.
-
-    > Example embedding a French literal in an English message:
-    >
-    > ```
-    > In French, “{|bonjour| @locale=fr}” is a greeting
-    > ```
-
-  - `dir` — An override for the LTR/RTL/auto directionality of the expression.
-
-    > Example explicitly isolating the directionality of a placeholder:
-    >
-    > ```
-    > Welcome, {$username @dir=auto}
-    > ```
 
 - Attributes relevant for translators, tools, and other message operations,
   but with no runtime impact:
@@ -88,10 +60,10 @@ At least the following expression attributes should be considered:
     whether the expression should or should not be localised.
     The values here correspond to those used for this property in HTML and elsewhere.
 
-    > Example embedding a non-translatable French literal in an English message:
+    > Example embedding a non-translatable CLI command in a message:
     >
     > ```
-    > In French, "{|bonjour| @locale=fr @translate=no}" is a greeting
+    > Use {+code @translate=no}git ls-files{-code} to list all files in a repository.
     > ```
 
   - `canCopy`, `canDelete`, `canOverlap`, `canReorder`, etc. — Flags supported by
@@ -115,19 +87,11 @@ including expressions without an annotation.
 
 Attributes are distinct from function options.
 
-Common attributes are defined by the MF2 specification
-and must be supported by all implementations.
-
 Users may define their own attributes.
 
 Implementations may define their own attributes.
 
-Some attributes may have an effect on the formatting of an expression.
-These cannot be defined within comments either within or outside a message.
-
 Each attribute relates to a specific expression.
-
-An attribute's scope is limited to the expression to which it relates.
 
 Multiple attributes should be assignable to a single expression.
 
@@ -143,25 +107,16 @@ the reserved/private-use rules will need to be adjusted to support attributes.
 
 ## Proposed Design
 
-Add support for option-like `@key=value` attribute pairs at the end of any expression.
-
-If the syntax for function options is extended to support flag-like options
-(see <a href="https://github.com/unicode-org/message-format-wg/issues/386">#386</a>),
-also extend expression attribute syntax to match.
+Add support for `@key` attributes at the end of any expression or markup.
+These may consist only of an attribute name,
+or an option-like `@key=value` pair with a literal value.
 
 To distinguish expression attributes from options,
 require `@` as a prefix for each attribute asignment.
-Examples: `@translate=yes` and `@locale=$exprLocale`.
+Examples: `@translate=yes` and `@xliff:canCopy`.
 
-Define the meaning and supported values of some expression attributes in the specification,
-including at least `@dir` and `@locale`.
-
-To support later extension of the specified set of attributes while allowing user extensibility,
-suggest custom attribute names to include a U+002D Hyphen-Minus `-`.
-Examples: `@can-copy=no`, `@note-link=|https://...|`.
-
-Allow expression attributes to influence the formatting context,
-but do not directly pass them to user-defined functions.
+Do not allow expression or markup attributes to influence the formatting context,
+or pass them to function handlers.
 
 ## Alternatives Considered
 
@@ -172,9 +127,15 @@ If not explicitly defined, less information will be provided to translators.
 Function options may be used as a workaround,
 but each implementation and user will end up with different practices.
 
-### Use function options, but with some suggested prefix like `_`
+### Use function options, but with some suggested "discard" namespace like `_`
 
-A bit less bad than the previous, but still mixes attributes and options into the same namespace.
+Examples: `_:translate=yes` and `_:example=|World|`.
+
+Requires reserving an additional namespace.
+
+Requires cooperation from implementers to ignore all options using the namespace.
+
+Makes defining namespaced attributes difficult.
 
 At least a no-op function is required for otherwise unannotated expressions.
 
