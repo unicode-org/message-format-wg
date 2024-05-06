@@ -685,6 +685,34 @@ the previous `AnnotatedFormattableValue`.
 
 ## Alternatives Considered
 
+### Severely limit how local variables are used
+
+Perhaps the most restrictive option is to forbid composition by
+restricting where local variables can be referenced.
+
+Suppose that local variables can only be used in patterns,
+not in the right-hand sides of subsequent declarations.
+Furthermore, suppose that they can only appear unannotated
+in patterns. This could be enforced via a new type of data model
+error.
+
+This is probably too severe, because we want to be able to write:
+
+```
+.local $x = {1}
+.match {$x :number}
+* {{wildcard}}
+```
+
+and not just:
+
+```
+.match {1 :number}
+* {{wildcard}}
+```
+
+Such a solution would make local declarations much less useful.
+
 ### Not defining the shape of inputs or outputs to custom formatters
 
 Leave it to implementations,
