@@ -245,7 +245,8 @@ that were passed in to the function.
 
 While some use cases don't work well
 (or at least work surprisingly)
-if options are **not** encoded in named values,
+if options are **not** preserved
+in function outputs,
 defining what it means to compose options
 is not straightforward.
 
