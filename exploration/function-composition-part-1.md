@@ -322,6 +322,8 @@ This suggests a representation for named values
 that allows functions to choose whether to
 inspect the "formatted result", the "argument" and options,
 or both.
+Or, it may also suggest that we consider 
+whether we allow composition at all when the functions differ.
 
 ## Background
 
