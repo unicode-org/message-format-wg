@@ -462,12 +462,14 @@ of the runtime behavior of function composition.
 
 1. Evaluate `$num` to a value and pass it to the `:number` function,
    along with named options `{"maxFrac": "2"}`
-2. Bind `$x` to the result, which is an object `X`
+2. Let `X` be the result of the function. `X` is
+   an object
    encapsulating the following fields:
      * The source value, `"0.33333"`
      * The fully-evaluated options, `{"maxFrac": "2"}`
      * The formatted result, a `FormattedNumber` object
        representing the string `"0.33"`
+2. Bind the name `$x` to the value `X`.
 3. Evaluate `$y` to a value, which is `X`,
    and pass it to the `:number` function,
    along with named options `{"maxFrac": "5"}`
@@ -485,9 +487,10 @@ then the formatted result is "0.33 0.33333".
 
 1. Evaluate `$num` to a value and pass it to the `:number` function,
    along with named options `{"maxFrac": "2"}`
-2. Bind `$x` to the result, which is:
-     * The formatted result F, a `FormattedNumber` object
-       representing the string `"0.33"`
+2. Let `F` be the result of the function. `F` is
+   a `FormattedNumber` object
+   representing the string `"0.33"`
+2. Bind the name `$x` to the value `F`.
 3. Evaluate `$y` to a value, which is F,
    and pass it to the `:number` function,
    along with named options `{"maxFrac": "5"}`
