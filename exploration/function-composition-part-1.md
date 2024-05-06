@@ -240,7 +240,7 @@ Should $y be formatted as +98765 or 98765?
 
 These examples raise the question
 of whether functions return values
-that encode the option names and values
+that preserve the input option names and values
 that were passed in to the function.
 
 While some use cases don't work well
