@@ -26,14 +26,14 @@ For users of Visual Studio Code, a [settings file](./.vscode/settings.json) is i
 
 ## Test Functions
 
-As the behaviour of some of the default registry functions
+As the behaviour of some of the default registry _functions_
 such as `:number` and `:datetime`
 is dependent on locale-specific data and may vary between implementations,
-the following functions are defined for **test use only**:
+the following _functions_ are defined for **test use only**:
 
 ### `:test:function`
 
-This function is valid both as a selector and as a formatter.
+This function is valid both as a _selector_ and as a _formatter_.
 
 #### Operands
 
@@ -41,64 +41,64 @@ The function `:test:function` requires a [Number Operand](/spec/registry.md#numb
 
 #### Options
 
-The only option `:test:function` recognizes is `fd`,
+The only _option_ `:test:function` recognizes is `fd`,
 a _digit size option_ for which only `0` and `1` are valid values.
 
-All other options and their values are ignored.
+All other _options_ and their values are ignored.
 
 #### Behavior
 
 When resolving a `:test:function` expression,
-its _Input_ and _FD_ values are determined as follows:
+its `Input` and `FD` values are determined as follows:
 
-1. Let _FD_ be `0`.
-1. Let _arg_ be the resolved value of the expression operand.
-1. If _arg_ is the resolved value of an expression
-   with a `:test:function`, `:test:select`, or `:test:format` annotation
+1. Let `FD` be 0.
+1. Let `arg` be the resolved value of the _expression_ _operand_.
+1. If `arg` is the resolved value of an _expression_
+   with a `:test:function`, `:test:select`, or `:test:format` _annotation_
    for which resolution has succeeded, then
-   1. Let _Input_ be the _Input_ value of _arg_.
-   1. Set _FD_ to be _FD_ value of _arg_.
-1. Else if _arg_ is a numerical value
+   1. Let `Input` be the `Input` value of `arg`.
+   1. Set `FD` to be `FD` value of `arg`.
+1. Else if `arg` is a numerical value
    or a string matching the `number-literal` production, then
-   1. Let _Input_ be the numerical value of _arg_.
+   1. Let `Input` be the numerical value of `arg`.
 1. Else,
-   1. Emit "bad-input" Resolution Error.
-   1. Use a fallback representation as the resolved value of the expression.
+   1. Emit "bad-input" _Resolution Error_.
+   1. Use a _fallback value_ as the resolved value of the _expression_.
       Further steps of this algorithm are not followed.
-1. If the `fd` option is set, then
-   1. If its value resolves to a numerical integer value `0` or `1`
+1. If the `fd` _option_ is set, then
+   1. If its value resolves to a numerical integer value 0 or 1
       or their corresponding string representations `'0'` or `'1'`, then
-      1. Set _FD_ to be the numerical value of the option.
-   1. Else if its value is not an unresolved value set by [Option Resolution](/spec/formatting.md#option-resolution),
-      1. Emit "bad-option" Resolution Error.
-      1. Use a fallback representation as the resolved value of the expression.
+      1. Set `FD` to be the numerical value of the _option_.
+   1. Else if its value is not an unresolved value set by _option resolution_,
+      1. Emit "bad-option" _Resolution Error_.
+      1. Use a _fallback value_ as the resolved value of the _expression_.
 
-When `:test:function` is used as a selector,
+When `:test:function` is used as a _selector_,
 the behaviour of calling it as the `rv` value of MatchSelectorKeys(`rv`, `keys`)
 (see [Resolve Preferences](/spec/formatting.md#resolve-preferences) for more information)
-depends on its _Input_ and _FD_ values.
+depends on its `Input` and `FD` values.
 
-- If the _Input_ is `1` and _FD_ is `1`,
+- If the `Input` is 1 and `FD` is 1,
   the method will return some slice of the list « `'1.0'`, `'1'` »,
   depending on whether those values are included in `keys`.
-- If the _Input_ is `1` and _FD_ is `0`,
+- If the `Input` is 1 and `FD` is 0,
   the method will return the list « `'1'` » if `keys` includes `'1'`, or an empty list otherwise.
-- If the _Input_ is any other value, the method will return an empty list.
+- If the `Input` is any other value, the method will return an empty list.
 
-When an expression with a `:test:function` annotation is assigned to a variable by a declaration
-and that variable is used as an option value,
-its resolved value is the _Input_ value.
+When an _expression_ with a `:test:function` _annotation_ is assigned to a _variable_ by a _declaration_
+and that _variable_ is used as an _option_ value,
+its resolved value is the `Input` value.
 
-When `:test:function` is used as a formatter,
-a placeholder resolving to a value with a `:test:function` expression
+When `:test:function` is used as a _formatter_,
+a _placeholder_ resolving to a value with a `:test:function` _expression_
 is formatted as a concatenation of the following parts:
 
-1. If _Input_ is less than `0`, the character `-` U+002D Hyphen-Minus.
-1. The truncated absolute integer value of _Input_, i.e. floor(abs(_Input_)),
+1. If `Input` is less than 0, the character `-` U+002D Hyphen-Minus.
+1. The truncated absolute integer value of `Input`, i.e. floor(abs(`Input`)),
    formatted as a sequence of decimal digit characters (U+0030...U+0039).
-1. If _FD_ is `1`, then
+1. If `FD` is 1, then
    1. The character `.` U+002E Full Stop.
-   1. The single decimal digit character representing the value floor((abs(_Input_) - floor(abs(_Input_))) \* 10)
+   1. The single decimal digit character representing the value floor((abs(`Input`) - floor(abs(`Input`))) \* 10)
 
 If the formatting target is a sequence of parts,
 each of the above parts will be emitted separately
@@ -108,19 +108,19 @@ Note that for purposes of clarity, the formatting of `:test:function` does not p
 
 ### `:test:select`
 
-This function accepts the same operands and options,
+This _function_ accepts the same _operands_ and _options_,
 and behaves exactly the same as `:test:function`,
 except that it cannot be used for formatting.
 
-When `:test:select` is used as a formatter,
-a "not-formattable" error is emitted and the placeholder is formatted with
-a fallback representation.
+When `:test:select` is used as a _formatter_,
+a "not-formattable" error is emitted and the _placeholder_ is formatted with
+a _fallback value_.
 
 ### `:test:format`
 
-This function accepts the same operands and options,
+This _function_ accepts the same _operands_ and _options_,
 and behaves exactly the same as `:test:function`,
 except that it cannot be used for selection.
 
-When `:test:format` is used as a selector,
+When `:test:format` is used as a _selector_,
 the steps under 2.iii. of [Resolve Selectors](/spec/formatting.md#resolve-selectors) are followed.
