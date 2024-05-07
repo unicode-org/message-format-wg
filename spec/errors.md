@@ -254,6 +254,20 @@ An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a
 > {{The message body}}
 > ```
 
+### Bad Selector
+
+A **_<dfn>Bad Selector</dfn>_** error occurs when a message includes a _selector_
+with a resolved value which does not support selection.
+
+> For example, attempting to format this message
+> would result in a _Bad Selector_ error:
+>
+> ```
+> .local $day = {|2024-05-01| :date}
+> .match {$day}
+> * {{The due date is {$day}}}
+> ```
+
 ## Message Function Errors
 
 A **_<dfn>Message Function Error</dfn>_** is any error that occurs
@@ -264,6 +278,35 @@ Implementations SHOULD provide a way for _functions_ to emit
 (or cause to be emitted) any of the types of error defined in this section.
 Implementations MAY also provide implementation-defined _Message Function Error_ types.
 
+> For example, attempting to format any of the following messages
+> might result in a _Message Function Error_ if done within a context that
+>
+> 1. Provides for the variable reference `$user` to resolve to
+>    an object `{ name: 'Kat', id: 1234 }`,
+> 2. Provides for the variable reference `$field` to resolve to
+>    a string `'address'`, and
+> 3. Uses a `:get` message function which requires its argument to be an object and
+>    an option `field` to be provided with a string value.
+>
+> The exact type of _Message Function Error_ is determined by the message function implementation.
+>
+> ```
+> Hello, {horse :get field=name}!
+> ```
+>
+> ```
+> Hello, {$user :get}!
+> ```
+>
+> ```
+> .local $id = {$user :get field=id}
+> {{Hello, {$id :get field=name}!}}
+> ```
+>
+> ```
+> Your {$field} is {$id :get field=$field}
+> ```
+
 ### Bad Operand
 
 A **_<dfn>Bad Operand</dfn>_** error is an error that occurs when
@@ -273,13 +316,19 @@ or in which a literal _operand_ value does not have the required format
 and thus cannot be processed into one of the expected implementation-defined types
 for that specific _function_.
 
-> For example, the following _message_ produces a _Bad Operand_ error
-> because the literal `|horse|` does not match the production `number-literal`,
+> For example, the following _messages_ each produce a _Bad Operand_ error
+> because the literal `|horse|` does not match the `number-literal` production,
 > which is a requirement of the function `:number` for its operand:
 >
 > ```
 > .local $horse = {|horse| :number}
 > {{You have a {$horse}.}}
+> ```
+>
+> ```
+> .match {|horse| :number}
+> 1 {{The value is one.}}
+> * {{The value is not one.}}
 > ```
 
 ### Bad Option
@@ -304,55 +353,19 @@ These might include:
 > The answer is {42 :number minimumFractionDigits=foo}.
 > ```
 
-### Selection Error
+### Bad Variant Key
 
-A **_<dfn>Selection Error</dfn>_** occurs when message selection fails.
+A **_<dfn>Bad Variant Key</dfn>_** error is an error that occurs when a _variant_ _key_
+does not match the expected implementation-defined format.
 
-> For example, attempting to format either of the following messages
-> might result in a _Selection Error_ if done within a context that
-> uses a `:number` selector function which requires its input to be numeric:
+> For example, the following _message_ produces a _Bad Variant Key_ error
+> because `horse` is not a recognized plural category and
+> does not match the `number-literal` production,
+> which is a requirement of the `:number` function:
 >
 > ```
-> .match {|horse| :number}
-> 1 {{The value is one.}}
-> * {{The value is not one.}}
+> .match {42 :number}
+> 1     {{The value is one.}}
+> horse {{The value is a horse.}}
+> *     {{The value is not one.}}
 > ```
->
-> ```
-> .local $sel = {|horse| :number}
-> .match {$sel}
-> 1 {{The value is one.}}
-> * {{The value is not one.}}
-> ```
-
-### Formatting Error
-
-A **_<dfn>Formatting Error</dfn>_** occurs during the formatting of a resolved value.
-
-> For example, attempting to format any of the following messages
-> might result in a _Formatting Error_ if done within a context that
->
-> 1. provides for the variable reference `$user` to resolve to
->    an object `{ name: 'Kat', id: 1234 }`,
-> 2. provides for the variable reference `$field` to resolve to
->    a string `'address'`, and
-> 3. uses a `:get` formatting function which requires its argument to be an object and
->    an option `field` to be provided with a string value,
->
-> ```
-> Hello, {horse :get field=name}!
-> ```
->
-> ```
-> Hello, {$user :get}!
-> ```
->
-> ```
-> .local $id = {$user :get field=id}
-> {{Hello, {$id :get field=name}!}}
-> ```
->
-> ```
-> Your {$field} is {$id :get field=$field}
-> ```
-

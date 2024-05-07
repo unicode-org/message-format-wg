@@ -519,7 +519,7 @@ First, resolve the values of each _selector_:
    1. Else:
       1. Let `nomatch` be a resolved value for which selection always fails.
       1. Append `nomatch` as the last element of the list `res`.
-      1. Emit a _Selection Error_.
+      1. Emit a _Bad Selector_ error.
 
 The form of the resolved values is determined by each implementation,
 along with the manner of determining their support for selection.

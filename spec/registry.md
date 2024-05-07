@@ -675,7 +675,7 @@ numeric selectors perform as described below.
    1. Else if `key` is one of the keywords `zero`, `one`, `two`, `few`, `many`, or `other`, then
       1. If `key` and `keyword` consist of the same sequence of Unicode code points, then
          1. Append `key` as the last element of the list `resultKeyword`.
-   1. Else, emit a _Selection Error_.
+   1. Else, emit a _Bad Variant Key_ error.
 1. Return a new list whose elements are the concatenation of the elements (in order) of `resultExact` followed by the elements (in order) of `resultKeyword`.
 
 > [!NOTE]
