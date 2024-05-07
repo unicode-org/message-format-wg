@@ -309,8 +309,8 @@ Implementations MAY also provide implementation-defined _Message Function Error_
 
 ### Bad Operand
 
-A **_<dfn>Bad Operand</dfn>_** error is an error that occurs when
-an _operand_ provided to a _function_ during _function resolution_ does not match one of the
+A **_<dfn>Bad Operand</dfn>_** error is any error that occurs due to the content or format of the _operand_,
+such as when the _operand_ provided to a _function_ during _function resolution_ does not match one of the
 expected implementation-defined types for that function;
 or in which a literal _operand_ value does not have the required format
 and thus cannot be processed into one of the expected implementation-defined types
@@ -339,11 +339,10 @@ These might include:
 - A required _option_ is missing.
 - Mutually exclusive _options_ are supplied.
 - An _option_ value provided to a _function_ during _function resolution_
-   does not match one of the implementation-defined types for that _function_;
+   does not match one of the implementation-defined types or values for that _function_;
    or in which the literal _option_ value does not have the required format
    and thus cannot be processed into one of the expected
    implementation-defined types for that specific _function_.
-- Any other implementation-defined errors related to _options_.
 
 > For example, the following _message_ might produce a _Bad Option_ error
 > because the literal `foo` does not match the production `digit-size-option`,
