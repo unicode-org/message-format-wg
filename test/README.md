@@ -41,7 +41,7 @@ The function `:test:function` requires a [Number Operand](/spec/registry.md#numb
 
 #### Options
 
-The only _option_ `:test:function` recognizes is `fd`,
+The only _option_ `:test:function` recognizes is `decimalPlaces`,
 a _digit size option_ for which only `0` and `1` are valid values.
 
 All other _options_ and their values are ignored.
@@ -49,15 +49,15 @@ All other _options_ and their values are ignored.
 #### Behavior
 
 When resolving a `:test:function` expression,
-its `Input` and `FD` values are determined as follows:
+its `Input` and `DecimalPlaces` values are determined as follows:
 
-1. Let `FD` be 0.
+1. Let `DecimalPlaces` be 0.
 1. Let `arg` be the resolved value of the _expression_ _operand_.
 1. If `arg` is the resolved value of an _expression_
    with a `:test:function`, `:test:select`, or `:test:format` _annotation_
    for which resolution has succeeded, then
    1. Let `Input` be the `Input` value of `arg`.
-   1. Set `FD` to be `FD` value of `arg`.
+   1. Set `DecimalPlaces` to be `DecimalPlaces` value of `arg`.
 1. Else if `arg` is a numerical value
    or a string matching the `number-literal` production, then
    1. Let `Input` be the numerical value of `arg`.
@@ -65,10 +65,10 @@ its `Input` and `FD` values are determined as follows:
    1. Emit "bad-input" _Resolution Error_.
    1. Use a _fallback value_ as the resolved value of the _expression_.
       Further steps of this algorithm are not followed.
-1. If the `fd` _option_ is set, then
+1. If the `decimalPlaces` _option_ is set, then
    1. If its value resolves to a numerical integer value 0 or 1
       or their corresponding string representations `'0'` or `'1'`, then
-      1. Set `FD` to be the numerical value of the _option_.
+      1. Set `DecimalPlaces` to be the numerical value of the _option_.
    1. Else if its value is not an unresolved value set by _option resolution_,
       1. Emit "bad-option" _Resolution Error_.
       1. Use a _fallback value_ as the resolved value of the _expression_.
@@ -76,12 +76,12 @@ its `Input` and `FD` values are determined as follows:
 When `:test:function` is used as a _selector_,
 the behaviour of calling it as the `rv` value of MatchSelectorKeys(`rv`, `keys`)
 (see [Resolve Preferences](/spec/formatting.md#resolve-preferences) for more information)
-depends on its `Input` and `FD` values.
+depends on its `Input` and `DecimalPlaces` values.
 
-- If the `Input` is 1 and `FD` is 1,
+- If the `Input` is 1 and `DecimalPlaces` is 1,
   the method will return some slice of the list « `'1.0'`, `'1'` »,
   depending on whether those values are included in `keys`.
-- If the `Input` is 1 and `FD` is 0,
+- If the `Input` is 1 and `DecimalPlaces` is 0,
   the method will return the list « `'1'` » if `keys` includes `'1'`, or an empty list otherwise.
 - If the `Input` is any other value, the method will return an empty list.
 
@@ -96,7 +96,7 @@ is formatted as a concatenation of the following parts:
 1. If `Input` is less than 0, the character `-` U+002D Hyphen-Minus.
 1. The truncated absolute integer value of `Input`, i.e. floor(abs(`Input`)),
    formatted as a sequence of decimal digit characters (U+0030...U+0039).
-1. If `FD` is 1, then
+1. If `DecimalPlaces` is 1, then
    1. The character `.` U+002E Full Stop.
    1. The single decimal digit character representing the value floor((abs(`Input`) - floor(abs(`Input`))) \* 10)
 
