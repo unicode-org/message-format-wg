@@ -1,8 +1,8 @@
 message           = simple-message / complex-message
 
 simple-message    = [simple-start pattern]
-simple-start      = simple-start-char / text-escape / placeholder
-pattern           = *(text-char / text-escape / placeholder)
+simple-start      = simple-start-char / escaped-char / placeholder
+pattern           = *(text-char / escaped-char / placeholder)
 placeholder       = expression / markup
 
 complex-message   = *(declaration [s]) complex-body
@@ -43,7 +43,7 @@ attribute      = "@" identifier [[s] "=" [s] (literal / variable)]
 
 variable       = "$" name
 literal        = quoted / unquoted
-quoted         = "|" *(quoted-char / quoted-escape) "|"
+quoted         = "|" *(quoted-char / escaped-char) "|"
 unquoted       = name / number-literal
 ; number-literal matches JSON number (https://www.rfc-editor.org/rfc/rfc8259#section-6)
 number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
@@ -68,7 +68,7 @@ reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 private-use-annotation    = private-start [[s] reserved-body]
 private-start             = "^" / "&"
 reserved-body             = reserved-body-part *([s] reserved-body-part)
-reserved-body-part        = reserved-char / reserved-escape / quoted
+reserved-body-part        = reserved-char / escaped-char / quoted
 
 ; Names and identifiers
 ; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName
@@ -101,10 +101,8 @@ content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %xE000-10FFFF
 
 ; Character escapes
-text-escape     = backslash ( backslash / "{" / "}" )
-quoted-escape   = backslash ( backslash / "|" )
-reserved-escape = backslash ( backslash / "{" / "|" / "}" )
-backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
+escaped-char = backslash ( backslash / "{" / "|" / "}" )
+backslash    = %x5C ; U+005C REVERSE SOLIDUS "\"
 
 ; Whitespace
 s = 1*( SP / HTAB / CR / LF / %x3000 )
