@@ -249,7 +249,7 @@ This is not the disadvantage to right-to-left languages that it might first appe
   correct order and without spillover effects
 
 Permit isolating bidi controls to be used on the **outside** of the following:
-- names
+- unquoted literals
 - quoted literals
 - quoted patterns
 
@@ -258,15 +258,13 @@ the user to set the base direction of a _literal_ or _pattern_ according to its 
 actual contents.
 
 This would change the ABNF as follows:
+(Notice that this change includes a production `bidi` described further down
+in this document)
 ```abnf
-name           = (open-isolate name-body close-isolate) / name-body
-name-body      = name-start *name-char
-
-quoted         = (open-isolate quoted-body close-isolate) / quoted-body
-quoted-body    = "|" *(quoted-char / quoted-escape) "|"
-
-quoted-pattern = (open-isolate "{{" pattern "}}" close-isolate)
-               / "{{" pattern "}}"
+literal        = ( open-isolate (quoted / (unquoted [bidi])) close-isolate)
+               / (quoted / (unquoted [bidi]))
+quoted-pattern = ( open-isolate "{{" pattern "}}" close-isolate)
+               / ("{{" pattern "}}")
 
 open-isolate   = %x2066-2068
 close-isolate  = %x2069
@@ -287,27 +285,49 @@ or _markup_ must be laid out left-to-right.
 _Literal_ values can be right-to-left isolated within that or use strongly
 directional marks to ensure correct display.
 
-An LTR isolate is also allowed immediately after a newline outside patterns and within expressions.
-This is intended to allow left-to-right representation for "code"
-even if it contains a newline followed by content
-that could otherwise prompt the paragraph direction to be detected as right-to-left.
-
 This would change the ABNF as follows (assuming the above changes are also incorporated):
 ```abnf
-literal-expression    = "{" [LRI] [s] literal [s annotation] *(s attribute) [s] [close-isolate] "}"
-variable-expression   = "{" [LRI] [s] variable [s annotation] *(s attribute) [s] [close-isolate] "}"
-annotation-expression = "{" [LRI] [s] annotation *(s attribute) [s] [close-isolate] "}"
-
-markup = "{" [LRI] [s] "#" identifier *(s option) *(s attribute) [s] ["/"] [close-isolate] "}"
-       / "{" [LRI] [s] "/" identifier *(s option) *(s attribute) [s] [close-isolate] "}"
-
-s = 1*( SP / HTAB / CR / LF [LRI] / %x3000 )
+expression            = "{" LRI (literal-expression / variable-expression / annotation-expression) close-isolate "}"
+                      / "{" (literal-expression / variable-expression / annotation-expression) "}"
+literal-expression    = [s] literal [s annotation] *(s attribute) [s]
+variable-expression   = [s] variable [s annotation] *(s attribute) [s]
+annotation-expression = [s] annotation *(s attribute) [s]
+markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"                    ; open and standalone
+       / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}"                          ; close
+       / "{" LRI [s] "#" identifier *(s option) *(s attribute) [s] ["/"] close-isolate "}"  ; open and standalone
+       / "{" LRI [s] "/" identifier *(s option) *(s attribute) [s] close-isolate "}"        ; close
 LRI = %x2066
 ```
 
-When an `LRI` is used at the start of an expression or markup or after a newline,
-it SHOULD be paired with a corresponding `close-isolate` at its end,
-unless subsequent whitespace includes a newline before that.
+Permit the use of LRM, RLM, or ALM stronly directional marks immediately following any of the items that
+**end** with the `name` production in the ABNF. 
+This includes _identifiers_ found in the names of
+_functions_ 
+and _options_,
+plus the names of _variables_,
+as well as the contents of _unquoted_ literals.
+
+> [!NOTE]
+> Notice that _unquoted_ literals can also be surrounded by bidi isolates
+> using the previous syntax modification just above.
+
+> [!NOTE]
+> Notice that `reserved-annotation` is not in the ABNF changes because it already
+> permits the marks in question.
+> Any syntax derived from `reserved-annotation`
+> (i.e. when unreserving a new statement in a future addition)
+> would need to handle bidi explicitly using the model already established here.
+
+```abnf
+variable-expression   = "{" [s] variable [bidi] [s annotation] *(s attribute) [s] "}"
+function       = ":" identifier [bidi] *(s option)
+option         = identifier [bidi] [s] "=" [s] (literal / (variable [bidi])
+attribute      = "@" identifier [bidi] [[s] "=" [s] (literal / (variable [bidi])]
+markup         = "{" [s] "#" identifier [bidi] *(s option) *(s attribute) [s] ["/"] "}"  ; open and standalone
+               / "{" [s] "/" identifier [bidi] *(s option) *(s attribute) [s] "}"  ; close
+identifier     = [(namespace [bidi] ":")] name
+bidi           = [ %x200E-200F / %x061C ]
+```
 
 ## Alternatives Considered
 
@@ -327,6 +347,66 @@ the results or debug what is wrong with their messages.
 
 By contrast, if users insert too many or the wrong controls using the recommended design,
 the _message_ would still be functional and would emit no undesired characters.
+
+
+### Loose isolation
+
+Apply a slightly different set of bidi isolates.
+The main differences to the proposed solution are:
+1. The open/close isolate characters are not syntactically required to be paired.
+   This avoids introducing parse errors for missing or required invisible characters,
+   which would lead to bad user experiences.
+2. Rather than patching the `name` rule with an optional trailing LRM/RLM/ALM,
+   allow for its proper isolation.
+
+Quoted patterns, quoted literals, and names may be isolated by LRI/RLI/FSI...PDI.
+For names and quoted literals, the isolate characters are outside the body of the token,
+but for quoted patterns, the isolates are in the middle of the `{{` and `}}` characters.
+This avoids adding a lookahead requirement for detecting a `complex-message` start,
+and differentiating a `quoted-pattern` from a `quoted` `key` in a `variant`.
+
+Expressions and markup may be isolated by LRI...PDI immediately within the `{` and `}`.
+
+An LRI is allowed immediately after a newline outside patterns and within expressions.
+This is intended to allow left-to-right representation for "code"
+even if it contains a newline followed by content
+that could otherwise prompt the paragraph direction to be detected as right-to-left.
+
+```abnf
+name           = [open-isolate] name-start *name-char [close-isolate]
+quoted         = [open-isolate] "|" *(quoted-char / quoted-escape) "|" [close-isolate]
+quoted-pattern = "{" [open-isolate] "{" pattern "}" [close-isolate] "}"
+
+literal-expression    = "{" [LRI] [s] literal [s annotation] *(s attribute) [s] [close-isolate] "}"
+variable-expression   = "{" [LRI] [s] variable [s annotation] *(s attribute) [s] [close-isolate] "}"
+annotation-expression = "{" [LRI] [s] annotation *(s attribute) [s] [close-isolate] "}"
+
+markup = "{" [LRI] [s] "#" identifier *(s option) *(s attribute) [s] ["/"] [close-isolate] "}"
+       / "{" [LRI] [s] "/" identifier *(s option) *(s attribute) [s] [close-isolate] "}"
+
+s = 1*( SP / HTAB / CR / LF [LRI] / %x3000 )
+LRI = %x2066
+open-isolate  = %x2066-2068
+close-isolate = %x2069
+```
+
+Isolating rather than marking `name` helps ensure
+that its directionality does not spill over to adjoining syntax.
+For example, this allows for the proper rendering of the expression
+```
+{⁦:⁧אחת⁩:⁧שתיים⁩⁩}
+```
+where "אחת" is the `namespace` of the `identifier`.
+Without `name` isolation, this would render as
+```
+{⁦:אחת:שתיים⁩}
+```
+
+In the syntax, it's much simpler to include the changes to `name` in that rule,
+rather than patching every place where `name` is used.
+Either way, the parsed value of the name should not include the open/close isolates,
+just as they're not included in the parsed values of quoted literals or quoted patterns.
+
 
 ### Deeper Syntax Changes
 We could alter the syntax to make it more "bidi robust", 
