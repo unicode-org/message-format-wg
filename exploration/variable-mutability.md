@@ -1,4 +1,4 @@
-# Design Proposal Template
+# Variable Mutability
 
 Status: **Accepted**
 
