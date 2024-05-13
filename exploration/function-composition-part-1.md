@@ -36,10 +36,21 @@ the meaning of function composition is ambiguous.
 An obstacle to disambiguating its meaning
 is the absence of a definition of "resolved value".
 
-So we must address both problems together:
+A necessary but not sufficient condition for specifying
+the meaning of function composition
+is to define the structure
+of the inputs and outputs to function implementations.
+These definitions must be flexible enough to accommodate
+different implementation languages and design choices,
+while also being concrete enough for ease of reasoning.
 
-* Problem 1: Define what it means for functions to compose with each other.
-* Problem 2: Define the constraints that a definition of "resolved value" must satisfy.
+It's much easier to think about what it means for
+one function to operate on the result of another function
+if we know what the inputs and outputs to those functions
+look like.
+
+This design document primarily attempts to address
+the constraints that a definition of "resolved value" must satisfy.
 
 The spec currently leaves the term "resolved value"
 undefined.
@@ -52,7 +63,7 @@ is to begin making those constraints explicit
 so that the implementor can consult documentation
 rather than inferring requirements.
 
-Problem 2 implies several subsidiary goals,
+Defining resolved values implies several subsidiary goals,
 as there are several things that can be done with resolved values
 at runtime:
 
