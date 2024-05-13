@@ -54,7 +54,7 @@ user interfaces that can appear in any language and support the needs of diverse
 
 The current specification starts [here](spec/README.md) and may have changed since the publication
 of the Tech Preview version.
-The Tech Preview specification is [here](tr35-messageformat.md) (link to follow).
+The Tech Preview specification is [here](https://www.unicode.org/reports/tr35/tr35-72/tr35-messageFormat.html)
 
 The current draft syntax for defining messages can be found in [spec/syntax.md](./spec/syntax.md).
 The syntax is formally described in [ABNF](spec/message.abnf).
@@ -107,10 +107,16 @@ Implementers should be aware of the following normative changes during the tech 
 
 ## Implementations
 
-(The working group expects that ICU75 will include both Java and C/C++ implementations of the tech preview specification)
-
-- Java: [`com.ibm.icu.message2`](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/index.html?com/ibm/icu/message2/package-summary.html), part of ICU 72 released in October 2022, is a _tech preview_ implementation of the MessageFormat 2 syntax, together with a formatting API. See the [ICU User Guide](https://unicode-org.github.io/icu/userguide/format_parse/messages/mf2.html) for examples and a quickstart guide.
+- Java: [`com.ibm.icu.message2`](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/index.html?com/ibm/icu/message2/package-summary.html), part of ICU 75, is a _tech preview_ implementation of the MessageFormat 2 syntax, together with a formatting API. See the [ICU User Guide](https://unicode-org.github.io/icu/userguide/format_parse/messages/mf2.html) for examples and a quickstart guide.
+- C/C++: [`icu::message2::MessageFormatter`](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1message2_1_1MessageFormatter.html), part of ICU 75, is a _tech preview_ implementation of MessageFormat 2.
 - JavaScript: [`messageformat`](https://github.com/messageformat/messageformat/tree/master/packages/mf2-messageformat) 4.0 implements the MessageFormat 2 syntax, together with a polyfill of the runtime API proposed for ECMA-402.
+
+The working group is also aware of these implementations in progress or released, but has not evaluated them:
+- [i18next](https://www.npmjs.com/package/i18next-mf2) i18nFormat plugin to use mf2 format with i18next, version 0.1.1
+
+> [!NOTE]
+> Tell us about your MessageFormat 2 implementation!
+> Submit a [PR on this page](https://github.com/unicode-org/message-format-wg/edit/main/README.md), file an issue, or send email to have your implementation appear here.
 
 ## Sharing Feedback
 
