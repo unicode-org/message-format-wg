@@ -54,7 +54,7 @@ user interfaces that can appear in any language and support the needs of diverse
 
 The current specification starts [here](spec/README.md) and may have changed since the publication
 of the Tech Preview version.
-The Tech Preview specification is [here](https://www.unicode.org/reports/tr35/tr35-messageFormat.html)
+The Tech Preview specification is [here](https://www.unicode.org/reports/tr35/tr35-72/tr35-messageFormat.html)
 
 The current draft syntax for defining messages can be found in [spec/syntax.md](./spec/syntax.md).
 The syntax is formally described in [ABNF](spec/message.abnf).
@@ -113,6 +113,10 @@ Implementers should be aware of the following normative changes during the tech 
 
 The working group is also aware of these implementations in progress or released, but has not evaluated them:
 - [i18next](https://www.npmjs.com/package/i18next-mf2) i18nFormat plugin to use mf2 format with i18next, version 0.1.1
+
+> [!NOTE]
+> Tell us about your MessageFormat 2 implementation!
+> Submit a PR on this page, file an issue, or send email to have your implementation appear here.
 
 ## Sharing Feedback
 
