@@ -116,7 +116,7 @@ The working group is also aware of these implementations in progress or released
 
 > [!NOTE]
 > Tell us about your MessageFormat 2 implementation!
-> Submit a PR on this page, file an issue, or send email to have your implementation appear here.
+> Submit a [PR on this page](https://github.com/unicode-org/message-format-wg/edit/main/README.md), file an issue, or send email to have your implementation appear here.
 
 ## Sharing Feedback
 
