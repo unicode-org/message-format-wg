@@ -351,7 +351,7 @@ the _message_ would still be functional and would emit no undesired characters.
 
 ### Loose isolation
 
-Apply a slightly different set of bidi isolates.
+Apply bidi isolates in a slightly different way.
 The main differences to the proposed solution are:
 1. The open/close isolate characters are not syntactically required to be paired.
    This avoids introducing parse errors for missing or required invisible characters,
@@ -363,7 +363,7 @@ Quoted patterns, quoted literals, and names may be isolated by LRI/RLI/FSI...PDI
 For names and quoted literals, the isolate characters are outside the body of the token,
 but for quoted patterns, the isolates are in the middle of the `{{` and `}}` characters.
 This avoids adding a lookahead requirement for detecting a `complex-message` start,
-and differentiating a `quoted-pattern` from a `quoted` `key` in a `variant`.
+and differentiates a `quoted-pattern` from a `quoted` `key` in a `variant`.
 
 Expressions and markup may be isolated by LRI...PDI immediately within the `{` and `}`.
 
