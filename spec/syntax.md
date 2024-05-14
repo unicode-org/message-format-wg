@@ -948,9 +948,10 @@ backslash    = %x5C ; U+005C REVERSE SOLIDUS "\"
 > they do not need to be escaped, such as braces in a _quoted_ _literal_.
 > For example, `|foo {bar}|` and `|foo \{bar\}|` are synonymous.
 
-When programmatically emitting message syntax,
-only characters that are lexically meaningful in the current context
-SHOULD be escaped.
+When writing or generating a _message_, escape sequences SHOULD NOT be used
+unless required by the syntax.
+That is, inside _literals_ only escape `|` 
+and inside _patterns_ only escape `{` and `}`.
 
 ### Whitespace
 
