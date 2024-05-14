@@ -37,8 +37,8 @@ For example, many of the [XLIFF 2 inline element] attributes don't really make s
 ### User Story: Formatting Context Override
 As a message author, I want to override values in the `formatting context` for a specific `expression`.
 I would like to do this in a consistent, effective manner that does not require the `function`
-inside the `expression` to do special things in their code.
-As far as the `function` is concerned, they just read the value from the `formatting context`
+inside the `expression` to do special things in its code.
+As far as the `function` is concerned, it just reads the value from the `formatting context`
 normally.
 
 A common example of this is the `locale`.
