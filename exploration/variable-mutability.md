@@ -1,4 +1,4 @@
-# Variable Mutability
+# Variable Namespacing and Mutability
 
 Status: **Accepted**
 
