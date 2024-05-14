@@ -1,9 +1,9 @@
-# Design Proposal Template
+# Variable Namespacing and Mutability
 
 Status: **Accepted**
 
 <details>
-	<summary>Variable Namespacing and Mutability</summary>
+	<summary>Metadata</summary>
 	<dl>
 		<dt>Contributors</dt>
 		<dd>@aphillips</dd>

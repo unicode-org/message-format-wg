@@ -9,6 +9,9 @@ Status: **Accepted**
 		<dd>@aphillips</dd>
 		<dt>First proposed</dt>
 		<dd>2023-12-15</dd>
+		<dt>Pull Requests</dt>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/564">#564</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/599">#599</a></dd>
 	</dl>
 </details>
 
