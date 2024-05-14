@@ -33,6 +33,46 @@ For example, many of the [XLIFF 2 inline element] attributes don't really make s
 
 ## Use-Cases
 
+### User Story: Formatting Context Override
+As a message author, I want to override values in the `formatting context` for a specific `expression`.
+I would like to do this in a consistent, effective manner that does not require the `function`
+inside the `expression` to do special things in their code.
+As far as the `function` is concerned, they just read the value from the `formatting context`
+normally.
+
+A common example of this is the `locale`.
+Overriding the `locale` used by a function might be needed if I want a specific locale chosen:
+>```
+>You format {42 :number @locale=fr} like this in French.
+>```
+Or if I want to supply it in a variable:
+>```
+> You format {42 :number @locale=$userSpecified} like this in {$userSpecified}
+>```
+
+Other examples include `direction` or `time zone`:
+>```
+> The MAC address is always LTR: {$mac :string @dir=ltr}
+> I don't want the system default time zone or the one in $d: {$d :date @timezone=|America/Phoenix|}
+>```
+
+An implemenation might want to override a custom contextual value:
+>```
+> You format this specially: {42 :number @amzn:marketplace=US}
+>```
+
+### User Story: Translation Tooling
+As a translator or developer, I want to ensure that instructions to CAT tools,
+including information for human translators or that help MT can be included into
+the message and preserved through the translation process.
+
+In general, such instructions, metadata, etc. do not effect the runtime formatting of the message.
+Implementers of functions or markup do not wish to access these and might be annoyed if
+the names of translation-related fields conflict with the normal naming of options.
+Message compilers might remove these expression attributes when creating messages for use by the runtime.
+
+
+### General Use Cases
 At least the following expression attributes should be considered:
 
 - Attributes with a formatting runtime impact:
