@@ -943,6 +943,15 @@ escaped-char = backslash ( backslash / "{" / "|" / "}" )
 backslash    = %x5C ; U+005C REVERSE SOLIDUS "\"
 ```
 
+> [!NOTE]
+> The `escaped-char` rule allows escaping some characters in places where
+> they do not need to be escaped, such as braces in a _quoted_ _literal_.
+> For example, `|foo {bar}|` and `|foo \{bar\}|` are synonymous.
+
+When programmatically emitting message syntax,
+only characters that are lexically meaningful in the current context
+SHOULD be escaped.
+
 ### Whitespace
 
 **_<dfn>Whitespace</dfn>_** is defined as one or more of
