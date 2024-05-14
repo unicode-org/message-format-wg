@@ -13,6 +13,7 @@ Status: **Proposed**
 		<dt>Pull Requests</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/458">#458</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/772">#772</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/792">#792</a></dd>
 	</dl>
 </details>
 
@@ -35,32 +36,31 @@ For example, many of the [XLIFF 2 inline element] attributes don't really make s
 ## Use-Cases
 
 ### User Story: Formatting Context Override
-As a message author, I want to override values in the `formatting context` for a specific `expression`.
-I would like to do this in a consistent, effective manner that does not require the `function`
-inside the `expression` to do special things in its code.
-As far as the `function` is concerned, it just reads the value from the `formatting context`
-normally.
+As a message author, I want to override values in the _formatting context_ for a specific _expression_.
+I would like to do this in a consistent, effective manner that does not require a change to the 
+_function_ or _markup_ support code in order to be effective.
+As far as the code is concerned, it just reads the value from the _formatting context_ normally.
 
-A common example of this is the `locale`.
-Overriding the `locale` used by a function might be needed if I want a specific locale chosen:
->```
->You format {42 :number @locale=fr} like this in French.
->```
+A common example of this is the _locale_.
+Overriding the locale used by a function might be needed if I want a specific locale chosen:
+```
+You format {42 :number @locale=fr} like this in French.
+```
 Or if I want to supply it in a variable:
->```
-> You format {42 :number @locale=$userSpecified} like this in {$userSpecified}
->```
+```
+You format {42 :number @locale=$userSpecified} like this in {$userSpecified}
+```
 
-Other examples include `direction` or `time zone`:
->```
-> The MAC address is always LTR: {$mac :string @dir=ltr}
-> I don't want the system default time zone or the one in $d: {$d :date @timezone=|America/Phoenix|}
->```
+Other examples include _direction_ or the _time zone_:
+```
+The MAC address is always LTR: {$mac :string @dir=ltr}
+I don't want the system default time zone or the one in $d: {$d :date @timezone=|America/Phoenix|}
+```
 
-An implemenation might want to override a custom contextual value:
->```
-> You format this specially: {42 :number @amzn:marketplace=US}
->```
+An implementation might want to override a custom contextual value:
+```
+You format this specially: {42 :number @amzn:marketplace=US}
+```
 
 ### User Story: Translation Tooling
 As a translator or developer, I want to ensure that instructions to CAT tools,
@@ -72,6 +72,26 @@ Implementers of functions or markup do not wish to access these and might be ann
 the names of translation-related fields conflict with the normal naming of options.
 Message compilers might remove these expression attributes when creating messages for use by the runtime.
 
+Some examples include:
+- In addition to supporting a limited set of HTML elements,
+  Android String Resources use `<xliff:g>` to wrap
+  [nontranslatable content](https://developer.android.com/guide/topics/resources/localization#mark-message-parts).
+  This is best represented in MF2 with a `@translate=no` attribute.
+- Web extension `messages.json` files allow for named [placeholders](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/i18n/Locale-Specific_Message_reference#placeholders)
+  that are mapped to indexed arguments.
+  These may include an example, which is best represented in MF2 as an `@example=...` attribute.
+
+- In #772, @eemeli calls out:
+  > While working on [moz.l10n](https://github.com/mozilla/moz-l10n/), 
+  > a new Python localization library that uses the MF2 message and 
+  > [resource data model](https://github.com/eemeli/message-resource-wg/pull/16) to represent messages 
+  > from a number of different current syntaxes, 
+  
+  Apple's Xcode supports localization of plural messages via `.stringsdict` XML files,
+  which encode the plural variable's name as a `NSStringLocalizedFormatKey` value,
+  where it appears as e.g. `%#@countOfFoo@` or similar.
+  To display only the relevant "countOfFoo" name of this variable to localizers as context,
+  it's best to use a `@source=...` attribute on the selector.
 
 ### General Use Cases
 At least the following expression attributes should be considered:
