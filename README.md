@@ -102,8 +102,16 @@ The Working Group continues to address feedback
 and develop portions of the specification not completed for the LDML45 Tech Preview release.
 The `main` branch of this repository contains changes implemented since the technical preview.
 
-Implementers should be aware of the following normative changes during the tech preview period:
-- _(list to be updated during tech preview)_
+Implementers should be aware of the following normative changes during the tech preview period.
+See the [commit history](https://github.com/unicode-org/message-format-wg/commits) 
+after 2024-04-13 for a list of all commits (including non-normative changes).
+- #771 Remove inappropriate normative statement from errors.md
+- #767 Add a test schema and #778 validate tests against it
+- #775 Add a definition for `variable`
+- #774 Refactor error types, adding a _Message Function Error_ type (and subtypes)
+- #769 Add `:test:function`, `:test:select` and `:test:format` functions for implementation testing
+- #743 Collapse all escape sequence rules into one (affects the ABNF)
+- _more to be added as the are merged_
 
 ## Implementations
 
