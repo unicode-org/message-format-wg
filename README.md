@@ -105,12 +105,14 @@ The `main` branch of this repository contains changes implemented since the tech
 Implementers should be aware of the following normative changes during the tech preview period.
 See the [commit history](https://github.com/unicode-org/message-format-wg/commits) 
 after 2024-04-13 for a list of all commits (including non-normative changes).
-- #771 Remove inappropriate normative statement from errors.md
-- #767 Add a test schema and #778 validate tests against it
-- #775 Add a definition for `variable`
-- #774 Refactor error types, adding a _Message Function Error_ type (and subtypes)
-- #769 Add `:test:function`, `:test:select` and `:test:format` functions for implementation testing
-- #743 Collapse all escape sequence rules into one (affects the ABNF)
+- [#771](https://github.com/unicode-org/message-format-wg/issues/771) Remove inappropriate normative statement from errors.md
+- [#767](https://github.com/unicode-org/message-format-wg/issues/767) Add a test schema and
+  [#778](https://github.com/unicode-org/message-format-wg/issues/778) validate tests against it
+- [#775](https://github.com/unicode-org/message-format-wg/issues/775) Add a definition for `variable`
+- [#774](https://github.com/unicode-org/message-format-wg/issues/774) Refactor error types, adding a _Message Function Error_ type (and subtypes)
+- [#769](https://github.com/unicode-org/message-format-wg/issues/769) Add `:test:function`,
+  `:test:select` and `:test:format` functions for implementation testing
+- [#743](https://github.com/unicode-org/message-format-wg/issues/743) Collapse all escape sequence rules into one (affects the ABNF)
 - _more to be added as they are merged_
 
 ## Implementations
