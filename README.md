@@ -111,7 +111,7 @@ after 2024-04-13 for a list of all commits (including non-normative changes).
 - #774 Refactor error types, adding a _Message Function Error_ type (and subtypes)
 - #769 Add `:test:function`, `:test:select` and `:test:format` functions for implementation testing
 - #743 Collapse all escape sequence rules into one (affects the ABNF)
-- _more to be added as the are merged_
+- _more to be added as they are merged_
 
 ## Implementations
 
