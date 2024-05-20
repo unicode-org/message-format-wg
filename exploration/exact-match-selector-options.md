@@ -1,4 +1,4 @@
-# Design Proposal Template
+# Name of the "Exact Match" selector function
 
 Status: **Accepted**
 
