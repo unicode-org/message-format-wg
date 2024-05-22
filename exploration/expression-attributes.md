@@ -28,9 +28,23 @@ Function options may influence the resolution, selection, and formatting of anno
 These provide a great solution for options like `minFractionDigits`, `dateStyle`,
 or other similar factors that influence the formatted result.
 
-However, this single bag of options is not appropriate in all cases,
-in particular for attributes that pertain to the expression as a selector or a placeholder.
-For example, many of the [XLIFF 2 inline element] attributes don't really make sense as function options.
+Such options naturally correspond to function arguments or builder-style function constructors.
+Each option is specific to the associated API.
+Users (message authors, translators, developers) should not expect
+that a given option name has the same meaning between functions
+or that its behavior stays the same.
+
+To reduce the learning curve for users and improve consistency,
+it would be useful to have common options
+(generally those related to the formatting context)
+shared between all functions.
+
+Separately from formatting concerns,
+it is often useful to attach other information to message expressions and markup.
+For example, presenting how an example value could be formatted can be very useful for the message's translation,
+and providing the original source representation of a placeholder may be essential for being able to format a non-MF2 message,
+if it has been transformed to MF2 to provide translators with a unified experience.
+As a specific example, many of the [XLIFF 2 inline element] attributes don't really make sense as function options.
 
 [XLIFF 2 inline element]: http://docs.oasis-open.org/xliff/xliff-core/v2.1/os/xliff-core-v2.1-os.html#inlineelements
 
@@ -38,7 +52,7 @@ For example, many of the [XLIFF 2 inline element] attributes don't really make s
 
 ### User Story: Formatting Context Override
 As a message author, I want to override values in the _formatting context_ for a specific _expression_.
-I would like to do this in a consistent, effective manner that does not require a change to the 
+I would like to do this in a consistent, effective manner that does not require a change to the
 _function_ or _markup_ support code in order to be effective.
 As far as the code is concerned, it just reads the value from the _formatting context_ normally.
 
@@ -83,11 +97,11 @@ Some examples include:
   These may include an example, which is best represented in MF2 as an `@example=...` attribute.
 
 - In #772, @eemeli calls out:
-  > While working on [moz.l10n](https://github.com/mozilla/moz-l10n/), 
-  > a new Python localization library that uses the MF2 message and 
-  > [resource data model](https://github.com/eemeli/message-resource-wg/pull/16) to represent messages 
-  > from a number of different current syntaxes, 
-  
+  > While working on [moz.l10n](https://github.com/mozilla/moz-l10n/),
+  > a new Python localization library that uses the MF2 message and
+  > [resource data model](https://github.com/eemeli/message-resource-wg/pull/16) to represent messages
+  > from a number of different current syntaxes,
+
   Apple's Xcode supports localization of plural messages via `.stringsdict` XML files,
   which encode the plural variable's name as a `NSStringLocalizedFormatKey` value,
   where it appears as e.g. `%#@countOfFoo@` or similar.
@@ -96,6 +110,35 @@ Some examples include:
 
 ### General Use Cases
 At least the following expression attributes should be considered:
+
+- Attributes with a formatting runtime impact:
+
+  - `id` — An identifier for the expression or markup.
+    This is included in the formatted part,
+    and allows each part of a message to be explicitly addressed.
+
+    > Example identifying two literal numbers:
+    >
+    > ```
+    > The first number was {1234 :number u:id=first} and the second {56789 :number u:id=second}.
+    > ```
+
+  - `locale` — An override for the locale used to format the expression.
+
+    > Example embedding a French date in an English message:
+    >
+    > ```
+    > In French, this date would be displayed as {|2024-05-06| :date u:locale=fr}
+    > ```
+
+  - `dir` — An override for the LTR/RTL/auto directionality of the expression.
+
+    > Example explicitly isolating the directionality of a placeholder
+    > for a custom user-defined function:
+    >
+    > ```
+    > Welcome, {$user :x:username u:dir=auto}
+    > ```
 
 - Attributes relevant for translators, tools, and other message operations,
   but with no runtime impact:
@@ -148,6 +191,10 @@ including expressions without an annotation.
 
 Attributes are distinct from function options.
 
+Common options or attributes should work the same way in different functions.
+
+Special options or attributes should not conflict with other option names.
+
 Users may define their own attributes.
 
 Implementations may define their own attributes.
@@ -168,25 +215,114 @@ the reserved/private-use rules will need to be adjusted to support attributes.
 
 ## Proposed Design
 
-Add support for `@key` attributes at the end of any expression or markup.
-These may consist only of an attribute name,
-or an option-like `@key=value` pair with a literal value.
+Solve the two disparate use cases separately,
+so that their namespaces are not comingled.
 
-To distinguish expression attributes from options,
+### Contextual options
+
+Define the expected values and handling for the following options
+wherever they are used:
+
+- `u:id` — A string value that is included as an `id` or other suitable value
+  in the formatted part(s) for the placeholder,
+  or any other structured formatted results.
+  Ignored when formatting to a string, but could show up in error messages.
+- `u:locale` — A comma-delimited list of BCP 47 language tags,
+  or an implementation-defined list of such tags.
+  The tags are parsed, and they replace the _locale_
+  defined in the _formatting context_ for this expression or markup.
+- `u:dir` — One of the string values `ltr`, `rtl`, or `auto`.
+  Replaces the character directionality
+  defined in the _formatting context_ for this expression or markup.
+
+Error handling should be well defined for invalid values.
+
+Additional restrictions could be imposed,
+e.g. requiring that each `u:id` is unique within a formatted message.
+
+### Attributes
+
+Add support for standalone `@key` as well as
+option-like `@key=value` attribute pairs with a literal value
+at the end of any expression or markup.
+
+To distinguish attributes from options,
 require `@` as a prefix for each attribute asignment.
 Examples: `@translate=yes` and `@xliff:canCopy`.
 
 Do not allow expression or markup attributes to influence the formatting context,
 or pass them to function handlers.
 
+Drop variable values from the `attribute` rule:
+
+```diff
+-attribute = "@" identifier [[s] "=" [s] (literal / variable)]
++attribute = "@" identifier [[s] "=" [s] literal]
+```
+
 ## Alternatives Considered
 
-### Do not support expression attributes
+### Do nothing
+
+Continue to [caution](https://github.com/unicode-org/message-format-wg/blob/d38ff326d2381b3ef361e996c3431d1b251518d6/spec/syntax.md#attributes)
+function authors and other implementers away from creating function-specific or implementation-specific option values
+for the use cases presented above.
+
+As should be obvious, the current situation is not tenable in the long term, and should be resolved.
+
+### Do not provide any guidance
+
+Do not include in the spec rules or guidance for declaring formatted part identifiers,
+or overriding the message locale or directionality.
+
+Do not define a common way to communicate information
+about an expression or markup to translators or tools.
+
+This would mean not defining anything for default registry functions either,
+effectively requiring implementation-specific options like `icu:locale`.
+
+Other functions could use their own definitions and handling for similar options,
+such as `locale` or `x:lang`.
+
+Formatted parts for markup would not be able to directly include an identifier.
 
 If not explicitly defined, less information will be provided to translators.
 
 Function options may be used as a workaround,
 but each implementation and user will end up with different practices.
+
+### Define options for default registry only
+
+Define at least `locale` and `dir` as options for default registry functions,
+with handling internal to each function implementation.
+
+Other functions could use their own definitions and handling for similar options,
+such as `locale` or `x:lang`.
+
+Formatted parts for markup would not be able to directly include an identifier.
+
+Do not define a common way to communicate information
+about an expression or markup to translators or tools.
+
+### Use attributes also for contextual options
+
+Add support for standalone `@key` as well as
+option-like `@key=value` attribute pairs with a literal or variable values
+at the end of any expression or markup.
+
+To distinguish attributes from options,
+require `@` as a prefix for each attribute asignment.
+Examples: `@translate=yes` and `@locale=$exprLocale`.
+
+Define the meaning and supported values of some attributes in the specification,
+including at least `@dir` and `@locale`.
+
+To support later extension of the specified set of attributes while allowing user extensibility,
+require custom attribute names to be namespaced.
+Examples: `@xliff:can-copy=no`, `@note:link=|https://...|`.
+
+Allow expression attributes to influence the formatting context,
+but do not directly pass them to user-defined functions.
 
 ### Use function options, but with some suggested "discard" namespace like `_`
 
@@ -209,17 +345,6 @@ Referring to specific expressions from outside the message is hard,
 esp. if a similar expression is used in multiple variants.
 
 Comments should not influence the runtime behaviour of a formatter.
-
-### Define `@attributes` as above, but explicitly namespace custom attributes
-
-As namespacing may also be required for function names and function option names,
-and because we want to allow at least for custom function options
-to be definable on default formatters,
-the namespace rules for parts of the specification would end up differing.
-
-By suggesting instead of requiring,
-we rely on our stability policy to guide implementations to keep clear of the namespace
-that may be claimed by later versions of the specification.
 
 ### Enable function chaining within a single expression
 
