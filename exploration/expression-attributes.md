@@ -30,9 +30,10 @@ or other similar factors that influence the formatted result.
 
 Such options naturally correspond to function arguments or builder-style function constructors.
 Each option is specific to the associated API.
-Users (message authors, translators, developers) should not expect
-that a given option name has the same meaning between functions
-or that its behavior stays the same.
+Message authors such as translators and developers want consistent ways to do common tasks, 
+such as providing hints to translation tools or overriding the locale,
+but, unless MessageFormat provides otherwise, cannot rely on implementations
+to consistently implement these.
 
 To reduce the learning curve for users and improve consistency,
 it would be useful to have common options
@@ -44,7 +45,8 @@ it is often useful to attach other information to message expressions and markup
 For example, presenting how an example value could be formatted can be very useful for the message's translation,
 and providing the original source representation of a placeholder may be essential for being able to format a non-MF2 message,
 if it has been transformed to MF2 to provide translators with a unified experience.
-As a specific example, many of the [XLIFF 2 inline element] attributes don't really make sense as function options.
+As a specific example, many of the [XLIFF 2 inline element] attributes have no meaning
+to the function that they appear as options or annotations of.
 
 [XLIFF 2 inline element]: http://docs.oasis-open.org/xliff/xliff-core/v2.1/os/xliff-core-v2.1-os.html#inlineelements
 
