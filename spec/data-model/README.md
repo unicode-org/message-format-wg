@@ -234,7 +234,8 @@ interface VariableRef {
 A `FunctionAnnotation` represents a _function_ _annotation_.
 The `name` does not include the `:` starting sigil.
 
-Each _option_ is represented by an `Options` key-value mapping.
+`Options` is a key-value mapping containing options,
+and is used to represent the _annotation_ and _markup_ _options_.
 
 ```ts
 interface FunctionAnnotation {
@@ -270,7 +271,7 @@ A `Markup` object has a `kind` of either `"open"`, `"standalone"`, or `"close"`,
 each corresponding to _open_, _standalone_, and _close_ _markup_.
 The `name` in these does not include the starting sigils `#` and `/` 
 or the ending sigil `/`.
-The optional `options` for markup use the same key-value mapping as `FunctionAnnotation`.
+The `options` for markup use the same key-value mapping as `FunctionAnnotation`.
 
 ```ts
 interface Markup {
