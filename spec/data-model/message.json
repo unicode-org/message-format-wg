@@ -21,36 +21,18 @@
       },
       "required": ["type", "name"]
     },
+    "literal-or-variable": {
+      "oneOf": [{ "$ref": "#/$defs/literal" }, { "$ref": "#/$defs/variable" }]
+    },
+
     "options": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "value": {
-            "oneOf": [
-              { "$ref": "#/$defs/literal" },
-              { "$ref": "#/$defs/variable" }
-            ]
-          }
-        },
-        "required": ["name", "value"]
-      }
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/literal-or-variable" }
     },
     "attributes": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "value": {
-            "oneOf": [
-              { "$ref": "#/$defs/literal" },
-              { "$ref": "#/$defs/variable" }
-            ]
-          }
-        },
-        "required": ["name"]
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [{ "$ref": "#/$defs/literal-or-variable" }, { "const": true }]
       }
     },
 
@@ -129,7 +111,7 @@
       "type": "object",
       "properties": {
         "type": { "const": "markup" },
-        "kind": { "oneOf": [ "open", "standalone", "close" ] },
+        "kind": { "oneOf": ["open", "standalone", "close"] },
         "name": { "type": "string" },
         "options": { "$ref": "#/$defs/options" },
         "attributes": { "$ref": "#/$defs/attributes" }

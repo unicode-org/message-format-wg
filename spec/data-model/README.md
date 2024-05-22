@@ -180,34 +180,31 @@ interface LiteralExpression {
   type: "expression";
   arg: Literal;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
-  attributes: Attribute[];
+  attributes: Attributes;
 }
 
 interface VariableExpression {
   type: "expression";
   arg: VariableRef;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
-  attributes: Attribute[];
+  attributes: Attributes;
 }
 
 interface FunctionExpression {
   type: "expression";
   arg?: never;
   annotation: FunctionAnnotation;
-  attributes: Attribute[];
+  attributes: Attributes;
 }
 
 interface UnsupportedExpression {
   type: "expression";
   arg?: never;
   annotation: UnsupportedAnnotation;
-  attributes: Attribute[];
+  attributes: Attributes;
 }
 
-interface Attribute {
-  name: string;
-  value?: Literal | VariableRef;
-}
+type Attributes = Map<string, Literal | VariableRef | true>;
 ```
 
 ## Expressions
@@ -237,19 +234,16 @@ interface VariableRef {
 A `FunctionAnnotation` represents a _function_ _annotation_.
 The `name` does not include the `:` starting sigil.
 
-Each _option_ is represented by an `Option`.
+Each _option_ is represented by an `Options` key-value mapping.
 
 ```ts
 interface FunctionAnnotation {
   type: "function";
   name: string;
-  options: Option[];
+  options: Options;
 }
 
-interface Option {
-  name: string;
-  value: Literal | VariableRef;
-}
+type Options = Map<string, Literal | VariableRef>;
 ```
 
 An `UnsupportedAnnotation` represents a
@@ -276,15 +270,15 @@ A `Markup` object has a `kind` of either `"open"`, `"standalone"`, or `"close"`,
 each corresponding to _open_, _standalone_, and _close_ _markup_.
 The `name` in these does not include the starting sigils `#` and `/` 
 or the ending sigil `/`.
-The optional `options` for markup use the same `Option` as `FunctionAnnotation`.
+The optional `options` for markup use the same key-value mapping as `FunctionAnnotation`.
 
 ```ts
 interface Markup {
   type: "markup";
   kind: "open" | "standalone" | "close";
   name: string;
-  options: Option[];
-  attributes: Attribute[];
+  options: Options;
+  attributes: Attributes;
 }
 ```
 
