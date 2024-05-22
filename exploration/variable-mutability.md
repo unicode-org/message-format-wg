@@ -1,4 +1,4 @@
-# Design Proposal Template
+# Variable Namespacing and Mutability
 
 Status: **Accepted**
 

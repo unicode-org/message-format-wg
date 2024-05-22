@@ -1,6 +1,6 @@
 # Design Proposal: Choosing a Code Mode Introducer
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -77,10 +77,9 @@ private-start  = "^" / "&"
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
 
-We need to choose one of these (or another option not yet considered).
-Presentation at UTW did not produce any opinions.
-
-Based on the pro/cons below, I would suggest Option D is possibly the best option?
+A modified version of Option D was chosen.
+The keyword `when` was dropped after this design was completed.
+"Simple" messages do not require the `pattern` to be quoted.
 
 ## Alternatives Considered
 

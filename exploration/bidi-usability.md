@@ -7,10 +7,12 @@ Status: **Proposed**
 	<dl>
 		<dt>Contributors</dt>
 		<dd>@aphillips</dd>
+		<dd>@eemeli</dd>
 		<dt>First proposed</dt>
 		<dd>2024-03-27</dd>
 		<dt>Pull Requests</dt>
-		<dd>#754</dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/754">#754</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/781">#781</a></dd>
 	</dl>
 </details>
 
@@ -345,6 +347,66 @@ the results or debug what is wrong with their messages.
 
 By contrast, if users insert too many or the wrong controls using the recommended design,
 the _message_ would still be functional and would emit no undesired characters.
+
+
+### Loose isolation
+
+Apply bidi isolates in a slightly different way.
+The main differences to the proposed solution are:
+1. The open/close isolate characters are not syntactically required to be paired.
+   This avoids introducing parse errors for missing or required invisible characters,
+   which would lead to bad user experiences.
+2. Rather than patching the `name` rule with an optional trailing LRM/RLM/ALM,
+   allow for its proper isolation.
+
+Quoted patterns, quoted literals, and names may be isolated by LRI/RLI/FSI...PDI.
+For names and quoted literals, the isolate characters are outside the body of the token,
+but for quoted patterns, the isolates are in the middle of the `{{` and `}}` characters.
+This avoids adding a lookahead requirement for detecting a `complex-message` start,
+and differentiates a `quoted-pattern` from a `quoted` `key` in a `variant`.
+
+Expressions and markup may be isolated by LRI...PDI immediately within the `{` and `}`.
+
+An LRI is allowed immediately after a newline outside patterns and within expressions.
+This is intended to allow left-to-right representation for "code"
+even if it contains a newline followed by content
+that could otherwise prompt the paragraph direction to be detected as right-to-left.
+
+```abnf
+name           = [open-isolate] name-start *name-char [close-isolate]
+quoted         = [open-isolate] "|" *(quoted-char / quoted-escape) "|" [close-isolate]
+quoted-pattern = "{" [open-isolate] "{" pattern "}" [close-isolate] "}"
+
+literal-expression    = "{" [LRI] [s] literal [s annotation] *(s attribute) [s] [close-isolate] "}"
+variable-expression   = "{" [LRI] [s] variable [s annotation] *(s attribute) [s] [close-isolate] "}"
+annotation-expression = "{" [LRI] [s] annotation *(s attribute) [s] [close-isolate] "}"
+
+markup = "{" [LRI] [s] "#" identifier *(s option) *(s attribute) [s] ["/"] [close-isolate] "}"
+       / "{" [LRI] [s] "/" identifier *(s option) *(s attribute) [s] [close-isolate] "}"
+
+s = 1*( SP / HTAB / CR / LF [LRI] / %x3000 )
+LRI = %x2066
+open-isolate  = %x2066-2068
+close-isolate = %x2069
+```
+
+Isolating rather than marking `name` helps ensure
+that its directionality does not spill over to adjoining syntax.
+For example, this allows for the proper rendering of the expression
+```
+{⁦:⁧אחת⁩:⁧שתיים⁩⁩}
+```
+where "אחת" is the `namespace` of the `identifier`.
+Without `name` isolation, this would render as
+```
+{⁦:אחת:שתיים⁩}
+```
+
+In the syntax, it's much simpler to include the changes to `name` in that rule,
+rather than patching every place where `name` is used.
+Either way, the parsed value of the name should not include the open/close isolates,
+just as they're not included in the parsed values of quoted literals or quoted patterns.
+
 
 ### Deeper Syntax Changes
 We could alter the syntax to make it more "bidi robust", 
