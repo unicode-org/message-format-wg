@@ -78,13 +78,13 @@ type Message = PatternMessage | SelectMessage;
 
 interface PatternMessage {
   type: "message";
-  declarations: Declaration[];
+  declarations: (Declaration | UnsupportedStatement)[];
   pattern: Pattern;
 }
 
 interface SelectMessage {
   type: "select";
-  declarations: Declaration[];
+  declarations: (Declaration | UnsupportedStatement)[];
   selectors: Expression[];
   variants: Variant[];
 }
@@ -94,9 +94,10 @@ Each message _declaration_ is represented by a `Declaration`,
 which connects the `name` of a _variable_
 with its _expression_ `value`.
 The `name` does not include the initial `$` of the _variable_.
-
-The `name` of an `InputDeclaration` MUST be the same
-as the `name` in the `VariableRef` of its `VariableExpression` `value`.
+If the `value` has a `VariableRef` `arg` with the same `name`
+as the `Declaration`,
+it represents an _input-declaration_.
+Otherwise, it represents a _local-declaration_.
 
 An `UnsupportedStatement` represents a statement not supported by the implementation.
 Its `keyword` is a non-empty string name (i.e. not including the initial `.`).
@@ -112,16 +113,8 @@ The non-empty `expressions` correspond to the trailing _expressions_ of the _res
 > this data model.
 
 ```ts
-type Declaration = InputDeclaration | LocalDeclaration | UnsupportedStatement;
-
-interface InputDeclaration {
-  type: "input";
-  name: string;
-  value: VariableExpression;
-}
-
-interface LocalDeclaration {
-  type: "local";
+interface Declaration {
+  type: "declaration";
   name: string;
   value: Expression;
 }
@@ -170,37 +163,19 @@ expressions or markup.
 ```ts
 type Pattern = Array<string | Expression | Markup>;
 
-type Expression =
-  | LiteralExpression
-  | VariableExpression
-  | FunctionExpression
-  | UnsupportedExpression;
+type Expression = OperandExpression | AnnotationExpression;
 
-interface LiteralExpression {
+interface OperandExpression {
   type: "expression";
-  arg: Literal;
+  arg: Literal | VariableRef;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
   attributes: Attribute[];
 }
 
-interface VariableExpression {
-  type: "expression";
-  arg: VariableRef;
-  annotation?: FunctionAnnotation | UnsupportedAnnotation;
-  attributes: Attribute[];
-}
-
-interface FunctionExpression {
+interface AnnotationExpression {
   type: "expression";
   arg?: never;
-  annotation: FunctionAnnotation;
-  attributes: Attribute[];
-}
-
-interface UnsupportedExpression {
-  type: "expression";
-  arg?: never;
-  annotation: UnsupportedAnnotation;
+  annotation: FunctionAnnotation | UnsupportedAnnotation;
   attributes: Attribute[];
 }
 

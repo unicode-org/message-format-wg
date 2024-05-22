@@ -21,18 +21,17 @@
       },
       "required": ["type", "name"]
     },
+    "literal-or-variable": {
+      "oneOf": [{ "$ref": "#/$defs/literal" }, { "$ref": "#/$defs/variable" }]
+    },
+
     "options": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
           "name": { "type": "string" },
-          "value": {
-            "oneOf": [
-              { "$ref": "#/$defs/literal" },
-              { "$ref": "#/$defs/variable" }
-            ]
-          }
+          "value": { "$ref": "#/$defs/literal-or-variable" }
         },
         "required": ["name", "value"]
       }
@@ -43,12 +42,7 @@
         "type": "object",
         "properties": {
           "name": { "type": "string" },
-          "value": {
-            "oneOf": [
-              { "$ref": "#/$defs/literal" },
-              { "$ref": "#/$defs/variable" }
-            ]
-          }
+          "value": { "$ref": "#/$defs/literal-or-variable" }
         },
         "required": ["name"]
       }
@@ -78,50 +72,17 @@
       ]
     },
 
-    "literal-expression": {
-      "type": "object",
-      "properties": {
-        "type": { "const": "expression" },
-        "arg": { "$ref": "#/$defs/literal" },
-        "annotation": { "$ref": "#/$defs/annotation" },
-        "attributes": { "$ref": "#/$defs/attributes" }
-      },
-      "required": ["type", "arg"]
-    },
-    "variable-expression": {
-      "type": "object",
-      "properties": {
-        "type": { "const": "expression" },
-        "arg": { "$ref": "#/$defs/variable" },
-        "annotation": { "$ref": "#/$defs/annotation" },
-        "attributes": { "$ref": "#/$defs/attributes" }
-      },
-      "required": ["type", "arg"]
-    },
-    "function-expression": {
-      "type": "object",
-      "properties": {
-        "type": { "const": "expression" },
-        "annotation": { "$ref": "#/$defs/function-annotation" },
-        "attributes": { "$ref": "#/$defs/attributes" }
-      },
-      "required": ["type", "annotation"]
-    },
-    "unsupported-expression": {
-      "type": "object",
-      "properties": {
-        "type": { "const": "expression" },
-        "annotation": { "$ref": "#/$defs/unsupported-annotation" },
-        "attributes": { "$ref": "#/$defs/attributes" }
-      },
-      "required": ["type", "annotation"]
-    },
     "expression": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "expression" },
+        "arg": { "$ref": "#/$defs/literal-or-variable" },
+        "annotation": { "$ref": "#/$defs/annotation" },
+        "attributes": { "$ref": "#/$defs/attributes" }
+      },
       "oneOf": [
-        { "$ref": "#/$defs/literal-expression" },
-        { "$ref": "#/$defs/variable-expression" },
-        { "$ref": "#/$defs/function-expression" },
-        { "$ref": "#/$defs/unsupported-expression" }
+        { "required": ["type", "arg"] },
+        { "required": ["type", "annotation"] }
       ]
     },
 
@@ -129,7 +90,7 @@
       "type": "object",
       "properties": {
         "type": { "const": "markup" },
-        "kind": { "oneOf": [ "open", "standalone", "close" ] },
+        "kind": { "oneOf": ["open", "standalone", "close"] },
         "name": { "type": "string" },
         "options": { "$ref": "#/$defs/options" },
         "attributes": { "$ref": "#/$defs/attributes" }
@@ -148,19 +109,10 @@
       }
     },
 
-    "input-declaration": {
+    "declaration": {
       "type": "object",
       "properties": {
-        "type": { "const": "input" },
-        "name": { "type": "string" },
-        "value": { "$ref": "#/$defs/variable-expression" }
-      },
-      "required": ["type", "name", "value"]
-    },
-    "local-declaration": {
-      "type": "object",
-      "properties": {
-        "type": { "const": "local" },
+        "type": { "const": "declaration" },
         "name": { "type": "string" },
         "value": { "$ref": "#/$defs/expression" }
       },
@@ -183,8 +135,7 @@
       "type": "array",
       "items": {
         "oneOf": [
-          { "$ref": "#/$defs/input-declaration" },
-          { "$ref": "#/$defs/local-declaration" },
+          { "$ref": "#/$defs/declaration" },
           { "$ref": "#/$defs/unsupported-statement" }
         ]
       }
