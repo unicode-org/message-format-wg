@@ -42,8 +42,8 @@ shared between all functions.
 
 Separately from formatting concerns,
 it is often useful to attach other information to message expressions and markup.
-For example, presenting how an example value could be formatted can be very useful for the message's translation,
-and providing the original source representation of a placeholder may be essential for being able to format a non-MF2 message,
+For example, presenting how an example value could be formatted can be very useful for the message's translation.
+Providing the original source representation of a placeholder may be essential for being able to format a non-MF2 message,
 if it has been transformed to MF2 to provide translators with a unified experience.
 As a specific example, many of the [XLIFF 2 inline element] attributes have no meaning
 to the function that they appear as options or annotations of.
@@ -217,7 +217,8 @@ the reserved/private-use rules will need to be adjusted to support attributes.
 
 ## Proposed Design
 
-Solve the two disparate use cases separately,
+Provide separate solutions for attributes that impact formatting,
+and those which do not,
 so that their namespaces are not comingled.
 
 ### Contextual options
@@ -309,7 +310,7 @@ about an expression or markup to translators or tools.
 ### Use attributes also for contextual options
 
 Add support for standalone `@key` as well as
-option-like `@key=value` attribute pairs with a literal or variable values
+option-like `@key=value` attribute pairs with a literal or variable value
 at the end of any expression or markup.
 
 To distinguish attributes from options,
