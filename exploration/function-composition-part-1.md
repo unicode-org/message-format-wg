@@ -469,7 +469,10 @@ abstract "input" and "output" types.
 Returning to Example Y1, consider two possible models
 of the runtime behavior of function composition.
 
-**Model 1:**
+**Preservation Model (Model 1)**
+
+We call this the "preservation" model because it preserves
+the options in the result of the function.
 
 1. Evaluate `$num` to a value and pass it to the `:number` function,
    along with named options `{"maxFrac": "2"}`
@@ -494,7 +497,10 @@ of the runtime behavior of function composition.
 
 then the formatted result is "0.33 0.33333".
 
-**Model 2:**
+**Simple Model (Model 2):**
+
+We call this the "simple" model because the result of the function
+is simpler than in the preservation model.
 
 1. Evaluate `$num` to a value and pass it to the `:number` function,
    along with named options `{"maxFrac": "2"}`
@@ -514,8 +520,8 @@ then the formatted result is "0.33 0.33".
 
 The difference is in step 2: whether the implementation
 of the `number` function returns a value encapsulating
-the various options that were passed in (model 1),
-or only a formatted result (model 2).
+the various options that were passed in (preservation model),
+or only a formatted result (simple model).
 
 In terms of implementation, the result depends on
 what the nature is of the value that is bound to
@@ -529,10 +535,10 @@ before a function call.
 Still, whatever value is stored in the environment
 must capture as much information as is needed by functions.
 
-In Model 2, the value is a simple "formatted value",
+In the simple model, the value is a simple "formatted value",
 analogously to MessageFormat 1.
 
-In Model 1, it is a more structured value that captures
+In the preservation model, it is a more structured value that captures
 both the "formatted value", and everything that was used to construct it,
 as in the first model.
 
@@ -546,7 +552,7 @@ A "resolved value"
 is also the operand of a function.
 
 Another way to resolve the ambiguity between
-Models 1 and 2 is to ask
+the simple and the preservation model is to ask
 when two resolved values are the same
 and when they are different.
 
@@ -597,7 +603,7 @@ interchangeable in any further piece of the message
 that follows this fragment.
 No processing can distinguish the resolved values
 of the two variables.
-This corresponds to model 1.
+This corresponds to the simple model.
 
 Interpretation 2: The meaning of `$x` is
 a value that represents
@@ -608,7 +614,7 @@ If the resolved value of `$x`, V, is passed to another function,
 that function can distinguish V from another value V1
 that represents the same formatted string,
 with different options.
-This corresponds to model 2.
+This corresponds to the preservation model.
 
 The choice of interpretation affects the meaning of
 function composition,
@@ -752,14 +758,14 @@ as both are "resolved values" according to the spec.
 But both interpretation 1 and interpretation 2 complicate that.
 
 Alternative 1: A function returns a "formatted value".
-This matches model 1, where formatted values
+This matches the simple model, where formatted values
 are bound to names.
 
 Alternative 2: A function returns a composite value
 that conceptually pairs a base value (possibly the
 operand of the function, but possibly not; see Example B1)
 with options.
-This matches model 2.
+This matches the preservation model.
 If we preserve the single usage of "resolved value"
 in the spec, this implies that the (base value, options)
 representation applies to all resolved values,
@@ -783,8 +789,8 @@ There seem to be several areas of ambiguity:
 
 * Are named values essentially `FormattedValue`s,
 or do they have additional structure that is used
-internally in the formatter? (Model 1 vs. Model 2)
-* In Model 2, some functions "look back" for the original value,
+internally in the formatter? (simple model vs. preservation model)
+* In the preservation model, some functions "look back" for the original value,
 (like `number`)
 while others return a new "source value"
 (like `getAge` in Example B1).
@@ -801,12 +807,14 @@ The question is how to craft the spec in a way that is consistent with expectati
 
 ## Requirements
 
-In the rest of this document, we assume some version of Model 2.
-However, if Model 1 is more desired, the questions arise of how to
+In the rest of this document, we assume some version of
+the preservation model.
+However, if the simple model is more desired, the questions arise of how to
 forbid compositions of functions that would do surprising things
 under that model.
 
-Even under Model 2, some instances of composition won't make sense,
+Even under the preservation model, some instances of composition
+won't make sense,
 so we need to define the error behavior when it doesn't make sense.
 
 This implies that we need:
