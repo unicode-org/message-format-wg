@@ -469,7 +469,7 @@ abstract "input" and "output" types.
 Returning to Example Y1, consider two possible models
 of the runtime behavior of function composition.
 
-**Preservation Model (Model 1)**
+#### Preservation Model
 
 This model preserves the options in the result of the function.
 
@@ -496,7 +496,7 @@ This model preserves the options in the result of the function.
 
 then the formatted result is "0.33 0.33333".
 
-### Formatted Value Model
+#### Formatted Value Model
 
 This model preserves the formatted value of the function,
 but not the options that were passed to the function.
@@ -517,10 +517,12 @@ but not the options that were passed to the function.
 
 then the formatted result is "0.33 0.33".
 
+#### Comparison between models
+
 The difference is in step 2: whether the implementation
 of the `number` function returns a value encapsulating
 the various options that were passed in (preservation model),
-or only a formatted result (simple model).
+or only a formatted result (formatted value model).
 
 In terms of implementation, the result depends on
 what the nature is of the value that is bound to
@@ -534,7 +536,7 @@ before a function call.
 Still, whatever value is stored in the environment
 must capture as much information as is needed by functions.
 
-In the simple model, the value is a simple "formatted value",
+In the formatted value model, the value is a simple "formatted value",
 analogously to MessageFormat 1.
 
 In the preservation model, it is a more structured value that captures
@@ -602,7 +604,7 @@ interchangeable in any further piece of the message
 that follows this fragment.
 No processing can distinguish the resolved values
 of the two variables.
-This corresponds to the simple model.
+This corresponds to the formatted value model.
 
 Interpretation 2: The meaning of `$x` is
 a value that represents
@@ -757,7 +759,7 @@ as both are "resolved values" according to the spec.
 But both interpretation 1 and interpretation 2 complicate that.
 
 Alternative 1: A function returns a "formatted value".
-This matches the simple model, where formatted values
+This matches the formatted value model, where formatted values
 are bound to names.
 
 Alternative 2: A function returns a composite value
@@ -788,7 +790,7 @@ There seem to be several areas of ambiguity:
 
 * Are named values essentially `FormattedValue`s,
 or do they have additional structure that is used
-internally in the formatter? (simple model vs. preservation model)
+internally in the formatter? (formatted value model vs. preservation model)
 * In the preservation model, some functions "look back" for the original value,
 (like `number`)
 while others return a new "source value"
@@ -808,7 +810,8 @@ The question is how to craft the spec in a way that is consistent with expectati
 
 In the rest of this document, we assume some version of
 the preservation model.
-However, if the simple model is more desired, the questions arise of how to
+However, if the formatted value model is more desired,
+the questions arise of how to
 forbid compositions of functions that would do surprising things
 under that model.
 
