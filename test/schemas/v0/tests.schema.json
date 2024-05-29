@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v1/tests.schema.json",
+  "$id": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
   "title": "MessageFormat 2 data-driven tests",
   "description": "The main schema for MessageFormat 2 test data.",
   "type": "object",
