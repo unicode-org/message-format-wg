@@ -471,8 +471,7 @@ of the runtime behavior of function composition.
 
 **Preservation Model (Model 1)**
 
-We call this the "preservation" model because it preserves
-the options in the result of the function.
+This model preserves the options in the result of the function.
 
 1. Evaluate `$num` to a value and pass it to the `:number` function,
    along with named options `{"maxFrac": "2"}`
