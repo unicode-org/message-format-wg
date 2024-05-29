@@ -496,10 +496,10 @@ This model preserves the options in the result of the function.
 
 then the formatted result is "0.33 0.33333".
 
-**Simple Model (Model 2):**
+### Formatted Value Model
 
-We call this the "simple" model because the result of the function
-is simpler than in the preservation model.
+This model preserves the formatted value of the function,
+but not the options that were passed to the function.
 
 1. Evaluate `$num` to a value and pass it to the `:number` function,
    along with named options `{"maxFrac": "2"}`
