@@ -11,7 +11,7 @@
       "exp": "{:datetime}",
       "expErrors": [
         {
-          "type": "invalid-expression"
+          "type": "bad-operand"
         }
       ]
     },
@@ -26,7 +26,7 @@
       ],
       "expErrors": [
         {
-          "type": "bad-input"
+          "type": "bad-operand"
         }
       ]
     },
@@ -35,7 +35,7 @@
       "exp": "{|horse|}",
       "expErrors": [
         {
-          "type": "operand-mismatch"
+          "type": "bad-operand"
         }
       ]
     },
