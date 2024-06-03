@@ -28,7 +28,7 @@ Decide whether and what implementations "MUST" / "SHOULD" / "MAY" perform after 
 
 In practice,
 runtime errors happen when formatting messages.
-It is useful to provide information about any formatting error(s) back to the callsite.
+It is useful to provide information about any errors back to the callsite.
 It is useful to the end user to provide best effort fallback representation of the message.
 Specifying the behavior in such cases promotes consistent results across conformant implementations.
 
@@ -43,7 +43,7 @@ ICU4X operates in low resource environments for which returning at most 1 error 
 because returning more than 1 error would require heap allocation.
 * Programming conventions and idioms: in [feedback from ICU-TC](https://docs.google.com/document/d/11yJUWedBIpmq-YNSqqDfgUxcREmlvV0NskYganXkQHA/edit#bookmark=id.lx4ls9eelh99),
 they found over the 25 years of maintaining the library that there was more cost than benefit in providing a default best effort return value at the same time as providing error information.
-The additional constraint in ICU4C's C++ style to use error code rather than throwing errors using the STL further complicates the usefulness and likelihood to be used correctly during nested calls.
+The additional constraint in ICU4C's C++ style to return an error code rather than throwing errors using the STL further complicates the usefulness and likelihood to be used correctly during nested calls.
 
 ## Proposed Design
 
