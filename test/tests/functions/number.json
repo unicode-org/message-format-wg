@@ -22,7 +22,7 @@
       "exp": "hello {|foo|}",
       "expErrors": [
         {
-          "type": "operand-mismatch"
+          "type": "bad-operand"
         }
       ]
     },
@@ -31,7 +31,7 @@
       "exp": "invalid number literal {|.1|}",
       "expErrors": [
         {
-          "type": "invalid-expression"
+          "type": "bad-operand"
         }
       ]
     },
@@ -40,7 +40,7 @@
       "exp": "invalid number literal {|1.|}",
       "expErrors": [
         {
-          "type": "invalid-expression"
+          "type": "bad-operand"
         }
       ]
     },
@@ -49,7 +49,7 @@
       "exp": "invalid number literal {|01|}",
       "expErrors": [
         {
-          "type": "invalid-expression"
+          "type": "bad-operand"
         }
       ]
     },
@@ -58,7 +58,7 @@
       "exp": "invalid number literal {|+1|}",
       "expErrors": [
         {
-          "type": "invalid-expression"
+          "type": "bad-operand"
         }
       ]
     },
@@ -67,7 +67,7 @@
       "exp": "invalid number literal {|0x1|}",
       "expErrors": [
         {
-          "type": "invalid-expression"
+          "type": "bad-operand"
         }
       ]
     },
@@ -76,7 +76,7 @@
       "exp": "hello {:number}",
       "expErrors": [
         {
-          "type": "invalid-expression"
+          "type": "bad-operand"
         }
       ]
     },
@@ -139,7 +139,7 @@
       "exp": "bar {$bar}",
       "expErrors": [
         {
-          "type": "invalid-expression"
+          "type": "bad-option"
         }
       ]
     },
@@ -154,7 +154,7 @@
       "exp": "bar {$bar}",
       "expErrors": [
         {
-          "type": "bad-input"
+          "type": "bad-operand"
         }
       ]
     },
@@ -189,7 +189,7 @@
       "exp": "bar {$foo}",
       "expErrors": [
         {
-          "type": "invalid-expression"
+          "type": "bad-option"
         }
       ]
     },
@@ -204,7 +204,7 @@
       "exp": "bar {$foo}",
       "expErrors": [
         {
-          "type": "bad-input"
+          "type": "bad-operand"
         }
       ]
     },

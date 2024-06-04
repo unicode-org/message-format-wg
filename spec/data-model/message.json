@@ -26,25 +26,13 @@
     },
 
     "options": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "value": { "$ref": "#/$defs/literal-or-variable" }
-        },
-        "required": ["name", "value"]
-      }
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/literal-or-variable" }
     },
     "attributes": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "value": { "$ref": "#/$defs/literal-or-variable" }
-        },
-        "required": ["name"]
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [{ "$ref": "#/$defs/literal-or-variable" }, { "const": true }]
       }
     },
 

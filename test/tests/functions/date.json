@@ -11,7 +11,7 @@
       "exp": "{:date}",
       "expErrors": [
         {
-          "type": "invalid-expression"
+          "type": "bad-operand"
         }
       ]
     },
@@ -20,7 +20,7 @@
       "exp": "{|horse|}",
       "expErrors": [
         {
-          "type": "operand-mismatch"
+          "type": "bad-operand"
         }
       ]
     },
