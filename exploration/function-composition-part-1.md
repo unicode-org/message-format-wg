@@ -1019,13 +1019,6 @@ Five alternatives are presented:
 4. Allow both kinds of composition
 5. Don't allow composition
 
-Alternatives 2 and 3 were presented earlier in this document.
-Alternative 4 is an idea from a prior mailing list discussion
-of this problem. Alternative 1 is similar to Alternative 3
-but introduces additional notation to make composition
-easier to think about (which is why it's presented first).
-Alternative 5 is included for completeness.
-
 ### Typed functions
 
 Types are a way for users of a language
@@ -1138,8 +1131,6 @@ Consider (this suggestion is from Elango Cheran):
     .pipeline $y = {$x :number maxFrac=5 padStart=3}
     {{$x} {$y}}
 ```
-
-
 
 `.pipeline` would be a new keyword that acts like `.local`,
 except that if its expression has a function annotation,
