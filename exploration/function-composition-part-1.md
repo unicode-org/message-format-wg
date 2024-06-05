@@ -980,15 +980,13 @@ definition of "resolved value".
 
 ## Introducing type names
 
-It's useful to be able to refer to two types:
+It's useful to be able to refer to three types:
 
-* `MessageValue`: The "resolved value" type; see [PR 728](https://github.com/unicode-org/message-format-wg/pull/728).
-* `ValueType`: This type encompasses strings, numbers, date/time values,
+* `InputType`: This type encompasses strings, numbers, date/time values,
 all other possible implementation-specific types that input variables can be
-assigned to, 
-and all possible implementation-specific types that custom and built-in
-functions can construct.
-Conceptually it's the union of an "input type" and a "formatted value".
+assigned to. The details are implementation-specific.
+* `MessageValue`: The "resolved value" type; see [PR 728](https://github.com/unicode-org/message-format-wg/pull/728).
+* `ValueType`: This type is the union of an `InputType` and a `MessageValue`.
 
 It's tagged with a string tag so functions can do type checks.
 
@@ -1027,8 +1025,10 @@ that functions can operate on.
 The most ambitious solution is to specify
 a type system for MessageFormat functions.
 
-`ValueType` is the most general type
+In this solution, `ValueType` is not what is defined above,
+but instead is the most general type
 in a system of user-defined types.
+(The internal definitions are omitted.)
 Using the function registry,
 each custom function could declare its own argument type
 and result type.
@@ -1087,6 +1087,15 @@ impractical.
 In the preservation model,
 functions "pipeline" the input through multiple calls.
 
+The `ValueType` definition is different:
+
+```ts
+interface ValueType {
+    type(): string
+    value(): InputType | MessageValue
+}
+```
+
 The resolved value interface would include both "input"
 and "output" methods:
 
@@ -1096,7 +1105,7 @@ interface MessageValue {
     formatToX(): X // where X is an implementation-defined type
     getInput(): ValueType
     getOutput(): ValueType
-    properties(): { [key: string]: MessageValue }
+    properties(): { [key: string]: ValueType }
     selectKeys(keys: string[]): string[]
 }
 ```
@@ -1110,7 +1119,7 @@ choose which options to pass through into the resulting
 Instead of using `unknown` as the result type of `getValue()`,
 we use `ValueType`, mentioned previously.
 Instead of using `unknown` as the value type for the
-`properties()` object, we use `MessageValue`,
+`properties()` object, we use `ValueType`,
 since options can also be full `MessageValue`s with their own options.
 
 Without a mechanism for type signatures,
@@ -1147,8 +1156,8 @@ number : Number -> FormattedNumber
 date   : Date -> FormattedDate
 ```
 
-The resolved value type would be the same as
-in the formatted value model.
+The `MessageValue` type would be defined the same way
+as in the formatted value model.
 
 The difference is that built-in functions
 would not accept a "formatted result"
