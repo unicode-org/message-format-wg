@@ -1080,7 +1080,10 @@ interface MessageValue {
 `MessageValue` is effectively a `ValueType` with methods.
 
 Using this definition would make some of the use cases
-impractical.
+impractical. For example, the result of Example A4
+might be surprising. Also, Example 1.3 from
+[the dataflow composability design doc](https://github.com/unicode-org/message-format-wg/blob/main/exploration/dataflow-composability.md)
+wouldn't work because options aren't preserved.
 
 ### Preservation model (Composition can operate on input and options)
 
@@ -1121,6 +1124,13 @@ we use `ValueType`, mentioned previously.
 Instead of using `unknown` as the value type for the
 `properties()` object, we use `ValueType`,
 since options can also be full `MessageValue`s with their own options.
+(The motivation for this is Example 1.3 from
+[the "dataflow composability" design doc](https://github.com/unicode-org/message-format-wg/blob/main/exploration/dataflow-composability.md).)
+
+This solution allows functions to pipeline input,
+operate on output, or both; as well as to examine
+previously passed options. Any example from this
+document can be implemented.
 
 Without a mechanism for type signatures,
 it may be hard for users to tell which combinations
