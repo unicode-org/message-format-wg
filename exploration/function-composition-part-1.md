@@ -1028,25 +1028,18 @@ Alternative 5 is included for completeness.
 
 ### Typed functions
 
-The following option aims to provide a general mechanism
-for custom function authors
-to specify how functions compose with each other.
+Types are a way for users of a language
+to reason about the kinds of data
+that functions can operate on.
+The most ambitious solution is to specify
+a type system for MessageFormat functions.
 
-This is an extension of the "preservation model"
-from part 1 of this document.
-
-Here, `ValueType` is the most general type
+`ValueType` is the most general type
 in a system of user-defined types.
 Using the function registry,
 each custom function could declare its own argument type
 and result type.
-
 This does not imply the existence of any static typechecking.
-A function passed the wrong type could signal a runtime error.
-This does require some mechanism for dynamically inspecting
-the type of a value.
-
-Consider Example B1 from part 1 of the document:
 
 Example B1:
 ```
@@ -1055,8 +1048,9 @@ Example B1:
     .local $z = {$y :uppercase}
 ```
 
-Informally, we can write the type signatures for
-the three custom functions in this example:
+In an informal notation,
+the three custom functions in this example
+have the following type signatures:
 
 ```
 getAge : Person -> Number
@@ -1064,94 +1058,21 @@ duration : Number -> String
 uppercase : String -> String
 ```
 
-`Number` and `String` are assumed to be subtypes
-of `MessageValue`. Thus, 
-
 The [function registry data model](https://github.com/unicode-org/message-format-wg/blob/main/spec/registry.md)
-attempts to do some of this, but does not define
-the structure of the values produced by functions.
+could be extended to define `Number` and `String`
+as subtypes of `MessageValue`.
+A custom function author could use the custom
+registry they define to define `Person` as
+a subtype of `MessageValue`.
 
 An optional static typechecking pass (linting)
 would then detect any cases where functions are composed in a way that
-doesn't make sense. For example:
-
-Semantically invalid example:
-```
-.local $z = {$person: uppercase}
-```
-
-A person can't be converted to uppercase; or, `:uppercase` expects
-a `String`, not a `Person`. So an optional tool could flag this
-as an error, assuming that enough type information
-was included in the registry.
-
-The resolved value type is similar to what was proposed in
-[PR 728](https://github.com/unicode-org/message-format-wg/pull/728/).
-
-```ts
-interface MessageValue {
-    formatToString(): string
-    formatToX(): X // where X is an implementation-defined type
-    getValue(): ValueType
-    properties(): { [key: string]: MessageValue }
-    selectKeys(keys: string[]): string[]
-}
-```
-
-The `resolvedOptions()` method is renamed to `properties`.
-This is to suggest that individual function implementations
-may not pass all of the options through into the resulting
-`MessageValue`. 
-
-Instead of using `unknown` as the result type of `getValue()`,
-we use `ValueType`, mentioned previously.
-Instead of using `unknown` as the value type for the
-`properties()` object, we use `MessageValue`,
-since options can also be full `MessageValue`s with their own options.
-
-Because `ValueType` has a type tag,
-custom function implementations can easily
-signal dynamic errors if passed an operand of the wrong type.
-
-The advantage of this approach is documentation:
-with type names that can be used in type signatures
-specified in the registry,
-it's easy for users to reason about functions and
-understand which combinations of functions
-compose with each other.
+doesn't make sense. The advantage of this approach is documentation.
 
 ### Formatted value model (Composition operates on output)
 
-This is an elaboration on the "formatted model" from part 1.
-
-A less general solution is to have a single "resolved value"
-type, and specify that if function `g` consumes the resolved value
-produced by function `f`,
-then `g` operates on the output of `f`.
-
-```
-    .local $x = {$num :number maxFrac=2}
-    .local $y = {$x :number maxFrac=5 padStart=3}
-```
-
-In this example, `$x` would be bound to the formatted result
-of calling `:number` on `$num`. So the `maxFrac` option would
-be "lost" and when determining the value of `$y`, the second
-set of options would be used.
-
-For built-ins, it suffices to define `ValueType`as something like:
-
-```
-FormattedNumber | FormattedDateTime | String
-```
-
-because no information about the input needs to be
-incorporated into the resolved value.
-
-However, to make it possible for custom functions to return
-a wider set of types, a wider `ValueType` definition would be needed.
-
-The `MessageValue` definition would look as in #728, but without
+To implement the "formatted value" model,
+the `MessageValue` definition would look as in [PR 728](https://github.com/unicode-org/message-format-wg/pull/728), but without
 the `resolvedOptions()` method:
 
 ```ts
@@ -1165,31 +1086,13 @@ interface MessageValue {
 
 `MessageValue` is effectively a `ValueType` with methods.
 
-Using this definition would make some of the use cases from part 1
+Using this definition would make some of the use cases
 impractical.
 
-### Preservation model (composition can operate on input and options)
+### Preservation model (Composition can operate on input and options)
 
-This is an extension of
-the "preservation model" from part 1,
-if resolved options are included in the output.
-This model can also be thought of as functions "pipelining"
-the input through multiple calls.
-
-A JSON representation of an example resolved value might be:
-```
-{
-    input: { type: "number", value: 1 },
-    output: { type: "FormattedNumber", value: FN }
-    properties: { "maximumFractionDigits": 2 }
-}
-```
-
-(The number "2" is shown for brevity, but it would
-actually be a `MessageValue` itself.)
-
-where `FN` is an instance of an implementation-specific
-`FormattedNumber` type, representing the number 1.
+In the preservation model,
+functions "pipeline" the input through multiple calls.
 
 The resolved value interface would include both "input"
 and "output" methods:
@@ -1204,6 +1107,18 @@ interface MessageValue {
     selectKeys(keys: string[]): string[]
 }
 ```
+
+Compared to PR 728:
+The `resolvedOptions()` method is renamed to `properties`.
+Individual function implementations
+choose which options to pass through into the resulting
+`MessageValue`. 
+
+Instead of using `unknown` as the result type of `getValue()`,
+we use `ValueType`, mentioned previously.
+Instead of using `unknown` as the value type for the
+`properties()` object, we use `MessageValue`,
+since options can also be full `MessageValue`s with their own options.
 
 Without a mechanism for type signatures,
 it may be hard for users to tell which combinations
@@ -1224,34 +1139,12 @@ Consider (this suggestion is from Elango Cheran):
     {{$x} {$y}}
 ```
 
-If `$num` is `0.33333`,
-then the result of formatting would be
 
-```
-0.33 000.33333
-```
-
-An extra argument to function implementations,
-`pipeline`, would be added.
 
 `.pipeline` would be a new keyword that acts like `.local`,
 except that if its expression has a function annotation,
-the formatter would pass in `true` for the `pipeline`
-argument to the function implementation.
-
-The `resolvedOptions()` method should be ignored if `pipeline`
-is `false`.
-
-```ts
-interface MessageValue {
-    formatToString(): string
-    formatToX(): X // where X is an implementation-defined type
-    getInput(): MessageValue
-    getOutput(): unknown
-    properties(): { [key: string]: MessageValue }
-    selectKeys(keys: string[]): string[]
-}
-```
+the formatter would apply the "preservation model" semantics
+to the function.
 
 ### Don't allow composition for built-in functions
 
@@ -1263,19 +1156,12 @@ number : Number -> FormattedNumber
 date   : Date -> FormattedDate
 ```
 
-Then it would be a runtime error to pass a `FormattedNumber` into `number`
-or to pass a `FormattedDate` into `date`.
+The resolved value type would be the same as
+in the formatted value model.
 
-The resolved value type would look like:
-
-```ts
-interface MessageValue {
-    formatToString(): string
-    formatToX(): X // where X is an implementation-defined type
-    getValue(): ValueType
-    selectKeys(keys: string[]): string[]
-}
-```
+The difference is that built-in functions
+would not accept a "formatted result"
+(would signal a runtime error in these cases).
 
 As with the formatted value model, this restricts the
 behavior of custom functions.
