@@ -14,19 +14,11 @@ Status: **Proposed**
 	</dl>
 </details>
 
-## Objective
+## Objectives
 
-_What is this proposal trying to achieve?_
-
-### Non-goal
-
-The objective of this design document is not to make
-a concrete proposal, but rather to explore a problem space.
-This space is complicated enough that agreement on vocabulary
-is desired before defining a solution.
-
-Instead of objectives, we present a primary problem
-and a set of subsidiary problems.
+* Present a complete list of alternative designs for how to
+provide the machinery for function composition.
+* Create a shared vocabulary for discussing these alternatives.
 
 ### Problem statement: defining resolved values
 
