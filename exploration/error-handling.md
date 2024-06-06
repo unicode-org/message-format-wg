@@ -49,17 +49,20 @@ The additional constraint in ICU4C's C++ style to return an error code rather th
 
 The following spec text is proposed:
 
-> In all cases, when encountering an error during formatting,
-> a message formatter MUST provide some representation of the message,
-> or MUST provide an informative error or errors.
-> An implementation MAY provide both.
+> In all cases, when encountering an error,
+> a message formatter MUST be able to signal an error or errors.
+> It MAY also provide the appropriate fallback representation of the _message_ defined
+> in this specification.
 
-This solution requires implementations to return _something_,
-but it leaves the decision to the implementation whether to:
+This solution requires implementations to be able to signal an error occurred,
+which can be accomplished in different ways. Ex:
 
-* return an error (or errors)
-* return a representative message
-* return both
+* an API that throws or returns an Error object when encountering an error
+* an API that includes a read/write `ErrorCode` argument 
+* two APIs, a permissive one that always returns a best-effort formatted result
+and a stricter one that throws or returns an Error object when encountering an error
+* an API that always returns a best-effort formatted result
+and a global `boolean` values
 
 This does not give implementations full freedom to return _nothing_ or some other behavior.
 
