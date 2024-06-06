@@ -29,7 +29,7 @@ Decide whether and what implementations "MUST" / "SHOULD" / "MAY" perform after 
 In practice,
 runtime errors happen when formatting messages.
 It is useful to provide information about any errors back to the callsite.
-It is useful to the end user to provide best effort fallback representation of the message.
+It is useful to the end user to provide a best effort fallback representation of the message.
 Specifying the behavior in such cases promotes consistent results across conformant implementations.
 
 However, implementations of MessageFormat 2.0 will be faced with different constraints due to various reasons:
