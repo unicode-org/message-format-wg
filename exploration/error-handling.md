@@ -42,7 +42,7 @@ In both languages, built-in error handling assumes a singular error.
 ICU4X operates in low resource environments for which returning at most 1 error is desirable
 because returning more than 1 error would require heap allocation.
 * Programming conventions and idioms: in [feedback from ICU-TC](https://docs.google.com/document/d/11yJUWedBIpmq-YNSqqDfgUxcREmlvV0NskYganXkQHA/edit#bookmark=id.lx4ls9eelh99),
-they found over the 25 years of maintaining the library that there was more cost than benefit in providing a default best effort return value at the same time as providing error information.
+they found over the 25 years of maintaining the library that there was more cost than benefit in additionally providing error information with a default best effort return value compared to just returning the default best effort value.
 The additional constraint in ICU4C's C++ style to return an error code rather than throwing errors using the STL further complicates the usefulness and likelihood to be used correctly during nested calls.
 
 ## Proposed Design
