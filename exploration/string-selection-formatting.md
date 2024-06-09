@@ -1,6 +1,6 @@
 # Selection and Formatting on String Values
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>

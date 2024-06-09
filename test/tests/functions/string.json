@@ -1,0 +1,48 @@
+{
+  "scenario": "String function",
+  "description": "The built-in formatter for strings.",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+      "src": ".match {$foo :string} |1| {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": "1"
+        }
+      ],
+      "exp": "one"
+    },
+    {
+      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1
+        }
+      ],
+      "exp": "one"
+    },
+    {
+      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": null
+        }
+      ],
+      "exp": "other"
+    },
+    {
+      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "exp": "other",
+      "expErrors": [
+        {
+          "type": "unresolved-variable"
+        }
+      ]
+    }
+  ]
+}

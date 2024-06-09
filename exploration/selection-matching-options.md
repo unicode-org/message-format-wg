@@ -1,5 +1,20 @@
 # Selection Matching Options
 
+Status: **Obsolete**
+
+<details>
+	<summary>Metadata</summary>
+	<dl>
+		<dt>Contributors</dt>
+		<dd>@aphillips</dd>
+	</dl>
+</details>
+
+> [!NOTE]
+> This document was used as part of the discussion for choosing the type of matching.
+> It is preserved for historical reasons, but does not conform to the format of a
+> normal design document.
+
 ## Recommendation
 
 We are discussing whether to change First-Match to another value. Currently voting looks like:

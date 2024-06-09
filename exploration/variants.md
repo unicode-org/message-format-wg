@@ -3,6 +3,10 @@
 This is a collection of message examples which require a branching logic to
 handle grammatical variations of the copy.
 
+> [!NOTE]
+> This document contains examples used during design discussions.
+> It is not a formal design document and is preserved for historical reasons.
+
 ## Regular plurals
 
 ### English

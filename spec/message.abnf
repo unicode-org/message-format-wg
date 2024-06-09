@@ -1,8 +1,8 @@
 message           = simple-message / complex-message
 
 simple-message    = [simple-start pattern]
-simple-start      = simple-start-char / text-escape / placeholder
-pattern           = *(text-char / text-escape / placeholder)
+simple-start      = simple-start-char / escaped-char / placeholder
+pattern           = *(text-char / escaped-char / placeholder)
 placeholder       = expression / markup
 
 complex-message   = *(declaration owsp) complex-body
@@ -46,7 +46,7 @@ attribute      = "@" identifier [owsp "=" owsp (literal / variable)]
 
 variable       = "$" name
 literal        = quoted / unquoted
-quoted         = "|" *(quoted-char / quoted-escape) "|"
+quoted         = "|" *(quoted-char / escaped-char) "|"
 unquoted       = name / number-literal
 ; number-literal matches JSON number (https://www.rfc-editor.org/rfc/rfc8259#section-6)
 number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
@@ -64,17 +64,18 @@ reserved-statement = reserved-keyword [s reserved-body] 1*(owsp expression)
 reserved-keyword   = "." name
 
 ; Reserve additional sigils for use by future versions of this specification.
-reserved-annotation       = reserved-annotation-start reserved-body
+reserved-annotation       = reserved-annotation-start [[s] reserved-body]
 reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
 ; Reserve sigils for private-use by implementations.
-private-use-annotation    = private-start reserved-body
+private-use-annotation    = private-start [[s] reserved-body]
 private-start             = "^" / "&"
-reserved-body             = *(owsp 1*(reserved-char / reserved-escape / quoted))
+reserved-body             = *(owsp 1*(reserved-char / escaped-char / quoted))
+
 
 ; Names and identifiers
 ; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName
-; name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName
+; name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName but excludes U+FFFD
 identifier = [namespace ":"] name
 namespace  = name
 name       = name-start *name-char
@@ -91,21 +92,20 @@ simple-start-char = content-char / s / "@" / "|"
 text-char         = content-char / s / "." / "@" / "|"
 quoted-char       = content-char / s / "." / "@" / "{" / "}"
 reserved-char     = content-char / "."
-content-char      = %x00-08        ; omit HTAB (%x09) and LF (%x0A)
+content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %x0B-0C        ; omit CR (%x0D)
                   / %x0E-1F        ; omit SP (%x20)
                   / %x21-2D        ; omit . (%x2E)
                   / %x2F-3F        ; omit @ (%x40)
                   / %x41-5B        ; omit \ (%x5C)
                   / %x5D-7A        ; omit { | } (%x7B-7D)
-                  / %x7E-D7FF      ; omit surrogates
+                  / %x7E-2FFF      ; omit IDEOGRAPHIC SPACE (%x3000)
+                  / %x3001-D7FF    ; omit surrogates
                   / %xE000-10FFFF
 
 ; Character escapes
-text-escape     = backslash ( backslash / "{" / "}" )
-quoted-escape   = backslash ( backslash / "|" )
-reserved-escape = backslash ( backslash / "{" / "|" / "}" )
-backslash       = %x5C ; U+005C REVERSE SOLIDUS "\"
+escaped-char = backslash ( backslash / "{" / "|" / "}" )
+backslash    = %x5C ; U+005C REVERSE SOLIDUS "\"
 
 ; bidi controls
 ; LRM / RLM / LRI / RLI / FSI / PDI

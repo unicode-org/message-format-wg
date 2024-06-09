@@ -1,9 +1,12 @@
 # MessageFormat 2.0 Errors
 
-Errors in messages and their formatting MAY occur and be detected
-at different stages of processing.
-Where available,
-the use of validation tools is recommended,
+Errors can occur during the processing of a _message_.
+Some errors can be detected statically, 
+such as those due to problems with _message_ syntax,
+violations of requirements in the data model,
+or requirements defined by a _function_.
+Other errors might be detected during selection or formatting of a given _message_.
+Where available, the use of validation tools is recommended,
 as early detection of errors makes their correction easier.
 
 ## Error Handling
@@ -13,12 +16,13 @@ and MUST be emitted as soon as possible.
 The other error categories are only emitted during formatting,
 but it might be possible to detect them with validation tools.
 
-During selection, an _expression_ handler MUST only emit _Resolution Errors_ and _Selection Errors_.
-During formatting, an _expression_ handler MUST only emit _Resolution Errors_ and _Formatting Errors_.
+During selection and formatting,
+_expression_ handlers MUST only emit _Message Function Errors_.
 
-_Resolution Errors_ and _Formatting Errors_ in _expressions_ that are not used
-in _pattern selection_ or _formatting_ MAY be ignored,
-as they do not affect the output of the formatter.
+Implementations do not have to check for or emit _Resolution Errors_
+or _Message Function Errors_ in _expressions_ that are not otherwise used by the _message_,
+such as _placeholders_ in unselected _patterns_
+or _declarations_ that are never referenced during _formatting_.
 
 In all cases, when encountering a runtime error,
 a message formatter MUST provide some representation of the message.
@@ -31,7 +35,7 @@ SHOULD prioritise _Syntax Errors_ and _Data Model Errors_ over others.
 
 When an error occurs within a _selector_,
 the _selector_ MUST NOT match any _variant_ _key_ other than the catch-all `*`
-and a _Resolution Error_ or a _Selection Error_ MUST be emitted.
+and a _Resolution Error_ or a _Message Function Error_ MUST be emitted.
 
 ## Syntax Errors
 
@@ -223,10 +227,11 @@ syntax reserved for future standardization,
 or for private implementation use that is not supported by the current implementation.
 
 > For example, attempting to format this message
-> would always result in an _Unsupported Expression_ error:
+> would result in an _Unsupported Expression_ error
+> because it includes a _reserved annotation_.
 >
 > ```
-> The value is {@horse}.
+> The value is {!horse}.
 > ```
 >
 > Attempting to format this message would result in an _Unsupported Expression_ error
@@ -238,82 +243,53 @@ or for private implementation use that is not supported by the current implement
 > * {{The value is not one.}}
 > ```
 
-### Invalid Expression
-
-An **_<dfn>Invalid Expression</dfn>_** error occurs when a _message_ includes an _expression_
-whose implementation-defined internal requirements produce an error during _function resolution_
-or when a _function_ returns a value (such as `null`) that the implementation does not support.
-
-An **_<dfn>Operand Mismatch Error</dfn>_** is an _Invalid Expression_ error that occurs when
-an _operand_ provided to a _function_ during _function resolution_ does not match one of the
-expected implementation-defined types for that function;
-or in which a literal _operand_ value does not have the required format
-and thus cannot be processed into one of the expected implementation-defined types
-for that specific _function_.
-
-> For example, the following _message_ produces an _Operand Mismatch Error_
-> (a type of _Invalid Expression_ error)
-> because the literal `|horse|` does not match the production `number-literal`,
-> which is a requirement of the function `:number` for its operand:
-> ```
-> .local $horse = {horse :number}
-> {{You have a {$horse}.}}
-> ```
-> The following _message_ might produce an _Invalid Expression_ error if the
-> the function `:function` threw an exception or otherwise emitted an error
-> rather than returning a valid value:
->```
-> {{This has an invalid expression {$var :function} because it has a bug in it.}}
->```
-
 ### Unsupported Statement
 
 An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a _reserved statement_.
 
 > For example, attempting to format this message
-> would always result in an _Unsupported Statement_ error:
+> would result in an _Unsupported Statement_ error:
 >
 > ```
 > .some {|horse|}
 > {{The message body}}
 > ```
 
-## Selection Errors
+### Bad Selector
 
-**_<dfn>Selection Errors</dfn>_** occur when message selection fails.
+A **_<dfn>Bad Selector</dfn>_** error occurs when a message includes a _selector_
+with a resolved value which does not support selection.
 
-> For example, attempting to format either of the following messages
-> might result in a _Selection Error_ if done within a context that
-> uses a `:number` selector function which requires its input to be numeric:
+> For example, attempting to format this message
+> would result in a _Bad Selector_ error:
 >
 > ```
-> .match {|horse| :number}
-> 1 {{The value is one.}}
-> * {{The value is not one.}}
-> ```
->
-> ```
-> .local $sel = {|horse| :number}
-> .match {$sel}
-> 1 {{The value is one.}}
-> * {{The value is not one.}}
+> .local $day = {|2024-05-01| :date}
+> .match {$day}
+> * {{The due date is {$day}}}
 > ```
 
-## Formatting Errors
+## Message Function Errors
 
-**_<dfn>Formatting Errors</dfn>_** occur during the formatting of a resolved value,
-for example when encountering a value with an unsupported type
-or an internally inconsistent set of options.
+A **_<dfn>Message Function Error</dfn>_** is any error that occurs
+when calling a message function implementation
+or which depends on validation associated with a specific function.
+
+Implementations SHOULD provide a way for _functions_ to emit 
+(or cause to be emitted) any of the types of error defined in this section.
+Implementations MAY also provide implementation-defined _Message Function Error_ types.
 
 > For example, attempting to format any of the following messages
-> might result in a _Formatting Error_ if done within a context that
+> might result in a _Message Function Error_ if done within a context that
 >
-> 1. provides for the variable reference `$user` to resolve to
+> 1. Provides for the variable reference `$user` to resolve to
 >    an object `{ name: 'Kat', id: 1234 }`,
-> 2. provides for the variable reference `$field` to resolve to
+> 2. Provides for the variable reference `$field` to resolve to
 >    a string `'address'`, and
-> 3. uses a `:get` formatting function which requires its argument to be an object and
->    an option `field` to be provided with a string value,
+> 3. Uses a `:get` message function which requires its argument to be an object and
+>    an option `field` to be provided with a string value.
+>
+> The exact type of _Message Function Error_ is determined by the message function implementation.
 >
 > ```
 > Hello, {horse :get field=name}!
@@ -332,3 +308,64 @@ or an internally inconsistent set of options.
 > Your {$field} is {$id :get field=$field}
 > ```
 
+### Bad Operand
+
+A **_<dfn>Bad Operand</dfn>_** error is any error that occurs due to the content or format of the _operand_,
+such as when the _operand_ provided to a _function_ during _function resolution_ does not match one of the
+expected implementation-defined types for that function;
+or in which a literal _operand_ value does not have the required format
+and thus cannot be processed into one of the expected implementation-defined types
+for that specific _function_.
+
+> For example, the following _messages_ each produce a _Bad Operand_ error
+> because the literal `|horse|` does not match the `number-literal` production,
+> which is a requirement of the function `:number` for its operand:
+>
+> ```
+> .local $horse = {|horse| :number}
+> {{You have a {$horse}.}}
+> ```
+>
+> ```
+> .match {|horse| :number}
+> 1 {{The value is one.}}
+> * {{The value is not one.}}
+> ```
+
+### Bad Option
+
+A **_<dfn>Bad Option</dfn>_** error is an error that occurs when there is
+an implementation-defined error with an _option_ or its value.
+These might include:
+- A required _option_ is missing.
+- Mutually exclusive _options_ are supplied.
+- An _option_ value provided to a _function_ during _function resolution_
+   does not match one of the implementation-defined types or values for that _function_;
+   or in which the literal _option_ value does not have the required format
+   and thus cannot be processed into one of the expected
+   implementation-defined types for that specific _function_.
+
+> For example, the following _message_ might produce a _Bad Option_ error
+> because the literal `foo` does not match the production `digit-size-option`,
+> which is a requirement of the function `:number` for its `minimumFractionDigits` _option_:
+>
+> ```
+> The answer is {42 :number minimumFractionDigits=foo}.
+> ```
+
+### Bad Variant Key
+
+A **_<dfn>Bad Variant Key</dfn>_** error is an error that occurs when a _variant_ _key_
+does not match the expected implementation-defined format.
+
+> For example, the following _message_ produces a _Bad Variant Key_ error
+> because `horse` is not a recognized plural category and
+> does not match the `number-literal` production,
+> which is a requirement of the `:number` function:
+>
+> ```
+> .match {42 :number}
+> 1     {{The value is one.}}
+> horse {{The value is a horse.}}
+> *     {{The value is not one.}}
+> ```

@@ -46,6 +46,24 @@ the JSON and DTD definitions are intended for interchange between systems and pr
 To that end, they relax some aspects of the data model, such as allowing
 declarations, options, and attributes to be optional rather than required properties.
 
+> [!NOTE]
+> Users relying on XML representations of messages should note that
+> XML 1.0 does not allow for the representation of all C0 control characters (U+0000-U+001F).
+> Except for U+0000 NULL , these characters are allowed in MessageFormat 2 messages,
+> so systems and users relying on this XML representation for interchange
+> might need to supply an alternate escape mechanism to support messages
+> that contain these characters.
+
+> [!IMPORTANT]
+> The data model uses the field name `name` to denote various interface identifiers.
+> In the MessageFormat 2 [syntax](/spec/syntax.md), the source for these `name` fields
+> sometimes uses the production `identifier`.
+> This happens when the named item, such as a _function_, supports namespacing.
+>
+> In the Tech Preview, feedback on whether to separate the `namespace` from the `name`
+> and represent both separately, or just, as here, use an opaque single field `name`
+> is desired.
+
 ## Messages
 
 A `SelectMessage` corresponds to a syntax message that includes _selectors_.
@@ -87,7 +105,7 @@ starting after the keyword and up to the first _expression_,
 not including leading or trailing whitespace.
 The non-empty `expressions` correspond to the trailing _expressions_ of the _reserved statement_.
 
-> **Note**
+> [!NOTE]
 > Be aware that future versions of this specification
 > might assign meaning to _reserved statement_ values.
 > This would result in new interfaces being added to
@@ -162,34 +180,31 @@ interface LiteralExpression {
   type: "expression";
   arg: Literal;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
-  attributes: Attribute[];
+  attributes: Attributes;
 }
 
 interface VariableExpression {
   type: "expression";
   arg: VariableRef;
   annotation?: FunctionAnnotation | UnsupportedAnnotation;
-  attributes: Attribute[];
+  attributes: Attributes;
 }
 
 interface FunctionExpression {
   type: "expression";
   arg?: never;
   annotation: FunctionAnnotation;
-  attributes: Attribute[];
+  attributes: Attributes;
 }
 
 interface UnsupportedExpression {
   type: "expression";
   arg?: never;
   annotation: UnsupportedAnnotation;
-  attributes: Attribute[];
+  attributes: Attributes;
 }
 
-interface Attribute {
-  name: string;
-  value?: Literal | VariableRef;
-}
+type Attributes = Map<string, Literal | VariableRef | true>;
 ```
 
 ## Expressions
@@ -219,19 +234,17 @@ interface VariableRef {
 A `FunctionAnnotation` represents a _function_ _annotation_.
 The `name` does not include the `:` starting sigil.
 
-Each _option_ is represented by an `Option`.
+`Options` is a key-value mapping containing options,
+and is used to represent the _annotation_ and _markup_ _options_.
 
 ```ts
 interface FunctionAnnotation {
   type: "function";
   name: string;
-  options: Option[];
+  options: Options;
 }
 
-interface Option {
-  name: string;
-  value: Literal | VariableRef;
-}
+type Options = Map<string, Literal | VariableRef>;
 ```
 
 An `UnsupportedAnnotation` represents a
@@ -258,15 +271,15 @@ A `Markup` object has a `kind` of either `"open"`, `"standalone"`, or `"close"`,
 each corresponding to _open_, _standalone_, and _close_ _markup_.
 The `name` in these does not include the starting sigils `#` and `/` 
 or the ending sigil `/`.
-The optional `options` for markup use the same `Option` as `FunctionAnnotation`.
+The `options` for markup use the same key-value mapping as `FunctionAnnotation`.
 
 ```ts
 interface Markup {
   type: "markup";
   kind: "open" | "standalone" | "close";
   name: string;
-  options: Option[];
-  attributes: Attribute[];
+  options: Options;
+  attributes: Attributes;
 }
 ```
 
