@@ -30,7 +30,7 @@ or other similar factors that influence the formatted result.
 
 Such options naturally correspond to function arguments or builder-style function constructors.
 Each option is specific to the associated API.
-Message authors such as translators and developers want consistent ways to do common tasks, 
+Message authors, such as translators or developers, want consistent ways to do common tasks,
 such as providing hints to translation tools or overriding the locale,
 but, unless MessageFormat provides otherwise, cannot rely on implementations
 to consistently implement these.
@@ -296,7 +296,9 @@ but each implementation and user will end up with different practices.
 
 ### Define options for default registry only
 
-Define at least `locale` and `dir` as options for default registry functions,
+Do not define a common way to communicate information
+about an expression or markup to translators or tools.
+Instead, define at least `locale` and `dir` as options for default registry functions,
 with handling internal to each function implementation.
 
 Other functions could use their own definitions and handling for similar options,
@@ -336,6 +338,8 @@ Requires reserving an additional namespace.
 Requires cooperation from implementers to ignore all options using the namespace.
 
 Makes defining namespaced attributes difficult.
+
+Could be combined with the definition of `u:dir`, `u:locale`, and `u:id` contextual options.
 
 At least a no-op function is required for otherwise unannotated expressions.
 
