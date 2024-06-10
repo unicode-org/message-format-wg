@@ -45,6 +45,18 @@ because returning more than 1 error would require heap allocation.
 they found over the 25 years of maintaining the library that there was more cost than benefit in additionally providing error information with a default best effort return value compared to just returning the default best effort value.
 The additional constraint in ICU4C's C++ style to return an error code rather than throwing errors using the STL further complicates the usefulness and likelihood to be used correctly by developers, especially during nested calls.
 
+> [!NOTE]
+> The wording in this document uses the word "signal" in regards to providing
+> information about an error rather than "return" or "emit" when referring to
+> a requirement that an implementation must at least indicate that an error has
+> occurred.
+> The word "signal" better accomodates more alternatives in the solution space
+> like those that only choose to indicate that an error occurred,
+> while still including those that additionally prefer to return the error
+> itself as an error object.
+> (By contrast, "return an error" implies that an error object will be thrown or
+> returned, and "emit an error" is ambiguous as to what is or isn't performed.)
+
 ## Proposed Design
 
 The following spec text is proposed:
