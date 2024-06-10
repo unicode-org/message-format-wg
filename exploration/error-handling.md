@@ -43,7 +43,7 @@ ICU4X operates in low resource environments for which returning at most 1 error 
 because returning more than 1 error would require heap allocation.
 * Programming conventions and idioms: in [feedback from ICU-TC](https://docs.google.com/document/d/11yJUWedBIpmq-YNSqqDfgUxcREmlvV0NskYganXkQHA/edit#bookmark=id.lx4ls9eelh99),
 they found over the 25 years of maintaining the library that there was more cost than benefit in additionally providing error information with a default best effort return value compared to just returning the default best effort value.
-The additional constraint in ICU4C's C++ style to return an error code rather than throwing errors using the STL further complicates the usefulness and likelihood to be used correctly during nested calls.
+The additional constraint in ICU4C's C++ style to return an error code rather than throwing errors using the STL further complicates the usefulness and likelihood to be used correctly by developers, especially during nested calls.
 
 ## Proposed Design
 
@@ -82,6 +82,10 @@ This alternative establishes constraints that would contravene the constraints t
 * programming language idioms/constraints
 * execution environment constraints
 * experience-based programming guidelines
+
+For example, in ICU, 
+[the suggested practice](https://docs.google.com/document/d/11yJUWedBIpmq-YNSqqDfgUxcREmlvV0NskYganXkQHA/edit#bookmark=id.lx4ls9eelh99)
+is to avoid additionally returning optional error codes when providing best-effort formatted results.
 
 ### Allow implementations to determine all details
 
