@@ -99,6 +99,26 @@ For example, in ICU,
 [the suggested practice](https://docs.google.com/document/d/11yJUWedBIpmq-YNSqqDfgUxcREmlvV0NskYganXkQHA/edit#bookmark=id.lx4ls9eelh99)
 is to avoid additionally returning optional error codes when providing best-effort formatted results.
 
+### Require a best-effort message value and signaling of an error
+
+> In all cases, when encountering an error,
+> a message formatter MUST be able to signal an error or errors.
+> It MUST also provide the appropriate fallback representation of the _message_ defined
+> in this specification.
+
+This alternative maintains that an implementation must both return a best-effort message
+and must signal that an error has occurred.
+Compared to the current text,
+this alternative slightly loosens the constraint of 
+returning an error into only needing to signal an error.
+
+Similar to the current spec text,
+this alternative requires implementations to provide useful information:
+both a signal that an error occurred and a best effort message.
+A downside to this alternative is that these requirements together assume that
+all implementations will want to pay the cost of constructing a representative mesage
+after the occurrence of an error.
+
 ### Allow implementations to determine all details
 
 > When encountering an error during formatting,
