@@ -136,7 +136,7 @@ This default property implies that
 
 #### Syntax tests
 
-These tests evaluate the pattern based on the runtime arguments. Functions are shown as stringified representations and are tested separately.
+These tests evaluate the pattern `src` using the given runtime `params`. Assertions are made on the output, which can be formatted as either a single string or parts, and any resulting errors. Syntax tests are the core of the test suite.
 
 #### Function tests
 
@@ -151,7 +151,7 @@ As mentioned above, the behaviour of some of the default registry functions such
 
 There is no standard data model within the specification, which means that we cannot create mandatory data model tests.
 
-If a particular implementation of MF2 exposes a standardized representation of [the data model](../spec/data-model/message.json), perhaps through a `mf2.toCanonicalJson();` function or similar, then we could create tests that assert against this.
+If a particular implementation of MF2 exposes a standardized representation of [the data model](../spec/data-model/message.json), perhaps through a `mf2.toCanonicalJson();` function or similar, then we could create tests that assert against this in future.
 
 ## Alternatives Considered
 
