@@ -24,7 +24,7 @@ This design proposal captures the planned approach for the suite:
 
 - It captures _what_ kind of tests are written by identifying the aspects of the MessageFormat 2 (MF2) specification that must be tested and the categories of test that do this.
 
-- It also captures _how_ tests are written by describing the single platform-agnostic format that can be utilized by any MF2 test runner.
+- It also captures _how_ tests are written by describing the single platform-agnostic format that can be used by any MF2 test runner.
 
 ## Background
 
