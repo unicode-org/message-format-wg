@@ -130,8 +130,6 @@ Default properties can be used for expected outputs as well as inputs. For examp
 "defaultTestProperties": { "exp": "Hello", "expErrors": false }
 ```
 
-This default property implies that
-
 ### Test content
 
 #### Syntax tests
