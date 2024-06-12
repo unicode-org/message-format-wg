@@ -106,11 +106,14 @@ is to avoid additionally returning optional error codes when providing best-effo
 > It MUST also provide the appropriate fallback representation of the _message_ defined
 > in this specification.
 
-This alternative maintains that an implementation must both return a best-effort message
-and must signal that an error has occurred.
-Compared to the current text,
-this alternative slightly loosens the constraint of 
-returning an error into only needing to signal an error.
+This alternative requires that an implementation provide both an error signal
+and a means of accessing a "best-effort" fallback message.
+This slightly relaxes the requirement of "returning" an error
+(to allow a locally-appropriate signal of the error).
+
+Under this alternative, implementations can be conformant by providing
+two separate formatting methods or functions,
+one of which returns the fallback string and one of which signals the error.
 
 Similar to the current spec text,
 this alternative requires implementations to provide useful information:
