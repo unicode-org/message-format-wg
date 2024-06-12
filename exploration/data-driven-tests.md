@@ -109,11 +109,11 @@ Other considerations around using JSON:
 
 ### Test schema
 
-__JSON Schema__ should be used to capture the structure of test files. `"$comment"` properties can be used within the schema for any additional documentation required.
+JSON Schema should be used to capture the structure of test files. `"$comment"` properties can be used within the schema for any additional documentation required.
 
 The proposed schema is included under [test/schemas/v0/](https://github.com/unicode-org/message-format-wg/tree/b4fd5a666a02950c57f0a454f65bf16a0bf03bf4/test/schemas/v0). Its version can be incremented to v1 when the proposal is accepted.
 
-It is important that the schema is versioned. The version number should be captured within the schema files themselves because these files may be copied and used out of the context of this repository. By using a __version directory__ and __$id property__ for the schema, we can bump a schema version by changing one directory name and updating the `$id` property in the schema file(s) to match.
+It is important that the schema is versioned. The version number should be captured within the schema files themselves because these files may be copied and used out of the context of this repository. By using a version directory and $id property for the schema, we can bump a schema version by changing one directory name and updating the `$id` property in the schema file(s) to match.
 
 Although the use of [semantic versioning](https://semver.org/) has been discussed, it is likely to be overkill for our purposes.
 
