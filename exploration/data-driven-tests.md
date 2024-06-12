@@ -94,7 +94,7 @@ Although a standard data model is included in this repository, there is no requi
 
 ### Test format
 
-Tests should be written in __JSON__. This format aligns with the requirements above around versatility, as well as providing a favorable editing experience. It offers:
+Tests should be written in JSON. This format aligns with the requirements above around versatility, as well as providing a favorable editing experience. It offers:
 
 - Precise control over whitespace - tests are needed around whitespace handling.
 - Concise readable syntax.
