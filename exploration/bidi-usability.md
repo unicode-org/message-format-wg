@@ -321,8 +321,8 @@ as well as the contents of _unquoted_ literals.
 ```abnf
 variable-expression   = "{" [s] variable [bidi] [s annotation] *(s attribute) [s] "}"
 function       = ":" identifier [bidi] *(s option)
-option         = identifier [bidi] [s] "=" [s] (literal / (variable [bidi])
-attribute      = "@" identifier [bidi] [[s] "=" [s] (literal / (variable [bidi])]
+option         = identifier [bidi] [s] "=" [s] (literal / variable) [bidi]
+attribute      = "@" identifier [bidi] [[s] "=" [s] ((literal / variable) [bidi])]
 markup         = "{" [s] "#" identifier [bidi] *(s option) *(s attribute) [s] ["/"] "}"  ; open and standalone
                / "{" [s] "/" identifier [bidi] *(s option) *(s attribute) [s] "}"  ; close
 identifier     = [(namespace [bidi] ":")] name
