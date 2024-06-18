@@ -121,7 +121,7 @@ and different implementations MAY choose to perform different levels of resoluti
 >   formatToString(): string
 >   formatToX(): X // where X is an implementation-defined type
 >   getValue(): unknown
->   resolvedOptions(): { [key: string]: unknown }
+>   resolvedOptions(): { [key: string]: MessageValue }
 >   selectKeys(keys: string[]): string[]
 > }
 > ```
@@ -129,7 +129,7 @@ and different implementations MAY choose to perform different levels of resoluti
 > With this approach:
 > - An _expression_ could be used as a _placeholder_ if
 >   calling the `formatToString()` or `formatToX()` method of its _resolved value_
->   did not throw an error.
+>   did not emit an error.
 > - An _expression_ could be used as a _selector_ _expression_ if
 >   calling the `selectKeys(keys)` method of its _resolved value_
 >   did not throw an error.
@@ -141,7 +141,8 @@ and different implementations MAY choose to perform different levels of resoluti
 >
 > Extensions of the base `MessageValue` interface could be provided for different data types,
 > such as numbers or strings,
-> for which the `unknown` return types of `getValue()` and `resolvedOptions()`
+> for which the `unknown` return type of `getValue()` and
+> the generic `MessageValue` type used in `resolvedOptions()`
 > could be narrowed appropriately.
 > An implementation could also allow `MessageValue` values to be passed in as input variables,
 > or automatically wrap each variable as a `MessageValue` to provide a uniform interface
