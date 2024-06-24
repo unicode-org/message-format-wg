@@ -56,15 +56,37 @@ The additional constraint in ICU4C's C++ style to return an error code rather th
 > itself as an error object.
 > (By contrast, "return an error" implies that an error object will be thrown or
 > returned, and "emit an error" is ambiguous as to what is or isn't performed.)
+## Use Cases
+
+As a software developer, I want calls to message format to signal runtime errors
+in a manner consistent with my programming language/environment.
+I would like error signals to include diagnostic information that allows me to debug errors.
+
+As a software developer, I sometimes need to be able to emit a formatted message
+even if a runtime error has occurred.
+
+As a software developer, I sometimes want to avoid "fatal" error signals,
+such as might occur due to unconstrained inputs,
+due to errors in translation of the message,
+or other reasons outside the developer's control.
+For example, in Java, throwing an Exception is a common means of signaling an error.
+However, `java.text.NumberFormat` provide both throwing and non-throwing
+`parse` methods to allow developers to avoid a "fatal" throw of `ParseException`
+(if the exception were uncaught).
+
+As a MessageFormat implementer, I want to be able to signal errors in an idiomatic way
+for my language and still be conformant with MF2 requirements.
 
 ## Proposed Design
 
 The following spec text is proposed:
 
-> In all cases, when encountering an error,
-> a message formatter MUST be able to signal an error or errors.
-> It MAY also provide the appropriate fallback representation of the _message_ defined
-> in this specification.
+> A message formatter MUST signal errors required by this specification.
+> It SHOULD provide the specific information for each error reported.
+> A message formatter SHOULD provide a fallback representation of the message.
+>
+> [!NOTE]
+> The fallback representation of a message MAY be provided by a separate API.
 
 This solution requires implementations to be able to signal an error occurred,
 which can be accomplished in different ways. Ex:
@@ -79,6 +101,33 @@ and a global `boolean` values
 This does not give implementations full freedom to return _nothing_ or some other behavior.
 
 ## Alternatives Considered
+
+### Separate Requirements
+
+The following spec text is proposed:
+
+> When formatting a message with one or more errors:
+> - An implementation MUST provide a way for a user to be informed
+>   of the name of at least one of the errors,
+>   either directly or via an identifying error code.
+> - An implementation MUST provide a way for a message with one or more
+>   _Resolution Errors_ or _Message Function Errors_ to be formatted
+>   using a fallback representation.
+>
+> The two above requirements MAY be fulfilled by a single formatting method,
+> or separately by more than one such method.
+
+This alternative ensures that even messages with runtime errors
+can be formatted with the same string representation in all implementations.
+
+Compared to the current spec text,
+the under-specified "informative error" is replaced
+with a more concrete minimum requirement,
+which can be fulfilled with a two-byte error code in very limited environments.
+
+The phrase "In all cases" is left out,
+and the ability to fulfill the requirements separately
+rather than at the same time is explicitly called out.
 
 ### Current spec: require information from error(s) and a representative best effort message
 
