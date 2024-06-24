@@ -70,18 +70,23 @@ would enable tools, including translation tools, and users who are writing in RT
 to format a _message_ so that its plain-text representation and its function
 are unambiguous.
 
-The isolate controls are paired invisible control characters inserted around a portion of a string.
-The start of an isolate sequence is one of:
+The isolates are paired invisible characters inserted around a portion of a string.
+The start of an isolated sequence is one of:
 - U+2066 LEFT-TO-RIGHT ISOLATE (LRI)
 - U+2067 RIGHT-TO-LEFT ISOLATE (RLI)
 - U+2068 FIRST-STRONG ISOLATE (FSI)
 
-The end of an isolate sequence is U+2069 POP DIRECTIONAL ISOLATE (PDI).
+The end of an isolated sequence is U+2069 POP DIRECTIONAL ISOLATE (PDI).
 
-The characters inside an isolate sequence have the initial string (paragraph) direction
-corresponding to the starting control (LTR for LRI, RTL for RLI, auto for FSI).
-The isolate sequence is **isolated** from surrounding text.
-This means that the surrounding text treats it as-if the sequence were a single neutral character.
+The characters inside an isolated sequence have the initial string direction
+corresponding to the starting control (
+left-to-right for `LRI`, 
+right-to-left for `RLI`, 
+or <a href="https://www.w3.org/TR/i18n-glossary#auto-direction">auto</a> for `FSI`).
+The isolated sequence is **isolated** from surrounding text:
+it is processed using the Unicode Bidirectional Algorithm (UBA)
+separately from the rest of the string and
+the surrounding text treats the sequence as-if it were a single neutral character.
 
 > [!NOTE]
 > One of the side-effects of using `{`/`}` and `{{`/`}}` to delimit _expressions_
@@ -96,10 +101,21 @@ These include:
 - U+200F RIGHT-TO-LEFT MARK (RLM)
 - U+061C ARABIC LETTER MARK (ALM)
 
-These characters are invisible strongly-directional characters used in bidirectional
+These characters are invisible strongly-directional characters.
+They are used in bidirectional
 text to coerce certain directional behavior (usually to mark the end of 
 a sequence of characters that would otherwise be ambiguous or interact with
 neutrals or opposite direction runs in an unhelpful way).
+
+### Strictness
+
+We want the syntax to be somewhat permissive, particularly when it comes to paired isolates.
+The isolates and strongly-directional marks are invisble except in certain specialized editing environments.
+While users and tools should be strict about using well-formed isolate sequences,
+we don't want to invisble characters or whitespace to generate additional syntax errors except where
+absolutely necessary.
+Therefore, it should not be a syntax error if a user, editor, or tool fails to provide the
+opening or closing isolate.
 
 ## Use-Cases
 
@@ -253,7 +269,7 @@ Permit isolating bidi controls to be used on the **outside** of the following:
 - quoted literals
 - quoted patterns
 
-We permit any of the isolate starting controls (LRI, RLI, FSI) because we want to allow
+We permit any of the isolate starting characters (LRI, RLI, FSI) because we want to allow
 the user to set the base direction of a _literal_ or _pattern_ according to its respective 
 actual contents.
 
@@ -261,24 +277,24 @@ This would change the ABNF as follows:
 (Notice that this change includes a production `bidi` described further down
 in this document)
 ```abnf
-literal        = ( open-isolate (quoted / (unquoted [bidi])) close-isolate)
-               / (quoted / (unquoted [bidi]))
-quoted-pattern = ( open-isolate "{{" pattern "}}" close-isolate)
-               / ("{{" pattern "}}")
+literal        = [open-isolate] (quoted / (unquoted [bidi])) [close-isolate]
+quoted-pattern = [open-isolate] "{{" pattern "}}" [close-isolate]
 
 open-isolate   = %x2066-2068
 close-isolate  = %x2069
 ```
 
 > [!IMPORTANT]
-> The isolating controls go on the **_outside_** of the various _literal_ and _pattern_
+> The isolating characters go on the **_outside_** of the various _literal_ and _pattern_
 > productions because characters on the **_inside_** of these are part of the _literal_'s
 > or _pattern_'s textual content.
-> We need to allow users to include bidi controls in the output of MF2.
+> We need to allow users to include bidi characters, including isolates and strongly directional marks in the output of MF2.
 
-Permit **left-to-right** isolating bidi controls (`U+2066`...`U+2069`) to be used **immediately inside** the following:
+Permit **left-to-right** isolates (`U+2066`...`U+2069`) to be used **immediately inside** the following:
 - expressions
 - markup
+
+Permit isolates around any token inside of an expression or markup.
 
 We only permit the LTR isolates because the contents of an _expression_
 or _markup_ must be laid out left-to-right.
@@ -287,15 +303,12 @@ directional marks to ensure correct display.
 
 This would change the ABNF as follows (assuming the above changes are also incorporated):
 ```abnf
-expression            = "{" LRI (literal-expression / variable-expression / annotation-expression) close-isolate "}"
-                      / "{" (literal-expression / variable-expression / annotation-expression) "}"
+expression            = "{" [LRI] (literal-expression / variable-expression / annotation-expression) [close-isolate] "}"
 literal-expression    = [s] literal [s annotation] *(s attribute) [s]
 variable-expression   = [s] variable [s annotation] *(s attribute) [s]
 annotation-expression = [s] annotation *(s attribute) [s]
-markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"                    ; open and standalone
-       / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}"                          ; close
-       / "{" LRI [s] "#" identifier *(s option) *(s attribute) [s] ["/"] close-isolate "}"  ; open and standalone
-       / "{" LRI [s] "/" identifier *(s option) *(s attribute) [s] close-isolate "}"        ; close
+markup = "{" [LRI] [s] "#" identifier *(s option) *(s attribute) [s] ["/"] [close-isolate] "}"  ; open and standalone
+       / "{" [LRI] [s] "/" identifier *(s option) *(s attribute) [s] [close-isolate] "}"        ; close
 LRI = %x2066
 ```
 
