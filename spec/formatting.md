@@ -90,8 +90,8 @@ Implementations MAY include additional fields in their _formatting context_.
 This specification allows for the same value to be used for:
 - formatting in a _placeholder_,
 - selection in a _selector_ _expression_,
-- as the _operand_ of another _expression_, or
-- as the _option_ value of another _expression_,
+- as the _operand_ of another _expression_ (including _local declarations_), or
+- as an _option_ value in another _expression_,
 
 To support this, the _**resolved value**_ of each _expression_
 is an implementation-dependent value that supports some or all of the above use cases.
