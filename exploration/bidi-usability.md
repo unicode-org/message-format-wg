@@ -117,6 +117,13 @@ absolutely necessary.
 Therefore, it should not be a syntax error if a user, editor, or tool fails to provide the
 opening or closing isolate.
 
+It is possible to generate a "strict" version of the ABNF that is more restrictive about
+isolate pairing.
+Such an ABNF might be used by message serializers to ensure high-quality message generation.
+
+Note that the permissive syntax might be abused to produce Trojan Source effects
+(see [[UTS55]](https://www.unicode.org/reports/tr55))
+
 ## Use-Cases
 
 _What use-cases do we see? Ideally, quote concrete examples._
@@ -273,6 +280,11 @@ We permit any of the isolate starting characters (LRI, RLI, FSI) because we want
 the user to set the base direction of a _literal_ or _pattern_ according to its respective 
 actual contents.
 
+> [!IMPORTANT]
+> This change adds a "lookahead" to determining if a given _message_ is
+> "simple" or "complex", as LRI, RLI, and FSI are all valid starters for a simple message
+> as well as being allowed before a quoted pattern.
+
 This would change the ABNF as follows:
 (Notice that this change includes a production `bidi` described further down
 in this document)
@@ -362,46 +374,19 @@ By contrast, if users insert too many or the wrong controls using the recommende
 the _message_ would still be functional and would emit no undesired characters.
 
 
-### Loose isolation
+### Strict isolation all the time
 
-Apply bidi isolates in a slightly different way.
-The main differences to the proposed solution are:
-1. The open/close isolate characters are not syntactically required to be paired.
-   This avoids introducing parse errors for missing or required invisible characters,
-   which would lead to bad user experiences.
-2. Rather than patching the `name` rule with an optional trailing LRM/RLM/ALM,
-   allow for its proper isolation.
+Apply bidi isolates in a strict way.
+The main differences to the proposed solution is:
+1. The open/close isolate characters are syntactically required to be paired.
+   This introduces parse errors for unpaired invisible characters,
+   which could lead to bad user experiences.
 
-Quoted patterns, quoted literals, and names may be isolated by LRI/RLI/FSI...PDI.
-For names and quoted literals, the isolate characters are outside the body of the token,
-but for quoted patterns, the isolates are in the middle of the `{{` and `}}` characters.
-This avoids adding a lookahead requirement for detecting a `complex-message` start,
-and differentiates a `quoted-pattern` from a `quoted` `key` in a `variant`.
+As noted above, the "strict" version of the ABNF should be adopted by serializers and for 
+message normalization.
 
-Expressions and markup may be isolated by LRI...PDI immediately within the `{` and `}`.
+// TODO put ABNF here
 
-An LRI is allowed immediately after a newline outside patterns and within expressions.
-This is intended to allow left-to-right representation for "code"
-even if it contains a newline followed by content
-that could otherwise prompt the paragraph direction to be detected as right-to-left.
-
-```abnf
-name           = [open-isolate] name-start *name-char [close-isolate]
-quoted         = [open-isolate] "|" *(quoted-char / quoted-escape) "|" [close-isolate]
-quoted-pattern = "{" [open-isolate] "{" pattern "}" [close-isolate] "}"
-
-literal-expression    = "{" [LRI] [s] literal [s annotation] *(s attribute) [s] [close-isolate] "}"
-variable-expression   = "{" [LRI] [s] variable [s annotation] *(s attribute) [s] [close-isolate] "}"
-annotation-expression = "{" [LRI] [s] annotation *(s attribute) [s] [close-isolate] "}"
-
-markup = "{" [LRI] [s] "#" identifier *(s option) *(s attribute) [s] ["/"] [close-isolate] "}"
-       / "{" [LRI] [s] "/" identifier *(s option) *(s attribute) [s] [close-isolate] "}"
-
-s = 1*( SP / HTAB / CR / LF [LRI] / %x3000 )
-LRI = %x2066
-open-isolate  = %x2066-2068
-close-isolate = %x2069
-```
 
 Isolating rather than marking `name` helps ensure
 that its directionality does not spill over to adjoining syntax.
@@ -410,7 +395,7 @@ For example, this allows for the proper rendering of the expression
 {⁦:⁧אחת⁩:⁧שתיים⁩⁩}
 ```
 where "אחת" is the `namespace` of the `identifier`.
-Without `name` isolation, this would render as
+Without `name` isolation, this would (misleadingly) render as
 ```
 {⁦:אחת:שתיים⁩}
 ```
@@ -423,7 +408,7 @@ just as they're not included in the parsed values of quoted literals or quoted p
 
 ### Deeper Syntax Changes
 We could alter the syntax to make it more "bidi robust", 
-such as by using strongly directional instead of neutrals.
+such as by using strongly directional characters instead of neutrals.
 
 ### Forbid RTL characters in `name` and/or `unquoted`
 We could alter the syntax to forbid using RTL characters in names and unquoted literals.
