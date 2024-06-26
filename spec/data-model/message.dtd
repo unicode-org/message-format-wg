@@ -3,12 +3,8 @@
   (pattern | (selectors,variant+))
 )>
 
-<!-- In a <declaration type="input">, the <expression> MUST contain a <variable> -->
 <!ELEMENT declaration (expression)>
-<!ATTLIST declaration
-  type (input | local) #REQUIRED
-  name NMTOKEN #REQUIRED
->
+<!ATTLIST declaration name NMTOKEN #REQUIRED>
 
 <!ELEMENT unsupportedStatement (expression)+>
 <!ATTLIST unsupportedStatement
