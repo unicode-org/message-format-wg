@@ -134,15 +134,23 @@ A **_<dfn>local variable</dfn>_** is a _variable_ created as the result of a _lo
 > > An exception to this is: whitespace inside a _pattern_ is **always** significant.
 
 > [!NOTE]
-> The syntax assumes that each _message_ will be displayed with a left-to-right display order
-> and be processed in the logical character order.
-> The syntax also permits the use of right-to-left characters in _identifiers_,
+> The MessageFormat 2 syntax assumes that each _message_ will be displayed
+> with a left-to-right display order
+> and be processed in the logical character order
+> while permitting the use of right-to-left characters in _identifiers_,
 > _literals_, and other values.
-> This can result in confusion when viewing the _message_.
+> This can result in confusion when viewing the message
+> or in users incorrectly inserting controls that negatively affect the output
+> of the message.
+>
+> To assist with this, the syntax permits the use of various controls and
+> strongly-directional markers in both optional and required _whitespace_
+> in a _message_, as well was encouraging the use of isolating controls
+> with _expressions_ and _quoted patterns_.
+> See: [whitespace](#whitespace) (below) for more information.
 > 
-> Additional restrictions or requirements,
-> such as permitting the use of certain bidirectional control characters in the syntax,
-> might be added during the Tech Preview to better manage bidirectional text.
+> Additional restrictions or requirements might be added during the
+> Tech Preview to better manage bidirectional text.
 > Feedback on the creation and management of _messages_
 > containing bidirectional tokens is strongly desired.
 
@@ -955,16 +963,72 @@ and inside _patterns_ only escape `{` and `}`.
 
 ### Whitespace
 
-**_<dfn>Whitespace</dfn>_** is defined as one or more of
-U+0009 CHARACTER TABULATION (tab), 
-U+000A LINE FEED (new line),
-U+000D CARRIAGE RETURN, 
-U+3000 IDEOGRAPHIC SPACE, 
-or U+0020 SPACE.
+The syntax limits whitespace characters outside of a _pattern_ to the following:
+`U+0009 CHARACTER TABULATION` (tab), 
+`U+000A LINE FEED` (new line),
+`U+000D CARRIAGE RETURN`, 
+`U+3000 IDEOGRAPHIC SPACE`, 
+or `U+0020 SPACE`.
 
 Inside _patterns_ and _quoted literals_,
 whitespace is part of the content and is recorded and stored verbatim.
 Whitespace is not significant outside translatable text, except where required by the syntax.
+
+There are two whitespace productions in the syntax.
+**_<dfn>Optional whitespace</dfn>_** is whitespace that is not required by the syntax, 
+but which users might want to include to increase the readability of a _message_.
+**_<dfn>Required whitespace</dfn>_** is whitespace that is required by the syntax.
+
+_Messages_ that contain right-to-left (aka RTL) characters SHOULD use one of the 
+following mechanisms to make messages display intelligibly in plain-text editors:
+
+1. Use paired isolating bidi controls `U+2066 LEFT-TO-RIGHT ISOLATE`
+   and `U+2069 POP DIRECTIONAL ISOLATE` as permitted by the ABNF around
+   parts of any _message_ containing RTL characters:
+   - _inside_ of _placeholder_ markers `{` and `}` 
+   - _outside_ _quoted-pattern_ markers `{{` and `}}`
+   - _identifiers_
+   - _literals_ (This is especially important for individual _keys_ in a _variant_)
+   - _option_ values
+2. Use the 'local-effect' bidi controls`U+200E LEFT-TO-RIGHT MARK` or
+   `U+200F RIGHT-TO-LEFT MARK` as permitted by the ABNF around
+   parts of any _message_ containing RTL characters:
+   -  _identifiers_
+   - _literals_ (taking care not to include the mark inside any quotes), 
+   - _option_ values
+
+> [!IMPORTANT]
+> Always take care **not** to add a bidi control where it is semantically significant:
+> - put them outside of _literal_ quotes, such as `<LRM>|...|<LRM>`
+> - put them outside of quoted _patterns_, such as `<LRI>{{...}}<PDI>`
+> Controls placed inside _literal_ quotes or quoted _patterns_ are part of the literal
+> or pattern.
+> Controls in a _pattern_ will appear in the output of the message.
+> Controls inside _literal_ quotes are part of the _literal_ and
+> will be considered in operations such as matching a _key_ to a _selector_.
+
+> [!NOTE]
+> Users cannot be expected to create or manage bidirectional controls or
+> marks in _messages_, since the characters are invisible and can be difficult
+> to manage.
+> Tools (such as resource editors or translation editors)
+> and other implementations of MessageFormat 2 serialization are strongly
+> encouraged to provide paired isolates around any right-to-left
+> syntax as described above so that _messages_ display appropriately as plain text.
+
+These definitions of _whitespace_ implement
+[UAX#31 Requirement R3a-2](https://www.unicode.org/reports/tr31/#R3a-2).
+It is a profile of R3a-1 in that specification because:
+the following pattern whitespace characters are not allowed:
+`U+000B FORM FEED`, 
+`U+000C VERTICAL TABULATION`, 
+`U+0085 NEXT LINE`, 
+`U+2028 LINE SEPARATOR` and 
+`U+2029 PARAGRAPH SEPARATOR`;
+the character `U+3000 IDEOGRAPHIC SPACE`
+_is_ interpreted as whitespace,
+ and the directional isolates U+2066..U+2069
+ are treated as ignorable format controls.
 
 > [!NOTE]
 > The character U+3000 IDEOGRAPHIC SPACE is included in whitespace for
@@ -972,7 +1036,18 @@ Whitespace is not significant outside translatable text, except where required b
 > in which users might accidentally create these characters in a _message_.
 
 ```abnf
-s = 1*( SP / HTAB / CR / LF / %x3000 )
+; bidi controls
+; LRM / RLM / LRI / RLI / FSI / PDI
+bidi = %x200E / %x200F / %x2066-2069
+
+; optional whitespace
+owsp = *( s / bidi )
+
+; required whitespace
+wsp = [ bidi ] 1*s [ bidi ]
+
+; whitespace characters
+s = ( SP / HTAB / CR / LF / %x3000 )
 ```
 
 ## Complete ABNF
