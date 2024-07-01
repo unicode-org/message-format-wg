@@ -170,7 +170,7 @@ and consists of:
 2. a _complex body_
 
 ```abnf
-complex-message = *(declaration [s]) complex-body
+complex-message = *(declaration [s]) complex-body [s]
 ```
 
 ### Declarations

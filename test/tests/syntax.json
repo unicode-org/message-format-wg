@@ -409,6 +409,11 @@
           "type": "unsupported-statement"
         }
       ]
+    },
+    {
+      "src": "{{trailing whitespace}} \n",
+      "expCleanSrc": "trailing whitespace",
+      "exp": "trailing whitespace"
     }
   ]
 }
