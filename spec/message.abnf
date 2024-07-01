@@ -5,7 +5,7 @@ simple-start      = simple-start-char / escaped-char / placeholder
 pattern           = *(text-char / escaped-char / placeholder)
 placeholder       = expression / markup
 
-complex-message   = *(declaration [s]) complex-body
+complex-message   = *(declaration [s]) complex-body [s]
 declaration       = input-declaration / local-declaration / reserved-statement
 complex-body      = quoted-pattern / matcher
 

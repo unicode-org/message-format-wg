@@ -168,9 +168,10 @@ and consists of:
 
 1. an optional list of _declarations_, followed by
 2. a _complex body_
+3. optional trailing whitespace
 
 ```abnf
-complex-message = *(declaration [s]) complex-body
+complex-message = *(declaration [s]) complex-body [s]
 ```
 
 ### Declarations
