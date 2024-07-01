@@ -773,7 +773,7 @@ The function `:datetime` is used to format date/time values, including
 the ability to compose user-specified combinations of fields.
 
 If no options are specified, this function defaults to the following:
-- `{$d :datetime}` is the same as `{$d :datetime dateStyle=short timeStyle=short}`
+- `{$d :datetime}` is the same as `{$d :datetime dateStyle=long timeStyle=short}`
 
 > [!NOTE]
 > The default formatting behavior of `:datetime` is inconsistent with `Intl.DateTimeFormat`
@@ -903,7 +903,7 @@ are encouraged to track development of these options during Tech Preview:
 The function `:date` is used to format the date portion of date/time values.
 
 If no options are specified, this function defaults to the following:
-- `{$d :date}` is the same as `{$d :date style=short}`
+- `{$d :date}` is the same as `{$d :date style=long}`
 
 #### Operands
 
@@ -917,9 +917,9 @@ All other _operand_ values produce a _Bad Operand_ error.
 The function `:date` has these _options_:
 - `style`
   - `full`
-  - `long`
+  - `long` (default)
   - `medium`
-  - `short` (default)
+  - `short`
 
 ### The `:time` function
 
