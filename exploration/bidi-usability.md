@@ -232,6 +232,13 @@ Newlines inside of messages should not harm later syntax.
 ن}}‎ 123 456 {{ LRM }}
 ```
 
+
+Naive text editors, when operating in a right-to-left context, 
+might display a _message_ with an RTL base direction.
+While the display of the _message_ might be somewhat damaged by this,
+it should not still produce results that are as reasonable as possible.
+
+
 ## Constraints
 
 _What prior decisions and existing conditions limit the possible design?_
@@ -252,6 +259,16 @@ whitespace or by some closing marker such as `}`.
 The workaround in #763 was to permit these characters _before_ or _after_ whitespace
 using the various whitespace productions.
 This works at the cost of allowing spurious markers.
+
+We want isolate characters to be _outside_ of patterns.
+There is an open question about how best to place them.
+One option would be to place them adjacent to the "pattern quote" character sequences `{{`/`}}`.
+Another option would be to place them _inside_ the pattern quotes, e.g. `{\u2066{`/`}\u2068}`.
+
+Bidi isolates and marks are invisible characters.
+Whitespace is also invisible.
+Mixing these may be problematic.
+Not allowing these to mix could produce annoying parse errors.
 
 ## Proposed Design
 
@@ -281,7 +298,7 @@ the user to set the base direction of a _literal_ or _pattern_ according to its 
 actual contents.
 
 > [!IMPORTANT]
-> This change adds a "lookahead" to determining if a given _message_ is
+> This change adds a "lookahead" to the process of determining if a given _message_ is
 > "simple" or "complex", as LRI, RLI, and FSI are all valid starters for a simple message
 > as well as being allowed before a quoted pattern.
 
