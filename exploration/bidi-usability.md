@@ -236,8 +236,7 @@ Newlines inside of messages should not harm later syntax.
 Naive text editors, when operating in a right-to-left context, 
 might display a _message_ with an RTL base direction.
 While the display of the _message_ might be somewhat damaged by this,
-it should not still produce results that are as reasonable as possible.
-
+it should still produce results that are as reasonable as possible.
 
 ## Constraints
 
