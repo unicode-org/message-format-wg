@@ -107,22 +107,19 @@ text to coerce certain directional behavior (usually to mark the end of
 a sequence of characters that would otherwise be ambiguous or interact with
 neutrals or opposite direction runs in an unhelpful way).
 
-### Strictness
+### Strictness and Abuse
 
 We want the syntax to be somewhat permissive, particularly when it comes to paired isolates.
 The isolates and strongly-directional marks are invisble except in certain specialized editing environments.
 While users and tools should be strict about using well-formed isolate sequences,
-we don't want to invisble characters or whitespace to generate additional syntax errors except where
-absolutely necessary.
-Therefore, it should not be a syntax error if a user, editor, or tool fails to provide the
-opening or closing isolate.
+we don't want to invisble characters or whitespace to generate additional syntax errors except where necessary.
+Therefore, it should not be a syntax error if a user, editor, or tool fails to match opening/closing isolates.
 
-It is possible to generate a "strict" version of the ABNF that is more restrictive about
-isolate pairing.
+It is possible to generate a "strict" version of the ABNF that is more restrictive about isolate pairing.
 Such an ABNF might be used by message serializers to ensure high-quality message generation.
 
-Note that the permissive syntax might be abused to produce Trojan Source effects
-(see [[UTS55]](https://www.unicode.org/reports/tr55))
+Unfortunately, permitting a "relaxed" handling of isolates/marks, when mixed with whitespace, 
+could produce the various Trojan Source effects described in [[UTS55]](https://www.unicode.org/reports/tr55/#Usability-bidi))
 
 ## Use-Cases
 
