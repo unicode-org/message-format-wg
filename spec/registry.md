@@ -905,8 +905,8 @@ are encouraged to track development of these options during Tech Preview:
 
 #### Composition
 
-When an _operand_ or an _option_ value uses a _variable_ with a _declaration_
-using an _expression_ with a `:datetime` _annotation_,
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:datetime` _annotation_,
 its resolved value contains only the implementation-defined datetime value
 of the _operand_ of the annotated _expression_,
 together with the resolved options values.
@@ -941,8 +941,8 @@ as is any `style` option.
 
 #### Composition
 
-When an _operand_ or an _option_ value uses a _variable_ with a _declaration_
-using an _expression_ with a `:date` _annotation_,
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:date` _annotation_,
 its resolved value contains only the implementation-defined date/time value
 of the _operand_ of the annotated _expression_ (with no time value),
 together with the resolved options values.
@@ -977,8 +977,8 @@ as is any `style` option.
 
 #### Composition
 
-When an _operand_ or an _option_ value uses a _variable_ with a _declaration_
-using an _expression_ with a `:time` _annotation_,
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:time` _annotation_,
 its resolved value contains only the implementation-defined date/time value
 of the _operand_ of the annotated _expression_ (with no date value),
 together with the resolved options values.
