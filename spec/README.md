@@ -16,7 +16,7 @@
    1. [Data Model Errors](errors.md#data-model-errors)
    1. [Resolution Errors](errors.md#resolution-errors)
    1. [Message Function Errors](errors.md#message-function-errors)
-1. [Registry](registry.md)
+1. [Default Function Registry](registry.md)
 1. [Formatting](formatting.md)
 1. [Interchange data model](data-model/README.md)
 
