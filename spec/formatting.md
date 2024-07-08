@@ -735,9 +735,8 @@ each _text_ and _placeholder_ part of the selected _pattern_ is resolved and for
 
 Resolved values cannot always be formatted by a given implementation.
 When such an error occurs during _formatting_,
-an implementation SHOULD emit an appropriate _Message Function Error_ and produce a
-_fallback value_ for the _placeholder_ that produced the error.
-A formatting function MAY substitute a value to use instead of a _fallback value_.
+an implementation MUST emit an appropriate _Message Function Error_ and use a
+_fallback value_ for the _placeholder_ with the error.
 
 Implementations MAY represent the result of _formatting_ using the most
 appropriate data type or structure. Some examples of these include:

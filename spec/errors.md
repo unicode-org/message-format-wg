@@ -24,9 +24,16 @@ or _Message Function Errors_ in _expressions_ that are not otherwise used by the
 such as _placeholders_ in unselected _patterns_
 or _declarations_ that are never referenced during _formatting_.
 
-In all cases, when encountering a runtime error,
-a message formatter MUST provide some representation of the message.
-An informative error or errors MUST also be separately provided.
+When formatting a message with one or more errors:
+- An implementation MUST provide a way for a user to be informed
+  of the name of at least one of the errors,
+  either directly or via an identifying error code.
+- An implementation MUST provide a way for a message with one or more
+  _Resolution Errors_ or _Message Function Errors_ to be formatted
+  using a fallback representation.
+
+The two above requirements MAY be fulfilled by a single formatting method,
+or separately by more than one such method.
 
 When a message contains more than one error,
 or contains some error which leads to further errors,
