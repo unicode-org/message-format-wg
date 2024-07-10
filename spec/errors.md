@@ -24,10 +24,13 @@ or _Message Function Errors_ in _expressions_ that are not otherwise used by the
 such as _placeholders_ in unselected _patterns_
 or _declarations_ that are never referenced during _formatting_.
 
-When formatting a message with one or more errors:
-- An implementation MUST provide a way for a user to be informed
-  of the name of at least one of the errors,
-  either directly or via an identifying error code.
+When formatting a _message_ with one or more errors:
+- An implementation MUST provide a mechanism to discover and identify
+  at least one of the errors. 
+  The exact form of error signaling is implementation defined.
+  Some examples include throwing an exception,
+  returning an error code, 
+  or providing a function or method for enumerating any errors.
 - An implementation MUST provide a way for a message with one or more
   _Resolution Errors_ or _Message Function Errors_ to be formatted
   using a fallback representation.
