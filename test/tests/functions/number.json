@@ -341,26 +341,6 @@
       "exp": "other"
     },
     {
-      "src": ".input {$bar} .match {$bar :number} one {{one}} * {{other}}",
-      "params": [
-        {
-          "name": "bar",
-          "value": 1
-        }
-      ],
-      "exp": "one"
-    },
-    {
-      "src": ".input {$bar} .match {$bar :number} one {{one}} * {{other}}",
-      "params": [
-        {
-          "name": "bar",
-          "value": 2
-        }
-      ],
-      "exp": "other"
-    },
-    {
       "src": ".input {$none} .match {$foo :number} one {{one}} * {{{$none}}}",
       "params": [
         {
