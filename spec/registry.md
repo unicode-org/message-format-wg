@@ -321,7 +321,7 @@ The function `:string` has no options.
 #### Selection
 
 When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
-where `resolvedSelector` is the resolved value of a _selector_ _expression_
+where `resolvedSelector` is the _resolved value_ of a _selector_ _expression_
 and `keys` is a list of strings,
 the `:string` selector performs as described below.
 
@@ -357,7 +357,7 @@ the `:string` selector performs as described below.
 
 #### Formatting
 
-The `:string` function returns the string value of the resolved value of the _operand_.
+The `:string` function returns the string value of the _resolved value_ of the _operand_.
 
 ## Numeric Value Selection and Formatting
 
@@ -646,7 +646,7 @@ such as the number of fraction, integer, or significant digits.
 
 A "digit size option" is an _option_ value that the _function_ interprets
 as a small integer value greater than or equal to zero.
-Implementations MAY define an upper limit on the resolved value 
+Implementations MAY define an upper limit on the _resolved value_ 
 of a digit size option option consistent with that implementation's practical limits.
 
 In most cases, the value of a digit size option will be a string that
@@ -668,7 +668,7 @@ Number selection has three modes:
   or to ordinal rule categories if there is no explicit match
 
 When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
-where `resolvedSelector` is the resolved value of a _selector_ _expression_
+where `resolvedSelector` is the _resolved value_ of a _selector_ _expression_
 and `keys` is a list of strings,
 numeric selectors perform as described below.
 
@@ -708,7 +708,7 @@ If the option `select` is set to `ordinal`, selection should be based on CLDR pl
 of type `ordinal`. See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
 for examples.
 
-Apply the rules defined by CLDR to the resolved value of the operand and the function options,
+Apply the rules defined by CLDR to the _resolved value_ of the operand and the function options,
 and return the resulting keyword.
 If no rules match, return `other`.
 
@@ -794,7 +794,7 @@ or can use a collection of _field options_ (but not both) to control the formatt
 output.
 
 If both are specified, a _Bad Option_ error MUST be emitted
-and a _fallback value_ used as the resolved value of the _expression_.
+and a _fallback value_ used as the _resolved value_ of the _expression_.
 
 > [!NOTE]
 > The names of _options_ and their _values_ were derived from the

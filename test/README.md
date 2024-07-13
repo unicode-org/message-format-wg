@@ -52,8 +52,8 @@ When resolving a `:test:function` expression,
 its `Input` and `DecimalPlaces` values are determined as follows:
 
 1. Let `DecimalPlaces` be 0.
-1. Let `arg` be the resolved value of the _expression_ _operand_.
-1. If `arg` is the resolved value of an _expression_
+1. Let `arg` be the _resolved value_ of the _expression_ _operand_.
+1. If `arg` is the _resolved value_ of an _expression_
    with a `:test:function`, `:test:select`, or `:test:format` _annotation_
    for which resolution has succeeded, then
    1. Let `Input` be the `Input` value of `arg`.
@@ -63,7 +63,7 @@ its `Input` and `DecimalPlaces` values are determined as follows:
    1. Let `Input` be the numerical value of `arg`.
 1. Else,
    1. Emit "bad-input" _Resolution Error_.
-   1. Use a _fallback value_ as the resolved value of the _expression_.
+   1. Use a _fallback value_ as the _resolved value_ of the _expression_.
       Further steps of this algorithm are not followed.
 1. If the `decimalPlaces` _option_ is set, then
    1. If its value resolves to a numerical integer value 0 or 1
@@ -71,7 +71,7 @@ its `Input` and `DecimalPlaces` values are determined as follows:
       1. Set `DecimalPlaces` to be the numerical value of the _option_.
    1. Else if its value is not an unresolved value set by _option resolution_,
       1. Emit "bad-option" _Resolution Error_.
-      1. Use a _fallback value_ as the resolved value of the _expression_.
+      1. Use a _fallback value_ as the _resolved value_ of the _expression_.
 
 When `:test:function` is used as a _selector_,
 the behaviour of calling it as the `rv` value of MatchSelectorKeys(`rv`, `keys`)
@@ -87,7 +87,7 @@ depends on its `Input` and `DecimalPlaces` values.
 
 When an _expression_ with a `:test:function` _annotation_ is assigned to a _variable_ by a _declaration_
 and that _variable_ is used as an _option_ value,
-its resolved value is the `Input` value.
+its _resolved value_ is the `Input` value.
 
 When `:test:function` is used as a _formatter_,
 a _placeholder_ resolving to a value with a `:test:function` _expression_
