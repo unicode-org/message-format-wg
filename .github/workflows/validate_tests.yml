@@ -1,0 +1,28 @@
+name: Validate test data
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - test/**
+  pull_request:
+    branches: '**'
+    paths:
+      - test/** 
+
+jobs:
+  run_all:
+    name: Validate tests using schema
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Install CLI tool for JSON Schema validation
+        run: npm install --global ajv-cli
+      - name: Validate tests using the latest schema version
+        run: >
+            ajv validate --spec=draft2020
+            -s $(ls -1v schemas/*/*schema.json | tail -1)
+            -d 'tests/**/*.json'
+        working-directory: ./test

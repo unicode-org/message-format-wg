@@ -277,6 +277,15 @@ which only expects the `accord` option:
 This section describes the functions which each implementation MUST provide
 to be conformant with this specification.
 
+> [!NOTE]
+> The [Stability Policy](/spec#stability-policy) allows for updates to
+> Default Registry functions to add support for new options.
+> As implementations are permitted to ignore options that they do not support,
+> it is possible to write messages using options not defined below
+> which currently format with no error, but which could produce errors
+> when formatted with a later edition of the Default Registry.
+> Therefore, using options not explicitly defined here is NOT RECOMMENDED.
+
 ## String Value Selection and Formatting
 
 ### The `:string` function
@@ -288,7 +297,7 @@ The function `:string` provides string selection and formatting.
 The _operand_ of `:string` is either any implementation-defined type
 that is a string or for which conversion to a string is supported,
 or any _literal_ value.
-All other values produce an _Invalid Expression_ error.
+All other values produce a _Bad Operand_ error.
 
 > For example, in Java, implementations of the `java.lang.CharSequence` interface
 > (such as `java.lang.String` or `java.lang.StringBuilder`),
@@ -367,6 +376,11 @@ The defaults for these options are implementation-dependent.
 In general, the default values for such options depend on the locale, 
 the value of other options, or both.
 
+> [!NOTE]
+> The names of _options_ and their _values_ were derived from the
+> [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
+> in JavaScript's `Intl.NumberFormat`.
+
 The following options and their values are required to be available on the function `:number`:
 - `select`
    -  `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
@@ -398,15 +412,15 @@ The following options and their values are required to be available on the funct
   - `never`
   - `min2`
 - `minimumIntegerDigits`
-  - (non-negative integer, default: `1`)
+  - ([digit size option](#digit-size-options), default: `1`)
 - `minimumFractionDigits`
-  - (non-negative integer)
+  - ([digit size option](#digit-size-options))
 - `maximumFractionDigits`
-  - (non-negative integer)
+  - ([digit size option](#digit-size-options))
 - `minimumSignificantDigits`
-  - (non-negative integer)
+  - ([digit size option](#digit-size-options))
 - `maximumSignificantDigits`
-  - (non-negative integer)
+  - ([digit size option](#digit-size-options))
 
 > [!NOTE]
 > The following options and option values are being developed during the Technical Preview
@@ -492,6 +506,11 @@ The defaults for these options are implementation-dependent.
 In general, the default values for such options depend on the locale, 
 the value of other options, or both.
 
+> [!NOTE]
+> The names of _options_ and their _values_ were derived from the
+> [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
+> in JavaScript's `Intl.NumberFormat`.
+
 The following options and their values are required in the default registry to be available on the 
 function `:integer`:
 - `select`
@@ -515,9 +534,9 @@ function `:integer`:
   - `always`
   - `min2`
 - `minimumIntegerDigits`
-  - (non-negative integer, default: `1`)
+  - ([digit size option](#digit-size-options), default: `1`)
 - `maximumSignificantDigits`
-  - (non-negative integer)
+  - ([digit size option](#digit-size-options))
 
 > [!NOTE]
 > The following options and option values are being developed during the Technical Preview
@@ -590,7 +609,7 @@ The _function_ `:integer` performs selection as described in [Number Selection](
 
 The _operand_ of a number function is either an implementation-defined type or
 a literal whose contents match the `number-literal` production in the [ABNF](/spec/message.abnf).
-All other values produce an _Invalid Expression_ error.
+All other values produce a _Bad Operand_ error.
 
 > For example, in Java, any subclass of `java.lang.Number` plus the primitive
 > types (`byte`, `short`, `int`, `long`, `float`, `double`, etc.) 
@@ -619,6 +638,24 @@ All other values produce an _Invalid Expression_ error.
 > or the type `com.ibm.icu.util.CurrencyAmount` can be used to set the currency and related
 > options (such as the number of fraction digits).
 
+### Digit Size Options
+
+Some _options_ of number _functions_ are defined to take a "digit size option".
+Implementations of number _functions_ use these _options_ to control aspects of numeric display
+such as the number of fraction, integer, or significant digits.
+
+A "digit size option" is an _option_ value that the _function_ interprets
+as a small integer value greater than or equal to zero.
+Implementations MAY define an upper limit on the resolved value 
+of a digit size option option consistent with that implementation's practical limits.
+
+In most cases, the value of a digit size option will be a string that
+encodes the value as a decimal integer.
+Implementations MAY also accept implementation-defined types as the value.
+When provided as a string, the representation of a digit size option matches the following ABNF:
+>```abnf
+> digit-size-option = "0" / (("1"-"9") [DIGIT])
+>```
 
 
 ### Number Selection
@@ -647,7 +684,7 @@ numeric selectors perform as described below.
    1. Else if `key` is one of the keywords `zero`, `one`, `two`, `few`, `many`, or `other`, then
       1. If `key` and `keyword` consist of the same sequence of Unicode code points, then
          1. Append `key` as the last element of the list `resultKeyword`.
-   1. Else, emit a _Selection Error_.
+   1. Else, emit a _Bad Variant Key_ error.
 1. Return a new list whose elements are the concatenation of the elements (in order) of `resultExact` followed by the elements (in order) of `resultKeyword`.
 
 > [!NOTE]
@@ -748,7 +785,7 @@ If no options are specified, this function defaults to the following:
 The _operand_ of the `:datetime` function is either 
 an implementation-defined date/time type
 or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
-All other _operand_ values produce an _Invalid Expression_ error.
+All other _operand_ values produce a _Bad Operand_ error.
 
 #### Options
 
@@ -756,8 +793,13 @@ The `:datetime` function can use either the appropriate _style options_
 or can use a collection of _field options_ (but not both) to control the formatted 
 output.
 
-If both are specified, an _Invalid Expression_ error MUST be emitted
+If both are specified, a _Bad Option_ error MUST be emitted
 and a _fallback value_ used as the resolved value of the _expression_.
+
+> [!NOTE]
+> The names of _options_ and their _values_ were derived from the
+> [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/resolvedOptions#description)
+> in JavaScript's `Intl.DateTimeFormat`.
 
 ##### Style Options
 
@@ -868,7 +910,7 @@ If no options are specified, this function defaults to the following:
 The _operand_ of the `:date` function is either 
 an implementation-defined date/time type
 or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
-All other _operand_ values produce an _Invalid Expression_ error.
+All other _operand_ values produce a _Bad Operand_ error.
 
 #### Options
 
@@ -891,7 +933,7 @@ If no options are specified, this function defaults to the following:
 The _operand_ of the `:time` function is either 
 an implementation-defined date/time type
 or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
-All other _operand_ values produce an _Invalid Expression_ error.
+All other _operand_ values produce a _Bad Operand_ error.
 
 #### Options
 
@@ -908,7 +950,7 @@ The function `:time` has these _options_:
 The _operand_ of a date/time function is either 
 an implementation-defined date/time type
 or a _date/time literal value_, as defined below.
-All other _operand_ values produce an _Invalid Expression_ error.
+All other _operand_ values produce a _Bad Operand_ error.
 
 A **_<dfn>date/time literal value</dfn>_** is a non-empty string consisting of an ISO 8601 date,
 or an ISO 8601 datetime optionally followed by a timezone offset.
@@ -930,7 +972,7 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 > The [ABNF](/spec/message.abnf) and [syntax](/spec/syntax.md) of MF2
 > do not formally define date/time literals. 
 > This means that a _message_ can be syntactically valid but produce
-> an _Operand Mismatch Error_ at runtime.
+> a _Bad Operand_ error at runtime.
 
 > [!NOTE]
 > String values passed as variables in the _formatting context_'s

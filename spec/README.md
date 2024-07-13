@@ -15,8 +15,7 @@
    1. [Syntax Errors](errors.md#syntax-errors)
    1. [Data Model Errors](errors.md#data-model-errors)
    1. [Resolution Errors](errors.md#resolution-errors)
-   1. [Selection Errors](errors.md#selection-errors)
-   1. [Formatting Errors](errors.md#formatting-errors)
+   1. [Message Function Errors](errors.md#message-function-errors)
 1. [Registry](registry.md)
    1. [`registry.dtd`](registry.dtd)
 1. [Formatting](formatting.md)
@@ -25,7 +24,7 @@
 ## Introduction
 
 One of the challenges in adapting software to work for
-users with different languages and cultures is the need for **_dynamic messages_**.
+users with different languages and cultures is the need for **_<dfn>dynamic messages</dfn>_**.
 Whenever a user interface needs to present data as part of a larger string,
 that data needs to be formatted (and the message may need to be altered)
 to make it culturally accepted and grammatically correct.
