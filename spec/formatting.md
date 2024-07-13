@@ -216,7 +216,23 @@ whether its value was originally _quoted_ or _unquoted_.
 > For example,
 > the _option_ `foo=42` and the _option_ `foo=|42|` are treated as identical.
 
-The resolution of a _text_ or _literal_ MUST resolve to a string.
+The resolution of a _text_ or _literal_ MUST resolve with a string value.
+
+> For example, in a JavaScript formatter
+> the _resolved value_ of a _text_ or a _literal_ could have the following implementation:
+>
+> ```ts
+> class MessageLiteral implements MessageValue {
+>   constructor(value: string) {
+>     this.formatToString = () => value;
+>     this.getValue = () => value;
+>   }
+>   resolvedOptions: () => ({});
+>   selectKeys(_keys: string[]) {
+>     throw Error("Selection on unannotated literals is not supported");
+>   }
+> }
+> ```
 
 ### Variable Resolution
 
@@ -225,6 +241,9 @@ its _name_ is used to identify either a local variable or an input variable.
 If a _declaration_ exists for the _variable_, its _resolved value_ is used.
 Otherwise, the _variable_ is an implicit reference to an input value,
 and its value is looked up from the _formatting context_ _input mapping_.
+
+An implemementation MAY choose to wrap or otherwise represent all input values
+using the same representation it uses for all _resolved values_.
 
 The resolution of a _variable_ MAY fail if no value is identified for its _name_.
 If this happens, an _Unresolved Variable_ error MUST be emitted.
@@ -466,6 +485,23 @@ The _fallback value_ depends on the contents of the _expression_:
 _Option_ _identifiers_ and values are not included in the _fallback value_.
 
 _Pattern selection_ is not supported for _fallback values_.
+
+> For example, in a JavaScript formatter
+> the _fallback value_ could have the following implementation,
+> where `source` is one of the above-defined strings:
+>
+> ```ts
+> class MessageFallback implements MessageValue {
+>   constructor(source: string) {
+>     this.formatToString = () => `{${source}}`;
+>     this.getValue = () => undefined;
+>   }
+>   resolvedOptions: () => ({});
+>   selectKeys(_keys: string[]) {
+>     throw Error("Selection on fallback values is not supported");
+>   }
+> }
+> ```
 
 ## Pattern Selection
 
