@@ -270,21 +270,26 @@ Not allowing these to mix could produce annoying parse errors.
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
 
-Editing and display of a _message_ SHOULD always use a left-to-right base direction
+The syntax of a _message_ assumes a left-to-right base direction
 both for the complete text of the _message_ as well as for each line (paragraph)
-contained therein.
-
-We use LTR display because the syntax of a _message_ depends on LTR word tokens,
+contained therein. 
+We prefer LTR display because human understanding of a _message_ depends on LTR word tokens,
 as well as token ordering (as in a placeholder or with variant keys).
+Note that LTR display is **_not_** a requirement, because that is beyond the scope of MF2 itself.
+However, tool and editor implementers ought to pay attention to this assumption.
 
-This is not the disadvantage to right-to-left languages that it might first appear:
-- Bidi inside of _patterns_ works normally
-- _Placeholders_ and _markup_ are isolated (treated as neutrals) so that they appear
+Preferring LTR display is not the disadvantage to right-to-left languages that it might first appear:
+- Bidi inside of _patterns_ works normally (we go to great lengths to make the interior
+  of _patterns_ work as plain text)
+- _Placeholders_ and _markup_ can be isolated (treated as neutrals) so that they appear
   in the correct location in an RTL _pattern_
 - _Expressions_ use isolates and directional marks to display internal tokens in the
   correct order and without spillover effects
+- The syntax uses paired enclosing marks that the Unicode Bidirectional Algorithm pairs
+  for shaping purposes and these offer a poor person's form of isolation.
 
-Permit isolating bidi controls to be used on the **outside** of the following:
+The syntax permits (but does not require) isolating bidi controls to be used on the 
+**outside** of the following:
 - unquoted literals
 - quoted literals
 - quoted patterns
@@ -313,7 +318,8 @@ close-isolate  = %x2069
 > The isolating characters go on the **_outside_** of the various _literal_ and _pattern_
 > productions because characters on the **_inside_** of these are part of the _literal_'s
 > or _pattern_'s textual content.
-> We need to allow users to include bidi characters, including isolates and strongly directional marks in the output of MF2.
+> We need to allow users to include bidi characters, including isolates and strongly directional marks
+> in the output of MF2.
 
 Permit **left-to-right** isolates (`U+2066`...`U+2069`) to be used **immediately inside** the following:
 - expressions
