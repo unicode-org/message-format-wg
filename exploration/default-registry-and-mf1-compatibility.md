@@ -81,8 +81,8 @@ Functions for formatting [date/time values](#operands) in the default registry a
 - `:time`
 
 If no options are specified, each of the functions defaults to the following:
-- `{$d :datetime}` is the same as `{$d :datetime dateStyle=long timeStyle=short}`
-- `{$d :date}` is the same as `{$d :date style=long}`
+- `{$d :datetime}` is the same as `{$d :datetime dateStyle=medium timeStyle=short}`
+- `{$d :date}` is the same as `{$d :date style=medium}`
 - `{$t :time}` is the same as `{$t :time style=short}`
 
 > [!NOTE]
@@ -165,8 +165,8 @@ The function `:datetime` has these function-specific _style_ options.
 The function `:date` has these function-specific _style_ options:
 - `style`
   - `full`
-  - `long` (default)
-  - `medium`
+  - `long`
+  - `medium` (default)
   - `short`
 
 The function `:time` has these function-specific _style_ options:
@@ -300,7 +300,7 @@ How to write an MF1 format or selector in MF2:
 | Plural (selector)  | `{num,plural, ...}`            | `.match {$num :plural}`<br/>`.match {$num :number}`                 |                                 |
 | Ordinal (selector) | `{num,selectordinal, ...}`     | `.match {$num :ordinal}`<br/>`.match {$num :number select=ordinal}` |                                 |
 | Ordinal (format)   | `{num,ordinal}`                |                                                                     | missing                         |
-| Date               | `{date,date}`                  | `{$date :date}`<br/>`{$date :datetime}`                             | long date is default           |
+| Date               | `{date,date}`                  | `{$date :date}`<br/>`{$date :datetime}`                             | medium date is default          |
 | Date               | `{date,date,short}`            | `{$date :date style=short}`<br/>`{$date :datetime dateStyle=short}` | also medium,long,full           |
 | Time               | `{date,time}`                  | `{$date :time}`<br/>`{$date :datetime timeStyle=short}`             | shorthand or timeStyle required |
 | Date               | `{date,time,short}`            | `{$date :time style=short}`<br/>`{$date :datetime timeStyle=short}` | also medium,long,full           |
