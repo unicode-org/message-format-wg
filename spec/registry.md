@@ -422,6 +422,12 @@ The following options and their values are required to be available on the funct
 - `maximumSignificantDigits`
   - ([digit size option](#digit-size-options))
 
+If the _operand_ of the _expression_ is an implementation-defined type,
+such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
+it can include option values.
+These are included in the resolved option values of the _expression_,
+with _options_ on the _expression_ taking priority over any option values of the _operand_.
+
 > [!NOTE]
 > The following options and option values are being developed during the Technical Preview
 > period.
@@ -489,6 +495,14 @@ MUST be multiplied by 100 for the purposes of formatting.
 
 The _function_ `:number` performs selection as described in [Number Selection](#number-selection) below.
 
+#### Composition
+
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:number` _annotation_,
+its resolved value contains the implementation-defined numerical value
+of the _operand_ of the annotated _expression_,
+together with the resolved options values.
+
 ### The `:integer` function
 
 The function `:integer` is a selector and formatter for matching or formatting numeric 
@@ -497,7 +511,6 @@ values as integers.
 #### Operands
 
 The function `:integer` requires a [Number Operand](#number-operands) as its _operand_.
-
 
 #### Options
 
@@ -537,6 +550,18 @@ function `:integer`:
   - ([digit size option](#digit-size-options), default: `1`)
 - `maximumSignificantDigits`
   - ([digit size option](#digit-size-options))
+
+If the _operand_ of the _expression_ is an implementation-defined type,
+such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
+it can include option values.
+In general, these are included in the resolved option values of the _expression_,
+with _options_ on the _expression_ taking priority over any option values of the _operand_.
+Option values with the following names are however discarded if included in the _operand_:
+- `compactDisplay`
+- `notation`
+- `minimumFractionDigits`
+- `maximumFractionDigits`
+- `minimumSignificantDigits`
 
 > [!NOTE]
 > The following options and option values are being developed during the Technical Preview
@@ -604,6 +629,14 @@ MUST be multiplied by 100 for the purposes of formatting.
 #### Selection
 
 The _function_ `:integer` performs selection as described in [Number Selection](#number-selection) below.
+
+#### Composition
+
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:integer` _annotation_,
+its resolved value contains the implementation-defined integer value
+of the _operand_ of the annotated _expression_,
+together with the resolved options values.
 
 ### Number Operands
 
