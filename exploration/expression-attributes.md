@@ -305,6 +305,9 @@ Other functions could use their own definitions and handling for similar options
 such as `locale` or `x:lang`.
 
 Formatted parts for markup would not be able to directly include an identifier.
+Implementations and users will need to invent their own practices with
+markup option names like `l10n-id`, `mf:id`, or `markupId`
+to refer to specific markup parts.
 
 Do not define a common way to communicate information
 about an expression or markup to translators or tools.
