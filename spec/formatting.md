@@ -175,7 +175,7 @@ after any character escape has been converted to the escaped character.
 When a _literal_ is used as an _operand_
 or on the right-hand side of an _option_,
 the formatting function MUST treat its resolved value the same
-whether its value was originally _quoted_ or _unquoted_.
+whether its value was originally a _quoted literal_ or an _unquoted literal_.
 
 > For example,
 > the _option_ `foo=42` and the _option_ `foo=|42|` are treated as identical.
@@ -361,7 +361,7 @@ An _expression_ fails to resolve when:
 
 The _fallback value_ depends on the contents of the _expression_:
 
-- _expression_ with _literal_ _operand_ (_quoted_ or _unquoted_):
+- _expression_ with any _literal_ _operand_:
   U+007C VERTICAL LINE `|`
   followed by the value of the _literal_
   with escaping applied to U+005C REVERSE SOLIDUS `\` and U+007C VERTICAL LINE `|`,

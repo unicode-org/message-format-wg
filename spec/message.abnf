@@ -42,11 +42,12 @@ option         = identifier [s] "=" [s] (literal / variable)
 attribute      = "@" identifier [[s] "=" [s] (literal / variable)]
 
 variable       = "$" name
-literal        = quoted / unquoted
-quoted         = "|" *(quoted-char / escaped-char) "|"
-unquoted       = name / number-literal
+
+literal          = quoted-literal / unquoted-literal
+quoted-literal   = "|" *(quoted-char / escaped-char) "|"
+unquoted-literal = name / number-literal
 ; number-literal matches JSON number (https://www.rfc-editor.org/rfc/rfc8259#section-6)
-number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
+number-literal   = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
 
 ; Keywords; Note that these are case-sensitive
 input = %s".input"
@@ -68,7 +69,7 @@ reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 private-use-annotation    = private-start [[s] reserved-body]
 private-start             = "^" / "&"
 reserved-body             = reserved-body-part *([s] reserved-body-part)
-reserved-body-part        = reserved-char / escaped-char / quoted
+reserved-body-part        = reserved-char / escaped-char / quoted-literal
 
 ; Names and identifiers
 ; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName
