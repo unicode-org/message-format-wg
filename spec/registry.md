@@ -499,7 +499,7 @@ The _function_ `:number` performs selection as described in [Number Selection](#
 
 When an _operand_ or an _option_ value uses a _variable_ annotated,
 directly or indirectly, by a `:number` _annotation_,
-its resolved value contains the implementation-defined numerical value
+its resolved value contains an implementation-defined numerical value
 of the _operand_ of the annotated _expression_,
 together with the resolved options values.
 
