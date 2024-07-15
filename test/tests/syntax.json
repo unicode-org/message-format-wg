@@ -292,6 +292,7 @@
       "expParts": [
         {
           "type": "string",
+          "source": "|42|",
           "value": "42"
         }
       ]
@@ -302,6 +303,7 @@
       "expParts": [
         {
           "type": "string",
+          "source": "|42|",
           "value": "42"
         }
       ]
