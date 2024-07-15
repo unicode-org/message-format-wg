@@ -291,7 +291,7 @@
       "exp": "42",
       "expParts": [
         {
-          "type": "literal",
+          "type": "string",
           "value": "42"
         }
       ]
@@ -301,7 +301,7 @@
       "exp": "42",
       "expParts": [
         {
-          "type": "literal",
+          "type": "string",
           "value": "42"
         }
       ]

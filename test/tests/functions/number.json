@@ -27,7 +27,7 @@
       ]
     },
     {
-      "src": "invalid number literal {.1 :number}",
+      "src": "invalid number literal {|.1| :number}",
       "exp": "invalid number literal {|.1|}",
       "expErrors": [
         {
@@ -36,7 +36,7 @@
       ]
     },
     {
-      "src": "invalid number literal {1. :number}",
+      "src": "invalid number literal {|1.| :number}",
       "exp": "invalid number literal {|1.|}",
       "expErrors": [
         {
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "src": "invalid number literal {01 :number}",
+      "src": "invalid number literal {|01| :number}",
       "exp": "invalid number literal {|01|}",
       "expErrors": [
         {
@@ -63,7 +63,7 @@
       ]
     },
     {
-      "src": "invalid number literal {0x1 :number}",
+      "src": "invalid number literal {|0x1| :number}",
       "exp": "invalid number literal {|0x1|}",
       "expErrors": [
         {
