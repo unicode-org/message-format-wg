@@ -9,6 +9,10 @@
     "tests"
   ],
   "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Identifier for the test file JSON schema."
+    },
     "scenario": {
       "type": "string",
       "description": "Identifier for the tests in the file."
