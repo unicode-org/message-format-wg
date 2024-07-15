@@ -361,7 +361,7 @@ An _expression_ fails to resolve when:
 
 The _fallback value_ depends on the contents of the _expression_:
 
-- _expression_ with any _literal_ _operand_:
+- _expression_ with a _literal_ _operand_ (either quoted or unquoted)
   U+007C VERTICAL LINE `|`
   followed by the value of the _literal_
   with escaping applied to U+005C REVERSE SOLIDUS `\` and U+007C VERTICAL LINE `|`,
