@@ -428,6 +428,14 @@ it can include option values.
 These are included in the resolved option values of the _expression_,
 with _options_ on the _expression_ taking priority over any option values of the _operand_.
 
+> For example, the _placeholder_ in this _message_:
+> ```
+> .input {$n :number notation=scientific minimumFractionDigits=2}
+> {{{$n :number minimumFractionDigits=1}}}
+> ```
+> would be formatted with the resolved options
+> `{ notation: 'scientific', minimumFractionDigits: '1' }`.
+
 > [!NOTE]
 > The following options and option values are being developed during the Technical Preview
 > period.
