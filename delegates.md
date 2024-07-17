@@ -19,6 +19,10 @@ Please include your primary affiliation (e.g., the company you represent or wher
 
 ## Delegate List
 
+This is list not in any way official. 
+Please sign the CLA to participate. 
+Contributions to specification language are acknowledged in the specification.
+
 ### Current
 
 - Addison Phillips - Unicode (APP)
@@ -29,6 +33,7 @@ Please include your primary affiliation (e.g., the company you represent or wher
 - Jan Mühlemann - Locize (JMU)
 - Janne Tynkkynen - PayPal (JMT)
 - Jeff Genovy - Microsoft (JMG)
+- Harmit Goswamy - Mozilla (HGO)
 - John Watson - Facebook (JRW)
 - Long Ho - Dropbox (LHO)
 - Mick Monaghan - Guidewire - (MMN)
