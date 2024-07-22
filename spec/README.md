@@ -79,12 +79,16 @@ A reference to a _term_ looks like this.
 > The provisions of the stability policy are not in effect until
 > the conclusion of the technical preview and adoption of this specification.
 
-Updates to this specification will not change
-the syntactical meaning, the runtime output, or other behaviour
-of valid messages written for earlier versions of this specification
-that only use functions defined in this specification.
-Updates to this specification will not remove any syntax provided in this version.
-Future versions MAY add additional structure or meaning to existing syntax.
+Updates to this specification shall not make any well-formed or valid _message_ invalid.
+Updates to this specification shall not remove any syntax provided in this version.
+Future versions might add additional structure or meaning to existing syntax.
+
+Updates to this specification shall not change the syntactical meaning
+of any syntax defined in this specification except for that syntax marked as
+"reserved for future standardization".
+
+Updates to this specification shall not assign any meaning or change the syntactical 
+requirements for any private-use annotation.
 
 Updates to this specification will not remove any reserved keywords or sigils.
 
@@ -95,9 +99,11 @@ Updates to this specification will not reserve or assign meaning to
 any character "sigils" except for those in the `reserved` production.
 
 Updates to this specification
-will not remove any functions defined in the default registry nor
-will they remove any options or option values.
-Additional options or option values MAY be defined.
+will not remove any functions defined in the default registry.
+
+Updates to this specification will not remove any options or option values
+defined in the default registry.
+Additional options or additional option values for existing options MAY be defined.
 
 > [!NOTE]
 > This does not guarantee that the results of formatting will never change.
