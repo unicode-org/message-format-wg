@@ -79,45 +79,39 @@ A reference to a _term_ looks like this.
 > The provisions of the stability policy are not in effect until
 > the conclusion of the technical preview and adoption of this specification.
 
-Updates to this specification shall not make any well-formed or valid _message_ invalid.
-Updates to this specification shall not remove any syntax provided in this version.
-Future versions might add additional structure or meaning to existing syntax.
+Updates to this specification will not make any well-formed or valid _message_ invalid.
 
-Updates to this specification shall not change the syntactical meaning
+Updates to this specification will not remove any syntax provided in this version.
+
+Updates to this specification will not change the syntactical meaning
 of any syntax defined in this specification except for that syntax marked as
 "reserved for future standardization".
 
-Updates to this specification shall not assign any meaning or change the syntactical 
+Updates to this specification will not assign any meaning to or change the syntactical 
 requirements for any private-use annotation.
 
 Updates to this specification will not remove any reserved keywords or sigils.
 
-> [!NOTE]
-> Future versions may define new keywords.
+Updates to this specification will not add any additional Unicode code points to 
+those in `reserved-annotation-start`.
 
-Updates to this specification will not reserve or assign meaning to
-any character "sigils" except for those in the `reserved` production.
-
-Updates to this specification
-will not remove any functions defined in the default registry.
+Updates to this specification will not remove any functions defined in the default registry.
 
 Updates to this specification will not remove any options or option values
 defined in the default registry.
-Additional options or additional option values for existing options MAY be defined.
 
 > [!NOTE]
-> This does not guarantee that the results of formatting will never change.
-> Even when the specification doesn't change,
+> The foregoing policies are _not_ a guarantee that the results of formatting will never change.
+> Even when this specification or its implementation do not change,
 > the functions for date formatting, number formatting and so on
-> will change their results over time.
-
-Later specification versions MAY make previously invalid messages valid.
+> can change their results over time or behave differently due to local runtime
+> differences in implementation or changes to locale data
+> (such as due to the release of new CLDR versions).
 
 Updates to this specification will not introduce message syntax that,
 when parsed according to earlier versions of this specification,
 would produce syntax or data model errors.
-Such messages MAY produce errors when formatted
-according to an earlier version of this specification.
+Such messages can produce errors when formatted according to an earlier version of this specification.
 
 From version 2.0, MessageFormat will only reserve, define, or require
 function names or function option names
@@ -127,22 +121,15 @@ All other names in these categories are reserved for the use of implementations 
 > [!NOTE]
 > Users defining custom names SHOULD include at least one character outside these ranges
 > to ensure that they will be compatible with future versions of this specification.
+> They SHOULD also use the namespace feature to avoid collisions with other implementations.
 
-Later versions of this specification will not introduce changes
+Future versions of this specification will not introduce changes
 to the data model that would result in a data model representation
 based on this version being invalid.
 
 > For example, existing interfaces or fields will not be removed.
 
-Later versions of this specification MAY introduce changes
-to the data model that would result in future data model representations
-not being valid for implementations of this version of the data model.
-
-> For example, a future version could introduce a new keyword,
-> whose data model representation would be a new interface
-> that is not recognized by this version's data model.
-
-Later specification versions will not introduce syntax that cannot be
+Future versions of this specification will not introduce syntax that cannot be
 represented by this version of the data model.
 
 > For example, a future version could introduce a new keyword.
@@ -151,4 +138,24 @@ represented by this version of the data model.
 > the interface `UnsupportedStatement`.
 > Both data models would be "valid" in their context,
 > but this version's would be missing any functionality for the new statement type.
+
+> [!IMPORTANT]
+> This stability policy allows any of the following, non-exhaustive list, of changes
+> in future versions of this specification:
+> - Future versions may add additional structure or meaning to existing syntax.
+> - Future versions may define new keywords.
+> - Future versions may define annotations that use portions of the `reserved-annotation`
+>   syntax.
+> - Future versions may make previously invalid messages valid.
+> - Future versions may define additional functions in the default registry
+>   or may reserve the names of functions for the purposes of interoperability.
+> - Future versions may define additional options to existing functions.
+> - Future versions may define additional option values for existing options.
+> - Future versions may deprecate functions, options, or option values.
+> - Future versions of this specification may introduce changes
+>   to the data model that would result in future data model representations
+>   not being valid for implementations of this version of the data model.
+>   - For example, a future version could introduce a new keyword,
+>     whose data model representation would be a new interface
+>     that is not recognized by this version's data model.
 
