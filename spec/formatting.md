@@ -549,6 +549,10 @@ The returned list MAY be empty.
 The most-preferred key is first,
 with each successive key appearing in order by decreasing preference.
 
+If calling MatchSelectorKeys encounters any error,
+a _Bad Selector_ error is emitted
+and an empty list is returned.
+
 ### Filter Variants
 
 Then, using the preferential key orders `pref`,
