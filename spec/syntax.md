@@ -675,7 +675,7 @@ reserved-annotation       = reserved-annotation-start [[s] reserved-body]
 reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
 
 reserved-body             = reserved-body-part *([s] reserved-body-part)
-reserved-body-part        = reserved-char / escaped-char / quoted
+reserved-body-part        = reserved-char / escaped-char / quoted-literal
 ```
 
 ## Markup
@@ -834,27 +834,26 @@ except for U+0000 NULL or the surrogate code points U+D800 through U+DFFF.
 
 All code points are preserved.
 
-A **_<dfn>quoted</dfn>_** literal begins and ends with U+005E VERTICAL BAR `|`.
-The characters `\` and `|` within a _quoted_ literal MUST be
+A **_<dfn>quoted literal</dfn>_** begins and ends with U+005E VERTICAL BAR `|`.
+The characters `\` and `|` within a _quoted literal_ MUST be
 escaped as `\\` and `\|`.
 
-An **_<dfn>unquoted</dfn>_** literal is a _literal_ that does not require the `|`
+An **_<dfn>unquoted literal</dfn>_** is a _literal_ that does not require the `|`
 quotes around it to be distinct from the rest of the _message_ syntax.
-An _unquoted_ MAY be used when the content of the _literal_
+An _unquoted literal_ MAY be used when the content of the _literal_
 contains no whitespace and otherwise matches the `unquoted` production.
-Any _unquoted_ literal MAY be _quoted_.
-Implementations MUST NOT distinguish between _quoted_ and _unquoted_ literals
+Implementations MUST NOT distinguish between _quoted literals_ and _unquoted literals_
 that have the same sequence of code points.
 
-_Unquoted_ literals can contain a _name_ or consist of a _number-literal_.
+_Unquoted literals_ can contain a _name_ or consist of a _number-literal_.
 A _number-literal_ uses the same syntax as JSON and is intended for the encoding 
 of number values in _operands_ or _options_, or as _keys_ for _variants_.
 
 ```abnf
-literal        = quoted / unquoted
-quoted         = "|" *(quoted-char / escaped-char) "|"
-unquoted       = name / number-literal
-number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
+literal          = quoted-literal / unquoted-literal
+quoted-literal   = "|" *(quoted-char / escaped-char) "|"
+unquoted-literal = name / number-literal
+number-literal   = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
 ```
 
 ### Names and Identifiers
@@ -876,7 +875,7 @@ _Option_ _identifiers_ have no prefix.
 
 A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_ 
 or as the name for a _variable_
-or the value of an _unquoted_ _literal_.
+or the value of an _unquoted literal_.
 
 _Variable_ names are prefixed with `$`.
 
@@ -934,7 +933,7 @@ An **_<dfn>escape sequence</dfn>_** is a two-character sequence starting with
 U+005C REVERSE SOLIDUS `\`.
 
 An _escape sequence_ allows the appearance of lexically meaningful characters
-in the body of _text_, _quoted_, or _reserved_
+in the body of _text_, _quoted literal_, or _reserved_
 (which includes, in this case, _private-use_) sequences.
 Each _escape sequence_ represents the literal character immediately following the initial `\`.
 
@@ -945,7 +944,7 @@ backslash    = %x5C ; U+005C REVERSE SOLIDUS "\"
 
 > [!NOTE]
 > The `escaped-char` rule allows escaping some characters in places where
-> they do not need to be escaped, such as braces in a _quoted_ _literal_.
+> they do not need to be escaped, such as braces in a _quoted literal_.
 > For example, `|foo {bar}|` and `|foo \{bar\}|` are synonymous.
 
 When writing or generating a _message_, escape sequences SHOULD NOT be used
