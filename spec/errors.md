@@ -258,7 +258,7 @@ An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a
 ### Bad Selector
 
 A **_<dfn>Bad Selector</dfn>_** error occurs when a message includes a _selector_
-with a resolved value which does not support selection.
+with a _resolved value_ which does not support selection.
 
 > For example, attempting to format this message
 > would result in a _Bad Selector_ error:

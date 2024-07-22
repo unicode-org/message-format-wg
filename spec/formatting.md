@@ -16,7 +16,7 @@ Formatting of a _message_ is defined by the following operations:
   with reference to the current _formatting context_.
   This can include multiple steps,
   such as looking up the value of a variable and calling formatting functions.
-  The form of the resolved value is implementation defined and the
+  The form of the _resolved value_ is implementation defined and the
   value might not be evaluated or formatted yet.
   However, it needs to be "formattable", i.e. it contains everything required
   by the eventual formatting.
@@ -47,7 +47,7 @@ Formatting of a _message_ is defined by the following operations:
   if the _message_ contains any _reserved statements_,
   emit an _Unsupported Statement_ error.
 
-- **_<dfn>Formatting</dfn>_** takes the resolved values of the selected _pattern_,
+- **_<dfn>Formatting</dfn>_** takes the _resolved values_ of the selected _pattern_,
   and produces the formatted result for the _message_.
   Depending on the implementation, this result could be a single concatenated string,
   an array of objects, an attributed string, or some other locally appropriate data type.
@@ -85,54 +85,90 @@ At a minimum, it includes:
 
 Implementations MAY include additional fields in their _formatting context_.
 
-## Expression and Markup Resolution
+## Resolved Values
 
-_Expressions_ are used in _declarations_, _selectors_, and _patterns_.
-_Markup_ is only used in _patterns_.
+This specification allows for the same value to be used for:
+- formatting in a _placeholder_,
+- selection in a _selector_ _expression_,
+- as the _operand_ of another _expression_ (including _local declarations_), or
+- as an _option_ value in another _expression_,
 
-In a _declaration_, the resolved value of the _expression_ is bound to a _variable_,
+To support this, the _**resolved value**_ of each _expression_
+is an implementation-dependent value that supports some or all of the above use cases.
+
+In a _declaration_, the _resolved value_ of the _expression_ is bound to a _variable_,
 which is available for use by later _expressions_.
 Since a _variable_ can be referenced in different ways later,
 implementations SHOULD NOT immediately fully format the value for output.
 
 In an _input-declaration_, the _variable_ operand of the _variable-expression_
 identifies not only the name of the external input value,
-but also the _variable_ to which the resolved value of the _variable-expression_ is bound.
+but also the _variable_ to which the _resolved value_ of the _variable-expression_ is bound.
 
-In _selectors_, the resolved value of an _expression_ is used for _pattern selection_.
+In _selectors_, the _resolved value_ of an _expression_ is used for _pattern selection_.
 
-In a _pattern_, the resolved value of an _expression_ or _markup_ is used in its _formatting_.
+In a _pattern_, the _resolved value_ of an _expression_ or _markup_ is used in its _formatting_.
 
-The form that resolved values take is implementation-dependent,
+The form that _resolved values_ take is implementation-dependent,
 and different implementations MAY choose to perform different levels of resolution.
 
-> For example, the resolved value of the _expression_ `{|0.40| :number style=percent}`
-> could be an object such as
+> While this specification does not require it,
+> a _resolved value_ could be implemented by requiring each function implementation to
+> return a value matching the following interface:
 >
-> ```
-> { value: Number('0.40'),
->   formatter: NumberFormat(locale, { style: 'percent' }) }
+> ```ts
+> interface MessageValue {
+>   formatToString(): string
+>   formatToX(): X // where X is an implementation-defined type
+>   getValue(): unknown
+>   resolvedOptions(): { [key: string]: MessageValue }
+>   selectKeys(keys: string[]): string[]
+> }
 > ```
 >
-> Alternatively, it could be an instance of an ICU4J `FormattedNumber`,
-> or some other locally appropriate value.
+> With this approach:
+> - An _expression_ could be used as a _placeholder_ if
+>   calling the `formatToString()` or `formatToX()` method of its _resolved value_
+>   did not emit an error.
+> - An _expression_ could be used as a _selector_ _expression_ if
+>   calling the `selectKeys(keys)` method of its _resolved value_
+>   did not emit an error.
+> - Using a _variable reference_, the _resolved value_ of an _expression_
+>   could be used as an _operand_ or _option_ value if
+>   calling the `getValue()` method of its _resolved value_ did not emit an error.
+>   In this use case, the `resolvedOptions()` method could also
+>   provide a set of option values that could be taken into account by the called function.
+>
+> Extensions of the base `MessageValue` interface could be provided for different data types,
+> such as numbers or strings,
+> for which the `unknown` return type of `getValue()` and
+> the generic `MessageValue` type used in `resolvedOptions()`
+> could be narrowed appropriately.
+> An implementation could also allow `MessageValue` values to be passed in as input variables,
+> or automatically wrap each variable as a `MessageValue` to provide a uniform interface
+> for custom functions.
+
+## Expression and Markup Resolution
+
+_Expressions_ are used in _declarations_, _selectors_, and _patterns_.
+_Markup_ is only used in _patterns_.
 
 Depending on the presence or absence of a _variable_ or _literal_ operand
 and a _function_, _private-use annotation_, or _reserved annotation_,
-the resolved value of the _expression_ is determined as follows:
+the _resolved value_ of an _expression_ is determined as follows:
 
 If the _expression_ contains a _reserved annotation_,
 an _Unsupported Expression_ error is emitted and
-a _fallback value_ is used as the resolved value of the _expression_.
+a _fallback value_ is used as the _resolved value_ of the _expression_.
 
 Else, if the _expression_ contains a _private-use annotation_,
-its resolved value is defined according to the implementation's specification.
+its _resolved value_ is defined according to the implementation's specification.
 
 Else, if the _expression_ contains an _annotation_,
-its resolved value is defined by _function resolution_.
+its _resolved value_ is defined by _function resolution_.
 
 Else, if the _expression_ consists of a _variable_,
-its resolved value is defined by _variable resolution_.
+its _resolved value_ is defined by _variable resolution_.
 An implementation MAY perform additional processing
 when resolving the value of an _expression_
 that consists only of a _variable_.
@@ -151,9 +187,9 @@ that consists only of a _variable_.
 > the pattern included the function `:datetime` with some set of default options.
 
 Else, the _expression_ consists of a _literal_.
-Its resolved value is defined by _literal resolution_.
+Its _resolved value_ is defined by _literal resolution_.
 
-> **Note**
+> [!NOTE]
 > This means that a _literal_ value with no _annotation_
 > is always treated as a string.
 > To represent values that are not strings as a _literal_,
@@ -168,27 +204,46 @@ Its resolved value is defined by _literal resolution_.
 
 ### Literal Resolution
 
-The resolved value of a _text_ or a _literal_ is
+The _resolved value_ of a _text_ or a _literal_ contains
 the character sequence of the _text_ or _literal_
 after any character escape has been converted to the escaped character.
 
 When a _literal_ is used as an _operand_
 or on the right-hand side of an _option_,
-the formatting function MUST treat its resolved value the same
+the formatting function MUST treat its _resolved value_ the same
 whether its value was originally _quoted_ or _unquoted_.
 
 > For example,
 > the _option_ `foo=42` and the _option_ `foo=|42|` are treated as identical.
 
-The resolution of a _text_ or _literal_ MUST resolve to a string.
+The resolution of a _text_ or _literal_ MUST resolve with a string value.
+
+> For example, in a JavaScript formatter
+> the _resolved value_ of a _text_ or a _literal_ could have the following implementation:
+>
+> ```ts
+> class MessageLiteral implements MessageValue {
+>   constructor(value: string) {
+>     this.formatToString = () => value;
+>     this.getValue = () => value;
+>   }
+>   resolvedOptions: () => ({});
+>   selectKeys(_keys: string[]) {
+>     throw Error("Selection on unannotated literals is not supported");
+>   }
+> }
+> ```
 
 ### Variable Resolution
 
 To resolve the value of a _variable_,
 its _name_ is used to identify either a local variable or an input variable.
-If a _declaration_ exists for the _variable_, its resolved value is used.
+If a _declaration_ exists for the _variable_, its _resolved value_ is used.
 Otherwise, the _variable_ is an implicit reference to an input value,
 and its value is looked up from the _formatting context_ _input mapping_.
+
+An implemementation MAY choose to wrap or otherwise represent all input values
+using the same representation it uses for all _resolved values_.
 
 The resolution of a _variable_ MAY fail if no value is identified for its _name_.
 If this happens, an _Unresolved Variable_ error MUST be emitted.
@@ -218,11 +273,11 @@ the following steps are taken:
 
    - The current _locale_.
    - The resolved mapping of _options_.
-   - If the _expression_ includes an _operand_, its resolved value.
+   - If the _expression_ includes an _operand_, its _resolved value_.
 
    The form that resolved _operand_ and _option_ values take is implementation-defined.
 
-   A _declaration_ binds the resolved value of an _expression_
+   A _declaration_ binds the _resolved value_ of an _expression_
    to a _variable_.
    Thus, the result of one _function_ is potentially the _operand_
    of another _function_,
@@ -233,7 +288,7 @@ the following steps are taken:
    .local $n1 = {$n :number maximumFractionDigits=3}
    ```
    the value bound to `$n` is the
-   resolved value used as the _operand_
+   _resolved value_ used as the _operand_
    of the `:number` _function_
    when resolving the value of the _variable_ `$n1`.
 
@@ -251,7 +306,7 @@ the following steps are taken:
    for implementations of functions
    such that `U` can be coerced to `T`.
    Implementations of a _function_ SHOULD emit a
-   _Bad Operand_ error for _operands_ whose resolved value
+   _Bad Operand_ error for _operands_ whose _resolved value_
    or type is not supported.
 
 > [!NOTE]
@@ -315,7 +370,7 @@ the following steps are taken:
    _operand_ did not match that expected by the _function_,
    the _function_ might cause a _Bad Operand_ error to be emitted.
   
-   In all failure cases, use the _fallback value_ for the _expression_ as the resolved value.
+   In all failure cases, use the _fallback value_ for the _expression_ as its _resolved value_.
 
 #### Option Resolution
 
@@ -325,7 +380,7 @@ For each _option_:
 
 - Resolve the _identifier_ of the _option_.
 - If the _option_'s right-hand side successfully resolves to a value,
-   bind the _identifier_ of the _option_ to the resolved value in the mapping.
+   bind the _identifier_ of the _option_ to the _resolved value_ in the mapping.
 - Otherwise, bind the _identifier_ of the _option_ to an unresolved value in the mapping.
    Implementations MAY later remove this value before calling the _function_.
    (Note that an _Unresolved Variable_ error will have been emitted.)
@@ -338,7 +393,7 @@ This mapping can be empty.
 
 Unlike _functions_, the resolution of _markup_ is not customizable.
 
-The resolved value of _markup_ includes the following fields:
+The _resolved value_ of _markup_ includes the following fields:
 
 - The type of the markup: open, standalone, or close
 - The _identifier_ of the _markup_
@@ -348,7 +403,7 @@ The resolution of _markup_ MUST always succeed.
 
 ### Fallback Resolution
 
-A **_<dfn>fallback value</dfn>_** is the resolved value for an _expression_ that fails to resolve.
+A **_<dfn>fallback value</dfn>_** is the _resolved value_ for an _expression_ that fails to resolve.
 
 An _expression_ fails to resolve when:
 
@@ -431,6 +486,23 @@ _Option_ _identifiers_ and values are not included in the _fallback value_.
 
 _Pattern selection_ is not supported for _fallback values_.
 
+> For example, in a JavaScript formatter
+> the _fallback value_ could have the following implementation,
+> where `source` is one of the above-defined strings:
+>
+> ```ts
+> class MessageFallback implements MessageValue {
+>   constructor(source: string) {
+>     this.formatToString = () => `{${source}}`;
+>     this.getValue = () => undefined;
+>   }
+>   resolvedOptions: () => ({});
+>   selectKeys(_keys: string[]) {
+>     throw Error("Selection on fallback values is not supported");
+>   }
+> }
+> ```
+
 ## Pattern Selection
 
 When a _message_ contains a _matcher_ with one or more _selectors_,
@@ -511,17 +583,17 @@ or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER `�`.
 
 First, resolve the values of each _selector_:
 
-1. Let `res` be a new empty list of resolved values that support selection.
+1. Let `res` be a new empty list of _resolved values_ that support selection.
 1. For each _selector_ `sel`, in source order,
-   1. Let `rv` be the resolved value of `sel`.
+   1. Let `rv` be the _resolved value_ of `sel`.
    1. If selection is supported for `rv`:
       1. Append `rv` as the last element of the list `res`.
    1. Else:
-      1. Let `nomatch` be a resolved value for which selection always fails.
+      1. Let `nomatch` be a _resolved value_ for which selection always fails.
       1. Append `nomatch` as the last element of the list `res`.
       1. Emit a _Bad Selector_ error.
 
-The form of the resolved values is determined by each implementation,
+The form of the _resolved values_ is determined by each implementation,
 along with the manner of determining their support for selection.
 
 ### Resolve Preferences
@@ -535,9 +607,9 @@ Next, using `res`, resolve the preferential order for all message keys:
       1. Let `key` be the `var` key at position `i`.
       1. If `key` is not the catch-all key `'*'`:
          1. Assert that `key` is a _literal_.
-         1. Let `ks` be the resolved value of `key`.
+         1. Let `ks` be the _resolved value_ of `key`.
          1. Append `ks` as the last element of the list `keys`.
-   1. Let `rv` be the resolved value at index `i` of `res`.
+   1. Let `rv` be the _resolved value_ at index `i` of `res`.
    1. Let `matches` be the result of calling the method MatchSelectorKeys(`rv`, `keys`)
    1. Append `matches` as the last element of the list `pref`.
 
@@ -565,7 +637,7 @@ filter the list of _variants_ to the ones that match with some preference:
       1. If `key` is the catch-all key `'*'`:
          1. Continue the inner loop on `pref`.
       1. Assert that `key` is a _literal_.
-      1. Let `ks` be the resolved value of `key`.
+      1. Let `ks` be the _resolved value_ of `key`.
       1. Let `matches` be the list of strings at index `i` of `pref`.
       1. If `matches` includes `ks`:
          1. Continue the inner loop on `pref`.
@@ -591,7 +663,7 @@ Finally, sort the list of variants `vars` and select the _pattern_:
       1. Let `key` be the `tuple` _variant_ key at position `i`.
       1. If `key` is not the catch-all key `'*'`:
          1. Assert that `key` is a _literal_.
-         1. Let `ks` be the resolved value of `key`.
+         1. Let `ks` be the _resolved value_ of `key`.
          1. Let `matchpref` be the integer position of `ks` in `matches`.
       1. Set the `tuple` integer value as `matchpref`.
    1. Set `sortable` to be the result of calling the method `SortVariants(sortable)`.
@@ -737,7 +809,7 @@ one {{Category match for {$count}}}
 After _pattern selection_,
 each _text_ and _placeholder_ part of the selected _pattern_ is resolved and formatted.
 
-Resolved values cannot always be formatted by a given implementation.
+_Resolved values_ cannot always be formatted by a given implementation.
 When such an error occurs during _formatting_,
 an implementation SHOULD emit an appropriate _Message Function Error_ and produce a
 _fallback value_ for the _placeholder_ that produced the error.
@@ -748,8 +820,8 @@ appropriate data type or structure. Some examples of these include:
 
 - A single string concatenated from the parts of the resolved _pattern_.
 - A string with associated attributes for portions of its text.
-- A flat sequence of objects corresponding to each resolved value.
-- A hierarchical structure of objects that group spans of resolved values,
+- A flat sequence of objects corresponding to each _resolved value_.
+- A hierarchical structure of objects that group spans of _resolved values_,
   such as sequences delimited by _markup-open_ and _markup-close_ _placeholders_.
 
 Implementations SHOULD provide _formatting_ result types that match user needs,
@@ -858,7 +930,7 @@ The _Default Bidi Strategy_ is defined as follows:
    These correspond to the message having left-to-right directionality,
    right-to-left directionality, and to the message's directionality not being known.
 1. For each _expression_ `exp` in _pattern_:
-   1. Let `fmt` be the formatted string representation of the resolved value of `exp`.
+   1. Let `fmt` be the formatted string representation of the _resolved value_ of `exp`.
    1. Let `dir` be the directionality of `fmt`,
       one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
    1. If `dir` is `'LTR'`:

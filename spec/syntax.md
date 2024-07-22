@@ -97,7 +97,7 @@ Attempting to parse a _message_ that is not _valid_ will result in a _Data Model
 
 A **_<dfn>message</dfn>_** is the complete template for a specific message formatting request.
 
-A **_<dfn>variable</dfn>_** is a _name_ associated to a resolved value.
+A **_<dfn>variable</dfn>_** is a _name_ associated with a _resolved value_.
 
 An **_<dfn>external variable</dfn>_** is a _variable_ 
 whose _name_ and initial value are supplied by the caller
@@ -183,7 +183,7 @@ An **_<dfn>input-declaration</dfn>_** binds a _variable_ to an external input va
 The _variable-expression_ of an _input-declaration_
 MAY include an _annotation_ that is applied to the external value.
 
-A **_<dfn>local-declaration</dfn>_** binds a _variable_ to the resolved value of an _expression_.
+A **_<dfn>local-declaration</dfn>_** binds a _variable_ to the _resolved value_ of an _expression_.
 
 For compatibility with later MessageFormat 2 specification versions,
 _declarations_ MAY also include _reserved statements_.
