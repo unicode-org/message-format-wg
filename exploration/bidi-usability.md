@@ -436,7 +436,8 @@ s = ( SP / HTAB / CR / LF / %x3000 )
 - Addresses need to comply with UAX#31
 
 **Cons**
-- Can be used irresponsibly, including enabling some Trojan Source cases (UAX#55)
+- Syntax does not prevent poor display outcomes, including enabling some Trojan Source cases (UAX#55);
+  note that tooling or linting can help ameliorate these issues.
 
 ### Strict isolation all the time
 
@@ -487,7 +488,7 @@ Cons:
 - This is not friendly to non-English/non-Latin users and represents a usability
   restriction in environments in which names can be non-ASCII values
 
-### Allow even more permissive use of bidi controls
+### Permit LRI, RLI, and FSI inside expressions and markup
 
 We could permit RLI/FSI to be used inside _expressions_ and _markup_.
 This would be an advantage for simple _expressions_ containing only or primarily
@@ -530,3 +531,45 @@ complex sets of controls.
 - Requires complex sets of bidi controls
 - RTL editing/display is mostly a special case;
   we already afford the ability to edit RTL in _patterns_ and _literals_
+
+### Hybrid approaches
+
+Strict syntactical requirements produce better _display_ outcomes 
+that solve the various problems enumerated in this design document.
+However, the strictness comes with a cost: otherwise-valid messages,
+including messages that display completely as expected and are not in any way misleading,
+can produce syntax errors.
+These errors can be difficult to debug, since the characters are invisible.
+Syntax errors are generally treated as fatal by processors.
+
+Semi-strict or super-loose strategies can be used to avoid producing these types of syntax error.
+However, valid messages using these approaches can have stray (e.g. unpaired isolates), 
+malformed (e.g. PDI before LRI/RLI/FSI), 
+or badly formatted character sequences (wrapping the wrong things), 
+unless the user or the user's tools are careful.
+This can include deliberate abuse, such as Trojan Source attacks (see UAX#55),
+in which Bad Actors create messages that have a misleading appearance vs. their runtime interpretation.
+
+A hybrid ("Postel's Law") approach would be to permit the use of isolates and strongly directional marks
+in whitespace in a permissive way (see: "super-loose isolation"),
+particularly in runtime formatting operations
+but strongly encourage tools to implement message normalization on a strictly-defined grammar
+(see: "strict isolation all the time")
+and to encourage users to use the strict version of the grammar when writing or serializing messages.
+
+The hybrid approach would include tests to allow implementations to claim 
+adherence to the stricter grammar.
+
+**Pros**
+- Messages can be written that solve all display problems
+- Stray, unpaired, repeated, or other invisible typos do not produce spurious
+  syntax errors
+- Provides a foundation for tools to claim strict conformance and message normalization
+  as well as guidance to implementers to make them want to adopt it
+
+**Cons**
+- Requires additional effort to maintain the grammar
+- Requires additional effort to maintain tests
+- Valid messages can contain Trojan Source and other negative display consequences;
+  messages can be checked, however, using the strict grammar, so tools could warn
+  users of potential abuse
