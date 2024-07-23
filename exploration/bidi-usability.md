@@ -54,18 +54,20 @@ the plain-text of the message and the Unicode Bidirectional Algorithm (UBA, UAX#
 can interact in ways that make the _message_ unintelligible or difficult to parse visually.
 
 Machines do not have a problem parsing _messages_ that contain RTL characters,
-but users need to be able to discern what a _message_ does,
-what _variant_ will be selected,
-or what a _placeholder_ will evaluate to.
+but users need to be able to discern what a _message_ does.
+For example, users need to be able to match _keys_ in a _variant_ to _selectors_
+in a `.match` statement.
+Or they want to know how a _pattern_ will be evaluated,
+such as understanding the _options_ and _values_ in a _placeholder_.
 
 In addition, it is possible to construct messages that use bidi characters to spoof
 users into believing that a _message_ does something different than what it actually does.
 
 The current syntax does not permit bidi controls in _name_ tokens,
-_unquoted_ literals,
-or in the whitespace portions of a _message_.
+_unquoted literals_,
+or in the non-pattern whitespace portions of a _message_.
 
-Permitting the **isolate** controls and the standalone strongly-directional markers
+Permitting the Unicode bidi **isolate** characters and the standalone strongly-directional markers
 would enable tools, including translation tools, and users who are writing in RTL languages
 to format a _message_ so that its plain-text representation and its function
 are unambiguous.
@@ -79,14 +81,15 @@ The start of an isolated sequence is one of:
 The end of an isolated sequence is U+2069 POP DIRECTIONAL ISOLATE (PDI).
 
 The characters inside an isolated sequence have the initial string direction
-corresponding to the starting control (
+corresponding to the starting character (
 left-to-right for `LRI`, 
 right-to-left for `RLI`, 
 or <a href="https://www.w3.org/TR/i18n-glossary#auto-direction">auto</a> for `FSI`).
-The isolated sequence is **isolated** from surrounding text:
-it is processed using the Unicode Bidirectional Algorithm (UBA)
-separately from the rest of the string and
-the surrounding text treats the sequence as-if it were a single neutral character.
+They are called "isolates" because the enclosed text is **isolated** from surrounding text
+while being processed using the Unicode Bidirectional Algorithm (UBA).
+The surrounding text treats the sequence as-if it were a single neutral character,
+while the interior sequence is processed using the base direction specified by the isolate
+starting character.
 
 > [!NOTE]
 > One of the side-effects of using `{`/`}` and `{{`/`}}` to delimit _expressions_
@@ -155,7 +158,7 @@ You have {$م1صر :م2صر م3صر=م4صر} <- no controls
 You have {$م1صر‎ :م2صر‎ م3صر‎=م4صر‎} <- LRM after each RTL token
 ```
 
-3. As a developer or translator, I want to make RTL literal or names appear correctly
+3. As a developer or translator, I want to make unquoted RTL literals or names appear correctly
    in my plain-text editing environment.
    I don't want to have to manage a lot of paired controls, when I can get the right effect using
    strongly directional mark characters (LRM, RLM, ALM)
@@ -301,13 +304,13 @@ actual contents.
 > [!IMPORTANT]
 > This change adds a "lookahead" to the process of determining if a given _message_ is
 > "simple" or "complex", as LRI, RLI, and FSI are all valid starters for a simple message
-> as well as being allowed before a quoted pattern.
+> as well as being allowed before a quoted pattern, declaration, or selector.
 
 This would change the ABNF as follows:
 (Notice that this change includes a production `bidi` described further down
 in this document)
 ```abnf
-literal        = [open-isolate] (quoted / (unquoted [bidi])) [close-isolate]
+literal        = [open-isolate] (quoted-literal / (unquoted-literal [bidi])) [close-isolate]
 quoted-pattern = [open-isolate] "{{" pattern "}}" [close-isolate]
 
 open-isolate   = %x2066-2068
@@ -352,8 +355,9 @@ plus the names of _variables_,
 as well as the contents of _unquoted_ literals.
 
 > [!NOTE]
-> Notice that _unquoted_ literals can also be surrounded by bidi isolates
+> Notice that _unquoted literals_ can also be surrounded by bidi isolates
 > using the previous syntax modification just above.
+> The isolates are **not** a part of the literal!
 
 > [!NOTE]
 > Notice that `reserved-annotation` is not in the ABNF changes because it already
@@ -365,13 +369,24 @@ as well as the contents of _unquoted_ literals.
 ```abnf
 variable-expression   = "{" [s] variable [bidi] [s annotation] *(s attribute) [s] "}"
 function       = ":" identifier [bidi] *(s option)
-option         = identifier [bidi] [s] "=" [s] (literal / variable) [bidi]
-attribute      = "@" identifier [bidi] [[s] "=" [s] ((literal / variable) [bidi])]
-markup         = "{" [s] "#" identifier [bidi] *(s option) *(s attribute) [s] ["/"] "}"  ; open and standalone
-               / "{" [s] "/" identifier [bidi] *(s option) *(s attribute) [s] "}"  ; close
-identifier     = [(namespace [bidi] ":")] name
+option         = [LRI] identifier [bidi] [s] "=" [s] (literal / variable) [bidi] [close-isolate]
+attribute      = [LRI] "@" identifier [bidi] [[s] "=" [s] ((literal / variable) [bidi])] [close-isolate]
+markup         = "{" [LRI] [s] "#" identifier [bidi] *(s option) *(s attribute) [s] ["/"] [close-isolate] "}"  ; open and standalone
+               / "{" [LRI] [s] "/" identifier [bidi] *(s option) *(s attribute) [s] [close-isolate] "}"  ; close
+identifier     = [(namespace ns-separator)] name
+ns-separator   = [bidi] ":"
 bidi           = [ %x200E-200F / %x061C ]
 ```
+
+### Open Issues with Proposed Design
+
+The ABNF changes found above put isolates and strongly directional marks into specific locations,
+such as directly next to `{`/`}`/`{{`/`}}` markers
+or directly following "tokens" such as `name`.
+This makes it a syntax error for whitespace to appear around the isolates or marks.
+A more permissive design would add the isolates and strongly directional marks to required and optional
+whitespace in the syntax and depend on users/editors to appropriately pair or position the marks
+to get optimal display.
 
 ## Alternatives Considered
 
@@ -442,7 +457,7 @@ Cons:
 - This is not friendly to non-English/non-Latin users and represents a usability
   restriction in environments in which names can be non-ASCII values
 
-### Allow more permissive use of bidi controls
+### Allow even more permissive use of bidi controls
 
 We could permit RLI/FSI to be used inside _expressions_ and _markup_.
 This would be an advantage for simple _expressions_ containing only or primarily
