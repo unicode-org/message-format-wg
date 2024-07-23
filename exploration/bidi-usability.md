@@ -407,6 +407,36 @@ the results or debug what is wrong with their messages.
 By contrast, if users insert too many or the wrong controls using the recommended design,
 the _message_ would still be functional and would emit no undesired characters.
 
+### Super-loose isolation
+
+Add isolates and strongly directional marks to required and optional whitespace in the syntax.
+This would permit users to get the effects described by the above design,
+as long as they use isolates/marks in a "responsible" way.
+
+(Omitting other changes found in #673)
+
+```abnf
+; strongly directional marks and bidi isolates
+; ALM / LRM / RLM / LRI / RLI / FSI / PDI
+bidi = %x061C / %x200E / %x200F / %x2066-2069
+
+; optional whitespace
+owsp = *( s / bidi )
+
+; required whitespace
+wsp = [ owsp ] 1*s [ owsp ]
+
+; whitespace characters
+s = ( SP / HTAB / CR / LF / %x3000 )
+```
+
+**Pros**
+- Avoids problems with syntax errors that users and tools might find difficult to debug.
+- Effective if used carefully.
+- Addresses need to comply with UAX#31
+
+**Cons**
+- Can be used irresponsibly, including enabling some Trojan Source cases (UAX#55)
 
 ### Strict isolation all the time
 
