@@ -115,7 +115,7 @@ neutrals or opposite direction runs in an unhelpful way).
 We want the syntax to be somewhat permissive, particularly when it comes to paired isolates.
 The isolates and strongly-directional marks are invisble except in certain specialized editing environments.
 While users and tools should be strict about using well-formed isolate sequences,
-we don't want to invisble characters or whitespace to generate additional syntax errors except where necessary.
+we don't want to have invisible characters or whitespace generate additional syntax errors except where necessary.
 Therefore, it should not be a syntax error if a user, editor, or tool fails to match opening/closing isolates.
 
 It is possible to generate a "strict" version of the ABNF that is more restrictive about isolate pairing.
