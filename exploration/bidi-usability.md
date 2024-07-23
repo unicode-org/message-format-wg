@@ -324,7 +324,7 @@ close-isolate  = %x2069
 > We need to allow users to include bidi characters, including isolates and strongly directional marks
 > in the output of MF2.
 
-Permit **left-to-right** isolates (`U+2066`...`U+2069`) to be used **immediately inside** the following:
+Permit **left-to-right** isolates (`U+2066` and `U+2069`) to be used **immediately inside** the following:
 - expressions
 - markup
 
