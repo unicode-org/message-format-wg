@@ -111,7 +111,9 @@ defined in the default registry.
 Updates to this specification will not introduce message syntax that,
 when parsed according to earlier versions of this specification,
 would produce syntax or data model errors.
-Such messages can produce errors when formatted according to an earlier version of this specification.
+Messages that use syntax introduced in a future version of this specification
+could produce resolution or message function errors
+when formatted according to an earlier version of this specification.
 
 From version 2.0, MessageFormat will only reserve, define, or require
 function names or function option names
