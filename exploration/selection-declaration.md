@@ -229,7 +229,7 @@ declaration       = s variable [s] "=" [s] expression
   However, this design does allow for a local variable to be easily created
   for the purpose of selection.
 
-### Allow _immutable_ input declarative selectors
+### Allow _mutable_ input declarative selectors
 
 In this alternative, selectors are treated as declaration-selectors.
 That is, an annotation in a selector works like a `.input`.
@@ -251,7 +251,7 @@ Instead the selector's annotation replaces what came before.
 **Cons**
 - Violates immutability that we've established everywhere else
 
-### Allow _mutable_ input declarative selectors
+### Allow _immutable_ input declarative selectors
 
 In this alternative, selectors are treated as declaration-selectors.
 That is, an annotation in a selector works like a `.input`.
