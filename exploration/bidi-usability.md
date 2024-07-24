@@ -113,7 +113,7 @@ neutrals or opposite direction runs in an unhelpful way).
 ### Strictness and Abuse
 
 We want the syntax to be somewhat permissive, particularly when it comes to paired isolates.
-The isolates and strongly-directional marks are invisble except in certain specialized editing environments.
+The isolates and strongly-directional marks are invisible except in certain specialized editing environments.
 While users and tools should be strict about using well-formed isolate sequences,
 we don't want to have invisible characters or whitespace generate additional syntax errors except where necessary.
 Therefore, it should not be a syntax error if a user, editor, or tool fails to match opening/closing isolates.
