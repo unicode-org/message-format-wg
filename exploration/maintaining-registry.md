@@ -38,23 +38,40 @@ and functionality available in these environments vary widely,
 the default function registry must be conservative in what it requires.
 
 At the same time, we want to promote message interoperability.
-Even though a feature cannot be adopted by all platforms,
+Even when a given feature or function cannot be adopted by all platforms,
 diversity in the function names, operands, options, error behavior,
 and so forth remains undesirable.
-This suggests that there exist a registry at a lower level of normativeness
-with "templates" for functions that implementations can implement 
-when they have the wherewithal to support them.
+Another way to say this is that, ideally, there should be only one way to
+do a given formatting or selection operation in terms of the syntax of a message.
 
-An example of this might be "personal name formatting",
-whose functionality is new in CLDR and ICU.
-Few if any non-ICU implementations are currently prepared to implement
-a function such as `:person`
-and implementation and usage experience is limited in ICU.
+This suggests that there exist a registry besides the "default function registry"
+that contains the "templates" for functions that go beyond those every implementation 
+must provide or which contain additional, optional features (options, option values)
+that implementations can provide if they are motivated and capable of doing so.
+This lower level of registry is normative for the functionality that it provides,
+but not obligatory.
+This lower level of registry uses the default namespace and can serve to incubate
+functions or options that might be promoted to the default registry over time.
+
+### Examples
+
+_Function Incubation_
+
+CLDR and ICU have defined locale data and formatting for personal names.
+This functionality is new in CLDR and ICU.
+Because it is new, few, if any, non-ICU implementations are currently prepared to implement
+a function such as a `:person` formatter or selector.
+Implementation and usage experience is limited in ICU.
 Where functionality is made available, we don't want it to vary from
 platform to platform.
 
-Finally, we need to establish mechanisms for managing proposals
-for the various types of function registry.
+_Option Incubation_
+
+In the Tech Preview (LDML45) release, options for `:number` (and friends)
+and `:datetime` (and friends) were omitted, including `currency` for `:number`
+and `timeZone` for `:datetime`.
+The options and their values were reserved, possibly for the LDML46 release as required,
+but they also might be retained at a lower level of maturity.
 
 ## Use-Cases
 
@@ -69,18 +86,18 @@ required to claim support for MF2:
   without difficulty.
 - I want to be able to use my local I18N APIs, which might use an older release of CLDR
   or might not be based on CLDR data at all.
-  This means that my output might not match that of an CLDR-based implementation.
+  This could mean that my output might not match that of an CLDR-based implementation.
 
 As an implementer, user, translator, or tools author I expect functions, options
 and option values to be stable.
 The meaning and use of these, once established, should never change.
-Messages that work today should work tomorrow.
+Messages that work today must work tomorrow.
 This doesn't mean that the output is stabilized or that selectors won't
-produce different results for a given input/locale.
+produce different results for a given input or locale.
 
 As an implementer, I want to track best practices for newer I18N APIs
 (such as implementing personal name formatting/selection)
-without being required to implement other APIs that I'm not ready for.
+without being required to implement any such APIs that I'm not ready for.
 
 As an implementer, I want to be assured that functions or options added in the future
 will not conflict with functions or options that I have created for my local users.
@@ -100,6 +117,11 @@ As a user, I want to be able to use required functions and their options in my m
 I want to be able to quickly adopt new additions as my implementation supports them
 or be able to choose plug-in or shim implementations.
 I never want to have to rewrite a message because a function or its options have changed.
+
+As an implementer or user, I want to be able to suggest useful additions to MF2 functionality
+so that users can benefit from consistent, standardized features.
+I want to understand the status of my proposal (and those of others) and know that a public,
+structured, well-managed process has been applied.
 
 ## Requirements
 
@@ -121,6 +143,10 @@ There must be a clear process for the addition of options or option values that 
 by the default registry, 
 which includes a maturation process that permits implementer feedback.
 
+There must be a clear process for the deprecation of any functions, options, or option values
+that are no longer I18N best practices.
+The stability guarantees of our standard do not permit removal of any of these.
+
 ## Constraints
 
 _What prior decisions and existing conditions limit the possible design?_
@@ -137,7 +163,7 @@ into the MessageFormat v2 function registry.
 There would be three levels of expected maturity:
 
 - **Default Registry** includes functions that are normatively required by all implementations.
-  Such entries will be limited in scope to functions that can be
+  Such entries will be limited in scope to functions that can reasonably be
   implemented in nearly any programming environment.
   > Examples: `:string`, `:number`, `:datetime`, `:date`, `:time`
 - **Recommended for General Implementation**
@@ -162,9 +188,12 @@ There would be three levels of expected maturity:
 - **Unicode Extensions** includes optional functionality that implementations
   may adopt at their discretion.
   These are provided as a reference.
-  Unicode extensions use the namespace `:u` (which should be reserved).
-  This is also intended as a useful means of incubating functionality before
-  adding it to the default or RGI registries in future releases.
+  Unicode extensions use the namespace `:u` (which is reserved by the specification).
+  Entries in the Unicode extension are stable and subject to the stability policy.
+  That is, they will never be removed (but may be deprecated).
+  Unicode extensions can be used to incubate functionality before
+  promotion (removing the `u:` namespace) to the RGI or default registries in future releases,
+  although, in general, this should be avoided.
   > Examples: Number and date skeletons are an example of Unicode extension
   > possibilities.
   > Providing a well-documented shorthand to augment "option bags" is
@@ -181,17 +210,15 @@ that includes a beta period.
 
 The timing of official releases of the default and RGI registries is the same as CLDR.
 Each CLDR release will include:
-- a machine-readable default registry
-- a machine-readable RGI registry
-- a machine-readable Unicode extension registry
-- a specification normatively incorporated into MF2 describing all entries
-  in the machine readable registries listed just above
+- a specification for the default registry
+- a specification for the RGI registry
+- a specification for the Unicode extension registry
+- a section of the MF2 specification specifically incorporating versions of the above
 
 Proposals for additions to any of the above registries include the following:
 - a design document, which MUST contain:
    - the exact text to include in the MF2 specification using a template to be named later
    - the desired maturity level (RGI or default)
-- a machine-readable registry file matching the design
 
 Each proposal is stored in a directory indicating indicating its maturity level.
 The maturity levels are:
@@ -199,7 +226,6 @@ The maturity levels are:
 - **Feedback** Complete designs that are in their implementation test period.
 - **Proposed** Proposals that have not yet been considered by the MFWG.
 - **Rejected** Proposals that have been rejected by the MFWG in the past.
-
 
 ## Alternatives Considered
 
