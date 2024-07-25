@@ -79,7 +79,7 @@ A reference to a _term_ looks like this.
 > The provisions of the stability policy are not in effect until
 > the conclusion of the technical preview and adoption of this specification.
 
-Updates to this specification will not make any well-formed or valid _message_ invalid.
+Updates to this specification will not make any valid _message_ invalid.
 
 Updates to this specification will not remove any syntax provided in this version.
 
