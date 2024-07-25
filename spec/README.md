@@ -115,7 +115,7 @@ Messages that use syntax introduced in a future version of this specification
 could produce resolution or message function errors
 when formatted according to an earlier version of this specification.
 
-From version 2.0, MessageFormat will only reserve, define, or require
+Updates to this specification will only reserve, define, or require
 function names or function option names
 consisting of characters in the ranges a-z, A-Z, and 0-9.
 All other names in these categories are reserved for the use of implementations or users.
