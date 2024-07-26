@@ -250,11 +250,28 @@ Multiple proposals can exist for a given _function_ or _option_.
 
 ### Registry process
 
+Proposals for registration are made via issues in a unicode-org github repo
+using a specific template TBD.
+
+Proposals must be made at least _x months_ prior to the release date to be included
+in a specific LDML release.
+The CLDR-TC will consider each proposal using _process details here_ and make a determination.
+The CLDR-TC may delegate approval to the MF2 WG.
+Decisions by the MF2 WG may be appealed to the CLDR-TC.
+Decisions by the CLDR-TC may be appealed using _existing process_.
+
+Technical discussion during the approval process is strongly encouraged.
+Changes to the proposal, 
+such as in response to comments or implementation experience, are permitted
+until the proposal has been approved.
+Once approved, changes require re-approval (how?)
+
+
 The timing of official releases of the default and RGI registries is the same as CLDR/LDML.
 Each LDML release will include:
-- **Approved** specifications in the default registry
-- **Approved** specifications in the RGI registry
-- **Approved** specifications in the Unicode reserved namespace registry
+- **Released** specifications in the default registry
+- **Released** specifications in the RGI registry
+- **Released** specifications in the Unicode reserved namespace registry
 - a section of the MF2 specification specifically incorporating versions of the above
 - **Accepted** entries for each of the above available for testing and feedback
 
