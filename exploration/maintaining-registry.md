@@ -155,65 +155,108 @@ _What prior decisions and existing conditions limit the possible design?_
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
 
-To address the above requirements, in addition to the default registry,
-create a template for registry functions
-and a process for proposing and evaluating these functions for inclusion
-into the MessageFormat v2 function registry.
+The MessageFormat WG will maintain three separate function and option registries 
+beginning with the LDML46 release.
+Future updates to these registries will coincide with LDML releases.
 
-There would be three levels of expected maturity:
+Each registry consists of a set of template-derived documents.
+Each _function_ or _option_ entry in a registry consists of a separate document.
+An _option_ entry in a given registry will not be created if there is a corresponding
+_function_ entry in the same registry for which it is an _option_.
+Proposals to include functions into the default registry
+or to include functions or options into the RGI registry
+or to include functions or options into the Unicode reserved namespace registry
+need to follow a specific process.
 
-- **Default Registry** includes functions that are normatively required by all implementations.
-  Such entries will be limited in scope to functions that can reasonably be
-  implemented in nearly any programming environment.
-  > Examples: `:string`, `:number`, `:datetime`, `:date`, `:time`
-- **Recommended for General Implementation**
-  ("RGI", deliberately similar to RGI in emoji, although we probably want to change the name
-  as the words inside the acronym are themselves different)
-  RGI includes functions that are not
-  normatively required but whose names, operands, and options are recommended.
-  Implementations SHOULD use these function signatures
-  when implementing the described functionality.
-  This will promote message interoperability
-  and reduce the learning curve for developers, tools, and translators.
-  > Examples: We don't currently have any, but potential work here
-  > might includes personal name formatting, gender-based selectors, etc.
+The three registries are:
 
-  RGI also includes _options_ that are not normatively required for MF2 conformance,
-  but which implementers SHOULD implement.
-  These should be used as test cases to populate RGI as soon as possible in the
-  Tech Preview period.
-  There are a number of these in the LDML45 Tech Preview:
-  - `:number`/`:integer` have: `currency`, `unit`, `currencyDisplay`, `currencySign`, and `unitDisplay`
-  - `:datetime` (et al) have: `calendar`, `numberingSystem`, and `timeZone`
-- **Unicode Extensions** includes optional functionality that implementations
-  may adopt at their discretion.
-  These are provided as a reference.
-  Unicode extensions use the namespace `:u` (which is reserved by the specification).
-  Entries in the Unicode extension are stable and subject to the stability policy.
-  That is, they will never be removed (but may be deprecated).
-  Unicode extensions can be used to incubate functionality before
-  promotion (removing the `u:` namespace) to the RGI or default registries in future releases,
-  although, in general, this should be avoided.
-  > Examples: Number and date skeletons are an example of Unicode extension
-  > possibilities.
-  > Providing a well-documented shorthand to augment "option bags" is
-  > popular with some developers,
-  > but it is not universally available and could represent a barrier to adoption
-  > if normatively required.
+1. **Default Registry**
+This is a _function_ registry.
+It includes _functions_ (and only functions) that are normatively required to be
+implemented by all implementations.
+Each function describes it's operand or operands,
+its formatting options (if any) and their values,
+its selection options (if any) and their values,
+its formatting behavior (if any),
+its selection behavior (if any),
+and its resolved value behavior.
+Items in this registry are stable and subject to stability guarantees.
+Such entries will be limited in scope to functions that can reasonably be
+implemented in nearly any programming environment.
+> Examples: `:string`, `:number`, `:datetime`, `:date`, `:time`
 
-Having RGI means providing a process for developing and evaluating proposals.
-Since RGI functions and options are normative and stabilized,
-there should be a mechanism for making an RGI proposal
-that includes a beta period.
+2. **Recommended for General Implementation**
+("RGI", deliberately similar to RGI in emoji, although we probably want to change the name
+as the words inside the acronym are themselves different)
+This registry can contain _functions_.
+It can also contain _options_ registered for _functions_ found in the default registry.
+Implmentations are not required to implement either _functions_ or _options_ to claim
+MF2 conformance, but MUST NOT implement functions or options that conflict with RGI entries.
+Each function describes it's operand or operands,
+its formatting options (if any) and their values,
+its selection options (if any) and their values,
+its formatting behavior (if any),
+its selection behavior (if any),
+and its resolved value behavior.
+Each option registry entry describes whether it affects formatting, selection or both;
+what its values are;
+and whether it is retained or affects the resolved value.
+Items in the RGI function or option registries are stable and subject to stability guarantees
+except that they MAY be promoted to the default registry.
+> Option Examples `:datetime` might have a `timezone` option in LDML46.
+> Function Examples: We don't currently have any, but potential work here
+> might includes personal name formatting, gender-based selectors, etc.
 
-### RGI registry process and design
+RGI includes functions that are not
+normatively required but whose names, operands, and options are recommended.
+Implementations SHOULD use these function signatures
+when implementing the described functionality.
+This will promote message interoperability
+and reduce the learning curve for developers, tools, and translators.
 
-The timing of official releases of the default and RGI registries is the same as CLDR.
-Each CLDR release will include:
-- a specification for the default registry
-- a specification for the RGI registry
-- a specification for the Unicode extension registry
+3. **Unicode Reserved Namespace**
+This registry is for items in the namespace `u:`, which is reserved for use by the Unicode Consortium.
+This registry can contain _functions_ or _options_.
+Implementations are not required to implement any values found in this registry
+and may adopt or ignore registry entries at their discretion.
+Items in the Unicode Reserved Namespace function or option registries are stable and subject to stability guarantees.
+This registry might sometimes be used to incubate functionality before
+promotion to the RGI or default registry in a future release.
+In such cases, the `u:` namespace version is retained, but deprecated.
+> Examples: Number and date skeletons are an example of Unicode extension
+> possibilities.
+> Providing a well-documented shorthand to augment "option bags" is
+> popular with some developers,
+> but it is not universally available and could represent a barrier to adoption
+> if normatively required.
+
+Any registry entry goes through a development process that includes these levels of maturity:
+
+1. **Proposed** The _function_ or _option_, along with necessary documentation,
+   has been proposed for inclusion in a future release.
+2. **Accepted** The _function_ or _option_ has been accepted but is not yet released.
+   During this period, changes can still be made.
+3. **Released** The _function_ or _option_ is accepted as of a given LDML release that MUST be specified.
+   1. **Deprecated** The _function_ or _option_ was previously _released_ but has been deprecated.
+      Implementations are still required to support deprecated items in the default registry.
+4. **Rejected** The _function_ or _option_ was considered and rejected by the MF2 WG and/or the CLDR-TC.
+   Such items are not part of any registry, but might be maintained for historical reference.
+
+A proposal can seek to modify an existing entry in a given registry.
+For example, if a _function_ `:foo` existed in the RGI registry,
+a proposal to add an _option_ `bar` to this function would take the form
+of a proposal to alter the existing registration of `:foo`.
+Multiple proposals can exist for a given _function_ or _option_.
+
+### Registry process
+
+The timing of official releases of the default and RGI registries is the same as CLDR/LDML.
+Each LDML release will include:
+- **Approved** specifications in the default registry
+- **Approved** specifications in the RGI registry
+- **Approved** specifications in the Unicode reserved namespace registry
 - a section of the MF2 specification specifically incorporating versions of the above
+- **Accepted** entries for each of the above available for testing and feedback
 
 Proposals for additions to any of the above registries include the following:
 - a design document, which MUST contain:
