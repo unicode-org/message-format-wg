@@ -36,6 +36,7 @@ Contributions to specification language are acknowledged in the specification.
 - Harmit Goswamy - Mozilla (HGO)
 - John Watson - Facebook (JRW)
 - Long Ho - Dropbox (LHO)
+- Luca Casonato - Independent, works at Deno (LCA)
 - Mick Monaghan - Guidewire - (MMN)
 - Mihai Nita - Google (MIH)
 - Mike McKenna - PayPal (MGM)
