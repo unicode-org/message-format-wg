@@ -227,18 +227,33 @@ Any such future keyword must start with `.`,
 followed by two or more lower-case ASCII characters.
 
 The rest of the statement supports
-a similarly wide range of content as _reserved annotations_,
-but it MUST end with one or more _expressions_.
+a similarly wide range of content as _reserved annotations_ (with the exception
+of U+002E FULL STOP `.`, which is only allowed following characters that are
+permissible in _name_), but it MUST end with one or more _expressions_.
 
 ```abnf
-reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
+reserved-statement = reserved-keyword [s reserved-statement-body] 1*([s] expression)
 reserved-keyword   = "." name
+
+reserved-statement-body      = reserved-statement-body-part *([s] reserved-statement-body-part)
+reserved-statement-body-part = (name-char-no-dot 1*".") / content-char
+                             / escaped-char / quoted-literal
 ```
 
 > [!NOTE]
 > The `reserved-keyword` ABNF rule is a simplification,
 > as it MUST NOT be considered to match any of the existing keywords
 > `.input`, `.local`, or `.match`.
+
+> [!NOTE]
+> Only dots that are preceded by a valid name character are allowed in a
+> `reserved-statement-body`. This enables better parser error recovery for tools in the
+> case of incomplete reserved statements, like in the following example:
+> ```mf2
+> .invalid $foo.bar =
+> .local $bar = {|baz|}
+> {{This is a message.}}
+> ```
 
 This allows flexibility in future standardization,
 as future definitions MAY define additional semantics and constraints
@@ -915,16 +930,17 @@ in this release.
 variable   = "$" name
 option     = identifier [s] "=" [s] (literal / variable)
 
-identifier = [namespace ":"] name
-namespace  = name
-name       = name-start *name-char
-name-start = ALPHA / "_"
-           / %xC0-D6 / %xD8-F6 / %xF8-2FF
-           / %x370-37D / %x37F-1FFF / %x200C-200D
-           / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
-           / %xF900-FDCF / %xFDF0-FFFC / %x10000-EFFFF
-name-char  = name-start / DIGIT / "-" / "."
-           / %xB7 / %x300-36F / %x203F-2040
+identifier       = [namespace ":"] name
+namespace        = name
+name             = name-start *name-char
+name-start       = ALPHA / "_"
+                 / %xC0-D6 / %xD8-F6 / %xF8-2FF
+                 / %x370-37D / %x37F-1FFF / %x200C-200D
+                 / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
+                 / %xF900-FDCF / %xFDF0-FFFC / %x10000-EFFFF
+name-char-no-dot = name-start / DIGIT / "-" / %xB7 / %x300-36F
+                 / %x203F-2040
+name-char        = name-char-no-dot / "."
 ```
 
 ### Escape Sequences
