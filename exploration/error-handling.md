@@ -77,78 +77,15 @@ However, `java.text.NumberFormat` provide both throwing and non-throwing
 As a MessageFormat implementer, I want to be able to signal errors in an idiomatic way
 for my language and still be conformant with MF2 requirements.
 
-## Proposed Design
+## Accepted Design
 
-The following spec text is proposed:
+The following design was selected in #830.
 
-> A message formatter MUST signal errors required by this specification.
-> It SHOULD provide the specific information for each error reported.
-> A message formatter SHOULD provide a fallback representation of the message.
->
-> [!NOTE]
-> The fallback representation of a message MAY be provided by a separate API.
+### MUST signal errors and MUST provide fallback
 
-This solution requires implementations to be able to signal an error occurred,
-which can be accomplished in different ways. Ex:
-
-* an API that throws or returns an Error object when encountering an error
-* an API that includes a read/write `ErrorCode` argument 
-* two APIs, a permissive one that always returns a best-effort formatted result
-and a stricter one that throws or returns an Error object when encountering an error
-* an API that always returns a best-effort formatted result
-and sets a global `boolean` value
-
-This does not give implementations full freedom to return _nothing_ or some other behavior.
-
-## Alternatives Considered
-
-### Separate Requirements
-
-The following spec text is proposed:
-
-> When formatting a message with one or more errors:
-> - An implementation MUST provide a way for a user to be informed
->   of the name of at least one of the errors,
->   either directly or via an identifying error code.
-> - An implementation MUST provide a way for a message with one or more
->   _Resolution Errors_ or _Message Function Errors_ to be formatted
->   using a fallback representation.
->
-> The two above requirements MAY be fulfilled by a single formatting method,
-> or separately by more than one such method.
-
-This alternative ensures that even messages with runtime errors
-can be formatted with the same string representation in all implementations.
-
-Compared to the current spec text,
-the under-specified "informative error" is replaced
-with a more concrete minimum requirement,
-which can be fulfilled with a two-byte error code in very limited environments.
-
-The phrase "In all cases" is left out,
-and the ability to fulfill the requirements separately
-rather than at the same time is explicitly called out.
-
-### Current spec: require information from error(s) and a representative best effort message
-
-The current spec text says:
-
-> In all cases, when encountering a runtime error,
-> a message formatter MUST provide some representation of the message.
-> An informative error or errors MUST also be separately provided.
-
-This alternative places constraints on implementations to provide multiple avenues of useful information (to the callsite and user).
-
-This alternative establishes constraints that would contravene the constraints that exist in projects that have implemented MF 2.0 (or likely will soon), based on:
-* programming language idioms/constraints
-* execution environment constraints
-* experience-based programming guidelines
-
-For example, in ICU, 
-[the suggested practice](https://docs.google.com/document/d/11yJUWedBIpmq-YNSqqDfgUxcREmlvV0NskYganXkQHA/edit#bookmark=id.lx4ls9eelh99)
-is to avoid additionally returning optional error codes when providing best-effort formatted results.
-
-### Require a best-effort message value and signaling of an error
+* Implementations MUST provide a mechanism for signaling errors. There is no specific requirement for what form signaling an error takes.
+* Implementations MUST provide a mechanism for getting a fallback representation of a message that produces a formatting or selection error. Note that this can be entirely separate from the first requirement.
+* An implementation is not conformant unless it provides access to both behaviors. It is compliant to do both in a single formatting attempt.
 
 > In all cases, when encountering an error,
 > a message formatter MUST be able to signal an error or errors.
@@ -171,7 +108,44 @@ A downside to this alternative is that these requirements together assume that
 all implementations will want to pay the cost of constructing a representative mesage
 after the occurrence of an error.
 
-### Allow implementations to determine all details
+## Alternatives Considered
+
+### Current spec: require information from error(s) and a representative best effort message
+
+The current spec text says:
+
+> In all cases, when encountering a runtime error,
+> a message formatter MUST provide some representation of the message.
+> An informative error or errors MUST also be separately provided.
+
+This alternative places constraints on implementations to provide multiple avenues of useful information (to the callsite and user).
+
+This alternative establishes constraints that would contravene the constraints that exist in projects that have implemented MF 2.0 (or likely will soon), based on:
+* programming language idioms/constraints
+* execution environment constraints
+* experience-based programming guidelines
+
+For example, in ICU, 
+[the suggested practice](https://docs.google.com/document/d/11yJUWedBIpmq-YNSqqDfgUxcREmlvV0NskYganXkQHA/edit#bookmark=id.lx4ls9eelh99)
+is to avoid additionally returning optional error codes when providing best-effort formatted results.
+
+### MUST signal errors and SHOULD provide fallback
+
+* Implementations MUST provide a mechanism for signaling errors. There is no specific requirement for what form signaling an error takes.
+* Implementations SHOULD provide a mechanism for getting a fallback representation of a message that produces a formatting or selection error. Note that this can be entirely separate from the first requirement.
+* Implementations are conformant if they only signal errors.
+
+###  SHOULD signal errors and MUST provide fallback
+
+* Implementations SHOULD provide a mechanism for signaling errors. There is no specific requirement for what form signaling an error takes.
+* Implementations MUST provide a mechanism for getting a fallback representation of a message that produces a formatting or selection error. Note that this can be entirely separate from the first requirement.
+* Implementations are conformant if they only provide a fallback representation of a message.
+
+
+### Error handling is not a normative requirement
+
+* Implementations are not required by MF2 to signal errors or to provide access to a fallback representation.
+    - The specification provides guidance on error conditions; on what error types exist; and what the fallback representation is.
 
 > When encountering an error during formatting,
 > a message formatter MAY provide some representation of the message,
