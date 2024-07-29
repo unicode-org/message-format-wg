@@ -55,11 +55,15 @@ local = %s".local"
 match = %s".match"
 
 ; Reserve additional .keywords for use by future versions of this specification.
-reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
+reserved-statement = reserved-keyword [s reserved-statement-body] 1*([s] expression)
 ; Note that the following production is a simplification,
 ; as this rule MUST NOT be considered to match existing keywords
 ; (`.input`, `.local`, and `.match`).
 reserved-keyword   = "." name
+
+reserved-statement-body      = reserved-statement-body-part *([s] reserved-statement-body-part)
+reserved-statement-body-part = (name-char 1*".") / content-char
+                             / escaped-char / quoted-literal
 
 ; Reserve additional sigils for use by future versions of this specification.
 reserved-annotation       = reserved-annotation-start [[s] reserved-body]
@@ -76,13 +80,13 @@ reserved-body-part        = reserved-char / escaped-char / quoted-literal
 ; name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName but excludes U+FFFD
 identifier = [namespace ":"] name
 namespace  = name
-name       = name-start *name-char
+name       = name-start *(name-char / ".")
 name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
            / %x370-37D / %x37F-1FFF / %x200C-200D
            / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
            / %xF900-FDCF / %xFDF0-FFFC / %x10000-EFFFF
-name-char  = name-start / DIGIT / "-" / "."
+name-char  = name-start / DIGIT / "-"
            / %xB7 / %x300-36F / %x203F-2040
 
 ; Restrictions on characters in various contexts
