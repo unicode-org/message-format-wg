@@ -30,10 +30,16 @@
       "src": "{{}"
     },
     {
+      "src": "{{}}"
+    },
+    {
       "src": "{{}}}"
     },
     {
       "src": "{|foo| #markup}"
+    },
+    {
+      "src": "{{no keyword}}"
     },
     {
       "src": "{{missing end brace}"
