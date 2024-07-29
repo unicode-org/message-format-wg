@@ -24,16 +24,17 @@ or _Message Function Errors_ in _expressions_ that are not otherwise used by the
 such as _placeholders_ in unselected _patterns_
 or _declarations_ that are never referenced during _formatting_.
 
-When formatting a _message_ with one or more errors:
-- An implementation MUST provide a mechanism to discover and identify
-  at least one of the errors. 
-  The exact form of error signaling is implementation defined.
-  Some examples include throwing an exception,
-  returning an error code, 
-  or providing a function or method for enumerating any errors.
-- For all messages without _Syntax Errors_ or _Data Model Errors_,
-  an implementation MUST enable a user to get a formatted result.
-  This result MAY include formatted _fallback values_.
+When formatting a _message_ with one or more errors,
+an implementation MUST provide a mechanism to discover and identify
+at least one of the errors. 
+The exact form of error signaling is implementation defined.
+Some examples include throwing an exception,
+returning an error code, 
+or providing a function or method for enumerating any errors.
+
+For all _messages_ without _Syntax Errors_ or _Data Model Errors_,
+an implementation MUST enable a user to get a formatted result.
+This result MAY include formatted _fallback values_.
 
 The two above requirements MAY be fulfilled by a single formatting method,
 or separately by more than one such method.
