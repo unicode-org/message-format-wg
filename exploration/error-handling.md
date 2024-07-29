@@ -58,7 +58,7 @@ The additional constraint in ICU4C's C++ style to return an error code rather th
 > returned, and "emit an error" is ambiguous as to what is or isn't performed.)
 ## Use Cases
 
-As a software developer, I want calls to message format to signal runtime errors
+As a software developer, I want message formatting calls to signal runtime errors
 in a manner consistent with my programming language/environment.
 I would like error signals to include diagnostic information that allows me to debug errors.
 
@@ -67,8 +67,8 @@ even if a runtime error has occurred.
 
 As a software developer, I sometimes want to avoid "fatal" error signals,
 such as might occur due to unconstrained inputs,
-due to errors in translation of the message,
-or other reasons outside the developer's control.
+errors in translation of the message,
+or other reasons outside my control.
 For example, in Java, throwing an Exception is a common means of signaling an error.
 However, `java.text.NumberFormat` provide both throwing and non-throwing
 `parse` methods to allow developers to avoid a "fatal" throw of `ParseException`
@@ -96,7 +96,7 @@ which can be accomplished in different ways. Ex:
 * two APIs, a permissive one that always returns a best-effort formatted result
 and a stricter one that throws or returns an Error object when encountering an error
 * an API that always returns a best-effort formatted result
-and a global `boolean` values
+and sets a global `boolean` value
 
 This does not give implementations full freedom to return _nothing_ or some other behavior.
 
