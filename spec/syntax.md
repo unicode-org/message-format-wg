@@ -163,14 +163,14 @@ simple-start   = simple-start-char / escaped-char / placeholder
 
 A **_<dfn>complex message</dfn>_** is any _message_ that contains _declarations_,
 a _matcher_, or both.
-A _complex message_ always begins with either a keyword that has a `.` prefix or a _quoted pattern_
-and consists of:
+A _complex message_ always begins with a keyword that has a `.` prefix.
 
-1. an optional list of _declarations_, followed by
-2. a _complex body_
+_Complex messages_ with multiple variants use a _matcher_,
+while ones with only declarations contain a _quoted pattern_.
 
 ```abnf
-complex-message = *(declaration [s]) complex-body [s]
+complex-message = 1*(declaration [s]) quoted-pattern [s]
+                / 0*(declaration [s]) matcher [s]
 ```
 
 ### Declarations
@@ -248,15 +248,6 @@ Implementations MUST NOT assign meaning or semantics to a _reserved statement_:
 these are reserved for future standardization.
 Implementations MUST NOT remove or alter the contents of a _reserved statement_.
 
-### Complex Body
-
-The **_<dfn>complex body</dfn>_** of a _complex message_ is the part that will be formatted.
-The _complex body_ consists of either a _quoted pattern_ or a _matcher_.
-
-```abnf
-complex-body = quoted-pattern / matcher
-```
-
 ## Pattern
 
 A **_<dfn>pattern</dfn>_** contains a sequence of _text_ and _placeholders_ to be formatted as a unit.
@@ -325,18 +316,15 @@ content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %xE000-10FFFF
 ```
 
-When a _pattern_ is quoted by embedding the _pattern_ in curly brackets, the
-resulting _message_ can be embedded into
-various formats regardless of the container's whitespace trimming rules.
-Otherwise, care must be taken to ensure that pattern-significant whitespace is preserved.
-
-> **Example**
-> In a Java `.properties` file, the values `hello` and `hello2` both contain
+> [!NOTE]
+> Care must be taken to ensure that pattern-significant leading or trailing whitespace is preserved
+> when embedding a message in a container with whitespace trimming rules.
+> For example, in a Java `.properties` file, the values `hello` and `hello2` both contain
 > an identical _message_ which consists of a single _pattern_.
 > This _pattern_ consists of _text_ with exactly three spaces before and after the word "Hello":
 >
 > ```properties
-> hello = {{   Hello   }}
+> hello = \   Hello   
 > hello2=\   Hello  \ 
 > ```
 
@@ -351,7 +339,7 @@ placeholder = expression / markup
 
 ## Matcher
 
-A **_<dfn>matcher</dfn>_** is the _complex body_ of a _message_ that allows runtime selection
+The **_<dfn>matcher</dfn>_** of a _complex message_ allows runtime selection
 of the _pattern_ to use for formatting.
 This allows the form or content of a _message_ to vary based on values
 determined at runtime.
@@ -938,7 +926,7 @@ in the body of _text_, _quoted literal_, or _reserved_
 Each _escape sequence_ represents the literal character immediately following the initial `\`.
 
 ```abnf
-escaped-char = backslash ( backslash / "{" / "|" / "}" )
+escaped-char = backslash ( backslash / "." / "{" / "|" / "}" )
 backslash    = %x5C ; U+005C REVERSE SOLIDUS "\"
 ```
 

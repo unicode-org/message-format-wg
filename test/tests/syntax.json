@@ -409,8 +409,8 @@
       ]
     },
     {
-      "src": "{{trailing whitespace}} \n",
-      "exp": "trailing whitespace"
+      "src": "trailing whitespace \n",
+      "exp": "trailing whitespace \n"
     }
   ]
 }
