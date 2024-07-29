@@ -31,9 +31,9 @@ When formatting a _message_ with one or more errors:
   Some examples include throwing an exception,
   returning an error code, 
   or providing a function or method for enumerating any errors.
-- An implementation MUST provide a way for a message with one or more
-  _Resolution Errors_ or _Message Function Errors_ to be formatted
-  using a fallback representation.
+- For all messages without _Syntax Errors_ or _Data Model Errors_,
+  an implementation MUST enable a user to get a formatted result.
+  This result MAY include formatted _fallback values_.
 
 The two above requirements MAY be fulfilled by a single formatting method,
 or separately by more than one such method.
