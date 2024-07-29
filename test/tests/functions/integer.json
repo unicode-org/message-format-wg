@@ -27,6 +27,26 @@
         }
       ],
       "exp": "one"
+    },
+    {
+      "src": ".match {$foo :integer} 1 {{=1}} one {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1.2
+        }
+      ],
+      "exp": "=1"
+    },
+    {
+      "src": ".match {$foo :integer} 1.0 {{=1.0}} one {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1.2
+        }
+      ],
+      "exp": "=1.0"
     }
   ]
 }

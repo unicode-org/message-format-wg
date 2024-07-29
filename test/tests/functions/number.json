@@ -240,6 +240,26 @@
       "exp": "=1"
     },
     {
+      "src": ".match {$foo :number} 1 {{=1}} 1.0 {{=1.0}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1
+        }
+      ],
+      "exp": "=1"
+    },
+    {
+      "src": ".match {$foo :number} 1.0 {{=1.0}} 1 {{=1}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1
+        }
+      ],
+      "exp": "=1.0"
+    },
+    {
       "src": ".match {$foo :number} {$bar :number} one one {{one one}} one * {{one other}} * * {{other}}",
       "params": [
         {
