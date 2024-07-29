@@ -34,7 +34,9 @@ or providing a function or method for enumerating any errors.
 
 For all _messages_ without _Syntax Errors_ or _Data Model Errors_,
 an implementation MUST enable a user to get a formatted result.
-This result MAY include formatted _fallback values_.
+The formatted result might include _fallback values_ 
+such as when a _placeholder_'s _expression_ produced an error
+during formatting.
 
 The two above requirements MAY be fulfilled by a single formatting method,
 or separately by more than one such method.
