@@ -90,7 +90,7 @@ Attempting to parse a _message_ that is not _well-formed_ will result in a _Synt
 A _message_ is **_<dfn>valid</dfn>_** if it is _well-formed_ and
 **also** meets the additional content restrictions
 and semantic requirements about its structure defined below for
-_declarations_, _matcher_ and _options_.
+_declarations_, _matcher_, _options_, and _attributes_.
 Attempting to parse a _message_ that is not _valid_ will result in a _Data Model Error_.
 
 ## The Message
@@ -154,7 +154,7 @@ message = simple-message / complex-message
 
 A **_<dfn>simple message</dfn>_** contains a single _pattern_,
 with restrictions on its first character.
-An empty string is a valid _simple message_.
+An empty string is a _valid_ _simple message_.
 
 ```abnf
 simple-message = [simple-start pattern]
@@ -436,7 +436,7 @@ There MAY be any number of additional _selectors_.
 
 A **_<dfn>variant</dfn>_** is a _quoted pattern_ associated with a set of _keys_ in a _matcher_.
 Each _variant_ MUST begin with a sequence of _keys_,
-and terminate with a valid _quoted pattern_.
+and terminate with a _valid_ _quoted pattern_.
 The number of _keys_ in each _variant_ MUST match the number of _selectors_ in the _matcher_.
 
 Each _key_ is separated from each other by whitespace.
@@ -546,7 +546,7 @@ A _function_'s entry in the _function registry_ will define
 whether the _function_ is a _selector_ or formatter (or both),
 whether an _operand_ is required,
 what form the values of an _operand_ can take,
-what _options_ and _option_ values are valid,
+what _options_ and _option_ values are acceptable,
 and what outputs might result.
 See [function registry](./registry.md) for more information.
 
@@ -578,7 +578,7 @@ Multiple _options_ are permitted in an _annotation_.
 _Options_ are separated from the preceding _function_ _identifier_
 and from each other by whitespace.
 Each _option_'s _identifier_ MUST be unique within the _annotation_:
-an _annotation_ with duplicate _option_ _identifiers_ is not valid.
+an _annotation_ with duplicate _option_ _identifiers_ is not _valid_.
 
 The order of _options_ is not significant.
 
@@ -742,7 +742,7 @@ by an U+003D EQUALS SIGN `=` along with optional whitespace.
 Multiple _attributes_ are permitted in an _expression_ or _markup_.
 Each _attribute_ is separated by whitespace.
 Each _attribute_'s _identifier_ MUST be unique within the _expression_ or _markup_:
-an _expression_ or _markup_ with duplicate _attribute_ _identifiers_ is not valid.
+an _expression_ or _markup_ with duplicate _attribute_ _identifiers_ is not _valid_.
 
 The order of _attributes_ is not significant.
 
