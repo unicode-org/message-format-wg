@@ -740,6 +740,8 @@ by an U+003D EQUALS SIGN `=` along with optional whitespace.
 
 Multiple _attributes_ are permitted in an _expression_ or _markup_.
 Each _attribute_ is separated by whitespace.
+Each _attribute_'s _identifier_ MUST be unique within the _expression_ or _markup_:
+an _expression_ or _markup_ with duplicate _attribute_ _identifiers_ is not valid.
 
 The order of _attributes_ is not significant.
 
