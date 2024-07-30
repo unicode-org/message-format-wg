@@ -32,7 +32,7 @@
     "attributes": {
       "type": "object",
       "additionalProperties": {
-        "oneOf": [{ "$ref": "#/$defs/literal-or-variable" }, { "const": true }]
+        "oneOf": [{ "$ref": "#/$defs/literal" }, { "const": true }]
       }
     },
 
