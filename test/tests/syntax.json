@@ -7,32 +7,32 @@
   },
   "tests": [
     {
-      "comment": "message -> simple-message -> <empty>",
+      "description": "message -> simple-message -> <empty>",
       "src": "",
       "exp": ""
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> simple-start-char",
+      "description": "message -> simple-message -> simple-start pattern -> simple-start-char",
       "src": "a",
       "exp": "a"
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> simple-start-char pattern -> ...",
+      "description": "message -> simple-message -> simple-start pattern -> simple-start-char pattern -> ...",
       "src": "hello",
       "exp": "hello"
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> escaped-char",
+      "description": "message -> simple-message -> simple-start pattern -> escaped-char",
       "src": "\\\\",
       "exp": "\\"
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> simple-start-char pattern -> ... -> simple-start-char *text-char placeholder",
+      "description": "message -> simple-message -> simple-start pattern -> simple-start-char pattern -> ... -> simple-start-char *text-char placeholder",
       "src": "hello {world}",
       "exp": "hello world"
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> simple-start-char pattern -> ... -> simple-start-char *text-char placeholder",
+      "description": "message -> simple-message -> simple-start pattern -> simple-start-char pattern -> ... -> simple-start-char *text-char placeholder",
       "src": "hello {|world|}",
       "exp": "hello world"
     },
@@ -66,59 +66,59 @@
       "exp": "hello {$place}"
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> expression -> literal-expression -> \"{\" literal \"}\"",
+      "description": "message -> simple-message -> simple-start pattern -> placeholder -> expression -> literal-expression -> \"{\" literal \"}\"",
       "src": "{a}",
       "exp": "a"
     },
     {
-      "comment": "... -> literal-expression -> \"{\" literal s annotation \"}\" -> \"{\" literal s function \"}\" -> \"{\" literal s \":\" identifier \"}\" -> \"{\" literal s \":\" name \"}\"",
+      "description": "... -> literal-expression -> \"{\" literal s annotation \"}\" -> \"{\" literal s function \"}\" -> \"{\" literal s \":\" identifier \"}\" -> \"{\" literal s \":\" name \"}\"",
       "src": "{a :f}",
       "exp": "{|a|}",
       "expErrors": [{ "type": "unknown-function" }]
     },
     {
-      "comment": "... -> \"{\" literal s \":\" namespace \":\" name \"}\"",
+      "description": "... -> \"{\" literal s \":\" namespace \":\" name \"}\"",
       "src": "{a :u:f}",
       "exp": "{|a|}",
       "expErrors": [{ "type": "unknown-function" }]
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> expression -> variable-expression -> \"{\" variable \"}\"",
+      "description": "message -> simple-message -> simple-start pattern -> placeholder -> expression -> variable-expression -> \"{\" variable \"}\"",
       "src": "{$x}",
       "exp": "{$x}",
       "expErrors": [{ "type": "unresolved-variable" }]
     },
     {
-      "comment": "... -> variable-expression -> \"{\" variable s annotation \"}\" -> \"{\" variable s function \"}\" -> \"{\" variable s \":\" identifier \"}\" -> \"{\" variable s \":\" name \"}\"",
+      "description": "... -> variable-expression -> \"{\" variable s annotation \"}\" -> \"{\" variable s function \"}\" -> \"{\" variable s \":\" identifier \"}\" -> \"{\" variable s \":\" name \"}\"",
       "src": "{$x :f}",
       "exp": "{$x}",
       "expErrors": [{ "type": "unresolved-variable" }, { "type": "unknown-function" }]
     },
     {
-      "comment": "... -> \"{\" variable s \":\" namespace \":\" name \"}\"",
+      "description": "... -> \"{\" variable s \":\" namespace \":\" name \"}\"",
       "src": "{$x :u:f}",
       "exp": "{$x}",
       "expErrors": [{ "type": "unresolved-variable" }, { "type": "unknown-function" }]
     },
     {
-      "comment": "... -> annotation-expression -> function -> \"{\" \":\" namespace \":\" name \"}\"",
+      "description": "... -> annotation-expression -> function -> \"{\" \":\" namespace \":\" name \"}\"",
       "src": "{:u:f}",
       "exp": "{:u:f}",
       "expErrors": [{ "type": "unknown-function" }]
     },
     {
-      "comment": "... -> annotation-expression -> function -> \"{\" \":\" name \"}\"",
+      "description": "... -> annotation-expression -> function -> \"{\" \":\" name \"}\"",
       "src": "{:f}",
       "exp": "{:f}",
       "expErrors": [{ "type": "unknown-function" }]
     },
     {
-      "comment": "message -> complex-message -> complex-body -> quoted-pattern -> \"{{\" pattern \"}}\" -> \"{{\"\"}}\"",
+      "description": "message -> complex-message -> complex-body -> quoted-pattern -> \"{{\" pattern \"}}\" -> \"{{\"\"}}\"",
       "src": "{{}}",
       "exp": ""
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"#\" identifier \"}\"", 
+      "description": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"#\" identifier \"}\"", 
       "src": "{#tag}",
       "exp": "",
       "expParts": [
@@ -130,162 +130,162 @@
       ]
     },
     {
-      "comment": "message -> complex-message -> *(declaration [s]) complex-body -> declaration complex-body -> input-declaration complex-body -> input variable-expression complex-body",
+      "description": "message -> complex-message -> *(declaration [s]) complex-body -> declaration complex-body -> input-declaration complex-body -> input variable-expression complex-body",
       "src": ".input{$x}{{}}",
       "exp": ""
     },
     {
-      "comment": "message -> complex-message -> *(declaration [s]) complex-body -> declaration declaration complex-body -> input-declaration input-declaration complex-body -> input variable-expression input variable-expression complex-body",
+      "description": "message -> complex-message -> *(declaration [s]) complex-body -> declaration declaration complex-body -> input-declaration input-declaration complex-body -> input variable-expression input variable-expression complex-body",
       "src": ".input{$x}.input{$y}{{}}",
       "exp": ""
     },
     {
-      "comment": "message -> complex-message -> *(declaration [s]) complex-body -> declaration s declaration complex-body -> input-declaration s input-declaration complex-body -> input variable-expression s input variable-expression complex-body",
+      "description": "message -> complex-message -> *(declaration [s]) complex-body -> declaration s declaration complex-body -> input-declaration s input-declaration complex-body -> input variable-expression s input variable-expression complex-body",
       "src": ".input{$x} .input{$y}{{}}",
       "exp": ""
     },
     {
-      "comment": "message -> complex-message -> *(declaration [s]) complex-body s -> complex-body s",
+      "description": "message -> complex-message -> *(declaration [s]) complex-body s -> complex-body s",
       "src": "{{}} ",
       "exp": ""
     },
     {
-      "comment": "message -> complex-message -> *(declaration [s]) complex-body -> declaration declaration complex-body -> local-declaration input-declaration complex-body -> local s variable [s] \"=\" [s] expression input variable-expression complex-body",
+      "description": "message -> complex-message -> *(declaration [s]) complex-body -> declaration declaration complex-body -> local-declaration input-declaration complex-body -> local s variable [s] \"=\" [s] expression input variable-expression complex-body",
       "src": ".local $x ={a}.input{$y}{{}}",
       "exp": ""
     },
     {
-      "comment": "message -> complex-message -> *(declaration [s]) complex-body -> declaration complex-body -> reserved-statement  complex-body -> reserved-keyword expression -> \".\" name expression complex-body",
+      "description": "message -> complex-message -> *(declaration [s]) complex-body -> declaration complex-body -> reserved-statement  complex-body -> reserved-keyword expression -> \".\" name expression complex-body",
       "src": ".n{a}{{}}",
       "exp": "",
       "expErrors": [ { "type": "unsupported-statement" } ]
     },
     {
-      "comment": "message -> complex-message -> complex-body -> matcher -> match-statement variant -> match selector key quoted-pattern -> \".match\" expression literal quoted-pattern",
+      "description": "message -> complex-message -> complex-body -> matcher -> match-statement variant -> match selector key quoted-pattern -> \".match\" expression literal quoted-pattern",
       "src": ".match{a :f}a{{}}*{{}}",
       "exp": "",
       "expErrors": [ { "type": "unknown-function" } ]
     },
     {
-      "comment": "... input-declaration -> input s variable-expression ...",
+      "description": "... input-declaration -> input s variable-expression ...",
       "src": ".input {$x}{{}}",
       "exp": ""
     },
     {
-      "comment": "... local-declaration -> local s variable s \"=\" expression ...",
+      "description": "... local-declaration -> local s variable s \"=\" expression ...",
       "src": ".local $x ={a}{{}}",
       "exp": ""
     },
     {
-      "comment": "... local-declaration -> local s variable \"=\" s expression ...",
+      "description": "... local-declaration -> local s variable \"=\" s expression ...",
       "src": ".local $x= {a}{{}}",
       "exp": ""
     },
     {
-      "comment": "... local-declaration -> local s variable s \"=\" expression ...",
+      "description": "... local-declaration -> local s variable s \"=\" expression ...",
       "src": ".local $x = {a}{{}}",
       "exp": ""
     },
     {
-      "comment": "... matcher -> match-statement [s] variant -> match 1*([s] selector) variant -> match selector selector variant -> match selector selector variant key s key quoted-pattern",
+      "description": "... matcher -> match-statement [s] variant -> match 1*([s] selector) variant -> match selector selector variant -> match selector selector variant key s key quoted-pattern",
       "src": ".match{a :f}{b :f}a b{{}}* *{{}}",
       "exp": "",
       "expErrors": [ { "type": "unknown-function" } ]
     },
     {
-      "comment": "... matcher -> match-statement [s] variant -> match 1*([s] selector) variant -> match selector variant variant ...",
+      "description": "... matcher -> match-statement [s] variant -> match 1*([s] selector) variant -> match selector variant variant ...",
       "src": ".match{a :f}a{{}}b{{}}*{{}}",
       "exp": "",
       "expErrors": [ { "type": "unknown-function" } ]
     },
     {
-      "comment": "... variant -> key s quoted-pattern -> ...",
+      "description": "... variant -> key s quoted-pattern -> ...",
       "src": ".match{a :f}a {{}}*{{}}",
       "exp": "",
       "expErrors": [ { "type": "unknown-function" } ]
     },
     {
-      "comment": "... variant -> key s key s quoted-pattern -> ...",
+      "description": "... variant -> key s key s quoted-pattern -> ...",
       "src": ".match{a :f}{b :f}a b {{}}* *{{}}",
       "exp": "",
       "expErrors": [ { "type": "unknown-function" } ]
     },
     {
-      "comment": "... key -> \"*\" ...",
+      "description": "... key -> \"*\" ...",
       "src": ".match{a :f}*{{}}",
       "exp": "",
       "expErrors": [ { "type": "unknown-function" } ]
     },
     {
-      "comment": "simple-message -> simple-start pattern -> placeholder -> expression -> literal-expression -> \"{\" s literal \"}\"",
+      "description": "simple-message -> simple-start pattern -> placeholder -> expression -> literal-expression -> \"{\" s literal \"}\"",
       "src": "{ a}",
       "exp": "a"
     },
     {
-      "comment": "... literal-expression -> \"{\" literal s attribute \"}\" -> \"{\" literal s \"@\" identifier \"}\"",
+      "description": "... literal-expression -> \"{\" literal s attribute \"}\" -> \"{\" literal s \"@\" identifier \"}\"",
       "src": "{a @c}",
       "exp": "a"
     },
     {
-      "comment": "... -> literal-expression -> \"{\" literal s \"}\"",
+      "description": "... -> literal-expression -> \"{\" literal s \"}\"",
       "src": "{a }",
       "exp": "a"
     },
     {
-      "comment": "simple-message -> simple-start pattern -> placeholder -> expression -> variable-expression -> \"{\" s variable \"}\"",
+      "description": "simple-message -> simple-start pattern -> placeholder -> expression -> variable-expression -> \"{\" s variable \"}\"",
       "src": "{ $x}",
       "exp": "{$x}",
       "expErrors": [{ "type": "unresolved-variable" }]
     },
     {
-      "comment": "... variable-expression -> \"{\" variable s attribute \"}\" -> \"{\" variable s \"@\" identifier \"}\"",
+      "description": "... variable-expression -> \"{\" variable s attribute \"}\" -> \"{\" variable s \"@\" identifier \"}\"",
       "src": "{$x @c}",
       "exp": "{$x}",
       "expErrors": [{ "type": "unresolved-variable" }]
     },
     {
-      "comment": "... -> variable-expression -> \"{\" variable s \"}\"",
+      "description": "... -> variable-expression -> \"{\" variable s \"}\"",
       "src": "{$x }",
       "exp": "{$x}",
       "expErrors": [{ "type": "unresolved-variable" }]
     },
     {
-      "comment": "simple-message -> simple-start pattern -> placeholder -> expression -> annotation-expression -> \"{\" s annotation \"}\"",
+      "description": "simple-message -> simple-start pattern -> placeholder -> expression -> annotation-expression -> \"{\" s annotation \"}\"",
       "src": "{ :f}",
       "exp": "{:f}",
       "expErrors": [{ "type": "unknown-function" }]
     },
     {
-      "comment": "... annotation-expression -> \"{\" annotation s attribute \"}\" -> \"{\" annotation s \"@\" identifier \"}\"",
+      "description": "... annotation-expression -> \"{\" annotation s attribute \"}\" -> \"{\" annotation s \"@\" identifier \"}\"",
       "src": "{:f @c}",
       "exp": "{:f}",
       "expErrors": [{ "type": "unknown-function" }]
     },
     {
-      "comment": "... -> annotation-expression -> \"{\" annotation s \"}\"",
+      "description": "... -> annotation-expression -> \"{\" annotation s \"}\"",
       "src": "{:f }",
       "exp": "{:f}",
       "expErrors": [{ "type": "unknown-function" }]
     },
     {
-      "comment": "... annotation -> private-use-annotation -> private-start",
+      "description": "... annotation -> private-use-annotation -> private-start",
       "src": "{^}",
       "exp": "{^}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... annotation -> reserved-annotation -> reserved-annotation-start",
+      "description": "... annotation -> reserved-annotation -> reserved-annotation-start",
       "src": "{!}",
       "exp": "{!}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" s \"#\" identifier \"}\"", 
+      "description": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" s \"#\" identifier \"}\"", 
       "src": "{ #a}",
       "exp": ""
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"#\" identifier option \"}\" -> \"{\" \"#\" identifier identifier \"=\" literal \"}\"",
+      "description": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"#\" identifier option \"}\" -> \"{\" \"#\" identifier identifier \"=\" literal \"}\"",
       "src": "{#tag foo=bar}",
       "exp": "",
       "expParts": [
@@ -300,32 +300,32 @@
       ]
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"#\" identifier attribute \"}\" -> \"{\" \"#\" identifier identifier \"=\" literal \"}\"",
+      "description": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"#\" identifier attribute \"}\" -> \"{\" \"#\" identifier identifier \"=\" literal \"}\"",
       "src": "{#a @c}",
       "exp": ""
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"#\" identifier s \"}\" -> \"{\" \"#\" identifier identifier \"=\" literal \"}\"",
+      "description": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"#\" identifier s \"}\" -> \"{\" \"#\" identifier identifier \"=\" literal \"}\"",
       "src": "{#a }",
       "exp": ""
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"#\" identifier \"/\" \"}\" -> \"{\" \"#\" identifier identifier \"=\" literal \"}\"",
+      "description": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"#\" identifier \"/\" \"}\" -> \"{\" \"#\" identifier identifier \"=\" literal \"}\"",
       "src": "{#a/}",
       "exp": ""
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"/\" identifier \"}\"",
+      "description": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"/\" identifier \"}\"",
       "src": "{/a}",
       "exp": ""
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" s \"/\" identifier \"}\"",
+      "description": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" s \"/\" identifier \"}\"",
       "src": "{ /a}",
       "exp": ""
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"/\" identifier option \"}\"",
+      "description": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"/\" identifier option \"}\"",
       "src": "{/tag foo=bar}",
       "exp": "",
       "expParts": [
@@ -340,56 +340,56 @@
       ]
     },
     {
-      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"/\" identifier s \"}\"",
+      "description": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" \"/\" identifier s \"}\"",
       "src": "{/a }",
       "exp": ""
     },
     {
-      "comment": "... annotation-expression -> function -> \":\" identifier option",
+      "description": "... annotation-expression -> function -> \":\" identifier option",
       "src": "{:f k=v}",
       "exp": "{:f}",
       "expErrors": [{ "type": "unknown-function" }]
     },
     {
-      "comment": "... option -> identifier s \"=\" literal",
+      "description": "... option -> identifier s \"=\" literal",
       "src": "{:f k =v}",
       "exp": "{:f}",
       "expErrors": [{ "type": "unknown-function" }]
     },
     {
-      "comment": "... option -> identifier \"=\" s literal",
+      "description": "... option -> identifier \"=\" s literal",
       "src": "{:f k= v}",
       "exp": "{:f}",
       "expErrors": [{ "type": "unknown-function" }]
     },
     {
-      "comment": "... option -> identifier s \"=\" s literal",
+      "description": "... option -> identifier s \"=\" s literal",
       "src": "{:f k = v}",
       "exp": "{:f}",
       "expErrors": [{ "type": "unknown-function" }]
     },
     {
-      "comment": "... attribute -> \"@\" identifier \"=\" literal ...",
+      "description": "... attribute -> \"@\" identifier \"=\" literal ...",
       "src": "{a @c=d}",
       "exp": "a"
     },
     {
-      "comment": "... attribute -> \"@\" identifier s \"=\" literal ...",
+      "description": "... attribute -> \"@\" identifier s \"=\" literal ...",
       "src": "{a @c =d}",
       "exp": "a"
     },
     {
-      "comment": "... attribute -> \"@\" identifier \"=\" s literal ...",
+      "description": "... attribute -> \"@\" identifier \"=\" s literal ...",
       "src": "{a @c= d}",
       "exp": "a"
     },
     {
-      "comment": "... attribute -> \"@\" identifier s \"=\" s literal ...",
+      "description": "... attribute -> \"@\" identifier s \"=\" s literal ...",
       "src": "{a @c = d}",
       "exp": "a"
     },
     {
-      "comment": "... attribute -> \"@\" identifier s \"=\" s variable ...",
+      "description": "... attribute -> \"@\" identifier s \"=\" s variable ...",
       "src": "{42 @foo=$bar}",
       "exp": "42",
       "expParts": [
@@ -402,179 +402,179 @@
       "exp": "42"
     },
     {
-      "comment": "... literal -> quoted-literal -> \"|\" \"|\" ...",
+      "description": "... literal -> quoted-literal -> \"|\" \"|\" ...",
       "src": "{||}",
       "exp": ""
     },
     {
-      "comment": "... quoted-literal -> \"|\" quoted-char \"|\"",
+      "description": "... quoted-literal -> \"|\" quoted-char \"|\"",
       "src": "{|a|}",
       "exp": "a"
     },
     {
-      "comment": "... quoted-literal -> \"|\" escaped-char \"|\"",
+      "description": "... quoted-literal -> \"|\" escaped-char \"|\"",
       "src": "{|\\\\|}",
       "exp": "\\"
     },
     {
-      "comment": "... quoted-literal -> \"|\" quoted-char escaped-char \"|\"",
+      "description": "... quoted-literal -> \"|\" quoted-char escaped-char \"|\"",
       "src": "{|a\\\\|}",
       "exp": "a\\"
     },
     {
-      "comment": "... unquoted-literal -> number-literal -> %x30",
+      "description": "... unquoted-literal -> number-literal -> %x30",
       "src": "{0}",
       "exp": "0"
     },
     {
-      "comment": "... unquoted-literal -> number-literal -> \"-\" %x30",
+      "description": "... unquoted-literal -> number-literal -> \"-\" %x30",
       "src": "{-0}",
       "exp": "-0"
     },
     {
-      "comment": "... unquoted-literal -> number-literal -> (%x31-39 *DIGIT) -> %x31",
+      "description": "... unquoted-literal -> number-literal -> (%x31-39 *DIGIT) -> %x31",
       "src": "{1}",
       "exp": "1"
     },
     {
-      "comment": "... unquoted-literal -> number-literal -> (%x31-39 *DIGIT) -> %x31 DIGIT -> 11",
+      "description": "... unquoted-literal -> number-literal -> (%x31-39 *DIGIT) -> %x31 DIGIT -> 11",
       "src": "{11}",
       "exp": "11"
     },
     {
-      "comment": "... unquoted-literal -> number-literal -> %x30 \".\" 1*DIGIT -> 0 \".\" 1",
+      "description": "... unquoted-literal -> number-literal -> %x30 \".\" 1*DIGIT -> 0 \".\" 1",
       "src": "{0.1}",
       "exp": "0.1"
     },
     {
-      "comment": "... unquoted-literal -> number-literal -> %x30 \".\" 1*DIGIT -> %x30 \".\" DIGIT DIGIT -> 0 \".\" 1 2",
+      "description": "... unquoted-literal -> number-literal -> %x30 \".\" 1*DIGIT -> %x30 \".\" DIGIT DIGIT -> 0 \".\" 1 2",
       "src": "{0.12}",
       "exp": "0.12"
     },
     {
-      "comment": "... unquoted-literal -> number-literal -> %x30 %i\"e\" 1*DIGIT -> %x30 \"e\" DIGIT",
+      "description": "... unquoted-literal -> number-literal -> %x30 %i\"e\" 1*DIGIT -> %x30 \"e\" DIGIT",
       "src": "{0e1}",
       "exp": "0e1"
     },
     {
-      "comment": "... unquoted-literal -> number-literal -> %x30 %i\"e\" 1*DIGIT -> %x30 \"E\" DIGIT",
+      "description": "... unquoted-literal -> number-literal -> %x30 %i\"e\" 1*DIGIT -> %x30 \"E\" DIGIT",
       "src": "{0E1}",
       "exp": "0E1"
     },
     {
-      "comment": "... unquoted-literal -> number-literal -> %x30 %i\"e\" \"-\" 1*DIGIT ...",
+      "description": "... unquoted-literal -> number-literal -> %x30 %i\"e\" \"-\" 1*DIGIT ...",
       "src": "{0E-1}",
       "exp": "0E-1"
     },
     {
-      "comment": "... unquoted-literal -> number-literal -> %x30 %i\"e\" \"+\" 1*DIGIT ...",
+      "description": "... unquoted-literal -> number-literal -> %x30 %i\"e\" \"+\" 1*DIGIT ...",
       "src": "{0E-1}",
       "exp": "0E-1"
     },
     {
-      "comment": "... reserved-statement -> reserved-keyword s reserved-body 1*([s] expression) -> reserved-keyword s reserved-body expression -> \".\" name s reserved-body-part expression -> \".\" name s reserved-char expression ...",
+      "description": "... reserved-statement -> reserved-keyword s reserved-body 1*([s] expression) -> reserved-keyword s reserved-body expression -> \".\" name s reserved-body-part expression -> \".\" name s reserved-char expression ...",
       "src": ".n .{a}{{}}",
       "exp": "",
       "expErrors": [ { "type": "unsupported-statement" } ]
     },
     {
-      "comment": "... reserved-statement -> reserved-keyword reserved-body 1*([s] expression) -> reserved-keyword s reserved-body s expression -> \".\" name s reserved-body-part expression -> \".\" name s reserved-char expression ...",
+      "description": "... reserved-statement -> reserved-keyword reserved-body 1*([s] expression) -> reserved-keyword s reserved-body s expression -> \".\" name s reserved-body-part expression -> \".\" name s reserved-char expression ...",
       "src": ".n. {a}{{}}",
       "exp": "",
       "expErrors": [ { "type": "unsupported-statement" } ]
     },
     {
-      "comment": "... reserved-statement -> reserved-keyword reserved-body 1*([s] expression) -> reserved-keyword reserved-body expression expression -> \".\" name reserved-body-part expression expression -> \".\" name s reserved-char expression expression ...",
+      "description": "... reserved-statement -> reserved-keyword reserved-body 1*([s] expression) -> reserved-keyword reserved-body expression expression -> \".\" name reserved-body-part expression expression -> \".\" name s reserved-char expression expression ...",
       "src": ".n.{a}{b}{{}}",
       "exp": "",
       "expErrors": [ { "type": "unsupported-statement" } ]
     },
     {
-      "comment": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part -> \"!\" reserved-char ...",
+      "description": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part -> \"!\" reserved-char ...",
       "src": "{!.}",
       "exp": "{!}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... reserved-annotation -> reserved-annotation-start s reserved-body -> \"!\" s reserved-body-part -> \"!\" s reserved-char ...",
+      "description": "... reserved-annotation -> reserved-annotation-start s reserved-body -> \"!\" s reserved-body-part -> \"!\" s reserved-char ...",
       "src": "{! .}",
       "exp": "{!}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... reserved-annotation-start ...",
+      "description": "... reserved-annotation-start ...",
       "src": "{%}",
       "exp": "{%}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... reserved-annotation-start ...",
+      "description": "... reserved-annotation-start ...",
       "src": "{*}",
       "exp": "{*}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... reserved-annotation-start ...",
+      "description": "... reserved-annotation-start ...",
       "src": "{+}",
       "exp": "{+}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... reserved-annotation-start ...",
+      "description": "... reserved-annotation-start ...",
       "src": "{<}",
       "exp": "{<}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... reserved-annotation-start ...",
+      "description": "... reserved-annotation-start ...",
       "src": "{>}",
       "exp": "{>}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... reserved-annotation-start ...",
+      "description": "... reserved-annotation-start ...",
       "src": "{?}",
       "exp": "{?}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... reserved-annotation-start ...",
+      "description": "... reserved-annotation-start ...",
       "src": "{~}",
       "exp": "{~}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... private-use-annotation -> private-start reserved-body -> \"^\" reserved-body-part -> \"^\" reserved-char ...",
+      "description": "... private-use-annotation -> private-start reserved-body -> \"^\" reserved-body-part -> \"^\" reserved-char ...",
       "src": "{^.}",
       "exp": "{^}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... private-use-annotation -> private-start s reserved-body -> \"^\" s reserved-body-part -> \"^\" s reserved-char ...",
+      "description": "... private-use-annotation -> private-start s reserved-body -> \"^\" s reserved-body-part -> \"^\" s reserved-char ...",
       "src": "{^ .}",
       "exp": "{^}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... private-start ...",
+      "description": "... private-start ...",
       "src": "{&}",
       "exp": "{&}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part reserved-body-part -> \"!\" reserved-char escaped-char ...",
+      "description": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part reserved-body-part -> \"!\" reserved-char escaped-char ...",
       "src": "{!.\\{}",
       "exp": "{!}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part s reserved-body-part -> \"!\" reserved-char s escaped-char ...",
+      "description": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part s reserved-body-part -> \"!\" reserved-char s escaped-char ...",
       "src": "{!. \\{}",
       "exp": "{!}",
       "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
-      "comment": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part -> \"!\" quoted-literal ...",
+      "description": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part -> \"!\" quoted-literal ...",
       "src": "{!|a|}",
       "exp": "{!}",
       "expErrors": [{ "type": "unsupported-expression" }]
