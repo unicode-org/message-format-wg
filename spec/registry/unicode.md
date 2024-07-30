@@ -34,7 +34,9 @@ Values matching the following ABNF are always accepted:
 ```abnf
 u-locale-option = langtag *([s] "," [s] langtag)
 ```
-using `langtag` as defined in [RFC 5646](https://www.rfc-editor.org/rfc/rfc5646).
+using `langtag` as defined in [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt).
+Note that `langtag` is the rule for "normal language tags",
+and does not include private-use or grandfathered tags.
 
 Implementations MAY support additional language tags,
 such as private-use or grandfathered tags,
