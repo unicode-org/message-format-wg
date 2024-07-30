@@ -714,7 +714,8 @@ markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"  ; open
 > {#button}Submit{/button} or {#img alt=|Cancel| /}.
 > ```
 
-> A _message_ with options on the closing tags:
+> A _message_ containing _markup_ that uses _options_ to pair 
+> two closing markup _placeholders_ to the one open markup _placeholder_:
 >
 > ```
 > {#ansi attr=|bold,italic|}Bold and italic{/ansi attr=|bold|} italic only {/ansi attr=|italic|} no formatting.}
