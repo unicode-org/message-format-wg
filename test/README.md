@@ -7,7 +7,7 @@ These test files are intended to be useful for testing multiple different messag
 
 - `syntax-errors.json` — Strings that should produce a Syntax Error when parsed.
 
-- `data-model-errors.json` - Strings that should produce Data Model Error when processed.
+- `data-model-errors.json` - Strings that should produce a Data Model Error when processed.
   Error names are defined in ["MessageFormat 2.0 Errors"](../spec/errors.md) in the spec.
 
 - `functions/` — Test cases that correspond to built-in functions.
@@ -23,6 +23,33 @@ Some examples of test harnesses using these tests, from the source repository:
 A [JSON schema](./schemas/) is included for the test files in this repository.
 
 For users of Visual Studio Code, a [settings file](./.vscode/settings.json) is included that enables schema validation while editing the test files.
+
+## Error Codes
+
+The following table relates the error names used in the [JSON schema](./schemas/)
+to the error names used in ["MessageFormat 2.0 Errors"](../spec/errors.md) in the spec.
+
+| Schema                      | Spec                        |
+| --------------------------- | --------------------------- |
+| bad-operand                 | Bad Operand                 |
+| bad-option                  | Bad Option                  |
+| bad-selector                | Bad Selector                |
+| bad-variant-key             | Bad Variant Key             |
+| duplicate-declaration       | Duplicate Declaration       |
+| duplicate-option-name       | Duplicate Option Name       |
+| missing-fallback-variant    | Missing Fallback Variant    |
+| missing-selector-annotation | Missing Selector Annotation |
+| syntax-error                | Syntax Error                |
+| unknown-function            | Unknown Function            |
+| unresolved-variable         | Unresolved Variable         |
+| unsupported-expression      | Unsupported Expression      |
+| unsupported-statement       | Unsupported Statement       |
+| variant-key-mismatch        | Variant Key Mismatch        |
+
+The "Message Function Error" error name used in the spec
+is not included in the schema,
+as it is intended to be an umbrella category
+for implementation-specific errors.
 
 ## Test Functions
 
