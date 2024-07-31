@@ -887,8 +887,23 @@
       ]
     },
     {
+      "src": ".l $y = {|bar|} {{}}",
+      "exp": "",
+      "expParts": [
+        {
+          "type": "literal",
+          "value": "bar"
+        }
+      ],
+      "expErrors": [
+        {
+          "type": "unsupported-statement"
+        }
+      ]
+    },
+    {
       "src": "{{trailing whitespace}} \n",
       "exp": "trailing whitespace"
-    }
+    },
   ]
 }
