@@ -904,6 +904,6 @@
     {
       "src": "{{trailing whitespace}} \n",
       "exp": "trailing whitespace"
-    },
+    }
   ]
 }
