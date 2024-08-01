@@ -26,22 +26,22 @@ A [JSON schema](./schemas/) is included for the test files in this repository.
 The following table relates the error names used in the [JSON schema](./schemas/)
 to the error names used in ["MessageFormat 2.0 Errors"](../spec/errors.md) in the spec.
 
-| Schema                      | Spec                        |
+| Spec                        | Schema                      |
 | --------------------------- | --------------------------- |
-| bad-operand                 | Bad Operand                 |
-| bad-option                  | Bad Option                  |
-| bad-selector                | Bad Selector                |
-| bad-variant-key             | Bad Variant Key             |
-| duplicate-declaration       | Duplicate Declaration       |
-| duplicate-option-name       | Duplicate Option Name       |
-| missing-fallback-variant    | Missing Fallback Variant    |
-| missing-selector-annotation | Missing Selector Annotation |
-| syntax-error                | Syntax Error                |
-| unknown-function            | Unknown Function            |
-| unresolved-variable         | Unresolved Variable         |
-| unsupported-expression      | Unsupported Expression      |
-| unsupported-statement       | Unsupported Statement       |
-| variant-key-mismatch        | Variant Key Mismatch        |
+| Bad Operand                 | bad-operand                 |
+| Bad Option                  | bad-option                  |
+| Bad Selector                | bad-selector                |
+| Bad Variant Key             | bad-variant-key             |
+| Duplicate Declaration       | duplicate-declaration       |
+| Duplicate Option Name       | duplicate-option-name       |
+| Missing Fallback Variant    | missing-fallback-variant    |
+| Missing Selector Annotation | missing-selector-annotation |
+| Syntax Error                | syntax-error                |
+| Unknown Function            | unknown-function            |
+| Unresolved Variable         | unresolved-variable         |
+| Unsupported Expression      | unsupported-expression      |
+| Unsupported Statement       | unsupported-statement       |
+| Variant Key Mismatch        | variant-key-mismatch        |
 
 The "Message Function Error" error name used in the spec
 is not included in the schema,
