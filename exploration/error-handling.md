@@ -11,8 +11,16 @@ Status: **Proposed**
 		<dd>2024-06-02</dd>
         <dt>Issues</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/issues/782">#782</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/issues/830">#830</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/issues/831">#831</a></dd>
 		<dt>Pull Requests</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/795">#795</a></dd>
+		<dt>Meeting Notes</dt>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/blob/main/meetings/2024/notes-2024-05-06.md">2024-05-06</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/blob/main/meetings/2024/notes-2024-05-13.md">2024-05-13</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/blob/main/meetings/2024/notes-2024-05-20.md">2024-05-20</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/blob/main/meetings/2024/notes-2024-07-15.md">2024-07-15</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/blob/main/meetings/2024/notes-2024-07-22.md">2024-07-22</a></dd>
 	</dl>
 </details>
 
