@@ -7,7 +7,7 @@ These test files are intended to be useful for testing multiple different messag
 
 - `syntax-errors.json` — Strings that should produce a Syntax Error when parsed.
 
-- `data-model-errors.json` - Strings that should produce Data Model Error when processed.
+- `data-model-errors.json` - Strings that should produce a Data Model Error when processed.
   Error names are defined in ["MessageFormat 2.0 Errors"](../spec/errors.md) in the spec.
 
 - `functions/` — Test cases that correspond to built-in functions.
@@ -21,8 +21,32 @@ Some examples of test harnesses using these tests, from the source repository:
 - [Formatting tests](https://github.com/messageformat/messageformat/blob/11c95dab2b25db8454e49ff4daadb817e1d5b770/packages/mf2-messageformat/src/messageformat.test.ts)
 
 A [JSON schema](./schemas/) is included for the test files in this repository.
+## Error Codes
 
-For users of Visual Studio Code, a [settings file](./.vscode/settings.json) is included that enables schema validation while editing the test files.
+The following table relates the error names used in the [JSON schema](./schemas/)
+to the error names used in ["MessageFormat 2.0 Errors"](../spec/errors.md) in the spec.
+
+| Spec                        | Schema                      |
+| --------------------------- | --------------------------- |
+| Bad Operand                 | bad-operand                 |
+| Bad Option                  | bad-option                  |
+| Bad Selector                | bad-selector                |
+| Bad Variant Key             | bad-variant-key             |
+| Duplicate Declaration       | duplicate-declaration       |
+| Duplicate Option Name       | duplicate-option-name       |
+| Missing Fallback Variant    | missing-fallback-variant    |
+| Missing Selector Annotation | missing-selector-annotation |
+| Syntax Error                | syntax-error                |
+| Unknown Function            | unknown-function            |
+| Unresolved Variable         | unresolved-variable         |
+| Unsupported Expression      | unsupported-expression      |
+| Unsupported Statement       | unsupported-statement       |
+| Variant Key Mismatch        | variant-key-mismatch        |
+
+The "Message Function Error" error name used in the spec
+is not included in the schema,
+as it is intended to be an umbrella category
+for implementation-specific errors.
 
 ## Test Functions
 
