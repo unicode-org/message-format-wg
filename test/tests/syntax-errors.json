@@ -123,6 +123,9 @@
       "src": "bad {:placeholder @attribute=@foo}"
     },
     {
+      "src": "{ @misplaced = attribute }"
+    },
+    {
       "src": "no {placeholder end"
     },
     {
