@@ -1,6 +1,6 @@
 # Error Handling
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -15,6 +15,7 @@ Status: **Proposed**
 		<dd><a href="https://github.com/unicode-org/message-format-wg/issues/831">#831</a></dd>
 		<dt>Pull Requests</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/795">#795</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/804">#804</a></dd>
 		<dt>Meeting Notes</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/blob/main/meetings/2024/notes-2024-05-06.md">2024-05-06</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/blob/main/meetings/2024/notes-2024-05-13.md">2024-05-13</a></dd>
