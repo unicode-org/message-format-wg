@@ -178,6 +178,27 @@ appears on the left-hand side of more than one _option_ in the same _expression_
 > {{This is {$foo}}}
 > ```
 
+### Duplicate Variant
+
+A **_<dfn>Duplicate Variant</dfn>_** error occurs when the same _keys_
+are used for more than one _variant_.
+
+> Examples of invalid messages resulting in a _Duplicate Variant_ error:
+>
+> ```
+> .match {$var :string}
+> * {{The first default}}
+> * {{The second default}}
+> ```
+>
+> ```
+> .match {$x :string} {$y :string}
+> *   foo   {{The first "foo" variant}}
+> bar *     {{The "bar" variant}}
+> *   |foo| {{The second "foo" variant}}
+> *   *     {{The default variant}}
+> ```
+
 ## Resolution Errors
 
 **_<dfn>Resolution Errors</dfn>_** occur when the runtime value of a part of a message

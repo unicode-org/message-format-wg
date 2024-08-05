@@ -369,6 +369,8 @@ satisfied:
 - At least one _variant_ MUST exist whose _keys_ are all equal to the "catch-all" key `*`.
 - Each _selector_ MUST have an _annotation_,
   or contain a _variable_ that directly or indirectly references a _declaration_ with an _annotation_.
+- Every _variant_ MUST NOT use the same set of _keys_ in the same order as another _variant_.
+  _Literal_ _keys_ are compared by their contents, not their syntactical appearance.
 
 ```abnf
 matcher         = match-statement 1*([s] variant)
