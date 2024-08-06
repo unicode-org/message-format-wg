@@ -180,8 +180,8 @@ appears on the left-hand side of more than one _option_ in the same _expression_
 
 ### Duplicate Variant
 
-A **_<dfn>Duplicate Variant</dfn>_** error occurs when the same _keys_
-are used for more than one _variant_.
+A **_<dfn>Duplicate Variant</dfn>_** error occurs when the
+same list of _keys_ is used for more than one _variant_.
 
 > Examples of invalid messages resulting in a _Duplicate Variant_ error:
 >
