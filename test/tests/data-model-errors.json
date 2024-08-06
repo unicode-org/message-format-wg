@@ -164,6 +164,22 @@
           "type": "duplicate-option-name"
         }
       ]
+    },
+    {
+      "src": ".match {$var :string} * {{The first default}} * {{The second default}}",
+      "expErrors": [
+        {
+          "type": "duplicate-variant"
+        }
+      ]
+    },
+    {
+      "src": ".match {$x :string} {$y :string} * foo {{The first foo variant}} bar * {{The bar variant}} * |foo| {{The second foo variant}} * * {{The default variant}}",
+      "expErrors": [
+        {
+          "type": "duplicate-variant"
+        }
+      ]
     }
   ]
 }

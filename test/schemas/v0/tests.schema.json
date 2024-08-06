@@ -342,6 +342,7 @@
               "missing-selector-annotation",
               "duplicate-declaration",
               "duplicate-option-name",
+              "duplicate-variant",
               "unresolved-variable",
               "unknown-function",
               "unsupported-expression",
