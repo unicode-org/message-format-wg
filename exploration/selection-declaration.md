@@ -1,6 +1,6 @@
 # Effect of Selectors on Subsequent Placeholders
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -10,7 +10,8 @@ Status: **Proposed**
 		<dt>First proposed</dt>
 		<dd>2024-03-27</dd>
 		<dt>Pull Requests</dt>
-		<dd>#000</dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/755">#755</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/824">#824</a></dd>
 	</dl>
 </details>
 
@@ -149,13 +150,10 @@ _What prior decisions and existing conditions limit the possible design?_
 
 ## Proposed Design
 
-_Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
+The design alternative [Match on variables instead of expressions](#match-on-variables-instead-of-expressions)
+described below is selected.
 
 ## Alternatives Considered
-
-_What other solutions are available?_
-_How do they compare against the requirements?_
-_What other properties they have?_
 
 ### Do nothing
 
