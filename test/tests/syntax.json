@@ -37,6 +37,11 @@
       "exp": "hello world"
     },
     {
+      "description": "message -> simple-message -> s simple-start pattern -> s simple-start-char pattern -> ...",
+      "src": "\n hello\t",
+      "exp": "\n hello\t"
+    },
+    {
       "src": "hello {$place}",
       "params": [
         {
@@ -135,6 +140,11 @@
       "exp": ""
     },
     {
+      "description": "message -> complex-message -> s *(declaration [s]) complex-body s -> s declaration complex-body s -> s input-declaration complex-body s -> s input variable-expression complex-body s",
+      "src": "\t.input{$x}{{}}\n",
+      "exp": ""
+    },
+    {
       "description": "message -> complex-message -> *(declaration [s]) complex-body -> declaration declaration complex-body -> input-declaration input-declaration complex-body -> input variable-expression input variable-expression complex-body",
       "src": ".input{$x}.input{$y}{{}}",
       "exp": ""
@@ -145,8 +155,8 @@
       "exp": ""
     },
     {
-      "description": "message -> complex-message -> *(declaration [s]) complex-body s -> complex-body s",
-      "src": "{{}} ",
+      "description": "message -> complex-message -> s *(declaration [s]) complex-body s -> s complex-body s",
+      "src": "  {{}}  ",
       "exp": ""
     },
     {
@@ -398,8 +408,7 @@
           "source": "|42|",
           "value": "42"
         }
-      ],
-      "exp": "42"
+      ]
     },
     {
       "description": "... literal -> quoted-literal -> \"|\" \"|\" ...",

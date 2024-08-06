@@ -1,11 +1,11 @@
 message           = simple-message / complex-message
 
-simple-message    = [simple-start pattern]
+simple-message    = [s] [simple-start pattern]
 simple-start      = simple-start-char / escaped-char / placeholder
 pattern           = *(text-char / escaped-char / placeholder)
 placeholder       = expression / markup
 
-complex-message   = *(declaration [s]) complex-body [s]
+complex-message   = [s] *(declaration [s]) complex-body [s]
 declaration       = input-declaration / local-declaration / reserved-statement
 complex-body      = quoted-pattern / matcher
 
@@ -86,7 +86,7 @@ name-char  = name-start / DIGIT / "-" / "."
            / %xB7 / %x300-36F / %x203F-2040
 
 ; Restrictions on characters in various contexts
-simple-start-char = content-char / s / "@" / "|"
+simple-start-char = content-char / "@" / "|"
 text-char         = content-char / s / "." / "@" / "|"
 quoted-char       = content-char / s / "." / "@" / "{" / "}"
 reserved-char     = content-char / "."
