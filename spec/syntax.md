@@ -153,11 +153,14 @@ message = simple-message / complex-message
 ```
 
 A **_<dfn>simple message</dfn>_** contains a single _pattern_,
-with restrictions on its first character.
+with restrictions on its first non-whitespace character.
 An empty string is a valid _simple message_.
 
+Whitespace at the start of a _simple message_ is significant,
+and a part of the _text_ of the _message_.
+
 ```abnf
-simple-message = [simple-start pattern]
+simple-message = [s] [simple-start pattern]
 simple-start   = simple-start-char / escaped-char / placeholder
 ```
 
@@ -169,8 +172,10 @@ and consists of:
 1. an optional list of _declarations_, followed by
 2. a _complex body_
 
+Whitespace at the start of a _complex message_ is ignored.
+
 ```abnf
-complex-message = *(declaration [s]) complex-body [s]
+complex-message = [s] *(declaration [s]) complex-body [s]
 ```
 
 ### Declarations
@@ -300,7 +305,7 @@ U+007B LEFT CURLY BRACKET `{`, and U+007D RIGHT CURLY BRACKET `}`
 MUST be escaped as `\\`, `\{`, and `\}` respectively.
 
 In the ABNF, _text_ is represented by non-empty sequences of
-`simple-start-char`, `text-char`, and `escaped-char`.
+`simple-start-char`, `text-char`, `escaped-char`, and `s`.
 The first of these is used at the start of a _simple message_,
 and matches `text-char` except for not allowing U+002E FULL STOP `.`.
 The ABNF uses `content-char` as a shared base for _text_ and _quoted literal_ characters.

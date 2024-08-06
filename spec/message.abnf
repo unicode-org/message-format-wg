@@ -1,11 +1,11 @@
 message           = simple-message / complex-message
 
-simple-message    = [simple-start pattern]
+simple-message    = [s] [simple-start pattern]
 simple-start      = simple-start-char / escaped-char / placeholder
 pattern           = *(text-char / escaped-char / placeholder)
 placeholder       = expression / markup
 
-complex-message   = *(declaration [s]) complex-body [s]
+complex-message   = [s] *(declaration [s]) complex-body [s]
 declaration       = input-declaration / local-declaration / reserved-statement
 complex-body      = quoted-pattern / matcher
 
