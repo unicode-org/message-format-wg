@@ -214,9 +214,21 @@ the following steps are taken:
 
 3. Perform _option resolution_.
 
-4. Call the function implementation with the following arguments:
+4. Determine the **_<dfn>function context</dfn>_** for calling the function implementation.
+   This includes:
 
-   - The current _locale_.
+   - The current _locale_,
+     potentially including a fallback chain of locales.
+   - The base directionality of the _message_ and its _text_ tokens.
+
+   If the resolved mapping of _options_ includes any `u:` options
+   supported by the implementation,
+   process them as specified in the [Unicode Registry](/spec/registry/unicode.md).
+   Such `u:` options MAY be removed from the resolved mapping of _options_.
+
+5. Call the function implementation with the following arguments:
+
+   - The _function context_.
    - The resolved mapping of _options_.
    - If the _expression_ includes an _operand_, its resolved value.
 
@@ -303,7 +315,7 @@ the following steps are taken:
    
    Implementation-defined _functions_ SHOULD use an implementation-defined _namespace_.
 
-5. If the call succeeds,
+6. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
 
    If the call fails or does not return a valid value,
@@ -343,6 +355,11 @@ The resolved value of _markup_ includes the following fields:
 - The type of the markup: open, standalone, or close
 - The _identifier_ of the _markup_
 - The resolved _options_ values after _option resolution_.
+
+If the resolved mapping of _options_ includes any `u:` options
+supported by the implementation,
+process them as specified in the [Unicode Registry](/spec/registry/unicode.md).
+Such `u:` options MAY be removed from the resolved mapping of _options_.
 
 The resolution of _markup_ MUST always succeed.
 
