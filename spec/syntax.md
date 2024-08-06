@@ -437,7 +437,7 @@ There MAY be any number of additional _selectors_.
 
 ### Variant
 
-A **_<dfn>variant</dfn>_** is a _quoted pattern_ associated with a set of _keys_ in a _matcher_.
+A **_<dfn>variant</dfn>_** is a _quoted pattern_ associated with a list of _keys_ in a _matcher_.
 Each _variant_ MUST begin with a sequence of _keys_,
 and terminate with a valid _quoted pattern_.
 The number of _keys_ in each _variant_ MUST match the number of _selectors_ in the _matcher_.
