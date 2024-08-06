@@ -315,7 +315,7 @@ Whitespace in _text_, including tabs, spaces, and newlines is significant and MU
 be preserved during formatting.
 
 ```abnf
-simple-start-char = content-char / s / "@" / "|"
+simple-start-char = content-char / "@" / "|"
 text-char         = content-char / s / "." / "@" / "|"
 quoted-char       = content-char / s / "." / "@" / "{" / "}"
 reserved-char     = content-char / "."
