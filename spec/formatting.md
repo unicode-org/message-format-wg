@@ -58,6 +58,8 @@ or even use them in their internal processing,
 as long as the final _formatting_ result is made available to users
 and the observable behavior of the formatter matches that described here.
 
+_Attributes_ MUST NOT affect the processing or output of a _message_.
+
 ## Formatting Context
 
 A message's **_<dfn>formatting context</dfn>_** represents the data and procedures that are required
@@ -761,10 +763,6 @@ When formatting to a string, the default representation of all _markup_
 MUST be an empty string.
 Implementations MAY offer functionality for customizing this,
 such as by emitting XML-ish tags for each _markup_.
-
-_Attributes_ are reserved for future standardization.
-Other than checking for valid syntax, they SHOULD NOT 
-affect the processing or output of a _message_.
 
 ### Examples
 

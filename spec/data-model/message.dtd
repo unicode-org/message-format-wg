@@ -41,7 +41,7 @@
 
 <!ELEMENT unsupportedAnnotation (#PCDATA)>
 
-<!ELEMENT attribute (literal | variable)?>
+<!ELEMENT attribute (literal)?>
 <!ATTLIST attribute name NMTOKEN #REQUIRED>
 
 <!ELEMENT markup (option*, attribute*)>
