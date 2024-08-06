@@ -82,7 +82,8 @@ A reference to a _term_ looks like this.
 Updates to this specification will not change
 the syntactical meaning, the runtime output, or other behaviour
 of valid messages written for earlier versions of this specification
-that only use functions defined in this specification.
+that only use functions defined in this specification
+and options explicitly defined for them.
 Updates to this specification will not remove any syntax provided in this version.
 Future versions MAY add additional structure or meaning to existing syntax.
 
