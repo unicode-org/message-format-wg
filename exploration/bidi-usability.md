@@ -450,8 +450,21 @@ The main differences to the proposed solution is:
 As noted above, the "strict" version of the ABNF should be adopted by serializers and for 
 message normalization.
 
-// TODO put ABNF here
-
+```abnf
+variable-expression   = "{" [s] variable [bidi] [s annotation] *(s attribute) [s] "}"
+function       = ":" identifier [bidi] *(s option)
+option         = identifier [bidi] [s] "=" [s] (literal / variable) [bidi]
+               / LRI identifier [bidi] [s] "=" [s] (literal / variable) [bidi] close-isolate
+attribute      = "@" identifier [bidi] [[s] "=" [s] ((literal / variable) [bidi])]
+               / LRI "@" identifier [bidi] [[s] "=" [s] ((literal / variable) [bidi])] close-isolate
+markup         = "{" [s] "#" identifier [bidi] *(s option) *(s attribute) [s] ["/"] "}"  ; open and standalone
+               / "{" LRI [s] "#" identifier [bidi] *(s option) *(s attribute) [s] ["/"] close-isolate "}"
+               / "{" [s] "/" identifier [bidi] *(s option) *(s attribute) [s] "}"  ; close
+               / "{" LRI [s] "/" identifier [bidi] *(s option) *(s attribute) [s] close-isolate "}"  ; close
+identifier     = [(namespace ns-separator)] name
+ns-separator   = [bidi] ":"
+bidi           = [ %x200E-200F / %x061C ]
+```
 
 
 ### Isolate `name` rather than `unquoted-literal`
