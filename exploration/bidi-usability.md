@@ -489,11 +489,26 @@ Without `name` isolation, this would (misleadingly) render as
 {⁦:אחת:שתיים⁩}
 ```
 
-In the syntax, it's much simpler to include the changes to `name` in that rule,
-rather than patching every place where `name` is used.
-Either way, the parsed value of the name should not include the open/close isolates,
-just as they're not included in the parsed values of quoted literals or quoted patterns.
+Note that the parsed value of the `name` does not include the open/close isolates,
+just as they're not included in the parsed values of quoted literals or quoted patterns,
+even though the production includes the characters.
+We could accomplish this by adding an additional productions to manage `name`, at the cost
+of a more complex ABNF.
 
+**Pros**
+- In the syntax, it's much simpler to include the changes to `name` in the `name` rule,
+  rather than patching every place where `name` is used.
+
+**Cons**
+- Implementations need to remove isolates from the `name` token before comparing
+  the value to other values (such as comparing `function` or `variable` names).
+  Because of namespacing, this requires looking _inside_ the token.
+- Implementations might need to insert isolates when generating names upon serialization.
+  The current data model does not separate `namespace` and `name`,
+  so this might be more complicated.
+- `unquoted-literal` values appear as keys, as operands, and as option values.
+  If not isolated, these can cause spillover effects, so we might need both `name`
+  and `unquoted-literal` isolation.
 
 ### Deeper Syntax Changes
 We could alter the syntax to make it more "bidi robust", 
