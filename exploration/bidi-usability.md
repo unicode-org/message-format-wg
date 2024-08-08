@@ -453,8 +453,19 @@ message normalization.
 // TODO put ABNF here
 
 
+
+### Isolate `name` rather than `unquoted-literal`
+
 Isolating rather than marking `name` helps ensure
 that its directionality does not spill over to adjoining syntax.
+
+The following replaces the proposed design's changes to `literal` and the `[bidi]` additions to
+`variable-expression`, `function`, `option`, `attribute`, `markup`, and `ns-separator`:
+```abnf
+name = [open-isolate] name-start *name-char [close-isolate]
+quoted-literal = [open-isolate] "|" *(quoted-char / quoted-escape) "|" [close-isolate]
+```
+
 For example, this allows for the proper rendering of the expression
 ```
 {⁦:⁧אחת⁩:⁧שתיים⁩⁩}
