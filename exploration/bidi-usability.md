@@ -288,8 +288,8 @@ Preferring LTR display is not the disadvantage to right-to-left languages that i
   in the correct location in an RTL _pattern_
 - _Expressions_ use isolates and directional marks to display internal tokens in the
   correct order and without spillover effects
-- The syntax uses paired enclosing marks that the Unicode Bidirectional Algorithm pairs
-  for shaping purposes and these offer a poor person's form of isolation.
+- The syntax uses enclosing marks (specifically curly brackets) which the Unicode Bidirectional Algorithm
+  pairs up for shaping purposes, resulting in a weak form of isolation in the syntax itself.
 
 The syntax permits (but does not require) isolating bidi controls to be used on the 
 **outside** of the following:
@@ -324,16 +324,23 @@ close-isolate  = %x2069
 > We need to allow users to include bidi characters, including isolates and strongly directional marks
 > in the output of MF2.
 
-Permit **left-to-right** isolates (`U+2066` and `U+2069`) to be used **immediately inside** the following:
-- expressions
-- markup
+- Permit **left-to-right** isolates 
+  (starting with LRI `U+2066` and ending with PDI `U+2069`) 
+  to be used **immediately inside** the following:
+  - expressions
+  - markup
 
-Permit isolates around any token inside of an expression or markup.
+- Permit any type of isolate sequence
+  (starting with LRI `U+2066`, RLI `U+2067`, or FSI `U+2068` and ending with PDI `U+2069`)
+  around any token inside of an expression or markup.
 
-We only permit the LTR isolates because the contents of an _expression_
-or _markup_ must be laid out left-to-right.
-_Literal_ values can be right-to-left isolated within that or use strongly
-directional marks to ensure correct display.
+- Permit the use of LRM, RLM, or ALM stronly directional marks immediately following any of the items that
+  **end** with the `name` production in the ABNF. 
+  This includes _identifiers_ found in the names of
+  _functions_ 
+  and _options_,
+  plus the names of _variables_,
+  as well as the contents of _unquoted_ literals.
 
 This would change the ABNF as follows (assuming the above changes are also incorporated):
 ```abnf
@@ -346,13 +353,11 @@ markup = "{" [LRI] [s] "#" identifier *(s option) *(s attribute) [s] ["/"] [clos
 LRI = %x2066
 ```
 
-Permit the use of LRM, RLM, or ALM stronly directional marks immediately following any of the items that
-**end** with the `name` production in the ABNF. 
-This includes _identifiers_ found in the names of
-_functions_ 
-and _options_,
-plus the names of _variables_,
-as well as the contents of _unquoted_ literals.
+> [!NOTE]
+> This design only permits LTR isolates at the expression level because the contents of an _expression_
+> or _markup_ must be laid out left-to-right.
+> _Literal_ values can be right-to-left isolated within that or use strongly
+> directional marks to ensure correct display.
 
 > [!NOTE]
 > Notice that _unquoted literals_ can also be surrounded by bidi isolates
