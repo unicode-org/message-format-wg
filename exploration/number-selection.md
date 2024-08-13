@@ -1,6 +1,6 @@
 # Selection on Numerical Values
 
-Status: **Accepted**
+Status: **Accepted** (moving back to **Proposed**)
 
 <details>
 	<summary>Metadata</summary>
@@ -53,6 +53,21 @@ Both JS and ICU PluralRules implementations provide for determining the plural c
 of a range based on its start and end values.
 Range-based selectors are not initially considered here.
 
+In <a href="https://github.com/unicode-org/message-format-wg/pull/842">PR #842</a>
+@eemeli points out a number of gaps or infelicities in the current specification
+and there was extensive discussion of how to address these gaps.
+
+The `key` for exact numeric match in a variant has to be a string. 
+The format of such strings, therefore, has to be specified if messages are to be portable and interoperable. 
+In LDML45 Tech Preview we selected JSON's number serialization as a source for `key` values.
+The JSON serialization is ambiguous, in that a given number value might be serialized validly in more than one way:
+```
+123
+123.0
+1.23E2
+... etc...
+```
+
 ## Use-Cases
 
 As a user, I want to write messages that use the correct plural for
@@ -75,6 +90,64 @@ either plural or ordinal selection in a single message.
 > * {{You have {$numRemaining} chances remaining (plural)}}
 >```
 
+As a user, I want the selector to match the options specified:
+```
+.local $num = {123.456 :number maximumSignificantDigits=2 maximumFractionDigits=2 minimumFractionDigits=2}
+.match {$num}
+120.00  {{This matches}}
+120     {{This does not match}}
+123.47  {{This does not match}}
+123.456 {{This does not match}}
+1.2E2   {{Does this match?}}
+*       {{ ... }}
+```
+
+Note that badly written keys just don't match, but we want users to be able to intuit whether a given set of keys will work or not.
+
+```
+.local $num = {123.456 :integer}
+.match {$num}
+123.456 {{Should not match?}}
+123     {{Should match}}
+123.0   {{Should not match?}}
+*       {{ ... }}
+```
+
+There can be complications, which we might need to define. Consider:
+
+```
+.local $num = {123.002 :number maximumFractionDigits=1 minimumFractionDigits=0}
+.match {$num}
+123.002 {{Should not match?}}
+123.0   {{Does minimumFractionDigits make this not match?}}
+123     {{Does minimumFractionDigits make this match?}}
+*       {{ ... }}
+```
+
+As an implementer, I am concerned about the cost of incorporating _options_ into the selector. 
+This might be accomplished by building a "second formatter". 
+Some implementations, such as ICU4J's, might use interfaces like `FormattedNumber` to feed the selector. 
+Implementations might also apply options by modifying the number value of the _operand_ 
+(or shadowing the options effect on the value)
+
+As a user, I want to be able to perform exact match using arbitrary digit numeric types where they are available.
+As an implementer, I do **not** want to be required to provide or implement arbitrary precision
+numeric types not available in my platform.
+Programming/runtime environments vary widely in support of these types.
+MF2 should not prevent the implementation of e.g. `BigDecimal` or `BigInt` types
+and permit their use in MF2 messages.
+MF2 should not _require_ implementations to support such types where they do not exist.
+The problem of numeric type precision,
+which is implementation dependent,
+should not affect how message `key` values are specified.
+
+> For example:
+>```
+>.local $num = {11111111111111.11111111111111 :number}
+>.match {$num}
+>11111111111111.11111111111111 {{This works on some implementations.}}
+>* {{... but not on others? ...}}
+>```
 
 ## Requirements
 
@@ -460,3 +533,21 @@ and they _might_ converge on some overlap that users could safely use across pla
 #### Cons
 
 - No guarantees about interoperability for a relatively core feature.
+
+## Alternatives Considered (`key` matching)
+
+### Standardize the Serialization Forms
+
+Using the design above, remove the integer-only and no-sig-digits restrictions from LDML45
+and specify numeric matching by specifying the form of matching `key` values.
+Comparison is as-if by string comparison of the serialized forms, just as in LDML45.
+
+### Compare numeric values
+
+This is the design proposed in #842.
+
+This modifies the key-match algorithm to use implementation-defined numeric value exact match:
+
+>   1. Let `exact` be the numeric value represented by `key`.
+>      1. If `value` and `exact` are numerically equal, then
+
