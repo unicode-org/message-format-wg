@@ -380,7 +380,7 @@ The _fallback value_ depends on the contents of the _expression_:
 
   > Examples:
   > In a context where `:func` fails to resolve,
-  > the _pattern_'s _expression_ in `.local $var={|val|} {{{$val :func}}}`
+  > the _pattern_'s _expression_ in `.local $var={|val|} {{{$var :func}}}`
   > resolves to the _fallback value_ `|val|` and the message formats to `{|val|}`.
   > In a context where `:now` fails to resolve but `:datetime` does not,
   > the _pattern_'s _expression_ in
