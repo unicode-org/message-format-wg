@@ -34,6 +34,7 @@ to the error names used in ["MessageFormat 2.0 Errors"](../spec/errors.md) in th
 | Bad Variant Key             | bad-variant-key             |
 | Duplicate Declaration       | duplicate-declaration       |
 | Duplicate Option Name       | duplicate-option-name       |
+| Duplicate Variant           | duplicate-variant           |
 | Missing Fallback Variant    | missing-fallback-variant    |
 | Missing Selector Annotation | missing-selector-annotation |
 | Syntax Error                | syntax-error                |
