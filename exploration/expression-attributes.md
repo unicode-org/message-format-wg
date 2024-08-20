@@ -1,6 +1,6 @@
 # Expression Attributes
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -15,6 +15,8 @@ Status: **Proposed**
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/772">#772</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/780">#780</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/792">#792</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/845">#845</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/846">#846</a></dd>
 	</dl>
 </details>
 

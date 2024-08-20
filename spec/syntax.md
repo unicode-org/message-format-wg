@@ -90,7 +90,7 @@ Attempting to parse a _message_ that is not _well-formed_ will result in a _Synt
 A _message_ is **_<dfn>valid</dfn>_** if it is _well-formed_ and
 **also** meets the additional content restrictions
 and semantic requirements about its structure defined below for
-_declarations_, _matcher_ and _options_.
+_declarations_, _matcher_, _options_, and _attributes_.
 Attempting to parse a _message_ that is not _valid_ will result in a _Data Model Error_.
 
 ## The Message
@@ -154,7 +154,7 @@ message = simple-message / complex-message
 
 A **_<dfn>simple message</dfn>_** contains a single _pattern_,
 with restrictions on its first non-whitespace character.
-An empty string is a valid _simple message_.
+An empty string is a _valid_ _simple message_.
 
 Whitespace at the start or end of a _simple message_ is significant,
 and a part of the _text_ of the _message_.
@@ -445,7 +445,7 @@ There MAY be any number of additional _selectors_.
 
 A **_<dfn>variant</dfn>_** is a _quoted pattern_ associated with a list of _keys_ in a _matcher_.
 Each _variant_ MUST begin with a sequence of _keys_,
-and terminate with a valid _quoted pattern_.
+and terminate with a _valid_ _quoted pattern_.
 The number of _keys_ in each _variant_ MUST match the number of _selectors_ in the _matcher_.
 
 Each _key_ is separated from each other by whitespace.
@@ -555,7 +555,7 @@ A _function_'s entry in the _function registry_ will define
 whether the _function_ is a _selector_ or formatter (or both),
 whether an _operand_ is required,
 what form the values of an _operand_ can take,
-what _options_ and _option_ values are valid,
+what _options_ and _option_ values are acceptable,
 and what outputs might result.
 See [function registry](./registry.md) for more information.
 
@@ -587,7 +587,7 @@ Multiple _options_ are permitted in an _annotation_.
 _Options_ are separated from the preceding _function_ _identifier_
 and from each other by whitespace.
 Each _option_'s _identifier_ MUST be unique within the _annotation_:
-an _annotation_ with duplicate _option_ _identifiers_ is not valid.
+an _annotation_ with duplicate _option_ _identifiers_ is not _valid_.
 
 The order of _options_ is not significant.
 
@@ -723,7 +723,8 @@ markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"  ; open
 > {#button}Submit{/button} or {#img alt=|Cancel| /}.
 > ```
 
-> A _message_ with attributes in the closing tag:
+> A _message_ containing _markup_ that uses _options_ to pair 
+> two closing markup _placeholders_ to the one open markup _placeholder_:
 >
 > ```
 > {#ansi attr=|bold,italic|}Bold and italic{/ansi attr=|bold|} italic only {/ansi attr=|italic|} no formatting.}
@@ -737,66 +738,25 @@ on the pairing, ordering, or contents of _markup_ during _formatting_.
 
 ## Attributes
 
-**_Attributes_ are reserved for standardization by future versions of this specification._**
-Examples in this section are meant to be illustrative and
-might not match future requirements or usage.
-
-> [!NOTE]
-> The Tech Preview does not provide a built-in mechanism for overriding
-> values in the _formatting context_ (most notably the locale)
-> Nor does it provide a mechanism for identifying specific expressions
-> such as by assigning a name or id.
-> The utility of these types of mechanisms has been debated.
-> There are at least two proposed mechanisms for implementing support for
-> these. 
-> Specifically, one mechanism would be to reserve specifically-named options, 
-> possibly using a Unicode namespace (i.e. `locale=xxx` or `u:locale=xxx`).
-> Such options would be reserved for use in any and all functions or markup.
-> The other mechanism would be to use the reserved "expression attribute" syntax
-> for this purpose (i.e. `@locale=xxx` or `@id=foo`)
-> Neither mechanism was included in this Tech Preview.
-> Feedback on the preferred mechanism for managing these features
-> is strongly desired.
-> 
-> In the meantime, function authors and other implementers are cautioned to avoid creating 
-> function-specific or implementation-specific option values for this purpose.
-> One workaround would be to use the implementation's namespace for these 
-> features to insure later interoperability when such a mechanism is finalized 
-> during the Tech Preview period.
-> Specifically:
-> - Avoid specifying an option for setting the locale of an expression as different from
->   that of the overall _message_ locale, or use a namespace that later maps to the final
->   mechanism.
-> - Avoid specifying options for the purpose of linking placeholders
->   (such as to pair opening markup to closing markup).
->   If such an option is created, the implementer should use an
->   implementation-specific namespace.
->   Users and implementers are cautioned that such options might be
->   replaced with a standard mechanism in a future version.
-> - Avoid specifying generic options to communicate with translators and 
->   translation tooling (i.e. implementation-specific options that apply to all
->   functions.
-> The above are all desirable features.
-> We welcome contributions to and proposals for such features during the
-> Technical Preview.
-
 An **_<dfn>attribute</dfn>_** is an _identifier_ with an optional value
 that appears in an _expression_ or in _markup_.
+During formatting, _attributes_ have no effect,
+and they can be treated as code comments.
 
 _Attributes_ are prefixed by a U+0040 COMMERCIAL AT `@` sign,
 followed by an _identifier_.
-An _attribute_ MAY have a _value_ which is separated from the _identifier_
+An _attribute_ MAY have a _literal_ _value_ which is separated from the _identifier_
 by an U+003D EQUALS SIGN `=` along with optional whitespace.
-The _value_ of an _attribute_ can be either a _literal_ or a _variable_.
 
 Multiple _attributes_ are permitted in an _expression_ or _markup_.
 Each _attribute_ is separated by whitespace.
+Each _attribute_'s _identifier_ MUST be unique within the _expression_ or _markup_:
+an _expression_ or _markup_ with duplicate _attribute_ _identifiers_ is not _valid_.
 
 The order of _attributes_ is not significant.
 
-
 ```abnf
-attribute = "@" identifier [[s] "=" [s] (literal / variable)]
+attribute = "@" identifier [[s] "=" [s] literal]
 ```
 
 > Examples of _expressions_ and _markup_ with _attributes_:

@@ -203,8 +203,6 @@ interface UnsupportedExpression {
   annotation: UnsupportedAnnotation;
   attributes: Attributes;
 }
-
-type Attributes = Map<string, Literal | VariableRef | true>;
 ```
 
 ## Expressions
@@ -281,6 +279,17 @@ interface Markup {
   options: Options;
   attributes: Attributes;
 }
+```
+
+## Attributes
+
+`Attributes` is a key-value mapping
+used to represent the _expression_ and _markup_ _attributes_.
+
+_Attributes_ with no value are represented by `true` here.
+
+```ts
+type Attributes = Map<string, Literal | true>;
 ```
 
 ## Extensions
