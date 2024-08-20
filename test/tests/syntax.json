@@ -174,7 +174,7 @@
       "description": "message -> complex-message -> complex-body -> matcher -> match-statement variant -> match selector key quoted-pattern -> \".match\" expression literal quoted-pattern",
       "src": ".match{a :f}a{{}}*{{}}",
       "exp": "",
-      "expErrors": [ { "type": "unknown-function" } ]
+      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
     },
     {
       "description": "... input-declaration -> input s variable-expression ...",
@@ -200,31 +200,41 @@
       "description": "... matcher -> match-statement [s] variant -> match 1*([s] selector) variant -> match selector selector variant -> match selector selector variant key s key quoted-pattern",
       "src": ".match{a :f}{b :f}a b{{}}* *{{}}",
       "exp": "",
-      "expErrors": [ { "type": "unknown-function" } ]
+      "expErrors": [
+        { "type": "unknown-function" },
+        { "type": "bad-selector" },
+        { "type": "unknown-function" },
+        { "type": "bad-selector" }
+      ]
     },
     {
       "description": "... matcher -> match-statement [s] variant -> match 1*([s] selector) variant -> match selector variant variant ...",
       "src": ".match{a :f}a{{}}b{{}}*{{}}",
       "exp": "",
-      "expErrors": [ { "type": "unknown-function" } ]
+      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
     },
     {
       "description": "... variant -> key s quoted-pattern -> ...",
       "src": ".match{a :f}a {{}}*{{}}",
       "exp": "",
-      "expErrors": [ { "type": "unknown-function" } ]
+      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
     },
     {
       "description": "... variant -> key s key s quoted-pattern -> ...",
       "src": ".match{a :f}{b :f}a b {{}}* *{{}}",
       "exp": "",
-      "expErrors": [ { "type": "unknown-function" } ]
+      "expErrors": [
+        { "type": "unknown-function" },
+        { "type": "bad-selector" },
+        { "type": "unknown-function" },
+        { "type": "bad-selector" }
+      ]
     },
     {
       "description": "... key -> \"*\" ...",
       "src": ".match{a :f}*{{}}",
       "exp": "",
-      "expErrors": [ { "type": "unknown-function" } ]
+      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
     },
     {
       "description": "simple-message -> simple-start pattern -> placeholder -> expression -> literal-expression -> \"{\" s literal \"}\"",
