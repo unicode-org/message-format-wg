@@ -908,12 +908,7 @@
     {
       "src": ".l $y = {|bar|} {{}}",
       "exp": "",
-      "expParts": [
-        {
-          "type": "literal",
-          "value": "bar"
-        }
-      ],
+      "expParts": [],
       "expErrors": [
         {
           "type": "unsupported-statement"
