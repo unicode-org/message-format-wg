@@ -197,6 +197,18 @@
       "exp": ""
     },
     {
+      "description": "input-declaration-like content in complex-message",
+      "src": "{{.input {$x}}}",
+      "params": [{ "name": "x", "value": "X" }],
+      "exp": ".input X"
+    },
+    {
+      "description": "local-declaration-like content in complex-message with leading whitespace",
+      "src": "{{ .local $x = {$y}}}",
+      "params": [{ "name": "y", "value": "Y" }],
+      "exp": " .local $x = Y"
+    },
+    {
       "description": "... matcher -> match-statement [s] variant -> match 1*([s] selector) variant -> match selector selector variant -> match selector selector variant key s key quoted-pattern",
       "src": ".match{a :f}{b :f}a b{{}}* *{{}}",
       "exp": "",

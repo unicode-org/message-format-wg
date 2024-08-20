@@ -180,6 +180,10 @@
           "type": "duplicate-variant"
         }
       ]
+    },
+    {
+      "src": ".match {star :string} |*| {{Literal star}} * {{The default}}",
+      "exp": "The default"
     }
   ]
 }
