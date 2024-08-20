@@ -402,14 +402,14 @@ where `resolvedSelector` is the resolved value of a _selector_ _expression_
 and `keys` is a list of strings,
 numeric selectors perform as described below.
 
-1. Let `exact` be the JSON string representation of the numeric value of `resolvedSelector`.
-   (See [Determining Exact Literal Match](#determining-exact-literal-match) for details)
+1. Let `value` be the numeric value of `resolvedSelector`.
 1. Let `keyword` be a string which is the result of [rule selection](#rule-selection) on `resolvedSelector`.
 1. Let `resultExact` be a new empty list of strings.
 1. Let `resultKeyword` be a new empty list of strings.
 1. For each string `key` in `keys`:
    1. If the value of `key` matches the production `number-literal`, then
-      1. If `key` and `exact` consist of the same sequence of Unicode code points, then
+      1. Let `exact` be the numeric value represented by `key`.
+      1. If `value` and `exact` are numerically equal, then
          1. Append `key` as the last element of the list `resultExact`.
    1. Else if `key` is one of the keywords `zero`, `one`, `two`, `few`, `many`, or `other`, then
       1. If `key` and `keyword` consist of the same sequence of Unicode code points, then
@@ -420,6 +420,11 @@ numeric selectors perform as described below.
 > [!NOTE]
 > Implementations are not required to implement this exactly as written.
 > However, the observed behavior must be consistent with what is described here.
+
+> [!IMPORTANT]
+> The binary representation of floating point numbers is not always exact.
+> Users should avoid using keys with fractional values,
+> as their behavior may vary between implementations.
 
 #### Rule Selection
 
@@ -463,28 +468,6 @@ If no rules match, return `other`.
 > | 22 | `few` | 22 dny |
 > | 27 | `other` | 27 dní |
 > | 2.4 | `many` | 2,4 dne |
-
-#### Determining Exact Literal Match
-
-> [!IMPORTANT]
-> The exact behavior of exact literal match is only defined for non-zero-filled
-> integer values.
-> Annotations that use fraction digits or significant digits might work in specific
-> implementation-defined ways.
-> Users should avoid depending on these types of keys in message selection.
-
-
-Number literals in the MessageFormat 2 syntax use the 
-[format defined for a JSON number](https://www.rfc-editor.org/rfc/rfc8259#section-6).
-A `resolvedSelector` exactly matches a numeric literal `key`
-if, when the numeric value of `resolvedSelector` is serialized using the format for a JSON number,
-the two strings are equal.
-
-> [!NOTE]
-> Only integer matching is required in the Technical Preview.
-> Feedback describing use cases for fractional and significant digits-based
-> selection would be helpful.
-> Otherwise, users should avoid using matching with fractional numbers or significant digits.
 
 ## Date and Time Value Formatting
 
