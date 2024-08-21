@@ -1,9 +1,9 @@
 {
   "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
   "scenario": "Pattern selection",
-  "description": "Tests for the pattern selection parts of the specification",
+  "description": "Tests for pattern selection",
   "defaultTestProperties": {
-    "locale": "en-US"
+    "locale": "und"
   },
   "tests": [
     {
@@ -63,8 +63,8 @@
       "exp": "1.0"
     },
     {
-      "src": ".match {1 :test:select decimalPlaces=9} 1.0 {{1.0}} 1 {{1}} * {{other}}",
-      "exp": "other",
+      "src": ".match {1 :test:select decimalPlaces=9} 1.0 {{1.0}} 1 {{1}} * {{bad-option-value}}",
+      "exp": "bad-option-value",
       "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
     },
     {
@@ -88,9 +88,9 @@
       "exp": "1.0"
     },
     {
-      "src": ".input {$x :test:select decimalPlaces=9} .match {$x :test:select decimalPlaces=1} 1.0 {{1.0}} 1 {{1}} * {{other}}",
+      "src": ".input {$x :test:select decimalPlaces=9} .match {$x :test:select decimalPlaces=1} 1.0 {{1.0}} 1 {{1}} * {{bad-option-value}}",
       "params": [{ "name": "x", "value": 1 }],
-      "exp": "other",
+      "exp": "bad-option-value",
       "expErrors": [
         { "type": "bad-option" },
         { "type": "bad-operand" },
