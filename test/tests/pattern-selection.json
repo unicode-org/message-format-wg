@@ -91,7 +91,11 @@
       "src": ".input {$x :test:select decimalPlaces=9} .match {$x :test:select decimalPlaces=1} 1.0 {{1.0}} 1 {{1}} * {{other}}",
       "params": [{ "name": "x", "value": 1 }],
       "exp": "other",
-      "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
+      "expErrors": [
+        { "type": "bad-option" },
+        { "type": "bad-operand" },
+        { "type": "bad-selector" }
+      ]
     },
     {
       "src": ".match {1 :test:select fails=select} 1.0 {{1.0}} 1 {{1}} * {{other}}",
@@ -110,7 +114,11 @@
     {
       "src": ".match {$x :test:select} 1.0 {{1.0}} 1 {{1}} * {{other}}",
       "exp": "other",
-      "expErrors": [{ "type": "unresolved-variable" }]
+      "expErrors": [
+        { "type": "unresolved-variable" },
+        { "type": "bad-operand" },
+        { "type": "bad-selector" }
+      ]
     },
     {
       "src": ".match {1 :test:select} {1 :test:select} 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
@@ -130,11 +138,13 @@
     },
     {
       "src": ".match {1 :test:select fails=select} {1 :test:select} 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
-      "exp": "*,1"
+      "exp": "*,1",
+      "expErrors": [{ "type": "bad-selector" }]
     },
     {
       "src": ".match {1 :test:select} {1 :test:format} 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
-      "exp": "1,*"
+      "exp": "1,*",
+      "expErrors": [{ "type": "bad-selector" }]
     }
   ]
 }
