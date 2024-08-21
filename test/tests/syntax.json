@@ -426,8 +426,8 @@
       "exp": "a"
     },
     {
-      "description": "... attribute -> \"@\" identifier s \"=\" s variable ...",
-      "src": "{42 @foo=$bar}",
+      "description": "... attribute -> \"@\" identifier s \"=\" s quoted-literal ...",
+      "src": "{42 @foo=|bar|}",
       "exp": "42",
       "expParts": [
         {
@@ -859,7 +859,7 @@
       ]
     },
     {
-      "src": "foo {?reserved @a @b=$c}",
+      "src": "foo {?reserved @a @b=c}",
       "exp": "foo {?}",
       "expParts": [
         {
