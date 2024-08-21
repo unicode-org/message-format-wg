@@ -27,6 +27,11 @@
       "exp": "\\"
     },
     {
+      "description": "message -> simple-message -> simple-start pattern -> 1*escaped-char",
+      "src": "\\\\\\{\\|\\}",
+      "exp": "\\{|}"
+    },
+    {
       "description": "message -> simple-message -> simple-start pattern -> simple-start-char pattern -> ... -> simple-start-char *text-char placeholder",
       "src": "hello {world}",
       "exp": "hello world"
@@ -448,9 +453,9 @@
       "exp": "\\"
     },
     {
-      "description": "... quoted-literal -> \"|\" quoted-char escaped-char \"|\"",
-      "src": "{|a\\\\|}",
-      "exp": "a\\"
+      "description": "... quoted-literal -> \"|\" quoted-char 1*escaped-char \"|\"",
+      "src": "{|a\\\\\\{\\|\\}|}",
+      "exp": "a\\{|}"
     },
     {
       "description": "... unquoted-literal -> number-literal -> %x30",
