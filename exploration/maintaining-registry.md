@@ -1,4 +1,4 @@
-# Maintaining the Function Registry
+# Maintaining and Registering Functions
 
 Status: **Proposed**
 
@@ -18,16 +18,26 @@ Status: **Proposed**
 
 _What is this proposal trying to achieve?_
 
-Describe how to manage the default function registry
-as well was related function registries intended to promote interoperability.
+Describe how to manage the registration of functions and options under the 
+auspices of MessageFormat 2.0.
+This includes the Standard Functions which are normatively required by MF2.0,
+functions or options in the Unicode `u:` namespace,
+and functions/options that are recommended for interoperability.
 
 ## Background
 
 _What context is helpful to understand this proposal?_
 
-MessageFormat v2 includes a "default function registry".
+MessageFormat v2 originally included the concept of "function registries",
+including a "default function registry" required of conformant implementations.
+
+The terms "registry" and "default registry" suggest machine-readbility
+and various relationships between function sets that the working group decided
+was not appropriate.
+
+MessageFormat v2 includes a standard set of functions.
 Implementations are required to implement all of the _selectors_ 
-and _formatters_ in this registry,
+and _formatters_ in this set,
 including _operands_, _options_, and option values.
 Our goal is to be as universal as possible, 
 making MFv2's message syntax available to developers in many different
@@ -35,23 +45,27 @@ runtimes in a wholly consistent manner.
 Because we want broad adoption in many different programming environments
 and because the capabilities 
 and functionality available in these environments vary widely,
-the default function registry must be conservative in what it requires.
+this standard set of functions must be conservative in its requirements
+such that every implementation can reasonably implement it.
 
-At the same time, we want to promote message interoperability.
+Promoting message interoperability can and should go beyond this.
 Even when a given feature or function cannot be adopted by all platforms,
 diversity in the function names, operands, options, error behavior,
 and so forth remains undesirable.
 Another way to say this is that, ideally, there should be only one way to
 do a given formatting or selection operation in terms of the syntax of a message.
 
-This suggests that there exist a registry besides the "default function registry"
-that contains the "templates" for functions that go beyond those every implementation 
+This suggests that there exist a set of functions and options that
+extends the standard set of functions.
+Such a set contains the "templates" for functions that go beyond those every implementation 
 must provide or which contain additional, optional features (options, option values)
 that implementations can provide if they are motivated and capable of doing so.
-This lower level of registry is normative for the functionality that it provides,
-but not obligatory.
-This lower level of registry uses the default namespace and can serve to incubate
-functions or options that might be promoted to the default registry over time.
+These specifications are normative for the functionality that they provide,
+but are optional for implementaters.
+
+There also needs to be a mechanism and process by which functions in the default namespace
+can be incubated for future inclusion in either the standard set of functions
+or in this extended, optional set.
 
 ### Examples
 
@@ -127,20 +141,20 @@ structured, well-managed process has been applied.
 
 _What properties does the solution have to manifest to enable the use-cases above?_
 
-The default registry needs to describe the minimum set of selectors and formatters
+The Standard Function Set needs to describe the minimum set of selectors and formatters
 needed to create messages effectively.
 This must be compatible with ICU MessageFormat 1 messages.
 
 There must be a clear process for the creation of new selectors that are required
-by the default registry, 
+by the Standard Function Set, 
 which includes a maturation process that permits implementer feedback.
 
 There must be a clear process for the creation of new formatters that are required
-by the default registry, 
+by the Standard Function Set, 
 which includes a maturation process that permits implementer feedback.
 
 There must be a clear process for the addition of options or option values that are required
-by the default registry, 
+by the Standard Function Set, 
 which includes a maturation process that permits implementer feedback.
 
 There must be a clear process for the deprecation of any functions, options, or option values
@@ -155,73 +169,80 @@ _What prior decisions and existing conditions limit the possible design?_
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
 
-The MessageFormat WG will maintain three separate function and option registries 
-beginning with the LDML46 release.
-Future updates to these registries will coincide with LDML releases.
+The MessageFormat WG will a set of specifications
+that standardize the implementation of functions and options in the default namespace of 
+MessageFormat v2 beginning with the LDML46 release.
+Implementations and users are strongly discourages from defining values that use
+the default namespace.
+Future updates to these sets of functions and options will coincide with LDML releases.
 
-Each registry consists of a set of template-derived documents.
-Each _function_ or _option_ entry in a registry consists of a separate document.
-An _option_ entry in a given registry will not be created if there is a corresponding
-_function_ entry in the same registry for which it is an _option_.
-Proposals to include functions into the default registry
-or to include functions or options into the RGI registry
-or to include functions or options into the Unicode reserved namespace registry
-need to follow a specific process.
+Each _function_ is described by a single specification document.
+Each such document will use a common template.
+A _function_ can be a _formatting function_,
+a _selector_,
+or both.
 
-The three registries are:
+The specification will indicate if the _formatting function_,
+the _selector function_, or, where applicable, both are `Standard` or `Optional`.
+The specification must describe operands, including literal representations.
 
-1. **Default Registry**
-This is a _function_ registry.
-It includes _functions_ (and only functions) that are normatively required to be
-implemented by all implementations.
-Each function describes it's operand or operands,
+The specification includes all defined _options_ for the function.
+Each _option_ must define which values it accepts.
+An _option_  is either `Standard` or `Optional`.
+
+_Functions_ or _options_ that have an `Optional` status
+must have a maturity level assigned.
+The maturity levels are:
+- **Proposed**
+- **Accepted**
+- **Released**
+- **Deprecated**
+
+_Functions_ and _options_ that have a `Standard` status have only the
+`Released` and `Deprecated` statuses.
+
+* An _option_ can be `Standard` for an `Optional` function.
+  This means that the function is optional to implement, but that, when implemented, must include the option.
+* An _option_ can be `Optional` for a `Standard` function.
+  This means that the function is required, but implementations are not required to implement the option.
+* An _option_ can be `Optional` for an `Optional` function.
+  This means that the function is optional to implement and the option is optional when implementing the function.
+
+A function specification describes the functions _operand_ or _operands_,
 its formatting options (if any) and their values,
 its selection options (if any) and their values,
 its formatting behavior (if any),
 its selection behavior (if any),
 and its resolved value behavior.
-Items in this registry are stable and subject to stability guarantees.
+
+`Standard` functions are stable and subject to stability guarantees.
 Such entries will be limited in scope to functions that can reasonably be
 implemented in nearly any programming environment.
 > Examples: `:string`, `:number`, `:datetime`, `:date`, `:time`
 
-2. **Recommended for General Implementation**
-("RGI", deliberately similar to RGI in emoji, although we probably want to change the name
-as the words inside the acronym are themselves different)
-This registry can contain _functions_.
-It can also contain _options_ registered for _functions_ found in the default registry.
-Implmentations are not required to implement either _functions_ or _options_ to claim
-MF2 conformance, but MUST NOT implement functions or options that conflict with RGI entries.
-Each function describes it's operand or operands,
-its formatting options (if any) and their values,
-its selection options (if any) and their values,
-its formatting behavior (if any),
-its selection behavior (if any),
-and its resolved value behavior.
-Each option registry entry describes whether it affects formatting, selection or both;
-what its values are;
-and whether it is retained or affects the resolved value.
-Items in the RGI function or option registries are stable and subject to stability guarantees
-except that they MAY be promoted to the default registry.
+
+`Optional` functions are stable and subject to stability guarantees once they
+reach the status of **Released**.
+Implmentations are not required to implement _functions_ or _options_ with an `Optional` status
+when claiming MF2 conformance.
+Implementations MUST NOT implement functions or options that conflict with `Optional` functions or options.
+
+`Optional` values may have their status changed to `Standard`,
+but not vice-versa.
+
 > Option Examples `:datetime` might have a `timezone` option in LDML46.
 > Function Examples: We don't currently have any, but potential work here
 > might includes personal name formatting, gender-based selectors, etc.
 
-RGI includes functions that are not
-normatively required but whose names, operands, and options are recommended.
-Implementations SHOULD use these function signatures
-when implementing the described functionality.
-This will promote message interoperability
-and reduce the learning curve for developers, tools, and translators.
+The CLDR-TC reserves the `u:` namespace for use by the Unicode Consortium.
+This namespace can contain _functions_ or _options_.
+Implementations are not required to implement these _functions_ or _options_
+and may adopt or ignore them at their discretion,
+but are encouraged to implement these items.
 
-3. **Unicode Reserved Namespace**
-This registry is for items in the namespace `u:`, which is reserved for use by the Unicode Consortium.
-This registry can contain _functions_ or _options_.
-Implementations are not required to implement any values found in this registry
-and may adopt or ignore registry entries at their discretion.
-Items in the Unicode Reserved Namespace function or option registries are stable and subject to stability guarantees.
-This registry might sometimes be used to incubate functionality before
-promotion to the RGI or default registry in a future release.
+Items in the Unicode Reserved Namespace are stable and subject to stability guarantees.
+This namespace might sometimes be used to incubate functionality before
+promotion to the default namespace in a future release.
 In such cases, the `u:` namespace version is retained, but deprecated.
 > Examples: Number and date skeletons are an example of Unicode extension
 > possibilities.
@@ -230,28 +251,31 @@ In such cases, the `u:` namespace version is retained, but deprecated.
 > but it is not universally available and could represent a barrier to adoption
 > if normatively required.
 
-Any registry entry goes through a development process that includes these levels of maturity:
+All `Standard`, `Optional`, and Unicode namespace function or option specifications goes through 
+a development process that includes these levels of maturity:
 
 1. **Proposed** The _function_ or _option_, along with necessary documentation,
    has been proposed for inclusion in a future release.
 2. **Accepted** The _function_ or _option_ has been accepted but is not yet released.
    During this period, changes can still be made.
 3. **Released** The _function_ or _option_ is accepted as of a given LDML release that MUST be specified.
-   1. **Deprecated** The _function_ or _option_ was previously _released_ but has been deprecated.
-      Implementations are still required to support deprecated items in the default registry.
-4. **Rejected** The _function_ or _option_ was considered and rejected by the MF2 WG and/or the CLDR-TC.
-   Such items are not part of any registry, but might be maintained for historical reference.
+4. **Deprecated** The _function_ or _option_ was previously _released_ but has been deprecated.
+   Implementations are still required to support `Standard` functions or options that are deprecated.
+5. **Rejected** The _function_ or _option_ was considered and rejected by the MF2 WG and/or the CLDR-TC.
+   Such items are not part of any standard, but might be maintained for historical reference.
 
-A proposal can seek to modify an existing entry in a given registry.
-For example, if a _function_ `:foo` existed in the RGI registry,
+A proposal can seek to modify an existing function.
+For example, if a _function_ `:foo` were an `Optional` function in the LDMLxx release,
 a proposal to add an _option_ `bar` to this function would take the form
-of a proposal to alter the existing registration of `:foo`.
+of a proposal to alter the existing specification of `:foo`.
 Multiple proposals can exist for a given _function_ or _option_.
 
-### Registry process
+### Process
 
-Proposals for registration are made via issues in a unicode-org github repo
+Proposals for additions are made via pull requests in a unicode-org github repo
 using a specific template TBD.
+Proposals for changes are made via pull requests in a unicode-org github repo
+using a specific template TBD against the existing specification for the function or option.
 
 Proposals must be made at least _x months_ prior to the release date to be included
 in a specific LDML release.
@@ -267,18 +291,16 @@ until the proposal has been approved.
 Once approved, changes require re-approval (how?)
 
 
-The timing of official releases of the default and RGI registries is the same as CLDR/LDML.
+The timing of official releases of the Standard Function Set and Optional Set is the same as CLDR/LDML.
 Each LDML release will include:
-- **Released** specifications in the default registry
-- **Released** specifications in the RGI registry
-- **Released** specifications in the Unicode reserved namespace registry
+- **Released** specifications in the Standard Function Set
+- **Released** specifications in the Unicode reserved namespace
 - a section of the MF2 specification specifically incorporating versions of the above
 - **Accepted** entries for each of the above available for testing and feedback
 
-Proposals for additions to any of the above registries include the following:
+Proposals for additions to any of the above include the following:
 - a design document, which MUST contain:
    - the exact text to include in the MF2 specification using a template to be named later
-   - the desired maturity level (RGI or default)
 
 Each proposal is stored in a directory indicating indicating its maturity level.
 The maturity levels are:
