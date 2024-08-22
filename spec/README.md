@@ -83,6 +83,12 @@ Updates to this specification will not make any valid _message_ invalid.
 
 Updates to this specification will not remove any syntax provided in this version.
 
+Updates to this specification MUST NOT specify an error for any message
+that previously did not specify an error.
+
+Updates to this specification MUST NOT specify the use of a fallback value for any message
+that previously did not specify a fallback value.
+
 Updates to this specification will not change the syntactical meaning
 of any syntax defined in this specification except for that syntax marked as
 "reserved for future standardization".
