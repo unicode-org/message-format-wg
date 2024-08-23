@@ -169,11 +169,11 @@ _What prior decisions and existing conditions limit the possible design?_
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
 
-The MessageFormat WG will a set of specifications
+The MessageFormat WG will release a set of specifications
 that standardize the implementation of functions and options in the default namespace of 
 MessageFormat v2 beginning with the LDML46 release.
-Implementations and users are strongly discourages from defining values that use
-the default namespace.
+Implementations and users are strongly discouraged from defining 
+their own functions or options that use the default namespace
 Future updates to these sets of functions and options will coincide with LDML releases.
 
 Each _function_ is described by a single specification document.
@@ -304,9 +304,9 @@ Proposals for additions to any of the above include the following:
 
 Each proposal is stored in a directory indicating indicating its maturity level.
 The maturity levels are:
-- **Approved** Items waiting for the next CLDR release.
-- **Feedback** Complete designs that are in their implementation test period.
-- **Proposed** Proposals that have not yet been considered by the MFWG.
+- **Accepted** Items waiting for the next CLDR release.
+- **Released** Complete designs that are released.
+- **Proposed** Proposals that have not yet been considered by the MFWG or which are under active development.
 - **Rejected** Proposals that have been rejected by the MFWG in the past.
 
 ## Alternatives Considered
