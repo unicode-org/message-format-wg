@@ -195,17 +195,27 @@ is expanded to also require later uses of a variable that's used as a selector t
 > each _placeholder_ _expression_ using the same _operand_ as a _selector_ MUST have an _annotation_,
 > or contain a _variable_ that directly or indirectly references a _declaration_ with an _annotation_.
 
-Example valid message:
+Example invalid message with this alternative:
 ```
+.match {$n :number minimumFractionDigits=2}
+* {{Data model error: {$n}}}
+```
+
+Valid, recommended form for the above message:
+```
+.input {$n :number minimumFractionDigits=2}
+.match {$n}
+* {{Formats '$n' as a number with fraction digits: {$n}}}
+```
+
+Technically valid but not recommended:
+```
+.match {$n :number minimumFractionDigits=2}
+* {{Formats '$n' as an integer: {$n :integer}}}
+
 .input {$n :integer}
 .match {$n :number minimumFractionDigits=2}
 * {{Formats '$n' as an integer: {$n}}}
-```
-
-Example invalid message:
-```
-.match {$n :integer}
-* {{If $n==1.2 formats {$n} as 1.2 in en-US}}
 ```
 
 **Pros**
