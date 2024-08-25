@@ -210,12 +210,12 @@ Valid, recommended form for the above message:
 
 Technically valid but not recommended:
 ```
-.match {$n :number minimumFractionDigits=2}
-* {{Formats '$n' as an integer: {$n :integer}}}
-
 .input {$n :integer}
 .match {$n :number minimumFractionDigits=2}
 * {{Formats '$n' as an integer: {$n}}}
+
+.match {$n :number minimumFractionDigits=2}
+* {{Formats '$n' as an integer: {$n :integer}}}
 ```
 
 **Pros**
