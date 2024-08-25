@@ -5,6 +5,7 @@
 1. [Introduction](#introduction)
    1. [Conformance](#conformance)
    1. [Terminology and Conventions](#terminology-and-conventions)
+   1. [Uniqueness and Equality](#uniqueness-and-equality)
    1. [Stability Policy](#stability-policy)
 1. [Syntax](syntax.md)
    1. [Productions](syntax.md#productions)
@@ -72,6 +73,22 @@ A **_term_** looks like this when it is defined in this specification.
 A reference to a _term_ looks like this.
 
 > Examples are non-normative and styled like this.
+
+### Uniqueness and Equality
+
+Parts of the specification compare strings with each other.
+In all such cases, the comparison MUST be made
+after applying [Unicode Normalization Form C](https://unicode.org/reports/tr15/) (NFC)
+to each string being compared.
+
+This applies when assessing the validity of _messages_,
+during _variable resolution_,
+and when looking up a function implementation during _function resolution_.
+
+When parsing message syntax,
+consuming or generating data model representations of messages,
+or dealing with user-submitted values,
+implementations MAY normalize all string values as NFC.
 
 ### Stability Policy
 
