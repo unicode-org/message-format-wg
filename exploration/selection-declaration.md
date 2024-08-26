@@ -193,6 +193,52 @@ Examples:
 - Can produce a mismatch between formatting and selection, since the operand's formatting
   isn't visible to the selector.
 
+### Require annotation of selector variables in placeholders
+
+In this alternative, the pre-existing validity requirement
+
+> Each _selector_ MUST have an _annotation_,
+> or contain a _variable_ that directly or indirectly references a _declaration_ with an _annotation_.
+
+is expanded to also require later uses of a variable that's used as a selector to be annotated:
+
+> In a _complex message_,
+> each _placeholder_ _expression_ using the same _operand_ as a _selector_ MUST have an _annotation_,
+> or contain a _variable_ that directly or indirectly references a _declaration_ with an _annotation_.
+
+Example invalid message with this alternative:
+```
+.match {$n :number minimumFractionDigits=2}
+* {{Data model error: {$n}}}
+```
+
+Valid, recommended form for the above message:
+```
+.input {$n :number minimumFractionDigits=2}
+.match {$n}
+* {{Formats '$n' as a number with fraction digits: {$n}}}
+```
+
+Technically valid but not recommended:
+```
+.input {$n :integer}
+.match {$n :number minimumFractionDigits=2}
+* {{Formats '$n' as an integer: {$n}}}
+
+.match {$n :number minimumFractionDigits=2}
+* {{Formats '$n' as an integer: {$n :integer}}}
+```
+
+**Pros**
+- No syntax changes required.
+- `.local` can be used to solve problems with variations in selection and formatting
+- Supports multiple selectors on the same operand
+- Avoids mismatches between formatting and selection by requiring their annotation.
+
+**Cons**
+- May require the user to annotate the operand for both formatting and selection,
+  unless they use a declaration.
+
 ### Allow both local and input declarative selectors with immutability
 
 In this alternative, we modify the syntax to allow selectors to 
