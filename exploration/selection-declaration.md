@@ -351,6 +351,12 @@ and a data model error otherwise.
 - More ergonomic for most `.input` cases
 - Enables representation of many messages without any declarations
 
+**Cons**
+- Confusing that the operand name can't be used in the pattern?
+  Removes some self-documentation from the pattern.
+- Requires the pattern to change if the selectors are modified.
+- Limits number of referenceable selectors to 10 (in the current form)
+
 ### Hybrid approach: Match may mutate, no duplicates
 
 In this alternative, in a `.match` statement:
