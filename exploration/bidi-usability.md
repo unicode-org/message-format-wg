@@ -279,6 +279,8 @@ portions of the syntax in order to make messages appear correctly.
 
 The second part of the hybrid approach would be to recommend ("SHOULD") the "strict isolation"
 design for serializers.
+(Note that "strict" and "super-loose" use non-identical productions with the name `bidi`.
+These serve different purposes and are consistent with strict being narrower with super-loose.)
 This syntax is a subset of the super-loose syntax and can be applied selectively to messages that
 have RTL sequences or which have problematic display.
 
@@ -431,7 +433,17 @@ Add isolates and strongly directional marks to required and optional whitespace 
 This would permit users to get the effects described by the above design,
 as long as they use isolates/marks in a "responsible" way.
 
-(Omitting other changes found in #673)
+The exception to this is the namespace separator, used in `identifier`.
+This requires the ability to insert isolates or strongly directional marks
+between the namespace and name portions, where whitespace is not permitted.
+This is the only location in the syntax where such characters might be needed
+but whitespace is not at least optional.
+This could be defined as:
+```abnf
+ns-separator   = [bidi] ":" [bidi]
+```
+
+Here are the other ABNF changes:
 
 ```abnf
 ; strongly directional marks and bidi isolates
@@ -460,7 +472,7 @@ s = ( SP / HTAB / CR / LF / %x3000 )
 ### Strict isolation all the time
 
 Apply bidi isolates in a strict way.
-The main differences to the proposed solution is:
+In this design:
 1. The open/close isolate characters are syntactically required to be paired.
    This introduces parse errors for unpaired invisible characters,
    which could lead to bad user experiences.
@@ -480,7 +492,7 @@ markup         = "{" [s] "#" identifier [bidi] *(s option) *(s attribute) [s] ["
                / "{" [s] "/" identifier [bidi] *(s option) *(s attribute) [s] "}"  ; close
                / "{" LRI [s] "/" identifier [bidi] *(s option) *(s attribute) [s] close-isolate "}"  ; close
 identifier     = [(namespace ns-separator)] name
-ns-separator   = [bidi] ":"
+ns-separator   = [bidi] ":" [bidi]
 bidi           = [ %x200E-200F / %x061C ]
 ```
 
