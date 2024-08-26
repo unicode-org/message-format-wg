@@ -366,7 +366,7 @@ In this alternative, in a `.match` statement:
 
 This keeps most message more concise, producing the expected results in Example 1.
 
-#### Example1.
+#### Example 1
 
 ```
 .match {$count :integer}
@@ -374,6 +374,8 @@ one {{You have {$count} whole apple.}}
 * {{You have {$count} whole apples.}}
 ```
 is precisely equivalent to:
+
+#### Example 2
 ```
 .local $count2 {$count :integer}
 .match {$count2}
@@ -382,30 +384,27 @@ one {{You have {$count2} whole apple.}}
 ```
 
 This avoids the serious problems with mismatched selection and formats
-as in Example 2, whereby the input of `count = 1.2`, 
+as in Example 1 under "Do Nothing", whereby the input of `count = 1.2`, 
 results the malformed "You have 1.2 whole apple."
-
-#### Example 2.
-
-```.match {$count :integer}
-one {{You have {$count} whole apple.}}
-* {{You have {$count} whole apples.}}
-```
 
 Due to clause 2, this requires users to declare any selector using a `.input` or `.local` declaration
 before writing the `.match`. That is, the following is illegal.
+
+#### Example 3
 ```
 .match {$count <anything>}{$count <anything>}
 The message author is required to rewrite it explicitly, eg to:
 ```
 It would need to be rewritten as something along the lines of:
+
+#### Example 4
 ```
 .local $count3 {$count}
 .match {$count <anything1>}{$count3 <anything2>}
 ```
-The number of times the same variable is used twice in a match (or the older Select) is vanishingly small. Since it is an error — and the advice to fix is easy — that will prevent misbehavior.
-
-There would be no change to the ABNF; but there would be an additional constraint in the spec.
+Notes:
+- The number of times the same variable is used twice in a match (or the older Select) is vanishingly small. Since it is an error — and the advice to fix is easy — that will prevent misbehavior.
+- There would be no change to the ABNF; but there would be an additional constraint in the spec, and relaxation of immutability within the .match statement.
 
 **Pros**
 - No new syntax is required
