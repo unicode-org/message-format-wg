@@ -393,7 +393,6 @@ before writing the `.match`. That is, the following is illegal.
 #### Example 3
 ```
 .match {$count <anything>}{$count <anything>}
-The message author is required to rewrite it explicitly, eg to:
 ```
 It would need to be rewritten as something along the lines of:
 
