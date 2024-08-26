@@ -273,6 +273,37 @@ Not allowing these to mix could produce annoying parse errors.
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
 
+I propose adopting a hybrid approach in which we permit "super-loose isolation".
+This allows user to include isolates and strongly directional characters into the whitespace
+portions of the syntax in order to make messages appear correctly.
+
+The second part of the hybrid approach would be to recommend ("SHOULD") the "strict isolation"
+design for serializers.
+This syntax is a subset of the super-loose syntax and can be applied selectively to messages that
+have RTL sequences or which have problematic display.
+
+
+## Alternatives Considered
+
+_What other solutions are available?_
+_How do they compare against the requirements?_
+_What other properties they have?_
+
+### Nothing
+We could do nothing.
+
+A likely outcome of doing nothing is that RTL users would insert bidi controls into
+_messages_ in an attempt to make the _pattern_ and/or _placeholders_ display correctly.
+These controls would become part of the output of the _message_,
+showing up inappropriately at runtime.
+Because these characters are invisible, users might be very frustrated trying to manage
+the results or debug what is wrong with their messages.
+
+By contrast, if users insert too many or the wrong controls using the recommended design,
+the _message_ would still be functional and would emit no undesired characters.
+
+### LTR Messages with isolating sequences
+
 The syntax of a _message_ assumes a left-to-right base direction
 both for the complete text of the _message_ as well as for each line (paragraph)
 contained therein. 
@@ -383,7 +414,7 @@ ns-separator   = [bidi] ":"
 bidi           = [ %x200E-200F / %x061C ]
 ```
 
-### Open Issues with Proposed Design
+**Open Issues**
 
 The ABNF changes found above put isolates and strongly directional marks into specific locations,
 such as directly next to `{`/`}`/`{{`/`}}` markers
@@ -393,24 +424,6 @@ A more permissive design would add the isolates and strongly directional marks t
 whitespace in the syntax and depend on users/editors to appropriately pair or position the marks
 to get optimal display.
 
-## Alternatives Considered
-
-_What other solutions are available?_
-_How do they compare against the requirements?_
-_What other properties they have?_
-
-### Nothing
-We could do nothing.
-
-A likely outcome of doing nothing is that RTL users would insert bidi controls into
-_messages_ in an attempt to make the _pattern_ and/or _placeholders_ display correctly.
-These controls would become part of the output of the _message_,
-showing up inappropriately at runtime.
-Because these characters are invisible, users might be very frustrated trying to manage
-the results or debug what is wrong with their messages.
-
-By contrast, if users insert too many or the wrong controls using the recommended design,
-the _message_ would still be functional and would emit no undesired characters.
 
 ### Super-loose isolation
 
@@ -610,6 +623,8 @@ adherence to the stricter grammar.
   syntax errors
 - Provides a foundation for tools to claim strict conformance and message normalization
   as well as guidance to implementers to make them want to adopt it
+- Messages are valid while being edited (such as when the open or close isolate has been
+  inserted but the corresponding opposite isolate hasn't been entered yet)
 
 **Cons**
 - Requires additional effort to maintain the grammar
