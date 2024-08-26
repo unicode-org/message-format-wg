@@ -65,23 +65,34 @@ The function `:test:function` requires a [Number Operand](/spec/registry.md#numb
 
 #### Options
 
-The only _option_ `:test:function` recognizes is `decimalPlaces`,
-a _digit size option_ for which only `0` and `1` are valid values.
+The following _options_ are available on `:test:function`:
+- `decimalPlaces`, a _digit size option_ for which only `0` and `1` are valid values.
+  - `0`
+  - `1`
+- `fails`
+  - `never` (default)
+  - `select`
+  - `format`
+  - `always`
 
 All other _options_ and their values are ignored.
 
 #### Behavior
 
 When resolving a `:test:function` expression,
-its `Input` and `DecimalPlaces` values are determined as follows:
+its `Input`, `DecimalPlaces`, `FailsFormat`, and `FailsSelect` values are determined as follows:
 
 1. Let `DecimalPlaces` be 0.
+1. Let `FailsFormat` be `false`.
+1. Let `FailsSelect` be `false`.
 1. Let `arg` be the resolved value of the _expression_ _operand_.
 1. If `arg` is the resolved value of an _expression_
    with a `:test:function`, `:test:select`, or `:test:format` _annotation_
    for which resolution has succeeded, then
    1. Let `Input` be the `Input` value of `arg`.
    1. Set `DecimalPlaces` to be `DecimalPlaces` value of `arg`.
+   1. Set `FailsFormat` to be `FailsFormat` value of `arg`.
+   1. Set `FailsSelect` to be `FailsSelect` value of `arg`.
 1. Else if `arg` is a numerical value
    or a string matching the `number-literal` production, then
    1. Let `Input` be the numerical value of `arg`.
@@ -96,12 +107,24 @@ its `Input` and `DecimalPlaces` values are determined as follows:
    1. Else if its value is not an unresolved value set by _option resolution_,
       1. Emit "bad-option" _Resolution Error_.
       1. Use a _fallback value_ as the resolved value of the _expression_.
+1. If the `fails` _option_ is set, then
+   1. If its value resolves to the string `'always'`, then
+      1. Set `FailsFormat` to be `true`.
+      1. Set `FailsSelect` to be `true`.
+   1. Else if its value resolves to the string `'format'`, then
+      1. Set `FailsFormat` to be `true`.
+   1. Else if its value resolves to the string `'select'`, then
+      1. Set `FailsSelect` to be `true`.
+   1. Else if its value does not resolve to the string `'never'`, then
+      1. Emit "bad-option" _Resolution Error_.
 
 When `:test:function` is used as a _selector_,
 the behaviour of calling it as the `rv` value of MatchSelectorKeys(`rv`, `keys`)
 (see [Resolve Preferences](/spec/formatting.md#resolve-preferences) for more information)
-depends on its `Input` and `DecimalPlaces` values.
+depends on its `Input`, `DecimalPlaces` and `FailsSelect` values.
 
+- If `FailsSelect` is `true`,
+  calling the method will fail and not return any value.
 - If the `Input` is 1 and `DecimalPlaces` is 1,
   the method will return some slice of the list « `'1.0'`, `'1'` »,
   depending on whether those values are included in `keys`.
@@ -128,6 +151,8 @@ If the formatting target is a sequence of parts,
 each of the above parts will be emitted separately
 rather than being concatenated into a single string.
 
+If `FailsFormat` is `true`,
+attempting to format the _placeholder_ to any formatting target will fail.
 
 ### `:test:select`
 
