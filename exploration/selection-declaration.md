@@ -361,10 +361,10 @@ and a data model error otherwise.
 
 In this alternative, in a `.match` statement:
 
-1. variables are mutated by options
-2. no variable can occur twice
+1. variables are mutated by their annotation
+2. no variable can be the operand in two selectors
 
-This keeps most message more concise, producing the expected results in Example 1.
+This keeps most messages more concise, producing the expected results in Example 1.
 
 #### Example 1
 
@@ -416,6 +416,7 @@ Notes:
 - Avoids the readability issues with "Provide a #-like Feature"
 
 **Cons**
-- Requires additional .local in cases where a variable would occur twice, such as .match {$date option=monthOnly}{$date option=full} 
+- Requires additional `.local` declarations in cases where a variable would occur twice
+  such as `.match {$date :date option=monthOnly} {$date :date option=full}`
 
 
