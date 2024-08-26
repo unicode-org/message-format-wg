@@ -24,9 +24,22 @@ or _Message Function Errors_ in _expressions_ that are not otherwise used by the
 such as _placeholders_ in unselected _patterns_
 or _declarations_ that are never referenced during _formatting_.
 
-In all cases, when encountering a runtime error,
-a message formatter MUST provide some representation of the message.
-An informative error or errors MUST also be separately provided.
+When formatting a _message_ with one or more errors,
+an implementation MUST provide a mechanism to discover and identify
+at least one of the errors. 
+The exact form of error signaling is implementation defined.
+Some examples include throwing an exception,
+returning an error code, 
+or providing a function or method for enumerating any errors.
+
+For all _messages_ without _Syntax Errors_ or _Data Model Errors_,
+an implementation MUST enable a user to get a formatted result.
+The formatted result might include _fallback values_ 
+such as when a _placeholder_'s _expression_ produced an error
+during formatting.
+
+The two above requirements MAY be fulfilled by a single formatting method,
+or separately by more than one such method.
 
 When a message contains more than one error,
 or contains some error which leads to further errors,
