@@ -139,6 +139,16 @@ _What use-cases do we see? Ideally, quote concrete examples._
    * {{...}}
    ```
 
+   As another example of where the selection function and formatting functions differ, consider a person object provided as a formatting input.
+   A `:gender` function can return the person's gender,
+   but a `:personName` person name formatter function formats the name.
+   ```
+   .match {$person :gender}
+   male {{Bienvenido {$person :personName}}}
+   female {{Bienvenida {$person :personName}}}
+   other {{Le damos la bienvenida {$person :personName}}}
+   ```
+
 ## Requirements
 
 _What properties does the solution have to manifest to enable the use-cases above?_
@@ -175,6 +185,7 @@ Examples:
 **Pros**
 - No changes required.
 - `.local` can be used to solve problems with variations in selection and formatting
+- No confusion or overlap of keywords' behavior (ex: `.match`, `.input`)
 - Supports multiple selectors on the same operand
 
 **Cons**
@@ -217,6 +228,8 @@ declaration       = s variable [s] "=" [s] expression
 - Produces an error when users inappropriately annotate some items
 
 **Cons**
+- Complexity: `.match` means more than one thing
+- Complexity: `.match` implicitly creates a new lexical scope
 - Selectors can't provide additional selection-specific options
   if the variable name is already in scope
 - Doesn't allow multiple selection on the same operand, e.g.
@@ -249,6 +262,8 @@ Instead the selector's annotation replaces what came before.
 - Shorthand version works intuitively with minimal typing.
 
 **Cons**
+- Complexity: `.match` means more than one thing
+- Complexity: `.match` implicitly creates a new lexical scope
 - Violates immutability that we've established everywhere else
 
 ### Allow _immutable_ input declarative selectors
@@ -280,6 +295,8 @@ This implies that multiple selecton on the same operand is pointless.
 - Produces an error when users inappropriately annotate some items
 
 **Cons**
+- Complexity: `.match` means more than one thing
+- Complexity: `.match` implicitly creates a new lexical scope
 - Selectors can't provide additional selection-specific options
   if the value has already been annotated
 - Doesn't allow multiple selection on the same operand, e.g.
@@ -321,6 +338,7 @@ The ABNF change would look like:
 - Preserves immutability.
 
 **Cons**
+- Complicates the situations where selection != formatting due to the strictness's design nudges
 - A separate declaration is required for each selector.
 
 ### Provide a `#`-like Feature
