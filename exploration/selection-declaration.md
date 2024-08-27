@@ -415,6 +415,9 @@ Notes:
 - Avoids the readability issues with "Provide a #-like Feature"
 
 **Cons**
+- Complexity: `.match` means more than one thing
+- Complexity: `.match` implicitly creates a new lexical scope
+- Violates immutability that we've established everywhere else
 - Requires additional `.local` declarations in cases where a variable would occur twice
   such as `.match {$date :date option=monthOnly} {$date :date option=full}`
 
