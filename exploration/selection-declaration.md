@@ -398,7 +398,7 @@ It would need to be rewritten as something along the lines of:
 
 #### Example 4
 ```
-.local $count3 {$count}
+.local $count3 = {$count}
 .match {$count <anything1>}{$count3 <anything2>}
 ```
 Notes:
