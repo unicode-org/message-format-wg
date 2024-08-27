@@ -377,7 +377,7 @@ is precisely equivalent to:
 
 #### Example 2
 ```
-.local $count2 {$count :integer}
+.local $count2 = {$count :integer}
 .match {$count2}
 one {{You have {$count2} whole apple.}}
 * {{You have {$count2} whole apples.}}
