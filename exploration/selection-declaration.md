@@ -1,6 +1,6 @@
 # Effect of Selectors on Subsequent Placeholders
 
-Status: **Accepted**
+Status: **Proposed, Ballot Requested**
 
 <details>
 	<summary>Metadata</summary>
