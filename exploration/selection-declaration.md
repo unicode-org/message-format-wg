@@ -1,6 +1,6 @@
 # Effect of Selectors on Subsequent Placeholders
 
-Status: **Proposed**
+Status: **Proposed, Ballot Requested**
 
 <details>
 	<summary>Metadata</summary>
@@ -10,7 +10,8 @@ Status: **Proposed**
 		<dt>First proposed</dt>
 		<dd>2024-03-27</dd>
 		<dt>Pull Requests</dt>
-		<dd>#000</dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/755">#755</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/824">#824</a></dd>
 	</dl>
 </details>
 
@@ -159,13 +160,10 @@ _What prior decisions and existing conditions limit the possible design?_
 
 ## Proposed Design
 
-_Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
+The design alternative [Match on variables instead of expressions](#match-on-variables-instead-of-expressions)
+described below is selected.
 
 ## Alternatives Considered
-
-_What other solutions are available?_
-_How do they compare against the requirements?_
-_What other properties they have?_
 
 ### Do nothing
 
@@ -422,3 +420,69 @@ and a data model error otherwise.
   Removes some self-documentation from the pattern.
 - Requires the pattern to change if the selectors are modified.
 - Limits number of referenceable selectors to 10 (in the current form)
+
+### Hybrid approach: Match may mutate, no duplicates
+
+In this alternative, in a `.match` statement:
+
+1. variables are mutated by their annotation
+2. no variable can be the operand in two selectors
+
+This keeps most messages more concise, producing the expected results in Example 1.
+
+#### Example 1
+
+```
+.match {$count :integer}
+one {{You have {$count} whole apple.}}
+* {{You have {$count} whole apples.}}
+```
+is precisely equivalent to:
+
+#### Example 2
+```
+.local $count2 = {$count :integer}
+.match {$count2}
+one {{You have {$count2} whole apple.}}
+* {{You have {$count2} whole apples.}}
+```
+
+This avoids the serious problems with mismatched selection and formats
+as in Example 1 under "Do Nothing", whereby the input of `count = 1.2`, 
+results the malformed "You have 1.2 whole apple."
+
+Due to clause 2, this requires users to declare any selector using a `.input` or `.local` declaration
+before writing the `.match`. That is, the following is illegal.
+
+#### Example 3
+```
+.match {$count <anything>}{$count <anything>}
+```
+It would need to be rewritten as something along the lines of:
+
+#### Example 4
+```
+.local $count3 = {$count}
+.match {$count <anything1>}{$count3 <anything2>}
+```
+Notes:
+- The number of times the same variable is used twice in a match (or the older Select) is vanishingly small. Since it is an error — and the advice to fix is easy — that will prevent misbehavior.
+- There would be no change to the ABNF; but there would be an additional constraint in the spec, and relaxation of immutability within the .match statement.
+
+**Pros**
+- No new syntax is required
+- Preserves immutability before and after the .match statement
+- Avoids the serious problem of mismatch of selector and format of option "Do Nothing"
+- Avoids the extra syntax of option "Allow both local and input declarative selectors with immutability"
+- Avoids the problem of multiple variables in "Allow immutable input declarative selectors"
+- Is much more consise than "Match on variables instead of expressions", since it doesn't require a .local or .input for every variable with options
+- Avoids the readability issues with "Provide a #-like Feature"
+
+**Cons**
+- Complexity: `.match` means more than one thing
+- Complexity: `.match` implicitly creates a new lexical scope
+- Violates immutability that we've established everywhere else
+- Requires additional `.local` declarations in cases where a variable would occur twice
+  such as `.match {$date :date option=monthOnly} {$date :date option=full}`
+
+
