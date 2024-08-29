@@ -329,7 +329,7 @@ This implies that multiple selecton on the same operand is pointless.
 .match {$num :number maximumFractionDigits=0}
 * {{This message produces a Duplicate Declaration error}}
 
-.input {$num :integer} {$num :number}
+.match {$num :integer} {$num :number}
 * * {{This message produces a Duplicate Declaration error}}
 ```
 
