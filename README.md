@@ -137,13 +137,22 @@ We invite feedback about the current syntax draft, as well as the real-life use-
 - General questions and thoughts → [post a discussion thread](https://github.com/unicode-org/message-format-wg/discussions).
 - Actionable feedback (bugs, feature requests) → [file a new issue](https://github.com/unicode-org/message-format-wg/issues).
 
-## Participation
+## Participation / Joining the Working Group
 
-To join in:
+We are looking for participation from software developers, localization engineers and others with experience
+in Internationalization (I18N) and Localization (L10N). 
+If you wish to contribute to this work, please review the information about the Contributor License Agreement below. 
 
-1. Review [CONTRIBUTING.md](./CONTRIBUTING.md)
-2. Apply to join our [mailing list](https://groups.google.com/a/chromium.org/forum/#!forum/message-format-wg)
-3. Watch this repository (use the "Watch" button in the upper right corner)
+To follow this work:
+1. Apply to join our [mailing list](https://groups.google.com/a/chromium.org/forum/#!forum/message-format-wg)
+2. Watch this repository (use the "Watch" button in the upper right corner)
+
+To contribute to this work, in addition to the above:
+1. Each individual MUST have a copy of the CLA on file. See below.
+2. Individuals who are employees of Unicode Member organizations SHOULD contact their member representative.
+   Individuals who are not employees of Unicode Member organizations MUST contact the chair to request Invited Expert status.
+   Employees of Unicode Member organizations MAY also apply for Invited Expert status,
+   subject to approval from their member representative.
 
 ### Copyright & Licenses
 
