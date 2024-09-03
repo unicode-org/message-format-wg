@@ -53,7 +53,7 @@ The function `:string` has no options.
 When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
 where `resolvedSelector` is the resolved value of a _selector_
 and `keys` is a list of strings,
-the `:string` function performs as described below.
+the `:string` selector function performs as described below.
 
 1. Let `compare` be the string value of `resolvedSelector`.
 1. Let `result` be a new empty list of strings.

@@ -402,7 +402,7 @@ match-statement = match 1*(s selector)
 
 ### Selector
 
-A **_<dfn>selector</dfn>_** is a _variable_ that ranks or excludes the
+A **_<dfn>selector</dfn>_** is a _variable_ whose resolved value ranks or excludes the
 _variants_ based on the value of the corresponding _key_ in each _variant_.
 The combination of _selectors_ in a _matcher_ thus determines
 which _pattern_ will be used during formatting.

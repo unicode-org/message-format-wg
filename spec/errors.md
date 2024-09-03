@@ -48,7 +48,7 @@ SHOULD prioritise _Syntax Errors_ and _Data Model Errors_ over others.
 
 When an error occurs while resolving a _selector_,
 the _selector_ MUST NOT match any _variant_ _key_ other than the catch-all `*`
-and a _Resolution Error_ or a _Message Function Error_ MUST be emitted.
+and a _Bad Selector_ error MUST be emitted.
 
 ## Syntax Errors
 
