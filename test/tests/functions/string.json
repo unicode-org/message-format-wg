@@ -7,7 +7,7 @@
   },
   "tests": [
     {
-      "src": ".match {$foo :string} |1| {{one}} * {{other}}",
+      "src": ".input {$foo :string} .match $foo |1| {{one}} * {{other}}",
       "params": [
         {
           "name": "foo",
@@ -17,7 +17,7 @@
       "exp": "one"
     },
     {
-      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "src": ".input {$foo :string} .match $foo 1 {{one}} * {{other}}",
       "params": [
         {
           "name": "foo",
@@ -27,7 +27,7 @@
       "exp": "one"
     },
     {
-      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "src": ".input {$foo :string} .match $foo 1 {{one}} * {{other}}",
       "params": [
         {
           "name": "foo",
@@ -37,7 +37,7 @@
       "exp": "other"
     },
     {
-      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "src": ".input {$foo :string} .match $foo 1 {{one}} * {{other}}",
       "exp": "other",
       "expErrors": [
         {

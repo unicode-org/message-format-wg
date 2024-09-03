@@ -16,7 +16,7 @@
   body CDATA #IMPLIED
 >
 
-<!ELEMENT selectors (expression)+>
+<!ELEMENT selectors (variable)+>
 <!ELEMENT variant (key+,pattern)>
 <!ELEMENT key (#PCDATA)>
 <!ATTLIST key catchall (true | false) "false">

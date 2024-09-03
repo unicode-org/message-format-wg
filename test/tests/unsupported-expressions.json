@@ -21,7 +21,9 @@
     { "src": "hello {|foo| *number}"  },
     { "src": "hello {?number}"  },
     { "src": "{<tag}"  },
-    { "src": ".local $bar = {$none ~plural} .match {foo :string}  * {{{$bar}}}"  },
+    {
+      "src": ".local $bar = {$none ~plural} .local $foo = {foo :string} .match $foo * {{{$bar}}}"
+    },
     { "src": "hello {|4.2| %num\\\\ber}"  },
     { "src": "hello {|4.2| %num\\{be\\|r}"  },
     { "src": "hello {|4.2| %num\\\\\\}ber}"  },

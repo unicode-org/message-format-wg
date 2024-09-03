@@ -155,26 +155,21 @@
     {
       "src": ".local $bar = |foo| {{_}}"
     },
-    {
-      "src": ".match {#foo} * {{foo}}"
-    },
-    {
-      "src": ".match {} * {{foo}}"
-    },
-    {
-      "src": ".match {|foo| :x} {|bar| :x} ** {{foo}}"
-    },
-    {
-      "src": ".match * {{foo}}"
-    },
-    {
-      "src": ".match {|x| :x} * foo"
-    },
-    {
-      "src": ".match {|x| :x} * {{foo}} extra"
-    },
-    {
-      "src": ".match |x| * {{foo}}"
-    }
+    { "src": ".match * {{foo}}" },
+    { "src": ".match x * {{foo}}" },
+    { "src": ".match |x| * {{foo}}" },
+    { "src": ".match :x * {{foo}}" },
+    { "src": ".match {$foo} * {{foo}}" },
+    { "src": ".match {#foo} * {{foo}}" },
+    { "src": ".input {$x :x} .match {$x} * {{foo}}" },
+    { "src": ".input {$x :x} .match$x * {{foo}}" },
+    { "src": ".input {$x :x} .match $x* {{foo}}" },
+    { "src": ".input {$x :x} .match $x|x| {{foo}} * {{foo}}" },
+    { "src": ".input {$x :x} .local $y = {y :y} .match $x$y * * {{foo}}" },
+    { "src": ".input {$x :x} .local $y = {y :y} .match $x $y ** {{foo}}" },
+    { "src": ".input {$x :x} .match $x" },
+    { "src": ".input {$x :x} .match $x *" },
+    { "src": ".input {$x :x} .match $x * foo" },
+    { "src": ".input {$x :x} .match $x * {{foo}} extra" }
   ]
 }

@@ -214,12 +214,13 @@ external input value does not appear in a previous _declaration_.
 
 > [!NOTE]
 > These restrictions only apply to _declarations_.
-> A _placeholder_ or _selector_ can apply a different annotation to a _variable_
+> A _placeholder_ can apply a different annotation to a _variable_
 > than one applied to the same _variable_ named in a _declaration_.
 > For example, this message is _valid_:
 > ```
 > .input {$var :number maximumFractionDigits=0}
-> .match {$var :number maximumFractionDigits=2}
+> .local $var2 = {$var :number maximumFractionDigits=2}
+> .match $var2
 > 0 {{The selector can apply a different annotation to {$var} for the purposes of selection}}
 > * {{A placeholder in a pattern can apply a different annotation to {$var :number maximumFractionDigits=3}}}
 > ```
@@ -373,22 +374,22 @@ satisfied:
 
 - The number of _keys_ on each _variant_ MUST be equal to the number of _selectors_.
 - At least one _variant_ MUST exist whose _keys_ are all equal to the "catch-all" key `*`.
-- Each _selector_ MUST have an _annotation_,
-  or contain a _variable_ that directly or indirectly references a _declaration_ with an _annotation_.
+- Each _selector_ MUST be a _variable_ that
+  directly or indirectly references a _declaration_ with an _annotation_.
 - Each _variant_ MUST use a list of _keys_ that is unique from that
   of all other _variants_ in the _message_.
   _Literal_ _keys_ are compared by their contents, not their syntactical appearance.
 
 ```abnf
-matcher         = match-statement 1*([s] variant)
-match-statement = match 1*([s] selector)
+matcher         = match-statement s variant *([s] variant)
+match-statement = match 1*(s selector)
 ```
 
 > A _message_ with a _matcher_:
 >
 > ```
 > .input {$count :number}
-> .match {$count}
+> .match $count
 > one {{You have {$count} notification.}}
 > *   {{You have {$count} notifications.}}
 > ```
@@ -396,18 +397,18 @@ match-statement = match 1*([s] selector)
 > A _message_ containing a _matcher_ formatted on a single line:
 >
 > ```
-> .match {:platform} windows {{Settings}} * {{Preferences}}
+> .local $os = {:platform} .match $os windows {{Settings}} * {{Preferences}}
 > ```
 
 ### Selector
 
-A **_<dfn>selector</dfn>_** is an _expression_ that ranks or excludes the
+A **_<dfn>selector</dfn>_** is a _variable_ that ranks or excludes the
 _variants_ based on the value of the corresponding _key_ in each _variant_.
 The combination of _selectors_ in a _matcher_ thus determines
 which _pattern_ will be used during formatting.
 
 ```abnf
-selector = expression
+selector = variable
 ```
 
 There MUST be at least one _selector_ in a _matcher_.
@@ -418,7 +419,8 @@ There MAY be any number of additional _selectors_.
 > based on grammatical case:
 >
 > ```
-> .match {$userName :hasCase}
+> .local $hasCase = {$userName :hasCase}
+> .match $hasCase
 > vocative {{Hello, {$userName :person case=vocative}!}}
 > accusative {{Please welcome {$userName :person case=accusative}!}}
 > * {{Hello!}}
@@ -429,7 +431,7 @@ There MAY be any number of additional _selectors_.
 > ```
 > .input {$numLikes :integer}
 > .input {$numShares :integer}
-> .match {$numLikes} {$numShares}
+> .match $numLikes $numShares
 > 0   0   {{Your item has no likes and has not been shared.}}
 > 0   one {{Your item has no likes and has been shared {$numShares} time.}}
 > 0   *   {{Your item has no likes and has been shared {$numShares} times.}}
@@ -497,8 +499,7 @@ There are several types of _expression_ that can appear in a _message_.
 All _expressions_ share a common syntax. The types of _expression_ are:
 
 1. The value of a _local-declaration_
-2. A _selector_
-3. A kind of _placeholder_ in a _pattern_
+2. A kind of _placeholder_ in a _pattern_
 
 Additionally, an _input-declaration_ can contain a _variable-expression_.
 
@@ -509,12 +510,6 @@ Additionally, an _input-declaration_ can contain a _variable-expression_.
 > ```
 > .input {$x :function option=value}
 > .local $y = {|This is an expression|}
-> ```
->
-> Selectors:
->
-> ```
-> .match {$selector :functionRequired}
 > ```
 >
 > Placeholders:

@@ -46,7 +46,7 @@ or contains some error which leads to further errors,
 an implementation which does not emit all of the errors
 SHOULD prioritise _Syntax Errors_ and _Data Model Errors_ over others.
 
-When an error occurs within a _selector_,
+When an error occurs while resolving a _selector_,
 the _selector_ MUST NOT match any _variant_ _key_ other than the catch-all `*`
 and a _Resolution Error_ or a _Message Function Error_ MUST be emitted.
 
@@ -85,13 +85,16 @@ does not equal the number of _selectors_.
 > Example invalid messages resulting in a _Variant Key Mismatch_ error:
 >
 > ```
-> .match {$one :func}
+> .input {$one :func}
+> .match $one
 > 1 2 {{Too many}}
 > * {{Otherwise}}
 > ```
 >
 > ```
-> .match {$one :func} {$two :func}
+> .input {$one :func}
+> .input {$two :func}
+> .match $one $two
 > 1 2 {{Two keys}}
 > * {{Missing a key}}
 > * * {{Otherwise}}
@@ -105,13 +108,16 @@ does not include a _variant_ with only catch-all keys.
 > Example invalid messages resulting in a _Missing Fallback Variant_ error:
 >
 > ```
-> .match {$one :func}
+> .input {$one :func}
+> .match $one
 > 1 {{Value is one}}
 > 2 {{Value is two}}
 > ```
 >
 > ```
-> .match {$one :func} {$two :func}
+> .input {$one :func}
+> .input {$two :func}
+> .match $one $two
 > 1 * {{First is one}}
 > * 1 {{Second is one}}
 > ```
@@ -119,27 +125,27 @@ does not include a _variant_ with only catch-all keys.
 ### Missing Selector Annotation
 
 A **_<dfn>Missing Selector Annotation</dfn>_** error occurs when the _message_
-contains a _selector_ that does not have an _annotation_,
-or contains a _variable_ that does not directly or indirectly reference a _declaration_ with an _annotation_.
+contains a _selector_ that does not
+directly or indirectly reference a _declaration_ with an _annotation_.
 
 > Examples of invalid messages resulting in a _Missing Selector Annotation_ error:
 >
 > ```
-> .match {$one}
+> .match $one
 > 1 {{Value is one}}
 > * {{Value is not one}}
 > ```
 >
 > ```
 > .local $one = {|The one|}
-> .match {$one}
+> .match $one
 > 1 {{Value is one}}
 > * {{Value is not one}}
 > ```
 >
 > ```
 > .input {$one}
-> .match {$one}
+> .match $one
 > 1 {{Value is one}}
 > * {{Value is not one}}
 > ```
@@ -199,13 +205,16 @@ same list of _keys_ is used for more than one _variant_.
 > Examples of invalid messages resulting in a _Duplicate Variant_ error:
 >
 > ```
-> .match {$var :string}
+> .input {$var :string}
+> .match $var
 > * {{The first default}}
 > * {{The second default}}
 > ```
 >
 > ```
-> .match {$x :string} {$y :string}
+> .input {$x :string}
+> .input {$y :string}
+> .match $x $y
 > *   foo   {{The first "foo" variant}}
 > bar *     {{The "bar" variant}}
 > *   |foo| {{The second "foo" variant}}
@@ -230,7 +239,8 @@ An **_<dfn>Unresolved Variable</dfn>_** error occurs when a variable reference c
 > ```
 >
 > ```
-> .match {$var :func}
+> .input {$var :func}
+> .match $var
 > 1 {{The value is one.}}
 > * {{The value is not one.}}
 > ```
@@ -249,7 +259,8 @@ a reference to a function which cannot be resolved.
 > ```
 >
 > ```
-> .match {|horse| :func}
+> .local $horse = {|horse| :func}
+> .match $horse
 > 1 {{The value is one.}}
 > * {{The value is not one.}}
 > ```
@@ -272,7 +283,8 @@ or for private implementation use that is not supported by the current implement
 > if done within a context that does not support the `^` private use sigil:
 >
 > ```
-> .match {|horse| ^private}
+> .local $horse = {|horse| ^private}
+> .match $horse
 > 1 {{The value is one.}}
 > * {{The value is not one.}}
 > ```
@@ -299,7 +311,7 @@ with a resolved value which does not support selection.
 >
 > ```
 > .local $day = {|2024-05-01| :date}
-> .match {$day}
+> .match $day
 > * {{The due date is {$day}}}
 > ```
 
@@ -361,7 +373,8 @@ for that specific _function_.
 > ```
 >
 > ```
-> .match {|horse| :number}
+> .local $horse = {|horse| :number}
+> .match $horse
 > 1 {{The value is one.}}
 > * {{The value is not one.}}
 > ```
@@ -398,7 +411,8 @@ does not match the expected implementation-defined format.
 > which is a requirement of the `:number` function:
 >
 > ```
-> .match {42 :number}
+> .local $answer = {42 :number}
+> .match $answer
 > 1     {{The value is one.}}
 > horse {{The value is a horse.}}
 > *     {{The value is not one.}}

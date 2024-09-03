@@ -1,6 +1,6 @@
 # Effect of Selectors on Subsequent Placeholders
 
-Status: **Proposed, Ballot Requested**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -12,6 +12,12 @@ Status: **Proposed, Ballot Requested**
 		<dt>Pull Requests</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/755">#755</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/824">#824</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/860">#860</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/867">#867</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/877">#877</a></dd>
+		<dt>Ballot</dt>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/872">#872</a> (discussion)</dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/873">#873</a> (voting)</dd>
 	</dl>
 </details>
 

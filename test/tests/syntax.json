@@ -171,8 +171,8 @@
       "expErrors": [ { "type": "unsupported-statement" } ]
     },
     {
-      "description": "message -> complex-message -> complex-body -> matcher -> match-statement variant -> match selector key quoted-pattern -> \".match\" expression literal quoted-pattern",
-      "src": ".match{a :f}a{{}}*{{}}",
+      "description": "message -> complex-message -> complex-body -> ... -> matcher -> match-statement variant -> match selector key quoted-pattern -> \".match\" variable literal quoted-pattern",
+      "src": ".local $a={a :f}.match $a a{{}}*{{}}",
       "exp": "",
       "expErrors": [ { "type": "unknown-function" } ]
     },
@@ -198,31 +198,31 @@
     },
     {
       "description": "... matcher -> match-statement [s] variant -> match 1*([s] selector) variant -> match selector selector variant -> match selector selector variant key s key quoted-pattern",
-      "src": ".match{a :f}{b :f}a b{{}}* *{{}}",
+      "src": ".local $a={a :f}.local $b={b :f}.match $a $b a b{{}}* *{{}}",
       "exp": "",
       "expErrors": [ { "type": "unknown-function" } ]
     },
     {
       "description": "... matcher -> match-statement [s] variant -> match 1*([s] selector) variant -> match selector variant variant ...",
-      "src": ".match{a :f}a{{}}b{{}}*{{}}",
+      "src": ".local $a={a :f}.match $a a{{}}b{{}}*{{}}",
       "exp": "",
       "expErrors": [ { "type": "unknown-function" } ]
     },
     {
       "description": "... variant -> key s quoted-pattern -> ...",
-      "src": ".match{a :f}a {{}}*{{}}",
+      "src": ".local $a={a :f}.match $a a {{}}*{{}}",
       "exp": "",
       "expErrors": [ { "type": "unknown-function" } ]
     },
     {
       "description": "... variant -> key s key s quoted-pattern -> ...",
-      "src": ".match{a :f}{b :f}a b {{}}* *{{}}",
+      "src": ".local $a={a :f}.local $b={b :f}.match $a $b a b {{}}* *{{}}",
       "exp": "",
       "expErrors": [ { "type": "unknown-function" } ]
     },
     {
       "description": "... key -> \"*\" ...",
-      "src": ".match{a :f}*{{}}",
+      "src": ".local $a={a :f}.match $a *{{}}",
       "exp": "",
       "expErrors": [ { "type": "unknown-function" } ]
     },
