@@ -46,7 +46,8 @@ or contains some error which leads to further errors,
 an implementation which does not emit all of the errors
 SHOULD prioritise _Syntax Errors_ and _Data Model Errors_ over others.
 
-When an error occurs while resolving a _selector_,
+When an error occurs while resolving a _selector_
+or calling MatchSelectorKeys with its resolved value,
 the _selector_ MUST NOT match any _variant_ _key_ other than the catch-all `*`
 and a _Bad Selector_ error MUST be emitted.
 
