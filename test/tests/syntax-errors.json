@@ -158,6 +158,7 @@
     {
       "src": ".local $bar = |foo| {{_}}"
     },
+    { "src": ".match {{foo}}" },
     { "src": ".match * {{foo}}" },
     { "src": ".match x * {{foo}}" },
     { "src": ".match |x| * {{foo}}" },

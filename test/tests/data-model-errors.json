@@ -182,7 +182,7 @@
       ]
     },
     {
-      "src": ".match {star :string} |*| {{Literal star}} * {{The default}}",
+      "src": ".local $star = {star :string} .match $star |*| {{Literal star}} * {{The default}}",
       "exp": "The default"
     }
   ]
