@@ -393,9 +393,9 @@ When provided as a string, the representation of a digit size option matches the
 Number selection has three modes:
 - `exact` selection matches the operand to explicit numeric keys exactly
 - `plural` selection matches the operand to explicit numeric keys exactly
-  or to plural rule categories if there is no explicit match
+  followed by a plural rule category if there is no explicit match
 - `ordinal` selection matches the operand to explicit numeric keys exactly
-  or to ordinal rule categories if there is no explicit match
+  followed by an ordinal rule category if there is no explicit match
 
 When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
 where `resolvedSelector` is the resolved value of a _selector_ _expression_
@@ -423,24 +423,40 @@ numeric selectors perform as described below.
 
 #### Rule Selection
 
-If the option `select` is set to `exact`, rule-based selection is not used.
-Return the empty string.
+Rule selection is intended to support the grammatical matching needs of different 
+languages/locales in order to support plural or ordinal numeric values.
+
+If the _option_ `select` is set to `exact`, rule-based selection is not used
+and the empty string is returned.
+Otherwise rule selection matches the _operand_, as modified by function _options_, to exactly one of these keywords:
+`zero`, `one`, `few`, `many`, or `other`.
+The keyword `other` is the default.
 
 > [!NOTE]
 > Since valid keys cannot be the empty string in a numeric expression, returning the
 > empty string disables keyword selection.
 
-If the option `select` is set to `plural`, selection should be based on CLDR plural rule data
-of type `cardinal`. See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
-for examples.
+The meaning of the keywords is locale-dependent and implementation-defined.
+A _key_ that matches the rule-selected keyword is a stronger match than the fallback key `*`
+but a weaker match than any exact match _key_ value.
 
-If the option `select` is set to `ordinal`, selection should be based on CLDR plural rule data
-of type `ordinal`. See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
-for examples.
+The rules for a given locale might not produce all of the keywords.
+The meaning of the keywords is different, depending on the locale.
+A given _operand_ value might produce different keywords depending on the locale.
 
-Apply the rules defined by CLDR to the resolved value of the operand and the function options,
+Apply the rules to the resolved value of the _operand_ and the relevant function _options_,
 and return the resulting keyword.
 If no rules match, return `other`.
+
+If the option `select` is set to `plural`, the rules applied to selection SHOULD be 
+the CLDR plural rule data of type `cardinal`. 
+See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
+for examples.
+
+If the option `select` is set to `ordinal`, the rules applied to selection SHOULD be 
+the CLDR plural rule data of type `ordinal`. 
+See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
+for examples.
 
 > **Example.**
 > In CLDR 44, the Czech (`cs`) plural rule set can be found
