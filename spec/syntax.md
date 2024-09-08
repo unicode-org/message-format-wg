@@ -757,7 +757,7 @@ Multiple _attributes_ are permitted in an _expression_ or _markup_.
 Each _attribute_ is separated by whitespace.
 
 Each _attribute_'s _identifier_ SHOULD be unique within the _expression_ or _markup_:
-_attributes_ beyond the first with the same _identifier_ are ignored.
+all but the last _attribute_ with the same _identifier_ are ignored.
 The order of _attributes_ is not otherwise significant.
 
 ```abnf
