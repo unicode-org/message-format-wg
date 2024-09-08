@@ -10,8 +10,7 @@ or created from a data model description.
 If the resulting _message_ is not _well-formed_, a _Syntax Error_ is emitted.
 If the resulting _message_ is _well-formed_ but is not _valid_, a _Data Model Error_ is emitted.
 
-The formatting of a _message_ is defined by the following operations,
-starting with _Pattern Selection_:
+The formatting of a _message_ is defined by the following operations:
 
 - **_<dfn>Pattern Selection</dfn>_** determines which of a message's _patterns_ is formatted.
   For a message with no _selectors_, this is simple as there is only one _pattern_.
