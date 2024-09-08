@@ -428,7 +428,7 @@ languages/locales in order to support plural or ordinal numeric values.
 
 If the _option_ `select` is set to `exact`, rule-based selection is not used.
 Otherwise rule selection matches the _operand_, as modified by function _options_, to exactly one of these keywords:
-`zero`, `one`, `few`, `many`, or `other`.
+`zero`, `one`, `two`, `few`, `many`, or `other`.
 The keyword `other` is the default.
 
 > [!NOTE]
