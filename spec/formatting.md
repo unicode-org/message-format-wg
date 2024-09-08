@@ -34,11 +34,11 @@ starting with _Pattern Selection_:
   The resolution of _text_ is rather straightforward,
   and is detailed under _literal resolution_.
 
-Formatter implementations are not required to expose
+Implementations are not required to expose
 the _expression resolution_ and _pattern selection_ operations to their users,
 or even use them in their internal processing,
 as long as the final _formatting_ result is made available to users
-and the observable behavior of the formatter matches that described here.
+and the observable behavior of the _formatting_ matches that described here.
 
 _Attributes_ MUST NOT affect the processing or output of a _message_.
 
@@ -188,7 +188,7 @@ If a _declaration_ exists for the _variable_, its resolved value is used.
 Otherwise, the _variable_ is an implicit reference to an input value,
 and its value is looked up from the _formatting context_ _input mapping_.
 
-The resolution of a _variable_ MAY fail if no value is identified for its _name_.
+The resolution of a _variable_ fails if no value is identified for its _name_.
 If this happens, an _Unresolved Variable_ error is emitted.
 If a _variable_ would resolve to a _fallback value_,
 this MUST also be considered a failure.
@@ -431,8 +431,7 @@ _Pattern selection_ is not supported for _fallback values_.
 
 ## Pattern Selection
 
-At the start of _pattern selection_,
-if the _message_ contains any _reserved statements_,
+If the _message_ contains any _reserved statements_,
 emit an _Unsupported Statement_ error.
 
 If the _message_ being formatted is not _well-formed_ and _valid_,
@@ -791,7 +790,8 @@ and a U+007D RIGHT CURLY BRACKET `}`.
 
 > For example,
 > a _message_ that is not _well-formed_ would format to a string as `{�}`,
-> if no fallback string is defined in the _formatting context_.
+> unless a fallback string is defined in the _formatting context_,
+> in which case that string would be used instead.
 
 ### Handling Bidirectional Text
 
