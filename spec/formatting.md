@@ -7,10 +7,20 @@ when formatting a message for display in a user interface, or for some later pro
 
 To start, we presume that a _message_ has either been parsed from its syntax
 or created from a data model description.
-If this construction has encountered any _Syntax Errors_ or _Data Model Errors_,
-an appropriate error MUST be emitted and a _fallback value_ MAY be used as the formatting result.
+If the resulting _message_ is not _well-formed_, a _Syntax Error_ is emitted.
+If the resulting _message_ is _well-formed_ but is not _valid_, a _Data Model Error_ is emitted.
 
-Formatting of a _message_ is defined by the following operations:
+The formatting of a _message_ is defined by the following operations,
+starting with _Pattern Selection_:
+
+- **_<dfn>Pattern Selection</dfn>_** determines which of a message's _patterns_ is formatted.
+  For a message with no _selectors_, this is simple as there is only one _pattern_.
+  With _selectors_, this will depend on their resolution.
+
+- **_<dfn>Formatting</dfn>_** takes the resolved values of the selected _pattern_,
+  and produces the formatted result for the _message_.
+  Depending on the implementation, this result could be a single concatenated string,
+  an array of objects, an attributed string, or some other locally appropriate data type.
 
 - **_<dfn>Expression and Markup Resolution</dfn>_** determines the value of an _expression_ or _markup_,
   with reference to the current _formatting context_.
@@ -23,6 +33,14 @@ Formatting of a _message_ is defined by the following operations:
 
   The resolution of _text_ is rather straightforward,
   and is detailed under _literal resolution_.
+
+Formatter implementations are not required to expose
+the _expression resolution_ and _pattern selection_ operations to their users,
+or even use them in their internal processing,
+as long as the final _formatting_ result is made available to users
+and the observable behavior of the formatter matches that described here.
+
+_Attributes_ MUST NOT affect the processing or output of a _message_.
 
 > [!IMPORTANT]
 >
@@ -38,27 +56,6 @@ Formatting of a _message_ is defined by the following operations:
 > _declarations_ and _selectors_ affecting _variables_ referenced by that _expression_
 > have already been evaluated in the order in which the relevant _declarations_
 > and _selectors_ appear in the _message_.
-
-- **_<dfn>Pattern Selection</dfn>_** determines which of a message's _patterns_ is formatted.
-  For a message with no _selectors_, this is simple as there is only one _pattern_.
-  With _selectors_, this will depend on their resolution.
-  
-  At the start of _pattern selection_,
-  if the _message_ contains any _reserved statements_,
-  emit an _Unsupported Statement_ error.
-
-- **_<dfn>Formatting</dfn>_** takes the resolved values of the selected _pattern_,
-  and produces the formatted result for the _message_.
-  Depending on the implementation, this result could be a single concatenated string,
-  an array of objects, an attributed string, or some other locally appropriate data type.
-
-Formatter implementations are not required to expose
-the _expression resolution_ and _pattern selection_ operations to their users,
-or even use them in their internal processing,
-as long as the final _formatting_ result is made available to users
-and the observable behavior of the formatter matches that described here.
-
-_Attributes_ MUST NOT affect the processing or output of a _message_.
 
 ## Formatting Context
 
@@ -82,8 +79,7 @@ At a minimum, it includes:
 - The _function registry_,
   providing the implementations of the functions referred to by message _functions_.
 
-- Optionally, a fallback string to use for the message
-  if it contains any _Syntax Errors_ or _Data Model Errors_.
+- Optionally, a fallback string to use for the message if it is not _valid_.
 
 Implementations MAY include additional fields in their _formatting context_.
 
@@ -193,7 +189,7 @@ Otherwise, the _variable_ is an implicit reference to an input value,
 and its value is looked up from the _formatting context_ _input mapping_.
 
 The resolution of a _variable_ MAY fail if no value is identified for its _name_.
-If this happens, an _Unresolved Variable_ error MUST be emitted.
+If this happens, an _Unresolved Variable_ error is emitted.
 If a _variable_ would resolve to a _fallback value_,
 this MUST also be considered a failure.
 
@@ -435,6 +431,18 @@ _Pattern selection_ is not supported for _fallback values_.
 
 ## Pattern Selection
 
+At the start of _pattern selection_,
+if the _message_ contains any _reserved statements_,
+emit an _Unsupported Statement_ error.
+
+If the _message_ being formatted is not _well-formed_ and _valid_,
+the result of pattern selection is a _pattern_ consisting of a single _fallback value_
+using the _message_'s fallback string defined in the _formatting context_
+or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER `�`.
+
+If the _message_ being formatted does not contain a _matcher_,
+the result of pattern selection is its _pattern_ value.
+
 When a _message_ contains a _matcher_ with one or more _selectors_,
 the implementation needs to determine which _variant_ will be used
 to provide the _pattern_ for the formatting operation.
@@ -503,11 +511,6 @@ the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
 This selection method is defined in more detail below.
 An implementation MAY use any pattern selection method,
 as long as its observable behavior matches the results of the method defined here.
-
-If the message being formatted has any _Syntax Errors_ or _Data Model Errors_,
-the result of pattern selection MUST be a pattern resolving to a single _fallback value_
-using the message's fallback string defined in the _formatting context_
-or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER `�`.
 
 ### Resolve Selectors
 
@@ -741,8 +744,8 @@ each _text_ and _placeholder_ part of the selected _pattern_ is resolved and for
 
 Resolved values cannot always be formatted by a given implementation.
 When such an error occurs during _formatting_,
-an implementation MUST emit an appropriate _Message Function Error_ and use a
-_fallback value_ for the _placeholder_ with the error.
+an appropriate _Message Function Error_ is emitted and
+a _fallback value_ is used for the _placeholder_ with the error.
 
 Implementations MAY represent the result of _formatting_ using the most
 appropriate data type or structure. Some examples of these include:
@@ -787,8 +790,8 @@ the _fallback value_ as a string,
 and a U+007D RIGHT CURLY BRACKET `}`.
 
 > For example,
-> a message with a _Syntax Error_ and no fallback string
-> defined in the _formatting context_ would format to a string as `{�}`.
+> a _message_ that is not _well-formed_ would format to a string as `{�}`,
+> if no fallback string is defined in the _formatting context_.
 
 ### Handling Bidirectional Text
 
