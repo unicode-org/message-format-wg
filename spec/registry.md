@@ -440,7 +440,6 @@ A _key_ that matches the rule-selected keyword is a stronger match than the fall
 but a weaker match than any exact match _key_ value.
 
 The rules for a given locale might not produce all of the keywords.
-The meaning of the keywords is different, depending on the locale.
 A given _operand_ value might produce different keywords depending on the locale.
 
 Apply the rules to the resolved value of the _operand_ and the relevant function _options_,
