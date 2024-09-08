@@ -39,7 +39,8 @@ or even use them in their internal processing,
 as long as the final _formatting_ result is made available to users
 and the observable behavior of the _formatting_ matches that described here.
 
-_Attributes_ MUST NOT affect the processing or output of a _message_.
+_Attributes_ MUST NOT have any effect on the formatted output of a _message_,
+or be made available to function implementations.
 
 > [!IMPORTANT]
 >
