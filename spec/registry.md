@@ -380,13 +380,16 @@ Implementations MAY define an upper limit on the resolved value
 of a digit size option option consistent with that implementation's practical limits.
 
 In most cases, the value of a digit size option will be a string that
-encodes the value as a decimal integer.
+encodes the value as a decimal integer greater than or equal to zero.
 Implementations MAY also accept implementation-defined types as the value.
 When provided as a string, the representation of a digit size option matches the following ABNF:
 >```abnf
 > digit-size-option = "0" / (("1"-"9") [DIGIT])
 >```
 
+If the value of a digit size option does not evaluate as a non-negative integer,
+or if the value exceeds any implementation-defined upper limit
+or any option-specific lower limit, a _Bad Option Error_ is emitted.
 
 ### Number Selection
 
