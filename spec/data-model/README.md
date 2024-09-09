@@ -17,11 +17,10 @@ Implementations that expose APIs supporting the production, consumption, or tran
 _message_ as a data structure are encouraged to use this data model.
 
 This data model provides these capabilities:
-- any MessageFormat 2 message (including future versions)
-  can be parsed into this representation
+- any MessageFormat 2.0 message can be parsed into this representation
 - this data model representation can be serialized as a well-formed
-MessageFormat 2 message
-- parsing a MessageFormat 2 message into a data model representation
+MessageFormat 2.0 message
+- parsing a MessageFormat 2.0 message into a data model representation
   and then serializing it results in an equivalently functional message
 
 This data model might also be used to:
@@ -98,21 +97,8 @@ The `name` does not include the initial `$` of the _variable_.
 The `name` of an `InputDeclaration` MUST be the same
 as the `name` in the `VariableRef` of its `VariableExpression` `value`.
 
-An `UnsupportedStatement` represents a statement not supported by the implementation.
-Its `keyword` is a non-empty string name (i.e. not including the initial `.`).
-If not empty, the `body` is the "raw" value (i.e. escape sequences are not processed)
-starting after the keyword and up to the first _expression_,
-not including leading or trailing whitespace.
-The non-empty `expressions` correspond to the trailing _expressions_ of the _reserved statement_.
-
-> [!NOTE]
-> Be aware that future versions of this specification
-> might assign meaning to _reserved statement_ values.
-> This would result in new interfaces being added to
-> this data model.
-
 ```ts
-type Declaration = InputDeclaration | LocalDeclaration | UnsupportedStatement;
+type Declaration = InputDeclaration | LocalDeclaration;
 
 interface InputDeclaration {
   type: "input";
@@ -124,13 +110,6 @@ interface LocalDeclaration {
   type: "local";
   name: string;
   value: Expression;
-}
-
-interface UnsupportedStatement {
-  type: "unsupported-statement";
-  keyword: string;
-  body?: string;
-  expressions: Expression[];
 }
 ```
 
@@ -173,34 +152,26 @@ type Pattern = Array<string | Expression | Markup>;
 type Expression =
   | LiteralExpression
   | VariableExpression
-  | FunctionExpression
-  | UnsupportedExpression;
+  | AnnotationExpression;
 
 interface LiteralExpression {
   type: "expression";
   arg: Literal;
-  annotation?: FunctionAnnotation | UnsupportedAnnotation;
+  annotation?: FunctionAnnotation | PrivateAnnotation;
   attributes: Attributes;
 }
 
 interface VariableExpression {
   type: "expression";
   arg: VariableRef;
-  annotation?: FunctionAnnotation | UnsupportedAnnotation;
+  annotation?: FunctionAnnotation | PrivateAnnotation;
   attributes: Attributes;
 }
 
-interface FunctionExpression {
+interface AnnotationExpression {
   type: "expression";
   arg?: never;
-  annotation: FunctionAnnotation;
-  attributes: Attributes;
-}
-
-interface UnsupportedExpression {
-  type: "expression";
-  arg?: never;
-  annotation: UnsupportedAnnotation;
+  annotation: FunctionAnnotation | PrivateAnnotation;
   attributes: Attributes;
 }
 ```
@@ -245,8 +216,8 @@ interface FunctionAnnotation {
 type Options = Map<string, Literal | VariableRef>;
 ```
 
-An `UnsupportedAnnotation` represents a
-_private-use annotation_ not supported by the implementation or a _reserved annotation_.
+A `PrivateAnnotation` represents a
+_private-use annotation_ not supported by the implementation.
 The `source` is the "raw" value (i.e. escape sequences are not processed),
 including the starting sigil.
 
@@ -257,8 +228,8 @@ using an interface appropriate for the semantics and meaning
 that the implementation attaches to that _annotation_.
 
 ```ts
-interface UnsupportedAnnotation {
-  type: "unsupported-annotation";
+interface PrivateAnnotation {
+  type: "private";
   source: string;
 }
 ```

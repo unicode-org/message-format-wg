@@ -191,11 +191,8 @@ MAY include an _annotation_ that is applied to the external value.
 
 A **_<dfn>local-declaration</dfn>_** binds a _variable_ to the resolved value of an _expression_.
 
-For compatibility with later MessageFormat 2 specification versions,
-_declarations_ MAY also include _reserved statements_.
-
 ```abnf
-declaration       = input-declaration / local-declaration / reserved-statement
+declaration       = input-declaration / local-declaration
 input-declaration = input [s] variable-expression
 local-declaration = local s variable [s] "=" [s] expression
 ```
@@ -224,35 +221,6 @@ external input value does not appear in a previous _declaration_.
 > * {{A placeholder in a pattern can apply a different annotation to {$var :number maximumFractionDigits=3}}}
 > ```
 > (See the [Errors](./errors.md) section for examples of invalid messages)
-
-#### Reserved Statements
-
-A **_<dfn>reserved statement</dfn>_** reserves additional `.keywords`
-for use by future versions of this specification.
-Any such future keyword must start with `.`,
-followed by two or more lower-case ASCII characters.
-
-The rest of the statement supports
-a similarly wide range of content as _reserved annotations_,
-but it MUST end with one or more _expressions_.
-
-```abnf
-reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
-reserved-keyword   = "." name
-```
-
-> [!NOTE]
-> The `reserved-keyword` ABNF rule is a simplification,
-> as it MUST NOT be considered to match any of the existing keywords
-> `.input`, `.local`, or `.match`.
-
-This allows flexibility in future standardization,
-as future definitions MAY define additional semantics and constraints
-on the contents of these _reserved statements_.
-
-Implementations MUST NOT assign meaning or semantics to a _reserved statement_:
-these are reserved for future standardization.
-Implementations MUST NOT remove or alter the contents of a _reserved statement_.
 
 ### Complex Body
 
@@ -318,7 +286,7 @@ be preserved during formatting.
 simple-start-char = content-char / "@" / "|"
 text-char         = content-char / s / "." / "@" / "|"
 quoted-char       = content-char / s / "." / "@" / "{" / "}"
-reserved-char     = content-char / "."
+private-char      = content-char / "."
 content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %x0B-0C        ; omit CR (%x0D)
                   / %x0E-1F        ; omit SP (%x20)
@@ -534,12 +502,11 @@ Additionally, an _input-declaration_ can contain a _variable-expression_.
 
 An **_<dfn>annotation</dfn>_** is part of an _expression_ containing either
 a _function_ together with its associated _options_, or
-a _private-use annotation_ or a _reserved annotation_.
+a _private-use annotation_.
 
 ```abnf
 annotation = function
            / private-use-annotation
-           / reserved-annotation
 ```
 
 An **_<dfn>operand</dfn>_** is the _literal_ of a _literal-expression_ or
@@ -625,7 +592,7 @@ Implementations MAY define their own meaning and semantics for _private-use anno
 A _private-use annotation_ starts with either U+0026 AMPERSAND `&` or U+005E CIRCUMFLEX ACCENT `^`.
 
 Characters, including whitespace, are assigned meaning by the implementation.
-The definition of escapes in the `reserved-body` production, used for the body of
+The definition of escapes in the `private-body` production, used for the body of
 a _private-use annotation_ is an affordance to implementations that
 wish to use a syntax exactly like other functions. Specifically:
 
@@ -638,8 +605,10 @@ wish to use a syntax exactly like other functions. Specifically:
 A _private-use annotation_ MAY be empty after its introducing sigil.
 
 ```abnf
-private-use-annotation = private-start [[s] reserved-body]
+private-use-annotation = private-start [[s] private-body]
 private-start          = "^" / "&"
+private-body           = private-body-part *([s] private-body-part)
+private-body-part      = private-char / escaped-char / quoted-literal
 ```
 
 > [!NOTE]
@@ -658,39 +627,6 @@ private-start          = "^" / "&"
 > Stop {& "translate 'stop' as a verb" might be a translator instruction or comment }
 > Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}
 > ```
-
-#### Reserved Annotations
-
-A **_<dfn>reserved annotation</dfn>_** is an _annotation_ whose syntax is reserved
-for future standardization.
-
-A _reserved annotation_ starts with a reserved character.
-The remaining part of a _reserved annotation_, called a _reserved body_,
-MAY be empty or contain arbitrary text that starts and ends with
-a non-whitespace character.
-
-This allows maximum flexibility in future standardization,
-as future definitions MAY define additional semantics and constraints
-on the contents of these _annotations_.
-
-Implementations MUST NOT assign meaning or semantics to
-an _annotation_ starting with `reserved-annotation-start`:
-these are reserved for future standardization.
-Whitespace before or after a _reserved body_ is not part of the _reserved body_.
-Implementations MUST NOT remove or alter the contents of a _reserved body_,
-including any interior whitespace,
-but MAY remove or alter whitespace before or after the _reserved body_.
-
-While a reserved sequence is technically "well-formed",
-unrecognized _reserved-annotations_ or _private-use-annotations_ have no meaning.
-
-```abnf
-reserved-annotation       = reserved-annotation-start [[s] reserved-body]
-reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
-
-reserved-body             = reserved-body-part *([s] reserved-body-part)
-reserved-body-part        = reserved-char / escaped-char / quoted-literal
-```
 
 ## Markup
 
@@ -907,8 +843,7 @@ An **_<dfn>escape sequence</dfn>_** is a two-character sequence starting with
 U+005C REVERSE SOLIDUS `\`.
 
 An _escape sequence_ allows the appearance of lexically meaningful characters
-in the body of _text_, _quoted literal_, or _reserved_
-(which includes, in this case, _private-use_) sequences.
+in the body of _text_, _quoted literal_, or _private-use annotations_ sequences.
 Each _escape sequence_ represents the literal character immediately following the initial `\`.
 
 ```abnf

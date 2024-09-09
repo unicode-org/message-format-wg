@@ -116,15 +116,14 @@ and different implementations MAY choose to perform different levels of resoluti
 > or some other locally appropriate value.
 
 Depending on the presence or absence of a _variable_ or _literal_ operand
-and a _function_, _private-use annotation_, or _reserved annotation_,
+and a _function_ or _private-use annotation_,
 the resolved value of the _expression_ is determined as follows:
-
-If the _expression_ contains a _reserved annotation_,
-an _Unsupported Expression_ error is emitted and
-a _fallback value_ is used as the resolved value of the _expression_.
 
 Else, if the _expression_ contains a _private-use annotation_,
 its resolved value is defined according to the implementation's specification.
+If the implementation does not support the annotation,
+an _Unsupported Expression_ error is emitted and
+a _fallback value_ is used as the resolved value of the _expression_.
 
 Else, if the _expression_ contains an _annotation_,
 its resolved value is defined by _function resolution_.
@@ -355,7 +354,6 @@ An _expression_ fails to resolve when:
 - A _function_ _annotation_ fails to resolve.
 - A _private-use annotation_ is unsupported by the implementation or if
   a _private-use annotation_ fails to resolve.
-- The _expression_ has a _reserved annotation_.
 
 The _fallback value_ depends on the contents of the _expression_:
 
@@ -369,7 +367,6 @@ The _fallback value_ depends on the contents of the _expression_:
   > In a context where `:func` fails to resolve,
   > `{42 :func}` resolves to the _fallback value_ `|42|` and
   > `{|C:\\| :func}` resolves to the _fallback value_ `|C:\\|`.
-  > In any context, `{|| @reserved}` resolves to the _fallback value_ `||`.
 
 - _expression_ with _variable_ _operand_ referring to a local _declaration_ (with or without an _annotation_):
   the _value_ to which it resolves (which may already be a _fallback value_)
@@ -392,7 +389,7 @@ The _fallback value_ depends on the contents of the _expression_:
   U+0024 DOLLAR SIGN `$` followed by the _name_ of the _variable_
 
   > Examples:
-  > In a context where `$var` fails to resolve, `{$var}` and `{$var :number}` and `{$var @reserved}`
+  > In a context where `$var` fails to resolve, `{$var}` and `{$var :number}` and `{$var ^private}`
   > all resolve to the _fallback value_ `$var`.
   > In a context where `:func` fails to resolve,
   > the _pattern_'s _expression_ in `.input $arg {{{$arg :func}}}`
@@ -406,11 +403,11 @@ The _fallback value_ depends on the contents of the _expression_:
   > In a context where `:func` fails to resolve, `{:func}` resolves to the _fallback value_ `:func`.
   > In a context where `:ns:func` fails to resolve, `{:ns:func}` resolves to the _fallback value_ `:ns:func`.
 
-- unsupported _private-use annotation_ or _reserved annotation_ with no _operand_:
+- unsupported _private-use annotation_ with no _operand_:
   the _annotation_ starting sigil
 
   > Examples:
-  > In any context, `{@reserved}` and `{@reserved |...|}` both resolve to the _fallback value_ `@`.
+  > In any context, `{&private}` and `{&private |...|}` both resolve to the _fallback value_ `&`.
 
 - supported _private-use annotation_ with no _operand_:
   the _annotation_ starting sigil, optionally followed by implementation-defined details
@@ -430,9 +427,6 @@ _Option_ _identifiers_ and values are not included in the _fallback value_.
 _Pattern selection_ is not supported for _fallback values_.
 
 ## Pattern Selection
-
-If the _message_ contains any _reserved statements_,
-emit an _Unsupported Statement_ error.
 
 If the _message_ being formatted is not _well-formed_ and _valid_,
 the result of pattern selection is a _pattern_ consisting of a single _fallback value_

@@ -257,36 +257,15 @@ a reference to a function which cannot be resolved.
 ### Unsupported Expression
 
 An **_<dfn>Unsupported Expression</dfn>_** error occurs when an expression uses
-syntax reserved for future standardization,
-or for private implementation use that is not supported by the current implementation.
+syntax reserved for private implementation use that is not supported by the current implementation.
 
-> For example, attempting to format this message
-> would result in an _Unsupported Expression_ error
-> because it includes a _reserved annotation_.
->
-> ```
-> The value is {!horse}.
-> ```
->
-> Attempting to format this message would result in an _Unsupported Expression_ error
+> For example, attempting to format this message would result in an _Unsupported Expression_ error
 > if done within a context that does not support the `^` private use sigil:
 >
 > ```
 > .match {|horse| ^private}
 > 1 {{The value is one.}}
 > * {{The value is not one.}}
-> ```
-
-### Unsupported Statement
-
-An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a _reserved statement_.
-
-> For example, attempting to format this message
-> would result in an _Unsupported Statement_ error:
->
-> ```
-> .some {|horse|}
-> {{The message body}}
 > ```
 
 ### Bad Selector
