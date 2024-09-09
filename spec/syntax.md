@@ -90,7 +90,7 @@ Attempting to parse a _message_ that is not _well-formed_ will result in a _Synt
 A _message_ is **_<dfn>valid</dfn>_** if it is _well-formed_ and
 **also** meets the additional content restrictions
 and semantic requirements about its structure defined below for
-_declarations_, _matcher_, _options_, and _attributes_.
+_declarations_, _matcher_, and _options_.
 Attempting to parse a _message_ that is not _valid_ will result in a _Data Model Error_.
 
 ## The Message
@@ -368,14 +368,18 @@ and at least one _variant_.
 When the _matcher_ is processed, the result will be a single _pattern_ that serves
 as the template for the formatting process.
 
-A _message_ can only be considered _valid_ if the following requirements are
-satisfied:
+A _message_ can only be considered _valid_ if the following requirements are satisfied;
+otherwise, a corresponding _Data Model Error_ will be produced during processing:
 
-- The number of _keys_ on each _variant_ MUST be equal to the number of _selectors_.
-- At least one _variant_ MUST exist whose _keys_ are all equal to the "catch-all" key `*`.
-- Each _selector_ MUST have an _annotation_,
+- _Variant Key Mismatch_:
+  The number of _keys_ on each _variant_ MUST be equal to the number of _selectors_.
+- _Missing Fallback Variant_:
+  At least one _variant_ MUST exist whose _keys_ are all equal to the "catch-all" key `*`.
+- _Missing Selector Annotation_:
+  Each _selector_ MUST have an _annotation_,
   or contain a _variable_ that directly or indirectly references a _declaration_ with an _annotation_.
-- Each _variant_ MUST use a list of _keys_ that is unique from that
+- _Duplicate Variant_:
+  Each _variant_ MUST use a list of _keys_ that is unique from that
   of all other _variants_ in the _message_.
   _Literal_ _keys_ are compared by their contents, not their syntactical appearance.
 
@@ -587,7 +591,8 @@ Multiple _options_ are permitted in an _annotation_.
 _Options_ are separated from the preceding _function_ _identifier_
 and from each other by whitespace.
 Each _option_'s _identifier_ MUST be unique within the _annotation_:
-an _annotation_ with duplicate _option_ _identifiers_ is not _valid_.
+an _annotation_ with duplicate _option_ _identifiers_ is not _valid_
+and will produce a _Duplicate Option Name_ error during processing.
 
 The order of _options_ is not significant.
 
@@ -750,10 +755,10 @@ by an U+003D EQUALS SIGN `=` along with optional whitespace.
 
 Multiple _attributes_ are permitted in an _expression_ or _markup_.
 Each _attribute_ is separated by whitespace.
-Each _attribute_'s _identifier_ MUST be unique within the _expression_ or _markup_:
-an _expression_ or _markup_ with duplicate _attribute_ _identifiers_ is not _valid_.
 
-The order of _attributes_ is not significant.
+Each _attribute_'s _identifier_ SHOULD be unique within the _expression_ or _markup_:
+all but the last _attribute_ with the same _identifier_ are ignored.
+The order of _attributes_ is not otherwise significant.
 
 ```abnf
 attribute = "@" identifier [[s] "=" [s] literal]

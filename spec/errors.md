@@ -32,7 +32,7 @@ Some examples include throwing an exception,
 returning an error code, 
 or providing a function or method for enumerating any errors.
 
-For all _messages_ without _Syntax Errors_ or _Data Model Errors_,
+For all _valid_ _messages_,
 an implementation MUST enable a user to get a formatted result.
 The formatted result might include _fallback values_ 
 such as when a _placeholder_'s _expression_ produced an error
@@ -52,7 +52,7 @@ and a _Resolution Error_ or a _Message Function Error_ MUST be emitted.
 
 ## Syntax Errors
 
-**_<dfn>Syntax Errors</dfn>_** occur when the syntax representation of a message is not well-formed.
+**_<dfn>Syntax Errors</dfn>_** occur when the syntax representation of a message is not _well-formed_.
 
 > Example invalid messages resulting in a _Syntax Error_:
 >
@@ -74,7 +74,7 @@ and a _Resolution Error_ or a _Message Function Error_ MUST be emitted.
 
 ## Data Model Errors
 
-**_<dfn>Data Model Errors</dfn>_** occur when a message is invalid due to
+**_<dfn>Data Model Errors</dfn>_** occur when a message is not _valid_ due to
 violating one of the semantic requirements on its structure.
 
 ### Variant Key Mismatch
