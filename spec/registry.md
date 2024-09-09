@@ -380,7 +380,7 @@ Implementations MAY define an upper limit on the resolved value
 of a digit size option option consistent with that implementation's practical limits.
 
 In most cases, the value of a digit size option will be a string that
-encodes the value as a decimal integer greater than or equal to zero.
+encodes the value as a non-negative integer.
 Implementations MAY also accept implementation-defined types as the value.
 When provided as a string, the representation of a digit size option matches the following ABNF:
 >```abnf
