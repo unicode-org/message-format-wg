@@ -345,8 +345,6 @@
               "duplicate-variant",
               "unresolved-variable",
               "unknown-function",
-              "unsupported-expression",
-              "unsupported-statement",
               "bad-selector",
               "bad-operand",
               "bad-option",
