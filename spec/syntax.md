@@ -187,7 +187,7 @@ _Declarations_ are optional: many messages will not contain any _declarations_.
 
 An **_<dfn>input-declaration</dfn>_** binds a _variable_ to an external input value.
 The _variable-expression_ of an _input-declaration_
-MAY include an _annotation_ that is applied to the external value.
+MAY include a _function_ that is applied to the external value.
 
 A **_<dfn>local-declaration</dfn>_** binds a _variable_ to the resolved value of an _expression_.
 
@@ -203,7 +203,7 @@ _Duplicate Declaration_ error during processing:
 - A _declaration_ MUST NOT bind a _variable_
   that appears as a _variable_ anywhere within a previous _declaration_.
 - An _input-declaration_ MUST NOT bind a _variable_
-  that appears anywhere within the _annotation_ of its _variable-expression_.
+  that appears anywhere within the _function_ of its _variable-expression_.
 - A _local-declaration_ MUST NOT bind a _variable_ that appears in its _expression_.
 
 A _local-declaration_ MAY overwrite an external input value as long as the
@@ -211,14 +211,14 @@ external input value does not appear in a previous _declaration_.
 
 > [!NOTE]
 > These restrictions only apply to _declarations_.
-> A _placeholder_ or _selector_ can apply a different annotation to a _variable_
+> A _placeholder_ or _selector_ can apply a different _function_ to a _variable_
 > than one applied to the same _variable_ named in a _declaration_.
 > For example, this message is _valid_:
 > ```
 > .input {$var :number maximumFractionDigits=0}
 > .match {$var :number maximumFractionDigits=2}
-> 0 {{The selector can apply a different annotation to {$var} for the purposes of selection}}
-> * {{A placeholder in a pattern can apply a different annotation to {$var :number maximumFractionDigits=3}}}
+> 0 {{The selector can apply a different function to {$var} for the purposes of selection}}
+> * {{A placeholder in a pattern can apply a different function to {$var :number maximumFractionDigits=3}}}
 > ```
 > (See the [Errors](./errors.md) section for examples of invalid messages)
 
@@ -286,7 +286,6 @@ be preserved during formatting.
 simple-start-char = content-char / "@" / "|"
 text-char         = content-char / s / "." / "@" / "|"
 quoted-char       = content-char / s / "." / "@" / "{" / "}"
-private-char      = content-char / "."
 content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %x0B-0C        ; omit CR (%x0D)
                   / %x0E-1F        ; omit SP (%x20)
@@ -343,9 +342,9 @@ otherwise, a corresponding _Data Model Error_ will be produced during processing
   The number of _keys_ on each _variant_ MUST be equal to the number of _selectors_.
 - _Missing Fallback Variant_:
   At least one _variant_ MUST exist whose _keys_ are all equal to the "catch-all" key `*`.
-- _Missing Selector Annotation_:
-  Each _selector_ MUST have an _annotation_,
-  or contain a _variable_ that directly or indirectly references a _declaration_ with an _annotation_.
+- _Missing Selector Function_:
+  Each _selector_ MUST have a _function_,
+  or contain a _variable_ that directly or indirectly references a _declaration_ with a _function_.
 - _Duplicate Variant_:
   Each _variant_ MUST use a list of _keys_ that is unique from that
   of all other _variants_ in the _message_.
@@ -449,20 +448,20 @@ An _expression_ cannot contain another _expression_.
 An _expression_ MAY contain one more _attributes_.
 
 A **_<dfn>literal-expression</dfn>_** contains a _literal_,
-optionally followed by an _annotation_.
+optionally followed by a _function_.
 
 A **_<dfn>variable-expression</dfn>_** contains a _variable_,
-optionally followed by an _annotation_.
+optionally followed by a _function_.
 
-An **_<dfn>annotation-expression</dfn>_** contains an _annotation_ without an _operand_.
+A **_<dfn>function-expression</dfn>_** contains a _function_ without an _operand_.
 
 ```abnf
-expression            = literal-expression
-                      / variable-expression
-                      / annotation-expression
-literal-expression    = "{" [s] literal [s annotation] *(s attribute) [s] "}"
-variable-expression   = "{" [s] variable [s annotation] *(s attribute) [s] "}"
-annotation-expression = "{" [s] annotation *(s attribute) [s] "}"
+expression          = literal-expression
+                    / variable-expression
+                    / function-expression
+literal-expression  = "{" [s] literal [s function] *(s attribute) [s] "}"
+variable-expression = "{" [s] variable [s function] *(s attribute) [s] "}"
+function-expression = "{" [s] function *(s attribute) [s] "}"
 ```
 
 There are several types of _expression_ that can appear in a _message_.
@@ -498,28 +497,19 @@ Additionally, an _input-declaration_ can contain a _variable-expression_.
 > This placeholder contains a function expression with a variable-valued option: {:function option=$variable}
 > ```
 
-### Annotation
-
-An **_<dfn>annotation</dfn>_** is part of an _expression_ containing either
-a _function_ together with its associated _options_, or
-a _private-use annotation_.
-
-```abnf
-annotation = function
-           / private-use-annotation
-```
+### Operand
 
 An **_<dfn>operand</dfn>_** is the _literal_ of a _literal-expression_ or
 the _variable_ of a _variable-expression_.
 
-An _annotation_ can appear in an _expression_ by itself or following a single _operand_.
-When following an _operand_, the _operand_ serves as input to the _annotation_.
-
 #### Function
 
-A **_<dfn>function</dfn>_** is named functionality in an _annotation_.
+A **_<dfn>function</dfn>_** is named functionality in an _expression_.
 _Functions_ are used to evaluate, format, select, or otherwise process data
 values during formatting.
+
+A _function_ can appear in an _expression_ by itself or following a single _operand_.
+When following an _operand_, the _operand_ serves as input to the _function_.
 
 Each _function_ is defined by the runtime's _function registry_.
 A _function_'s entry in the _function registry_ will define
@@ -554,11 +544,11 @@ The _identifier_ is separated from the _value_ by an U+003D EQUALS SIGN `=` alon
 optional whitespace.
 The value of an _option_ can be either a _literal_ or a _variable_.
 
-Multiple _options_ are permitted in an _annotation_.
+Multiple _options_ are permitted in a _function_.
 _Options_ are separated from the preceding _function_ _identifier_
 and from each other by whitespace.
-Each _option_'s _identifier_ MUST be unique within the _annotation_:
-an _annotation_ with duplicate _option_ _identifiers_ is not _valid_
+Each _option_'s _identifier_ MUST be unique within the _function_:
+a _function_ with duplicate _option_ _identifiers_ is not _valid_
 and will produce a _Duplicate Option Name_ error during processing.
 
 The order of _options_ is not significant.
@@ -581,51 +571,6 @@ option = identifier [s] "=" [s] (literal / variable)
 >
 > ```
 > Today is {$date :datetime weekday=$dateStyle}!
-> ```
-
-#### Private-Use Annotations
-
-A **_<dfn>private-use annotation</dfn>_** is an _annotation_ whose syntax is reserved
-for use by a specific implementation or by private agreement between multiple implementations.
-Implementations MAY define their own meaning and semantics for _private-use annotations_.
-
-A _private-use annotation_ starts with either U+0026 AMPERSAND `&` or U+005E CIRCUMFLEX ACCENT `^`.
-
-Characters, including whitespace, are assigned meaning by the implementation.
-The definition of escapes in the `private-body` production, used for the body of
-a _private-use annotation_ is an affordance to implementations that
-wish to use a syntax exactly like other functions. Specifically:
-
-- The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}` respectively
-  when they appear in the body of a _private-use annotation_.
-- The character `|` is special: it SHOULD be escaped as `\|` in a _private-use annotation_,
-  but can appear unescaped as long as it is paired with another `|`.
-  This is an affordance to allow _literals_ to appear in the private use syntax.
-
-A _private-use annotation_ MAY be empty after its introducing sigil.
-
-```abnf
-private-use-annotation = private-start [[s] private-body]
-private-start          = "^" / "&"
-private-body           = private-body-part *([s] private-body-part)
-private-body-part      = private-char / escaped-char / quoted-literal
-```
-
-> [!NOTE]
-> Users are cautioned that _private-use annotations_ cannot be reliably exchanged
-> and can result in errors during formatting.
-> It is generally a better idea to use the function registry
-> to define additional formatting or annotation options.
-
-> Here are some examples of what _private-use_ sequences might look like:
->
-> ```
-> Here's private use with an operand: {$foo &bar}
-> Here's a placeholder that is entirely private-use: {&anything here}
-> Here's a private-use function that uses normal function syntax: {$operand ^foo option=|literal|}
-> The character \| has to be paired or escaped: {&private || |something between| or isolated: \| }
-> Stop {& "translate 'stop' as a verb" might be a translator instruction or comment }
-> Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}
 > ```
 
 ## Markup
@@ -843,7 +788,7 @@ An **_<dfn>escape sequence</dfn>_** is a two-character sequence starting with
 U+005C REVERSE SOLIDUS `\`.
 
 An _escape sequence_ allows the appearance of lexically meaningful characters
-in the body of _text_, _quoted literal_, or _private-use annotations_ sequences.
+in the body of _text_ or _quoted literal_ sequences.
 Each _escape sequence_ represents the literal character immediately following the initial `\`.
 
 ```abnf

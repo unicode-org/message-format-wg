@@ -152,26 +152,26 @@ type Pattern = Array<string | Expression | Markup>;
 type Expression =
   | LiteralExpression
   | VariableExpression
-  | AnnotationExpression;
+  | FunctionExpression;
 
 interface LiteralExpression {
   type: "expression";
   arg: Literal;
-  annotation?: FunctionAnnotation | PrivateAnnotation;
+  function?: FunctionRef;
   attributes: Attributes;
 }
 
 interface VariableExpression {
   type: "expression";
   arg: VariableRef;
-  annotation?: FunctionAnnotation | PrivateAnnotation;
+  function?: FunctionRef;
   attributes: Attributes;
 }
 
-interface AnnotationExpression {
+interface FunctionExpression {
   type: "expression";
   arg?: never;
-  annotation: FunctionAnnotation | PrivateAnnotation;
+  function: FunctionRef;
   attributes: Attributes;
 }
 ```
@@ -180,7 +180,7 @@ interface AnnotationExpression {
 
 The `Literal` and `VariableRef` correspond to the the _literal_ and _variable_ syntax rules.
 When they are used as the `body` of an `Expression`,
-they represent _expression_ values with no _annotation_.
+they represent _expression_ values with no _function_.
 
 `Literal` represents all literal values, both _quoted literal_ and _unquoted literal_.
 The presence or absence of quotes is not preserved by the data model.
@@ -200,14 +200,14 @@ interface VariableRef {
 }
 ```
 
-A `FunctionAnnotation` represents a _function_ _annotation_.
+A `FunctionRef` represents a _function_.
 The `name` does not include the `:` starting sigil.
 
 `Options` is a key-value mapping containing options,
-and is used to represent the _annotation_ and _markup_ _options_.
+and is used to represent the _function_ and _markup_ _options_.
 
 ```ts
-interface FunctionAnnotation {
+interface FunctionRef {
   type: "function";
   name: string;
   options: Options;
@@ -216,31 +216,13 @@ interface FunctionAnnotation {
 type Options = Map<string, Literal | VariableRef>;
 ```
 
-A `PrivateAnnotation` represents a
-_private-use annotation_ not supported by the implementation.
-The `source` is the "raw" value (i.e. escape sequences are not processed),
-including the starting sigil.
-
-When parsing the syntax of a _message_ that includes a _private-use annotation_
-supported by the implementation,
-the implementation SHOULD represent it in the data model
-using an interface appropriate for the semantics and meaning
-that the implementation attaches to that _annotation_.
-
-```ts
-interface PrivateAnnotation {
-  type: "private";
-  source: string;
-}
-```
-
 ## Markup
 
 A `Markup` object has a `kind` of either `"open"`, `"standalone"`, or `"close"`,
 each corresponding to _open_, _standalone_, and _close_ _markup_.
 The `name` in these does not include the starting sigils `#` and `/` 
 or the ending sigil `/`.
-The `options` for markup use the same key-value mapping as `FunctionAnnotation`.
+The `options` for markup use the same key-value mapping as `FunctionRef`.
 
 ```ts
 interface Markup {

@@ -36,7 +36,7 @@
       }
     },
 
-    "function-annotation": {
+    "function": {
       "type": "object",
       "properties": {
         "type": { "const": "function" },
@@ -45,32 +45,17 @@
       },
       "required": ["type", "name"]
     },
-    "private-annotation": {
-      "type": "object",
-      "properties": {
-        "type": { "const": "private" },
-        "source": { "type": "string" }
-      },
-      "required": ["type", "source"]
-    },
-    "annotation": {
-      "oneOf": [
-        { "$ref": "#/$defs/function-annotation" },
-        { "$ref": "#/$defs/private-annotation" }
-      ]
-    },
-
     "expression": {
       "type": "object",
       "properties": {
         "type": { "const": "expression" },
         "arg": { "$ref": "#/$defs/literal-or-variable" },
-        "annotation": { "$ref": "#/$defs/annotation" },
+        "function": { "$ref": "#/$defs/function" },
         "attributes": { "$ref": "#/$defs/attributes" }
       },
       "oneOf": [
         { "required": ["type", "arg"] },
-        { "required": ["type", "annotation"] }
+        { "required": ["type", "function"] }
       ]
     },
 

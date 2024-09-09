@@ -92,9 +92,6 @@ that previously did not specify a fallback value.
 Updates to this specification will not change the syntactical meaning
 of any syntax defined in this specification.
 
-Updates to this specification will not assign any meaning to or change the syntactical 
-requirements for any private-use annotation.
-
 Updates to this specification will not remove any functions defined in the default registry.
 
 Updates to this specification will not remove any options or option values

@@ -254,20 +254,6 @@ a reference to a function which cannot be resolved.
 > * {{The value is not one.}}
 > ```
 
-### Unsupported Expression
-
-An **_<dfn>Unsupported Expression</dfn>_** error occurs when an expression uses
-syntax reserved for private implementation use that is not supported by the current implementation.
-
-> For example, attempting to format this message would result in an _Unsupported Expression_ error
-> if done within a context that does not support the `^` private use sigil:
->
-> ```
-> .match {|horse| ^private}
-> 1 {{The value is one.}}
-> * {{The value is not one.}}
-> ```
-
 ### Bad Selector
 
 A **_<dfn>Bad Selector</dfn>_** error occurs when a message includes a _selector_

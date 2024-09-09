@@ -21,15 +21,12 @@ variant           = key *(s key) [s] quoted-pattern
 key               = literal / "*"
 
 ; Expressions
-expression            = literal-expression
-                      / variable-expression
-                      / annotation-expression
-literal-expression    = "{" [s] literal [s annotation] *(s attribute) [s] "}"
-variable-expression   = "{" [s] variable [s annotation] *(s attribute) [s] "}"
-annotation-expression = "{" [s] annotation *(s attribute) [s] "}"
-
-annotation            = function
-                      / private-use-annotation
+expression          = literal-expression
+                    / variable-expression
+                    / function-expression
+literal-expression  = "{" [s] literal [s function] *(s attribute) [s] "}"
+variable-expression = "{" [s] variable [s function] *(s attribute) [s] "}"
+function-expression = "{" [s] function *(s attribute) [s] "}"
 
 markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"  ; open and standalone
        / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}"  ; close
@@ -53,12 +50,6 @@ input = %s".input"
 local = %s".local"
 match = %s".match"
 
-; Reserve sigils for private-use by implementations.
-private-use-annotation = private-start [[s] private-body]
-private-start          = "^" / "&"
-private-body           = private-body-part *([s] private-body-part)
-private-body-part      = private-char / escaped-char / quoted-literal
-
 ; Names and identifiers
 ; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName
 ; name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName but excludes U+FFFD
@@ -77,7 +68,6 @@ name-char  = name-start / DIGIT / "-" / "."
 simple-start-char = content-char / "@" / "|"
 text-char         = content-char / s / "." / "@" / "|"
 quoted-char       = content-char / s / "." / "@" / "{" / "}"
-private-char      = content-char / "."
 content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %x0B-0C        ; omit CR (%x0D)
                   / %x0E-1F        ; omit SP (%x20)
