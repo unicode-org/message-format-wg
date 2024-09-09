@@ -262,7 +262,7 @@ the following steps are taken:
 > ```
 > .input {$n :number minimumIntegerDigits=3}
 > .local $n1 = {$n :number maximumFractionDigits=3}
-> {{$n1}}
+> {{What is the value of: {$n1}}}
 > ```
 >
 > is currently implementation-dependent.
