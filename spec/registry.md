@@ -487,7 +487,7 @@ for examples.
 > [!IMPORTANT]
 > The exact behavior of exact literal match is only defined for non-zero-filled
 > integer values.
-> Annotations that use fraction digits or significant digits might work in specific
+> Functions that use fraction digits or significant digits might work in specific
 > implementation-defined ways.
 > Users should avoid depending on these types of keys in message selection.
 
@@ -567,7 +567,7 @@ The function `:datetime` has these _style options_.
 
 _Field options_ describe which fields to include in the formatted output
 and what format to use for that field.
-The implementation may use this _annotation_ to configure which fields
+The implementation may use this _function_ to configure which fields
 appear in the formatted output.
 
 > [!NOTE]

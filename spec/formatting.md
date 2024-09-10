@@ -113,18 +113,10 @@ and different implementations MAY choose to perform different levels of resoluti
 > Alternatively, it could be an instance of an ICU4J `FormattedNumber`,
 > or some other locally appropriate value.
 
-Depending on the presence or absence of a _variable_ or _literal_ operand
-and a _function_, _private-use annotation_, or _reserved annotation_,
+Depending on the presence or absence of a _variable_ or _literal_ operand and a _function_,
 the resolved value of the _expression_ is determined as follows:
 
-If the _expression_ contains a _reserved annotation_,
-an _Unsupported Expression_ error is emitted and
-a _fallback value_ is used as the resolved value of the _expression_.
-
-Else, if the _expression_ contains a _private-use annotation_,
-its resolved value is defined according to the implementation's specification.
-
-Else, if the _expression_ contains an _annotation_,
+If the _expression_ contains a _function_,
 its resolved value is defined by _function resolution_.
 
 Else, if the _expression_ consists of a _variable_,
@@ -150,10 +142,10 @@ Else, the _expression_ consists of a _literal_.
 Its resolved value is defined by _literal resolution_.
 
 > **Note**
-> This means that a _literal_ value with no _annotation_
+> This means that a _literal_ value with no _function_
 > is always treated as a string.
 > To represent values that are not strings as a _literal_,
-> an _annotation_ needs to be provided:
+> a _function_ needs to be provided:
 >
 > ```
 > .local $aNumber = {1234 :number}
@@ -193,7 +185,7 @@ this MUST also be considered a failure.
 
 ### Function Resolution
 
-To resolve an _expression_ with a _function_ _annotation_,
+To resolve an _expression_ with a _function_,
 the following steps are taken:
 
 1. If the _expression_ includes an _operand_, resolve its value.
@@ -260,13 +252,13 @@ the following steps are taken:
 > ```
 > .input {$n :number minimumIntegerDigits=3}
 > .local $n1 = {$n :number maximumFractionDigits=3}
-> {{$n1}}
+> {{What is the value of: {$n1}}}
 > ```
 >
 > is currently implementation-dependent.
 > Depending on whether the options are preserved
-> between the resolution of the first `:number` _annotation_
-> and the resolution of the second `:number` _annotation_,
+> between the resolution of the first `:number` _function_
+> and the resolution of the second `:number` _function_,
 > a conformant implementation
 > could produce either "001.000" or "1.000"
 >
@@ -348,12 +340,9 @@ A **_<dfn>fallback value</dfn>_** is the resolved value for an _expression_ that
 
 An _expression_ fails to resolve when:
 
-- A _variable_ used as an _operand_ (with or without an _annotation_) fails to resolve.
+- A _variable_ used as an _operand_ (with or without a _function_) fails to resolve.
   * Note that this does not include a _variable_ used as an _option_ value.
-- A _function_ _annotation_ fails to resolve.
-- A _private-use annotation_ is unsupported by the implementation or if
-  a _private-use annotation_ fails to resolve.
-- The _expression_ has a _reserved annotation_.
+- A _function_ fails to resolve.
 
 The _fallback value_ depends on the contents of the _expression_:
 
@@ -367,9 +356,8 @@ The _fallback value_ depends on the contents of the _expression_:
   > In a context where `:func` fails to resolve,
   > `{42 :func}` resolves to the _fallback value_ `|42|` and
   > `{|C:\\| :func}` resolves to the _fallback value_ `|C:\\|`.
-  > In any context, `{|| @reserved}` resolves to the _fallback value_ `||`.
 
-- _expression_ with _variable_ _operand_ referring to a local _declaration_ (with or without an _annotation_):
+- _expression_ with _variable_ _operand_ referring to a local _declaration_ (with or without a _function_):
   the _value_ to which it resolves (which may already be a _fallback value_)
 
   > Examples:
@@ -386,12 +374,12 @@ The _fallback value_ depends on the contents of the _expression_:
   > (transitively) resolves to the _fallback value_ `:now` and
   > the message formats to `{:now}`.
 
-- _expression_ with _variable_ _operand_ not referring to a local _declaration_ (with or without an _annotation_):
+- _expression_ with _variable_ _operand_ not referring to a local _declaration_ (with or without a _function_):
   U+0024 DOLLAR SIGN `$` followed by the _name_ of the _variable_
 
   > Examples:
-  > In a context where `$var` fails to resolve, `{$var}` and `{$var :number}` and `{$var @reserved}`
-  > all resolve to the _fallback value_ `$var`.
+  > In a context where `$var` fails to resolve, `{$var}` and `{$var :number}`
+  > both resolve to the _fallback value_ `$var`.
   > In a context where `:func` fails to resolve,
   > the _pattern_'s _expression_ in `.input $arg {{{$arg :func}}}`
   > resolves to the _fallback value_ `$arg` and
@@ -404,21 +392,6 @@ The _fallback value_ depends on the contents of the _expression_:
   > In a context where `:func` fails to resolve, `{:func}` resolves to the _fallback value_ `:func`.
   > In a context where `:ns:func` fails to resolve, `{:ns:func}` resolves to the _fallback value_ `:ns:func`.
 
-- unsupported _private-use annotation_ or _reserved annotation_ with no _operand_:
-  the _annotation_ starting sigil
-
-  > Examples:
-  > In any context, `{@reserved}` and `{@reserved |...|}` both resolve to the _fallback value_ `@`.
-
-- supported _private-use annotation_ with no _operand_:
-  the _annotation_ starting sigil, optionally followed by implementation-defined details
-  conforming with patterns in the other cases (such as quoting literals).
-  If details are provided, they SHOULD NOT leak potentially private information.
-
-  > Examples:
-  > In a context where `^` expressions are used for comments, `{^▽^}` might resolve to the _fallback value_ `^`.
-  > In a context where `&` expressions are _function_-like macro invocations, `{&foo |...|}` might resolve to the _fallback value_ `&foo`.
-
 - Otherwise: the U+FFFD REPLACEMENT CHARACTER `�`
 
   This is not currently used by any expression, but may apply in future revisions.
@@ -428,9 +401,6 @@ _Option_ _identifiers_ and values are not included in the _fallback value_.
 _Pattern selection_ is not supported for _fallback values_.
 
 ## Pattern Selection
-
-If the _message_ contains any _reserved statements_,
-emit an _Unsupported Statement_ error.
 
 If the _message_ being formatted is not _well-formed_ and _valid_,
 the result of pattern selection is a _pattern_ consisting of a single _fallback value_
@@ -615,7 +585,7 @@ _This section is non-normative._
 
 #### Example 1
 
-Presuming a minimal implementation which only supports `:string` annotation
+Presuming a minimal implementation which only supports `:string` _function_
 which matches keys by using string comparison,
 and a formatting context in which
 the variable reference `$foo` resolves to the string `'foo'` and

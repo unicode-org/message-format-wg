@@ -6,7 +6,7 @@ pattern           = *(text-char / escaped-char / placeholder)
 placeholder       = expression / markup
 
 complex-message   = [s] *(declaration [s]) complex-body [s]
-declaration       = input-declaration / local-declaration / reserved-statement
+declaration       = input-declaration / local-declaration
 complex-body      = quoted-pattern / matcher
 
 input-declaration = input [s] variable-expression
@@ -21,16 +21,12 @@ variant           = key *(s key) [s] quoted-pattern
 key               = literal / "*"
 
 ; Expressions
-expression            = literal-expression
-                      / variable-expression
-                      / annotation-expression
-literal-expression    = "{" [s] literal [s annotation] *(s attribute) [s] "}"
-variable-expression   = "{" [s] variable [s annotation] *(s attribute) [s] "}"
-annotation-expression = "{" [s] annotation *(s attribute) [s] "}"
-
-annotation            = function
-                      / private-use-annotation
-                      / reserved-annotation
+expression          = literal-expression
+                    / variable-expression
+                    / function-expression
+literal-expression  = "{" [s] literal [s function] *(s attribute) [s] "}"
+variable-expression = "{" [s] variable [s function] *(s attribute) [s] "}"
+function-expression = "{" [s] function *(s attribute) [s] "}"
 
 markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"  ; open and standalone
        / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}"  ; close
@@ -38,7 +34,7 @@ markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"  ; open
 ; Expression and literal parts
 function       = ":" identifier *(s option)
 option         = identifier [s] "=" [s] (literal / variable)
-; Attributes are reserved for future standardization
+
 attribute      = "@" identifier [[s] "=" [s] (literal / variable)]
 
 variable       = "$" name
@@ -53,23 +49,6 @@ number-literal   = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "
 input = %s".input"
 local = %s".local"
 match = %s".match"
-
-; Reserve additional .keywords for use by future versions of this specification.
-reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
-; Note that the following production is a simplification,
-; as this rule MUST NOT be considered to match existing keywords
-; (`.input`, `.local`, and `.match`).
-reserved-keyword   = "." name
-
-; Reserve additional sigils for use by future versions of this specification.
-reserved-annotation       = reserved-annotation-start [[s] reserved-body]
-reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
-
-; Reserve sigils for private-use by implementations.
-private-use-annotation    = private-start [[s] reserved-body]
-private-start             = "^" / "&"
-reserved-body             = reserved-body-part *([s] reserved-body-part)
-reserved-body-part        = reserved-char / escaped-char / quoted-literal
 
 ; Names and identifiers
 ; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName
@@ -89,7 +68,6 @@ name-char  = name-start / DIGIT / "-" / "."
 simple-start-char = content-char / "@" / "|"
 text-char         = content-char / s / "." / "@" / "|"
 quoted-char       = content-char / s / "." / "@" / "{" / "}"
-reserved-char     = content-char / "."
 content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %x0B-0C        ; omit CR (%x0D)
                   / %x0E-1F        ; omit SP (%x20)

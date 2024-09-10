@@ -90,16 +90,7 @@ Updates to this specification MUST NOT specify the use of a fallback value for a
 that previously did not specify a fallback value.
 
 Updates to this specification will not change the syntactical meaning
-of any syntax defined in this specification except for that syntax marked as
-"reserved for future standardization".
-
-Updates to this specification will not assign any meaning to or change the syntactical 
-requirements for any private-use annotation.
-
-Updates to this specification will not remove any reserved keywords or sigils.
-
-Updates to this specification will not add any additional Unicode code points to 
-those in `reserved-annotation-start`.
+of any syntax defined in this specification.
 
 Updates to this specification will not remove any functions defined in the default registry.
 
@@ -113,13 +104,6 @@ defined in the default registry.
 > can change their results over time or behave differently due to local runtime
 > differences in implementation or changes to locale data
 > (such as due to the release of new CLDR versions).
-
-Updates to this specification will not introduce message syntax that,
-when parsed according to earlier versions of this specification,
-would produce syntax or data model errors.
-Messages that use syntax introduced in a future version of this specification
-could produce resolution or message function errors
-when formatted according to an earlier version of this specification.
 
 Updates to this specification will only reserve, define, or require
 function names or function option names
@@ -137,29 +121,19 @@ based on this version being invalid.
 
 > For example, existing interfaces or fields will not be removed.
 
-Future versions of this specification will not introduce syntax that cannot be
-represented by this version of the data model.
-
-> For example, a future version could introduce a new keyword.
-> The future version's data model would provide an interface for that keyword
-> while this version of the data model would parse the value into
-> the interface `UnsupportedStatement`.
-> Both data models would be "valid" in their context,
-> but this version's would be missing any functionality for the new statement type.
-
 > [!IMPORTANT]
 > This stability policy allows any of the following, non-exhaustive list, of changes
 > in future versions of this specification:
+> - Future versions may define new syntax and structures
+>   that would not be supported by this version of the specification.
 > - Future versions may add additional structure or meaning to existing syntax.
 > - Future versions may define new keywords.
-> - Future versions may define annotations that use portions of the `reserved-annotation`
->   syntax.
 > - Future versions may make previously invalid messages valid.
 > - Future versions may define additional functions in the default registry
 >   or may reserve the names of functions for the purposes of interoperability.
 > - Future versions may define additional options to existing functions.
 > - Future versions may define additional option values for existing options.
-> - Future versions may deprecate functions, options, or option values.
+> - Future versions may deprecate (but not remove) keywords, functions, options, or option values.
 > - Future versions of this specification may introduce changes
 >   to the data model that would result in future data model representations
 >   not being valid for implementations of this version of the data model.

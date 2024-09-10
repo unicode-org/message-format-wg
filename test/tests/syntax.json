@@ -170,12 +170,6 @@
       "exp": ""
     },
     {
-      "description": "message -> complex-message -> *(declaration [s]) complex-body -> declaration complex-body -> reserved-statement  complex-body -> reserved-keyword expression -> \".\" name expression complex-body",
-      "src": ".n{a}{{}}",
-      "exp": "",
-      "expErrors": [ { "type": "unsupported-statement" } ]
-    },
-    {
       "description": "message -> complex-message -> complex-body -> ... -> matcher -> match-statement variant -> match selector key quoted-pattern -> \".match\" variable literal quoted-pattern",
       "src": ".local $a={a :f}.match $a a{{}}*{{}}",
       "exp": "",
@@ -303,18 +297,6 @@
       "src": "{:f }",
       "exp": "{:f}",
       "expErrors": [{ "type": "unknown-function" }]
-    },
-    {
-      "description": "... annotation -> private-use-annotation -> private-start",
-      "src": "{^}",
-      "exp": "{^}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... annotation -> reserved-annotation -> reserved-annotation-start",
-      "src": "{!}",
-      "exp": "{!}",
-      "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
       "description": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" s \"#\" identifier \"}\"", 
@@ -506,114 +488,6 @@
       "description": "... unquoted-literal -> number-literal -> %x30 %i\"e\" \"+\" 1*DIGIT ...",
       "src": "{0E-1}",
       "exp": "0E-1"
-    },
-    {
-      "description": "... reserved-statement -> reserved-keyword s reserved-body 1*([s] expression) -> reserved-keyword s reserved-body expression -> \".\" name s reserved-body-part expression -> \".\" name s reserved-char expression ...",
-      "src": ".n .{a}{{}}",
-      "exp": "",
-      "expErrors": [ { "type": "unsupported-statement" } ]
-    },
-    {
-      "description": "... reserved-statement -> reserved-keyword reserved-body 1*([s] expression) -> reserved-keyword s reserved-body s expression -> \".\" name s reserved-body-part expression -> \".\" name s reserved-char expression ...",
-      "src": ".n. {a}{{}}",
-      "exp": "",
-      "expErrors": [ { "type": "unsupported-statement" } ]
-    },
-    {
-      "description": "... reserved-statement -> reserved-keyword reserved-body 1*([s] expression) -> reserved-keyword reserved-body expression expression -> \".\" name reserved-body-part expression expression -> \".\" name s reserved-char expression expression ...",
-      "src": ".n.{a}{b}{{}}",
-      "exp": "",
-      "expErrors": [ { "type": "unsupported-statement" } ]
-    },
-    {
-      "description": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part -> \"!\" reserved-char ...",
-      "src": "{!.}",
-      "exp": "{!}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... reserved-annotation -> reserved-annotation-start s reserved-body -> \"!\" s reserved-body-part -> \"!\" s reserved-char ...",
-      "src": "{! .}",
-      "exp": "{!}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... reserved-annotation-start ...",
-      "src": "{%}",
-      "exp": "{%}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... reserved-annotation-start ...",
-      "src": "{*}",
-      "exp": "{*}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... reserved-annotation-start ...",
-      "src": "{+}",
-      "exp": "{+}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... reserved-annotation-start ...",
-      "src": "{<}",
-      "exp": "{<}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... reserved-annotation-start ...",
-      "src": "{>}",
-      "exp": "{>}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... reserved-annotation-start ...",
-      "src": "{?}",
-      "exp": "{?}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... reserved-annotation-start ...",
-      "src": "{~}",
-      "exp": "{~}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... private-use-annotation -> private-start reserved-body -> \"^\" reserved-body-part -> \"^\" reserved-char ...",
-      "src": "{^.}",
-      "exp": "{^}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... private-use-annotation -> private-start s reserved-body -> \"^\" s reserved-body-part -> \"^\" s reserved-char ...",
-      "src": "{^ .}",
-      "exp": "{^}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... private-start ...",
-      "src": "{&}",
-      "exp": "{&}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part reserved-body-part -> \"!\" reserved-char escaped-char ...",
-      "src": "{!.\\{}",
-      "exp": "{!}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part s reserved-body-part -> \"!\" reserved-char s escaped-char ...",
-      "src": "{!. \\{}",
-      "exp": "{!}",
-      "expErrors": [{ "type": "unsupported-expression" }]
-    },
-    {
-      "description": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part -> \"!\" quoted-literal ...",
-      "src": "{!|a|}",
-      "exp": "{!}",
-      "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
       "src": "hello { world\t\n}",
@@ -817,118 +691,6 @@
           "type": "string",
           "source": "|42|",
           "value": "42"
-        }
-      ]
-    },
-    {
-      "src": "foo {+reserved}",
-      "exp": "foo {+}",
-      "expParts": [
-        {
-          "type": "literal",
-          "value": "foo "
-        },
-        {
-          "type": "fallback",
-          "source": "+"
-        }
-      ],
-      "expErrors": [
-        {
-          "type": "unsupported-expression"
-        }
-      ]
-    },
-    {
-      "src": "foo {&private}",
-      "exp": "foo {&}",
-      "expParts": [
-        {
-          "type": "literal",
-          "value": "foo "
-        },
-        {
-          "type": "fallback",
-          "source": "&"
-        }
-      ],
-      "expErrors": [
-        {
-          "type": "unsupported-expression"
-        }
-      ]
-    },
-    {
-      "src": "foo {?reserved @a @b=c}",
-      "exp": "foo {?}",
-      "expParts": [
-        {
-          "type": "literal",
-          "value": "foo "
-        },
-        {
-          "type": "fallback",
-          "source": "?"
-        }
-      ],
-      "expErrors": [
-        {
-          "type": "unsupported-expression"
-        }
-      ]
-    },
-    {
-      "src": ".foo {42} {{bar}}",
-      "exp": "bar",
-      "expParts": [
-        {
-          "type": "literal",
-          "value": "bar"
-        }
-      ],
-      "expErrors": [
-        {
-          "type": "unsupported-statement"
-        }
-      ]
-    },
-    {
-      "src": ".foo{42}{{bar}}",
-      "exp": "bar",
-      "expParts": [
-        {
-          "type": "literal",
-          "value": "bar"
-        }
-      ],
-      "expErrors": [
-        {
-          "type": "unsupported-statement"
-        }
-      ]
-    },
-    {
-      "src": ".foo |}lit{| {42}{{bar}}",
-      "exp": "bar",
-      "expParts": [
-        {
-          "type": "literal",
-          "value": "bar"
-        }
-      ],
-      "expErrors": [
-        {
-          "type": "unsupported-statement"
-        }
-      ]
-    },
-    {
-      "src": ".l $y = {|bar|} {{}}",
-      "exp": "",
-      "expParts": [],
-      "expErrors": [
-        {
-          "type": "unsupported-statement"
         }
       ]
     },
