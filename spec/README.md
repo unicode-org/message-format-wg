@@ -133,7 +133,7 @@ based on this version being invalid.
 >   or may reserve the names of functions for the purposes of interoperability.
 > - Future versions may define additional options to existing functions.
 > - Future versions may define additional option values for existing options.
-> - Future versions may deprecate functions, options, or option values.
+> - Future versions may deprecate (but not remove) keywords, functions, options, or option values.
 > - Future versions of this specification may introduce changes
 >   to the data model that would result in future data model representations
 >   not being valid for implementations of this version of the data model.
