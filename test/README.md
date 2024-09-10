@@ -40,8 +40,6 @@ to the error names used in ["MessageFormat 2.0 Errors"](../spec/errors.md) in th
 | Syntax Error                | syntax-error                |
 | Unknown Function            | unknown-function            |
 | Unresolved Variable         | unresolved-variable         |
-| Unsupported Expression      | unsupported-expression      |
-| Unsupported Statement       | unsupported-statement       |
 | Variant Key Mismatch        | variant-key-mismatch        |
 
 The "Message Function Error" error name used in the spec
