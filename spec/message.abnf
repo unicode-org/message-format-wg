@@ -14,9 +14,9 @@ local-declaration = local s variable [s] "=" [s] expression
 
 quoted-pattern    = "{{" pattern "}}"
 
-matcher           = match-statement 1*([s] variant)
-match-statement   = match 1*([s] selector)
-selector          = expression
+matcher           = match-statement s variant *([s] variant)
+match-statement   = match 1*(s selector)
+selector          = variable
 variant           = key *(s key) [s] quoted-pattern
 key               = literal / "*"
 

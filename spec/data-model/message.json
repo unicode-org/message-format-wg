@@ -139,7 +139,7 @@
         "declarations": { "$ref": "#/$defs/declarations" },
         "selectors": {
           "type": "array",
-          "items": { "$ref": "#/$defs/expression" }
+          "items": { "$ref": "#/$defs/variable" }
         },
         "variants": {
           "type": "array",

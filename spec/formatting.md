@@ -53,9 +53,9 @@ nor be made available to function implementations.
 > value of a given _expression_ until it is actually used by a
 > selection or formatting process.
 > However, when an _expression_ is resolved, it MUST behave as if all preceding
-> _declarations_ and _selectors_ affecting _variables_ referenced by that _expression_
+> _declarations_ affecting _variables_ referenced by that _expression_
 > have already been evaluated in the order in which the relevant _declarations_
-> and _selectors_ appear in the _message_.
+> appear in the _message_.
 
 ## Formatting Context
 
@@ -85,7 +85,7 @@ Implementations MAY include additional fields in their _formatting context_.
 
 ## Expression and Markup Resolution
 
-_Expressions_ are used in _declarations_, _selectors_, and _patterns_.
+_Expressions_ are used in _declarations_ and _patterns_.
 _Markup_ is only used in _patterns_.
 
 In a _declaration_, the resolved value of the _expression_ is bound to a _variable_,
@@ -96,8 +96,6 @@ implementations SHOULD NOT immediately fully format the value for output.
 In an _input-declaration_, the _variable_ operand of the _variable-expression_
 identifies not only the name of the external input value,
 but also the _variable_ to which the resolved value of the _variable-expression_ is bound.
-
-In _selectors_, the resolved value of an _expression_ is used for _pattern selection_.
 
 In a _pattern_, the resolved value of an _expression_ or _markup_ is used in its _formatting_.
 
@@ -429,7 +427,8 @@ according to their _key_ values and selecting the first one.
 > > For example, in the `pl` (Polish) locale, this _message_ cannot reach
 > > the `*` _variant_:
 > > ```
-> > .match {$num :integer}
+> > .input {$num :integer}
+> > .match $num
 > > 0    {{ }}
 > > one  {{ }}
 > > few  {{ }}
@@ -449,13 +448,16 @@ Each _key_ corresponds to a _selector_ by its position in the _variant_.
 > For example, in this message:
 >
 > ```
-> .match {:one} {:two} {:three}
+> .input {$one :number}
+> .input {$two :number}
+> .input {$three :number}
+> .match $one $two $three
 > 1 2 3 {{ ... }}
 > ```
 >
-> The first _key_ `1` corresponds to the first _selector_ (`{:one}`),
-> the second _key_ `2` to the second _selector_ (`{:two}`),
-> and the third _key_ `3` to the third _selector_ (`{:three}`).
+> The first _key_ `1` corresponds to the first _selector_ (`$one`),
+> the second _key_ `2` to the second _selector_ (`$two`),
+> and the third _key_ `3` to the third _selector_ (`$three`).
 
 To determine which _variant_ best matches a given set of inputs,
 each _selector_ is used in turn to order and filter the list of _variants_.
@@ -467,15 +469,6 @@ Earlier _selectors_ in the _matcher_'s list of _selectors_ have a higher priorit
 
 When all of the _selectors_ have been processed,
 the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
-
-> [!NOTE]
-> A _selector_ is not a _declaration_.
-> Even when the same _function_ can be used for both formatting and selection
-> of a given _operand_
-> the _annotation_ that appears in a _selector_ has no effect on subsequent
-> _selectors_ nor on the formatting used in _placeholders_.
-> To use the same value for selection and formatting,
-> set its value with a `.input` or `.local` _declaration_.
 
 This selection method is defined in more detail below.
 An implementation MAY use any pattern selection method,
@@ -600,7 +593,9 @@ the variable reference `$bar` resolves to the string `'bar'`,
 pattern selection proceeds as follows for this message:
 
 ```
-.match {$foo :string} {$bar :string}
+.input {$foo :string}
+.input {$bar :string}
+.match $foo $bar
 bar bar {{All bar}}
 foo foo {{All foo}}
 * * {{Otherwise}}
@@ -631,7 +626,9 @@ Alternatively, with the same implementation and formatting context as in Example
 pattern selection would proceed as follows for this message:
 
 ```
-.match {$foo :string} {$bar :string}
+.input {$foo :string}
+.input {$bar :string}
+.match $foo $bar
 * bar {{Any and bar}}
 foo * {{Foo and any}}
 foo bar {{Foo and bar}}
@@ -680,7 +677,7 @@ the pattern selection proceeds as follows for this message:
 
 ```
 .input {$count :number}
-.match {$count}
+.match $count
 one {{Category match for {$count}}}
 1   {{Exact match for {$count}}}
 *   {{Other match for {$count}}}

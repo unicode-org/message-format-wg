@@ -76,7 +76,8 @@ Functions can optionally take _options_:
 Messages can use a _selector_ to choose between different _variants_,
 which correspond to the grammatical (or other) requirements of the language:
 
-    .match {$count :integer}
+    .input {$count :integer}
+    .match $count
     0   {{You have no notifications.}}
     one {{You have {$count} notification.}}
     *   {{You have {$count} notifications.}}

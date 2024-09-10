@@ -51,9 +51,9 @@ The function `:string` has no options.
 #### Selection
 
 When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
-where `resolvedSelector` is the resolved value of a _selector_ _expression_
+where `resolvedSelector` is the resolved value of a _selector_
 and `keys` is a list of strings,
-the `:string` selector performs as described below.
+the `:string` selector function performs as described below.
 
 1. Let `compare` be the string value of `resolvedSelector`.
 1. Let `result` be a new empty list of strings.
@@ -80,7 +80,8 @@ the `:string` selector performs as described below.
 >
 > For example:
 > ```
-> .match {$string :string}
+> .input {$string :string}
+> .match $string
 > | space key | {{Matches the string " space key "}}
 > *             {{Matches the string "space key"}}
 > ```
@@ -195,7 +196,8 @@ but can cause problems in target locales that the original developer is not cons
 > For example, a naive developer might use a special message for the value `1` without
 > considering a locale's need for a `one` plural:
 > ```
-> .match {$var :number}
+> .input {$var :number}
+> .match $var
 > 1   {{You have one last chance}}
 > one {{You have {$var} chance remaining}}
 > *   {{You have {$var} chances remaining}}
@@ -311,7 +313,8 @@ but can cause problems in target locales that the original developer is not cons
 > For example, a naive developer might use a special message for the value `1` without
 > considering a locale's need for a `one` plural:
 > ```
-> .match {$var :integer}
+> .input {$var :integer}
+> .match $var
 > 1   {{You have one last chance}}
 > one {{You have {$var} chance remaining}}
 > *   {{You have {$var} chances remaining}}
@@ -398,7 +401,7 @@ Number selection has three modes:
   followed by an ordinal rule category if there is no explicit match
 
 When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
-where `resolvedSelector` is the resolved value of a _selector_ _expression_
+where `resolvedSelector` is the resolved value of a _selector_
 and `keys` is a list of strings,
 numeric selectors perform as described below.
 
@@ -462,7 +465,8 @@ for examples.
 >
 > A message in Czech might be:
 > ```
-> .match {$numDays :number}
+> .input {$numDays :number}
+> .match $numDays
 > one  {{{$numDays} den}}
 > few  {{{$numDays} dny}}
 > many {{{$numDays} dne}}

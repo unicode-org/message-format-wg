@@ -84,7 +84,7 @@ interface PatternMessage {
 interface SelectMessage {
   type: "select";
   declarations: Declaration[];
-  selectors: Expression[];
+  selectors: VariableRef[];
   variants: Variant[];
 }
 ```
