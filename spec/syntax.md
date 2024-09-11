@@ -725,7 +725,6 @@ Built-in _functions_ and their _options_ do not have a _namespace_ identifier.
 The _namespace_ `u` (U+0075 LATIN SMALL LETTER U)
 is reserved for future standardization.
 
-_Variable_ names are prefixed with `$`.
 _Function_ _identifiers_ are prefixed with `:`.
 _Markup_ _identifiers_ are prefixed with `#` or `/`.
 _Option_ _identifiers_ have no prefix.
@@ -736,9 +735,11 @@ or the value of an _unquoted literal_.
 
 A _name_ can be preceded or followed by bidirectional marks or isolating controls
 to aid in presenting names that contain right-to-left or neutral characters.
-These characters are **not** part of the name and MUST be treated as if they were not present
-when matching _name_ or _identifier_ strings.
+These characters are **not** part of the _name_ and MUST be treated as if they were not present
+when matching _name_ or _identifier_ strings or _unquoted literal_ values.
 Implementations MAY remove these characters from a _message_.
+
+_Variable_ _names_ are prefixed with `$`.
 
 Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
 [NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
