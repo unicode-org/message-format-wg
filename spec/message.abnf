@@ -52,13 +52,13 @@ match = %s".match"
 
 ; Names and identifiers
 ; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName
-; name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName but excludes U+FFFD
+; name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName but excludes U+FFFD and U+061C
 identifier = [namespace ":"] name
 namespace  = name
-name       = name-start *name-char
+name       = [bidi] name-start *name-char [bidi]
 name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
-           / %x370-37D / %x37F-1FFF / %x200C-200D
+           / %x370-37D / %x37F-61B / %x61D-1FFF / %x200C-200D
            / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
            / %xF900-FDCF / %xFDF0-FFFC / %x10000-EFFFF
 name-char  = name-start / DIGIT / "-" / "."
