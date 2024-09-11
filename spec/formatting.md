@@ -768,7 +768,16 @@ That is, the text can can consist of a mixture of left-to-right and right-to-lef
 The display of bidirectional text is defined by the
 [Unicode Bidirectional Algorithm](http://www.unicode.org/reports/tr9/) [UAX9].
 
-The directionality of the message as a whole is provided by the _formatting context_.
+The directionality of the formatted _message_ as a whole is provided by the _formatting context_.
+
+> [!NOTE]
+> Keep in mind the difference between the formatted output of a _message_,
+> which is the topic of this section,
+> and the syntax of _message_ prior to formatting.
+> The processing of a _message_ depends on the logical sequence of Unicode code points,
+> not on the presentation of the _message_.
+> Affordances to allow users appropriate control over the appearance of the
+> _message_'s syntax have been provided.
 
 When a _message_ is formatted, _placeholders_ are replaced
 with their formatted representation.
