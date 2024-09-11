@@ -836,12 +836,12 @@ following mechanisms to make messages display intelligibly in plain-text editors
    - _identifiers_
    - _literals_ (This is especially important for individual _keys_ in a _variant_)
    - _option_ values
-2. Use the 'local-effect' bidi controls`U+200E LEFT-TO-RIGHT MARK` or
-   `U+200F RIGHT-TO-LEFT MARK` as permitted by the ABNF around
-   parts of any _message_ containing RTL characters:
-   -  _identifiers_
-   - _literals_ (taking care not to include the mark inside any quotes), 
-   - _option_ values
+2. Use the 'local-effect' bidi marks
+   `U+061C ARABIC LETTER MARK`, `U+200E LEFT-TO-RIGHT MARK` or
+   `U+200F RIGHT-TO-LEFT MARK` as permitted by the ABNF before or after _identifiers_,
+   _names_, unquoted _literals_, or _option_ values,
+   especially when the values contain a mix of neutral, weakly directional, and
+   strongly directional characters.
 
 > [!IMPORTANT]
 > Always take care **not** to add a bidi controls and mark
