@@ -725,6 +725,7 @@ Built-in _functions_ and their _options_ do not have a _namespace_ identifier.
 The _namespace_ `u` (U+0075 LATIN SMALL LETTER U)
 is reserved for future standardization.
 
+_Variable_ names are prefixed with `$`.
 _Function_ _identifiers_ are prefixed with `:`.
 _Markup_ _identifiers_ are prefixed with `#` or `/`.
 _Option_ _identifiers_ have no prefix.
@@ -733,7 +734,11 @@ A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_
 or as the name for a _variable_
 or the value of an _unquoted literal_.
 
-_Variable_ names are prefixed with `$`.
+A _name_ can be preceded or followed by bidirectional marks or isolating controls
+to aid in presenting names that contain right-to-left or neutral characters.
+These characters are **not** part of the name and MUST be treated as if they were not present
+when matching _name_ or _identifier_ strings.
+Implementations MAY remove these characters from a _message_.
 
 Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
 [NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
@@ -773,10 +778,10 @@ option     = identifier owsp "=" owsp (literal / variable)
 
 identifier = [namespace ":"] name
 namespace  = name
-name       = name-start *name-char
+name       = [bidi] name-start *name-char [bidi]
 name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
-           / %x370-37D / %x37F-1FFF / %x200C-200D
+           / %x370-37D / %x37F-61B / %x61D-1FFF / %x200C-200D
            / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
            / %xF900-FDCF / %xFDF0-FFFC / %x10000-EFFFF
 name-char  = name-start / DIGIT / "-" / "."
