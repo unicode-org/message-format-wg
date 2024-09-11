@@ -83,30 +83,29 @@ As a user, I want to write messages that mix exact matching and
 either plural or ordinal selection in a single message. 
 > For example:
 >```
->.match {$numRemaining}
->0 {{You have no more chances remaining (exact match)}}
->1 {{You have one more chance remaining (exact match)}}
+>.match $numRemaining
+>0   {{You have no more chances remaining (exact match)}}
+>1   {{You have one more chance remaining (exact match)}}
 >one {{You have {$numRemaining} chance remaining (plural)}}
-> * {{You have {$numRemaining} chances remaining (plural)}}
+>*   {{You have {$numRemaining} chances remaining (plural)}}
 >```
 
 As a user, I want the selector to match the options specified:
 ```
-.local $num = {123.456 :number maximumSignificantDigits=2 maximumFractionDigits=2 minimumFractionDigits=2}
-.match {$num}
-120.00  {{This matches}}
-120     {{This does not match}}
-123.47  {{This does not match}}
-123.456 {{This does not match}}
-1.2E2   {{Does this match?}}
-*       {{ ... }}
+.local $num = {123.123 :number maximumFractionDigits=2 minimumFractionDigits=2}
+.match $num
+123.12      {{This matches}}
+120         {{This does not match}}
+123.123     {{This does not match}}
+1.23123E2   {{Does this match?}}
+*           {{ ... }}
 ```
 
 Note that badly written keys just don't match, but we want users to be able to intuit whether a given set of keys will work or not.
 
 ```
 .local $num = {123.456 :integer}
-.match {$num}
+.match $num
 123.456 {{Should not match?}}
 123     {{Should match}}
 123.0   {{Should not match?}}
@@ -117,7 +116,7 @@ There can be complications, which we might need to define. Consider:
 
 ```
 .local $num = {123.002 :number maximumFractionDigits=1 minimumFractionDigits=0}
-.match {$num}
+.match $num
 123.002 {{Should not match?}}
 123.0   {{Does minimumFractionDigits make this not match?}}
 123     {{Does minimumFractionDigits make this match?}}
@@ -131,10 +130,11 @@ Implementations might also apply options by modifying the number value of the _o
 (or shadowing the options effect on the value)
 
 As a user, I want to be able to perform exact match using arbitrary digit numeric types where they are available.
+
 As an implementer, I do **not** want to be required to provide or implement arbitrary precision
 numeric types not available in my platform.
 Programming/runtime environments vary widely in support of these types.
-MF2 should not prevent the implementation of e.g. `BigDecimal` or `BigInt` types
+MF2 should not prevent the implementation using, for example, `BigDecimal` or `BigInt` types
 and permit their use in MF2 messages.
 MF2 should not _require_ implementations to support such types where they do not exist.
 The problem of numeric type precision,
@@ -144,7 +144,7 @@ should not affect how message `key` values are specified.
 > For example:
 >```
 >.local $num = {11111111111111.11111111111111 :number}
->.match {$num}
+>.match $num
 >11111111111111.11111111111111 {{This works on some implementations.}}
 >* {{... but not on others? ...}}
 >```
@@ -351,7 +351,8 @@ but can cause problems in target locales that the original developer is not cons
 > considering other locale's need for a `one` plural:
 >
 > ```
-> .match {$var}
+> .input {$var :integer}
+> .match $var
 > 1   {{You have one last chance}}
 > one {{You have {$var} chance remaining}} // needed by languages such as Polish or Russian
 >                                          // such locales typically require other keywords
@@ -364,6 +365,12 @@ but can cause problems in target locales that the original developer is not cons
 
 When implementing `style=percent`, the numeric value of the operand
 MUST be divided by 100 for the purposes of formatting.
+
+> For example,
+> ```
+> .local $percent = {1000 :integer style=percent}
+> {{This formats as '10%' in the en-US locale: {$percent}}}
+> ```
 
 ### Selection
 
@@ -489,7 +496,9 @@ To expand on the last of these,
 consider this message:
 
 ```
-.match {$count :plural minimumFractionDigits=1}
+.input {$count :number minimumFractionDigits=1}
+.local $selector = {$count :plural}
+.match $selector
 0 {{You have no apples}}
 1 {{You have exactly one apple}}
 * {{You have {$count :number minimumFractionDigits=1} apples}}
@@ -504,9 +513,9 @@ With the proposed design, this message would much more naturally be written as:
 
 ```
 .input {$count :number minimumFractionDigits=1}
-.match {$count}
-0 {{You have no apples}}
-1 {{You have exactly one apple}}
+.match $count
+0.0 {{You have no apples}}
+1.0 {{You have exactly one apple}}
 one {{You have {$count} apple}}
 * {{You have {$count} apples}}
 ```
