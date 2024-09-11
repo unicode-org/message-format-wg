@@ -12,12 +12,12 @@ complex-body      = quoted-pattern / matcher
 input-declaration = input owsp variable-expression
 local-declaration = local wsp variable owsp "=" owsp expression
 
-quoted-pattern    = "{{" pattern "}}"
+quoted-pattern    = owsp "{{" pattern "}}" owsp
 
 matcher           = match-statement wsp variant *(owsp variant)
 match-statement   = match 1*(wsp selector)
 selector          = variable
-variant           = key *(wsp key) owsp quoted-pattern
+variant           = owsp key *(wsp key) quoted-pattern
 key               = literal / "*"
 
 ; Expressions
