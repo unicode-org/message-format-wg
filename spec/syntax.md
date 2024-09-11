@@ -840,14 +840,14 @@ _option values_, and _keys_)
 _Messages_ that contain right-to-left (aka RTL) characters SHOULD use one of the 
 following mechanisms to make messages display intelligibly in plain-text editors:
 
-1. Use paired isolating bidi controls `U+2066 LEFT-TO-RIGHT ISOLATE`
-   and `U+2069 POP DIRECTIONAL ISOLATE` as permitted by the ABNF around
+1. Use paired isolating bidi controls `U+2066 LEFT-TO-RIGHT ISOLATE` ("LRI")
+   and `U+2069 POP DIRECTIONAL ISOLATE` ("PDI) as permitted by the ABNF around
    parts of any _message_ containing RTL characters:
    - _inside_ of _placeholder_ markers `{` and `}` 
    - _outside_ _quoted-pattern_ markers `{{` and `}}`
-   - _identifiers_
-   - _literals_ (This is especially important for individual _keys_ in a _variant_)
-   - _option_ values
+   - _outside_ of _literals_, paying particular attention to _keys_ in a _variant_
+   - _outside_ of _variable_, _function_, _markup_, or _attribute_ _names_/_identifiers_,
+     including the identifying sigil (e.g. `<LRI>$var</PDI>` or `<LRI>:ns:name</PDI>`)
 2. Use the 'local-effect' bidi marks
    `U+061C ARABIC LETTER MARK`, `U+200E LEFT-TO-RIGHT MARK` or
    `U+200F RIGHT-TO-LEFT MARK` as permitted by the ABNF before or after _identifiers_,
