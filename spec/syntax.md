@@ -841,7 +841,7 @@ _Messages_ that contain right-to-left (aka RTL) characters SHOULD use one of the
 following mechanisms to make messages display intelligibly in plain-text editors:
 
 1. Use paired isolating bidi controls `U+2066 LEFT-TO-RIGHT ISOLATE` ("LRI")
-   and `U+2069 POP DIRECTIONAL ISOLATE` ("PDI) as permitted by the ABNF around
+   and `U+2069 POP DIRECTIONAL ISOLATE` ("PDI") as permitted by the ABNF around
    parts of any _message_ containing RTL characters:
    - _inside_ of _placeholder_ markers `{` and `}` 
    - _outside_ _quoted-pattern_ markers `{{` and `}}`
