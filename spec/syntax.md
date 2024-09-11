@@ -260,7 +260,7 @@ A _quoted pattern_ starts with a sequence of two U+007B LEFT CURLY BRACKET `{{`
 and ends with a sequence of two U+007D RIGHT CURLY BRACKET `}}`.
 
 ```abnf
-quoted-pattern = "{{" pattern "}}"
+quoted-pattern = owsp "{{" pattern "}}" owsp
 ```
 
 A _quoted pattern_ MAY be empty.
@@ -431,7 +431,7 @@ Each _key_ is separated from each other by whitespace.
 Whitespace is permitted but not required between the last _key_ and the _quoted pattern_.
 
 ```abnf
-variant = key *(wsp key) owsp quoted-pattern
+variant = owsp key *(wsp key) owsp quoted-pattern
 key     = literal / "*"
 ```
 
