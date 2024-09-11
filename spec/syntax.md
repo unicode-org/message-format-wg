@@ -852,6 +852,7 @@ following mechanisms to make messages display intelligibly in plain-text editors
 >   (instead put them outside of quoted _patterns_, such as `<LRI>{{...}}<PDI>`)
 > - do not put them outside _placeholders_,
 >   (instead put them inside the _placeholder_, such as `{<LRI>$foo :number<PDI>}`)
+>   
 > Controls placed inside _literal_ quotes or quoted _patterns_ are part of the _literal_
 > or _pattern_.
 > Controls in a _pattern_ will appear in the output of the message.
