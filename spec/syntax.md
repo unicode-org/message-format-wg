@@ -825,6 +825,12 @@ There are two whitespace productions in the syntax.
 but which users might want to include to increase the readability of a _message_.
 **_<dfn>Required whitespace</dfn>_** is whitespace that is required by the syntax.
 
+Both types of whitespace optionally permit the use of the bidirectional isolate controls
+and certain strongly directional marks.
+These can assist users in presenting _messages_ that contain right-to-left
+text, _literals_, or _names_ (including those for _functions_, _options_,
+_option values_, and _keys_)
+
 _Messages_ that contain right-to-left (aka RTL) characters SHOULD use one of the 
 following mechanisms to make messages display intelligibly in plain-text editors:
 
@@ -844,8 +850,9 @@ following mechanisms to make messages display intelligibly in plain-text editors
    strongly directional characters.
 
 > [!IMPORTANT]
-> Always take care **not** to add a bidi controls and mark
-> where they would be semantically significant:
+> Always take care **not** to add bidirectional controls or marks
+> where they would be semantically significant
+> or where they would unintentionally become part of the _message_'s output:
 > - do not put them inside of a _literal_ except when they are part of the value,
 >   (instead put them outside of _literal_ quotes, such as `<LRM>|...|<LRM>`)
 > - do not put them inside quoted _patterns_ except when they are part of the text,
