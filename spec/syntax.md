@@ -908,11 +908,11 @@ It is a profile of R3a-1 in that specification because:
 > in which users might accidentally create these characters in a _message_.
 
 ```abnf
-; Optional whitespace
-o = *(s / bidi)
-
 ; Required whitespace
 s = *bidi ws o
+
+; Optional whitespace
+o = *(s / bidi)
 
 ; Bidirectional marks and isolates
 ; ALM / LRM / RLM / LRI, RLI, FSI & PDI
