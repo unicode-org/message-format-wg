@@ -17,7 +17,7 @@ quoted-pattern    = o "{{" pattern "}}"
 matcher           = match-statement s variant *(o variant)
 match-statement   = match 1*(s selector)
 selector          = variable
-variant           = o key *(s key) quoted-pattern
+variant           = key *(s key) quoted-pattern
 key               = literal / "*"
 
 ; Expressions
