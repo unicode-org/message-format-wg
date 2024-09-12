@@ -83,11 +83,11 @@ content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
 escaped-char = backslash ( backslash / "{" / "|" / "}" )
 backslash    = %x5C ; U+005C REVERSE SOLIDUS "\"
 
-; Optional whitespace
-o = *(ws / bidi)
-
 ; Required whitespace
 s = *bidi ws o
+
+; Optional whitespace
+o = *(ws / bidi)
 
 ; Bidirectional marks and isolates
 ; ALM / LRM / RLM / LRI, RLI, FSI & PDI
