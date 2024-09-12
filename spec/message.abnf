@@ -87,7 +87,7 @@ backslash    = %x5C ; U+005C REVERSE SOLIDUS "\"
 o = *(ws / bidi)
 
 ; Required whitespace
-s = *bidi ws *o
+s = *bidi ws o
 
 ; Bidirectional marks and isolates
 ; ALM / LRM / RLM / LRI, RLI, FSI & PDI
