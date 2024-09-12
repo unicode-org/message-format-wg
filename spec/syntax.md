@@ -166,7 +166,7 @@ Whitespace at the start or end of a _simple message_ is significant,
 and a part of the _text_ of the _message_.
 
 ```abnf
-simple-message = owsp [simple-start pattern]
+simple-message = o [simple-start pattern]
 simple-start   = simple-start-char / escaped-char / placeholder
 ```
 
@@ -182,7 +182,7 @@ Whitespace at the start or end of a _complex message_ is not significant,
 and does not affect the processing of the _message_.
 
 ```abnf
-complex-message = owsp *(declaration owsp) complex-body owsp
+complex-message = o *(declaration o) complex-body o
 ```
 
 ### Declarations
@@ -199,8 +199,8 @@ A **_<dfn>local-declaration</dfn>_** binds a _variable_ to the resolved value of
 
 ```abnf
 declaration       = input-declaration / local-declaration
-input-declaration = input owsp variable-expression
-local-declaration = local wsp variable owsp "=" owsp expression
+input-declaration = input o variable-expression
+local-declaration = local s variable o "=" o expression
 ```
 
 _Variables_, once declared, MUST NOT be redeclared. 
@@ -260,7 +260,7 @@ A _quoted pattern_ starts with a sequence of two U+007B LEFT CURLY BRACKET `{{`
 and ends with a sequence of two U+007D RIGHT CURLY BRACKET `}}`.
 
 ```abnf
-quoted-pattern = owsp "{{" pattern "}}" owsp
+quoted-pattern = o "{{" pattern "}}" o
 ```
 
 A _quoted pattern_ MAY be empty.
@@ -291,8 +291,8 @@ be preserved during formatting.
 
 ```abnf
 simple-start-char = content-char / "@" / "|"
-text-char         = content-char / s / "." / "@" / "|"
-quoted-char       = content-char / s / "." / "@" / "{" / "}"
+text-char         = content-char / ws / "." / "@" / "|"
+quoted-char       = content-char / ws / "." / "@" / "{" / "}"
 content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %x0B-0C        ; omit CR (%x0D)
                   / %x0E-1F        ; omit SP (%x20)
@@ -358,8 +358,8 @@ otherwise, a corresponding _Data Model Error_ will be produced during processing
   _Literal_ _keys_ are compared by their contents, not their syntactical appearance.
 
 ```abnf
-matcher         = match-statement wsp variant *(owsp variant)
-match-statement = match 1*(wsp selector)
+matcher         = match-statement s variant *(o variant)
+match-statement = match 1*(s selector)
 ```
 
 > A _message_ with a _matcher_:
@@ -431,7 +431,7 @@ Each _key_ is separated from each other by whitespace.
 Whitespace is permitted but not required between the last _key_ and the _quoted pattern_.
 
 ```abnf
-variant = owsp key *(wsp key) owsp quoted-pattern
+variant = o key *(s key) o quoted-pattern
 key     = literal / "*"
 ```
 
@@ -467,9 +467,9 @@ A **_<dfn>function-expression</dfn>_** contains a _function_ without an _operand
 expression          = literal-expression
                     / variable-expression
                     / function-expression
-literal-expression  = "{" owsp literal [wsp function] *(wsp attribute) owsp "}"
-variable-expression = "{" owsp variable [wsp function] *(wsp attribute) owsp "}"
-function-expression = "{" owsp function *(wsp attribute) owsp "}"
+literal-expression  = "{" o literal [s function] *(s attribute) o "}"
+variable-expression = "{" o variable [s function] *(s attribute) o "}"
+function-expression = "{" o function *(s attribute) o "}"
 ```
 
 There are several types of _expression_ that can appear in a _message_.
@@ -526,7 +526,7 @@ The _identifier_ MAY be followed by one or more _options_.
 _Options_ are not required.
 
 ```abnf
-function = ":" identifier *(wsp option)
+function = ":" identifier *(s option)
 ```
 
 > A _message_ with a _function_ operating on the _variable_ `$now`:
@@ -555,7 +555,7 @@ and will produce a _Duplicate Option Name_ error during processing.
 The order of _options_ is not significant.
 
 ```abnf
-option = identifier owsp "=" owsp (literal / variable)
+option = identifier o "=" o (literal / variable)
 ```
 
 > Examples of _functions_ with _options_
@@ -600,8 +600,8 @@ It MAY include _options_.
 is a _pattern_ part ending a span.
 
 ```abnf
-markup = "{" owsp "#" identifier *(wsp option) *(wsp attribute) owsp ["/"] "}"  ; open and standalone
-       / "{" owsp "/" identifier *(wsp option) *(wsp attribute) owsp "}"  ; close
+markup = "{" o "#" identifier *(s option) *(s attribute) o ["/"] "}"  ; open and standalone
+       / "{" o "/" identifier *(s option) *(s attribute) o "}"  ; close
 ```
 
 > A _message_ with one `button` markup span and a standalone `img` markup element:
@@ -643,7 +643,7 @@ all but the last _attribute_ with the same _identifier_ are ignored.
 The order of _attributes_ is not otherwise significant.
 
 ```abnf
-attribute = "@" identifier [owsp "=" owsp literal]
+attribute = "@" identifier [o "=" o literal]
 ```
 
 > Examples of _expressions_ and _markup_ with _attributes_:
@@ -774,7 +774,7 @@ in this release.
 
 ```abnf
 variable   = "$" name
-option     = identifier owsp "=" owsp (literal / variable)
+option     = identifier o "=" o (literal / variable)
 
 identifier = [namespace ":"] name
 namespace  = name
@@ -910,17 +910,17 @@ It is a profile of R3a-1 in that specification because:
 
 ```abnf
 ; Optional whitespace
-owsp = *(s / bidi)
+o = *(s / bidi)
 
 ; Required whitespace
-wsp = (owsp) 1*s (owsp)
+s = *bidi ws *o
 
 ; Bidirectional marks and isolates
 ; ALM / LRM / RLM / LRI, RLI, FSI & PDI
 bidi = %x061C / %x200E / %x200F / %x2066-2069
 
 ; Whitespace characters
-s = SP / HTAB / CR / LF / %x3000
+ws = SP / HTAB / CR / LF / %x3000
 ```
 
 ## Complete ABNF
