@@ -844,8 +844,7 @@ following mechanisms to make messages display intelligibly in plain-text editors
    parts of any _message_ containing RTL characters:
    - _inside_ of _placeholder_ markers `{` and `}` 
    - _outside_ _quoted-pattern_ markers `{{` and `}}`
-   - _outside_ of _literals_, paying particular attention to _keys_ in a _variant_
-   - _outside_ of _variable_, _function_, _markup_, or _attribute_ _names_/_identifiers_,
+   - _outside_ of _variable_, _function_, _markup_, or _attribute_,
      including the identifying sigil (e.g. `<LRI>$var</PDI>` or `<LRI>:ns:name</PDI>`)
 2. Use the 'local-effect' bidi marks
    `U+061C ARABIC LETTER MARK`, `U+200E LEFT-TO-RIGHT MARK` or
