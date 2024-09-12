@@ -735,7 +735,7 @@ or the value of an _unquoted literal_.
 
 A _name_ can be preceded or followed by bidirectional marks or isolating controls
 to aid in presenting names that contain right-to-left or neutral characters.
-These characters are **not** part of the _name_ and MUST be treated as if they were not present
+These characters are **not** part of the value of the _name_ and MUST be treated as if they were not present
 when matching _name_ or _identifier_ strings or _unquoted literal_ values.
 Implementations MAY remove these characters from a _message_.
 
