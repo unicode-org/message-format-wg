@@ -900,6 +900,8 @@ It is a profile of R3a-1 in that specification because:
    `U+2067 RIGHT-TO-LEFT ISOLATE`,
    `U+2068 FIRST STRONG ISOLATE`,
    and `U+2069 POP DIRECTIONAL ISOLATE`.
+   (The character `U+061C` is an addition according to R3a.)
+   
 
 > [!NOTE]
 > The character U+3000 IDEOGRAPHIC SPACE is included in whitespace for
