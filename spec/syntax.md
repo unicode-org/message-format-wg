@@ -884,16 +884,23 @@ following mechanisms to make messages display intelligibly in plain-text editors
 These definitions of _whitespace_ implement
 [UAX#31 Requirement R3a-2](https://www.unicode.org/reports/tr31/#R3a-2).
 It is a profile of R3a-1 in that specification because:
-the following pattern whitespace characters are not allowed:
-`U+000B FORM FEED`, 
-`U+000C VERTICAL TABULATION`, 
-`U+0085 NEXT LINE`, 
-`U+2028 LINE SEPARATOR` and 
-`U+2029 PARAGRAPH SEPARATOR`;
-the character `U+3000 IDEOGRAPHIC SPACE`
-_is_ interpreted as whitespace,
- and the directional isolates U+2066..U+2069
- are treated as ignorable format controls.
+- The following pattern whitespace characters are not allowed:
+  `U+000B FORM FEED`, 
+  `U+000C VERTICAL TABULATION`, 
+  `U+0085 NEXT LINE`, 
+  `U+2028 LINE SEPARATOR` and 
+  `U+2029 PARAGRAPH SEPARATOR`.
+- The character `U+3000 IDEOGRAPHIC SPACE`
+  _is_ interpreted as whitespace.
+ - The following directional marks and isolates 
+   are treated as ignorable format controls:
+   `U+061C ARABIC LETTER MARK`,
+   `U+200E LEFT-TO-RIGHT MARK`,
+   `U+200F RIGHT-TO-LEFT MARK`,
+   `U+2066 LEFT-TO-RIGHT ISOLATE`,
+   `U+2067 RIGHT-TO-LEFT ISOLATE`,
+   `U+2068 FIRST STRONG ISOLATE`,
+   and `U+2069 POP DIRECTIONAL ISOLATE`.
 
 > [!NOTE]
 > The character U+3000 IDEOGRAPHIC SPACE is included in whitespace for
