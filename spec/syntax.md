@@ -431,7 +431,7 @@ Each _key_ is separated from each other by whitespace.
 Whitespace is permitted but not required between the last _key_ and the _quoted pattern_.
 
 ```abnf
-variant = key *(s key) o quoted-pattern
+variant = key *(s key) quoted-pattern
 key     = literal / "*"
 ```
 
