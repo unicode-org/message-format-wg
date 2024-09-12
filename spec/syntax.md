@@ -913,7 +913,7 @@ It is a profile of R3a-1 in that specification because:
 o = *(s / bidi)
 
 ; Required whitespace
-s = *bidi ws *o
+s = *bidi ws o
 
 ; Bidirectional marks and isolates
 ; ALM / LRM / RLM / LRI, RLI, FSI & PDI
