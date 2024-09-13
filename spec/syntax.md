@@ -723,12 +723,21 @@ A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_
 or as the name for a _variable_
 or the value of an _unquoted literal_.
 
+_Variable_ names are prefixed with `$`.
+
 A _name_ is identical to another name if both consist of the same sequence of
 Unicode code points after 
 [Unicode Normalization Form C](https://unicode.org/reports/tr15/) (NFC)
 has been applied to both.
 
-_Variable_ names are prefixed with `$`.
+> [!NOTE]
+> Implementations are not required to normalize _names_.
+> Comparisons of _name_ values only need be done "as-if" normalization
+> has occured.
+> Since most text in the wild is already in NFC
+> and since checking for NFC is fast and efficient,
+> implementations can often substitute checking for actually applying normalization
+> to _name_ values.
 
 Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
 [NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
