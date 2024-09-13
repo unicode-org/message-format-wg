@@ -684,6 +684,17 @@ except for U+0000 NULL or the surrogate code points U+D800 through U+DFFF.
 
 All code points are preserved.
 
+Two literals are considered equal if the consist of the same sequence of Unicode
+code points.
+
+> [!IMPORTANT]
+> _Literal_ equality is different from _name_ equality in that
+> Unicode Normalization is not applied to _literal_ values before comparison.
+> Users are cautioned to ensure that they use the same character sequences
+> for equivalent values.
+> The use of [Normalization Form C]((https://unicode.org/reports/tr15/) for all
+> _literal_ values is RECOMMENDED.
+
 A **_<dfn>quoted literal</dfn>_** begins and ends with U+005E VERTICAL BAR `|`.
 The characters `\` and `|` within a _quoted literal_ MUST be
 escaped as `\\` and `\|`.
@@ -708,6 +719,28 @@ number-literal   = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "
 
 ### Names and Identifiers
 
+A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_ 
+or as the name for a _variable_
+or the value of an _unquoted literal_.
+
+A _name_ is identical to another name if both consist of the same sequence of
+Unicode code points after 
+[Unicode Normalization Form C](https://unicode.org/reports/tr15/) (NFC)
+has been applied to both.
+
+_Variable_ names are prefixed with `$`.
+
+Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
+[NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
+This is different from XML's [Name](https://www.w3.org/TR/xml/#NT-Name)
+in that it MUST NOT contain a U+003A COLON `:`.
+Otherwise, the set of characters allowed in a _name_ is large.
+
+> [!NOTE]
+> _External variables_ can be passed in that are not valid _names_.
+> Such variables cannot be referenced in a _message_,
+> but are not otherwise errors.
+
 An **_<dfn>identifier</dfn>_** is a character sequence that
 identifies a _function_, _markup_, or _option_.
 Each _identifier_ consists of a _name_ optionally preceeded by
@@ -722,23 +755,6 @@ is reserved for future standardization.
 _Function_ _identifiers_ are prefixed with `:`.
 _Markup_ _identifiers_ are prefixed with `#` or `/`.
 _Option_ _identifiers_ have no prefix.
-
-A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_ 
-or as the name for a _variable_
-or the value of an _unquoted literal_.
-
-_Variable_ names are prefixed with `$`.
-
-Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
-[NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
-This is different from XML's [Name](https://www.w3.org/TR/xml/#NT-Name)
-in that it MUST NOT contain a U+003A COLON `:`.
-Otherwise, the set of characters allowed in a _name_ is large.
-
-> [!NOTE]
-> _External variables_ can be passed in that are not valid _names_.
-> Such variables cannot be referenced in a _message_,
-> but are not otherwise errors.
 
 Examples:
 > A variable:
