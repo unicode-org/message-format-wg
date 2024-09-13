@@ -684,7 +684,7 @@ except for U+0000 NULL or the surrogate code points U+D800 through U+DFFF.
 
 All code points are preserved.
 
-Two literals are considered equal if the consist of the same sequence of Unicode
+Two _literals_ are considered equal if they consist of the same sequence of Unicode
 code points.
 
 > [!IMPORTANT]
