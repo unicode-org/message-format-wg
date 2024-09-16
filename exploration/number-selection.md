@@ -1,6 +1,6 @@
 # Selection on Numerical Values
 
-Status: **Accepted** (moving back to **Proposed**)
+Status: **Re-Opened**
 
 <details>
 	<summary>Metadata</summary>
@@ -13,6 +13,7 @@ Status: **Accepted** (moving back to **Proposed**)
 		<dt>Pull Request</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/471">#471</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/621">#621</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/859">#859</a></dd>
 	</dl>
 </details>
 
