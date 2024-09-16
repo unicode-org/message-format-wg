@@ -365,12 +365,12 @@ but can cause problems in target locales that the original developer is not cons
 ### Percent Style
 
 When implementing `style=percent`, the numeric value of the operand
-MUST be divided by 100 for the purposes of formatting.
+MUST be multiplied by 100 for the purposes of formatting.
 
 > For example,
 > ```
-> .local $percent = {1000 :integer style=percent}
-> {{This formats as '10%' in the en-US locale: {$percent}}}
+> .local $percent = {1 :integer style=percent}
+> {{This formats as '100%' in the en-US locale: {$percent}}}
 > ```
 
 ### Selection
