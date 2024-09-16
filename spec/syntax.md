@@ -438,6 +438,14 @@ A _key_ can be either a _literal_ value or the "catch-all" key `*`.
 The **_<dfn>catch-all key</dfn>_** is a special key, represented by `*`,
 that matches all values for a given _selector_.
 
+The value of each _key_ MUST be treated as if it were in
+[Unicode Normalization Form C](https://unicode.org/reports/tr15/) ("NFC").
+When _keys_ are passed during _pattern selection_, the _key_ values MUST
+be normalized into NFC.
+Two _keys_ are considered equal if they are canonically equivalent strings,
+that is, if they consist of the same sequence of Unicode code points after
+Unicode Normalization Form C has been applied to both.
+
 ## Expressions
 
 An **_<dfn>expression</dfn>_** is a part of a _message_ that will be determined
@@ -684,16 +692,19 @@ except for U+0000 NULL or the surrogate code points U+D800 through U+DFFF.
 
 All code points are preserved.
 
-Two _literals_ are considered equal if they consist of the same sequence of Unicode
-code points.
-
 > [!IMPORTANT]
-> _Literal_ equality is different from _name_ equality in that
-> Unicode Normalization is not applied to _literal_ values before comparison.
-> Users are cautioned to ensure that they use the same character sequences
-> for equivalent values.
-> The use of [Normalization Form C]((https://unicode.org/reports/tr15/) for all
-> _literal_ values is RECOMMENDED.
+> Most text, including that produced by common keyboards and input methods,
+> is already encoded in the canonical form known as
+> [Unicode Normalization Form C](https://unicode.org/reports/tr15) ("NFC").
+> A few languages, legacy character encoding conversions, or operating environments
+> can result in _literal_ values that are not in this form.
+> Some uses of _literals_ in MessageFormat,
+> notably as the value of _keys_,
+> apply NFC to the _literal_ value during processing or comparison.
+> While there is no requirement that the _literal_ value actually be entered
+> in a normalized form,
+> users are cautioned to employ the same character sequences
+> for equivalent values and, whenever possible, ensure _literals_ are in NFC.
 
 A **_<dfn>quoted literal</dfn>_** begins and ends with U+005E VERTICAL BAR `|`.
 The characters `\` and `|` within a _quoted literal_ MUST be
@@ -725,9 +736,9 @@ or the value of an _unquoted literal_.
 
 _Variable_ names are prefixed with `$`.
 
-A _name_ is identical to another name if both consist of the same sequence of
-Unicode code points after 
-[Unicode Normalization Form C](https://unicode.org/reports/tr15/) (NFC)
+Two _names_ are considered equal if they are canonically equivalent strings,
+that is, if they consist of the same sequence of Unicode code points after
+[Unicode Normalization Form C](https://unicode.org/reports/tr15/) ("NFC")
 has been applied to both.
 
 > [!NOTE]
