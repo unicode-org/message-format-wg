@@ -474,6 +474,11 @@ This selection method is defined in more detail below.
 An implementation MAY use any pattern selection method,
 as long as its observable behavior matches the results of the method defined here.
 
+The resolved value of each _key_ MUST be in Unicode Normalization Form C ("NFC"),
+even if the _literal_ for the _key_ is not.
+All comparisons of _keys_ MUST be done on the canonical, normalized values
+and the normalized value MUST be the value that is passed in the steps below.
+
 ### Resolve Selectors
 
 First, resolve the values of each _selector_:
@@ -502,7 +507,7 @@ Next, using `res`, resolve the preferential order for all message keys:
       1. Let `key` be the `var` key at position `i`.
       1. If `key` is not the catch-all key `'*'`:
          1. Assert that `key` is a _literal_.
-         1. Let `ks` be the resolved value of `key`.
+         1. Let `ks` be the resolved value of `key` in Unicode Normalization Form C.
          1. Append `ks` as the last element of the list `keys`.
    1. Let `rv` be the resolved value at index `i` of `res`.
    1. Let `matches` be the result of calling the method MatchSelectorKeys(`rv`, `keys`)
