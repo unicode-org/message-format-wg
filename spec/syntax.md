@@ -446,8 +446,6 @@ that matches all values for a given _selector_.
 
 The value of each _key_ MUST be treated as if it were in
 [Unicode Normalization Form C](https://unicode.org/reports/tr15/) ("NFC").
-When _keys_ are passed during _pattern selection_, the _key_ values MUST
-be normalized into NFC.
 Two _keys_ are considered equal if they are canonically equivalent strings,
 that is, if they consist of the same sequence of Unicode code points after
 Unicode Normalization Form C has been applied to both.
