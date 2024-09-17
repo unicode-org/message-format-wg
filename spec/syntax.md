@@ -444,6 +444,12 @@ A _key_ can be either a _literal_ value or the "catch-all" key `*`.
 The **_<dfn>catch-all key</dfn>_** is a special key, represented by `*`,
 that matches all values for a given _selector_.
 
+The value of each _key_ MUST be treated as if it were in
+[Unicode Normalization Form C](https://unicode.org/reports/tr15/) ("NFC").
+Two _keys_ are considered equal if they are canonically equivalent strings,
+that is, if they consist of the same sequence of Unicode code points after
+Unicode Normalization Form C has been applied to both.
+
 ## Expressions
 
 An **_<dfn>expression</dfn>_** is a part of a _message_ that will be determined
@@ -690,6 +696,20 @@ except for U+0000 NULL or the surrogate code points U+D800 through U+DFFF.
 
 All code points are preserved.
 
+> [!IMPORTANT]
+> Most text, including that produced by common keyboards and input methods,
+> is already encoded in the canonical form known as
+> [Unicode Normalization Form C](https://unicode.org/reports/tr15) ("NFC").
+> A few languages, legacy character encoding conversions, or operating environments
+> can result in _literal_ values that are not in this form.
+> Some uses of _literals_ in MessageFormat,
+> notably as the value of _keys_,
+> apply NFC to the _literal_ value during processing or comparison.
+> While there is no requirement that the _literal_ value actually be entered
+> in a normalized form,
+> users are cautioned to employ the same character sequences
+> for equivalent values and, whenever possible, ensure _literals_ are in NFC.
+
 A **_<dfn>quoted literal</dfn>_** begins and ends with U+005E VERTICAL BAR `|`.
 The characters `\` and `|` within a _quoted literal_ MUST be
 escaped as `\\` and `\|`.
@@ -714,6 +734,42 @@ number-literal   = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "
 
 ### Names and Identifiers
 
+A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_ 
+or as the name for a _variable_
+or the value of an _unquoted literal_.
+
+A _name_ can be preceded or followed by bidirectional marks or isolating controls
+to aid in presenting names that contain right-to-left or neutral characters.
+These characters are **not** part of the value of the _name_ and MUST be treated as if they were not present
+when matching _name_ or _identifier_ strings or _unquoted literal_ values.
+
+_Variable_ _names_ are prefixed with `$`.
+
+Two _names_ are considered equal if they are canonically equivalent strings,
+that is, if they consist of the same sequence of Unicode code points after
+[Unicode Normalization Form C](https://unicode.org/reports/tr15/) ("NFC")
+has been applied to both.
+
+> [!NOTE]
+> Implementations are not required to normalize all _names_.
+> Comparisons of _name_ values only need be done "as-if" normalization
+> has occured.
+> Since most text in the wild is already in NFC
+> and since checking for NFC is fast and efficient,
+> implementations can often substitute checking for actually applying normalization
+> to _name_ values.
+
+Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
+[NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
+This is different from XML's [Name](https://www.w3.org/TR/xml/#NT-Name)
+in that it MUST NOT contain a U+003A COLON `:`.
+Otherwise, the set of characters allowed in a _name_ is large.
+
+> [!NOTE]
+> _External variables_ can be passed in that are not valid _names_.
+> Such variables cannot be referenced in a _message_,
+> but are not otherwise errors.
+
 An **_<dfn>identifier</dfn>_** is a character sequence that
 identifies a _function_, _markup_, or _option_.
 Each _identifier_ consists of a _name_ optionally preceeded by
@@ -728,28 +784,6 @@ is reserved for future standardization.
 _Function_ _identifiers_ are prefixed with `:`.
 _Markup_ _identifiers_ are prefixed with `#` or `/`.
 _Option_ _identifiers_ have no prefix.
-
-A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_ 
-or as the name for a _variable_
-or the value of an _unquoted literal_.
-
-A _name_ can be preceded or followed by bidirectional marks or isolating controls
-to aid in presenting names that contain right-to-left or neutral characters.
-These characters are **not** part of the value of the _name_ and MUST be treated as if they were not present
-when matching _name_ or _identifier_ strings or _unquoted literal_ values.
-
-_Variable_ _names_ are prefixed with `$`.
-
-Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
-[NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
-This is different from XML's [Name](https://www.w3.org/TR/xml/#NT-Name)
-in that it MUST NOT contain a U+003A COLON `:`.
-Otherwise, the set of characters allowed in a _name_ is large.
-
-> [!NOTE]
-> _External variables_ can be passed in that are not valid _names_.
-> Such variables cannot be referenced in a _message_,
-> but are not otherwise errors.
 
 Examples:
 > A variable:

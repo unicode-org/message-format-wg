@@ -502,7 +502,7 @@ Next, using `res`, resolve the preferential order for all message keys:
       1. Let `key` be the `var` key at position `i`.
       1. If `key` is not the catch-all key `'*'`:
          1. Assert that `key` is a _literal_.
-         1. Let `ks` be the resolved value of `key`.
+         1. Let `ks` be the resolved value of `key` in Unicode Normalization Form C.
          1. Append `ks` as the last element of the list `keys`.
    1. Let `rv` be the resolved value at index `i` of `res`.
    1. Let `matches` be the result of calling the method MatchSelectorKeys(`rv`, `keys`)
@@ -515,6 +515,9 @@ The returned list MUST contain only unique elements of the input list `keys`.
 The returned list MAY be empty.
 The most-preferred key is first,
 with each successive key appearing in order by decreasing preference.
+
+The resolved value of each _key_ MUST be in Unicode Normalization Form C ("NFC"),
+even if the _literal_ for the _key_ is not.
 
 If calling MatchSelectorKeys encounters any error,
 a _Bad Selector_ error is emitted
