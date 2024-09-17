@@ -753,7 +753,7 @@ that is, if they consist of the same sequence of Unicode code points after
 has been applied to both.
 
 > [!NOTE]
-> Implementations are not required to normalize _names_.
+> Implementations are not required to normalize all _names_.
 > Comparisons of _name_ values only need be done "as-if" normalization
 > has occured.
 > Since most text in the wild is already in NFC
