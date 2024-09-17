@@ -474,11 +474,6 @@ This selection method is defined in more detail below.
 An implementation MAY use any pattern selection method,
 as long as its observable behavior matches the results of the method defined here.
 
-The resolved value of each _key_ MUST be in Unicode Normalization Form C ("NFC"),
-even if the _literal_ for the _key_ is not.
-All comparisons of _keys_ MUST be done on the canonical, normalized values
-and the normalized value MUST be the value that is passed in the steps below.
-
 ### Resolve Selectors
 
 First, resolve the values of each _selector_:
@@ -520,6 +515,9 @@ The returned list MUST contain only unique elements of the input list `keys`.
 The returned list MAY be empty.
 The most-preferred key is first,
 with each successive key appearing in order by decreasing preference.
+
+The resolved value of each _key_ MUST be in Unicode Normalization Form C ("NFC"),
+even if the _literal_ for the _key_ is not.
 
 If calling MatchSelectorKeys encounters any error,
 a _Bad Selector_ error is emitted
