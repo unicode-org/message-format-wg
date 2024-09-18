@@ -106,6 +106,23 @@ The `main` branch of this repository contains changes implemented since the tech
 Implementers should be aware of the following normative changes during the tech preview period.
 See the [commit history](https://github.com/unicode-org/message-format-wg/commits) 
 after 2024-04-13 for a list of all commits (including non-normative changes).
+- [#885](https://github.com/unicode-org/message-format-wg/issues/885) Address equality of `name` and `literal` values, including requiring keys to use NFC
+- [#884](https://github.com/unicode-org/message-format-wg/issues/884) Add support for bidirectional isolates and strong marks in syntax and address UAX31/UTS55 requirements
+- [#883](https://github.com/unicode-org/message-format-wg/issues/883) Remove forward-compatibility promise and all reserved/private syntax.
+- [#882](https://github.com/unicode-org/message-format-wg/issues/882) Specify `bad-option` error for bad digit size options in `:number` and `:integer` functions
+- [#878](https://github.com/unicode-org/message-format-wg/issues/878) Clarify "rule" selection in `:number` and `:integer` functions
+- [#877](https://github.com/unicode-org/message-format-wg/issues/877) Match on variables instead of expressions. 
+- [#854](https://github.com/unicode-org/message-format-wg/issues/854) Allow whitespace at complex message start
+- [#853](https://github.com/unicode-org/message-format-wg/issues/853) Add a "duplicate-variant" error
+- [#845](https://github.com/unicode-org/message-format-wg/issues/845) Define "attributes" feature
+- [#834](https://github.com/unicode-org/message-format-wg/issues/834) Modify the stability policy (not currently in effect due to Tech Preview)
+- [#816](https://github.com/unicode-org/message-format-wg/issues/816) Refine error handling
+- [#815](https://github.com/unicode-org/message-format-wg/issues/815) Removed machine-readable function registry as a deliverable
+- [#813](https://github.com/unicode-org/message-format-wg/issues/813) Change default of `:date` and `:datetime` date formatting from `short` to `medium`
+- [#812](https://github.com/unicode-org/message-format-wg/issues/812) Allow trailing whitespace for complex messages
+- [#793](https://github.com/unicode-org/message-format-wg/issues/793) Recommend the use of escapes only when necessary
+- [#775](https://github.com/unicode-org/message-format-wg/issues/775) Add formal definitions for variable, external variable, and local variable
+- [#774](https://github.com/unicode-org/message-format-wg/issues/774) Refactor errors, adding Message Function Errors
 - [#771](https://github.com/unicode-org/message-format-wg/issues/771) Remove inappropriate normative statement from errors.md
 - [#767](https://github.com/unicode-org/message-format-wg/issues/767) Add a test schema and
   [#778](https://github.com/unicode-org/message-format-wg/issues/778) validate tests against it
@@ -114,7 +131,9 @@ after 2024-04-13 for a list of all commits (including non-normative changes).
 - [#769](https://github.com/unicode-org/message-format-wg/issues/769) Add `:test:function`,
   `:test:select` and `:test:format` functions for implementation testing
 - [#743](https://github.com/unicode-org/message-format-wg/issues/743) Collapse all escape sequence rules into one (affects the ABNF)
-- _more to be added as they are merged_
+
+In addition to the above, the test suite is significantly modified and updated.
+
 
 ## Implementations
 
