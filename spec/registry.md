@@ -488,11 +488,11 @@ for examples.
 #### Determining Exact Literal Match
 
 > [!IMPORTANT]
-> The exact behavior of exact literal match is only defined for non-zero-filled
+> The exact behavior of exact literal match is currently only well defined for non-zero-filled
 > integer values.
 > Functions that use fraction digits or significant digits might work in specific
 > implementation-defined ways.
-> Users should avoid depending on these types of keys in message selection.
+> Users should avoid depending on these types of keys in message selection in this release.
 
 
 Number literals in the MessageFormat 2 syntax use the 
@@ -502,10 +502,19 @@ if, when the numeric value of `resolvedSelector` is serialized using the format 
 the two strings are equal.
 
 > [!NOTE]
-> Only integer matching is required in the Technical Preview.
-> Feedback describing use cases for fractional and significant digits-based
-> selection would be helpful.
-> Otherwise, users should avoid using matching with fractional numbers or significant digits.
+> The above description of numeric matching contains 
+> [open issues](https://github.com/unicode-org/message-format-wg/issues/675)
+> in the Technical Preview, since a given numeric value might be formatted in
+> several different ways under RFC8259
+> and since the effect of formatting options, such as the number of fraction
+> digits or significant digits, is not described.
+> The Working Group intends to address these issues before final release
+> with a number of design options
+> [being considered](https://github.com/unicode-org/message-format-wg/pull/859).
+>
+> Users should avoid creating messages that depend on exact matching of non-integer
+> numeric values.
+> Feedback, including use cases encountered in message authoring, is strongly desired.
 
 ## Date and Time Value Formatting
 
