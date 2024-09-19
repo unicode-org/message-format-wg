@@ -14,7 +14,7 @@
       ]
     },
     {
-      "src": ".input {$foo :x} input {$bar :x} .match $foo $bar * {{foo}}",
+      "src": ".input {$foo :x} .input {$bar :x} .match $foo $bar * {{foo}}",
       "expErrors": [
         {
           "type": "variant-key-mismatch"
@@ -38,7 +38,7 @@
       ]
     },
     {
-      "src": ".input {$foo :x} input {$bar :x} .match $foo $bar * 1 {{_}} 1 * {{_}}",
+      "src": ".input {$foo :x} .input {$bar :x} .match $foo $bar * 1 {{_}} 1 * {{_}}",
       "expErrors": [
         {
           "type": "missing-fallback-variant"
