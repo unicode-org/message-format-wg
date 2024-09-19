@@ -35,7 +35,7 @@ markup = "{" o "#" identifier *(s option) *(s attribute) o ["/"] "}"  ; open and
 function       = ":" identifier *(s option)
 option         = identifier o "=" o (literal / variable)
 
-attribute      = "@" identifier [o "=" o (literal / variable)]
+attribute      = "@" identifier [o "=" o literal]
 
 variable       = "$" name
 
