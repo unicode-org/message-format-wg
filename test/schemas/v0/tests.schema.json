@@ -9,6 +9,10 @@
     "tests"
   ],
   "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Identifier for the test file JSON schema."
+    },
     "scenario": {
       "type": "string",
       "description": "Identifier for the tests in the file."
@@ -120,9 +124,6 @@
         "exp": {
           "$ref": "#/$defs/exp"
         },
-        "expCleanSrc": {
-          "$ref": "#/$defs/expCleanSrc"
-        },
         "expParts": {
           "$ref": "#/$defs/expParts"
         },
@@ -150,9 +151,6 @@
         },
         "exp": {
           "$ref": "#/$defs/exp"
-        },
-        "expCleanSrc": {
-          "$ref": "#/$defs/expCleanSrc"
         },
         "expParts": {
           "$ref": "#/$defs/expParts"
@@ -221,10 +219,6 @@
     },
     "exp": {
       "description": "The expected result of formatting the message to a string.",
-      "type": "string"
-    },
-    "expCleanSrc": {
-      "description": "The expected normalized form of `src`, for testing stringifiers.",
       "type": "string"
     },
     "expParts": {
@@ -348,10 +342,9 @@
               "missing-selector-annotation",
               "duplicate-declaration",
               "duplicate-option-name",
+              "duplicate-variant",
               "unresolved-variable",
               "unknown-function",
-              "unsupported-expression",
-              "unsupported-statement",
               "bad-selector",
               "bad-operand",
               "bad-option",
@@ -366,11 +359,6 @@
         {
           "required": [
             "exp"
-          ]
-        },
-        {
-          "required": [
-            "expCleanSrc"
           ]
         },
         {
