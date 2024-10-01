@@ -1,7 +1,7 @@
 # MessageFormat 2.0 Default Function Registry
 
-This section describes the functions which each implementation MUST provide
-to be conformant with this specification.
+This section describes the functions for which each implementation MUST provide
+a _function handler_ to be conformant with this specification.
 
 Implementations MAY implement additional _functions_ or additional _options_.
 In particular, implementations are encouraged to provide feedback on proposed
@@ -374,7 +374,7 @@ All other values produce a _Bad Operand_ error.
 ### Digit Size Options
 
 Some _options_ of number _functions_ are defined to take a "digit size option".
-Implementations of number _functions_ use these _options_ to control aspects of numeric display
+_Function handlers_ of number _functions_ use these _options_ to control aspects of numeric display
 such as the number of fraction, integer, or significant digits.
 
 A "digit size option" is an _option_ value that the _function_ interprets
@@ -579,8 +579,6 @@ The function `:datetime` has these _style options_.
 
 _Field options_ describe which fields to include in the formatted output
 and what format to use for that field.
-The implementation may use this _function_ to configure which fields
-appear in the formatted output.
 
 > [!NOTE]
 > _Field options_ do not have default values because they are only to be used

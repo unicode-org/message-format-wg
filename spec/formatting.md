@@ -40,7 +40,7 @@ as long as the final _formatting_ result is made available to users
 and the observable behavior of the _formatting_ matches that described here.
 
 _Attributes_ MUST NOT have any effect on the formatted output of a _message_,
-nor be made available to function implementations.
+nor be made available to _function handlers_.
 
 > [!IMPORTANT]
 >
@@ -77,7 +77,7 @@ At a minimum, it includes:
   This is often determined by a user-provided argument of a formatting function call.
 
 - The _function registry_,
-  providing the implementations of the functions referred to by message _functions_.
+  providing the _function handlers_ of the functions referred to by message _functions_.
 
 - Optionally, a fallback string to use for the message if it is not _valid_.
 
@@ -99,6 +99,16 @@ which is available for use by later _expressions_.
 Since a _variable_ can be referenced in different ways later,
 implementations SHOULD NOT immediately fully format the value for output.
 
+> For example, in
+> ```
+> .input {$a :number minimumIntegerDigits=3}
+> .local $b = {$a :number maximumFractionDigits=3}
+> ```
+> the value bound to `$a` is the
+> _resolved value_ used as the _operand_
+> of the `:number` _function_
+> when resolving the value of the _variable_ `$b`.
+
 In an _input-declaration_, the _variable_ operand of the _variable-expression_
 identifies not only the name of the external input value,
 but also the _variable_ to which the _resolved value_ of the _variable-expression_ is bound.
@@ -109,7 +119,7 @@ The form that _resolved values_ take is implementation-dependent,
 and different implementations MAY choose to perform different levels of resolution.
 
 > While this specification does not require it,
-> a _resolved value_ could be implemented by requiring each function implementation to
+> a _resolved value_ could be implemented by requiring each _function handler_ to
 > return a value matching the following interface:
 >
 > ```ts
@@ -243,8 +253,8 @@ the following steps are taken:
 1. If the _expression_ includes an _operand_, resolve its value.
    If this fails, use a _fallback value_ for the _expression_.
 2. Resolve the _identifier_ of the _function_ and, based on the starting sigil,
-   find the appropriate function implementation to call.
-   If the implementation cannot find the function,
+   find the appropriate _function handler_ to call.
+   If the implementation cannot find the _function handler_,
    or if the _identifier_ includes a _namespace_ that the implementation does not support,
    emit an _Unknown Function_ error
    and use a _fallback value_ for the _expression_.
@@ -254,7 +264,7 @@ the following steps are taken:
 
 3. Perform _option resolution_.
 
-4. Call the function implementation with the following arguments:
+4. Call the _function handler_ with the following arguments:
 
    - The current _locale_.
    - The resolved mapping of _options_.
@@ -262,86 +272,9 @@ the following steps are taken:
 
    The form that resolved _operand_ and _option_ values take is implementation-defined.
 
-   A _declaration_ binds the _resolved value_ of an _expression_
-   to a _variable_.
-   Thus, the result of one _function_ is potentially the _operand_
-   of another _function_,
-   or the value of one of the _options_ for another function.
-   For example, in
-   ```
-   .input {$n :number minimumIntegerDigits=3}
-   .local $n1 = {$n :number maximumFractionDigits=3}
-   ```
-   the value bound to `$n` is the
-   _resolved value_ used as the _operand_
-   of the `:number` _function_
-   when resolving the value of the _variable_ `$n1`.
-
-   Implementations that provide a means for defining custom functions
-   SHOULD provide a means for function implementations
-   to return values that contain enough information
-   (e.g. a representation of
-   the resolved _operand_ and _option_ values
-   that the function was called with)
-   to be used as arguments to subsequent calls
-   to the function implementations.
-   For example, an implementation might define an interface that allows custom function implementation.
-   Such an interface SHOULD define an implementation-specific
-   argument type `T` and return type `U`
-   for implementations of functions
-   such that `U` can be coerced to `T`.
-   Implementations of a _function_ SHOULD emit a
-   _Bad Operand_ error for _operands_ whose _resolved value_
-   or type is not supported.
-
-> [!NOTE]
-> The behavior of the previous example is
-> currently implementation-dependent. Supposing that
-> the external input variable `n` is bound to the string `"1"`,
-> and that the implementation formats to a string,
-> the formatted result of the following message:
->
-> ```
-> .input {$n :number minimumIntegerDigits=3}
-> .local $n1 = {$n :number maximumFractionDigits=3}
-> {{What is the value of: {$n1}}}
-> ```
->
-> is currently implementation-dependent.
-> Depending on whether the options are preserved
-> between the resolution of the first `:number` _function_
-> and the resolution of the second `:number` _function_,
-> a conformant implementation
-> could produce either "001.000" or "1.000"
->
-> Each function **specification** MAY have
-> its own rules to preserve some options in the returned structure
-> and discard others. 
-> In instances where a function specification does not determine whether an option is preserved or discarded,
-> each function **implementation** of that specification MAY have
-> its own rules to preserve some options in the returned structure
-> and discard others. 
->
-
-> [!NOTE]
-> During the Technical Preview,
-> feedback on how the registry describes
-> the flow of _resolved values_ and _options_
-> from one _function_ to another,
-> and on what requirements this specification should impose,
-> is highly desired.
-
    An implementation MAY pass additional arguments to the function,
    as long as reasonable precautions are taken to keep the function interface
    simple and minimal, and avoid introducing potential security vulnerabilities.
-
-   An implementation MAY define its own functions.
-   An implementation MAY allow custom functions to be defined by users.
-
-   Function access to the _formatting context_ MUST be minimal and read-only,
-   and execution time SHOULD be limited.
-   
-   Implementation-defined _functions_ SHOULD use an implementation-defined _namespace_.
 
 5. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
@@ -349,13 +282,45 @@ the following steps are taken:
    If the call fails or does not return a valid value,
    emit the appropriate _Message Function Error_ for the failure.
 
-   Implementations MAY provide a mechanism for the _function_ to provide
+   Implementations MAY provide a mechanism for the _function handler_ to provide
    additional detail about internal failures.
    Specifically, if the cause of the failure was that the datatype, value, or format of the
    _operand_ did not match that expected by the _function_,
    the _function_ might cause a _Bad Operand_ error to be emitted.
   
    In all failure cases, use the _fallback value_ for the _expression_ as its _resolved value_.
+
+#### Function Handler
+
+To resolve a _function_,
+a **_<dfn>function handler</dfn>_** is required.
+This is an implementation-defined process such as a function or method
+which accepts a set of arguments and returns a _resolved value_.
+
+An implementation MAY define its own functions and their handlers.
+An implementation MAY allow custom functions to be defined by users.
+
+Implementations that provide a means for defining custom functions
+MUST provide a means for _function handlers_
+to return _resolved values_ that contain enough information
+to be used as _operands_ or _option_ values in subsequent _expressions_.
+
+The _resolved value_ returned by a _function handler_
+MAY be different from the value of the _operand_ of the _function_.
+It MAY be an implementation specified type.
+It is not required to be the same type as the _operand_.
+
+A _function handler_ MAY include resolved options in its _resolved value_.
+The resolved options MAY be different from the _options_ of the function.
+
+A _function handler_ SHOULD emit a
+_Bad Operand_ error for _operands_ whose _resolved value_
+or type is not supported.
+
+_Function handler_ access to the _formatting context_ MUST be minimal and read-only,
+and execution time SHOULD be limited.
+
+Implementation-defined _functions_ SHOULD use an implementation-defined _namespace_.
 
 #### Option Resolution
 
