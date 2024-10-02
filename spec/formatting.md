@@ -86,29 +86,27 @@ Implementations MAY include additional fields in their _formatting context_.
 
 ## Resolved Values
 
-This specification allows for the same value to be used for:
-- formatting in a _placeholder_,
-- selection with a _selector_,
-- as the _operand_ of another _expression_ (including _local declarations_), or
-- as an _option_ value in another _expression_,
+During formatting, the **_<dfn>resolved value</dfn>_** of each
+_text_, _literal_, _variable_, _expression_, and _markup_
+is determined using the _formatting context_.
+Each _resolved value_ is an implementation-defined value which
+MAY support selection, formatting, and/or use as an _operand_ or _option_ value.
 
-To support this, the **_<dfn>resolved value</dfn>_** of each _expression_
-is an implementation-dependent value that supports some or all of the above use cases.
-
-In a _declaration_, the _resolved value_ of the _expression_ is bound to a _variable_,
-which is available for use by later _expressions_.
-Since a _variable_ can be referenced in different ways later,
-implementations SHOULD NOT immediately fully format the value for output.
+In a _declaration_, the _resolved value_ of an _expression_ is bound to a _variable_,
+which makes it available for use in later _expressions_ and _markup_ _options_.
 
 > For example, in
 > ```
-> .input {$a :number minimumIntegerDigits=3}
-> .local $b = {$a :number maximumFractionDigits=3}
+> .input {$a :number minimumFractionDigits=3}
+> .local $b = {$a :integer notation=compact}
+> .match $a
+> 0 {{The value is zero.}}
+> * {{In compact form, the value {$a} is rendered as {$b}.}}
 > ```
-> the value bound to `$a` is the
-> _resolved value_ used as the _operand_
-> of the `:number` _function_
-> when resolving the value of the _variable_ `$b`.
+> the _resolved value_ bound to `$a` is used as the _operand_
+> of the `:integer` _function_ when resolving the value of the _variable_ `$b`,
+> as a _selector_ in the `.match` statement,
+> as well as for formatting the _placeholder_ `{$a}`.
 
 In an _input-declaration_, the _variable_ operand of the _variable-expression_
 identifies not only the name of the external input value,
