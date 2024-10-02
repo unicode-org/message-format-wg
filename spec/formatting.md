@@ -16,7 +16,8 @@ The formatting of a _message_ is defined by the following operations:
   For a message with no _selectors_, this is simple as there is only one _pattern_.
   With _selectors_, this will depend on their resolution.
 
-- **_<dfn>Formatting</dfn>_** takes the _resolved values_ of the selected _pattern_,
+- **_<dfn>Formatting</dfn>_** takes the _resolved values_ of
+  the _text_ and _placeholder_ parts of the selected _pattern_,
   and produces the formatted result for the _message_.
   Depending on the implementation, this result could be a single concatenated string,
   an array of objects, an attributed string, or some other locally appropriate data type.
@@ -272,7 +273,7 @@ the following steps are taken:
 
    The form that resolved _operand_ and _option_ values take is implementation-defined.
 
-   An implementation MAY pass additional arguments to the function,
+   An implementation MAY pass additional arguments to the _function handler_,
    as long as reasonable precautions are taken to keep the function interface
    simple and minimal, and avoid introducing potential security vulnerabilities.
 
@@ -286,16 +287,16 @@ the following steps are taken:
    additional detail about internal failures.
    Specifically, if the cause of the failure was that the datatype, value, or format of the
    _operand_ did not match that expected by the _function_,
-   the _function_ might cause a _Bad Operand_ error to be emitted.
+   the _function_ SHOULD cause a _Bad Operand_ error to be emitted.
   
    In all failure cases, use the _fallback value_ for the _expression_ as its _resolved value_.
 
 #### Function Handler
 
-To resolve a _function_,
-a **_<dfn>function handler</dfn>_** is required.
-This is an implementation-defined process such as a function or method
+A **_<dfn>function handler</dfn>_** is an implementation-defined process
+such as a function or method
 which accepts a set of arguments and returns a _resolved value_.
+A _function handler_ is required to resolve a _function_.
 
 An implementation MAY define its own functions and their handlers.
 An implementation MAY allow custom functions to be defined by users.

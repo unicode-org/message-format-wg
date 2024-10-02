@@ -374,7 +374,7 @@ All other values produce a _Bad Operand_ error.
 ### Digit Size Options
 
 Some _options_ of number _functions_ are defined to take a "digit size option".
-_Function handlers_ of number _functions_ use these _options_ to control aspects of numeric display
+The _function handlers_ for number _functions_ use these _options_ to control aspects of numeric display
 such as the number of fraction, integer, or significant digits.
 
 A "digit size option" is an _option_ value that the _function_ interprets

@@ -97,7 +97,7 @@ Attempting to parse a _message_ that is not _valid_ will result in a _Data Model
 
 A **_<dfn>message</dfn>_** is the complete template for a specific message formatting request.
 
-A **_<dfn>variable</dfn>_** is a _name_ associated with a _resolved value_.
+A **_<dfn>variable</dfn>_** is a _name_ associated to a _resolved value_.
 
 An **_<dfn>external variable</dfn>_** is a _variable_ 
 whose _name_ and initial value are supplied by the caller
