@@ -86,11 +86,9 @@ Implementations MAY include additional fields in their _formatting context_.
 
 ## Resolved Values
 
-During formatting, the **_<dfn>resolved value</dfn>_** of each
-_text_, _literal_, _variable_, _expression_, and _markup_
-is determined using the _formatting context_.
-Each _resolved value_ is an implementation-defined value which
-MAY support selection, formatting, and/or use as an _operand_ or _option_ value.
+A **_<dfn>resolved value</dfn>_** is the result of resolving a _text_, _literal_, _variable_, _expression_, or _markup_.
+The _resolved value_ is determined using the _formatting context_.
+The form of the _resolved value_ is implementation-defined.
 
 In a _declaration_, the _resolved value_ of an _expression_ is bound to a _variable_,
 which makes it available for use in later _expressions_ and _markup_ _options_.
