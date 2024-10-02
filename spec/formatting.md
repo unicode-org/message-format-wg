@@ -213,7 +213,6 @@ whether its value was originally a _quoted literal_ or an _unquoted literal_.
 > For example,
 > the _option_ `foo=42` and the _option_ `foo=|42|` are treated as identical.
 
-The resolution of a _text_ or _literal_ MUST resolve with a string value.
 
 > For example, in a JavaScript formatter
 > the _resolved value_ of a _text_ or a _literal_ could have the following implementation:
