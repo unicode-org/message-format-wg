@@ -211,8 +211,7 @@ whether its value was originally a _quoted literal_ or an _unquoted literal_.
 > For example,
 > the _option_ `foo=42` and the _option_ `foo=|42|` are treated as identical.
 
-
-> For example, in a JavaScript formatter
+> In a JavaScript formatter,
 > the _resolved value_ of a _text_ or a _literal_ could have the following implementation:
 >
 > ```ts
@@ -237,9 +236,8 @@ Otherwise, the _variable_ is an implicit reference to an input value,
 and its value is looked up from the _formatting context_ _input mapping_.
 
 The resolution of a _variable_ fails if no value is identified for its _name_.
-If this happens, an _Unresolved Variable_ error is emitted.
-If a _variable_ would resolve to a _fallback value_,
-this MUST also be considered a failure.
+If this happens, an _Unresolved Variable_ error is emitted
+and a _fallback value_ is used as _resolved value_ of the _variable_.
 
 ### Function Resolution
 
@@ -247,13 +245,14 @@ To resolve an _expression_ with a _function_,
 the following steps are taken:
 
 1. If the _expression_ includes an _operand_, resolve its value.
-   If this fails, use a _fallback value_ for the _expression_.
+   If this is a _fallback value_,
+   use it as the _resolved value_ of the _expression_.
 2. Resolve the _identifier_ of the _function_ and, based on the starting sigil,
    find the appropriate _function handler_ to call.
    If the implementation cannot find the _function handler_,
    or if the _identifier_ includes a _namespace_ that the implementation does not support,
    emit an _Unknown Function_ error
-   and use a _fallback value_ for the _expression_.
+   and use a _fallback value_ as the _resolved value_ of the _expression_.
 
    Implementations are not required to implement _namespaces_ or installable
    _function registries_.
@@ -284,7 +283,7 @@ the following steps are taken:
    _operand_ did not match that expected by the _function_,
    the _function_ SHOULD cause a _Bad Operand_ error to be emitted.
   
-   In all failure cases, use the _fallback value_ for the _expression_ as its _resolved value_.
+   In all failure cases, use a _fallback value_ as the _resolved value_ of the _expression_.
 
 #### Function Handler
 
@@ -320,16 +319,20 @@ Implementation-defined _functions_ SHOULD use an implementation-defined _namespa
 
 #### Option Resolution
 
-The result of resolving _option_ values is an unordered mapping of string identifiers to values.
+The result of resolving _option_ values is an unordered mapping of string identifiers to values,
+determined as follows:
 
-For each _option_:
+1. Let `res` be a new empty mapping.
+1. For each _option_:
+   1. Let `id` be the string value of the _identifier_ of the _option_.
+   1. Let `rv` be the _resolved value_ of the _option_ value.
+   1. If `rv` is a _fallback value_:
+      1. Set the value bound to `id` in `res` to an unresolved value.
+   1. Else:
+      1. Set the value bound to `id` in `res` to `rv`.
+1. Return `res`.
 
-- Resolve the _identifier_ of the _option_.
-- If the _option_'s right-hand side successfully resolves to a value,
-   bind the _identifier_ of the _option_ to the _resolved value_ in the mapping.
-- Otherwise, bind the _identifier_ of the _option_ to an unresolved value in the mapping.
-   Implementations MAY later remove this value before calling the _function_.
-   (Note that an _Unresolved Variable_ error will have been emitted.)
+Implementations MAY remove entries from `res` with unresolved values.
 
 Errors MAY be emitted during _option resolution_,
 but it always resolves to some mapping of string identifiers to values.
@@ -349,17 +352,26 @@ The resolution of _markup_ MUST always succeed.
 
 ### Fallback Resolution
 
-A **_<dfn>fallback value</dfn>_** is the _resolved value_ for an _expression_ that fails to resolve.
+A **_<dfn>fallback value</dfn>_** is the _resolved value_ for
+an _expression_ or _variable_ that fails to resolve.
+It has a string representation that is used for its formatting.
+
+The _resolved value_ of _text_, _literal_, and _markup_ MUST NOT be a _fallback value_.
+
+A _variable_ fails to resolve when no value is identified for its _name_.
+The string representation of its _fallback value_ is
+U+0024 DOLLAR SIGN `$` followed by the _name_ of the _variable_.
 
 An _expression_ fails to resolve when:
 
-- A _variable_ used as an _operand_ (with or without a _function_) fails to resolve.
-  * Note that this does not include a _variable_ used as an _option_ value.
+- A _variable_ used as its _operand_ resolves to a _fallback value_.
+  Note that an _expression_ does not necessarily fail to resolve
+  if an _option_ resolves with a _fallback value_.
 - A _function_ fails to resolve.
 
-The _fallback value_ depends on the contents of the _expression_:
+The string representation of the _fallback value_ of an _expression_ depends on its contents:
 
-- _expression_ with a _literal_ _operand_ (either quoted or unquoted)
+- _expression_ with a _literal_ _operand_ (either quoted or unquoted):
   U+007C VERTICAL LINE `|`
   followed by the value of the _literal_
   with escaping applied to U+005C REVERSE SOLIDUS `\` and U+007C VERTICAL LINE `|`,
@@ -370,33 +382,29 @@ The _fallback value_ depends on the contents of the _expression_:
   > `{42 :func}` resolves to the _fallback value_ `|42|` and
   > `{|C:\\| :func}` resolves to the _fallback value_ `|C:\\|`.
 
-- _expression_ with _variable_ _operand_ referring to a local _declaration_ (with or without a _function_):
-  the _value_ to which it resolves (which may already be a _fallback value_)
+- _expression_ with a _variable_ _operand_ referring to a _declaration_:
+  the string representation of the _fallback value_ of the _expression_ of that _declaration_.
 
   > Examples:
   > In a context where `:func` fails to resolve,
-  > the _pattern_'s _expression_ in `.local $var={|val|} {{{$var :func}}}`
-  > resolves to the _fallback value_ `|val|` and the message formats to `{|val|}`.
-  > In a context where `:now` fails to resolve but `:datetime` does not,
-  > the _pattern_'s _expression_ in
+  > the _placeholder_ in `.local $var = {|val| :func} {{{$var}}}`
+  > resolves to the _fallback value_ `|val|`.
+  >
+  > In a context where `:pretty` fails to resolve but `:now` does not,
+  > the _placeholder_ in
   > ```
   > .local $t = {:now format=iso8601}
-  > .local $pretty_t = {$t :datetime}
-  > {{{$pretty_t}}}
+  > {{{$t :pretty}}}
   > ```
-  > (transitively) resolves to the _fallback value_ `:now` and
-  > the message formats to `{:now}`.
+  > resolves to the _fallback value_ `:now`.
 
-- _expression_ with _variable_ _operand_ not referring to a local _declaration_ (with or without a _function_):
+- _expression_ with _variable_ _operand_ not referring to a _declaration_:
+  the _fallback value_ representation of that _variable_,
   U+0024 DOLLAR SIGN `$` followed by the _name_ of the _variable_
 
   > Examples:
   > In a context where `$var` fails to resolve, `{$var}` and `{$var :number}`
   > both resolve to the _fallback value_ `$var`.
-  > In a context where `:func` fails to resolve,
-  > the _pattern_'s _expression_ in `.input $arg {{{$arg :func}}}`
-  > resolves to the _fallback value_ `$arg` and
-  > the message formats to `{$arg}`.
 
 - _function_ _expression_ with no _operand_:
   U+003A COLON `:` followed by the _function_ _identifier_
@@ -409,7 +417,7 @@ The _fallback value_ depends on the contents of the _expression_:
 
   This is not currently used by any expression, but may apply in future revisions.
 
-_Option_ _identifiers_ and values are not included in the _fallback value_.
+_Options_ and _attributes_ are not included in the _fallback value_.
 
 _Pattern selection_ is not supported for _fallback values_.
 
