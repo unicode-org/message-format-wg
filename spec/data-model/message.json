@@ -32,11 +32,11 @@
     "attributes": {
       "type": "object",
       "additionalProperties": {
-        "oneOf": [{ "$ref": "#/$defs/literal-or-variable" }, { "const": true }]
+        "oneOf": [{ "$ref": "#/$defs/literal" }, { "const": true }]
       }
     },
 
-    "function-annotation": {
+    "function": {
       "type": "object",
       "properties": {
         "type": { "const": "function" },
@@ -45,32 +45,17 @@
       },
       "required": ["type", "name"]
     },
-    "unsupported-annotation": {
-      "type": "object",
-      "properties": {
-        "type": { "const": "unsupported-annotation" },
-        "source": { "type": "string" }
-      },
-      "required": ["type", "source"]
-    },
-    "annotation": {
-      "oneOf": [
-        { "$ref": "#/$defs/function-annotation" },
-        { "$ref": "#/$defs/unsupported-annotation" }
-      ]
-    },
-
     "expression": {
       "type": "object",
       "properties": {
         "type": { "const": "expression" },
         "arg": { "$ref": "#/$defs/literal-or-variable" },
-        "annotation": { "$ref": "#/$defs/annotation" },
+        "function": { "$ref": "#/$defs/function" },
         "attributes": { "$ref": "#/$defs/attributes" }
       },
       "oneOf": [
         { "required": ["type", "arg"] },
-        { "required": ["type", "annotation"] }
+        { "required": ["type", "function"] }
       ]
     },
 
@@ -106,27 +91,9 @@
       },
       "required": ["type", "name", "value"]
     },
-    "unsupported-statement": {
-      "type": "object",
-      "properties": {
-        "type": { "const": "unsupported-statement" },
-        "keyword": { "type": "string" },
-        "body": { "type": "string" },
-        "expressions": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/expression" }
-        }
-      },
-      "required": ["type", "keyword", "expressions"]
-    },
     "declarations": {
       "type": "array",
-      "items": {
-        "oneOf": [
-          { "$ref": "#/$defs/declaration" },
-          { "$ref": "#/$defs/unsupported-statement" }
-        ]
-      }
+      "items": { "$ref": "#/$defs/declaration" }
     },
 
     "variant-key": {
@@ -158,7 +125,7 @@
         "declarations": { "$ref": "#/$defs/declarations" },
         "selectors": {
           "type": "array",
-          "items": { "$ref": "#/$defs/expression" }
+          "items": { "$ref": "#/$defs/variable" }
         },
         "variants": {
           "type": "array",

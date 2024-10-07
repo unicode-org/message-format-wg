@@ -41,8 +41,8 @@ in <a href="https://github.com/unicode-org/message-format-wg/pull/457#discussion
 ordinal selection works similarly to plural selection, but uses a separate set of rules
 for each locale.
 This is visible in English, for example, where plural rules use only `one` and `other`
-but ordinal rules use `one` (_1st_, _21st_, etc.), `few` (_2nd_, _22nd_, etc.), 
-`many` (_3rd_, _23rd_, etc.), and `other` (_4th_, _5th_, etc.).
+but ordinal rules use `one` (_1st_, _21st_, etc.), `two` (_2nd_, _22nd_, etc.), 
+`few` (_3rd_, _23rd_, etc.), and `other` (_4th_, _5th_, etc.).
 
 Additionally,
 MF1 provides `ChoiceFormat` selection based on a complex rule set

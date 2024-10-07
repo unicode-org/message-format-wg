@@ -7,18 +7,15 @@ why MessageFormat is important and why MessageFormat 2.0 is needed.
 
 ## Intro
 
-The `MessageFormat` API and syntax have been around for a long time.
-
-Intro
+The `MessageFormat` API and syntax have been around for a long time:
 
 - `MessageFormat` is the Unicode API for software localization
-- It is 20 years old, well designed, proven solution
-  Its design was optimized for the software development model
-  of twenty years ago.
-  Implementers, developers, and translators struggle with its shortcomings.
+- It is 20 years old and is a well-designed, proven solution
 
-The current wave of software development uses dynamic languages, modern UI
-frameworks and new forms of user interactions (voice, VR etc.).
+However, its design was optimized for the software development model of twenty
+years ago. Implementers, developers, and translators struggle with its
+shortcomings. The current wave of software development uses dynamic languages,
+modern UI frameworks, and new forms of user interactions (voice, VR etc.).
 
 Considering these new challenges, combined with the lessons learned from using
 `MessageFormat`, we aim to design the next iteration of `MessageFormat`
