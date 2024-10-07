@@ -269,7 +269,7 @@ a reference to a function which cannot be resolved.
 ### Bad Selector
 
 A **_<dfn>Bad Selector</dfn>_** error occurs when a message includes a _selector_
-with a resolved value which does not support selection.
+with a _resolved value_ which does not support selection.
 
 > For example, attempting to format this message
 > would result in a _Bad Selector_ error:
@@ -283,10 +283,10 @@ with a resolved value which does not support selection.
 ## Message Function Errors
 
 A **_<dfn>Message Function Error</dfn>_** is any error that occurs
-when calling a message function implementation
+when calling a _function handler_
 or which depends on validation associated with a specific function.
 
-Implementations SHOULD provide a way for _functions_ to emit 
+Implementations SHOULD provide a way for _function handlers_ to emit 
 (or cause to be emitted) any of the types of error defined in this section.
 Implementations MAY also provide implementation-defined _Message Function Error_ types.
 
@@ -300,7 +300,7 @@ Implementations MAY also provide implementation-defined _Message Function Error_
 > 3. Uses a `:get` message function which requires its argument to be an object and
 >    an option `field` to be provided with a string value.
 >
-> The exact type of _Message Function Error_ is determined by the message function implementation.
+> The exact type of _Message Function Error_ is determined by the _function handler_.
 >
 > ```
 > Hello, {horse :get field=name}!

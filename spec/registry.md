@@ -1,7 +1,7 @@
 # MessageFormat 2.0 Default Function Registry
 
-This section describes the functions which each implementation MUST provide
-to be conformant with this specification.
+This section describes the functions for which each implementation MUST provide
+a _function handler_ to be conformant with this specification.
 
 Implementations MAY implement additional _functions_ or additional _options_.
 In particular, implementations are encouraged to provide feedback on proposed
@@ -51,7 +51,7 @@ The function `:string` has no options.
 #### Selection
 
 When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
-where `resolvedSelector` is the resolved value of a _selector_
+where `resolvedSelector` is the _resolved value_ of a _selector_
 and `keys` is a list of strings,
 the `:string` selector function performs as described below.
 
@@ -88,7 +88,7 @@ the `:string` selector function performs as described below.
 
 #### Formatting
 
-The `:string` function returns the string value of the resolved value of the _operand_.
+The `:string` function returns the string value of the _resolved value_ of the _operand_.
 
 ## Numeric Value Selection and Formatting
 
@@ -374,12 +374,12 @@ All other values produce a _Bad Operand_ error.
 ### Digit Size Options
 
 Some _options_ of number _functions_ are defined to take a "digit size option".
-Implementations of number _functions_ use these _options_ to control aspects of numeric display
+The _function handlers_ for number _functions_ use these _options_ to control aspects of numeric display
 such as the number of fraction, integer, or significant digits.
 
 A "digit size option" is an _option_ value that the _function_ interprets
 as a small integer value greater than or equal to zero.
-Implementations MAY define an upper limit on the resolved value 
+Implementations MAY define an upper limit on the _resolved value_
 of a digit size option option consistent with that implementation's practical limits.
 
 In most cases, the value of a digit size option will be a string that
@@ -404,7 +404,7 @@ Number selection has three modes:
   followed by an ordinal rule category if there is no explicit match
 
 When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
-where `resolvedSelector` is the resolved value of a _selector_
+where `resolvedSelector` is the _resolved value_ of a _selector_
 and `keys` is a list of strings,
 numeric selectors perform as described below.
 
@@ -448,7 +448,7 @@ but a weaker match than any exact match _key_ value.
 The rules for a given locale might not produce all of the keywords.
 A given _operand_ value might produce different keywords depending on the locale.
 
-Apply the rules to the resolved value of the _operand_ and the relevant function _options_,
+Apply the rules to the _resolved value_ of the _operand_ and the relevant function _options_,
 and return the resulting keyword.
 If no rules match, return `other`.
 
@@ -554,7 +554,7 @@ or can use a collection of _field options_ (but not both) to control the formatt
 output.
 
 If both are specified, a _Bad Option_ error MUST be emitted
-and a _fallback value_ used as the resolved value of the _expression_.
+and a _fallback value_ used as the _resolved value_ of the _expression_.
 
 > [!NOTE]
 > The names of _options_ and their _values_ were derived from the
@@ -579,8 +579,6 @@ The function `:datetime` has these _style options_.
 
 _Field options_ describe which fields to include in the formatted output
 and what format to use for that field.
-The implementation may use this _function_ to configure which fields
-appear in the formatted output.
 
 > [!NOTE]
 > _Field options_ do not have default values because they are only to be used

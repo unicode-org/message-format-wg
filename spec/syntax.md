@@ -97,7 +97,7 @@ Attempting to parse a _message_ that is not _valid_ will result in a _Data Model
 
 A **_<dfn>message</dfn>_** is the complete template for a specific message formatting request.
 
-A **_<dfn>variable</dfn>_** is a _name_ associated to a resolved value.
+A **_<dfn>variable</dfn>_** is a _name_ associated to a _resolved value_.
 
 An **_<dfn>external variable</dfn>_** is a _variable_ 
 whose _name_ and initial value are supplied by the caller
@@ -195,7 +195,7 @@ An **_<dfn>input-declaration</dfn>_** binds a _variable_ to an external input va
 The _variable-expression_ of an _input-declaration_
 MAY include a _function_ that is applied to the external value.
 
-A **_<dfn>local-declaration</dfn>_** binds a _variable_ to the resolved value of an _expression_.
+A **_<dfn>local-declaration</dfn>_** binds a _variable_ to the _resolved value_ of an _expression_.
 
 ```abnf
 declaration       = input-declaration / local-declaration
@@ -379,7 +379,7 @@ match-statement = match 1*(s selector)
 
 ### Selector
 
-A **_<dfn>selector</dfn>_** is a _variable_ whose resolved value ranks or excludes the
+A **_<dfn>selector</dfn>_** is a _variable_ whose _resolved value_ ranks or excludes the
 _variants_ based on the value of the corresponding _key_ in each _variant_.
 The combination of _selectors_ in a _matcher_ thus determines
 which _pattern_ will be used during formatting.
