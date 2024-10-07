@@ -93,21 +93,14 @@ Each message _declaration_ is represented by a `Declaration`,
 which connects the `name` of a _variable_
 with its _expression_ `value`.
 The `name` does not include the initial `$` of the _variable_.
-
-The `name` of an `InputDeclaration` MUST be the same
-as the `name` in the `VariableRef` of its `VariableExpression` `value`.
+If the `value` has a `VariableRef` `arg` with the same `name`
+as the `Declaration`,
+it represents an _input-declaration_.
+Otherwise, it represents a _local-declaration_.
 
 ```ts
-type Declaration = InputDeclaration | LocalDeclaration;
-
-interface InputDeclaration {
-  type: "input";
-  name: string;
-  value: VariableExpression;
-}
-
-interface LocalDeclaration {
-  type: "local";
+interface Declaration {
+  type: "declaration";
   name: string;
   value: Expression;
 }
@@ -149,21 +142,11 @@ expressions or markup.
 ```ts
 type Pattern = Array<string | Expression | Markup>;
 
-type Expression =
-  | LiteralExpression
-  | VariableExpression
-  | FunctionExpression;
+type Expression = OperandExpression | FunctionExpression;
 
-interface LiteralExpression {
+interface OperandExpression {
   type: "expression";
-  arg: Literal;
-  function?: FunctionRef;
-  attributes: Attributes;
-}
-
-interface VariableExpression {
-  type: "expression";
-  arg: VariableRef;
+  arg: Literal | VariableRef;
   function?: FunctionRef;
   attributes: Attributes;
 }

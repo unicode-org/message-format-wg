@@ -82,19 +82,10 @@
       }
     },
 
-    "input-declaration": {
+    "declaration": {
       "type": "object",
       "properties": {
-        "type": { "const": "input" },
-        "name": { "type": "string" },
-        "value": { "$ref": "#/$defs/variable-expression" }
-      },
-      "required": ["type", "name", "value"]
-    },
-    "local-declaration": {
-      "type": "object",
-      "properties": {
-        "type": { "const": "local" },
+        "type": { "const": "declaration" },
         "name": { "type": "string" },
         "value": { "$ref": "#/$defs/expression" }
       },
@@ -102,12 +93,7 @@
     },
     "declarations": {
       "type": "array",
-      "items": {
-        "oneOf": [
-          { "$ref": "#/$defs/input-declaration" },
-          { "$ref": "#/$defs/local-declaration" }
-        ]
-      }
+      "items": { "$ref": "#/$defs/declaration" }
     },
 
     "variant-key": {
