@@ -979,7 +979,7 @@ as is any `style` option.
 
 When an _operand_ or an _option_ value uses a _variable_ annotated,
 directly or indirectly, by a `:time` _annotation_,
-its resolved value contains the implementation-defined date/time value
+its _resolved value_ contains the implementation-defined date/time value
 of the _operand_ of the annotated _expression_ (with no date value),
 together with the resolved options values.
 
