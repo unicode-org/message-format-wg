@@ -23,7 +23,7 @@
     {
         "description": "complex-message   = o *(declaration o) complex-body o",
         "src": ".local $x = {1} {{ {$x}}} \u2066",
-        "exp": "1"
+        "exp": " 1"
     },
     {
         "description": "input-declaration = input o variable-expression",
@@ -84,7 +84,7 @@
     {
         "description": "variable-expression = \"{\" o variable [s function] *(s attribute) o \"}\"",
         "src": ".local $x = {1} {{ {\u200E $x \u200F} }}",
-        "exp": "1"
+        "exp": " 1 "
     },
     {
         "description": "function-expression = \"{\" o function *(s attribute) o \"}\"",
@@ -104,7 +104,7 @@
     {
         "description": "option = identifier o \"=\" o (literal / variable)",
         "src": "{1 :number minimumFractionDigits\u200F=\u200E1 }",
-        "exp": "1.1"
+        "exp": "1.0"
     },
     {
         "description": "attribute      = \"@\" identifier [o \"=\" o (literal / variable)]",
@@ -123,22 +123,22 @@
     },
     {
         "description":  "name       = [bidi] name-start *name-char [bidi]",
-        "src": ".local $\u200Efoo\u200F = {3} {{$\u200Efoo\u200F}}",
+        "src": ".local $\u200Efoo\u200F = {3} {{{$\u200Efoo\u200F}}}",
         "exp": "3"
     },
     {
         "description":  "name       = [bidi] name-start *name-char [bidi]",
-        "src": ".local $foo = {4} {{$\u200Efoo\u200F}}",
+        "src": ".local $foo = {4} {{{$\u200Efoo\u200F}}}",
         "exp": "4"
     },
     {
         "description":  "name       = [bidi] name-start *name-char [bidi]",
-        "src": ".local $\u200Efoo\u200F = {4} {{$foo}}",
+        "src": ".local $\u200Efoo\u200F = {5} {{{$foo}}}",
         "exp": "5"
     },
     {
         "description":  "name       = [bidi] name-start *name-char [bidi]",
-        "src": ".local $foo\u200Ebar = {5} {{$foo\u200Ebar}}",
+        "src": ".local $foo\u200Ebar = {5} {{{$foo\u200Ebar}}}",
         "expErrors": [{"type": "syntax-error"}]
     }
   ]
