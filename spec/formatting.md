@@ -57,6 +57,12 @@ nor be made available to _function handlers_.
 > _declarations_ affecting _variables_ referenced by that _expression_
 > have already been evaluated in the order in which the relevant _declarations_
 > appear in the _message_.
+>
+> Users may write custom functions that have observable side effects.
+> Lazy evaluation may involve evaluating the same expression multiple times
+> (call-by-name) or evaluating every expression at most once (call-by-need).
+> In the presence of custom functions with side effect, this implementation
+> choice affects the result of formatting a message.
 
 ## Formatting Context
 
