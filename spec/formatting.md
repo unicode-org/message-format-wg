@@ -58,14 +58,19 @@ nor be made available to _function handlers_.
 > have already been evaluated in the order in which the relevant _declarations_
 > appear in the _message_.
 >
-> Users or implementations can provide functions that have observable side effects
-> or whose results depend on external mutable state (for example, a function
-> that returns the current time and date.)
+> In some environments, users or implementations can provide functions
+> that mutate state that is external to the message formatter
+> (for example, deleting a file in the filesystem). This is not recommended.
+> Functions can also be written that depend on external mutable state
+> (for example, the current date and time).
 > Lazy evaluation might involve evaluating the same _expression_ multiple times
 > (call-by-name) or evaluating every expression at most once (call-by-need).
-> In the presence of custom functions with side effects, this implementation
+> In the presence of custom functions that either depend on or modify
+> mutable state external to the message formatter, this implementation
 > choice affects the result of formatting a message.
-> Functions that mutate external state are not recommended.
+> If all functions return a result that depends only on their _operand_
+> and _options_, then the choice of evaluation strategy has no effect
+> on the result of formatting a message.
 
 ## Formatting Context
 
