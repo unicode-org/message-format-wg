@@ -61,7 +61,7 @@ nor be made available to _function handlers_.
 > Users or implementations can provide functions that have observable side effects.
 > Lazy evaluation might involve evaluating the same _expression_ multiple times
 > (call-by-name) or evaluating every expression at most once (call-by-need).
-> In the presence of custom functions with side effect, this implementation
+> In the presence of custom functions with side effects, this implementation
 > choice affects the result of formatting a message.
 
 ## Formatting Context
