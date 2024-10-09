@@ -60,7 +60,7 @@ nor be made available to _function handlers_.
 >
 > In some environments, users or implementations can provide functions
 > that mutate state that is external to the message formatter
-> (for example, deleting a file in the filesystem). This is not recommended.
+(for example, setting or modifying the system locale).
 > Functions can also be written that depend on external mutable state
 > (for example, the current date and time).
 > Lazy evaluation might involve evaluating the same _expression_ multiple times
