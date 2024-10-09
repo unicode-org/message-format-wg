@@ -64,7 +64,7 @@
     {
         "description": "match-statement s variant *(o variant)",
         "src": ".local $x = {1 :number}.match $x\u061c1 {{one}}* {{other}}",
-        "exp": "one"
+        "expErrors": [{"type": "syntax-error"}]
     },
     {
         "description": "variant = key *(s key) quoted-pattern",
