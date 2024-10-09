@@ -61,7 +61,7 @@ nor be made available to _function handlers_.
 > Implementations and users creating custom functions SHOULD avoid
 > creating _function handlers_ that mutate external program state.
 >
->> [!NOTE]
+> [!NOTE]
 >> Function handlers can also be written that depend on external mutable state
 >> (for example, the current date and time).
 >> Lazy evaluation might involve evaluating the same _expression_ multiple times
