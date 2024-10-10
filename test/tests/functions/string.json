@@ -44,6 +44,16 @@
           "type": "unresolved-variable"
         }
       ]
+    },
+    {
+      "description": "NFC: keys are normalized",
+      "src": ".local $x = {\u1E0A\u0323 :string} .match $x \u1E0A\u0323 {{Not normalized}} \u1E0C\u0307 {{Normalized}} * {{Wrong}}",
+      "expErrors": [{"type": "duplicate-variant"}]
+    },
+    {
+      "description": "NFC: keys are normalized",
+      "src": ".local $x = {\u1E0A\u0323 :string} .match $x \u1E0C\u0307 {{Right}} * {{Wrong}}",
+      "exp": "Right"
     }
   ]
 }
