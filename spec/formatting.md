@@ -58,8 +58,9 @@ nor be made available to _function handlers_.
 > have already been evaluated in the order in which the relevant _declarations_
 > appear in the _message_.
 >
-> Implementations and users creating custom functions SHOULD avoid
-> creating _function handlers_ that mutate external program state.
+> Implementations and users SHOULD NOT create _function handlers_
+> that mutate external program state,
+> particularly since such a _function handler_ can present a remote execution hazard.
 >
 
 > [!NOTE]
