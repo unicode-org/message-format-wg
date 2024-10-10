@@ -742,9 +742,9 @@ as is any `style` option.
 
 When an _operand_ or an _option_ value uses a _variable_ annotated,
 directly or indirectly, by a `:date` _annotation_,
-its _resolved value_ contains the implementation-defined date/time value
-of the _operand_ of the annotated _expression_ (with no time value),
-together with the resolved options values.
+its _resolved value_ is implementation-defined.
+An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate)
+when this happens.
 
 ### The `:time` function
 
@@ -778,12 +778,9 @@ as is any `style` option.
 
 When an _operand_ or an _option_ value uses a _variable_ annotated,
 directly or indirectly, by a `:time` _annotation_,
-its _resolved value_ contains the implementation-defined date/time value
-of the _operand_ of the annotated _expression_ (with no date value),
-together with the resolved options values.
-
-Using a `:time` annotated value as the _operand_ of `:datetime` or `:date`
-produces a _Bad Operand_ error as it contains no date value.
+its _resolved value_ is implementation-defined.
+An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate)
+when this happens.
 
 ### Date and Time Operands
 
