@@ -334,8 +334,9 @@ determined as follows:
 
 Implementations MAY remove entries from `res` with unresolved values.
 
-Errors MAY be emitted during _option resolution_,
-but it always resolves to some mapping of string identifiers to values.
+The result of _option resolution_ MUST be a (possibly empty) mapping
+of string identifiers to values;
+that is, errors MAY be emitted, but such errors cannot be fatal.
 This mapping can be empty.
 
 ### Markup Resolution
@@ -353,7 +354,7 @@ The resolution of _markup_ MUST always succeed.
 ### Fallback Resolution
 
 A **_<dfn>fallback value</dfn>_** is the _resolved value_ for
-an _expression_ or _variable_ that fails to resolve.
+an _expression_ or _variable_ when that _expression_ or _variable_ fails to resolve.
 It has a string representation that is used for its formatting.
 
 The _resolved value_ of _text_, _literal_, and _markup_ MUST NOT be a _fallback value_.
