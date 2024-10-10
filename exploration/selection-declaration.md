@@ -1,6 +1,6 @@
 # Effect of Selectors on Subsequent Placeholders
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -10,7 +10,14 @@ Status: **Proposed**
 		<dt>First proposed</dt>
 		<dd>2024-03-27</dd>
 		<dt>Pull Requests</dt>
-		<dd>#000</dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/755">#755</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/824">#824</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/860">#860</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/867">#867</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/877">#877</a></dd>
+		<dt>Ballot</dt>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/872">#872</a> (discussion)</dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/873">#873</a> (voting)</dd>
 	</dl>
 </details>
 
@@ -139,6 +146,16 @@ _What use-cases do we see? Ideally, quote concrete examples._
    * {{...}}
    ```
 
+   As another example of where the selection function and formatting functions differ, consider a person object provided as a formatting input.
+   A `:gender` function can return the person's gender,
+   but a `:personName` person name formatter function formats the name.
+   ```
+   .match {$person :gender}
+   male {{Bienvenido {$person :personName}}}
+   female {{Bienvenida {$person :personName}}}
+   other {{Le damos la bienvenida {$person :personName}}}
+   ```
+
 ## Requirements
 
 _What properties does the solution have to manifest to enable the use-cases above?_
@@ -149,13 +166,10 @@ _What prior decisions and existing conditions limit the possible design?_
 
 ## Proposed Design
 
-_Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
+The design alternative [Match on variables instead of expressions](#match-on-variables-instead-of-expressions)
+described below is selected.
 
 ## Alternatives Considered
-
-_What other solutions are available?_
-_How do they compare against the requirements?_
-_What other properties they have?_
 
 ### Do nothing
 
@@ -175,12 +189,59 @@ Examples:
 **Pros**
 - No changes required.
 - `.local` can be used to solve problems with variations in selection and formatting
+- No confusion or overlap of keywords' behavior (ex: `.match`, `.input`)
 - Supports multiple selectors on the same operand
 
 **Cons**
 - May require the user to annotate the operand for both formatting and selection.
 - Can produce a mismatch between formatting and selection, since the operand's formatting
   isn't visible to the selector.
+
+### Require annotation of selector variables in placeholders
+
+In this alternative, the pre-existing validity requirement
+
+> Each _selector_ MUST have an _annotation_,
+> or contain a _variable_ that directly or indirectly references a _declaration_ with an _annotation_.
+
+is expanded to also require later uses of a variable that's used as a selector to be annotated:
+
+> In a _complex message_,
+> each _placeholder_ _expression_ using the same _operand_ as a _selector_ MUST have an _annotation_,
+> or contain a _variable_ that directly or indirectly references a _declaration_ with an _annotation_.
+
+Example invalid message with this alternative:
+```
+.match {$n :number minimumFractionDigits=2}
+* {{Data model error: {$n}}}
+```
+
+Valid, recommended form for the above message:
+```
+.input {$n :number minimumFractionDigits=2}
+.match {$n}
+* {{Formats '$n' as a number with fraction digits: {$n}}}
+```
+
+Technically valid but not recommended:
+```
+.input {$n :integer}
+.match {$n :number minimumFractionDigits=2}
+* {{Formats '$n' as an integer: {$n}}}
+
+.match {$n :number minimumFractionDigits=2}
+* {{Formats '$n' as an integer: {$n :integer}}}
+```
+
+**Pros**
+- No syntax changes required.
+- `.local` can be used to solve problems with variations in selection and formatting
+- Supports multiple selectors on the same operand
+- Avoids mismatches between formatting and selection by requiring their annotation.
+
+**Cons**
+- May require the user to annotate the operand for both formatting and selection,
+  unless they use a declaration.
 
 ### Allow both local and input declarative selectors with immutability
 
@@ -217,6 +278,8 @@ declaration       = s variable [s] "=" [s] expression
 - Produces an error when users inappropriately annotate some items
 
 **Cons**
+- Complexity: `.match` means more than one thing
+- Complexity: `.match` implicitly creates a new lexical scope
 - Selectors can't provide additional selection-specific options
   if the variable name is already in scope
 - Doesn't allow multiple selection on the same operand, e.g.
@@ -229,7 +292,7 @@ declaration       = s variable [s] "=" [s] expression
   However, this design does allow for a local variable to be easily created
   for the purpose of selection.
 
-### Allow _immutable_ input declarative selectors
+### Allow _mutable_ input declarative selectors
 
 In this alternative, selectors are treated as declaration-selectors.
 That is, an annotation in a selector works like a `.input`.
@@ -249,9 +312,11 @@ Instead the selector's annotation replaces what came before.
 - Shorthand version works intuitively with minimal typing.
 
 **Cons**
+- Complexity: `.match` means more than one thing
+- Complexity: `.match` implicitly creates a new lexical scope
 - Violates immutability that we've established everywhere else
 
-### Allow _mutable_ input declarative selectors
+### Allow _immutable_ input declarative selectors
 
 In this alternative, selectors are treated as declaration-selectors.
 That is, an annotation in a selector works like a `.input`.
@@ -270,7 +335,7 @@ This implies that multiple selecton on the same operand is pointless.
 .match {$num :number maximumFractionDigits=0}
 * {{This message produces a Duplicate Declaration error}}
 
-.input {$num :integer} {$num :number}
+.match {$num :integer} {$num :number}
 * * {{This message produces a Duplicate Declaration error}}
 ```
 
@@ -280,6 +345,8 @@ This implies that multiple selecton on the same operand is pointless.
 - Produces an error when users inappropriately annotate some items
 
 **Cons**
+- Complexity: `.match` means more than one thing
+- Complexity: `.match` implicitly creates a new lexical scope
 - Selectors can't provide additional selection-specific options
   if the value has already been annotated
 - Doesn't allow multiple selection on the same operand, e.g.
@@ -321,6 +388,7 @@ The ABNF change would look like:
 - Preserves immutability.
 
 **Cons**
+- Complicates the situations where selection != formatting due to the strictness's design nudges
 - A separate declaration is required for each selector.
 
 ### Provide a `#`-like Feature
@@ -358,3 +426,69 @@ and a data model error otherwise.
   Removes some self-documentation from the pattern.
 - Requires the pattern to change if the selectors are modified.
 - Limits number of referenceable selectors to 10 (in the current form)
+
+### Hybrid approach: Match may mutate, no duplicates
+
+In this alternative, in a `.match` statement:
+
+1. variables are mutated by their annotation
+2. no variable can be the operand in two selectors
+
+This keeps most messages more concise, producing the expected results in Example 1.
+
+#### Example 1
+
+```
+.match {$count :integer}
+one {{You have {$count} whole apple.}}
+* {{You have {$count} whole apples.}}
+```
+is precisely equivalent to:
+
+#### Example 2
+```
+.local $count2 = {$count :integer}
+.match {$count2}
+one {{You have {$count2} whole apple.}}
+* {{You have {$count2} whole apples.}}
+```
+
+This avoids the serious problems with mismatched selection and formats
+as in Example 1 under "Do Nothing", whereby the input of `count = 1.2`, 
+results the malformed "You have 1.2 whole apple."
+
+Due to clause 2, this requires users to declare any selector using a `.input` or `.local` declaration
+before writing the `.match`. That is, the following is illegal.
+
+#### Example 3
+```
+.match {$count <anything>}{$count <anything>}
+```
+It would need to be rewritten as something along the lines of:
+
+#### Example 4
+```
+.local $count3 = {$count}
+.match {$count <anything1>}{$count3 <anything2>}
+```
+Notes:
+- The number of times the same variable is used twice in a match (or the older Select) is vanishingly small. Since it is an error — and the advice to fix is easy — that will prevent misbehavior.
+- There would be no change to the ABNF; but there would be an additional constraint in the spec, and relaxation of immutability within the .match statement.
+
+**Pros**
+- No new syntax is required
+- Preserves immutability before and after the .match statement
+- Avoids the serious problem of mismatch of selector and format of option "Do Nothing"
+- Avoids the extra syntax of option "Allow both local and input declarative selectors with immutability"
+- Avoids the problem of multiple variables in "Allow immutable input declarative selectors"
+- Is much more consise than "Match on variables instead of expressions", since it doesn't require a .local or .input for every variable with options
+- Avoids the readability issues with "Provide a #-like Feature"
+
+**Cons**
+- Complexity: `.match` means more than one thing
+- Complexity: `.match` implicitly creates a new lexical scope
+- Violates immutability that we've established everywhere else
+- Requires additional `.local` declarations in cases where a variable would occur twice
+  such as `.match {$date :date option=monthOnly} {$date :date option=full}`
+
+

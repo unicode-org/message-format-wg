@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="registry.dtd" type="application/xml-dtd"?>
-<!--
-     This registry is not part of the LDML45 Tech Preview of MessageFormat 2.
-     Comments on the contents of this registry are welcome as we seek to 
-     finalize the registry descriptions as part of the stable release
-     in LDML46.
--->
+
+<!-- This registry is not part of the MessageFormat 2 specification. -->
+
 <registry xml:lang="en">
   <!-- All regex here are to be seen as provisory. See issue #422. -->
   <validationRule id="anyNumber" regex="-?(0|([1-9]\d*))(\.\d*)?([eE][-+]?\d+)?"/>

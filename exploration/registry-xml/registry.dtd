@@ -1,7 +1,5 @@
-<!-- 
-     This DTD is not part of the LDML45 Tech Preview of MessageFormat 2.
-     Comments on this DTD are welcome. 
--->
+<!-- This DTD is not part of the MessageFormat 2 specification. -->
+
 <!ELEMENT registry (function|validationRule)*>
 <!ATTLIST registry
     xml:lang       NMTOKEN  #IMPLIED
