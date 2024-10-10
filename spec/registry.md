@@ -93,10 +93,10 @@ The `:string` function returns the string value of the _resolved value_ of the _
 #### Composition
 
 When an _operand_ or an _option_ value uses a _variable_ annotated,
-directly or indirectly, by a `:string` _annotation_,
-its resolved value contains the string value of the _operand_ of the annotated _expression_,
-together with its resolved locale and directionality,
-and no _option_ values.
+directly or indirectly, by a `:string` _function_,
+its _resolved value_ contains the string value of the _operand_ of the annotated _expression_,
+together with its resolved locale and directionality.
+None of the _options_ set on the _expression_ are part of the _resolved value_.
 
 ## Numeric Value Selection and Formatting
 
