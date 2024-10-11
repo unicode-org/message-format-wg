@@ -699,7 +699,7 @@
       "exp": "trailing whitespace"
     },
     {
-      "description": "NFC: literals are not normalized",
+      "description": "NFC: text is not normalized",
       "src": "\u1E0A\u0323",
       "exp": "\u1E0A\u0323"
     },
