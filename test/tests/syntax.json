@@ -724,6 +724,16 @@
       "src": ".input {$\u0044\u0323\u0307} {{{$\u1E0c\u0307}}}",
       "params": [{"name": "\u0044\u0323\u0307", "value": "foo"}],
       "exp": "foo"
+    },
+    {
+      "description": "NFC: variables are compared to each other as-if normalized; decl is non-normalized, use is; reordering",
+      "src": ".local $\u0044\u0307\u0323 = {foo} {{{$\u1E0c\u0307}}}",
+      "exp": "foo"
+    },
+    {
+      "description": "NFC: variables are compared to each other as-if normalized; decl is non-normalized, use is; special case mapping",
+      "src": ".local $\u0041\u030A\u0301 = {foo} {{{$\u01FA}}}",
+      "exp": "foo"
     }
   ]
 }
