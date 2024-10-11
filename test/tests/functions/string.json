@@ -62,7 +62,7 @@
     },
     {
       "description": "NFC: keys are normalized",
-      "src": ".local $x = {\u1E0A\u0323 :string} .match $x \u1E0C\u0307 {{Right}} * {{Wrong}}",
+      "src": ".local $x = {\u1E0C\u0307 :string} .match $x \u1E0A\u0323 {{Right}} * {{Wrong}}",
       "exp": "Right"
     }
   ]
