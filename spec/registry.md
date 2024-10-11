@@ -55,22 +55,12 @@ where `resolvedSelector` is the _resolved value_ of a _selector_
 and `keys` is a list of strings,
 the `:string` selector function performs as described below.
 
-1. Let `compare` be the string value of `resolvedSelector`.
+1. Let `compare` be the string value of `resolvedSelector` in Unicode Normalization Form C.
 1. Let `result` be a new empty list of strings.
 1. For each string `key` in `keys`:
    1. If `key` and `compare` consist of the same sequence of Unicode code points, then
       1. Append `key` as the last element of the list `result`.
 1. Return `result`.
-
-> [!NOTE]
-> Matching of `key` and `compare` values is sensitive to the sequence of code points
-> in each string.
-> As a result, variations in how text can be encoded can affect the performance of matching.
-> The function `:string` does not perform case folding or Unicode Normalization of string values.
-> Users SHOULD encode _messages_ and their parts (such as _keys_ and _operands_),
-> in Unicode Normalization Form C (NFC) unless there is a very good reason
-> not to.
-> See also: [String Matching](https://www.w3.org/TR/charmod-norm)
 
 > [!NOTE]
 > Unquoted string literals in a _variant_ do not include spaces.
@@ -89,6 +79,11 @@ the `:string` selector function performs as described below.
 #### Formatting
 
 The `:string` function returns the string value of the _resolved value_ of the _operand_.
+
+> [!NOTE]
+> The function `:string` does not perform Unicode Normalization of its formatted output.
+> Users SHOULD encode _messages_ and their parts in Unicode Normalization Form C (NFC)
+> unless there is a very good reason not to.
 
 ## Numeric Value Selection and Formatting
 
