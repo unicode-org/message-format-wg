@@ -211,7 +211,7 @@ whether its value was originally a _quoted literal_ or an _unquoted literal_.
 > For example,
 > the _option_ `foo=42` and the _option_ `foo=|42|` are treated as identical.
 
-> In a JavaScript formatter,
+> For example, in a JavaScript formatter,
 > the _resolved value_ of a _text_ or a _literal_ could have the following implementation:
 >
 > ```ts
@@ -237,7 +237,7 @@ and its value is looked up from the _formatting context_ _input mapping_.
 
 The resolution of a _variable_ fails if no value is identified for its _name_.
 If this happens, an _Unresolved Variable_ error is emitted
-and a _fallback value_ is used as _resolved value_ of the _variable_.
+and a _fallback value_ is used as the _resolved value_ of the _variable_.
 
 ### Function Resolution
 
@@ -246,13 +246,13 @@ the following steps are taken:
 
 1. If the _expression_ includes an _operand_, resolve its value.
    If this is a _fallback value_,
-   use it as the _resolved value_ of the _expression_.
+   return the _fallback value_ as the _resolved value_ of the _expression_.
 2. Resolve the _identifier_ of the _function_ and, based on the starting sigil,
    find the appropriate _function handler_ to call.
    If the implementation cannot find the _function handler_,
    or if the _identifier_ includes a _namespace_ that the implementation does not support,
    emit an _Unknown Function_ error
-   and use a _fallback value_ as the _resolved value_ of the _expression_.
+   and return a _fallback value_ as the _resolved value_ of the _expression_.
 
    Implementations are not required to implement _namespaces_ or installable
    _function registries_.
@@ -283,7 +283,7 @@ the following steps are taken:
    _operand_ did not match that expected by the _function_,
    the _function_ SHOULD cause a _Bad Operand_ error to be emitted.
   
-   In all failure cases, use a _fallback value_ as the _resolved value_ of the _expression_.
+   In all failure cases, return a _fallback value_ as the _resolved value_ of the _expression_.
 
 #### Function Handler
 
