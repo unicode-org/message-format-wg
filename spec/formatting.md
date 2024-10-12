@@ -405,7 +405,7 @@ The string representation of the _fallback value_ of an _expression_ depends on 
 
   > Examples:
   > In a context where `$var` fails to resolve, `{$var}` and `{$var :number}`
-  > both resolve to the _fallback value_ `$var`.
+  > both resolve to the _fallback value_ `$var`
   > (even if `:number` fails to resolve).
 
 - _function_ _expression_ with no _operand_:
