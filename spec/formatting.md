@@ -339,6 +339,12 @@ of string identifiers to values;
 that is, errors MAY be emitted, but such errors MUST NOT be fatal.
 This mapping can be empty.
 
+> [!NOTE]
+> The _resolved value_ of a _function_ _operand_
+> can also include resolved option values.
+> These are not included in the _option resolution_ result,
+> and need to processed separately by a _function handler_.
+
 ### Markup Resolution
 
 Unlike _functions_, the resolution of _markup_ is not customizable.
