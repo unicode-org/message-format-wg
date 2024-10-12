@@ -336,7 +336,7 @@ Implementations MAY remove entries from `res` with unresolved values.
 
 The result of _option resolution_ MUST be a (possibly empty) mapping
 of string identifiers to values;
-that is, errors MAY be emitted, but such errors cannot be fatal.
+that is, errors MAY be emitted, but such errors MUST NOT be fatal.
 This mapping can be empty.
 
 ### Markup Resolution
@@ -406,6 +406,7 @@ The string representation of the _fallback value_ of an _expression_ depends on 
   > Examples:
   > In a context where `$var` fails to resolve, `{$var}` and `{$var :number}`
   > both resolve to the _fallback value_ `$var`.
+  > (even if `:number` fails to resolve).
 
 - _function_ _expression_ with no _operand_:
   U+003A COLON `:` followed by the _function_ _identifier_
