@@ -267,9 +267,8 @@ the following steps are taken:
      potentially including a fallback chain of locales.
    - The base directionality of the _message_ and its _text_ tokens.
 
-   If the resolved mapping of _options_ includes any `u:` options
-   supported by the implementation,
-   process them as specified in the [Unicode Registry](/spec/registry/unicode.md).
+   If the resolved mapping of _options_ includes any _`u:` options_
+   supported by the implementation, process them as specified.
    Such `u:` options MAY be removed from the resolved mapping of _options_.
 
 5. Call the function implementation with the following arguments:
@@ -357,9 +356,8 @@ The _resolved value_ of _markup_ includes the following fields:
 - The _identifier_ of the _markup_
 - The resolved _options_ values after _option resolution_.
 
-If the resolved mapping of _options_ includes any `u:` options
-supported by the implementation,
-process them as specified in the [Unicode Registry](/spec/registry/unicode.md).
+If the resolved mapping of _options_ includes any _`u:` options_
+supported by the implementation, process them as specified.
 Such `u:` options MAY be removed from the resolved mapping of _options_.
 
 The resolution of _markup_ MUST always succeed.

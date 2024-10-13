@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
-  "scenario": "Unicode u: Registry",
+  "scenario": "u: Options",
   "description": "Common options affecting the function context",
   "defaultTestProperties": {
     "locale": "en-US"

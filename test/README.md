@@ -10,7 +10,7 @@ These test files are intended to be useful for testing multiple different messag
 - `data-model-errors.json` - Strings that should produce a Data Model Error when processed.
   Error names are defined in ["MessageFormat 2.0 Errors"](../spec/errors.md) in the spec.
 
-- `unicode.md` — Test cases for the `u:` Unicode Registry, using built-in functions.
+- `u-options.md` — Test cases for the `u:` options, using built-in functions.
 
 - `functions/` — Test cases that correspond to built-in functions.
   The behaviour of the built-in formatters is implementation-specific so the `exp` field is often
@@ -23,6 +23,7 @@ Some examples of test harnesses using these tests, from the source repository:
 - [Formatting tests](https://github.com/messageformat/messageformat/blob/11c95dab2b25db8454e49ff4daadb817e1d5b770/packages/mf2-messageformat/src/messageformat.test.ts)
 
 A [JSON schema](./schemas/) is included for the test files in this repository.
+
 ## Error Codes
 
 The following table relates the error names used in the [JSON schema](./schemas/)

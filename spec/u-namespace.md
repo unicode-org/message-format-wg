@@ -1,10 +1,10 @@
-# MessageFormat 2.0 Unicode Registry
+# MessageFormat 2.0 Unicode Namespace
 
 The `u:` namespace is reserved for use by the Unicode Consortium.
 
 ## Options
 
-This section describes common options which each implementation SHOULD support
+This section describes common **_<dfn>`u:` options</dfn>_** which each implementation SHOULD support
 for all _functions_ and _markup_.
 
 ### `u:id`
