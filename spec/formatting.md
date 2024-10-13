@@ -327,12 +327,10 @@ determined as follows:
    1. Let `id` be the string value of the _identifier_ of the _option_.
    1. Let `rv` be the _resolved value_ of the _option_ value.
    1. If `rv` is a _fallback value_:
-      1. Set the value bound to `id` in `res` to an unresolved value.
+      1. Emit a _Bad Option_ error.
    1. Else:
-      1. Set the value bound to `id` in `res` to `rv`.
+      1. Set `res[id]` to be `rv`.
 1. Return `res`.
-
-Implementations MAY remove entries from `res` with unresolved values.
 
 The result of _option resolution_ MUST be a (possibly empty) mapping
 of string identifiers to values;
