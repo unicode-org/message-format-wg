@@ -17,11 +17,10 @@ Implementations that expose APIs supporting the production, consumption, or tran
 _message_ as a data structure are encouraged to use this data model.
 
 This data model provides these capabilities:
-- any MessageFormat 2 message (including future versions)
-  can be parsed into this representation
+- any MessageFormat 2.0 message can be parsed into this representation
 - this data model representation can be serialized as a well-formed
-MessageFormat 2 message
-- parsing a MessageFormat 2 message into a data model representation
+MessageFormat 2.0 message
+- parsing a MessageFormat 2.0 message into a data model representation
   and then serializing it results in an equivalently functional message
 
 This data model might also be used to:
@@ -85,7 +84,7 @@ interface PatternMessage {
 interface SelectMessage {
   type: "select";
   declarations: Declaration[];
-  selectors: Expression[];
+  selectors: VariableRef[];
   variants: Variant[];
 }
 ```
@@ -98,21 +97,8 @@ The `name` does not include the initial `$` of the _variable_.
 The `name` of an `InputDeclaration` MUST be the same
 as the `name` in the `VariableRef` of its `VariableExpression` `value`.
 
-An `UnsupportedStatement` represents a statement not supported by the implementation.
-Its `keyword` is a non-empty string name (i.e. not including the initial `.`).
-If not empty, the `body` is the "raw" value (i.e. escape sequences are not processed)
-starting after the keyword and up to the first _expression_,
-not including leading or trailing whitespace.
-The non-empty `expressions` correspond to the trailing _expressions_ of the _reserved statement_.
-
-> [!NOTE]
-> Be aware that future versions of this specification
-> might assign meaning to _reserved statement_ values.
-> This would result in new interfaces being added to
-> this data model.
-
 ```ts
-type Declaration = InputDeclaration | LocalDeclaration | UnsupportedStatement;
+type Declaration = InputDeclaration | LocalDeclaration;
 
 interface InputDeclaration {
   type: "input";
@@ -124,13 +110,6 @@ interface LocalDeclaration {
   type: "local";
   name: string;
   value: Expression;
-}
-
-interface UnsupportedStatement {
-  type: "unsupported-statement";
-  keyword: string;
-  body?: string;
-  expressions: Expression[];
 }
 ```
 
@@ -173,45 +152,35 @@ type Pattern = Array<string | Expression | Markup>;
 type Expression =
   | LiteralExpression
   | VariableExpression
-  | FunctionExpression
-  | UnsupportedExpression;
+  | FunctionExpression;
 
 interface LiteralExpression {
   type: "expression";
   arg: Literal;
-  annotation?: FunctionAnnotation | UnsupportedAnnotation;
+  function?: FunctionRef;
   attributes: Attributes;
 }
 
 interface VariableExpression {
   type: "expression";
   arg: VariableRef;
-  annotation?: FunctionAnnotation | UnsupportedAnnotation;
+  function?: FunctionRef;
   attributes: Attributes;
 }
 
 interface FunctionExpression {
   type: "expression";
   arg?: never;
-  annotation: FunctionAnnotation;
+  function: FunctionRef;
   attributes: Attributes;
 }
-
-interface UnsupportedExpression {
-  type: "expression";
-  arg?: never;
-  annotation: UnsupportedAnnotation;
-  attributes: Attributes;
-}
-
-type Attributes = Map<string, Literal | VariableRef | true>;
 ```
 
 ## Expressions
 
 The `Literal` and `VariableRef` correspond to the the _literal_ and _variable_ syntax rules.
 When they are used as the `body` of an `Expression`,
-they represent _expression_ values with no _annotation_.
+they represent _expression_ values with no _function_.
 
 `Literal` represents all literal values, both _quoted literal_ and _unquoted literal_.
 The presence or absence of quotes is not preserved by the data model.
@@ -231,14 +200,14 @@ interface VariableRef {
 }
 ```
 
-A `FunctionAnnotation` represents a _function_ _annotation_.
+A `FunctionRef` represents a _function_.
 The `name` does not include the `:` starting sigil.
 
 `Options` is a key-value mapping containing options,
-and is used to represent the _annotation_ and _markup_ _options_.
+and is used to represent the _function_ and _markup_ _options_.
 
 ```ts
-interface FunctionAnnotation {
+interface FunctionRef {
   type: "function";
   name: string;
   options: Options;
@@ -247,31 +216,13 @@ interface FunctionAnnotation {
 type Options = Map<string, Literal | VariableRef>;
 ```
 
-An `UnsupportedAnnotation` represents a
-_private-use annotation_ not supported by the implementation or a _reserved annotation_.
-The `source` is the "raw" value (i.e. escape sequences are not processed),
-including the starting sigil.
-
-When parsing the syntax of a _message_ that includes a _private-use annotation_
-supported by the implementation,
-the implementation SHOULD represent it in the data model
-using an interface appropriate for the semantics and meaning
-that the implementation attaches to that _annotation_.
-
-```ts
-interface UnsupportedAnnotation {
-  type: "unsupported-annotation";
-  source: string;
-}
-```
-
 ## Markup
 
 A `Markup` object has a `kind` of either `"open"`, `"standalone"`, or `"close"`,
 each corresponding to _open_, _standalone_, and _close_ _markup_.
 The `name` in these does not include the starting sigils `#` and `/` 
 or the ending sigil `/`.
-The `options` for markup use the same key-value mapping as `FunctionAnnotation`.
+The `options` for markup use the same key-value mapping as `FunctionRef`.
 
 ```ts
 interface Markup {
@@ -281,6 +232,17 @@ interface Markup {
   options: Options;
   attributes: Attributes;
 }
+```
+
+## Attributes
+
+`Attributes` is a key-value mapping
+used to represent the _expression_ and _markup_ _attributes_.
+
+_Attributes_ with no value are represented by `true` here.
+
+```ts
+type Attributes = Map<string, Literal | true>;
 ```
 
 ## Extensions

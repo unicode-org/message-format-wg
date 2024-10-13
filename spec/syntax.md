@@ -90,14 +90,14 @@ Attempting to parse a _message_ that is not _well-formed_ will result in a _Synt
 A _message_ is **_<dfn>valid</dfn>_** if it is _well-formed_ and
 **also** meets the additional content restrictions
 and semantic requirements about its structure defined below for
-_declarations_, _matcher_ and _options_.
+_declarations_, _matcher_, and _options_.
 Attempting to parse a _message_ that is not _valid_ will result in a _Data Model Error_.
 
 ## The Message
 
 A **_<dfn>message</dfn>_** is the complete template for a specific message formatting request.
 
-A **_<dfn>variable</dfn>_** is a _name_ associated to a resolved value.
+A **_<dfn>variable</dfn>_** is a _name_ associated to a _resolved value_.
 
 An **_<dfn>external variable</dfn>_** is a _variable_ 
 whose _name_ and initial value are supplied by the caller
@@ -134,17 +134,23 @@ A **_<dfn>local variable</dfn>_** is a _variable_ created as the result of a _lo
 > > An exception to this is: whitespace inside a _pattern_ is **always** significant.
 
 > [!NOTE]
-> The syntax assumes that each _message_ will be displayed with a left-to-right display order
+> The MessageFormat 2 syntax assumes that each _message_ will be displayed
+> with a left-to-right display order
 > and be processed in the logical character order.
-> The syntax also permits the use of right-to-left characters in _identifiers_,
+> The syntax permits the use of right-to-left characters in _identifiers_,
 > _literals_, and other values.
-> This can result in confusion when viewing the _message_.
+> This can result in confusion when viewing the message
+> or users might incorrectly insert bidi controls or marks that negatively affect the output
+> of the message.
+>
+> To assist with this, the syntax permits the use of various controls and
+> strongly-directional markers in both optional and required _whitespace_
+> in a _message_, as well was encouraging the use of isolating controls
+> with _expressions_ and _quoted patterns_.
+> See: [whitespace](#whitespace) (below) for more information.
 > 
-> Additional restrictions or requirements,
-> such as permitting the use of certain bidirectional control characters in the syntax,
-> might be added during the Tech Preview to better manage bidirectional text.
-> Feedback on the creation and management of _messages_
-> containing bidirectional tokens is strongly desired.
+> Additional restrictions or requirements might be added during the
+> Tech Preview to better manage bidirectional text.
 
 A _message_ can be a _simple message_ or it can be a _complex message_.
 
@@ -153,11 +159,14 @@ message = simple-message / complex-message
 ```
 
 A **_<dfn>simple message</dfn>_** contains a single _pattern_,
-with restrictions on its first character.
-An empty string is a valid _simple message_.
+with restrictions on its first non-whitespace character.
+An empty string is a _valid_ _simple message_.
+
+Whitespace at the start or end of a _simple message_ is significant,
+and a part of the _text_ of the _message_.
 
 ```abnf
-simple-message = [simple-start pattern]
+simple-message = o [simple-start pattern]
 simple-start   = simple-start-char / escaped-char / placeholder
 ```
 
@@ -169,8 +178,11 @@ and consists of:
 1. an optional list of _declarations_, followed by
 2. a _complex body_
 
+Whitespace at the start or end of a _complex message_ is not significant,
+and does not affect the processing of the _message_.
+
 ```abnf
-complex-message = *(declaration [s]) complex-body [s]
+complex-message = o *(declaration o) complex-body o
 ```
 
 ### Declarations
@@ -181,17 +193,14 @@ _Declarations_ are optional: many messages will not contain any _declarations_.
 
 An **_<dfn>input-declaration</dfn>_** binds a _variable_ to an external input value.
 The _variable-expression_ of an _input-declaration_
-MAY include an _annotation_ that is applied to the external value.
+MAY include a _function_ that is applied to the external value.
 
-A **_<dfn>local-declaration</dfn>_** binds a _variable_ to the resolved value of an _expression_.
-
-For compatibility with later MessageFormat 2 specification versions,
-_declarations_ MAY also include _reserved statements_.
+A **_<dfn>local-declaration</dfn>_** binds a _variable_ to the _resolved value_ of an _expression_.
 
 ```abnf
-declaration       = input-declaration / local-declaration / reserved-statement
-input-declaration = input [s] variable-expression
-local-declaration = local s variable [s] "=" [s] expression
+declaration       = input-declaration / local-declaration
+input-declaration = input o variable-expression
+local-declaration = local s variable o "=" o expression
 ```
 
 _Variables_, once declared, MUST NOT be redeclared. 
@@ -200,7 +209,7 @@ _Duplicate Declaration_ error during processing:
 - A _declaration_ MUST NOT bind a _variable_
   that appears as a _variable_ anywhere within a previous _declaration_.
 - An _input-declaration_ MUST NOT bind a _variable_
-  that appears anywhere within the _annotation_ of its _variable-expression_.
+  that appears anywhere within the _function_ of its _variable-expression_.
 - A _local-declaration_ MUST NOT bind a _variable_ that appears in its _expression_.
 
 A _local-declaration_ MAY overwrite an external input value as long as the
@@ -208,45 +217,17 @@ external input value does not appear in a previous _declaration_.
 
 > [!NOTE]
 > These restrictions only apply to _declarations_.
-> A _placeholder_ or _selector_ can apply a different annotation to a _variable_
+> A _placeholder_ can apply a different _function_ to a _variable_
 > than one applied to the same _variable_ named in a _declaration_.
 > For example, this message is _valid_:
 > ```
 > .input {$var :number maximumFractionDigits=0}
-> .match {$var :number maximumFractionDigits=2}
-> 0 {{The selector can apply a different annotation to {$var} for the purposes of selection}}
-> * {{A placeholder in a pattern can apply a different annotation to {$var :number maximumFractionDigits=3}}}
+> .local $var2 = {$var :number maximumFractionDigits=2}
+> .match $var2
+> 0 {{The selector can apply a different function to {$var} for the purposes of selection}}
+> * {{A placeholder in a pattern can apply a different function to {$var :number maximumFractionDigits=3}}}
 > ```
 > (See the [Errors](./errors.md) section for examples of invalid messages)
-
-#### Reserved Statements
-
-A **_<dfn>reserved statement</dfn>_** reserves additional `.keywords`
-for use by future versions of this specification.
-Any such future keyword must start with `.`,
-followed by two or more lower-case ASCII characters.
-
-The rest of the statement supports
-a similarly wide range of content as _reserved annotations_,
-but it MUST end with one or more _expressions_.
-
-```abnf
-reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
-reserved-keyword   = "." name
-```
-
-> [!NOTE]
-> The `reserved-keyword` ABNF rule is a simplification,
-> as it MUST NOT be considered to match any of the existing keywords
-> `.input`, `.local`, or `.match`.
-
-This allows flexibility in future standardization,
-as future definitions MAY define additional semantics and constraints
-on the contents of these _reserved statements_.
-
-Implementations MUST NOT assign meaning or semantics to a _reserved statement_:
-these are reserved for future standardization.
-Implementations MUST NOT remove or alter the contents of a _reserved statement_.
 
 ### Complex Body
 
@@ -279,7 +260,7 @@ A _quoted pattern_ starts with a sequence of two U+007B LEFT CURLY BRACKET `{{`
 and ends with a sequence of two U+007D RIGHT CURLY BRACKET `}}`.
 
 ```abnf
-quoted-pattern = "{{" pattern "}}"
+quoted-pattern = o "{{" pattern "}}"
 ```
 
 A _quoted pattern_ MAY be empty.
@@ -300,8 +281,8 @@ U+007B LEFT CURLY BRACKET `{`, and U+007D RIGHT CURLY BRACKET `}`
 MUST be escaped as `\\`, `\{`, and `\}` respectively.
 
 In the ABNF, _text_ is represented by non-empty sequences of
-`simple-start-char`, `text-char`, and `escaped-char`.
-The first of these is used at the start of a _simple message_,
+`simple-start-char`, `text-char`, `escaped-char`, and `s`.
+The production `simple-start-char` represents the first non-whitespace in a _simple message_
 and matches `text-char` except for not allowing U+002E FULL STOP `.`.
 The ABNF uses `content-char` as a shared base for _text_ and _quoted literal_ characters.
 
@@ -309,10 +290,9 @@ Whitespace in _text_, including tabs, spaces, and newlines is significant and MU
 be preserved during formatting.
 
 ```abnf
-simple-start-char = content-char / s / "@" / "|"
-text-char         = content-char / s / "." / "@" / "|"
-quoted-char       = content-char / s / "." / "@" / "{" / "}"
-reserved-char     = content-char / "."
+simple-start-char = content-char / "@" / "|"
+text-char         = content-char / ws / "." / "@" / "|"
+quoted-char       = content-char / ws / "." / "@" / "{" / "}"
 content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %x0B-0C        ; omit CR (%x0D)
                   / %x0E-1F        ; omit SP (%x20)
@@ -362,24 +342,31 @@ and at least one _variant_.
 When the _matcher_ is processed, the result will be a single _pattern_ that serves
 as the template for the formatting process.
 
-A _message_ can only be considered _valid_ if the following requirements are
-satisfied:
+A _message_ can only be considered _valid_ if the following requirements are satisfied;
+otherwise, a corresponding _Data Model Error_ will be produced during processing:
 
-- The number of _keys_ on each _variant_ MUST be equal to the number of _selectors_.
-- At least one _variant_ MUST exist whose _keys_ are all equal to the "catch-all" key `*`.
-- Each _selector_ MUST have an _annotation_,
-  or contain a _variable_ that directly or indirectly references a _declaration_ with an _annotation_.
+- _Variant Key Mismatch_:
+  The number of _keys_ on each _variant_ MUST be equal to the number of _selectors_.
+- _Missing Fallback Variant_:
+  At least one _variant_ MUST exist whose _keys_ are all equal to the "catch-all" key `*`.
+- _Missing Selector Annotation_:
+  Each _selector_ MUST be a _variable_ that
+  directly or indirectly references a _declaration_ with a _function_.
+- _Duplicate Variant_:
+  Each _variant_ MUST use a list of _keys_ that is unique from that
+  of all other _variants_ in the _message_.
+  _Literal_ _keys_ are compared by their contents, not their syntactical appearance.
 
 ```abnf
-matcher         = match-statement 1*([s] variant)
-match-statement = match 1*([s] selector)
+matcher         = match-statement s variant *(o variant)
+match-statement = match 1*(s selector)
 ```
 
 > A _message_ with a _matcher_:
 >
 > ```
 > .input {$count :number}
-> .match {$count}
+> .match $count
 > one {{You have {$count} notification.}}
 > *   {{You have {$count} notifications.}}
 > ```
@@ -387,18 +374,18 @@ match-statement = match 1*([s] selector)
 > A _message_ containing a _matcher_ formatted on a single line:
 >
 > ```
-> .match {:platform} windows {{Settings}} * {{Preferences}}
+> .local $os = {:platform} .match $os windows {{Settings}} * {{Preferences}}
 > ```
 
 ### Selector
 
-A **_<dfn>selector</dfn>_** is an _expression_ that ranks or excludes the
+A **_<dfn>selector</dfn>_** is a _variable_ whose _resolved value_ ranks or excludes the
 _variants_ based on the value of the corresponding _key_ in each _variant_.
 The combination of _selectors_ in a _matcher_ thus determines
 which _pattern_ will be used during formatting.
 
 ```abnf
-selector = expression
+selector = variable
 ```
 
 There MUST be at least one _selector_ in a _matcher_.
@@ -409,7 +396,8 @@ There MAY be any number of additional _selectors_.
 > based on grammatical case:
 >
 > ```
-> .match {$userName :hasCase}
+> .local $hasCase = {$userName :hasCase}
+> .match $hasCase
 > vocative {{Hello, {$userName :person case=vocative}!}}
 > accusative {{Please welcome {$userName :person case=accusative}!}}
 > * {{Hello!}}
@@ -420,7 +408,7 @@ There MAY be any number of additional _selectors_.
 > ```
 > .input {$numLikes :integer}
 > .input {$numShares :integer}
-> .match {$numLikes} {$numShares}
+> .match $numLikes $numShares
 > 0   0   {{Your item has no likes and has not been shared.}}
 > 0   one {{Your item has no likes and has been shared {$numShares} time.}}
 > 0   *   {{Your item has no likes and has been shared {$numShares} times.}}
@@ -434,16 +422,16 @@ There MAY be any number of additional _selectors_.
 
 ### Variant
 
-A **_<dfn>variant</dfn>_** is a _quoted pattern_ associated with a set of _keys_ in a _matcher_.
+A **_<dfn>variant</dfn>_** is a _quoted pattern_ associated with a list of _keys_ in a _matcher_.
 Each _variant_ MUST begin with a sequence of _keys_,
-and terminate with a valid _quoted pattern_.
+and terminate with a _valid_ _quoted pattern_.
 The number of _keys_ in each _variant_ MUST match the number of _selectors_ in the _matcher_.
 
 Each _key_ is separated from each other by whitespace.
 Whitespace is permitted but not required between the last _key_ and the _quoted pattern_.
 
 ```abnf
-variant = key *(s key) [s] quoted-pattern
+variant = key *(s key) quoted-pattern
 key     = literal / "*"
 ```
 
@@ -455,6 +443,12 @@ A _key_ can be either a _literal_ value or the "catch-all" key `*`.
 
 The **_<dfn>catch-all key</dfn>_** is a special key, represented by `*`,
 that matches all values for a given _selector_.
+
+The value of each _key_ MUST be treated as if it were in
+[Unicode Normalization Form C](https://unicode.org/reports/tr15/) ("NFC").
+Two _keys_ are considered equal if they are canonically equivalent strings,
+that is, if they consist of the same sequence of Unicode code points after
+Unicode Normalization Form C has been applied to both.
 
 ## Expressions
 
@@ -468,28 +462,27 @@ An _expression_ cannot contain another _expression_.
 An _expression_ MAY contain one more _attributes_.
 
 A **_<dfn>literal-expression</dfn>_** contains a _literal_,
-optionally followed by an _annotation_.
+optionally followed by a _function_.
 
 A **_<dfn>variable-expression</dfn>_** contains a _variable_,
-optionally followed by an _annotation_.
+optionally followed by a _function_.
 
-An **_<dfn>annotation-expression</dfn>_** contains an _annotation_ without an _operand_.
+A **_<dfn>function-expression</dfn>_** contains a _function_ without an _operand_.
 
 ```abnf
-expression            = literal-expression
-                      / variable-expression
-                      / annotation-expression
-literal-expression    = "{" [s] literal [s annotation] *(s attribute) [s] "}"
-variable-expression   = "{" [s] variable [s annotation] *(s attribute) [s] "}"
-annotation-expression = "{" [s] annotation *(s attribute) [s] "}"
+expression          = literal-expression
+                    / variable-expression
+                    / function-expression
+literal-expression  = "{" o literal [s function] *(s attribute) o "}"
+variable-expression = "{" o variable [s function] *(s attribute) o "}"
+function-expression = "{" o function *(s attribute) o "}"
 ```
 
 There are several types of _expression_ that can appear in a _message_.
 All _expressions_ share a common syntax. The types of _expression_ are:
 
 1. The value of a _local-declaration_
-2. A _selector_
-3. A kind of _placeholder_ in a _pattern_
+2. A kind of _placeholder_ in a _pattern_
 
 Additionally, an _input-declaration_ can contain a _variable-expression_.
 
@@ -502,12 +495,6 @@ Additionally, an _input-declaration_ can contain a _variable-expression_.
 > .local $y = {|This is an expression|}
 > ```
 >
-> Selectors:
->
-> ```
-> .match {$selector :functionRequired}
-> ```
->
 > Placeholders:
 >
 > ```
@@ -517,36 +504,26 @@ Additionally, an _input-declaration_ can contain a _variable-expression_.
 > This placeholder contains a function expression with a variable-valued option: {:function option=$variable}
 > ```
 
-### Annotation
-
-An **_<dfn>annotation</dfn>_** is part of an _expression_ containing either
-a _function_ together with its associated _options_, or
-a _private-use annotation_ or a _reserved annotation_.
-
-```abnf
-annotation = function
-           / private-use-annotation
-           / reserved-annotation
-```
+### Operand
 
 An **_<dfn>operand</dfn>_** is the _literal_ of a _literal-expression_ or
 the _variable_ of a _variable-expression_.
 
-An _annotation_ can appear in an _expression_ by itself or following a single _operand_.
-When following an _operand_, the _operand_ serves as input to the _annotation_.
-
 #### Function
 
-A **_<dfn>function</dfn>_** is named functionality in an _annotation_.
+A **_<dfn>function</dfn>_** is named functionality in an _expression_.
 _Functions_ are used to evaluate, format, select, or otherwise process data
 values during formatting.
+
+A _function_ can appear in an _expression_ by itself or following a single _operand_.
+When following an _operand_, the _operand_ serves as input to the _function_.
 
 Each _function_ is defined by the runtime's _function registry_.
 A _function_'s entry in the _function registry_ will define
 whether the _function_ is a _selector_ or formatter (or both),
 whether an _operand_ is required,
 what form the values of an _operand_ can take,
-what _options_ and _option_ values are valid,
+what _options_ and _option_ values are acceptable,
 and what outputs might result.
 See [function registry](/spec/registry/default.md) for more information.
 
@@ -574,16 +551,17 @@ The _identifier_ is separated from the _value_ by an U+003D EQUALS SIGN `=` alon
 optional whitespace.
 The value of an _option_ can be either a _literal_ or a _variable_.
 
-Multiple _options_ are permitted in an _annotation_.
+Multiple _options_ are permitted in a _function_.
 _Options_ are separated from the preceding _function_ _identifier_
 and from each other by whitespace.
-Each _option_'s _identifier_ MUST be unique within the _annotation_:
-an _annotation_ with duplicate _option_ _identifiers_ is not valid.
+Each _option_'s _identifier_ MUST be unique within the _function_:
+a _function_ with duplicate _option_ _identifiers_ is not _valid_
+and will produce a _Duplicate Option Name_ error during processing.
 
 The order of _options_ is not significant.
 
 ```abnf
-option = identifier [s] "=" [s] (literal / variable)
+option = identifier o "=" o (literal / variable)
 ```
 
 > Examples of _functions_ with _options_
@@ -601,82 +579,6 @@ option = identifier [s] "=" [s] (literal / variable)
 > ```
 > Today is {$date :datetime weekday=$dateStyle}!
 > ```
-
-#### Private-Use Annotations
-
-A **_<dfn>private-use annotation</dfn>_** is an _annotation_ whose syntax is reserved
-for use by a specific implementation or by private agreement between multiple implementations.
-Implementations MAY define their own meaning and semantics for _private-use annotations_.
-
-A _private-use annotation_ starts with either U+0026 AMPERSAND `&` or U+005E CIRCUMFLEX ACCENT `^`.
-
-Characters, including whitespace, are assigned meaning by the implementation.
-The definition of escapes in the `reserved-body` production, used for the body of
-a _private-use annotation_ is an affordance to implementations that
-wish to use a syntax exactly like other functions. Specifically:
-
-- The characters `\`, `{`, and `}` MUST be escaped as `\\`, `\{`, and `\}` respectively
-  when they appear in the body of a _private-use annotation_.
-- The character `|` is special: it SHOULD be escaped as `\|` in a _private-use annotation_,
-  but can appear unescaped as long as it is paired with another `|`.
-  This is an affordance to allow _literals_ to appear in the private use syntax.
-
-A _private-use annotation_ MAY be empty after its introducing sigil.
-
-```abnf
-private-use-annotation = private-start [[s] reserved-body]
-private-start          = "^" / "&"
-```
-
-> [!NOTE]
-> Users are cautioned that _private-use annotations_ cannot be reliably exchanged
-> and can result in errors during formatting.
-> It is generally a better idea to use the function registry
-> to define additional formatting or annotation options.
-
-> Here are some examples of what _private-use_ sequences might look like:
->
-> ```
-> Here's private use with an operand: {$foo &bar}
-> Here's a placeholder that is entirely private-use: {&anything here}
-> Here's a private-use function that uses normal function syntax: {$operand ^foo option=|literal|}
-> The character \| has to be paired or escaped: {&private || |something between| or isolated: \| }
-> Stop {& "translate 'stop' as a verb" might be a translator instruction or comment }
-> Protect stuff in {^ph}<a>{^/ph}private use{^ph}</a>{^/ph}
-> ```
-
-#### Reserved Annotations
-
-A **_<dfn>reserved annotation</dfn>_** is an _annotation_ whose syntax is reserved
-for future standardization.
-
-A _reserved annotation_ starts with a reserved character.
-The remaining part of a _reserved annotation_, called a _reserved body_,
-MAY be empty or contain arbitrary text that starts and ends with
-a non-whitespace character.
-
-This allows maximum flexibility in future standardization,
-as future definitions MAY define additional semantics and constraints
-on the contents of these _annotations_.
-
-Implementations MUST NOT assign meaning or semantics to
-an _annotation_ starting with `reserved-annotation-start`:
-these are reserved for future standardization.
-Whitespace before or after a _reserved body_ is not part of the _reserved body_.
-Implementations MUST NOT remove or alter the contents of a _reserved body_,
-including any interior whitespace,
-but MAY remove or alter whitespace before or after the _reserved body_.
-
-While a reserved sequence is technically "well-formed",
-unrecognized _reserved-annotations_ or _private-use-annotations_ have no meaning.
-
-```abnf
-reserved-annotation       = reserved-annotation-start [[s] reserved-body]
-reserved-annotation-start = "!" / "%" / "*" / "+" / "<" / ">" / "?" / "~"
-
-reserved-body             = reserved-body-part *([s] reserved-body-part)
-reserved-body-part        = reserved-char / escaped-char / quoted-literal
-```
 
 ## Markup
 
@@ -704,8 +606,8 @@ It MAY include _options_.
 is a _pattern_ part ending a span.
 
 ```abnf
-markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"  ; open and standalone
-       / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}"  ; close
+markup = "{" o "#" identifier *(s option) *(s attribute) o ["/"] "}"  ; open and standalone
+       / "{" o "/" identifier *(s option) *(s attribute) o "}"  ; close
 ```
 
 > A _message_ with one `button` markup span and a standalone `img` markup element:
@@ -714,7 +616,8 @@ markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}"  ; open
 > {#button}Submit{/button} or {#img alt=|Cancel| /}.
 > ```
 
-> A _message_ with attributes in the closing tag:
+> A _message_ containing _markup_ that uses _options_ to pair 
+> two closing markup _placeholders_ to the one open markup _placeholder_:
 >
 > ```
 > {#ansi attr=|bold,italic|}Bold and italic{/ansi attr=|bold|} italic only {/ansi attr=|italic|} no formatting.}
@@ -728,66 +631,25 @@ on the pairing, ordering, or contents of _markup_ during _formatting_.
 
 ## Attributes
 
-**_Attributes_ are reserved for standardization by future versions of this specification._**
-Examples in this section are meant to be illustrative and
-might not match future requirements or usage.
-
-> [!NOTE]
-> The Tech Preview does not provide a built-in mechanism for overriding
-> values in the _formatting context_ (most notably the locale)
-> Nor does it provide a mechanism for identifying specific expressions
-> such as by assigning a name or id.
-> The utility of these types of mechanisms has been debated.
-> There are at least two proposed mechanisms for implementing support for
-> these. 
-> Specifically, one mechanism would be to reserve specifically-named options, 
-> possibly using a Unicode namespace (i.e. `locale=xxx` or `u:locale=xxx`).
-> Such options would be reserved for use in any and all functions or markup.
-> The other mechanism would be to use the reserved "expression attribute" syntax
-> for this purpose (i.e. `@locale=xxx` or `@id=foo`)
-> Neither mechanism was included in this Tech Preview.
-> Feedback on the preferred mechanism for managing these features
-> is strongly desired.
-> 
-> In the meantime, function authors and other implementers are cautioned to avoid creating 
-> function-specific or implementation-specific option values for this purpose.
-> One workaround would be to use the implementation's namespace for these 
-> features to insure later interoperability when such a mechanism is finalized 
-> during the Tech Preview period.
-> Specifically:
-> - Avoid specifying an option for setting the locale of an expression as different from
->   that of the overall _message_ locale, or use a namespace that later maps to the final
->   mechanism.
-> - Avoid specifying options for the purpose of linking placeholders
->   (such as to pair opening markup to closing markup).
->   If such an option is created, the implementer should use an
->   implementation-specific namespace.
->   Users and implementers are cautioned that such options might be
->   replaced with a standard mechanism in a future version.
-> - Avoid specifying generic options to communicate with translators and 
->   translation tooling (i.e. implementation-specific options that apply to all
->   functions.
-> The above are all desirable features.
-> We welcome contributions to and proposals for such features during the
-> Technical Preview.
-
 An **_<dfn>attribute</dfn>_** is an _identifier_ with an optional value
 that appears in an _expression_ or in _markup_.
+During formatting, _attributes_ have no effect,
+and they can be treated as code comments.
 
 _Attributes_ are prefixed by a U+0040 COMMERCIAL AT `@` sign,
 followed by an _identifier_.
-An _attribute_ MAY have a _value_ which is separated from the _identifier_
+An _attribute_ MAY have a _literal_ _value_ which is separated from the _identifier_
 by an U+003D EQUALS SIGN `=` along with optional whitespace.
-The _value_ of an _attribute_ can be either a _literal_ or a _variable_.
 
 Multiple _attributes_ are permitted in an _expression_ or _markup_.
 Each _attribute_ is separated by whitespace.
 
-The order of _attributes_ is not significant.
-
+Each _attribute_'s _identifier_ SHOULD be unique within the _expression_ or _markup_:
+all but the last _attribute_ with the same _identifier_ are ignored.
+The order of _attributes_ is not otherwise significant.
 
 ```abnf
-attribute = "@" identifier [[s] "=" [s] (literal / variable)]
+attribute = "@" identifier [o "=" o literal]
 ```
 
 > Examples of _expressions_ and _markup_ with _attributes_:
@@ -834,6 +696,20 @@ except for U+0000 NULL or the surrogate code points U+D800 through U+DFFF.
 
 All code points are preserved.
 
+> [!IMPORTANT]
+> Most text, including that produced by common keyboards and input methods,
+> is already encoded in the canonical form known as
+> [Unicode Normalization Form C](https://unicode.org/reports/tr15) ("NFC").
+> A few languages, legacy character encoding conversions, or operating environments
+> can result in _literal_ values that are not in this form.
+> Some uses of _literals_ in MessageFormat,
+> notably as the value of _keys_,
+> apply NFC to the _literal_ value during processing or comparison.
+> While there is no requirement that the _literal_ value actually be entered
+> in a normalized form,
+> users are cautioned to employ the same character sequences
+> for equivalent values and, whenever possible, ensure _literals_ are in NFC.
+
 A **_<dfn>quoted literal</dfn>_** begins and ends with U+005E VERTICAL BAR `|`.
 The characters `\` and `|` within a _quoted literal_ MUST be
 escaped as `\\` and `\|`.
@@ -858,6 +734,42 @@ number-literal   = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "
 
 ### Names and Identifiers
 
+A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_ 
+or as the name for a _variable_
+or the value of an _unquoted literal_.
+
+A _name_ can be preceded or followed by bidirectional marks or isolating controls
+to aid in presenting names that contain right-to-left or neutral characters.
+These characters are **not** part of the value of the _name_ and MUST be treated as if they were not present
+when matching _name_ or _identifier_ strings or _unquoted literal_ values.
+
+_Variable_ _names_ are prefixed with `$`.
+
+Two _names_ are considered equal if they are canonically equivalent strings,
+that is, if they consist of the same sequence of Unicode code points after
+[Unicode Normalization Form C](https://unicode.org/reports/tr15/) ("NFC")
+has been applied to both.
+
+> [!NOTE]
+> Implementations are not required to normalize all _names_.
+> Comparisons of _name_ values only need be done "as-if" normalization
+> has occured.
+> Since most text in the wild is already in NFC
+> and since checking for NFC is fast and efficient,
+> implementations can often substitute checking for actually applying normalization
+> to _name_ values.
+
+Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
+[NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
+This is different from XML's [Name](https://www.w3.org/TR/xml/#NT-Name)
+in that it MUST NOT contain a U+003A COLON `:`.
+Otherwise, the set of characters allowed in a _name_ is large.
+
+> [!NOTE]
+> _External variables_ can be passed in that are not valid _names_.
+> Such variables cannot be referenced in a _message_,
+> but are not otherwise errors.
+
 An **_<dfn>identifier</dfn>_** is a character sequence that
 identifies a _function_, _markup_, or _option_.
 Each _identifier_ consists of a _name_ optionally preceeded by
@@ -872,23 +784,6 @@ is reserved for future standardization.
 _Function_ _identifiers_ are prefixed with `:`.
 _Markup_ _identifiers_ are prefixed with `#` or `/`.
 _Option_ _identifiers_ have no prefix.
-
-A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_ 
-or as the name for a _variable_
-or the value of an _unquoted literal_.
-
-_Variable_ names are prefixed with `$`.
-
-Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
-[NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
-This is different from XML's [Name](https://www.w3.org/TR/xml/#NT-Name)
-in that it MUST NOT contain a U+003A COLON `:`.
-Otherwise, the set of characters allowed in a _name_ is large.
-
-> [!NOTE]
-> _External variables_ can be passed in that are not valid _names_.
-> Such variables cannot be referenced in a _message_,
-> but are not otherwise errors.
 
 Examples:
 > A variable:
@@ -913,14 +808,14 @@ in this release.
 
 ```abnf
 variable   = "$" name
-option     = identifier [s] "=" [s] (literal / variable)
+option     = identifier o "=" o (literal / variable)
 
 identifier = [namespace ":"] name
 namespace  = name
-name       = name-start *name-char
+name       = [bidi] name-start *name-char [bidi]
 name-start = ALPHA / "_"
            / %xC0-D6 / %xD8-F6 / %xF8-2FF
-           / %x370-37D / %x37F-1FFF / %x200C-200D
+           / %x370-37D / %x37F-61B / %x61D-1FFF / %x200C-200D
            / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
            / %xF900-FDCF / %xFDF0-FFFC / %x10000-EFFFF
 name-char  = name-start / DIGIT / "-" / "."
@@ -933,8 +828,7 @@ An **_<dfn>escape sequence</dfn>_** is a two-character sequence starting with
 U+005C REVERSE SOLIDUS `\`.
 
 An _escape sequence_ allows the appearance of lexically meaningful characters
-in the body of _text_, _quoted literal_, or _reserved_
-(which includes, in this case, _private-use_) sequences.
+in the body of _text_ or _quoted literal_ sequences.
 Each _escape sequence_ represents the literal character immediately following the initial `\`.
 
 ```abnf
@@ -954,16 +848,93 @@ and inside _patterns_ only escape `{` and `}`.
 
 ### Whitespace
 
-**_<dfn>Whitespace</dfn>_** is defined as one or more of
-U+0009 CHARACTER TABULATION (tab), 
-U+000A LINE FEED (new line),
-U+000D CARRIAGE RETURN, 
-U+3000 IDEOGRAPHIC SPACE, 
-or U+0020 SPACE.
+The syntax limits whitespace characters outside of a _pattern_ to the following:
+`U+0009 CHARACTER TABULATION` (tab), 
+`U+000A LINE FEED` (new line),
+`U+000D CARRIAGE RETURN`, 
+`U+3000 IDEOGRAPHIC SPACE`, 
+or `U+0020 SPACE`.
 
 Inside _patterns_ and _quoted literals_,
 whitespace is part of the content and is recorded and stored verbatim.
 Whitespace is not significant outside translatable text, except where required by the syntax.
+
+There are two whitespace productions in the syntax.
+**_<dfn>Optional whitespace</dfn>_** is whitespace that is not required by the syntax, 
+but which users might want to include to increase the readability of a _message_.
+**_<dfn>Required whitespace</dfn>_** is whitespace that is required by the syntax.
+
+Both types of whitespace optionally permit the use of the bidirectional isolate controls
+and certain strongly directional marks.
+These can assist users in presenting _messages_ that contain right-to-left
+text, _literals_, or _names_ (including those for _functions_, _options_,
+_option values_, and _keys_)
+
+_Messages_ that contain right-to-left (aka RTL) characters SHOULD use one of the 
+following mechanisms to make messages display intelligibly in plain-text editors:
+
+1. Use paired isolating bidi controls `U+2066 LEFT-TO-RIGHT ISOLATE` ("LRI")
+   and `U+2069 POP DIRECTIONAL ISOLATE` ("PDI") as permitted by the ABNF around
+   parts of any _message_ containing RTL characters:
+   - _inside_ of _placeholder_ markers `{` and `}` 
+   - _outside_ _quoted-pattern_ markers `{{` and `}}`
+   - _outside_ of _variable_, _function_, _markup_, or _attribute_,
+     including the identifying sigil (e.g. `<LRI>$var</PDI>` or `<LRI>:ns:name</PDI>`)
+2. Use the 'local-effect' bidi marks
+   `U+061C ARABIC LETTER MARK`, `U+200E LEFT-TO-RIGHT MARK` or
+   `U+200F RIGHT-TO-LEFT MARK` as permitted by the ABNF before or after _identifiers_,
+   _names_, unquoted _literals_, or _option_ values,
+   especially when the values contain a mix of neutral, weakly directional, and
+   strongly directional characters.
+
+> [!IMPORTANT]
+> Always take care **not** to add bidirectional controls or marks
+> where they would be semantically significant
+> or where they would unintentionally become part of the _message_'s output:
+> - do not put them inside of a _literal_ except when they are part of the value,
+>   (instead put them outside of _literal_ quotes, such as `<LRM>|...|<LRM>`)
+> - do not put them inside quoted _patterns_ except when they are part of the text,
+>   (instead put them outside of quoted _patterns_, such as `<LRI>{{...}}<PDI>`)
+> - do not put them outside _placeholders_,
+>   (instead put them inside the _placeholder_, such as `{<LRI>$foo :number<PDI>}`)
+>   
+> Controls placed inside _literal_ quotes or quoted _patterns_ are part of the _literal_
+> or _pattern_.
+> Controls in a _pattern_ will appear in the output of the message.
+> Controls inside _literal_ quotes are part of the _literal_ and
+> will be considered in operations such as matching a _key_ to a _selector_.
+
+> [!NOTE]
+> Users cannot be expected to create or manage bidirectional controls or
+> marks in _messages_, since the characters are invisible and can be difficult
+> to manage.
+> Tools (such as resource editors or translation editors)
+> and other implementations of MessageFormat 2 serialization are strongly
+> encouraged to provide paired isolates around any right-to-left
+> syntax as described above so that _messages_ display appropriately as plain text.
+
+These definitions of _whitespace_ implement
+[UAX#31 Requirement R3a-2](https://www.unicode.org/reports/tr31/#R3a-2).
+It is a profile of R3a-1 in that specification because:
+- The following pattern whitespace characters are not allowed:
+  `U+000B FORM FEED`, 
+  `U+000C VERTICAL TABULATION`, 
+  `U+0085 NEXT LINE`, 
+  `U+2028 LINE SEPARATOR` and 
+  `U+2029 PARAGRAPH SEPARATOR`.
+- The character `U+3000 IDEOGRAPHIC SPACE`
+  _is_ interpreted as whitespace.
+ - The following directional marks and isolates 
+   are treated as ignorable format controls:
+   `U+061C ARABIC LETTER MARK`,
+   `U+200E LEFT-TO-RIGHT MARK`,
+   `U+200F RIGHT-TO-LEFT MARK`,
+   `U+2066 LEFT-TO-RIGHT ISOLATE`,
+   `U+2067 RIGHT-TO-LEFT ISOLATE`,
+   `U+2068 FIRST STRONG ISOLATE`,
+   and `U+2069 POP DIRECTIONAL ISOLATE`.
+   (The character `U+061C` is an addition according to R3a.)
+   
 
 > [!NOTE]
 > The character U+3000 IDEOGRAPHIC SPACE is included in whitespace for
@@ -971,7 +942,18 @@ Whitespace is not significant outside translatable text, except where required b
 > in which users might accidentally create these characters in a _message_.
 
 ```abnf
-s = 1*( SP / HTAB / CR / LF / %x3000 )
+; Required whitespace
+s = *bidi ws o
+
+; Optional whitespace
+o = *(s / bidi)
+
+; Bidirectional marks and isolates
+; ALM / LRM / RLM / LRI, RLI, FSI & PDI
+bidi = %x061C / %x200E / %x200F / %x2066-2069
+
+; Whitespace characters
+ws = SP / HTAB / CR / LF / %x3000
 ```
 
 ## Complete ABNF

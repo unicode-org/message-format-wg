@@ -24,22 +24,36 @@ or _Message Function Errors_ in _expressions_ that are not otherwise used by the
 such as _placeholders_ in unselected _patterns_
 or _declarations_ that are never referenced during _formatting_.
 
-In all cases, when encountering a runtime error,
-a message formatter MUST provide some representation of the message.
-An informative error or errors MUST also be separately provided.
+When formatting a _message_ with one or more errors,
+an implementation MUST provide a mechanism to discover and identify
+at least one of the errors. 
+The exact form of error signaling is implementation defined.
+Some examples include throwing an exception,
+returning an error code, 
+or providing a function or method for enumerating any errors.
+
+For all _valid_ _messages_,
+an implementation MUST enable a user to get a formatted result.
+The formatted result might include _fallback values_ 
+such as when a _placeholder_'s _expression_ produced an error
+during formatting.
+
+The two above requirements MAY be fulfilled by a single formatting method,
+or separately by more than one such method.
 
 When a message contains more than one error,
 or contains some error which leads to further errors,
 an implementation which does not emit all of the errors
 SHOULD prioritise _Syntax Errors_ and _Data Model Errors_ over others.
 
-When an error occurs within a _selector_,
+When an error occurs while resolving a _selector_
+or calling MatchSelectorKeys with its resolved value,
 the _selector_ MUST NOT match any _variant_ _key_ other than the catch-all `*`
-and a _Resolution Error_ or a _Message Function Error_ MUST be emitted.
+and a _Bad Selector_ error MUST be emitted.
 
 ## Syntax Errors
 
-**_<dfn>Syntax Errors</dfn>_** occur when the syntax representation of a message is not well-formed.
+**_<dfn>Syntax Errors</dfn>_** occur when the syntax representation of a message is not _well-formed_.
 
 > Example invalid messages resulting in a _Syntax Error_:
 >
@@ -61,7 +75,7 @@ and a _Resolution Error_ or a _Message Function Error_ MUST be emitted.
 
 ## Data Model Errors
 
-**_<dfn>Data Model Errors</dfn>_** occur when a message is invalid due to
+**_<dfn>Data Model Errors</dfn>_** occur when a message is not _valid_ due to
 violating one of the semantic requirements on its structure.
 
 ### Variant Key Mismatch
@@ -72,13 +86,16 @@ does not equal the number of _selectors_.
 > Example invalid messages resulting in a _Variant Key Mismatch_ error:
 >
 > ```
-> .match {$one :func}
+> .input {$one :func}
+> .match $one
 > 1 2 {{Too many}}
 > * {{Otherwise}}
 > ```
 >
 > ```
-> .match {$one :func} {$two :func}
+> .input {$one :func}
+> .input {$two :func}
+> .match $one $two
 > 1 2 {{Two keys}}
 > * {{Missing a key}}
 > * * {{Otherwise}}
@@ -92,13 +109,16 @@ does not include a _variant_ with only catch-all keys.
 > Example invalid messages resulting in a _Missing Fallback Variant_ error:
 >
 > ```
-> .match {$one :func}
+> .input {$one :func}
+> .match $one
 > 1 {{Value is one}}
 > 2 {{Value is two}}
 > ```
 >
 > ```
-> .match {$one :func} {$two :func}
+> .input {$one :func}
+> .input {$two :func}
+> .match $one $two
 > 1 * {{First is one}}
 > * 1 {{Second is one}}
 > ```
@@ -106,27 +126,27 @@ does not include a _variant_ with only catch-all keys.
 ### Missing Selector Annotation
 
 A **_<dfn>Missing Selector Annotation</dfn>_** error occurs when the _message_
-contains a _selector_ that does not have an _annotation_,
-or contains a _variable_ that does not directly or indirectly reference a _declaration_ with an _annotation_.
+contains a _selector_ that does not
+directly or indirectly reference a _declaration_ with a _function_.
 
 > Examples of invalid messages resulting in a _Missing Selector Annotation_ error:
 >
 > ```
-> .match {$one}
+> .match $one
 > 1 {{Value is one}}
 > * {{Value is not one}}
 > ```
 >
 > ```
 > .local $one = {|The one|}
-> .match {$one}
+> .match $one
 > 1 {{Value is one}}
 > * {{Value is not one}}
 > ```
 >
 > ```
 > .input {$one}
-> .match {$one}
+> .match $one
 > 1 {{Value is one}}
 > * {{Value is not one}}
 > ```
@@ -178,6 +198,30 @@ appears on the left-hand side of more than one _option_ in the same _expression_
 > {{This is {$foo}}}
 > ```
 
+### Duplicate Variant
+
+A **_<dfn>Duplicate Variant</dfn>_** error occurs when the
+same list of _keys_ is used for more than one _variant_.
+
+> Examples of invalid messages resulting in a _Duplicate Variant_ error:
+>
+> ```
+> .input {$var :string}
+> .match $var
+> * {{The first default}}
+> * {{The second default}}
+> ```
+>
+> ```
+> .input {$x :string}
+> .input {$y :string}
+> .match $x $y
+> *   foo   {{The first "foo" variant}}
+> bar *     {{The "bar" variant}}
+> *   |foo| {{The second "foo" variant}}
+> *   *     {{The default variant}}
+> ```
+
 ## Resolution Errors
 
 **_<dfn>Resolution Errors</dfn>_** occur when the runtime value of a part of a message
@@ -196,7 +240,8 @@ An **_<dfn>Unresolved Variable</dfn>_** error occurs when a variable reference c
 > ```
 >
 > ```
-> .match {$var :func}
+> .input {$var :func}
+> .match $var
 > 1 {{The value is one.}}
 > * {{The value is not one.}}
 > ```
@@ -215,67 +260,33 @@ a reference to a function which cannot be resolved.
 > ```
 >
 > ```
-> .match {|horse| :func}
+> .local $horse = {|horse| :func}
+> .match $horse
 > 1 {{The value is one.}}
 > * {{The value is not one.}}
-> ```
-
-### Unsupported Expression
-
-An **_<dfn>Unsupported Expression</dfn>_** error occurs when an expression uses
-syntax reserved for future standardization,
-or for private implementation use that is not supported by the current implementation.
-
-> For example, attempting to format this message
-> would result in an _Unsupported Expression_ error
-> because it includes a _reserved annotation_.
->
-> ```
-> The value is {!horse}.
-> ```
->
-> Attempting to format this message would result in an _Unsupported Expression_ error
-> if done within a context that does not support the `^` private use sigil:
->
-> ```
-> .match {|horse| ^private}
-> 1 {{The value is one.}}
-> * {{The value is not one.}}
-> ```
-
-### Unsupported Statement
-
-An **_<dfn>Unsupported Statement</dfn>_** error occurs when a message includes a _reserved statement_.
-
-> For example, attempting to format this message
-> would result in an _Unsupported Statement_ error:
->
-> ```
-> .some {|horse|}
-> {{The message body}}
 > ```
 
 ### Bad Selector
 
 A **_<dfn>Bad Selector</dfn>_** error occurs when a message includes a _selector_
-with a resolved value which does not support selection.
+with a _resolved value_ which does not support selection.
 
 > For example, attempting to format this message
 > would result in a _Bad Selector_ error:
 >
 > ```
 > .local $day = {|2024-05-01| :date}
-> .match {$day}
+> .match $day
 > * {{The due date is {$day}}}
 > ```
 
 ## Message Function Errors
 
 A **_<dfn>Message Function Error</dfn>_** is any error that occurs
-when calling a message function implementation
+when calling a _function handler_
 or which depends on validation associated with a specific function.
 
-Implementations SHOULD provide a way for _functions_ to emit 
+Implementations SHOULD provide a way for _function handlers_ to emit 
 (or cause to be emitted) any of the types of error defined in this section.
 Implementations MAY also provide implementation-defined _Message Function Error_ types.
 
@@ -289,7 +300,7 @@ Implementations MAY also provide implementation-defined _Message Function Error_
 > 3. Uses a `:get` message function which requires its argument to be an object and
 >    an option `field` to be provided with a string value.
 >
-> The exact type of _Message Function Error_ is determined by the message function implementation.
+> The exact type of _Message Function Error_ is determined by the _function handler_.
 >
 > ```
 > Hello, {horse :get field=name}!
@@ -327,7 +338,8 @@ for that specific _function_.
 > ```
 >
 > ```
-> .match {|horse| :number}
+> .local $horse = {|horse| :number}
+> .match $horse
 > 1 {{The value is one.}}
 > * {{The value is not one.}}
 > ```
@@ -364,7 +376,8 @@ does not match the expected implementation-defined format.
 > which is a requirement of the `:number` function:
 >
 > ```
-> .match {42 :number}
+> .local $answer = {42 :number}
+> .match $answer
 > 1     {{The value is one.}}
 > horse {{The value is a horse.}}
 > *     {{The value is not one.}}
