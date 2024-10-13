@@ -21,7 +21,9 @@ and the `u:id` option is ignored.
 
 ### `u:locale`
 
-A comma-delimited list of BCP 47 language tags,
+A comma-delimited list consisting of
+well-formed [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt)
+language tags,
 or an implementation-defined list of such tags.
 
 Replaces the _locale_ defined in the _function context_ for this _expression_.
@@ -32,7 +34,7 @@ is always removed from the resolved mapping of _options_.
 
 Values matching the following ABNF are always accepted:
 ```abnf
-u-locale-option = langtag *([s] "," [s] langtag)
+u-locale-option = langtag *(o "," o langtag)
 ```
 using `langtag` as defined in [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt).
 Note that `langtag` is the rule for "normal language tags",
