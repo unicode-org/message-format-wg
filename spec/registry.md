@@ -593,6 +593,11 @@ output.
 If both are specified, a _Bad Option_ error MUST be emitted
 and a _fallback value_ used as the _resolved value_ of the _expression_.
 
+If the _operand_ of the _expression_ is an implementation-defined date/time type,
+it can include _style options_, _field options_, or other option values.
+These are included in the resolved option values of the _expression_,
+with _options_ on the _expression_ taking priority over any option values of the _operand_.
+
 > [!NOTE]
 > The names of _options_ and their _values_ were derived from the
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/resolvedOptions#description)
@@ -692,7 +697,15 @@ are encouraged to track development of these options during Tech Preview:
    - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
 - `timeZone` (default is system default time zone or UTC)
   - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
- 
+
+#### Composition
+
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:datetime` _annotation_,
+its _resolved value_ contains an implementation-defined date/time value
+of the _operand_ of the annotated _expression_,
+together with the resolved options values.
+
 ### The `:date` function
 
 The function `:date` is used to format the date portion of date/time values.
@@ -715,6 +728,19 @@ The function `:date` has these _options_:
   - `long`
   - `medium` (default)
   - `short`
+
+If the _operand_ of the _expression_ is an implementation-defined date/time type,
+it can include other option values.
+Any _operand_ option values matching the `:datetime` _style options_ or _field options_ are ignored,
+as is any `style` option.
+
+#### Composition
+
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:date` _annotation_,
+its _resolved value_ is implementation-defined.
+An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate)
+when this happens.
 
 ### The `:time` function
 
@@ -739,6 +765,18 @@ The function `:time` has these _options_:
   - `medium`
   - `short` (default)
 
+If the _operand_ of the _expression_ is an implementation-defined date/time type,
+it can include other option values.
+Any _operand_ option values matching the `:datetime` _style options_ or _field options_ are ignored,
+as is any `style` option.
+
+#### Composition
+
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:time` _annotation_,
+its _resolved value_ is implementation-defined.
+An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate)
+when this happens.
 
 ### Date and Time Operands
 
@@ -788,5 +826,3 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 > The form of these serializations is known and is a de facto standard.
 > Support for these extensions is expected to be required in the post-tech preview.
 > See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
-
-
