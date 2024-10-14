@@ -1,6 +1,6 @@
 # Function Composition
 
-Status: **Proposed**
+Status: **Obsolete**
 
 <details>
 	<summary>Metadata</summary>
@@ -11,6 +11,7 @@ Status: **Proposed**
 		<dd>2024-03-26</dd>
 		<dt>Pull Requests</dt>
 		<dd>#753</dd>
+		<dd>#806</dd>
 	</dl>
 </details>
 
@@ -19,6 +20,11 @@ Status: **Proposed**
 * Present a complete list of alternative designs for how to
 provide the machinery for function composition.
 * Create a shared vocabulary for discussing these alternatives.
+
+> [!NOTE]
+> This design document is preserved as part of a valuable conversation about
+> function composition, but it is not the basis for the design eventually
+> accepted.
 
 ### Problem statement: defining resolved values
 
