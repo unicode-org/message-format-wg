@@ -341,7 +341,7 @@ This mapping can be empty.
 > The _resolved value_ of a _function_ _operand_
 > can also include resolved option values.
 > These are not included in the _option resolution_ result,
-> and need to processed separately by a _function handler_.
+> and need to be processed separately by a _function handler_.
 
 ### Markup Resolution
 
