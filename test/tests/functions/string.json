@@ -61,7 +61,12 @@
       "expErrors": [{"type": "duplicate-variant"}]
     },
     {
-      "description": "NFC: keys are normalized",
+      "description": "NFC: :string normalizes the comparison value (un-normalized selector, normalized key)",
+      "src": ".local $x = {\u1E0A\u0323 :string} .match $x \u1E0C\u0307 {{Right}} * {{Wrong}}",
+      "exp": "Right"
+    },
+    {
+      "description": "NFC: keys are normalized (normalized selector, un-normalized key)",
       "src": ".local $x = {\u1E0C\u0307 :string} .match $x \u1E0A\u0323 {{Right}} * {{Wrong}}",
       "exp": "Right"
     }
