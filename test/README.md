@@ -10,7 +10,7 @@ These test files are intended to be useful for testing multiple different messag
 - `data-model-errors.json` - Strings that should produce a Data Model Error when processed.
   Error names are defined in ["MessageFormat 2.0 Errors"](../spec/errors.md) in the spec.
 
-- `u-options.md` — Test cases for the `u:` options, using built-in functions.
+- `u-options.json` — Test cases for the `u:` options, using built-in functions.
 
 - `functions/` — Test cases that correspond to built-in functions.
   The behaviour of the built-in formatters is implementation-specific so the `exp` field is often
