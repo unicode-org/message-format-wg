@@ -1,6 +1,13 @@
 # MessageFormat 2.0 Unicode Namespace
 
-The `u:` namespace is reserved for use by the Unicode Consortium.
+The `u:` _namespace_ is reserved for the definition of _options_
+which affect the _function context_ of the specific _expressions_
+in which they appear,
+or for the definition of _options_ that are universally applicable
+rather than function-specific.
+
+The CLDR Technical Committee of the Unicode Consortium
+manages the specification for this namespace, hence the name `u:`.
 
 ## Options
 
@@ -50,8 +57,12 @@ or tags using `_` instead of `-` as a separator.
 When the value of `u:locale` is set by a _variable_,
 implementations MAY support non-string values otherwise representing locales.
 
-For unsupported values, a _Bad Option_ error is emitted
-and the value of the `u:locale` option is ignored.
+Implementations MAY emit a _Bad Option_ error
+and MAY ignore the value of the `u:locale` _option_ as a whole
+or any of the entries in the list of language tags.
+This might be because the locale specified is not supported
+or because the language tag is not well-formed,
+not valid, or some other reason.
 
 ### `u:dir`
 
