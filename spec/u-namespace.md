@@ -15,7 +15,9 @@ or any other structured formatted results.
 
 Ignored when formatting a message to a string.
 
-Accepts string values, or values which can be stringified without error.
+The value of the `u:id` _option_ MUST be a _literal_ or a
+_variable_ whose _resolved value_ is either a string
+or can be resolved to a string without error.
 For other values, a _Bad Option_ error is emitted
 and the `u:id` option is ignored.
 
@@ -63,7 +65,8 @@ During processing, the `u:dir` option
 MUST be removed from the resolved mapping of _options_
 before calling the _function handler_.
 
-Accepts the following string values:
+The value of the `u:dir` _option_ MUST be one of the following _literal_ values
+or a _variable_ whose _resolved value_ is one of these _literals_:
 - `ltr`: left-to-right directionality
 - `rtl`: right-to-left directionality
 - `auto`: directionality determined from _expression_ contents
