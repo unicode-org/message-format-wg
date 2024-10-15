@@ -21,12 +21,12 @@ and the `u:id` option is ignored.
 
 ### `u:locale`
 
+Replaces the _locale_ defined in the _function context_ for this _expression_.
+
 A comma-delimited list consisting of
 well-formed [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt)
 language tags,
 or an implementation-defined list of such tags.
-
-Replaces the _locale_ defined in the _function context_ for this _expression_.
 
 If this option is set on _markup_, a _Bad Option_ error is emitted
 and the value of the `u:locale` option is ignored.
