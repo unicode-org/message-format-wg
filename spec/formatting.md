@@ -260,8 +260,10 @@ the following steps are taken:
 
 3. Perform _option resolution_.
 
-4. Determine the **_<dfn>function context</dfn>_** for calling the function implementation.
-   This includes:
+4. Determine the _function context_ for calling the _function handler_.
+
+   The **_<dfn>function context</dfn>_** contains the context necessary for
+   the _function handler_ to resolve the _expression_. This includes:
 
    - The current _locale_,
      potentially including a fallback chain of locales.

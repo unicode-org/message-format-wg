@@ -7,7 +7,7 @@
   },
   "tests": [
     {
-      "src": "{#tag u:id=x u:dir=rtl u:locale=ar}content{/ns:tag u:id=x}",
+      "src": "{#tag u:id=x}content{/ns:tag u:id=x}",
       "exp": "content",
       "expParts": [
         {
@@ -24,6 +24,27 @@
           "type": "markup",
           "kind": "close",
           "id": "x",
+          "name": "tag"
+        }
+      ]
+    },
+    {
+      "src": "{#tag u:dir=rtl u:locale=ar}content{/ns:tag}",
+      "exp": "content",
+      "expErrors": [{ "type": "bad-option" }, { "type": "bad-option" }],
+      "expParts": [
+        {
+          "type": "markup",
+          "kind": "open",
+          "name": "tag"
+        },
+        {
+          "type": "literal",
+          "value": "content"
+        },
+        {
+          "type": "markup",
+          "kind": "close",
           "name": "tag"
         }
       ]
