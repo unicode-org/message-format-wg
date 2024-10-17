@@ -5,6 +5,7 @@ which affect the _function context_ of the specific _expressions_
 in which they appear,
 or for the definition of _options_ that are universally applicable
 rather than function-specific.
+It might also be used to define _functions_ in a future release.
 
 The CLDR Technical Committee of the Unicode Consortium
 manages the specification for this namespace, hence the name `u:`.
