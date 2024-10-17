@@ -260,9 +260,22 @@ the following steps are taken:
 
 3. Perform _option resolution_.
 
-4. Call the _function handler_ with the following arguments:
+4. Determine the _function context_ for calling the _function handler_.
 
-   - The current _locale_.
+   The **_<dfn>function context</dfn>_** contains the context necessary for
+   the _function handler_ to resolve the _expression_. This includes:
+
+   - The current _locale_,
+     potentially including a fallback chain of locales.
+   - The base directionality of the _message_ and its _text_ tokens.
+
+   If the resolved mapping of _options_ includes any _`u:` options_
+   supported by the implementation, process them as specified.
+   Such `u:` options MAY be removed from the resolved mapping of _options_.
+
+5. Call the function implementation with the following arguments:
+
+   - The _function context_.
    - The resolved mapping of _options_.
    - If the _expression_ includes an _operand_, its _resolved value_.
 
@@ -272,7 +285,7 @@ the following steps are taken:
    as long as reasonable precautions are taken to keep the function interface
    simple and minimal, and avoid introducing potential security vulnerabilities.
 
-5. If the call succeeds,
+6. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
 
    If the call fails or does not return a valid value,
@@ -344,6 +357,10 @@ The _resolved value_ of _markup_ includes the following fields:
 - The type of the markup: open, standalone, or close
 - The _identifier_ of the _markup_
 - The resolved _options_ values after _option resolution_.
+
+If the resolved mapping of _options_ includes any _`u:` options_
+supported by the implementation, process them as specified.
+Such `u:` options MAY be removed from the resolved mapping of _options_.
 
 The resolution of _markup_ MUST always succeed.
 
