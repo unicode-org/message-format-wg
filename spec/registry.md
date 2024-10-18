@@ -86,6 +86,14 @@ The `:string` function returns the string value of the _resolved value_ of the _
 > Users SHOULD encode _messages_ and their parts in Unicode Normalization Form C (NFC)
 > unless there is a very good reason not to.
 
+#### Composition
+
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:string` _function_,
+its _resolved value_ contains the string value of the _operand_ of the annotated _expression_,
+together with its resolved locale and directionality.
+None of the _options_ set on the _expression_ are part of the _resolved value_.
+
 ## Numeric Value Selection and Formatting
 
 ### The `:number` function
