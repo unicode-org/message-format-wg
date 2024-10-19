@@ -229,6 +229,7 @@ it MAY make the following option available on the function `:number`
 when `style=currency` is set:
 - `currency`
    - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+     or an implementation-defined currency value.
      (no default)
 
 ##### Unit Formatting
