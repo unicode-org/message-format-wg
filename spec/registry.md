@@ -598,6 +598,9 @@ it can include _style options_, _field options_, or other option values.
 These are included in the resolved option values of the _expression_,
 with _options_ on the _expression_ taking priority over any option values of the _operand_.
 
+In addition to _style options_ and _field options_,
+an implementation MAY also support _date/time locale options_ for `:datetime`.
+
 > [!NOTE]
 > The names of _options_ and their _values_ were derived from the
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/resolvedOptions#description)
@@ -671,11 +674,6 @@ The function `:datetime` has the following options:
   - `1`
   - `2`
   - `3`
-- `hourCycle` (default is locale-specific)
-  - `h11`
-  - `h12`
-  - `h23`
-  - `h24`
 - `timeZoneName`
   - `long`
   - `short`
@@ -683,20 +681,6 @@ The function `:datetime` has the following options:
   - `longOffset`
   - `shortGeneric`
   - `longGeneric`
-
-> [!NOTE]
-> The following options do not have default values because they are only to be used
-> as overrides for locale-and-value dependent implementation-defined defaults.
-
-The following date/time options are **not** part of the default registry.
-Implementations SHOULD avoid creating options that conflict with these, but
-are encouraged to track development of these options during Tech Preview:
-- `calendar` (default is locale-specific)
-  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
-- `numberingSystem` (default is locale-specific)
-   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
-- `timeZone` (default is system default time zone or UTC)
-  - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
 
 #### Composition
 
@@ -728,6 +712,7 @@ The function `:date` has these _options_:
   - `long`
   - `medium` (default)
   - `short`
+- _date/time locale options_
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
@@ -764,6 +749,7 @@ The function `:time` has these _options_:
   - `long`
   - `medium`
   - `short` (default)
+- _date/time locale options_
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
@@ -826,3 +812,24 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 > The form of these serializations is known and is a de facto standard.
 > Support for these extensions is expected to be required in the post-tech preview.
 > See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
+
+### Date and Time Locale Options
+
+Implementations MAY support overriding some of the options set by the current locale
+or an implementation-defined date/time _operand_ value.
+To do so, the following **_<dfn>date/time locale options</dfn>_**
+can be made available on `:datetime`, `:date`, and `:time`:
+
+- `calendar`
+  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
+- `numberingSystem`
+   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+- `hour12`
+  - `true`
+  - `false`
+- `timeZone`
+  - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
+
+> [!NOTE]
+> These options do not have default values because they are only to be used
+> as overrides for locale-and-value dependent implementation-defined defaults.
