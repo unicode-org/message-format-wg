@@ -209,7 +209,8 @@ when the option `style` is assigned the value `currency`.
 If an implementation supports currency formatting,
 it SHOULD define and support an implementation-defined _operand_ value
 that combines a value together with its currency
-expressed as a valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier).
+expressed as a valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+or an implementation-defined currency value.
 
 If an implementation supports currency formatting,
 the following options and their values are REQUIRED to be available on the function `:number`
@@ -232,7 +233,8 @@ when `style=currency` is set:
 
 ##### Unit Formatting
 
-Implementations MAY support formatting a value together with its unit
+Implementations MAY support formatting a value 
+together with its unit or units
 when the option `style` is assigned the value `unit`.
 
 If an implementation supports unit formatting,
