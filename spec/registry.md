@@ -108,7 +108,9 @@ the value of other options, or both.
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
 > in JavaScript's `Intl.NumberFormat`.
 
-The following options and their values are required to be available on the function `:number`:
+Except where indicated otherwise,
+the following options and their values are
+REQUIRED to be available on the function `:number`:
 - `select`
    -  `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
    -  `ordinal`
@@ -132,7 +134,9 @@ The following options and their values are required to be available on the funct
    -  `never`
 - `style`
   - `decimal` (default)
-  - `percent` (see [Percent Style](#percent-style) below)
+  - `percent` (see [Percent Formatting](#percent-formatting) below)
+  - `currency` (OPTIONAL, see [Currency Formatting](#currency-formatting) below)
+  - `unit` (OPTIONAL, see [Unit Formatting](#unit-formatting) below)
 - `useGrouping`
   - `auto` (default)
   - `always`
@@ -163,37 +167,6 @@ with _options_ on the _expression_ taking priority over any option values of the
 > would be formatted with the resolved options
 > `{ notation: 'scientific', minimumFractionDigits: '1' }`.
 
-> [!NOTE]
-> The following options and option values are being developed during the Technical Preview
-> period.
-
-The following values for the option `style` are _not_ part of the default registry.
-Implementations SHOULD avoid creating options that conflict with these, but
-are encouraged to track development of these options during Tech Preview:
-- `currency`
-- `unit`
-
-The following options are _not_ part of the default registry.
-Implementations SHOULD avoid creating options that conflict with these, but
-are encouraged to track development of these options during Tech Preview:
-- `currency`
-   - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
-     (no default)
-- `currencyDisplay`
-   - `symbol` (default)
-   - `narrowSymbol`
-   - `code`
-   - `name`
-- `currencySign`
-  - `accounting`
-  - `standard` (default)
-- `unit`
-   - (anything not empty)
-- `unitDisplay`
-   - `long`
-   - `short` (default)
-   - `narrow`
-
 ##### Default Value of `select` Option
 
 The value `plural` is the default for the option `select` 
@@ -216,7 +189,8 @@ but can cause problems in target locales that the original developer is not cons
 > The `one` variant is needed by languages such as Polish or Russian.
 > Such locales typically also require other keywords such as `two`, `few`, and `many`.
 
-##### Percent Style
+##### Percent Formatting
+
 When implementing `style=percent`, the numeric value of the _operand_ 
 MUST be multiplied by 100 for the purposes of formatting.
 
@@ -226,6 +200,58 @@ MUST be multiplied by 100 for the purposes of formatting.
 > ```
 > should format in a manner similar to:
 > > The total was 50%.
+
+##### Currency Formatting
+
+Implementations MAY support formatting a numeric value together with its currency
+when the option `style` is assigned the value `currency`.
+
+If an implementation supports currency formatting,
+it SHOULD define and support an implementation-defined _operand_ value
+that combines a value together with its currency
+expressed as a valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier).
+
+If an implementation supports currency formatting,
+the following options and their values are REQUIRED to be available on the function `:number`
+when `style=currency` is set:
+- `currencyDisplay`
+   - `symbol` (default)
+   - `narrowSymbol`
+   - `code`
+   - `name`
+- `currencySign`
+  - `accounting`
+  - `standard` (default)
+
+If an implementation supports currency formatting,
+it MAY make the following option available on the function `:number`
+when `style=currency` is set:
+- `currency`
+   - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+     (no default)
+
+##### Unit Formatting
+
+Implementations MAY support formatting a value together with its unit
+when the option `style` is assigned the value `unit`.
+
+If an implementation supports unit formatting,
+it SHOULD define and support an implementation-defined _operand_ value
+that combines a value together with its unit identifier.
+
+If an implementation supports unit formatting,
+the following option is REQUIRED to be available on the function `:number`
+when `style=unit` is set:
+- `unitDisplay`
+   - `long`
+   - `short` (default)
+   - `narrow`
+
+If an implementation supports unit formatting,
+it MAY make the following option available on the function `:number`
+when `style=unit` is set:
+- `unit`
+   - (anything not empty)
 
 #### Selection
 
@@ -260,7 +286,7 @@ the value of other options, or both.
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
 > in JavaScript's `Intl.NumberFormat`.
 
-The following options and their values are required in the default registry to be available on the 
+The following options and their values are REQUIRED in the default registry to be available on the 
 function `:integer`:
 - `select`
    -  `plural` (default)
@@ -275,9 +301,6 @@ function `:integer`:
    -  `exceptZero`
    -  `negative`
    -  `never`
-- `style`
-  - `decimal` (default)
-  - `percent` (see [Percent Style](#percent-style) below)
 - `useGrouping`
   - `auto` (default)
   - `always`
@@ -294,41 +317,16 @@ In general, these are included in the resolved option values of the _expression_
 with _options_ on the _expression_ taking priority over any option values of the _operand_.
 Option values with the following names are however discarded if included in the _operand_:
 - `compactDisplay`
+- `currency`
+- `currencyDisplay`
+- `currencySign`
 - `notation`
 - `minimumFractionDigits`
 - `maximumFractionDigits`
 - `minimumSignificantDigits`
-
-> [!NOTE]
-> The following options and option values are being developed during the Technical Preview
-> period.
-
-The following values for the option `style` are _not_ part of the default registry.
-Implementations SHOULD avoid creating options that conflict with these, but
-are encouraged to track development of these options during Tech Preview:
-- `currency`
+- `style`
 - `unit`
-
-The following options are _not_ part of the default registry.
-Implementations SHOULD avoid creating options that conflict with these, but
-are encouraged to track development of these options during Tech Preview:
-- `currency`
-   - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
-     (no default)
-- `currencyDisplay`
-   - `symbol` (default)
-   - `narrowSymbol`
-   - `code`
-   - `name`
-- `currencySign`
-  - `accounting`
-  - `standard` (default)
-- `unit`
-   - (anything not empty)
 - `unitDisplay`
-   - `long`
-   - `short` (default)
-   - `narrow`
 
 ##### Default Value of `select` Option
 
@@ -351,17 +349,6 @@ but can cause problems in target locales that the original developer is not cons
 >
 > The `one` variant is needed by languages such as Polish or Russian.
 > Such locales typically also require other keywords such as `two`, `few`, and `many`.
-
-##### Percent Style
-When implementing `style=percent`, the numeric value of the _operand_ 
-MUST be multiplied by 100 for the purposes of formatting.
-
-> For example,
-> ```
-> The total was {0.5 :number style=percent}.
-> ```
-> should format in a manner similar to:
-> > The total was 50%.
 
 #### Selection
 
