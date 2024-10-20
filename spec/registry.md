@@ -281,6 +281,7 @@ function `:integer`:
 - `useGrouping`
   - `auto` (default)
   - `always`
+  - `never`
   - `min2`
 - `minimumIntegerDigits`
   - ([digit size option](#digit-size-options), default: `1`)
