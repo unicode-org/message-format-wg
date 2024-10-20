@@ -60,7 +60,8 @@ The syntax specification takes into account the following design restrictions:
    control characters such as U+0000 NULL and U+0009 TAB, permanently reserved noncharacters
    (U+FDD0 through U+FDEF and U+<i>n</i>FFFE and U+<i>n</i>FFFF where <i>n</i> is 0x0 through 0x10),
    private-use code points (U+E000 through U+F8FF, U+F0000 through U+FFFFD, and
-   U+100000 through U+10FFFD), unassigned code points, and other potentially confusing content.
+   U+100000 through U+10FFFD), unassigned code points, unpaired surrogates in messages and literals
+   only (U+D800 through U+DFFF), and other potentially confusing content.
 
 ## Messages and their Syntax
 
@@ -274,8 +275,9 @@ A _quoted pattern_ MAY be empty.
 ### Text
 
 **_<dfn>text</dfn>_** is the translateable content of a _pattern_.
-Any Unicode code point is allowed, except for U+0000 NULL
-and the surrogate code points U+D800 through U+DFFF inclusive.
+Any Unicode code point is allowed, except for U+0000 NULL.
+Unpaired surrogates code points (U+D800 through U+DFFF inclusive) are allowed
+in localizable elements, but using them is likely a mistake and not recommended.
 The characters U+005C REVERSE SOLIDUS `\`,
 U+007B LEFT CURLY BRACKET `{`, and U+007D RIGHT CURLY BRACKET `}`
 MUST be escaped as `\\`, `\{`, and `\}` respectively.
@@ -691,8 +693,7 @@ A _literal_ can appear
 as a _key_ value,
 as the _operand_ of a _literal-expression_,
 or in the value of an _option_.
-A _literal_ MAY include any Unicode code point
-except for U+0000 NULL or the surrogate code points U+D800 through U+DFFF.
+A _literal_ MAY include any Unicode code point except for U+0000 NULL.
 
 All code points are preserved.
 

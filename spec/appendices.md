@@ -14,16 +14,20 @@ host environments, their serializations and resource formats,
 that might be sufficient to prevent most problems.
 However, MessageFormat itself does not supply such a restriction.
 
-MessageFormat _messages_ permit nearly all Unicode code points,
-with the exception of surrogates, 
+MessageFormat _messages_ permit nearly all Unicode code points
 to appear in _literals_, including the text portions of a _pattern_.
 This means that it can be possible for a _message_ to contain invisible characters
-(such as bidirectional controls, 
-ASCII control characters in the range U+0000 to U+001F,
+(such as bidirectional controls, ASCII control characters in the range U+0000 to U+001F,
 or characters that might be interpreted as escapes or syntax in the host format)
 that abnormally affect the display of the _message_
 when viewed as source code, or in resource formats or translation tools,
 but do not generate errors from MessageFormat parsers or processing APIs.
+
+The localizable elements of a message (text and string literals) allow the presence of
+unpaired surrogates (U+D800 to U+DFFF). This is for compatibility with existing formats
+that are agnostic about them. \
+But their presence of unpaired surrogates is likely an indication of mistakes or bad tooling.
+Their use is not recommended, and linting (if present) can be used to prevent them.
 
 Bidirectional text containing right-to-left characters (such as used for Arabic or Hebrew) 
 also poses a potential source of confusion for users. 
