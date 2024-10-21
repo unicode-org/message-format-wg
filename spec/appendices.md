@@ -23,11 +23,21 @@ that abnormally affect the display of the _message_
 when viewed as source code, or in resource formats or translation tools,
 but do not generate errors from MessageFormat parsers or processing APIs.
 
-The localizable elements of a message (text and string literals) allow the presence of
-unpaired surrogates (U+D800 to U+DFFF). This is for compatibility with existing formats
-that are agnostic about them. \
-But their presence of unpaired surrogates is likely an indication of mistakes or bad tooling.
-Their use is not recommended, and linting (if present) can be used to prevent them.
+> [!IMPORTANT]
+> _Text_ and _literals_ allow unpaired surrogate code points
+> (`U+D800` to `U+DFFF`).
+> This is for compatibility with formats or data structures 
+> that use the UTF-16 encoding 
+> and do not check for unpaired surrogates.
+> (Strings in Java or JavaScript are examples of this.)
+> These code points SHOULD NOT be used in a _message_.
+> Unpaired surrogate code points are likely an indication of mistakes
+> or errors in the creation, serialization, or processing of the _message_.
+> Many processes will convert them to 
+> &#xfffd; U+FFFD REPLACEMENT CHARACTER
+> during processing or display.
+> Implementations not based on UTF-16 might not be able to represent
+> a _message_ containing such code points.
 
 Bidirectional text containing right-to-left characters (such as used for Arabic or Hebrew) 
 also poses a potential source of confusion for users. 
