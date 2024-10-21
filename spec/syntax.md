@@ -276,8 +276,10 @@ A _quoted pattern_ MAY be empty.
 
 **_<dfn>text</dfn>_** is the translateable content of a _pattern_.
 Any Unicode code point is allowed, except for U+0000 NULL.
-Unpaired surrogates code points (U+D800 through U+DFFF inclusive) are allowed
-in localizable elements, but using them is likely a mistake and not recommended.
+> [!NOTE]
+> Unpaired surrogate code points (`U+D800` through `U+DFFF` inclusive)
+> are allowed for compatibility with UTF-16 based implementations
+> that do not check for this encoding error.
 The characters U+005C REVERSE SOLIDUS `\`,
 U+007B LEFT CURLY BRACKET `{`, and U+007D RIGHT CURLY BRACKET `}`
 MUST be escaped as `\\`, `\{`, and `\}` respectively.
