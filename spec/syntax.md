@@ -115,6 +115,22 @@ A **_<dfn>local variable</dfn>_** is a _variable_ created as the result of a _lo
 > so that these do not need to be escaped in the body of a _message_.
 
 > [!NOTE]
+> _Text_ and _quoted literals_ allow unpaired surrogate code points
+> (`U+D800` to `U+DFFF`).
+> This is for compatibility with formats or data structures 
+> that use the UTF-16 encoding 
+> and do not check for unpaired surrogates.
+> (Strings in Java or JavaScript are examples of this.)
+> These code points SHOULD NOT be used in a _message_.
+> Unpaired surrogate code points are likely an indication of mistakes
+> or errors in the creation, serialization, or processing of the _message_.
+> Many processes will convert them to 
+> &#xfffd; U+FFFD REPLACEMENT CHARACTER
+> during processing or display.
+> Implementations not based on UTF-16 might not be able to represent
+> a _message_ containing such code points.
+
+> [!NOTE]
 > In general (and except where required by the syntax), whitespace carries no meaning in the structure
 > of a _message_. While many of the examples in this spec are written on multiple lines, the formatting
 > shown is primarily for readability.
