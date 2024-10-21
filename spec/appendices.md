@@ -24,7 +24,7 @@ when viewed as source code, or in resource formats or translation tools,
 but do not generate errors from MessageFormat parsers or processing APIs.
 
 > [!IMPORTANT]
-> _Text_ and _literals_ allow unpaired surrogate code points
+> _Text_ and _quoted literals_ allow unpaired surrogate code points
 > (`U+D800` to `U+DFFF`).
 > This is for compatibility with formats or data structures 
 > that use the UTF-16 encoding 

@@ -60,8 +60,8 @@ The syntax specification takes into account the following design restrictions:
    control characters such as U+0000 NULL and U+0009 TAB, permanently reserved noncharacters
    (U+FDD0 through U+FDEF and U+<i>n</i>FFFE and U+<i>n</i>FFFF where <i>n</i> is 0x0 through 0x10),
    private-use code points (U+E000 through U+F8FF, U+F0000 through U+FFFFD, and
-   U+100000 through U+10FFFD), unassigned code points, unpaired surrogates in messages and literals
-   only (U+D800 through U+DFFF), and other potentially confusing content.
+   U+100000 through U+10FFFD), unassigned code points, unpaired surrogates in messages and
+   quoted literals only (U+D800 through U+DFFF), and other potentially confusing content.
 
 ## Messages and their Syntax
 
@@ -305,7 +305,7 @@ content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %x41-5B        ; omit \ (%x5C)
                   / %x5D-7A        ; omit { | } (%x7B-7D)
                   / %x7E-2FFF      ; omit IDEOGRAPHIC SPACE (%x3000)
-                  / %xE000-10FFFF
+                  / %x3001-10FFFF  ; allowing surrogates is intentional
 ```
 
 When a _pattern_ is quoted by embedding the _pattern_ in curly brackets, the
@@ -715,6 +715,11 @@ All code points are preserved.
 A **_<dfn>quoted literal</dfn>_** begins and ends with U+005E VERTICAL BAR `|`.
 The characters `\` and `|` within a _quoted literal_ MUST be
 escaped as `\\` and `\|`.
+
+> [!NOTE]
+> Unpaired surrogate code points (`U+D800` through `U+DFFF` inclusive)
+> are allowed in quoted literals for compatibility with UTF-16 based
+> implementations that do not check for this encoding error.
 
 An **_<dfn>unquoted literal</dfn>_** is a _literal_ that does not require the `|`
 quotes around it to be distinct from the rest of the _message_ syntax.
