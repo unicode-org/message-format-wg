@@ -17,6 +17,7 @@
    1. [Resolution Errors](errors.md#resolution-errors)
    1. [Message Function Errors](errors.md#message-function-errors)
 1. [Default Function Registry](registry.md)
+1. [`u:` Namespace](u-namespace.md)
 1. [Formatting](formatting.md)
 1. [Interchange data model](data-model/README.md)
 
