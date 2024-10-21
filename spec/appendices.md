@@ -14,16 +14,30 @@ host environments, their serializations and resource formats,
 that might be sufficient to prevent most problems.
 However, MessageFormat itself does not supply such a restriction.
 
-MessageFormat _messages_ permit nearly all Unicode code points,
-with the exception of surrogates, 
+MessageFormat _messages_ permit nearly all Unicode code points
 to appear in _literals_, including the text portions of a _pattern_.
 This means that it can be possible for a _message_ to contain invisible characters
-(such as bidirectional controls, 
-ASCII control characters in the range U+0000 to U+001F,
+(such as bidirectional controls, ASCII control characters in the range U+0000 to U+001F,
 or characters that might be interpreted as escapes or syntax in the host format)
 that abnormally affect the display of the _message_
 when viewed as source code, or in resource formats or translation tools,
 but do not generate errors from MessageFormat parsers or processing APIs.
+
+> [!IMPORTANT]
+> _Text_ and _quoted literals_ allow unpaired surrogate code points
+> (`U+D800` to `U+DFFF`).
+> This is for compatibility with formats or data structures 
+> that use the UTF-16 encoding 
+> and do not check for unpaired surrogates.
+> (Strings in Java or JavaScript are examples of this.)
+> These code points SHOULD NOT be used in a _message_.
+> Unpaired surrogate code points are likely an indication of mistakes
+> or errors in the creation, serialization, or processing of the _message_.
+> Many processes will convert them to 
+> &#xfffd; U+FFFD REPLACEMENT CHARACTER
+> during processing or display.
+> Implementations not based on UTF-16 might not be able to represent
+> a _message_ containing such code points.
 
 Bidirectional text containing right-to-left characters (such as used for Arabic or Hebrew) 
 also poses a potential source of confusion for users. 
