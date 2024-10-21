@@ -305,7 +305,6 @@ content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %x41-5B        ; omit \ (%x5C)
                   / %x5D-7A        ; omit { | } (%x7B-7D)
                   / %x7E-2FFF      ; omit IDEOGRAPHIC SPACE (%x3000)
-                  / %x3001-D7FF    ; omit surrogates
                   / %xE000-10FFFF
 ```
 
