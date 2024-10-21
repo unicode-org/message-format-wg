@@ -148,9 +148,6 @@ A **_<dfn>local variable</dfn>_** is a _variable_ created as the result of a _lo
 > in a _message_, as well was encouraging the use of isolating controls
 > with _expressions_ and _quoted patterns_.
 > See: [whitespace](#whitespace) (below) for more information.
-> 
-> Additional restrictions or requirements might be added during the
-> Tech Preview to better manage bidirectional text.
 
 A _message_ can be a _simple message_ or it can be a _complex message_.
 
