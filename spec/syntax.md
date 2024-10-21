@@ -61,7 +61,7 @@ The syntax specification takes into account the following design restrictions:
    (U+FDD0 through U+FDEF and U+<i>n</i>FFFE and U+<i>n</i>FFFF where <i>n</i> is 0x0 through 0x10),
    private-use code points (U+E000 through U+F8FF, U+F0000 through U+FFFFD, and
    U+100000 through U+10FFFD), unassigned code points, unpaired surrogates in messages and
-   quoted literals only (U+D800 through U+DFFF), and other potentially confusing content.
+   _quoted literals_ only (U+D800 through U+DFFF), and other potentially confusing content.
 
 ## Messages and their Syntax
 
