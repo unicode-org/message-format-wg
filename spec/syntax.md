@@ -292,6 +292,7 @@ A _quoted pattern_ MAY be empty.
 
 **_<dfn>text</dfn>_** is the translateable content of a _pattern_.
 Any Unicode code point is allowed, except for U+0000 NULL.
+
 > [!NOTE]
 > Unpaired surrogate code points (`U+D800` through `U+DFFF` inclusive)
 > are allowed for compatibility with UTF-16 based implementations
