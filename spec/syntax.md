@@ -735,7 +735,7 @@ escaped as `\\` and `\|`.
 
 > [!NOTE]
 > Unpaired surrogate code points (`U+D800` through `U+DFFF` inclusive)
-> are allowed in quoted literals for compatibility with UTF-16 based
+> are allowed in _quoted literals_ for compatibility with UTF-16 based
 > implementations that do not check for this encoding error.
 
 An **_<dfn>unquoted literal</dfn>_** is a _literal_ that does not require the `|`
