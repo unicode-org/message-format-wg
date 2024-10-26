@@ -548,9 +548,84 @@ and they _might_ converge on some overlap that users could safely use across pla
 
 ### Standardize the Serialization Forms
 
-Using the design above, remove the integer-only and no-sig-digits restrictions from LDML45
-and specify numeric matching by specifying the form of matching `key` values.
-Comparison is as-if by string comparison of the serialized forms, just as in LDML45.
+Modify the above exact match as follows.
+Note that this implementation is less restrictive than before, but still leaves some
+values that cannot be matched.
+> [!IMPORTANT]
+> The exact behavior of exact literal match is only defined for
+> a specific range of numeric values and does not support scientific notation.
+> Very large or very small numeric values will be difficult to perform
+> exact matching on.
+> Avoid depending on these types of keys in message selection.
+> [!IMPORTANT]
+> For implementations that do not have arbitrary precision numeric types
+> or operands that do not use these types,
+> it is possible to specify a key value that exceeds the precision
+> of the underlying type.
+> Such a key value will not work reliably or may not work at all
+> in such implementations.
+> Avoid depending on such keys values in message selection.
+Number literals in the MessageFormat 2 syntax use a subset of the 
+[format defined for a JSON number](https://www.rfc-editor.org/rfc/rfc8259#section-6).
+The resolved value of an `operand` exactly matches a numeric literal `key`
+if, when the `operand` is serialized using this format
+the two strings are equal.
+```abnf
+number   = [ "-" ] int [ fraction ]
+integer  = "0" / [ "-" ] (digit19 *DIGIT)
+int      = "0" / (digit19 *DIGIT)
+digit19  = %31-39 ; 1-9
+fraction = "." 1*DIGIT
+```
+If the function `:integer` is used or the `maximumFractionDigits` is 0,
+the production `integer` is used and any fractional amount is omitted,
+otherwise the `minimumFractionDigits` number of digits is produced,
+zero-filled as needed.
+The implementation applies the `maximumSignificantDigits` to the value
+being serialized.
+This might involve locally-specific rounding.
+The `minimumSignificantDigits` has no effect on the value produced for comparison.
+The option `signDisplay` has no effect on the value produced for comparison.
+> [!NOTE]
+> Implementations are not expected to implement this exactly as written,
+> as there are clearly optimizations that can be applied.
+> Here are some examples:
+> ```
+> .input {$num :integer}
+> .match $num
+> 0    {{The number 0}}
+> 1    {{The number 1}}
+> -1   {{The number -1}}
+> 1.0  {{This cannot match}}
+> 1.1  {{This cannot match}}
+> ```
+> ```
+> .input {$num :number maximumFractionDigits=2 minimumFractionDigits=2}
+> .match $num
+> 0      {{This does not match}}
+> 0.00   {{This matches the value 0}}
+> 0.0    {{This does not match}}
+> 0.000  {{This does not match}}
+> ```
+> ```
+> .input {$num :number minimumFractionDigits=2 maximumFractionDigits=5}
+> .match $num
+> 0.12       {{Matches the value 0.12}
+> 0.123      {{Matches the value 0.123}}
+> 0.12345    {{Matches the values 0.12345}}
+> 0.123456   {{Does not match}}
+> 0.12346    {{May match the value 0.123456 depending on local rounding mode?}}
+> ```
+> ```
+> .input {$num :number}
+> -0    {{Error: Bad Variant Key}}
+> -99   {{The value -99}}
+> 1111111111111111111111111111 {{Might exceed the size of local integer type, but is valid}}
+> 11111111111111.1111111111111 {{Might exceed local floating point precision, but is valid}}
+> 1.23e-37 {{Error: Bad Variant Key}}
+> ```
+
+
 
 ### Compare numeric values
 
