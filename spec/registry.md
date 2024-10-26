@@ -322,7 +322,7 @@ its _resolved value_ contains the implementation-defined integer value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
-## The `:currency` function
+### The `:currency` function
 
 The function `:currency` is an OPTIONAL selector and formatter for currency values, 
 which are a specialized form of numeric selection and formatting.
@@ -439,8 +439,8 @@ The _function_ `:currency` performs selection as described in [Number Selection]
 #### Composition
 
 When an _operand_ or an _option_ value uses a _variable_ annotated,
-directly or indirectly, by a `:number` _annotation_,
-its _resolved value_ contains an implementation-defined numerical value
+directly or indirectly, by a `:currency` _annotation_,
+its _resolved value_ contains an implementation-defined currency value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
@@ -482,13 +482,20 @@ All other values produce a _Bad Operand_ error.
 The _operand_ of the `:currency` function is an implementation-defined type that
 contains a number and a currency code
 or a map whose keys are `value` and `currency`.
+When the _operand_ is a map, the value of `value` MUST be a [Number Operand](#number-operands).
+When the _operand_ is a map, the value of `currency` MUST be either a 
+valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+or an implementation-defined currency type.
 
 > [!NOTE]
 > For example, in ICU4J, the type `com.ibm.icu.util.CurrencyAmount` can be used
-> to set the currency.
+> to set the amount and currency.
 
 The _operand_ MAY be a [Number Operand](#number-operands), as long as the option `currency`
 is provided.
+The option `currency` MUST NOT be used to override the currency of an implementation-defined type
+or of a map containing a `currency` field.
+Using this option in such a case results in a _Bad Option_ error.
 
 ### Digit Size Options
 
