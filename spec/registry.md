@@ -171,37 +171,6 @@ with _options_ on the _expression_ taking priority over any option values of the
 > would be formatted with the resolved options
 > `{ notation: 'scientific', minimumFractionDigits: '1' }`.
 
-> [!NOTE]
-> The following options and option values are being developed during the Technical Preview
-> period.
-
-The following values for the option `style` are _not_ part of the default registry.
-Implementations SHOULD avoid creating options that conflict with these, but
-are encouraged to track development of these options during Tech Preview:
-- `currency`
-- `unit`
-
-The following options are _not_ part of the default registry.
-Implementations SHOULD avoid creating options that conflict with these, but
-are encouraged to track development of these options during Tech Preview:
-- `currency`
-   - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
-     (no default)
-- `currencyDisplay`
-   - `symbol` (default)
-   - `narrowSymbol`
-   - `code`
-   - `name`
-- `currencySign`
-  - `accounting`
-  - `standard` (default)
-- `unit`
-   - (anything not empty)
-- `unitDisplay`
-   - `long`
-   - `short` (default)
-   - `narrow`
-
 ##### Default Value of `select` Option
 
 The value `plural` is the default for the option `select` 
@@ -308,37 +277,6 @@ Option values with the following names are however discarded if included in the 
 - `maximumFractionDigits`
 - `minimumSignificantDigits`
 
-> [!NOTE]
-> The following options and option values are being developed during the Technical Preview
-> period.
-
-The following values for the option `style` are _not_ part of the default registry.
-Implementations SHOULD avoid creating options that conflict with these, but
-are encouraged to track development of these options during Tech Preview:
-- `currency`
-- `unit`
-
-The following options are _not_ part of the default registry.
-Implementations SHOULD avoid creating options that conflict with these, but
-are encouraged to track development of these options during Tech Preview:
-- `currency`
-   - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
-     (no default)
-- `currencyDisplay`
-   - `symbol` (default)
-   - `narrowSymbol`
-   - `code`
-   - `name`
-- `currencySign`
-  - `accounting`
-  - `standard` (default)
-- `unit`
-   - (anything not empty)
-- `unitDisplay`
-   - `long`
-   - `short` (default)
-   - `narrow`
-
 ##### Default Value of `select` Option
 
 The value `plural` is the default for the option `select` 
@@ -384,6 +322,128 @@ its _resolved value_ contains the implementation-defined integer value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
+## The `:currency` function
+
+The function `:currency` is a selector and formatter for currency values, 
+which are a specialized form of numeric selection and formatting.
+
+#### Operands
+
+The function `:currency` requires a [Currency Operand](#currency-operands) as its _operand_
+or a [Number Operand](#number-operands), if used with the _option_ `currency`.
+
+#### Options
+
+Some options do not have default values defined in this specification.
+The defaults for these options are implementation-dependent.
+In general, the default values for such options depend on the locale, 
+the currency,
+the value of other options, or all of these.
+
+Fraction digits for currency values behave differently than for other numeric formatters.
+The number of fraction digits displayed is usually set by the currency used.
+For example, USD uses 2 fraction digits, while JPY uses none.
+Setting `fractionDigits` to `none` makes the display and selection work similar to `:integer`.
+Setting some other number of `fractionDigits` allows greater precision display
+(such as when performing currency conversions or other specialized operations)
+
+> [!NOTE]
+> The names of _options_ and their _values_ were derived from the
+> [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
+> in JavaScript's `Intl.NumberFormat`.
+
+The following options and their values are required to be available on the function `:number`:
+- `select`
+   -  `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
+   -  `ordinal`
+   -  `exact`
+- `currency`
+   - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+     (no default)
+- `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
+   - `short` (default)
+   - `long`
+- `notation`
+   - `standard` (default)
+   - `compact`
+- `numberingSystem`
+   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+     (default is locale-specific)
+- `currencySign`
+  - `accounting`
+  - `standard` (default)
+- `currencyDisplay` (this option's values are derived from those in ICU NumberFormatter)
+  - `auto` (default)
+  - `narrow`
+  - `short`
+  - `iso`
+  - `full`
+  - `formal`
+  - `variant`
+- `useGrouping`
+  - `auto` (default)
+  - `always`
+  - `never`
+  - `min2`
+- `minimumIntegerDigits`
+  - ([digit size option](#digit-size-options), default: `1`)
+- `fractionDigits` (unlike number/integer formats, the fraction digits for currency formatting are fixed)
+  - `auto` (default) (the number of digits used by the currency)
+  - `none`
+  - ([digit size option](#digit-size-options))
+- `minimumSignificantDigits`
+  - ([digit size option](#digit-size-options))
+- `maximumSignificantDigits`
+  - ([digit size option](#digit-size-options))
+
+If the _operand_ of the _expression_ is an implementation-defined type,
+such as the _resolved value_ of an _expression_ with a `:currency` _annotation_,
+it can include option values.
+These are included in the resolved option values of the _expression_,
+with _options_ on the _expression_ taking priority over any option values of the _operand_.
+
+> For example, the _placeholder_ in this _message_:
+> ```
+> .input {$n :currency currency=USD fractionDigits=none}
+> {{{$n :currency currencySign=accounting}}}
+> ```
+> would be formatted with the resolved options
+> `{ currencySign: 'accounting', fractionDigits: 'none', currency: 'USD' }`.
+
+##### Default Value of `select` Option
+
+The value `plural` is the default for the option `select` 
+because it is the most common use case for numeric selection.
+It can be used for exact value matches but also allows for the grammatical needs of 
+languages using CLDR's plural rules.
+This might not be noticeable in the source language (particularly English), 
+but can cause problems in target locales that the original developer is not considering.
+
+> For example, a naive developer might use a special message for the value `1` without
+> considering a locale's need for a `one` plural:
+> ```
+> .input {$var :currency}
+> .match $var
+> 1   {{You have one last chance}}
+> one {{You have {$var} chance remaining}}
+> *   {{You have {$var} chances remaining}}
+> ```
+>
+> The `one` variant is needed by languages such as Polish or Russian.
+> Such locales typically also require other keywords such as `two`, `few`, and `many`.
+
+#### Selection
+
+The _function_ `:currency` performs selection as described in [Number Selection](#number-selection) below.
+
+#### Composition
+
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:number` _annotation_,
+its _resolved value_ contains an implementation-defined numerical value
+of the _operand_ of the annotated _expression_,
+together with the resolved options' values.
+
 ### Number Operands
 
 The _operand_ of a number function is either an implementation-defined type or
@@ -416,6 +476,19 @@ All other values produce a _Bad Operand_ error.
 > a value that includes a unit
 > or the type `com.ibm.icu.util.CurrencyAmount` can be used to set the currency and related
 > options (such as the number of fraction digits).
+
+### Currency Operands
+
+The _operand_ of the `:currency` function is an implementation-defined type that
+contains a number and a currency code
+or a map whose keys are `value` and `currency`.
+
+> [!NOTE]
+> For example, in ICU4J, the type `com.ibm.icu.util.CurrencyAmount` can be used
+> to set the currency.
+
+The _operand_ MAY be a [Number Operand](#number-operands), as long as the option `currency`
+is provided.
 
 ### Digit Size Options
 
