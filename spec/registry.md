@@ -324,10 +324,10 @@ together with the resolved options' values.
 
 ## The `:currency` function
 
-The function `:currency` is a selector and formatter for currency values, 
+The function `:currency` is an OPTIONAL selector and formatter for currency values, 
 which are a specialized form of numeric selection and formatting.
 
-#### Operands
+#### `:currency` Operands
 
 The function `:currency` requires a [Currency Operand](#currency-operands) as its _operand_
 or a [Number Operand](#number-operands), if used with the _option_ `currency`.
@@ -348,11 +348,11 @@ Setting some other number of `fractionDigits` allows greater precision display
 (such as when performing currency conversions or other specialized operations)
 
 > [!NOTE]
-> The names of _options_ and their _values_ were derived from the
+> Except where noted otherwise, the names of _options_ and their _values_ were derived from the
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
 > in JavaScript's `Intl.NumberFormat`.
 
-The following options and their values are required to be available on the function `:number`:
+The following options and their values are required to be available on the function `:currency`:
 - `select`
    -  `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
    -  `ordinal`
