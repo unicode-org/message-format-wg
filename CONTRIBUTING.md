@@ -1,6 +1,13 @@
 # Contributing to this project
 
-To join this Working Group, please read the information in the [README.md](./README.md) as well as the Contributor License Agreement information just below:
+## Joining the Working Group
+
+We are looking for participation from software developers, localization engineers and others with experience
+in Internationalization (I18N) and Localization (L10N). If you wish to contribute to this work, please review
+the information on the Contributor License Agreement below. In addition, you should:
+
+1. Apply to join our [mailing list](https://groups.google.com/a/chromium.org/forum/#!forum/message-format-wg)
+2. Watch this repository (use the "Watch" button in the upper right corner)
 
 <!-- boilerplate follows - do not edit -->
 

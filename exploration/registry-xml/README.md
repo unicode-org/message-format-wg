@@ -163,8 +163,7 @@ For the sake of brevity, only `locales="en"` is considered.
 Given the above description, the `:number` function is defined to work both in a selector and a placeholder:
 
 ```
-.input {$count :number}
-.match $count
+.match {$count :number}
 1 {{One new message}}
 * {{{$count :number} new messages}}
 ```

@@ -27,11 +27,6 @@
       "exp": "\\"
     },
     {
-      "description": "message -> simple-message -> simple-start pattern -> 1*escaped-char",
-      "src": "\\\\\\{\\|\\}",
-      "exp": "\\{|}"
-    },
-    {
       "description": "message -> simple-message -> simple-start pattern -> simple-start-char pattern -> ... -> simple-start-char *text-char placeholder",
       "src": "hello {world}",
       "exp": "hello world"
@@ -170,10 +165,16 @@
       "exp": ""
     },
     {
-      "description": "message -> complex-message -> complex-body -> ... -> matcher -> match-statement variant -> match selector key quoted-pattern -> \".match\" variable literal quoted-pattern",
-      "src": ".local $a={a :f}.match $a a{{}}*{{}}",
+      "description": "message -> complex-message -> *(declaration [s]) complex-body -> declaration complex-body -> reserved-statement  complex-body -> reserved-keyword expression -> \".\" name expression complex-body",
+      "src": ".n{a}{{}}",
       "exp": "",
-      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
+      "expErrors": [ { "type": "unsupported-statement" } ]
+    },
+    {
+      "description": "message -> complex-message -> complex-body -> matcher -> match-statement variant -> match selector key quoted-pattern -> \".match\" expression literal quoted-pattern",
+      "src": ".match{a :f}a{{}}*{{}}",
+      "exp": "",
+      "expErrors": [ { "type": "unknown-function" } ]
     },
     {
       "description": "... input-declaration -> input s variable-expression ...",
@@ -196,56 +197,34 @@
       "exp": ""
     },
     {
-      "description": "input-declaration-like content in complex-message",
-      "src": "{{.input {$x}}}",
-      "params": [{ "name": "x", "value": "X" }],
-      "exp": ".input X"
-    },
-    {
-      "description": "local-declaration-like content in complex-message with leading whitespace",
-      "src": "{{ .local $x = {$y}}}",
-      "params": [{ "name": "y", "value": "Y" }],
-      "exp": " .local $x = Y"
-    },
-    {
       "description": "... matcher -> match-statement [s] variant -> match 1*([s] selector) variant -> match selector selector variant -> match selector selector variant key s key quoted-pattern",
-      "src": ".local $a={a :f}.local $b={b :f}.match $a $b a b{{}}* *{{}}",
+      "src": ".match{a :f}{b :f}a b{{}}* *{{}}",
       "exp": "",
-      "expErrors": [
-        { "type": "unknown-function" },
-        { "type": "bad-selector" },
-        { "type": "unknown-function" },
-        { "type": "bad-selector" }
-      ]
+      "expErrors": [ { "type": "unknown-function" } ]
     },
     {
       "description": "... matcher -> match-statement [s] variant -> match 1*([s] selector) variant -> match selector variant variant ...",
-      "src": ".local $a={a :f}.match $a a{{}}b{{}}*{{}}",
+      "src": ".match{a :f}a{{}}b{{}}*{{}}",
       "exp": "",
-      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
+      "expErrors": [ { "type": "unknown-function" } ]
     },
     {
       "description": "... variant -> key s quoted-pattern -> ...",
-      "src": ".local $a={a :f}.match $a a {{}}*{{}}",
+      "src": ".match{a :f}a {{}}*{{}}",
       "exp": "",
-      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
+      "expErrors": [ { "type": "unknown-function" } ]
     },
     {
       "description": "... variant -> key s key s quoted-pattern -> ...",
-      "src": ".local $a={a :f}.local $b={b :f}.match $a $b a b {{}}* *{{}}",
+      "src": ".match{a :f}{b :f}a b {{}}* *{{}}",
       "exp": "",
-      "expErrors": [
-        { "type": "unknown-function" },
-        { "type": "bad-selector" },
-        { "type": "unknown-function" },
-        { "type": "bad-selector" }
-      ]
+      "expErrors": [ { "type": "unknown-function" } ]
     },
     {
       "description": "... key -> \"*\" ...",
-      "src": ".local $a={a :f}.match $a *{{}}",
+      "src": ".match{a :f}*{{}}",
       "exp": "",
-      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
+      "expErrors": [ { "type": "unknown-function" } ]
     },
     {
       "description": "simple-message -> simple-start pattern -> placeholder -> expression -> literal-expression -> \"{\" s literal \"}\"",
@@ -297,6 +276,18 @@
       "src": "{:f }",
       "exp": "{:f}",
       "expErrors": [{ "type": "unknown-function" }]
+    },
+    {
+      "description": "... annotation -> private-use-annotation -> private-start",
+      "src": "{^}",
+      "exp": "{^}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... annotation -> reserved-annotation -> reserved-annotation-start",
+      "src": "{!}",
+      "exp": "{!}",
+      "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
       "description": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" s \"#\" identifier \"}\"", 
@@ -408,8 +399,8 @@
       "exp": "a"
     },
     {
-      "description": "... attribute -> \"@\" identifier s \"=\" s quoted-literal ...",
-      "src": "{42 @foo=|bar|}",
+      "description": "... attribute -> \"@\" identifier s \"=\" s variable ...",
+      "src": "{42 @foo=$bar}",
       "exp": "42",
       "expParts": [
         {
@@ -435,9 +426,9 @@
       "exp": "\\"
     },
     {
-      "description": "... quoted-literal -> \"|\" quoted-char 1*escaped-char \"|\"",
-      "src": "{|a\\\\\\{\\|\\}|}",
-      "exp": "a\\{|}"
+      "description": "... quoted-literal -> \"|\" quoted-char escaped-char \"|\"",
+      "src": "{|a\\\\|}",
+      "exp": "a\\"
     },
     {
       "description": "... unquoted-literal -> number-literal -> %x30",
@@ -488,6 +479,114 @@
       "description": "... unquoted-literal -> number-literal -> %x30 %i\"e\" \"+\" 1*DIGIT ...",
       "src": "{0E-1}",
       "exp": "0E-1"
+    },
+    {
+      "description": "... reserved-statement -> reserved-keyword s reserved-body 1*([s] expression) -> reserved-keyword s reserved-body expression -> \".\" name s reserved-body-part expression -> \".\" name s reserved-char expression ...",
+      "src": ".n .{a}{{}}",
+      "exp": "",
+      "expErrors": [ { "type": "unsupported-statement" } ]
+    },
+    {
+      "description": "... reserved-statement -> reserved-keyword reserved-body 1*([s] expression) -> reserved-keyword s reserved-body s expression -> \".\" name s reserved-body-part expression -> \".\" name s reserved-char expression ...",
+      "src": ".n. {a}{{}}",
+      "exp": "",
+      "expErrors": [ { "type": "unsupported-statement" } ]
+    },
+    {
+      "description": "... reserved-statement -> reserved-keyword reserved-body 1*([s] expression) -> reserved-keyword reserved-body expression expression -> \".\" name reserved-body-part expression expression -> \".\" name s reserved-char expression expression ...",
+      "src": ".n.{a}{b}{{}}",
+      "exp": "",
+      "expErrors": [ { "type": "unsupported-statement" } ]
+    },
+    {
+      "description": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part -> \"!\" reserved-char ...",
+      "src": "{!.}",
+      "exp": "{!}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... reserved-annotation -> reserved-annotation-start s reserved-body -> \"!\" s reserved-body-part -> \"!\" s reserved-char ...",
+      "src": "{! .}",
+      "exp": "{!}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... reserved-annotation-start ...",
+      "src": "{%}",
+      "exp": "{%}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... reserved-annotation-start ...",
+      "src": "{*}",
+      "exp": "{*}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... reserved-annotation-start ...",
+      "src": "{+}",
+      "exp": "{+}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... reserved-annotation-start ...",
+      "src": "{<}",
+      "exp": "{<}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... reserved-annotation-start ...",
+      "src": "{>}",
+      "exp": "{>}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... reserved-annotation-start ...",
+      "src": "{?}",
+      "exp": "{?}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... reserved-annotation-start ...",
+      "src": "{~}",
+      "exp": "{~}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... private-use-annotation -> private-start reserved-body -> \"^\" reserved-body-part -> \"^\" reserved-char ...",
+      "src": "{^.}",
+      "exp": "{^}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... private-use-annotation -> private-start s reserved-body -> \"^\" s reserved-body-part -> \"^\" s reserved-char ...",
+      "src": "{^ .}",
+      "exp": "{^}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... private-start ...",
+      "src": "{&}",
+      "exp": "{&}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part reserved-body-part -> \"!\" reserved-char escaped-char ...",
+      "src": "{!.\\{}",
+      "exp": "{!}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part s reserved-body-part -> \"!\" reserved-char s escaped-char ...",
+      "src": "{!. \\{}",
+      "exp": "{!}",
+      "expErrors": [{ "type": "unsupported-expression" }]
+    },
+    {
+      "description": "... reserved-annotation -> reserved-annotation-start reserved-body -> \"!\" reserved-body-part -> \"!\" quoted-literal ...",
+      "src": "{!|a|}",
+      "exp": "{!}",
+      "expErrors": [{ "type": "unsupported-expression" }]
     },
     {
       "src": "hello { world\t\n}",
@@ -695,45 +794,125 @@
       ]
     },
     {
+      "src": "foo {+reserved}",
+      "exp": "foo {+}",
+      "expParts": [
+        {
+          "type": "literal",
+          "value": "foo "
+        },
+        {
+          "type": "fallback",
+          "source": "+"
+        }
+      ],
+      "expErrors": [
+        {
+          "type": "unsupported-expression"
+        }
+      ]
+    },
+    {
+      "src": "foo {&private}",
+      "exp": "foo {&}",
+      "expParts": [
+        {
+          "type": "literal",
+          "value": "foo "
+        },
+        {
+          "type": "fallback",
+          "source": "&"
+        }
+      ],
+      "expErrors": [
+        {
+          "type": "unsupported-expression"
+        }
+      ]
+    },
+    {
+      "src": "foo {?reserved @a @b=$c}",
+      "exp": "foo {?}",
+      "expParts": [
+        {
+          "type": "literal",
+          "value": "foo "
+        },
+        {
+          "type": "fallback",
+          "source": "?"
+        }
+      ],
+      "expErrors": [
+        {
+          "type": "unsupported-expression"
+        }
+      ]
+    },
+    {
+      "src": ".foo {42} {{bar}}",
+      "exp": "bar",
+      "expParts": [
+        {
+          "type": "literal",
+          "value": "bar"
+        }
+      ],
+      "expErrors": [
+        {
+          "type": "unsupported-statement"
+        }
+      ]
+    },
+    {
+      "src": ".foo{42}{{bar}}",
+      "exp": "bar",
+      "expParts": [
+        {
+          "type": "literal",
+          "value": "bar"
+        }
+      ],
+      "expErrors": [
+        {
+          "type": "unsupported-statement"
+        }
+      ]
+    },
+    {
+      "src": ".foo |}lit{| {42}{{bar}}",
+      "exp": "bar",
+      "expParts": [
+        {
+          "type": "literal",
+          "value": "bar"
+        }
+      ],
+      "expErrors": [
+        {
+          "type": "unsupported-statement"
+        }
+      ]
+    },
+    {
+      "src": ".l $y = {|bar|} {{}}",
+      "exp": "",
+      "expParts": [
+        {
+          "type": "literal",
+          "value": "bar"
+        }
+      ],
+      "expErrors": [
+        {
+          "type": "unsupported-statement"
+        }
+      ]
+    },
+    {
       "src": "{{trailing whitespace}} \n",
       "exp": "trailing whitespace"
-    },
-    {
-      "description": "NFC: text is not normalized",
-      "src": "\u1E0A\u0323",
-      "exp": "\u1E0A\u0323"
-    },
-    {
-      "description": "NFC: variables are compared to each other as-if normalized; decl is non-normalized, use is",
-      "src": ".local $\u0044\u0323\u0307 = {foo} {{{$\u1E0c\u0307}}}",
-      "exp": "foo"
-    },
-    {
-      "description": "NFC: variables are compared to each other as-if normalized; decl is normalized, use isn't",
-      "src": ".local $\u1E0c\u0307 = {foo} {{{$\u0044\u0323\u0307}}}",
-      "exp": "foo"
-    },
-    {
-      "description": "NFC: variables are compared to each other as-if normalized; decl is normalized, use isn't",
-      "src": ".input {$\u1E0c\u0307} {{{$\u0044\u0323\u0307}}}",
-      "params": [{"name": "\u1E0c\u0307", "value": "foo"}],
-      "exp": "foo"
-    },
-    {
-      "description": "NFC: variables are compared to each other as-if normalized; decl is non-normalized, use is",
-      "src": ".input {$\u0044\u0323\u0307} {{{$\u1E0c\u0307}}}",
-      "params": [{"name": "\u0044\u0323\u0307", "value": "foo"}],
-      "exp": "foo"
-    },
-    {
-      "description": "NFC: variables are compared to each other as-if normalized; decl is non-normalized, use is; reordering",
-      "src": ".local $\u0044\u0307\u0323 = {foo} {{{$\u1E0c\u0307}}}",
-      "exp": "foo"
-    },
-    {
-      "description": "NFC: variables are compared to each other as-if normalized; decl is non-normalized, use is; special case mapping",
-      "src": ".local $\u0041\u030A\u0301 = {foo} {{{$\u01FA}}}",
-      "exp": "foo"
     }
   ]
 }

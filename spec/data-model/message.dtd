@@ -1,5 +1,5 @@
 <!ELEMENT message (
-  (declaration)*,
+  (declaration | unsupportedStatement)*,
   (pattern | (selectors,variant+))
 )>
 
@@ -10,7 +10,13 @@
   name NMTOKEN #REQUIRED
 >
 
-<!ELEMENT selectors (variable)+>
+<!ELEMENT unsupportedStatement (expression)+>
+<!ATTLIST unsupportedStatement
+  keyword CDATA #REQUIRED
+  body CDATA #IMPLIED
+>
+
+<!ELEMENT selectors (expression)+>
 <!ELEMENT variant (key+,pattern)>
 <!ELEMENT key (#PCDATA)>
 <!ATTLIST key catchall (true | false) "false">
@@ -18,8 +24,8 @@
 <!ELEMENT pattern (#PCDATA | expression | markup)*>
 
 <!ELEMENT expression (
-  ((literal | variable), function?, attribute*) |
-  (function, attribute*)
+  ((literal | variable), (functionAnnotation | unsupportedAnnotation)?, attribute*) |
+  ((functionAnnotation | unsupportedAnnotation), attribute*)
 )>
 
 <!ELEMENT literal (#PCDATA)>
@@ -27,13 +33,15 @@
 <!ELEMENT variable (EMPTY)>
 <!ATTLIST variable name NMTOKEN #REQUIRED>
 
-<!ELEMENT function (option)*>
-<!ATTLIST function name NMTOKEN #REQUIRED>
+<!ELEMENT functionAnnotation (option)*>
+<!ATTLIST functionAnnotation name NMTOKEN #REQUIRED>
 
 <!ELEMENT option (literal | variable)>
 <!ATTLIST option name NMTOKEN #REQUIRED>
 
-<!ELEMENT attribute (literal)?>
+<!ELEMENT unsupportedAnnotation (#PCDATA)>
+
+<!ELEMENT attribute (literal | variable)?>
 <!ATTLIST attribute name NMTOKEN #REQUIRED>
 
 <!ELEMENT markup (option*, attribute*)>

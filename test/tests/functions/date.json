@@ -35,10 +35,10 @@
       "src": "{|2006-01-02| :date style=long}"
     },
     {
-      "src": ".local $d = {|2006-01-02| :date style=long} {{{$d}}}"
+      "src": ".local $d = {|2006-01-02| :date style=long} {{{$d :date}}}"
     },
     {
-      "src": ".local $d = {|2006-01-02| :datetime dateStyle=long timeStyle=long} {{{$d :date}}}"
+      "src": ".local $t = {|2006-01-02T15:04:06| :time} {{{$t :date}}}"
     }
   ]
 }
