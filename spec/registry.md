@@ -1,7 +1,7 @@
 # MessageFormat 2.0 Default Function Registry
 
-This section describes the functions which each implementation MUST provide
-to be conformant with this specification.
+This section describes the functions for which each implementation MUST provide
+a _function handler_ to be conformant with this specification.
 
 Implementations MAY implement additional _functions_ or additional _options_.
 In particular, implementations are encouraged to provide feedback on proposed
@@ -51,26 +51,17 @@ The function `:string` has no options.
 #### Selection
 
 When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
-where `resolvedSelector` is the resolved value of a _selector_ _expression_
+where `resolvedSelector` is the _resolved value_ of a _selector_
 and `keys` is a list of strings,
-the `:string` selector performs as described below.
+the `:string` selector function performs as described below.
 
-1. Let `compare` be the string value of `resolvedSelector`.
+1. Let `compare` be the string value of `resolvedSelector`
+   in Unicode Normalization Form C (NFC) [\[UAX#15\]](https://www.unicode.org/reports/tr15)
 1. Let `result` be a new empty list of strings.
 1. For each string `key` in `keys`:
    1. If `key` and `compare` consist of the same sequence of Unicode code points, then
       1. Append `key` as the last element of the list `result`.
 1. Return `result`.
-
-> [!NOTE]
-> Matching of `key` and `compare` values is sensitive to the sequence of code points
-> in each string.
-> As a result, variations in how text can be encoded can affect the performance of matching.
-> The function `:string` does not perform case folding or Unicode Normalization of string values.
-> Users SHOULD encode _messages_ and their parts (such as _keys_ and _operands_),
-> in Unicode Normalization Form C (NFC) unless there is a very good reason
-> not to.
-> See also: [String Matching](https://www.w3.org/TR/charmod-norm)
 
 > [!NOTE]
 > Unquoted string literals in a _variant_ do not include spaces.
@@ -80,14 +71,28 @@ the `:string` selector performs as described below.
 >
 > For example:
 > ```
-> .match {$string :string}
+> .input {$string :string}
+> .match $string
 > | space key | {{Matches the string " space key "}}
 > *             {{Matches the string "space key"}}
 > ```
 
 #### Formatting
 
-The `:string` function returns the string value of the resolved value of the _operand_.
+The `:string` function returns the string value of the _resolved value_ of the _operand_.
+
+> [!NOTE]
+> The function `:string` does not perform Unicode Normalization of its formatted output.
+> Users SHOULD encode _messages_ and their parts in Unicode Normalization Form C (NFC)
+> unless there is a very good reason not to.
+
+#### Composition
+
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:string` _function_,
+its _resolved value_ contains the string value of the _operand_ of the annotated _expression_,
+together with its resolved locale and directionality.
+None of the _options_ set on the _expression_ are part of the _resolved value_.
 
 ## Numeric Value Selection and Formatting
 
@@ -152,6 +157,20 @@ The following options and their values are required to be available on the funct
 - `maximumSignificantDigits`
   - ([digit size option](#digit-size-options))
 
+If the _operand_ of the _expression_ is an implementation-defined type,
+such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
+it can include option values.
+These are included in the resolved option values of the _expression_,
+with _options_ on the _expression_ taking priority over any option values of the _operand_.
+
+> For example, the _placeholder_ in this _message_:
+> ```
+> .input {$n :number notation=scientific minimumFractionDigits=2}
+> {{{$n :number minimumFractionDigits=1}}}
+> ```
+> would be formatted with the resolved options
+> `{ notation: 'scientific', minimumFractionDigits: '1' }`.
+
 > [!NOTE]
 > The following options and option values are being developed during the Technical Preview
 > period.
@@ -195,7 +214,8 @@ but can cause problems in target locales that the original developer is not cons
 > For example, a naive developer might use a special message for the value `1` without
 > considering a locale's need for a `one` plural:
 > ```
-> .match {$var :number}
+> .input {$var :number}
+> .match $var
 > 1   {{You have one last chance}}
 > one {{You have {$var} chance remaining}}
 > *   {{You have {$var} chances remaining}}
@@ -219,6 +239,14 @@ MUST be multiplied by 100 for the purposes of formatting.
 
 The _function_ `:number` performs selection as described in [Number Selection](#number-selection) below.
 
+#### Composition
+
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:number` _annotation_,
+its _resolved value_ contains an implementation-defined numerical value
+of the _operand_ of the annotated _expression_,
+together with the resolved options' values.
+
 ### The `:integer` function
 
 The function `:integer` is a selector and formatter for matching or formatting numeric 
@@ -227,7 +255,6 @@ values as integers.
 #### Operands
 
 The function `:integer` requires a [Number Operand](#number-operands) as its _operand_.
-
 
 #### Options
 
@@ -262,11 +289,24 @@ function `:integer`:
 - `useGrouping`
   - `auto` (default)
   - `always`
+  - `never`
   - `min2`
 - `minimumIntegerDigits`
   - ([digit size option](#digit-size-options), default: `1`)
 - `maximumSignificantDigits`
   - ([digit size option](#digit-size-options))
+
+If the _operand_ of the _expression_ is an implementation-defined type,
+such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
+it can include option values.
+In general, these are included in the resolved option values of the _expression_,
+with _options_ on the _expression_ taking priority over any option values of the _operand_.
+Option values with the following names are however discarded if included in the _operand_:
+- `compactDisplay`
+- `notation`
+- `minimumFractionDigits`
+- `maximumFractionDigits`
+- `minimumSignificantDigits`
 
 > [!NOTE]
 > The following options and option values are being developed during the Technical Preview
@@ -311,7 +351,8 @@ but can cause problems in target locales that the original developer is not cons
 > For example, a naive developer might use a special message for the value `1` without
 > considering a locale's need for a `one` plural:
 > ```
-> .match {$var :integer}
+> .input {$var :integer}
+> .match $var
 > 1   {{You have one last chance}}
 > one {{You have {$var} chance remaining}}
 > *   {{You have {$var} chances remaining}}
@@ -334,6 +375,14 @@ MUST be multiplied by 100 for the purposes of formatting.
 #### Selection
 
 The _function_ `:integer` performs selection as described in [Number Selection](#number-selection) below.
+
+#### Composition
+
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:integer` _annotation_,
+its _resolved value_ contains the implementation-defined integer value
+of the _operand_ of the annotated _expression_,
+together with the resolved options' values.
 
 ### Number Operands
 
@@ -371,34 +420,37 @@ All other values produce a _Bad Operand_ error.
 ### Digit Size Options
 
 Some _options_ of number _functions_ are defined to take a "digit size option".
-Implementations of number _functions_ use these _options_ to control aspects of numeric display
+The _function handlers_ for number _functions_ use these _options_ to control aspects of numeric display
 such as the number of fraction, integer, or significant digits.
 
 A "digit size option" is an _option_ value that the _function_ interprets
 as a small integer value greater than or equal to zero.
-Implementations MAY define an upper limit on the resolved value 
+Implementations MAY define an upper limit on the _resolved value_
 of a digit size option option consistent with that implementation's practical limits.
 
 In most cases, the value of a digit size option will be a string that
-encodes the value as a decimal integer.
+encodes the value as a non-negative integer.
 Implementations MAY also accept implementation-defined types as the value.
 When provided as a string, the representation of a digit size option matches the following ABNF:
 >```abnf
 > digit-size-option = "0" / (("1"-"9") [DIGIT])
 >```
 
+If the value of a digit size option does not evaluate as a non-negative integer,
+or if the value exceeds any implementation-defined upper limit
+or any option-specific lower limit, a _Bad Option Error_ is emitted.
 
 ### Number Selection
 
 Number selection has three modes:
 - `exact` selection matches the operand to explicit numeric keys exactly
 - `plural` selection matches the operand to explicit numeric keys exactly
-  or to plural rule categories if there is no explicit match
+  followed by a plural rule category if there is no explicit match
 - `ordinal` selection matches the operand to explicit numeric keys exactly
-  or to ordinal rule categories if there is no explicit match
+  followed by an ordinal rule category if there is no explicit match
 
 When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
-where `resolvedSelector` is the resolved value of a _selector_ _expression_
+where `resolvedSelector` is the _resolved value_ of a _selector_
 and `keys` is a list of strings,
 numeric selectors perform as described below.
 
@@ -423,24 +475,38 @@ numeric selectors perform as described below.
 
 #### Rule Selection
 
-If the option `select` is set to `exact`, rule-based selection is not used.
-Return the empty string.
+Rule selection is intended to support the grammatical matching needs of different 
+languages/locales in order to support plural or ordinal numeric values.
+
+If the _option_ `select` is set to `exact`, rule-based selection is not used.
+Otherwise rule selection matches the _operand_, as modified by function _options_, to exactly one of these keywords:
+`zero`, `one`, `two`, `few`, `many`, or `other`.
+The keyword `other` is the default.
 
 > [!NOTE]
 > Since valid keys cannot be the empty string in a numeric expression, returning the
 > empty string disables keyword selection.
 
-If the option `select` is set to `plural`, selection should be based on CLDR plural rule data
-of type `cardinal`. See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
-for examples.
+The meaning of the keywords is locale-dependent and implementation-defined.
+A _key_ that matches the rule-selected keyword is a stronger match than the fallback key `*`
+but a weaker match than any exact match _key_ value.
 
-If the option `select` is set to `ordinal`, selection should be based on CLDR plural rule data
-of type `ordinal`. See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
-for examples.
+The rules for a given locale might not produce all of the keywords.
+A given _operand_ value might produce different keywords depending on the locale.
 
-Apply the rules defined by CLDR to the resolved value of the operand and the function options,
+Apply the rules to the _resolved value_ of the _operand_ and the relevant function _options_,
 and return the resulting keyword.
 If no rules match, return `other`.
+
+If the option `select` is set to `plural`, the rules applied to selection SHOULD be 
+the CLDR plural rule data of type `cardinal`. 
+See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
+for examples.
+
+If the option `select` is set to `ordinal`, the rules applied to selection SHOULD be 
+the CLDR plural rule data of type `ordinal`. 
+See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
+for examples.
 
 > **Example.**
 > In CLDR 44, the Czech (`cs`) plural rule set can be found
@@ -448,7 +514,8 @@ If no rules match, return `other`.
 >
 > A message in Czech might be:
 > ```
-> .match {$numDays :number}
+> .input {$numDays :number}
+> .match $numDays
 > one  {{{$numDays} den}}
 > few  {{{$numDays} dny}}
 > many {{{$numDays} dne}}
@@ -467,11 +534,11 @@ If no rules match, return `other`.
 #### Determining Exact Literal Match
 
 > [!IMPORTANT]
-> The exact behavior of exact literal match is only defined for non-zero-filled
+> The exact behavior of exact literal match is currently only well defined for non-zero-filled
 > integer values.
-> Annotations that use fraction digits or significant digits might work in specific
+> Functions that use fraction digits or significant digits might work in specific
 > implementation-defined ways.
-> Users should avoid depending on these types of keys in message selection.
+> Users should avoid depending on these types of keys in message selection in this release.
 
 
 Number literals in the MessageFormat 2 syntax use the 
@@ -481,10 +548,19 @@ if, when the numeric value of `resolvedSelector` is serialized using the format 
 the two strings are equal.
 
 > [!NOTE]
-> Only integer matching is required in the Technical Preview.
-> Feedback describing use cases for fractional and significant digits-based
-> selection would be helpful.
-> Otherwise, users should avoid using matching with fractional numbers or significant digits.
+> The above description of numeric matching contains 
+> [open issues](https://github.com/unicode-org/message-format-wg/issues/675)
+> in the Technical Preview, since a given numeric value might be formatted in
+> several different ways under RFC8259
+> and since the effect of formatting options, such as the number of fraction
+> digits or significant digits, is not described.
+> The Working Group intends to address these issues before final release
+> with a number of design options
+> [being considered](https://github.com/unicode-org/message-format-wg/pull/859).
+>
+> Users should avoid creating messages that depend on exact matching of non-integer
+> numeric values.
+> Feedback, including use cases encountered in message authoring, is strongly desired.
 
 ## Date and Time Value Formatting
 
@@ -524,7 +600,12 @@ or can use a collection of _field options_ (but not both) to control the formatt
 output.
 
 If both are specified, a _Bad Option_ error MUST be emitted
-and a _fallback value_ used as the resolved value of the _expression_.
+and a _fallback value_ used as the _resolved value_ of the _expression_.
+
+If the _operand_ of the _expression_ is an implementation-defined date/time type,
+it can include _style options_, _field options_, or other option values.
+These are included in the resolved option values of the _expression_,
+with _options_ on the _expression_ taking priority over any option values of the _operand_.
 
 > [!NOTE]
 > The names of _options_ and their _values_ were derived from the
@@ -549,8 +630,6 @@ The function `:datetime` has these _style options_.
 
 _Field options_ describe which fields to include in the formatted output
 and what format to use for that field.
-The implementation may use this _annotation_ to configure which fields
-appear in the formatted output.
 
 > [!NOTE]
 > _Field options_ do not have default values because they are only to be used
@@ -627,7 +706,15 @@ are encouraged to track development of these options during Tech Preview:
    - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
 - `timeZone` (default is system default time zone or UTC)
   - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
- 
+
+#### Composition
+
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:datetime` _annotation_,
+its _resolved value_ contains an implementation-defined date/time value
+of the _operand_ of the annotated _expression_,
+together with the resolved options values.
+
 ### The `:date` function
 
 The function `:date` is used to format the date portion of date/time values.
@@ -650,6 +737,19 @@ The function `:date` has these _options_:
   - `long`
   - `medium` (default)
   - `short`
+
+If the _operand_ of the _expression_ is an implementation-defined date/time type,
+it can include other option values.
+Any _operand_ option values matching the `:datetime` _style options_ or _field options_ are ignored,
+as is any `style` option.
+
+#### Composition
+
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:date` _annotation_,
+its _resolved value_ is implementation-defined.
+An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate)
+when this happens.
 
 ### The `:time` function
 
@@ -674,6 +774,18 @@ The function `:time` has these _options_:
   - `medium`
   - `short` (default)
 
+If the _operand_ of the _expression_ is an implementation-defined date/time type,
+it can include other option values.
+Any _operand_ option values matching the `:datetime` _style options_ or _field options_ are ignored,
+as is any `style` option.
+
+#### Composition
+
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:time` _annotation_,
+its _resolved value_ is implementation-defined.
+An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate)
+when this happens.
 
 ### Date and Time Operands
 
@@ -723,5 +835,3 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 > The form of these serializations is known and is a de facto standard.
 > Support for these extensions is expected to be required in the post-tech preview.
 > See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
-
-

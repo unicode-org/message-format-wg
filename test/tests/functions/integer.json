@@ -19,7 +19,7 @@
       "exp": "hello 4"
     },
     {
-      "src": ".match {$foo :integer} one {{one}} * {{other}}",
+      "src": ".input {$foo :integer} .match $foo 1 {{one}} * {{other}}",
       "params": [
         {
           "name": "foo",
@@ -27,6 +27,10 @@
         }
       ],
       "exp": "one"
+    },
+    {
+      "src": ".local $x = {1.25 :integer} .local $y = {$x :number} {{{$y}}}",
+      "exp": "1"
     }
   ]
 }

@@ -10,6 +10,8 @@ These test files are intended to be useful for testing multiple different messag
 - `data-model-errors.json` - Strings that should produce a Data Model Error when processed.
   Error names are defined in ["MessageFormat 2.0 Errors"](../spec/errors.md) in the spec.
 
+- `u-options.json` — Test cases for the `u:` options, using built-in functions.
+
 - `functions/` — Test cases that correspond to built-in functions.
   The behaviour of the built-in formatters is implementation-specific so the `exp` field is often
   omitted and assertions are made on error cases.
@@ -21,6 +23,7 @@ Some examples of test harnesses using these tests, from the source repository:
 - [Formatting tests](https://github.com/messageformat/messageformat/blob/11c95dab2b25db8454e49ff4daadb817e1d5b770/packages/mf2-messageformat/src/messageformat.test.ts)
 
 A [JSON schema](./schemas/) is included for the test files in this repository.
+
 ## Error Codes
 
 The following table relates the error names used in the [JSON schema](./schemas/)
@@ -34,13 +37,12 @@ to the error names used in ["MessageFormat 2.0 Errors"](../spec/errors.md) in th
 | Bad Variant Key             | bad-variant-key             |
 | Duplicate Declaration       | duplicate-declaration       |
 | Duplicate Option Name       | duplicate-option-name       |
+| Duplicate Variant           | duplicate-variant           |
 | Missing Fallback Variant    | missing-fallback-variant    |
 | Missing Selector Annotation | missing-selector-annotation |
 | Syntax Error                | syntax-error                |
 | Unknown Function            | unknown-function            |
 | Unresolved Variable         | unresolved-variable         |
-| Unsupported Expression      | unsupported-expression      |
-| Unsupported Statement       | unsupported-statement       |
 | Variant Key Mismatch        | variant-key-mismatch        |
 
 The "Message Function Error" error name used in the spec
@@ -65,29 +67,40 @@ The function `:test:function` requires a [Number Operand](/spec/registry.md#numb
 
 #### Options
 
-The only _option_ `:test:function` recognizes is `decimalPlaces`,
-a _digit size option_ for which only `0` and `1` are valid values.
+The following _options_ are available on `:test:function`:
+- `decimalPlaces`, a _digit size option_ for which only `0` and `1` are valid values.
+  - `0`
+  - `1`
+- `fails`
+  - `never` (default)
+  - `select`
+  - `format`
+  - `always`
 
 All other _options_ and their values are ignored.
 
 #### Behavior
 
 When resolving a `:test:function` expression,
-its `Input` and `DecimalPlaces` values are determined as follows:
+its `Input`, `DecimalPlaces`, `FailsFormat`, and `FailsSelect` values are determined as follows:
 
 1. Let `DecimalPlaces` be 0.
-1. Let `arg` be the resolved value of the _expression_ _operand_.
-1. If `arg` is the resolved value of an _expression_
+1. Let `FailsFormat` be `false`.
+1. Let `FailsSelect` be `false`.
+1. Let `arg` be the _resolved value_ of the _expression_ _operand_.
+1. If `arg` is the _resolved value_ of an _expression_
    with a `:test:function`, `:test:select`, or `:test:format` _annotation_
    for which resolution has succeeded, then
    1. Let `Input` be the `Input` value of `arg`.
    1. Set `DecimalPlaces` to be `DecimalPlaces` value of `arg`.
+   1. Set `FailsFormat` to be `FailsFormat` value of `arg`.
+   1. Set `FailsSelect` to be `FailsSelect` value of `arg`.
 1. Else if `arg` is a numerical value
    or a string matching the `number-literal` production, then
    1. Let `Input` be the numerical value of `arg`.
 1. Else,
    1. Emit "bad-input" _Resolution Error_.
-   1. Use a _fallback value_ as the resolved value of the _expression_.
+   1. Use a _fallback value_ as the _resolved value_ of the _expression_.
       Further steps of this algorithm are not followed.
 1. If the `decimalPlaces` _option_ is set, then
    1. If its value resolves to a numerical integer value 0 or 1
@@ -95,13 +108,25 @@ its `Input` and `DecimalPlaces` values are determined as follows:
       1. Set `DecimalPlaces` to be the numerical value of the _option_.
    1. Else if its value is not an unresolved value set by _option resolution_,
       1. Emit "bad-option" _Resolution Error_.
-      1. Use a _fallback value_ as the resolved value of the _expression_.
+      1. Use a _fallback value_ as the _resolved value_ of the _expression_.
+1. If the `fails` _option_ is set, then
+   1. If its value resolves to the string `'always'`, then
+      1. Set `FailsFormat` to be `true`.
+      1. Set `FailsSelect` to be `true`.
+   1. Else if its value resolves to the string `'format'`, then
+      1. Set `FailsFormat` to be `true`.
+   1. Else if its value resolves to the string `'select'`, then
+      1. Set `FailsSelect` to be `true`.
+   1. Else if its value does not resolve to the string `'never'`, then
+      1. Emit "bad-option" _Resolution Error_.
 
 When `:test:function` is used as a _selector_,
 the behaviour of calling it as the `rv` value of MatchSelectorKeys(`rv`, `keys`)
 (see [Resolve Preferences](/spec/formatting.md#resolve-preferences) for more information)
-depends on its `Input` and `DecimalPlaces` values.
+depends on its `Input`, `DecimalPlaces` and `FailsSelect` values.
 
+- If `FailsSelect` is `true`,
+  calling the method will fail and not return any value.
 - If the `Input` is 1 and `DecimalPlaces` is 1,
   the method will return some slice of the list « `'1.0'`, `'1'` »,
   depending on whether those values are included in `keys`.
@@ -111,7 +136,7 @@ depends on its `Input` and `DecimalPlaces` values.
 
 When an _expression_ with a `:test:function` _annotation_ is assigned to a _variable_ by a _declaration_
 and that _variable_ is used as an _option_ value,
-its resolved value is the `Input` value.
+its _resolved value_ is the `Input` value.
 
 When `:test:function` is used as a _formatter_,
 a _placeholder_ resolving to a value with a `:test:function` _expression_
@@ -128,6 +153,8 @@ If the formatting target is a sequence of parts,
 each of the above parts will be emitted separately
 rather than being concatenated into a single string.
 
+If `FailsFormat` is `true`,
+attempting to format the _placeholder_ to any formatting target will fail.
 
 ### `:test:select`
 

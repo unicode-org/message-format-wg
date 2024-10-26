@@ -269,6 +269,9 @@
               "name": {
                 "type": "string"
               },
+              "id": {
+                "type": "string"
+              },
               "options": {
                 "type": "object"
               }
@@ -345,8 +348,6 @@
               "duplicate-variant",
               "unresolved-variable",
               "unknown-function",
-              "unsupported-expression",
-              "unsupported-statement",
               "bad-selector",
               "bad-operand",
               "bad-option",
