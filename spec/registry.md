@@ -410,28 +410,6 @@ with _options_ on the _expression_ taking priority over any option values of the
 > would be formatted with the resolved options
 > `{ currencySign: 'accounting', fractionDigits: 'none', currency: 'USD' }`.
 
-##### Default Value of `select` Option
-
-The value `plural` is the default for the option `select` 
-because it is the most common use case for numeric selection.
-It can be used for exact value matches but also allows for the grammatical needs of 
-languages using CLDR's plural rules.
-This might not be noticeable in the source language (particularly English), 
-but can cause problems in target locales that the original developer is not considering.
-
-> For example, a naive developer might use a special message for the value `1` without
-> considering a locale's need for a `one` plural:
-> ```
-> .input {$var :currency}
-> .match $var
-> 1   {{You have one last chance}}
-> one {{You have {$var} chance remaining}}
-> *   {{You have {$var} chances remaining}}
-> ```
->
-> The `one` variant is needed by languages such as Polish or Russian.
-> Such locales typically also require other keywords such as `two`, `few`, and `many`.
-
 #### Selection
 
 The _function_ `:currency` performs selection as described in [Number Selection](#number-selection) below.
@@ -479,9 +457,10 @@ All other values produce a _Bad Operand_ error.
 
 ### Currency Operands
 
-The _operand_ of the `:currency` function is an implementation-defined type that
-contains a numerical `value` and a `currency` code.
-The value of `currency` MUST be either a 
+The _operand_ of the `:currency` function is one or more implementation-defined types
+each of which contains a numerical `value` and a `currency`
+or a [Number Operand](#number-operands), if used with the _option_ `currency`.
+The value of `currency` MUST be either a string containing a
 valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
 or an implementation-defined currency type.
 
