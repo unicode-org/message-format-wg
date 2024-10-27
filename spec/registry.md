@@ -384,7 +384,7 @@ Setting some other number of `fractionDigits` allows greater precision display
 
 The following options and their values are required to be available on the function `:currency`:
 - `select`
-   -  `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
+   -  `plural` (default)
    -  `ordinal`
    -  `exact`
 - `currency`
