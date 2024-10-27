@@ -3,6 +3,7 @@
   "scenario": "Date function",
   "description": "The built-in formatter for dates.",
   "defaultTestProperties": {
+    "bidiIsolation": "none",
     "locale": "en-US",
     "expErrors": false
   },
