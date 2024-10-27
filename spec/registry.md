@@ -480,10 +480,8 @@ All other values produce a _Bad Operand_ error.
 ### Currency Operands
 
 The _operand_ of the `:currency` function is an implementation-defined type that
-contains a number and a currency code
-or a map whose keys are `value` and `currency`.
-When the _operand_ is a map, the value of `value` MUST be a [Number Operand](#number-operands).
-When the _operand_ is a map, the value of `currency` MUST be either a 
+contains a numerical `value` and a `currency` code.
+The value of `currency` MUST be either a 
 valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
 or an implementation-defined currency type.
 
@@ -493,8 +491,7 @@ or an implementation-defined currency type.
 
 The _operand_ MAY be a [Number Operand](#number-operands), as long as the option `currency`
 is provided.
-The option `currency` MUST NOT be used to override the currency of an implementation-defined type
-or of a map containing a `currency` field.
+The option `currency` MUST NOT be used to override the currency of an implementation-defined type.
 Using this option in such a case results in a _Bad Option_ error.
 
 ### Digit Size Options
