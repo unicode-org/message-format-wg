@@ -267,7 +267,8 @@ the following steps are taken:
 
    - The current _locale_,
      potentially including a fallback chain of locales.
-   - The base directionality of the _message_ and its _text_ tokens.
+   - The base directionality of the _expression_.
+     By default, this is undefined or empty.
 
    If the resolved mapping of _options_ includes any _`u:` options_
    supported by the implementation, process them as specified.
