@@ -327,10 +327,40 @@ together with the resolved options' values.
 The function `:currency` is an OPTIONAL selector and formatter for currency values, 
 which are a specialized form of numeric selection and formatting.
 
-#### `:currency` Operands
+#### Operands
 
-The function `:currency` requires a [Currency Operand](#currency-operands) as its _operand_
-or a [Number Operand](#number-operands), if used with the _option_ `currency`.
+The _operand_ of the `:currency` function can be one of any number of
+implementation-defined types,
+each of which contains a numerical `value` and a `currency`;
+or it can be a [Number Operand](#number-operands), as long as the option
+`currency` is provided.
+The option `currency` MUST NOT be used to override the currency of an implementation-defined type.
+Using this option in such a case results in a _Bad Option_ error.
+
+The value of the _operand_'s `currency` MUST be either a string containing a
+valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+or an implementation-defined currency type.
+
+A [Number Operand](#number-operands) without a `currency` _option_ results in a _Bad Operand_ error.
+
+> [!NOTE]
+> For example, in ICU4J, the type `com.ibm.icu.util.CurrencyAmount` can be used
+> to set the amount and currency.
+
+> [!NOTE]
+> For runtime environments that do not provide a ready-made data structure,
+> class, or type for currency values, the implementation ought to provide
+> a data structure, convenience function, or documentation on how to encode
+> the value and currency code for formatting.
+> For example, such an implementation might define a "currency operand"
+> to include a key-value structure with specific keys to be the
+> local currency operand, which might look like the following:
+> ```json
+> "operandName": {
+>    "value": 123.45,
+>    "currency": "EUR"
+> }
+> ```
 
 #### Options
 
@@ -454,24 +484,6 @@ All other values produce a _Bad Operand_ error.
 > a value that includes a unit
 > or the type `com.ibm.icu.util.CurrencyAmount` can be used to set the currency and related
 > options (such as the number of fraction digits).
-
-### Currency Operands
-
-The _operand_ of the `:currency` function is one or more implementation-defined types
-each of which contains a numerical `value` and a `currency`
-or a [Number Operand](#number-operands), if used with the _option_ `currency`.
-The value of `currency` MUST be either a string containing a
-valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
-or an implementation-defined currency type.
-
-> [!NOTE]
-> For example, in ICU4J, the type `com.ibm.icu.util.CurrencyAmount` can be used
-> to set the amount and currency.
-
-The _operand_ MAY be a [Number Operand](#number-operands), as long as the option `currency`
-is provided.
-The option `currency` MUST NOT be used to override the currency of an implementation-defined type.
-Using this option in such a case results in a _Bad Option_ error.
 
 ### Digit Size Options
 
