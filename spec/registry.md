@@ -324,7 +324,7 @@ together with the resolved options' values.
 
 ### The `:currency` function
 
-The function `:currency` is an OPTIONAL selector and formatter for currency values, 
+The function `:currency` is a selector and formatter for currency values, 
 which are a specialized form of numeric selection and formatting.
 
 #### Operands
@@ -373,9 +373,24 @@ the value of other options, or all of these.
 Fraction digits for currency values behave differently than for other numeric formatters.
 The number of fraction digits displayed is usually set by the currency used.
 For example, USD uses 2 fraction digits, while JPY uses none.
-Setting `fractionDigits` to `none` makes the display and selection work similar to `:integer`.
 Setting some other number of `fractionDigits` allows greater precision display
 (such as when performing currency conversions or other specialized operations)
+or disabling fraction digits if set to `0`.
+The special _option_ _value_ `hideIfWhole` is used to display values without
+fraction digits when the number of fraction digits is zero,
+or based on the currency when the number of fraction digits for the currency is non-zero.
+> For example, this _message_:
+> ```
+> The special price is {$price :currency fractionDigits=hideIfWhole}.
+> ```
+> When used with the value `5.00 USD` in the `en-US` locale displays as:
+> ```
+> The special price is $5.
+> ```
+> But like this when when value is `5.01 USD`:
+> ```
+> The special price is $5.01.
+> ```
 
 > [!NOTE]
 > Except where noted otherwise, the names of _options_ and their _values_ were derived from the
@@ -419,7 +434,7 @@ The following options and their values are required to be available on the funct
   - ([digit size option](#digit-size-options), default: `1`)
 - `fractionDigits` (unlike number/integer formats, the fraction digits for currency formatting are fixed)
   - `auto` (default) (the number of digits used by the currency)
-  - `none`
+  - `hideIfWhole` (see note above)
   - ([digit size option](#digit-size-options))
 - `minimumSignificantDigits`
   - ([digit size option](#digit-size-options))
