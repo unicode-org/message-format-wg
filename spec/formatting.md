@@ -333,7 +333,15 @@ Implementation-defined _functions_ SHOULD use an implementation-defined _namespa
 
 #### Option Resolution
 
-The result of resolving _option_ values is an unordered mapping of string identifiers to values.
+**_<dfn>Option resolution</dfn>_** is the process of computing the _options_
+for a given _expression_. 
+_Option resolution_ results in a mapping of string _identifiers_ to _values_.
+The order of _options_ MUST NOT be significant.
+
+> For example, the following _message_ treats both both placeholders identically:
+> ```
+> {$x :function option1=foo option2=bar} {$x :function option2=bar option1=foo}
+> ```
 
 For each _option_:
 
