@@ -12,12 +12,12 @@ complex-body      = quoted-pattern / matcher
 input-declaration = input o variable-expression
 local-declaration = local s variable o "=" o expression
 
-quoted-pattern    = o "{{" pattern "}}"
+quoted-pattern    = "{{" pattern "}}"
 
 matcher           = match-statement s variant *(o variant)
 match-statement   = match 1*(s selector)
 selector          = variable
-variant           = key *(s key) quoted-pattern
+variant           = key *(s key) o quoted-pattern
 key               = literal / "*"
 
 ; Expressions
