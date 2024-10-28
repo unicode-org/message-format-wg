@@ -356,7 +356,7 @@ A [Number Operand](#number-operands) without a `currency` _option_ results in a 
 > to include a key-value structure with specific keys to be the
 > local currency operand, which might look like the following:
 > ```json
-> "operandName": {
+> {
 >    "value": 123.45,
 >    "currency": "EUR"
 > }
