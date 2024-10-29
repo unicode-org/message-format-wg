@@ -60,23 +60,23 @@ nor be made available to _function handlers_.
 > An implementation MUST ensure that every _expression_ in a _message_
 > is evaluated at most once.
 
+> [!NOTE]
+>
+> Implementations with lazy evaluation MUST NOT use a
+> call-by-name evaluation strategy. Instead, they must evaluate expressions
+> at most once ("call-by-need").
+> This is to prevent _expressions_ from having different values
+> when used in different parts of a given _message_.
+> _Function handlers_ are not necessarily pure: they can access
+> external mutable state such as the current system clock time.
+> Thus, evaluating the same _expression_ more than once
+> could yield different results. That behavior violates this specification.
+
 > [!IMPORTANT]
 > Implementations and users SHOULD NOT create _function handlers_
 > that mutate external program state,
 > particularly since such a _function handler_ can present a remote execution hazard.
 >
-
-> [!NOTE]
->
-> Function handlers can be written that depend on external mutable state
-> (for example, the current date and time).
-> Lazy evaluation might involve evaluating the same _expression_ multiple times
-> (call-by-name) or evaluating every expression at most once (call-by-need).
-> This justifies the requirement to ensure that every _expression_ is
-> evaluated at most once: different invocations of the same function handler
-> might return different results (functions are not pure).
-> This means that lazy implementations cannot use
-> a call-by-name evaluation strategy.
 
 ## Formatting Context
 
