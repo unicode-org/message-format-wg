@@ -1,6 +1,6 @@
 # Function Composition
 
-Status: **Proposed**
+Status: **Obsolete**
 
 <details>
 	<summary>Metadata</summary>
@@ -11,22 +11,20 @@ Status: **Proposed**
 		<dd>2024-03-26</dd>
 		<dt>Pull Requests</dt>
 		<dd>#753</dd>
+		<dd>#806</dd>
 	</dl>
 </details>
 
-## Objective
+## Objectives
 
-_What is this proposal trying to achieve?_
+* Present a complete list of alternative designs for how to
+provide the machinery for function composition.
+* Create a shared vocabulary for discussing these alternatives.
 
-### Non-goal
-
-The objective of this design document is not to make
-a concrete proposal, but rather to explore a problem space.
-This space is complicated enough that agreement on vocabulary
-is desired before defining a solution.
-
-Instead of objectives, we present a primary problem
-and a set of subsidiary problems.
+> [!NOTE]
+> This design document is preserved as part of a valuable conversation about
+> function composition, but it is not the basis for the design eventually
+> accepted.
 
 ### Problem statement: defining resolved values
 
@@ -838,7 +836,10 @@ so that functions can be passed the values they need.
 It also needs to provide a mechanism for declaring
 when functions can compose with each other.
 
-Other requirements:
+### Guarantee portability
+
+A message that has a valid result in one implementation
+should not result in an error in a different implementation.
 
 ### Identify a set of use cases that must be supported
 
@@ -975,26 +976,217 @@ Hence, revisiting the extensibility of the runtime model
 now that the data model is settled
 may result in a more workable solution.
 
-## Proposed design and alternatives considered
+## Alternatives to be considered
 
-These sections are omitted from this document and will be added in
-a future follow-up document,
-given the length so far and need to agree on a common vocabulary.
+The goal of this section is to present a _complete_ list of
+alternatives that may be considered by the working group.
 
-We expect that any proposed design
-would fall into one of the following categories:
+Each alternative corresponds to a different concrete
+definition of "resolved value".
 
-1. Provide a general mechanism for custom function authors
-to specify how functions compose with each other.
-1. Specify composition rules for built-in functions,
-but not in general, allowing custom functions
-to cooperate in an _ad hoc_ way.
-1. Recommend a rich representation of resolved values
-without specifying any constraints on how these values
-are used.
-(This is the approach in [PR 645](https://github.com/unicode-org/message-format-wg/pull/645).)
-1. Restrict function composition for built-in functions
-(in order to prevent unintuitive behavior).
+## Introducing type names
+
+It's useful to be able to refer to three types:
+
+* `InputType`: This type encompasses strings, numbers, date/time values,
+all other possible implementation-specific types that input variables can be
+assigned to. The details are implementation-specific.
+* `MessageValue`: The "resolved value" type; see [PR 728](https://github.com/unicode-org/message-format-wg/pull/728).
+* `ValueType`: This type is the union of an `InputType` and a `MessageValue`.
+
+It's tagged with a string tag so functions can do type checks.
+
+```
+interface ValueType {
+    type(): string
+    value(): unknown
+}
+```
+
+## Alternatives to consider
+
+In lieu of the usual "Proposed design" and "Alternatives considered" sections,
+we offer some alternatives already considered in separate discussions.
+
+Because of our constraints, implementations are **not required**
+to use the `MessageValue` interface internally as described in
+any of the sections.
+The purpose of defining the interface is to guide implementors.
+An implementation that uses different types internally
+but allows the same observable behavior for composition
+is compliant with the spec.
+
+Five alternatives are presented:
+1. Typed functions
+2. Formatted value model
+3. Preservation model
+4. Allow both kinds of composition
+5. Don't allow composition
+
+### Typed functions
+
+Types are a way for users of a language
+to reason about the kinds of data
+that functions can operate on.
+The most ambitious solution is to specify
+a type system for MessageFormat functions.
+
+In this solution, `ValueType` is not what is defined above,
+but instead is the most general type
+in a system of user-defined types.
+(The internal definitions are omitted.)
+Using the function registry,
+each custom function could declare its own argument type
+and result type.
+This does not imply the existence of any static typechecking.
+
+Example B1:
+```
+    .local $age = {$person :getAge}
+    .local $y = {$age :duration skeleton=yM}
+    .local $z = {$y :uppercase}
+```
+
+In an informal notation,
+the three custom functions in this example
+have the following type signatures:
+
+```
+getAge : Person -> Number
+duration : Number -> String
+uppercase : String -> String
+```
+
+The [function registry data model](https://github.com/unicode-org/message-format-wg/blob/main/spec/registry.md)
+could be extended to define `Number` and `String`
+as subtypes of `MessageValue`.
+A custom function author could use the custom
+registry they define to define `Person` as
+a subtype of `MessageValue`.
+
+An optional static typechecking pass (linting)
+would then detect any cases where functions are composed in a way that
+doesn't make sense. The advantage of this approach is documentation.
+
+### Formatted value model (Composition operates on output)
+
+To implement the "formatted value" model,
+the `MessageValue` definition would look as in [PR 728](https://github.com/unicode-org/message-format-wg/pull/728), but without
+the `resolvedOptions()` method:
+
+```ts
+interface MessageValue {
+    formatToString(): string
+    formatToX(): X // where X is an implementation-defined type
+    getValue(): ValueType
+    selectKeys(keys: string[]): string[]
+}
+```
+
+`MessageValue` is effectively a `ValueType` with methods.
+
+Using this definition would make some of the use cases
+impractical. For example, the result of Example A4
+might be surprising. Also, Example 1.3 from
+[the dataflow composability design doc](https://github.com/unicode-org/message-format-wg/blob/main/exploration/dataflow-composability.md)
+wouldn't work because options aren't preserved.
+
+### Preservation model (Composition can operate on input and options)
+
+In the preservation model,
+functions "pipeline" the input through multiple calls.
+
+The `ValueType` definition is different:
+
+```ts
+interface ValueType {
+    type(): string
+    value(): InputType | MessageValue
+}
+```
+
+The resolved value interface would include both "input"
+and "output" methods:
+
+```ts
+interface MessageValue {
+    formatToString(): string
+    formatToX(): X // where X is an implementation-defined type
+    getInput(): ValueType
+    getOutput(): ValueType
+    properties(): { [key: string]: ValueType }
+    selectKeys(keys: string[]): string[]
+}
+```
+
+Compared to PR 728:
+The `resolvedOptions()` method is renamed to `properties`.
+Individual function implementations
+choose which options to pass through into the resulting
+`MessageValue`. 
+
+Instead of using `unknown` as the result type of `getValue()`,
+we use `ValueType`, mentioned previously.
+Instead of using `unknown` as the value type for the
+`properties()` object, we use `ValueType`,
+since options can also be full `MessageValue`s with their own options.
+(The motivation for this is Example 1.3 from
+[the "dataflow composability" design doc](https://github.com/unicode-org/message-format-wg/blob/main/exploration/dataflow-composability.md).)
+
+This solution allows functions to pipeline input,
+operate on output, or both; as well as to examine
+previously passed options. Any example from this
+document can be implemented.
+
+Without a mechanism for type signatures,
+it may be hard for users to tell which combinations
+of functions compose without errors,
+and for implementors to document that information
+for users.
+
+### Allow both kinds of composition (with different syntax)
+
+By introducing new syntax, the same function could have
+either "preservation" or "formatted value" behavior.
+
+Consider (this suggestion is from Elango Cheran):
+
+```
+    .local $x = {$num :number maxFrac=2}
+    .pipeline $y = {$x :number maxFrac=5 padStart=3}
+    {{$x} {$y}}
+```
+
+`.pipeline` would be a new keyword that acts like `.local`,
+except that if its expression has a function annotation,
+the formatter would apply the "preservation model" semantics
+to the function.
+
+### Don't allow composition for built-in functions
+
+Another option is to define the built-in functions this way,
+notionally:
+
+```
+number : Number -> FormattedNumber
+date   : Date -> FormattedDate
+```
+
+The `MessageValue` type would be defined the same way
+as in the formatted value model.
+
+The difference is that built-in functions
+would not accept a "formatted result"
+(would signal a runtime error in these cases).
+
+As with the formatted value model, this restricts the
+behavior of custom functions.
+
+### Non-alternative: Allow composition in some implementations
+
+Allow composition only if the implementation requires functions to return a resolved value as defined in [PR 728](https://github.com/unicode-org/message-format-wg/pull/728).
+
+This violates the portability requirement.
 
 ## Acknowledgments
 

@@ -12,12 +12,12 @@ complex-body      = quoted-pattern / matcher
 input-declaration = input o variable-expression
 local-declaration = local s variable o "=" o expression
 
-quoted-pattern    = o "{{" pattern "}}"
+quoted-pattern    = "{{" pattern "}}"
 
 matcher           = match-statement s variant *(o variant)
 match-statement   = match 1*(s selector)
 selector          = variable
-variant           = key *(s key) quoted-pattern
+variant           = key *(s key) o quoted-pattern
 key               = literal / "*"
 
 ; Expressions
@@ -76,8 +76,7 @@ content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %x41-5B        ; omit \ (%x5C)
                   / %x5D-7A        ; omit { | } (%x7B-7D)
                   / %x7E-2FFF      ; omit IDEOGRAPHIC SPACE (%x3000)
-                  / %x3001-D7FF    ; omit surrogates
-                  / %xE000-10FFFF
+                  / %x3001-10FFFF  ; allowing surrogates is intentional
 
 ; Character escapes
 escaped-char = backslash ( backslash / "{" / "|" / "}" )

@@ -58,10 +58,6 @@ declarations, options, and attributes to be optional rather than required proper
 > In the MessageFormat 2 [syntax](/spec/syntax.md), the source for these `name` fields
 > sometimes uses the production `identifier`.
 > This happens when the named item, such as a _function_, supports namespacing.
->
-> In the Tech Preview, feedback on whether to separate the `namespace` from the `name`
-> and represent both separately, or just, as here, use an opaque single field `name`
-> is desired.
 
 ## Messages
 
