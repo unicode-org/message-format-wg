@@ -59,7 +59,8 @@ nor be made available to _function handlers_.
 > appear in the _message_.
 > An implementation MUST ensure that every _expression_ in a _message_
 > is evaluated at most once.
->
+
+> [!IMPORTANT]
 > Implementations and users SHOULD NOT create _function handlers_
 > that mutate external program state,
 > particularly since such a _function handler_ can present a remote execution hazard.
