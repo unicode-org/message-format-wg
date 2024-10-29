@@ -97,6 +97,13 @@ Implementations may even support users creating their own functions.
 
 See more examples and the formal definition of the grammar in [spec/syntax.md](./spec/syntax.md).
 
+## Developer Documentation
+
+Unofficial documentation for developers on MessageFormat 2 syntax and on using it with
+various programming languages can be found at [messageformat.dev](https://messageformat.dev/),
+which also includes an interactive [playground](https://messageformat.dev/playground/)
+for experimenting with message syntax.
+
 ## Normative Changes during Tech Preview
 
 The Working Group continues to address feedback
