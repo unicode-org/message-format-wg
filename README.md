@@ -99,7 +99,7 @@ See more examples and the formal definition of the grammar in [spec/syntax.md](.
 
 ## Developer Documentation
 
-Documentation for developers on MessageFormat 2 syntax and on using it with
+Unofficial documentation for developers on MessageFormat 2 syntax and on using it with
 various programming languages can be found at [messageformat.dev](https://messageformat.dev/),
 which also includes an interactive [playground](https://messageformat.dev/playground/)
 for experimenting with message syntax.
