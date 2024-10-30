@@ -384,7 +384,6 @@ its _resolved value_ contains the implementation-defined integer value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
-====
 
 ### `:unit` function
 
@@ -424,7 +423,7 @@ A [Number Operand](#number-operands) without a `unit` _option_ results in a _Bad
 > For example, such an implementation might define a "unit operand"
 > to include a key-value structure with specific keys to be the
 > local unit operand, which might look like the following:
-> ```json
+> ```
 > {
 >    "value": 123.45,
 >    "unit": "kilometer",
@@ -451,6 +450,10 @@ The following options and their values are required to be available on the funct
 - `perUnit`
   - valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
     (no default)
+- `unitDisplay`
+  - `short` (default)
+  - `narrow`
+  - `long`
 - `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
    - `short` (default)
    - `long`
@@ -460,6 +463,12 @@ The following options and their values are required to be available on the funct
 - `numberingSystem`
    - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
      (default is locale-specific)
+- `signDisplay`
+   -  `auto` (default)
+   -  `always`
+   -  `exceptZero`
+   -  `negative`
+   -  `never`
 - `useGrouping`
   - `auto` (default)
   - `always`
@@ -524,7 +533,6 @@ together with the resolved options' values.
 > (for example, trying to convert meters to gallons produced a _Bad Option_)
 > nor will all implementations support conversion.
 
-====
 
 ### Number Operands
 
