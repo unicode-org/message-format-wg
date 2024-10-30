@@ -384,6 +384,148 @@ its _resolved value_ contains the implementation-defined integer value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
+====
+
+### `:unit` function
+
+The function `:unit` is a selector and formatter for unitized values,
+that is, numeric values associated with a unit of measurement.
+This is a specialized form of numeric selection and formatting.
+
+> [!IMPORTANT]
+> Implementation of this function is **_OPTIONAL_**.
+> Any implementation of this function is strongly encouraged to follow this specification.
+
+#### Operands
+
+The _operand_ of the `:unit` function can be one of any number of
+implementation-defined types,
+each of which contains a numerical `value` plus a `unit` and optionally a `perUnit`.
+or it can be a [Number Operand](#number-operands), as long as at least the option
+`unit` is provided.
+The options `unit` and `perUnit` MAY be used to override the units of an implementation-defined type,
+provided the units are compatible and the implementation supports conversion.
+
+The value of the _operand_'s `unit` SHOULD be either a string containing a
+valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
+or an implementation-defined unit type.
+
+A [Number Operand](#number-operands) without a `unit` _option_ results in a _Bad Operand_ error.
+
+> [!NOTE]
+> For example, in ICU4J, the type `com.ibm.icu.util.Measure` can be used
+> to set the `value` and `unit` (and optionally the `perUnit`).
+
+> [!NOTE]
+> For runtime environments that do not provide a ready-made data structure,
+> class, or type for currency values, the implementation ought to provide
+> a data structure, convenience function, or documentation on how to encode
+> the value, unit, and optionally per-unit for formatting.
+> For example, such an implementation might define a "unit operand"
+> to include a key-value structure with specific keys to be the
+> local unit operand, which might look like the following:
+> ```json
+> {
+>    "value": 123.45,
+>    "unit": "kilometer",
+>    "perUnit": "hour"
+> }
+> ```
+
+#### Options
+
+Some options do not have default values defined in this specification.
+The defaults for these options are implementation-dependent.
+In general, the default values for such options depend on the locale, 
+the unit,
+the value of other options, or all of these.
+
+The following options and their values are required to be available on the function `:currency`:
+- `select`
+   -  `plural` (default)
+   -  `ordinal`
+   -  `exact`
+- `unit`
+   - valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
+     (no default)
+- `perUnit`
+  - valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
+    (no default)
+- `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
+   - `short` (default)
+   - `long`
+- `notation`
+   - `standard` (default)
+   - `compact`
+- `numberingSystem`
+   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+     (default is locale-specific)
+- `useGrouping`
+  - `auto` (default)
+  - `always`
+  - `never`
+  - `min2`
+- `minimumIntegerDigits`
+  - ([digit size option](#digit-size-options), default: `1`)
+- `minimumFractionDigits`
+  - ([digit size option](#digit-size-options))
+- `maximumFractionDigits`
+  - ([digit size option](#digit-size-options))
+- `minimumSignificantDigits`
+  - ([digit size option](#digit-size-options))
+- `maximumSignificantDigits`
+  - ([digit size option](#digit-size-options))
+
+If the _operand_ of the _expression_ is an implementation-defined type,
+such as the _resolved value_ of an _expression_ with a `:unit` _annotation_,
+it can include option values.
+These are included in the resolved option values of the _expression_,
+with _options_ on the _expression_ taking priority over any option values of the _operand_.
+
+> For example, the _placeholder_ in this _message_:
+> ```
+> .input {$n :unit unit=furlong minimumFractionDigits=2}
+> {{{$n :unit minimumIntegerDigits=1}}}
+> ```
+> would have the resolved options:
+> `{ unit: 'furlong', minimumFractionDigits: '2', minimumIntegerDigits: '1' }`.
+
+Not all per-units are compatible with the primary unit.
+Implementations will produce a _Bad Option_ error for units 
+or combinations of units and per-units that are not supported.
+
+#### Selection
+
+The _function_ `:unit` performs selection as described in [Number Selection](#number-selection) below.
+
+#### Composition
+
+When an _operand_ or an _option_ value uses a _variable_ annotated,
+directly or indirectly, by a `:unit` _annotation_,
+its _resolved value_ contains an implementation-defined unit value
+of the _operand_ of the annotated _expression_,
+together with the resolved options' values.
+
+> [!NOTE]
+> Some implementations support conversation between compatible units.
+> For example, consider the value:
+> ```
+> {
+>    "value": 123.5,
+>    "unit": "meter"
+> }
+> ```
+> The following _message_ might convert the formatted result to U.S. customary units:
+> ```
+> You have {$v :unit unit=foot} to go.
+> ```
+> Care has to be excersized with this type of operation.
+> Not all units support conversion
+> (for example, trying to convert meters to gallons produced a _Bad Option_)
+> nor will all implementations support conversion.
+
+====
+
 ### Number Operands
 
 The _operand_ of a number function is either an implementation-defined type or
