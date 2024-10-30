@@ -417,7 +417,7 @@ A [Number Operand](#number-operands) without a `unit` _option_ results in a _Bad
 
 > [!NOTE]
 > For runtime environments that do not provide a ready-made data structure,
-> class, or type for currency values, the implementation ought to provide
+> class, or type for unit values, the implementation ought to provide
 > a data structure, convenience function, or documentation on how to encode
 > the value, unit, and optionally per-unit for formatting.
 > For example, such an implementation might define a "unit operand"
@@ -439,7 +439,7 @@ In general, the default values for such options depend on the locale,
 the unit,
 the value of other options, or all of these.
 
-The following options and their values are required to be available on the function `:currency`:
+The following options and their values are required to be available on the function `:unit`:
 - `select`
    -  `plural` (default)
    -  `ordinal`
