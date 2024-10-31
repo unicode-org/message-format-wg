@@ -499,6 +499,27 @@ with _options_ on the _expression_ taking priority over any option values of the
 > would have the resolved options:
 > `{ unit: 'furlong', minimumFractionDigits: '2', minimumIntegerDigits: '1' }`.
 
+Some implementations support conversion between compatible units.
+Attempting to convert units (by specifying the `unit` option)
+produces a _Bad Option_ error if conversion is unsupported
+or if the specified units are incompatible.
+For example, trying to convert meters to gallons produces a _Bad Option_.
+
+Implementations MUST NOT substitute the unit without performing the associated conversion.
+
+> For example, consider the value:
+> ```
+> {
+>    "value": 123.5,
+>    "unit": "meter"
+> }
+> ```
+> The following _message_ might convert the formatted result to U.S. customary units:
+> ```
+> You have {$v :unit unit=foot maximumFractionDigits=0} to go.
+> ```
+> This can produce "You have 405 feet to go."
+
 Not all per-units are compatible with the primary unit.
 Implementations will produce a _Bad Option_ error for units 
 or combinations of units and per-units that are not supported.
@@ -514,25 +535,6 @@ directly or indirectly, by a `:unit` _annotation_,
 its _resolved value_ contains an implementation-defined unit value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
-
-> [!NOTE]
-> Some implementations support conversion between compatible units.
-> For example, consider the value:
-> ```
-> {
->    "value": 123.5,
->    "unit": "meter"
-> }
-> ```
-> The following _message_ might convert the formatted result to U.S. customary units:
-> ```
-> You have {$v :unit unit=foot} to go.
-> ```
-> Care has to be exercised with this type of operation.
-> Not all units support conversion
-> (for example, trying to convert meters to gallons produced a _Bad Option_)
-> nor will all implementations support conversion.
-
 
 ### Number Operands
 
