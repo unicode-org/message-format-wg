@@ -399,10 +399,10 @@ This is a specialized form of numeric selection and formatting.
 
 The _operand_ of the `:unit` function can be one of any number of
 implementation-defined types,
-each of which contains a numerical `value` plus a `unit` and optionally a `perUnit`.
-or it can be a [Number Operand](#number-operands), as long as at least the option
+each of which contains a numerical `value` plus a `unit`
+or it can be a [Number Operand](#number-operands), as long as the option
 `unit` is provided.
-The options `unit` and `perUnit` MAY be used to override the units of an implementation-defined type,
+The option `unit` MAY be used to override the units of an implementation-defined type,
 provided the units are compatible and the implementation supports conversion.
 
 The value of the _operand_'s `unit` SHOULD be either a string containing a
@@ -412,22 +412,21 @@ or an implementation-defined unit type.
 A [Number Operand](#number-operands) without a `unit` _option_ results in a _Bad Operand_ error.
 
 > [!NOTE]
-> For example, in ICU4J, the type `com.ibm.icu.util.Measure` can be used
-> to set the `value` and `unit` (and optionally the `perUnit`).
+> For example, in ICU4J, the type `com.ibm.icu.util.Measure` might be used
+> as an _operand_ for `:unit` because it contains the `value` and `unit`.
 
 > [!NOTE]
 > For runtime environments that do not provide a ready-made data structure,
 > class, or type for unit values, the implementation ought to provide
 > a data structure, convenience function, or documentation on how to encode
-> the value, unit, and optionally per-unit for formatting.
+> the value and unit for formatting.
 > For example, such an implementation might define a "unit operand"
 > to include a key-value structure with specific keys to be the
 > local unit operand, which might look like the following:
 > ```
 > {
 >    "value": 123.45,
->    "unit": "kilometer",
->    "perUnit": "hour"
+>    "unit": "kilometer-per-hour"
 > }
 > ```
 
@@ -447,8 +446,8 @@ The following options and their values are required to be available on the funct
 - `unit`
    - valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
      (no default)
-- `perUnit`
-  - valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
+- `usage`
+  - valid usage identifier (TBD)
     (no default)
 - `unitDisplay`
   - `short` (default)
@@ -500,7 +499,7 @@ with _options_ on the _expression_ taking priority over any option values of the
 > `{ unit: 'furlong', minimumFractionDigits: '2', minimumIntegerDigits: '1' }`.
 
 Some implementations support conversion between compatible units.
-Attempting to convert units (by specifying the `unit` option)
+Attempting to convert units (by specifying the `usage` option)
 produces a _Bad Option_ error if conversion is unsupported
 or if the specified units are incompatible.
 For example, trying to convert meters to gallons produces a _Bad Option_.
@@ -520,9 +519,9 @@ Implementations MUST NOT substitute the unit without performing the associated c
 > ```
 > This can produce "You have 405 feet to go."
 
-Not all per-units are compatible with the primary unit.
+Not all usages are compatible with the unit.
 Implementations will produce a _Bad Option_ error for units 
-or combinations of units and per-units that are not supported.
+or combinations of units and usages that are not supported.
 
 #### Selection
 
