@@ -483,7 +483,8 @@ The following options and their values are required to be available on the funct
   - ([digit size option](#digit-size-options))
 - `maximumSignificantDigits`
   - ([digit size option](#digit-size-options))
-
+- `usage`
+    - Well-formed and valid usage identifiers are defined in [Unicode Preferences](https://www.unicode.org/reports/tr35/tr35-info.html#unit-preferences).
 If the _operand_ of the _expression_ is an implementation-defined type,
 such as the _resolved value_ of an _expression_ with a `:unit` _annotation_,
 it can include option values.
