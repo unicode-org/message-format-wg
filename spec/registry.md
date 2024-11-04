@@ -392,15 +392,22 @@ or based on the currency when the number of fraction digits for the currency is 
 > The special price is $5.01.
 > ```
 
+Implementations MAY internally alias option values that they do not have data or a backing implementation for.
+Notably, the `currencyDisplay` option has a rich set of values that mirrors developments in CLDR data.
+Some implementations might not be able to produce all of these formats for every currency.
+
 > [!NOTE]
 > Except where noted otherwise, the names of _options_ and their _values_ were derived from the
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
 > in JavaScript's `Intl.NumberFormat`.
 
+> [!NOTE]
+> The option `select` does not accept the value `ordinal` because selecting
+> currency values using ordinal rules makes no sense.
+
 The following options and their values are required to be available on the function `:currency`:
 - `select`
    -  `plural` (default)
-   -  `ordinal`
    -  `exact`
 - `currency`
    - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
@@ -417,14 +424,14 @@ The following options and their values are required to be available on the funct
 - `currencySign`
   - `accounting`
   - `standard` (default)
-- `currencyDisplay` (this option's values are derived from those in ICU NumberFormatter)
-  - `auto` (default)
+- `currencyDisplay` (this option's values are derived from those in ICU [NumberFormatter.UnitWidth](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/number/NumberFormatter.UnitWidth.html))
   - `narrow`
-  - `short`
-  - `iso`
+  - `short` (default)
   - `full`
+  - `iso`
   - `formal`
   - `variant`
+  - `none` (this is called `hidden` in ICU)
 - `useGrouping`
   - `auto` (default)
   - `always`
@@ -449,11 +456,11 @@ with _options_ on the _expression_ taking priority over any option values of the
 
 > For example, the _placeholder_ in this _message_:
 > ```
-> .input {$n :currency currency=USD fractionDigits=none}
+> .input {$n :currency currency=USD fractionDigits=hideIfWhole}
 > {{{$n :currency currencySign=accounting}}}
 > ```
 > would be formatted with the resolved options
-> `{ currencySign: 'accounting', fractionDigits: 'none', currency: 'USD' }`.
+> `{ currencySign: 'accounting', fractionDigits: 'hideIfWhole', currency: 'USD' }`.
 
 #### Selection
 
