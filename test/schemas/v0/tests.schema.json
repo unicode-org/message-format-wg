@@ -175,8 +175,17 @@
       "type": "string"
     },
     "src": {
-      "description": "The MF2 syntax source.",
-      "type": "string"
+      "oneOf": [
+        {
+          "description": "The MF2 syntax source.",
+          "type": "string"
+        },
+        {
+          "description": "The MF2 syntax source, as an array of strings to be concatenated.",
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      ]
     },
     "bidiIsolation": {
       "description": "The bidi isolation strategy.",
