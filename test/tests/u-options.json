@@ -3,6 +3,7 @@
   "scenario": "u: Options",
   "description": "Common options affecting the function context",
   "defaultTestProperties": {
+    "bidiIsolation": "default",
     "locale": "en-US"
   },
   "tests": [
@@ -24,7 +25,7 @@
           "type": "markup",
           "kind": "close",
           "id": "x",
-          "name": "tag"
+          "name": "ns:tag"
         }
       ]
     },
@@ -45,7 +46,7 @@
         {
           "type": "markup",
           "kind": "close",
-          "name": "tag"
+          "name": "ns:tag"
         }
       ]
     },
@@ -74,32 +75,31 @@
       "src": "hello {world :string u:dir=rtl}",
       "exp": "hello \u2067world\u2069",
       "expParts": [
-        {
-          "type": "literal",
-          "value": "hello "
-        },
+        { "type": "literal", "value": "hello " },
+        { "type": "bidiIsolation", "value": "\u2067" },
         {
           "type": "string",
           "source": "|world|",
           "dir": "rtl",
+          "locale": "en-US",
           "value": "world"
-        }
+        },
+        { "type": "bidiIsolation", "value": "\u2069" }
       ]
     },
     {
       "src": "hello {world :string u:dir=auto}",
       "exp": "hello \u2068world\u2069",
       "expParts": [
-        {
-          "type": "literal",
-          "value": "hello "
-        },
+        { "type": "literal", "value": "hello " },
+        { "type": "bidiIsolation", "value": "\u2068" },
         {
           "type": "string",
           "source": "|world|",
-          "dir": "auto",
+          "locale": "en-US",
           "value": "world"
-        }
+        },
+        { "type": "bidiIsolation", "value": "\u2069" }
       ]
     },
     {
@@ -120,7 +120,7 @@
     {
       "locale": "ar",
       "src": "أهلاً {بالعالم :string}",
-      "exp": "أهلاً \u2067بالعالم\u2069"
+      "exp": "أهلاً \u2068بالعالم\u2069"
     }
   ]
 }

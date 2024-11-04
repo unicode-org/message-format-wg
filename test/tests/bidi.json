@@ -2,6 +2,7 @@
   "scenario": "Bidi support",
   "description": "Tests for correct parsing of messages with bidirectional marks and isolates",
   "defaultTestProperties": {
+    "bidiIsolation": "default",
     "locale": "en-US"
   },
   "tests": [
@@ -13,17 +14,17 @@
     {
         "description": "complex-message   = o *(declaration o) complex-body o",
         "src": "\u200E .local $x = {1} {{ {$x}}}",
-        "exp": " 1"
+        "exp": " \u20681\u2069"
     },
     {
         "description": "complex-message   = o *(declaration o) complex-body o",
         "src": ".local $x = {1} \u200F {{ {$x}}}",
-        "exp": " 1"
+        "exp": " \u20681\u2069"
     },
     {
         "description": "complex-message   = o *(declaration o) complex-body o",
         "src": ".local $x = {1} {{ {$x}}} \u2066",
-        "exp": " 1"
+        "exp": " \u20681\u2069"
     },
     {
         "description": "input-declaration = input o variable-expression",
@@ -79,12 +80,12 @@
     {
         "description": "literal-expression  = \"{\" o literal [s function] *(s attribute) o \"}\"",
         "src": "{\u200E hello \u200F}",
-        "exp": "hello"
+        "exp": "\u2068hello\u2069"
     },
     {
         "description": "variable-expression = \"{\" o variable [s function] *(s attribute) o \"}\"",
         "src": ".local $x = {1} {{ {\u200E $x \u200F} }}",
-        "exp": " 1 "
+        "exp": " \u20681\u2069 "
     },
     {
         "description": "function-expression = \"{\" o function *(s attribute) o \"}\"",
@@ -114,7 +115,7 @@
     {
         "description":  " name... excludes U+FFFD and U+061C -- this pases as name -> [bidi] name-start *name-char",
         "src": ".local $\u061Cfoo = {1} {{ {$\u061Cfoo} }}",
-        "exp": " 1 "
+        "exp": " \u20681\u2069 "
     },
     {
         "description":  " name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName but excludes U+FFFD and U+061C",
@@ -124,17 +125,17 @@
     {
         "description":  "name       = [bidi] name-start *name-char [bidi]",
         "src": ".local $\u200Efoo\u200F = {3} {{{$\u200Efoo\u200F}}}",
-        "exp": "3"
+        "exp": "\u20683\u2069"
     },
     {
         "description":  "name       = [bidi] name-start *name-char [bidi]",
         "src": ".local $foo = {4} {{{$\u200Efoo\u200F}}}",
-        "exp": "4"
+        "exp": "\u20684\u2069"
     },
     {
         "description":  "name       = [bidi] name-start *name-char [bidi]",
         "src": ".local $\u200Efoo\u200F = {5} {{{$foo}}}",
-        "exp": "5"
+        "exp": "\u20685\u2069"
     },
     {
         "description":  "name       = [bidi] name-start *name-char [bidi]",
