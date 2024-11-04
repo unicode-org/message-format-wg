@@ -387,7 +387,7 @@ together with the resolved options' values.
 
 ### `:unit` function
 
-The function `:unit` is a selector and formatter for unitized values,
+The _function_ `:unit` is a selector and formatter for unitized values,
 that is, numeric values associated with a unit of measurement.
 This is a specialized form of numeric selection and formatting.
 
@@ -432,11 +432,11 @@ A [Number Operand](#number-operands) without a `unit` _option_ results in a _Bad
 
 #### Options
 
-Some options do not have default values defined in this specification.
-The defaults for these options are implementation-dependent.
-In general, the default values for such options depend on the locale, 
+Some _options_ do not have default values defined in this specification.
+The defaults for these _options_ are implementation-dependent.
+In general, the default values for such _options_ depend on the locale, 
 the unit,
-the value of other options, or all of these.
+the value of other _options_, or all of these.
 
 > [!NOTE]
 > The option `select` does not accept the value `ordinal` because selecting
@@ -449,7 +449,7 @@ The following options and their values are required to be available on the funct
 - `unit`
    - valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
      (no default)
-- `usage`
+- `usage` \[OPTIONAL\]
     - Well-formed and valid usage identifiers are defined in [Unicode Preferences](https://www.unicode.org/reports/tr35/tr35-info.html#unit-preferences).
     - (no default)
 - `unitDisplay`
@@ -501,7 +501,8 @@ with _options_ on the _expression_ taking priority over any option values of the
 > would have the resolved options:
 > `{ unit: 'furlong', minimumFractionDigits: '2', minimumIntegerDigits: '1' }`.
 
-Some implementations support conversion to the locale's preferred units via the `usage` option.
+Some implementations support conversion to the locale's preferred units via the `usage` _option_.
+Implementing this _option_ is optional.
 Attempting to convert units produces a _Bad Option_ error if such conversion is unsupported
 or if the specified units are incompatible.
 For example, trying to convert meters to a `volume` unit (such as "gallons") produces a _Bad Option_.
