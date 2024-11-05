@@ -3,9 +3,8 @@
 This section describes the functions for which each implementation MUST provide
 a _function handler_ to be conformant with this specification.
 
-Implementations MAY implement additional _functions_ or additional _options_.
-In particular, implementations are encouraged to provide feedback on proposed
-_options_ and their values.
+Implementations MAY implement additional _functions_,
+additional _options_, and additional _option_ values.
 
 > [!NOTE]
 > The [Stability Policy](/spec#stability-policy) allows for updates to
