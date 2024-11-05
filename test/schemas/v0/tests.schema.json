@@ -181,7 +181,7 @@
           "type": "string"
         },
         {
-          "description": "The MF2 syntax source, as an array of strings to be concatenated.",
+          "description": "An array of strings to be concatenated as the source message in the MF2 format.",
           "type": "array",
           "items": { "type": "string" }
         }
