@@ -338,7 +338,7 @@ The option `currency` MUST NOT be used to override the currency of an implementa
 Using this option in such a case results in a _Bad Option_ error.
 
 The value of the _operand_'s `currency` MUST be either a string containing a
-valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+well-formed [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
 or an implementation-defined currency type.
 
 A [Number Operand](#number-operands) without a `currency` _option_ results in a _Bad Operand_ error.
@@ -346,6 +346,14 @@ A [Number Operand](#number-operands) without a `currency` _option_ results in a 
 > [!NOTE]
 > For example, in ICU4J, the type `com.ibm.icu.util.CurrencyAmount` can be used
 > to set the amount and currency.
+
+> [!NOTE]
+> The `currency` is only required to be well-formed rather than checked for validity.
+> This allows new currency codes to be defined 
+> (there are many recent examples of this occuring).
+> It also avoids requiring implementations to check currency codes for validity,
+> although implementations are permitted to emit _Bad Option_ or _Bad Operand_ for invalid codes.
+> A well-formed currency code matches the regular expression `^[A-Z]{3}$`.
 
 > [!NOTE]
 > For runtime environments that do not provide a ready-made data structure,
@@ -410,7 +418,7 @@ The following options and their values are required to be available on the funct
    -  `plural` (default)
    -  `exact`
 - `currency`
-   - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+   - well-formed [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
      (no default)
 - `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
    - `short` (default)
