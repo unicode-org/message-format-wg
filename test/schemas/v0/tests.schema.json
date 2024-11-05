@@ -177,7 +177,7 @@
     "src": {
       "oneOf": [
         {
-          "description": "The MF2 syntax source.",
+          "description": "The source message in the MF2 format.",
           "type": "string"
         },
         {
