@@ -1,11 +1,34 @@
 # MessageFormat 2.0 Default Function Registry
 
-This section describes the functions for which each implementation MUST provide
-a _function handler_ to be conformant with this specification.
+This section defines the **standard** _functions_ which are REQUIRED for conformance with this specification,
+along with **optional** _functions_ that SHOULD be implemented to support
+additional functionality.
 
-Implementations MAY implement additional _functions_ or additional _options_.
-In particular, implementations are encouraged to provide feedback on proposed
-_options_ and their values.
+Implementations MUST define and support each **standard** _function_ and
+MUST accept all _options_ and _option_ values defined as **standard** listed in this specification.
+
+When defined and supported by an implementation, each **optional** _function_ 
+MUST accept all _options_ and _option_ values listed as **standard** in this specification.
+
+Implementations SHOULD implement _options_ and _option_ values that are marked as **optional**.
+
+Implementations MAY implement _functions_ not defined in this specification.
+Such functions MUST use an implementation-defined _namespace_.
+In addition, implementations are encouraged to provide mechanisms for users to
+register and use user-defined _functions_ and their associated _functional handlers_.
+
+Implementations MAY implement additional _options_ not defined here.  
+Such _options_ MUST use an implementation-specific _namespace_.
+
+Implementations MAY implement additional _option_ values for _options_ defined here,
+although care needs to be exercised to ensure interoperability
+and to avoid collisions with future standardization.
+There is no namespace mechanism for _option_ values,
+however, the [stability policy](#stability-policy) for this specification 
+permits only the ranges a-z, A-Z, and 0-9 in _option_ values.
+Implementation-defined values SHOULD use a distinguishing character 
+or character sequence, such as by prefixing with a `_` U+005F LOW LINE,
+to ensure that they don't collide with future standardization.
 
 > [!NOTE]
 > The [Stability Policy](/spec#stability-policy) allows for updates to
