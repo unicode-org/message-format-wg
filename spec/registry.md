@@ -443,7 +443,7 @@ The following options and their values are required to be available on the funct
 - `currencySign`
   - `accounting`
   - `standard` (default)
-- `currencyDisplay` (this option's values are derived from those in ICU [NumberFormatter.UnitWidth](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/number/NumberFormatter.UnitWidth.html))
+- `currencyDisplay`
   - `narrowSymbol`
   - `symbol` (default)
   - `name`
