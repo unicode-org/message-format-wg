@@ -156,6 +156,9 @@ The following options and their values are required to be available on the funct
   - ([digit size option](#digit-size-options))
 - `maximumSignificantDigits`
   - ([digit size option](#digit-size-options))
+- `trailingZeroDisplay`
+  - `auto` (default)
+  - `stripIfInteger`
 
 If the _operand_ of the _expression_ is an implementation-defined type,
 such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
@@ -389,12 +392,15 @@ For example, USD uses 2 fraction digits, while JPY uses none.
 Setting some other number of `fractionDigits` allows greater precision display
 (such as when performing currency conversions or other specialized operations)
 or disabling fraction digits if set to `0`.
-The special _option_ _value_ `hideIfWhole` is used to display values without
-fraction digits when the number of fraction digits is zero,
-or based on the currency when the number of fraction digits for the currency is non-zero.
+
+The _option_ `trailingZeroDisplay` has a value `stripIfInteger` that is useful 
+for displaying currencies with their fraction digits removed when the fraction
+part of the _operand_ is zero.
+This is sometimes used in _messages_ to make the displayed value omit the fraction part
+automatically.
 > For example, this _message_:
 > ```
-> The special price is {$price :currency fractionDigits=hideIfWhole}.
+> The special price is {$price :currency trailingZeroDisplay=stripIfInteger}.
 > ```
 > When used with the value `5.00 USD` in the `en-US` locale displays as:
 > ```
@@ -471,11 +477,11 @@ with _options_ on the _expression_ taking priority over any option values of the
 
 > For example, the _placeholder_ in this _message_:
 > ```
-> .input {$n :currency currency=USD fractionDigits=hideIfWhole}
+> .input {$n :currency currency=USD trailingZeroDisplay=stripIfInteger}
 > {{{$n :currency currencySign=accounting}}}
 > ```
 > would be formatted with the resolved options
-> `{ currencySign: 'accounting', fractionDigits: 'hideIfWhole', currency: 'USD' }`.
+> `{ currencySign: 'accounting', trailingZeroDisplay: 'stripIfInteger', currency: 'USD' }`.
 
 #### Selection
 
