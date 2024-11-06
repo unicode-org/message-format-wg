@@ -340,6 +340,12 @@ Using this option in such a case results in a _Bad Option_ error.
 The value of the _operand_'s `currency` MUST be either a string containing a
 well-formed [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
 or an implementation-defined currency type.
+Although currency codes are expected to be uppercase,
+implementations SHOULD treat them in a case-insensitive manner.
+A well-formed Unicode Currency Identifier matches the production `currency_code` in this ABNF:
+```abnf
+currency_code = 3ALPHA
+```
 
 A [Number Operand](#number-operands) without a `currency` _option_ results in a _Bad Operand_ error.
 
@@ -353,7 +359,6 @@ A [Number Operand](#number-operands) without a `currency` _option_ results in a 
 > (there are many recent examples of this occuring).
 > It also avoids requiring implementations to check currency codes for validity,
 > although implementations are permitted to emit _Bad Option_ or _Bad Operand_ for invalid codes.
-> A well-formed currency code matches the regular expression `^[A-Z]{3}$`.
 
 > [!NOTE]
 > For runtime environments that do not provide a ready-made data structure,
@@ -363,7 +368,7 @@ A [Number Operand](#number-operands) without a `currency` _option_ results in a 
 > For example, such an implementation might define a "currency operand"
 > to include a key-value structure with specific keys to be the
 > local currency operand, which might look like the following:
-> ```json
+> ```
 > {
 >    "value": 123.45,
 >    "currency": "EUR"
