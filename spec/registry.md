@@ -454,12 +454,14 @@ The following options and their values are required to be available on the funct
   - ([digit size option](#digit-size-options), default: `1`)
 - `fractionDigits` (unlike number/integer formats, the fraction digits for currency formatting are fixed)
   - `auto` (default) (the number of digits used by the currency)
-  - `hideIfWhole` (see note above)
   - ([digit size option](#digit-size-options))
 - `minimumSignificantDigits`
   - ([digit size option](#digit-size-options))
 - `maximumSignificantDigits`
   - ([digit size option](#digit-size-options))
+- `trailingZeroDisplay`
+  - `auto` (default)
+  - `stripIfInteger`
 
 If the _operand_ of the _expression_ is an implementation-defined type,
 such as the _resolved value_ of an _expression_ with a `:currency` _annotation_,
