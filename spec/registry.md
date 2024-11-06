@@ -14,7 +14,7 @@ Implementations SHOULD implement _options_ and _option_ values that are marked a
 
 Implementations MAY implement _functions_ not defined in this specification.
 Such functions MUST use an implementation-defined _namespace_.
-In addition, implementations are encouraged to provide mechanisms for users to
+In addition, implementations SHOULD provide mechanisms for users to
 register and use user-defined _functions_ and their associated _functional handlers_.
 
 Implementations MAY implement additional _options_ not defined here.  
