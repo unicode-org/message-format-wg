@@ -303,6 +303,8 @@ function `:integer`:
   - ([digit size option](#digit-size-options), default: `1`)
 - `maximumSignificantDigits`
   - ([digit size option](#digit-size-options))
+- `offset` (optional)
+  - ([digit size option](#digit-size-options), default: `0`)
 
 If the _operand_ of the _expression_ is an implementation-defined type,
 such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
@@ -346,6 +348,12 @@ are encouraged to track development of these options during Tech Preview:
    - `long`
    - `short` (default)
    - `narrow`
+
+The support for the `offset` option is optional.
+The _resolved value_ of the _expression_ is determined by first subtracting the numeric value of `offset` from the  _operand_,
+and then resolving the _expression_ on the calculated value.
+Implementations that don't support `offset` don't do any subtraction.
+It is the same as subtracting the numeric value of `0`, the default value of `offset`.
 
 ##### Default Value of `select` Option
 
