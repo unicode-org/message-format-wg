@@ -156,6 +156,8 @@ The following options and their values are required to be available on the funct
   - ([digit size option](#digit-size-options))
 - `maximumSignificantDigits`
   - ([digit size option](#digit-size-options))
+- `offset` (optional)
+  - ([digit size option](#digit-size-options), default: `0`)
 
 If the _operand_ of the _expression_ is an implementation-defined type,
 such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
@@ -201,6 +203,12 @@ are encouraged to track development of these options during Tech Preview:
    - `long`
    - `short` (default)
    - `narrow`
+
+The support for the `offset` option is optional.
+The _resolved value_ of the _expression_ is determined by first subtracting the numeric value of `offset` from the  _operand_,
+and then resolving the _expression_ on the calculated value.
+Implementations that don't support `offset` don't do any subtraction.
+It is the same as subtracting the numeric value of `0`, the default value of `offset`.
 
 ##### Default Value of `select` Option
 
@@ -449,6 +457,9 @@ Number selection has three modes:
 - `ordinal` selection matches the operand to explicit numeric keys exactly
   followed by an ordinal rule category if there is no explicit match
 
+When the selection mode is `plural` implementations can optionaly support
+the `offset` option ([digit size option](#digit-size-options), default: `0`).
+
 When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
 where `resolvedSelector` is the _resolved value_ of a _selector_
 and `keys` is a list of strings,
@@ -456,7 +467,9 @@ numeric selectors perform as described below.
 
 1. Let `exact` be the JSON string representation of the numeric value of `resolvedSelector`.
    (See [Determining Exact Literal Match](#determining-exact-literal-match) for details)
-1. Let `keyword` be a string which is the result of [rule selection](#rule-selection) on `resolvedSelector`.
+1. Let `keyword` be a string which is the result of [rule selection](#rule-selection) on `resolvedSelector` minus the numeric value of the `offset` option.
+   Implementations that don't implement the `offset` option don't need to subtract anything.
+   It is the same as subtracting the numeric value of `0`, the default value of `offset`.
 1. Let `resultExact` be a new empty list of strings.
 1. Let `resultKeyword` be a new empty list of strings.
 1. For each string `key` in `keys`:
