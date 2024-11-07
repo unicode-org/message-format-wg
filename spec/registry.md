@@ -156,7 +156,7 @@ The following options and their values are required to be available on the funct
   - ([digit size option](#digit-size-options))
 - `maximumSignificantDigits`
   - ([digit size option](#digit-size-options))
-- `offset` (optional)
+- `offset` **optional**
   - ([digit size option](#digit-size-options), default: `0`)
 
 If the _operand_ of the _expression_ is an implementation-defined type,
