@@ -486,6 +486,22 @@ The following options and their values are required to be available on the funct
   - ([digit size option](#digit-size-options))
 - `maximumSignificantDigits`
   - ([digit size option](#digit-size-options))
+- `roundingPriority`
+  - `auto` (default)
+  - `morePrecision`
+  - `lessPrecision`
+- `roundingIncrement`
+  - 1 (default), 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000, 2500, and 5000
+- `roundingMode`
+  - `ceil`
+  - `floor`
+  - `expand`
+  - `trunc`
+  - `halfCeil`
+  - `halfFloor`
+  - `halfExpand` (default)
+  - `halfTrunc`
+  - `halfEven`
 
 If the _operand_ of the _expression_ is an implementation-defined type,
 such as the _resolved value_ of an _expression_ with a `:unit` _annotation_,
