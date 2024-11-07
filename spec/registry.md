@@ -303,7 +303,7 @@ function `:integer`:
   - ([digit size option](#digit-size-options), default: `1`)
 - `maximumSignificantDigits`
   - ([digit size option](#digit-size-options))
-- `offset` (optional)
+- `offset` **optional**
   - ([digit size option](#digit-size-options), default: `0`)
 
 If the _operand_ of the _expression_ is an implementation-defined type,
