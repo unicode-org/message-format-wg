@@ -27,7 +27,7 @@ listed as **standard** for that _function_.
 Implementations SHOULD _accept_ _options_ and _option_ values that are marked as **optional**.
 
 Implementations MAY _accept_ _functions_ not defined in this specification.
-Such functions MUST use an implementation-defined _namespace_.
+Functions not defined by any version of this specification MUST use an implementation-defined _namespace_.
 In addition, implementations SHOULD provide mechanisms for users to
 register and use user-defined _functions_ and their associated _functional handlers_.
 
