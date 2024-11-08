@@ -4,15 +4,29 @@ This section defines the **standard** _functions_ which are REQUIRED for conform
 along with **optional** _functions_ that SHOULD be implemented to support
 additional functionality.
 
-Implementations MUST define and support each **standard** _function_ and
-MUST accept all _options_ and _option_ values defined as **standard** listed in this specification.
+To **_<dfn>accept</dfn>_** a function means that an implementation MUST NOT
+emit an _Unknown Function_ error for that _function_'s _identifier_.
+To _accept_ an option means that an implementation MUST NOT
+emit a _Bad Option_ error for that _option_'s _identifier_ when used with the _function_
+it is defined for
+and MUST NOT emit a _Bad Option_ error for any of the _option_ values
+(both **standard** and **optional**)
+defined for that _option_.
+Accepting a _function_ or its _options_ does not mean that any given output is produced.
 
-When defined and supported by an implementation, each **optional** _function_ 
-MUST accept all _options_ and _option_ values listed as **standard** in this specification.
+_Functions_ can define _options_. 
+An _option_ can be **standard** or **optional**.
 
-Implementations SHOULD implement _options_ and _option_ values that are marked as **optional**.
+Implementations MUST _accept_ each **standard** _function_ and
+MUST _accept_ all _options_ and _option_ values defined as **standard** for those _functions_.
 
-Implementations MAY implement _functions_ not defined in this specification.
+Implementations SHOULD _accept_ each **optional** _function_. 
+For each such _function_, the implementation MUST accept all _options_ and _option_ values 
+listed as **standard** for that _function_.
+
+Implementations SHOULD _accept_ _options_ and _option_ values that are marked as **optional**.
+
+Implementations MAY _accept_ _functions_ not defined in this specification.
 Such functions MUST use an implementation-defined _namespace_.
 In addition, implementations SHOULD provide mechanisms for users to
 register and use user-defined _functions_ and their associated _functional handlers_.
@@ -20,7 +34,7 @@ register and use user-defined _functions_ and their associated _functional handl
 Implementations MAY implement additional _options_ not defined here.  
 Such _options_ MUST use an implementation-specific _namespace_.
 
-Implementations MAY implement additional _option_ values for _options_ defined here,
+Implementations MAY _accept_ additional _option_ values for _options_ defined here,
 although care needs to be exercised to ensure interoperability
 and to avoid collisions with future standardization.
 There is no namespace mechanism for _option_ values,
