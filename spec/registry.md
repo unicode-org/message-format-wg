@@ -12,7 +12,7 @@ it is defined for
 and MUST NOT emit a _Bad Option_ error for any of the _option_ values
 (both **standard** and **optional**)
 defined for that _option_.
-Accepting a _function_ or its _options_ does not mean that any given output is produced.
+Accepting a _function_ or its _options_ does not mean that a particular output is produced.
 
 _Functions_ can define _options_. 
 An _option_ can be **standard** or **optional**.
