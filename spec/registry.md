@@ -31,7 +31,8 @@ Functions not defined by any version of this specification MUST use an implement
 In addition, implementations SHOULD provide mechanisms for users to
 register and use user-defined _functions_ and their associated _functional handlers_.
 
-Implementations MAY implement additional _options_ not defined here.  
+Implementations MAY implement additional _options_ not defined here
+for **standard** and **optional** functions.
 Such _options_ MUST use an implementation-specific _namespace_.
 
 Implementations MAY _accept_ additional _option_ values for _options_ defined here,
