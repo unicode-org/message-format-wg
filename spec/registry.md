@@ -6,7 +6,7 @@ additional functionality.
 
 To **_<dfn>accept</dfn>_** a function means that an implementation MUST NOT
 emit an _Unknown Function_ error for that _function_'s _identifier_.
-To _accept_ an option means that an implementation MUST NOT
+To _accept_ an option means that a _function handler_ MUST NOT
 emit a _Bad Option_ error for that _option_'s _identifier_ when used with the _function_
 it is defined for
 and MUST NOT emit a _Bad Option_ error for any of the _option_ values
