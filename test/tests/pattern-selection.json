@@ -58,7 +58,11 @@
       "exp": "1.0"
     },
     {
-      "src": ".input {$x :test:select decimalPlaces=9} .local $y = {$x :test:select decimalPlaces=1} .match $y 1.0 {{1.0}} 1 {{1}} * {{bad-option-value}}",
+      "srcs": [".input {$x :test:select decimalPlaces=9}",
+               ".local $y = {$x :test:select decimalPlaces=1}",
+               ".match $y 1.0",
+               "{{1.0}} 1",
+               "{{1}} * {{bad-option-value}}",
       "params": [{ "name": "x", "value": 1 }],
       "exp": "bad-option-value",
       "expErrors": [
@@ -91,28 +95,64 @@
       ]
     },
     {
-      "src": ".local $x = {1 :test:select} .local $y = {1 :test:select} .match $x $y 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
+      "src": [".local $x = {1 :test:select}",
+              ".local $y = {1 :test:select}",
+              ".match $x $y",
+              "1 1 {{1,1}}",
+              "1 * {{1,*}}",
+              "* 1 {{*,1}}",
+              "* * {{*,*}}",
       "exp": "1,1"
     },
     {
-      "src": ".local $x = {1 :test:select} .local $y = {0 :test:select} .match $x $y 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
+      "src": [".local $x = {1 :test:select}",
+              ".local $y = {0 :test:select}",
+              ".match $x $y",
+              "1 1 {{1,1}}",
+              "1 * {{1,*}}",
+              "* 1 {{*,1}}",
+              "* * {{*,*}}",
       "exp": "1,*"
     },
     {
-      "src": ".local $x = {0 :test:select} .local $y = {1 :test:select} .match $x $y 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
+      "src": [".local $x = {0 :test:select}",
+              ".local $y = {1 :test:select}",
+              ".match $x $y",
+              "1 1 {{1,1}}",
+                "1 * {{1,*}}",
+              "* 1 {{*,1}}",
+              "* * {{*,*}}",
       "exp": "*,1"
     },
     {
-      "src": ".local $x = {0 :test:select} .local $y = {0 :test:select} .match $x $y 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
+      "src": [".local $x = {0 :test:select}",
+              ".local $y = {0 :test:select}",
+              ".match $x $y",
+              "1 1 {{1,1}}",
+              "1 * {{1,*}}",
+              "* 1 {{*,1}}",
+              "* * {{*,*}}",
       "exp": "*,*"
     },
     {
-      "src": ".local $x = {1 :test:select fails=select} .local $y = {1 :test:select} .match $x $y 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
+      "src": [".local $x = {1 :test:select fails=select}",
+              ".local $y = {1 :test:select}",
+              ".match $x $y",
+              "1 1 {{1,1}}",
+              "1 * {{1,*}}",
+              "* 1 {{*,1}}",
+              "* * {{*,*}}",
       "exp": "*,1",
       "expErrors": [{ "type": "bad-selector" }]
     },
     {
-      "src": ".local $x = {1 :test:select} .local $y = {1 :test:format} .match $x $y 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
+      "src": [".local $x = {1 :test:select}",
+              ".local $y = {1 :test:format}",
+              ".match $x $y",
+              "1 1 {{1,1}}",
+              "1 * {{1,*}}",
+              "* 1 {{*,1}}",
+              "* * {{*,*}}",
       "exp": "1,*",
       "expErrors": [{ "type": "bad-selector" }]
     }
