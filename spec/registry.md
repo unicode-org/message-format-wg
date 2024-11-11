@@ -13,6 +13,8 @@ and MUST NOT emit a _Bad Option_ error for any of the _option_ values
 (both **standard** and **optional**)
 defined for that _option_.
 Accepting a _function_ or its _options_ does not mean that a particular output is produced.
+Implementations MAY emit an _Unsupported Operation_ error for _options_
+or _option_ values that they cannot support.
 
 _Functions_ can define _options_. 
 An _option_ can be **standard** or **optional**.
@@ -36,24 +38,20 @@ Implementations MAY implement additional _options_ not defined here
 for **standard** and **optional** functions.
 Such _options_ MUST use an implementation-specific _namespace_.
 
-Implementations MAY _accept_ additional _option_ values for _options_ defined here,
-although care needs to be exercised to ensure interoperability
-and to avoid collisions with future standardization.
-There is no namespace mechanism for _option_ values,
-however, the [stability policy](#stability-policy) for this specification 
-permits only the ranges a-z, A-Z, and 0-9 in _option_ values.
-Implementation-defined values SHOULD use a distinguishing character 
-or character sequence, such as by prefixing with a `_` U+005F LOW LINE,
-to ensure that they don't collide with future standardization.
+Implementations MAY _accept_ additional _option_ values for _options_ defined here.
+However, such values might become defined with a different meaning in the future,
+including with a different, incompatible name
+or using an incompatible value space.
+Supporting implementation-specific _option_ values for **standard** or **optional** functions is NOT RECOMMENDED.
 
-> [!NOTE]
-> The [Stability Policy](/spec#stability-policy) allows for updates to
-> Default Registry functions to add support for new options.
-> As implementations are permitted to ignore options that they do not support,
-> it is possible to write messages using options not defined below
-> which currently format with no error, but which could produce errors
-> when formatted with a later edition of the Default Registry.
-> Therefore, using options not explicitly defined here is NOT RECOMMENDED.
+Future versions of this specification MAY define additional _options_ and _option_ values,
+subject to the rules in the [Stability Policy](#stability-policy),
+for _functions_ found in this specification.
+As implementations are permitted to ignore _options_ that they do not support,
+it is possible to write _messages_ using _options_ not defined below
+which currently format with no error, but which could produce errors
+when formatted with a later edition of this specification.
+Therefore, using _options_ not explicitly defined here is NOT RECOMMENDED.
 
 ## String Value Selection and Formatting
 
