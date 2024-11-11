@@ -266,8 +266,9 @@ the following steps are taken:
 
 1. If the _expression_ includes an _operand_, resolve its value.
    If this is a _fallback value_,
-   return the _fallback value_ as the _resolved value_ of the _expression_.
-2. Resolve the _identifier_ of the _function_ and, based on the starting sigil,
+   return a _fallback value_ as the _resolved value_ of the _expression_.
+
+2. Resolve the _identifier_ of the _function_ and
    find the appropriate _function handler_ to call.
    If the implementation cannot find the _function handler_,
    or if the _identifier_ includes a _namespace_ that the implementation does not support,
@@ -292,7 +293,7 @@ the following steps are taken:
    supported by the implementation, process them as specified.
    Such `u:` options MAY be removed from the resolved mapping of _options_.
 
-5. Call the function implementation with the following arguments:
+5. Call the _function handler_ with the following arguments:
 
    - The _function context_.
    - The resolved mapping of _options_.
@@ -418,7 +419,8 @@ An _expression_ fails to resolve when:
 - A _variable_ used as its _operand_ resolves to a _fallback value_.
   Note that an _expression_ does not necessarily fail to resolve
   if an _option_ resolves with a _fallback value_.
-- A _function_ fails to resolve.
+- No _function handler_ is found for a _function_ _identifier_.
+- Calling a _function handler_ fails or does not return a valid value.
 
 The string representation of the _fallback value_ of an _expression_ depends on its contents:
 
@@ -433,23 +435,7 @@ The string representation of the _fallback value_ of an _expression_ depends on 
   > `{42 :func}` resolves to the _fallback value_ `|42|` and
   > `{|C:\\| :func}` resolves to the _fallback value_ `|C:\\|`.
 
-- _expression_ with a _variable_ _operand_ referring to a _declaration_:
-  the string representation of the _fallback value_ of the _expression_ of that _declaration_.
-
-  > Examples:
-  > In a context where `:func` fails to resolve,
-  > the _placeholder_ in `.local $var = {|val| :func} {{{$var}}}`
-  > resolves to the _fallback value_ `|val|`.
-  >
-  > In a context where `:pretty` fails to resolve but `:now` does not,
-  > the _placeholder_ in
-  > ```
-  > .local $t = {:now format=iso8601}
-  > {{{$t :pretty}}}
-  > ```
-  > resolves to the _fallback value_ `:now`.
-
-- _expression_ with _variable_ _operand_ not referring to a _declaration_:
+- _expression_ with _variable_ _operand_:
   the _fallback value_ representation of that _variable_,
   U+0024 DOLLAR SIGN `$` followed by the _name_ of the _variable_
 
@@ -457,6 +443,18 @@ The string representation of the _fallback value_ of an _expression_ depends on 
   > In a context where `$var` fails to resolve, `{$var}` and `{$var :number}`
   > both resolve to the _fallback value_ `$var`
   > (even if `:number` fails to resolve).
+  >
+  > In a context where `:func` fails to resolve,
+  > the _placeholder_ in `.local $var = {|val| :func} {{{$var}}}`
+  > resolves to the _fallback value_ `$var`.
+  >
+  > In a context where either `:now` or `:pretty` fails to resolve,
+  > the _placeholder_ in
+  > ```
+  > .local $time = {:now format=iso8601}
+  > {{{$time :pretty}}}
+  > ```
+  > resolves to the _fallback value_ `$time`.
 
 - _function_ _expression_ with no _operand_:
   U+003A COLON `:` followed by the _function_ _identifier_
