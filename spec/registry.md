@@ -381,6 +381,69 @@ together with the resolved options' values.
 
 The _function_ `:integer` performs selection as described in [Number Selection](#number-selection) below.
 
+### The `:math` function
+
+The function `:math` is a selector and formatter for matching or formatting
+numeric values to which a mathematical operation has been applied.
+
+> This function is useful for plural selection and formatting of an offset of an input value.
+> For example, it can be used in a message such as this:
+> ```
+> .input {$like_count :integer}
+> .local $others_count = {$like_count :math subtract=1}
+> .match $like_count $others_count
+> 0 * {{Your post has no likes.}}
+> 1 * {{{$name} liked your post.}}
+> * 1 {{{$name} and one other person liked your post.}}
+> * * {{{$name} and {$others_count} other people liked your post.}}
+> ```
+
+#### Operands
+
+The function `:math` requires a [Number Operand](#number-operands) as its _operand_.
+
+#### Options
+
+The options on `:math` are exclusive with each other,
+and exactly one option is always required.
+The options do not have default values.
+
+The following options and their values are
+required in the default registry to be available on the function `:math`:
+- `add`
+  - ([digit size option](#digit-size-options))
+- `subtract`
+  - ([digit size option](#digit-size-options))
+
+If no options or more than one option is set,
+or if an _option_ value is not a [digit size option](#digit-size-options),
+a _Bad Option_ error is emitted
+and a _fallback value_ used as the _resolved value_ of the _expression_.
+
+#### Resolved Value
+
+The _resolved value_ of an _expression_ with a `:math` _function_
+contains the implementation-defined numeric value
+of the _operand_ of the annotated _expression_.
+
+If the `add` option is set,
+the numeric value of the _resolved value_ is formed by incrementing
+the numeric value of the _operand_ by the integer value of the digit size option value.
+
+If the `subtract` option is set,
+the numeric value of the _resolved value_ is formed by decrementing
+the numeric value of the _operand_ by the integer value of the digit size option value.
+
+If the _operand_ of the _expression_ is an implementation-defined numeric type,
+such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
+it can include option values.
+These are included in the resolved option values of the _expression_.
+The `:math` _options_ are not included in the resolved option values.
+
+#### Selection
+
+The _function_ `:math` performs selection as described in [Number Selection](#number-selection) below.
+
 ### Number Operands
 
 The _operand_ of a number function is either an implementation-defined type or
