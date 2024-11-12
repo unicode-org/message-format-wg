@@ -57,6 +57,26 @@ nor be made available to _function handlers_.
 > _declarations_ affecting _variables_ referenced by that _expression_
 > have already been evaluated in the order in which the relevant _declarations_
 > appear in the _message_.
+> An implementation MUST ensure that every _expression_ in a _message_
+> is evaluated at most once.
+
+> [!NOTE]
+>
+> Implementations with lazy evaluation MUST NOT use a
+> call-by-name evaluation strategy. Instead, they must evaluate expressions
+> at most once ("call-by-need").
+> This is to prevent _expressions_ from having different values
+> when used in different parts of a given _message_.
+> _Function handlers_ are not necessarily pure: they can access
+> external mutable state such as the current system clock time.
+> Thus, evaluating the same _expression_ more than once
+> could yield different results. That behavior violates this specification.
+
+> [!IMPORTANT]
+> Implementations and users SHOULD NOT create _function handlers_
+> that mutate external program state,
+> particularly since such a _function handler_ can present a remote execution hazard.
+>
 
 ## Formatting Context
 
@@ -267,7 +287,8 @@ the following steps are taken:
 
    - The current _locale_,
      potentially including a fallback chain of locales.
-   - The base directionality of the _message_ and its _text_ tokens.
+   - The base directionality of the _expression_.
+     By default, this is undefined or empty.
 
    If the resolved mapping of _options_ includes any _`u:` options_
    supported by the implementation, process them as specified.
@@ -333,7 +354,15 @@ Implementation-defined _functions_ SHOULD use an implementation-defined _namespa
 
 #### Option Resolution
 
-The result of resolving _option_ values is an unordered mapping of string identifiers to values.
+**_<dfn>Option resolution</dfn>_** is the process of computing the _options_
+for a given _expression_. 
+_Option resolution_ results in a mapping of string _identifiers_ to _values_.
+The order of _options_ MUST NOT be significant.
+
+> For example, the following _message_ treats both both placeholders identically:
+> ```
+> {$x :function option1=foo option2=bar} {$x :function option2=bar option1=foo}
+> ```
 
 For each _option_:
 

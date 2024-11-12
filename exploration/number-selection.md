@@ -1,6 +1,6 @@
 # Selection on Numerical Values
 
-Status: **Accepted**
+Status: **Re-Opened**
 
 <details>
 	<summary>Metadata</summary>
@@ -13,6 +13,7 @@ Status: **Accepted**
 		<dt>Pull Request</dt>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/471">#471</a></dd>
 		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/621">#621</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/859">#859</a></dd>
 	</dl>
 </details>
 
@@ -53,6 +54,21 @@ Both JS and ICU PluralRules implementations provide for determining the plural c
 of a range based on its start and end values.
 Range-based selectors are not initially considered here.
 
+In <a href="https://github.com/unicode-org/message-format-wg/pull/842">PR #842</a>
+@eemeli points out a number of gaps or infelicities in the current specification
+and there was extensive discussion of how to address these gaps.
+
+The `key` for exact numeric match in a variant has to be a string. 
+The format of such strings, therefore, has to be specified if messages are to be portable and interoperable. 
+In LDML45 Tech Preview we selected JSON's number serialization as a source for `key` values.
+The JSON serialization is ambiguous, in that a given number value might be serialized validly in more than one way:
+```
+123
+123.0
+1.23E2
+... etc...
+```
+
 ## Use-Cases
 
 As a user, I want to write messages that use the correct plural for
@@ -68,13 +84,71 @@ As a user, I want to write messages that mix exact matching and
 either plural or ordinal selection in a single message. 
 > For example:
 >```
->.match {$numRemaining}
->0 {{You have no more chances remaining (exact match)}}
->1 {{You have one more chance remaining (exact match)}}
+>.match $numRemaining
+>0   {{You have no more chances remaining (exact match)}}
+>1   {{You have one more chance remaining (exact match)}}
 >one {{You have {$numRemaining} chance remaining (plural)}}
-> * {{You have {$numRemaining} chances remaining (plural)}}
+>*   {{You have {$numRemaining} chances remaining (plural)}}
 >```
 
+As a user, I want the selector to match the options specified:
+```
+.local $num = {123.123 :number maximumFractionDigits=2 minimumFractionDigits=2}
+.match $num
+123.12      {{This matches}}
+120         {{This does not match}}
+123.123     {{This does not match}}
+1.23123E2   {{Does this match?}}
+*           {{ ... }}
+```
+
+Note that badly written keys just don't match, but we want users to be able to intuit whether a given set of keys will work or not.
+
+```
+.local $num = {123.456 :integer}
+.match $num
+123.456 {{Should not match?}}
+123     {{Should match}}
+123.0   {{Should not match?}}
+*       {{ ... }}
+```
+
+There can be complications, which we might need to define. Consider:
+
+```
+.local $num = {123.002 :number maximumFractionDigits=1 minimumFractionDigits=0}
+.match $num
+123.002 {{Should not match?}}
+123.0   {{Does minimumFractionDigits make this not match?}}
+123     {{Does minimumFractionDigits make this match?}}
+*       {{ ... }}
+```
+
+As an implementer, I am concerned about the cost of incorporating _options_ into the selector. 
+This might be accomplished by building a "second formatter". 
+Some implementations, such as ICU4J's, might use interfaces like `FormattedNumber` to feed the selector. 
+Implementations might also apply options by modifying the number value of the _operand_ 
+(or shadowing the options effect on the value)
+
+As a user, I want to be able to perform exact match using arbitrary digit numeric types where they are available.
+
+As an implementer, I do **not** want to be required to provide or implement arbitrary precision
+numeric types not available in my platform.
+Programming/runtime environments vary widely in support of these types.
+MF2 should not prevent the implementation using, for example, `BigDecimal` or `BigInt` types
+and permit their use in MF2 messages.
+MF2 should not _require_ implementations to support such types where they do not exist.
+The problem of numeric type precision,
+which is implementation dependent,
+should not affect how message `key` values are specified.
+
+> For example:
+>```
+>.local $num = {11111111111111.11111111111111 :number}
+>.match $num
+>11111111111111.11111111111111 {{This works on some implementations.}}
+>* {{... but not on others? ...}}
+>```
 
 ## Requirements
 
@@ -278,7 +352,8 @@ but can cause problems in target locales that the original developer is not cons
 > considering other locale's need for a `one` plural:
 >
 > ```
-> .match {$var}
+> .input {$var :integer}
+> .match $var
 > 1   {{You have one last chance}}
 > one {{You have {$var} chance remaining}} // needed by languages such as Polish or Russian
 >                                          // such locales typically require other keywords
@@ -290,7 +365,13 @@ but can cause problems in target locales that the original developer is not cons
 ### Percent Style
 
 When implementing `style=percent`, the numeric value of the operand
-MUST be divided by 100 for the purposes of formatting.
+MUST be multiplied by 100 for the purposes of formatting.
+
+> For example,
+> ```
+> .local $percent = {1 :integer style=percent}
+> {{This formats as '100%' in the en-US locale: {$percent}}}
+> ```
 
 ### Selection
 
@@ -416,7 +497,9 @@ To expand on the last of these,
 consider this message:
 
 ```
-.match {$count :plural minimumFractionDigits=1}
+.input {$count :number minimumFractionDigits=1}
+.local $selector = {$count :plural}
+.match $selector
 0 {{You have no apples}}
 1 {{You have exactly one apple}}
 * {{You have {$count :number minimumFractionDigits=1} apples}}
@@ -431,9 +514,9 @@ With the proposed design, this message would much more naturally be written as:
 
 ```
 .input {$count :number minimumFractionDigits=1}
-.match {$count}
-0 {{You have no apples}}
-1 {{You have exactly one apple}}
+.match $count
+0.0 {{You have no apples}}
+1.0 {{You have exactly one apple}}
 one {{You have {$count} apple}}
 * {{You have {$count} apples}}
 ```
@@ -460,3 +543,96 @@ and they _might_ converge on some overlap that users could safely use across pla
 #### Cons
 
 - No guarantees about interoperability for a relatively core feature.
+
+## Alternatives Considered (`key` matching)
+
+### Standardize the Serialization Forms
+
+Modify the above exact match as follows.
+Note that this implementation is less restrictive than before, but still leaves some
+values that cannot be matched.
+> [!IMPORTANT]
+> The exact behavior of exact literal match is only defined for
+> a specific range of numeric values and does not support scientific notation.
+> Very large or very small numeric values will be difficult to perform
+> exact matching on.
+> Avoid depending on these types of keys in message selection.
+> [!IMPORTANT]
+> For implementations that do not have arbitrary precision numeric types
+> or operands that do not use these types,
+> it is possible to specify a key value that exceeds the precision
+> of the underlying type.
+> Such a key value will not work reliably or may not work at all
+> in such implementations.
+> Avoid depending on such keys values in message selection.
+Number literals in the MessageFormat 2 syntax use a subset of the 
+[format defined for a JSON number](https://www.rfc-editor.org/rfc/rfc8259#section-6).
+The resolved value of an `operand` exactly matches a numeric literal `key`
+if, when the `operand` is serialized using this format
+the two strings are equal.
+```abnf
+number   = [ "-" ] int [ fraction ]
+integer  = "0" / [ "-" ] (digit19 *DIGIT)
+int      = "0" / (digit19 *DIGIT)
+digit19  = %31-39 ; 1-9
+fraction = "." 1*DIGIT
+```
+If the function `:integer` is used or the `maximumFractionDigits` is 0,
+the production `integer` is used and any fractional amount is omitted,
+otherwise the `minimumFractionDigits` number of digits is produced,
+zero-filled as needed.
+The implementation applies the `maximumSignificantDigits` to the value
+being serialized.
+This might involve locally-specific rounding.
+The `minimumSignificantDigits` has no effect on the value produced for comparison.
+The option `signDisplay` has no effect on the value produced for comparison.
+> [!NOTE]
+> Implementations are not expected to implement this exactly as written,
+> as there are clearly optimizations that can be applied.
+> Here are some examples:
+> ```
+> .input {$num :integer}
+> .match $num
+> 0    {{The number 0}}
+> 1    {{The number 1}}
+> -1   {{The number -1}}
+> 1.0  {{This cannot match}}
+> 1.1  {{This cannot match}}
+> ```
+> ```
+> .input {$num :number maximumFractionDigits=2 minimumFractionDigits=2}
+> .match $num
+> 0      {{This does not match}}
+> 0.00   {{This matches the value 0}}
+> 0.0    {{This does not match}}
+> 0.000  {{This does not match}}
+> ```
+> ```
+> .input {$num :number minimumFractionDigits=2 maximumFractionDigits=5}
+> .match $num
+> 0.12       {{Matches the value 0.12}
+> 0.123      {{Matches the value 0.123}}
+> 0.12345    {{Matches the values 0.12345}}
+> 0.123456   {{Does not match}}
+> 0.12346    {{May match the value 0.123456 depending on local rounding mode?}}
+> ```
+> ```
+> .input {$num :number}
+> -0    {{Error: Bad Variant Key}}
+> -99   {{The value -99}}
+> 1111111111111111111111111111 {{Might exceed the size of local integer type, but is valid}}
+> 11111111111111.1111111111111 {{Might exceed local floating point precision, but is valid}}
+> 1.23e-37 {{Error: Bad Variant Key}}
+> ```
+
+
+
+### Compare numeric values
+
+This is the design proposed in #842.
+
+This modifies the key-match algorithm to use implementation-defined numeric value exact match:
+
+>   1. Let `exact` be the numeric value represented by `key`.
+>      1. If `value` and `exact` are numerically equal, then
+
