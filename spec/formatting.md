@@ -259,6 +259,12 @@ The resolution of a _variable_ fails if no value is identified for its _name_.
 If this happens, an _Unresolved Variable_ error is emitted
 and a _fallback value_ is used as the _resolved value_ of the _variable_.
 
+If the _resolved value_ identified for the _variable_ _name_ is a _fallback value_,
+a _fallback value_ is used as the _resolved value_ of the _variable_.
+
+The _fallback value_ representation of a _variable_ has a string representation
+consisting of the U+0024 DOLLAR SIGN `$` followed by the _name_ of the _variable_.
+
 ### Function Resolution
 
 To resolve an _expression_ with a _function_,
