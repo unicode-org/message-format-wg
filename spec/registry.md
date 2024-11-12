@@ -451,7 +451,7 @@ where `resolvedSelector` is the _resolved value_ of a _selector_
 and `keys` is a list of strings,
 numeric selectors perform as described below.
 
-1. Let `exact` be the JSON string representation of the numeric value of `resolvedSelector`.
+1. Let `exact` be the serialized representation of the numeric value of `resolvedSelector`.
    (See [Determining Exact Literal Match](#determining-exact-literal-match) for details)
 1. Let `keyword` be a string which is the result of [rule selection](#rule-selection) on `resolvedSelector`.
 1. Let `resultExact` be a new empty list of strings.
@@ -530,34 +530,24 @@ for examples.
 
 #### Determining Exact Literal Match
 
+If the numeric value of `resolvedSelector` is a non-negative integer
+and none of the following options are set for `resolvedSelector`,
+the serialized form of the numeric value MUST match the ABNF for `digit-size-option`,
+representing its decimal value:
+- `minimumFractionDigits`
+- `minimumIntegerDigits`
+- `minimumSignificantDigits`
+- `notation`
+- `style`
+
+Otherwise, the serialized form of the numeric value is implementation-defined.
+
 > [!IMPORTANT]
-> The exact behavior of exact literal match is currently only well defined for non-zero-filled
-> integer values.
-> Functions that use fraction digits or significant digits might work in specific
-> implementation-defined ways.
-> Users should avoid depending on these types of keys in message selection in this release.
-
-
-Number literals in the MessageFormat 2 syntax use the 
-[format defined for a JSON number](https://www.rfc-editor.org/rfc/rfc8259#section-6).
-A `resolvedSelector` exactly matches a numeric literal `key`
-if, when the numeric value of `resolvedSelector` is serialized using the format for a JSON number,
-the two strings are equal.
-
-> [!NOTE]
-> The above description of numeric matching contains 
-> [open issues](https://github.com/unicode-org/message-format-wg/issues/675)
-> in the Technical Preview, since a given numeric value might be formatted in
-> several different ways under RFC8259
-> and since the effect of formatting options, such as the number of fraction
-> digits or significant digits, is not described.
-> The Working Group intends to address these issues before final release
-> with a number of design options
-> [being considered](https://github.com/unicode-org/message-format-wg/pull/859).
->
-> Users should avoid creating messages that depend on exact matching of non-integer
-> numeric values.
-> Feedback, including use cases encountered in message authoring, is strongly desired.
+> The exact behavior of exact literal match is only well defined
+> for non-zero-filled integer values.
+> Functions that use fraction digits or significant digits
+> might work in specific implementation-defined ways.
+> Users should avoid depending on these types of keys in message selection.
 
 ## Date and Time Value Formatting
 

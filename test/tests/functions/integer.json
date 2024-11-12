@@ -20,14 +20,14 @@
       "exp": "hello 4"
     },
     {
-      "src": ".input {$foo :integer} .match $foo 1 {{one}} * {{other}}",
-      "params": [
-        {
-          "name": "foo",
-          "value": 1.2
-        }
-      ],
-      "exp": "one"
+      "src": ".input {$foo :integer} .match $foo 1 {{=1}} * {{other}}",
+      "params": [{ "name": "foo", "value": 1.2 }],
+      "exp": "=1"
+    },
+    {
+      "src": ".input {$foo :integer} .match $foo 1 {{=1}} one {{one}} * {{other}}",
+      "params": [{ "name": "foo", "value": 1.2 }],
+      "exp": "=1"
     },
     {
       "src": ".local $x = {1.25 :integer} .local $y = {$x :number} {{{$y}}}",
