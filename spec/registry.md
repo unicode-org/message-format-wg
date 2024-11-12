@@ -464,9 +464,8 @@ The following options and their values are required to be available on the funct
   - `symbol` (default)
   - `name`
   - `code`
-  - `formal`
-  - `variant`
-  - `none` (this is called `hidden` in ICU)
+  - `formalSymbol`
+  - `never` (this is called `hidden` in ICU)
 - `useGrouping`
   - `auto` (default)
   - `always`
