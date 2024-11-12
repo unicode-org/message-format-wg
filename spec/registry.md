@@ -589,17 +589,16 @@ All other _operand_ values produce a _Bad Operand_ error.
 The `:datetime` function can use either the appropriate _style options_ 
 or can use a collection of _field options_ (but not both) to control the formatted 
 output.
+_Date/time locale options_ can be combined with either _style options_ or _field options_.
 
-If both are specified, a _Bad Option_ error MUST be emitted
+If both _style options_ and _field options_ are specified,
+a _Bad Option_ error is emitted
 and a _fallback value_ used as the _resolved value_ of the _expression_.
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include _style options_, _field options_, or other option values.
 These are included in the resolved option values of the _expression_,
 with _options_ on the _expression_ taking priority over any option values of the _operand_.
-
-In addition to _style options_ and _field options_,
-an implementation MAY also support _date/time locale options_ for `:datetime`.
 
 > [!NOTE]
 > The names of _options_ and their _values_ were derived from the
@@ -632,7 +631,7 @@ and what format to use for that field.
 The _field options_ are defined as follows:
 
 > [!IMPORTANT]
-> The value `2-digit` for some _field options_ **must** be quoted
+> The value `2-digit` for some _field options_ MUST be quoted
 > in the MessageFormat syntax because it starts with a digit
 > but does not match the `number-literal` production in the ABNF.
 > ```
@@ -712,7 +711,7 @@ The function `:date` has these _options_:
   - `long`
   - `medium` (default)
   - `short`
-- _date/time locale options_
+- _Date/time locale options_
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
@@ -749,7 +748,7 @@ The function `:time` has these _options_:
   - `long`
   - `medium`
   - `short` (default)
-- _date/time locale options_
+- _Date/time locale options_
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
@@ -815,19 +814,20 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 
 ### Date and Time Locale Options
 
-Implementations MAY support overriding some of the options set by the current locale
+**_<dfn>Date/time locale options</dfn>_** override options set by the current locale
 or an implementation-defined date/time _operand_ value.
-To do so, the following **_<dfn>date/time locale options</dfn>_**
-can be made available on `:datetime`, `:date`, and `:time`:
 
-- `calendar`
-  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
-- `numberingSystem`
-   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+The following options and their values are required to be available on
+the functions `:datetime`, `:date`, and `:time`:
+
 - `hour12`
   - `true`
   - `false`
-- `timeZone`
+- `calendar` \[OPTIONAL\]
+  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
+- `numberingSystem` \[OPTIONAL\]
+  - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+- `timeZone` \[OPTIONAL\]
   - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
 
 > [!NOTE]
