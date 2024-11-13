@@ -10,7 +10,6 @@ To _accept_ an _option_ means that a _function handler_ MUST NOT
 emit a _Bad Option_ error for that _option_'s _identifier_ when used with the _function_
 it is defined for
 and MUST NOT emit a _Bad Option_ error for any of the _option_ values
-(both **standard** and **optional**)
 defined for that _option_.
 Accepting a _function_ or its _options_ does not mean that a particular output is produced.
 Implementations MAY emit an _Unsupported Operation_ error for _options_
