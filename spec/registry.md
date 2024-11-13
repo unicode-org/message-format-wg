@@ -386,7 +386,8 @@ The _function_ `:integer` performs selection as described in [Number Selection](
 The function `:math` is a selector and formatter for matching or formatting
 numeric values to which a mathematical operation has been applied.
 
-> This function is useful for plural selection and formatting of an offset of an input value.
+> This function is useful for selection and formatting of values that
+> differ from the input value by a specified amount.
 > For example, it can be used in a message such as this:
 > ```
 > .input {$like_count :integer}
