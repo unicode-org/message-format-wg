@@ -33,7 +33,8 @@ register and use user-defined _functions_ and their associated _functional handl
 Functions not defined by any version of this specification SHOULD use 
 an implementation-defined or user-defined _namespace_.
 
-Implementations MAY implement additional _options_ not defined here
+Implementations MAY implement additional _options_ not defined
+by any version of this specification
 for **standard** and **optional** functions.
 Such _options_ MUST use an implementation-specific _namespace_.
 
