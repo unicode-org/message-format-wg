@@ -22,7 +22,7 @@ Implementations MUST _accept_ each **standard** _function_ and
 MUST _accept_ all _options_ defined as **standard** for those _functions_.
 
 Implementations SHOULD _accept_ each **optional** _function_. 
-For each such _function_, the implementation MUST accept all _options_ and _option_ values 
+For each such _function_, the implementation MUST accept all _options_
 listed as **standard** for that _function_.
 
 Implementations SHOULD _accept_ _options_ and _option_ values that are marked as **optional**.
