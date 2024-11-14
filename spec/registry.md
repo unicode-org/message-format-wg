@@ -1,20 +1,57 @@
 # MessageFormat 2.0 Default Function Registry
 
-This section describes the functions for which each implementation MUST provide
-a _function handler_ to be conformant with this specification.
+This section defines the **standard** _functions_ which are REQUIRED for conformance with this specification,
+along with **optional** _functions_ that SHOULD be implemented to support
+additional functionality.
 
-Implementations MAY implement additional _functions_ or additional _options_.
-In particular, implementations are encouraged to provide feedback on proposed
-_options_ and their values.
+To **_<dfn>accept</dfn>_** a function means that an implementation MUST NOT
+emit an _Unknown Function_ error for that _function_'s _identifier_.
+To _accept_ an _option_ means that a _function handler_ MUST NOT
+emit a _Bad Option_ error for that _option_'s _identifier_ when used with the _function_
+it is defined for
+and MUST NOT emit a _Bad Option_ error for any of the _option_ values
+defined for that _option_.
+Accepting a _function_ or its _options_ does not mean that a particular output is produced.
+Implementations MAY emit an _Unsupported Operation_ error for _options_
+or _option_ values that they cannot support.
 
-> [!NOTE]
-> The [Stability Policy](/spec#stability-policy) allows for updates to
-> Default Registry functions to add support for new options.
-> As implementations are permitted to ignore options that they do not support,
-> it is possible to write messages using options not defined below
-> which currently format with no error, but which could produce errors
-> when formatted with a later edition of the Default Registry.
-> Therefore, using options not explicitly defined here is NOT RECOMMENDED.
+_Functions_ can define _options_. 
+An _option_ can be **standard** or **optional**.
+
+Implementations MUST _accept_ each **standard** _function_ and
+MUST _accept_ all _options_ defined as **standard** for those _functions_.
+
+Implementations SHOULD _accept_ each **optional** _function_. 
+For each such _function_, the implementation MUST accept all _options_
+listed as **standard** for that _function_.
+
+Implementations SHOULD _accept_ _options_ that are marked as **optional**.
+
+Implementations MAY _accept_ _functions_ not defined in this specification.
+In addition, implementations SHOULD provide mechanisms for users to
+register and use user-defined _functions_ and their associated _functional handlers_.
+Functions not defined by any version of this specification SHOULD use 
+an implementation-defined or user-defined _namespace_.
+
+Implementations MAY implement additional _options_ not defined
+by any version of this specification
+for **standard** and **optional** functions.
+Such _options_ MUST use an implementation-specific _namespace_.
+
+Implementations MAY _accept_ additional _option_ values for _options_ defined here.
+However, such values might become defined with a different meaning in the future,
+including with a different, incompatible name
+or using an incompatible value space.
+Supporting implementation-specific _option_ values for **standard** or **optional** functions is NOT RECOMMENDED.
+
+Future versions of this specification MAY define additional _options_ and _option_ values,
+subject to the rules in the [Stability Policy](#stability-policy),
+for _functions_ found in this specification.
+As implementations are permitted to ignore _options_ that they do not support,
+it is possible to write _messages_ using _options_ not defined below
+which currently format with no error, but which could produce errors
+when formatted with a later edition of this specification.
+Therefore, using _options_ not explicitly defined here is NOT RECOMMENDED.
 
 ## String Value Selection and Formatting
 
@@ -47,6 +84,13 @@ The function `:string` has no options.
 > [!NOTE]
 > Proposals for string transformation options or implementation
 > experience with user requirements is desired during the Tech Preview.
+
+#### Resolved Value
+
+The _resolved value_ of an _expression_ with a `:string` _function_
+contains the string value of the _operand_ of the annotated _expression_,
+together with its resolved locale and directionality.
+None of the _options_ set on the _expression_ are part of the _resolved value_.
 
 #### Selection
 
@@ -85,14 +129,6 @@ The `:string` function returns the string value of the _resolved value_ of the _
 > The function `:string` does not perform Unicode Normalization of its formatted output.
 > Users SHOULD encode _messages_ and their parts in Unicode Normalization Form C (NFC)
 > unless there is a very good reason not to.
-
-#### Composition
-
-When an _operand_ or an _option_ value uses a _variable_ annotated,
-directly or indirectly, by a `:string` _function_,
-its _resolved value_ contains the string value of the _operand_ of the annotated _expression_,
-together with its resolved locale and directionality.
-None of the _options_ set on the _expression_ are part of the _resolved value_.
 
 ## Numeric Value Selection and Formatting
 
@@ -156,6 +192,25 @@ The following options and their values are required to be available on the funct
   - ([digit size option](#digit-size-options))
 - `maximumSignificantDigits`
   - ([digit size option](#digit-size-options))
+- `trailingZeroDisplay`
+  - `auto` (default)
+  - `stripIfInteger`
+- `roundingPriority`
+  - `auto` (default)
+  - `morePrecision`
+  - `lessPrecision`
+- `roundingIncrement`
+  - 1 (default), 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000, 2500, and 5000
+- `roundingMode`
+  - `ceil`
+  - `floor`
+  - `expand`
+  - `trunc`
+  - `halfCeil`
+  - `halfFloor`
+  - `halfExpand` (default)
+  - `halfTrunc`
+  - `halfEven` 
 
 If the _operand_ of the _expression_ is an implementation-defined type,
 such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
@@ -170,37 +225,6 @@ with _options_ on the _expression_ taking priority over any option values of the
 > ```
 > would be formatted with the resolved options
 > `{ notation: 'scientific', minimumFractionDigits: '1' }`.
-
-> [!NOTE]
-> The following options and option values are being developed during the Technical Preview
-> period.
-
-The following values for the option `style` are _not_ part of the default registry.
-Implementations SHOULD avoid creating options that conflict with these, but
-are encouraged to track development of these options during Tech Preview:
-- `currency`
-- `unit`
-
-The following options are _not_ part of the default registry.
-Implementations SHOULD avoid creating options that conflict with these, but
-are encouraged to track development of these options during Tech Preview:
-- `currency`
-   - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
-     (no default)
-- `currencyDisplay`
-   - `symbol` (default)
-   - `narrowSymbol`
-   - `code`
-   - `name`
-- `currencySign`
-  - `accounting`
-  - `standard` (default)
-- `unit`
-   - (anything not empty)
-- `unitDisplay`
-   - `long`
-   - `short` (default)
-   - `narrow`
 
 ##### Default Value of `select` Option
 
@@ -235,17 +259,16 @@ MUST be multiplied by 100 for the purposes of formatting.
 > should format in a manner similar to:
 > > The total was 50%.
 
+#### Resolved Value
+
+The _resolved value_ of an _expression_ with a `:number` _function_
+contains an implementation-defined numerical value
+of the _operand_ of the annotated _expression_,
+together with the resolved options' values.
+
 #### Selection
 
 The _function_ `:number` performs selection as described in [Number Selection](#number-selection) below.
-
-#### Composition
-
-When an _operand_ or an _option_ value uses a _variable_ annotated,
-directly or indirectly, by a `:number` _annotation_,
-its _resolved value_ contains an implementation-defined numerical value
-of the _operand_ of the annotated _expression_,
-together with the resolved options' values.
 
 ### The `:integer` function
 
@@ -308,37 +331,6 @@ Option values with the following names are however discarded if included in the 
 - `maximumFractionDigits`
 - `minimumSignificantDigits`
 
-> [!NOTE]
-> The following options and option values are being developed during the Technical Preview
-> period.
-
-The following values for the option `style` are _not_ part of the default registry.
-Implementations SHOULD avoid creating options that conflict with these, but
-are encouraged to track development of these options during Tech Preview:
-- `currency`
-- `unit`
-
-The following options are _not_ part of the default registry.
-Implementations SHOULD avoid creating options that conflict with these, but
-are encouraged to track development of these options during Tech Preview:
-- `currency`
-   - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
-     (no default)
-- `currencyDisplay`
-   - `symbol` (default)
-   - `narrowSymbol`
-   - `code`
-   - `name`
-- `currencySign`
-  - `accounting`
-  - `standard` (default)
-- `unit`
-   - (anything not empty)
-- `unitDisplay`
-   - `long`
-   - `short` (default)
-   - `narrow`
-
 ##### Default Value of `select` Option
 
 The value `plural` is the default for the option `select` 
@@ -372,18 +364,200 @@ MUST be multiplied by 100 for the purposes of formatting.
 > should format in a manner similar to:
 > > The total was 50%.
 
+#### Resolved Value
+
+The _resolved value_ of an _expression_ with an `:integer` _function_
+contains the implementation-defined integer value
+of the _operand_ of the annotated _expression_,
+together with the resolved options' values.
+
 #### Selection
 
 The _function_ `:integer` performs selection as described in [Number Selection](#number-selection) below.
 
-#### Composition
+### The `:currency` function
 
-When an _operand_ or an _option_ value uses a _variable_ annotated,
-directly or indirectly, by a `:integer` _annotation_,
-its _resolved value_ contains the implementation-defined integer value
+The function `:currency` is a selector and formatter for currency values, 
+which are a specialized form of numeric selection and formatting.
+
+#### Operands
+
+The _operand_ of the `:currency` function can be one of any number of
+implementation-defined types,
+each of which contains a numerical `value` and a `currency`;
+or it can be a [Number Operand](#number-operands), as long as the option
+`currency` is provided.
+The option `currency` MUST NOT be used to override the currency of an implementation-defined type.
+Using this option in such a case results in a _Bad Option_ error.
+
+The value of the _operand_'s `currency` MUST be either a string containing a
+well-formed [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+or an implementation-defined currency type.
+Although currency codes are expected to be uppercase,
+implementations SHOULD treat them in a case-insensitive manner.
+A well-formed Unicode Currency Identifier matches the production `currency_code` in this ABNF:
+```abnf
+currency_code = 3ALPHA
+```
+
+A [Number Operand](#number-operands) without a `currency` _option_ results in a _Bad Operand_ error.
+
+> [!NOTE]
+> For example, in ICU4J, the type `com.ibm.icu.util.CurrencyAmount` can be used
+> to set the amount and currency.
+
+> [!NOTE]
+> The `currency` is only required to be well-formed rather than checked for validity.
+> This allows new currency codes to be defined 
+> (there are many recent examples of this occuring).
+> It also avoids requiring implementations to check currency codes for validity,
+> although implementations are permitted to emit _Bad Option_ or _Bad Operand_ for invalid codes.
+
+> [!NOTE]
+> For runtime environments that do not provide a ready-made data structure,
+> class, or type for currency values, the implementation ought to provide
+> a data structure, convenience function, or documentation on how to encode
+> the value and currency code for formatting.
+> For example, such an implementation might define a "currency operand"
+> to include a key-value structure with specific keys to be the
+> local currency operand, which might look like the following:
+> ```
+> {
+>    "value": 123.45,
+>    "currency": "EUR"
+> }
+> ```
+
+#### Options
+
+Some options do not have default values defined in this specification.
+The defaults for these options are implementation-dependent.
+In general, the default values for such options depend on the locale, 
+the currency,
+the value of other options, or all of these.
+
+Fraction digits for currency values behave differently than for other numeric formatters.
+The number of fraction digits displayed is usually set by the currency used.
+For example, USD uses 2 fraction digits, while JPY uses none.
+Setting some other number of `fractionDigits` allows greater precision display
+(such as when performing currency conversions or other specialized operations)
+or disabling fraction digits if set to `0`.
+
+The _option_ `trailingZeroDisplay` has a value `stripIfInteger` that is useful 
+for displaying currencies with their fraction digits removed when the fraction
+part of the _operand_ is zero.
+This is sometimes used in _messages_ to make the displayed value omit the fraction part
+automatically.
+> For example, this _message_:
+> ```
+> The special price is {$price :currency trailingZeroDisplay=stripIfInteger}.
+> ```
+> When used with the value `5.00 USD` in the `en-US` locale displays as:
+> ```
+> The special price is $5.
+> ```
+> But like this when when value is `5.01 USD`:
+> ```
+> The special price is $5.01.
+> ```
+
+Implementations MAY internally alias option values that they do not have data or a backing implementation for.
+Notably, the `currencyDisplay` option has a rich set of values that mirrors developments in CLDR data.
+Some implementations might not be able to produce all of these formats for every currency.
+
+> [!NOTE]
+> Except where noted otherwise, the names of _options_ and their _values_ were derived from the
+> [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
+> in JavaScript's `Intl.NumberFormat`.
+
+> [!NOTE]
+> The option `select` does not accept the value `ordinal` because selecting
+> currency values using ordinal rules makes no sense.
+
+The following options and their values are required to be available on the function `:currency`:
+- `select`
+   -  `plural` (default)
+   -  `exact`
+- `currency`
+   - well-formed [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+     (no default)
+- `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
+   - `short` (default)
+   - `long`
+- `notation`
+   - `standard` (default)
+   - `compact`
+- `numberingSystem`
+   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+     (default is locale-specific)
+- `currencySign`
+  - `accounting`
+  - `standard` (default)
+- `currencyDisplay`
+  - `narrowSymbol`
+  - `symbol` (default)
+  - `name`
+  - `code`
+  - `formalSymbol`
+  - `never` (this is called `hidden` in ICU)
+- `useGrouping`
+  - `auto` (default)
+  - `always`
+  - `never`
+  - `min2`
+- `minimumIntegerDigits`
+  - ([digit size option](#digit-size-options), default: `1`)
+- `fractionDigits` (unlike number/integer formats, the fraction digits for currency formatting are fixed)
+  - `auto` (default) (the number of digits used by the currency)
+  - ([digit size option](#digit-size-options))
+- `minimumSignificantDigits`
+  - ([digit size option](#digit-size-options))
+- `maximumSignificantDigits`
+  - ([digit size option](#digit-size-options))
+- `trailingZeroDisplay`
+  - `auto` (default)
+  - `stripIfInteger`
+- `roundingPriority`
+  - `auto` (default)
+  - `morePrecision`
+  - `lessPrecision`
+- `roundingIncrement`
+  - 1 (default), 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000, 2500, and 5000
+- `roundingMode`
+  - `ceil`
+  - `floor`
+  - `expand`
+  - `trunc`
+  - `halfCeil`
+  - `halfFloor`
+  - `halfExpand` (default)
+  - `halfTrunc`
+  - `halfEven`
+
+If the _operand_ of the _expression_ is an implementation-defined type,
+such as the _resolved value_ of an _expression_ with a `:currency` _annotation_,
+it can include option values.
+These are included in the resolved option values of the _expression_,
+with _options_ on the _expression_ taking priority over any option values of the _operand_.
+
+> For example, the _placeholder_ in this _message_:
+> ```
+> .input {$n :currency currency=USD trailingZeroDisplay=stripIfInteger}
+> {{{$n :currency currencySign=accounting}}}
+> ```
+> would be formatted with the resolved options
+> `{ currencySign: 'accounting', trailingZeroDisplay: 'stripIfInteger', currency: 'USD' }`.
+
+#### Resolved Value
+
+The _resolved value_ of an _expression_ with a `:currency` _function_
+contains an implementation-defined currency value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
+#### Selection
+
+The _function_ `:currency` performs selection as described in [Number Selection](#number-selection) below.
 
 ### `:unit` function
 
@@ -876,11 +1050,10 @@ are encouraged to track development of these options during Tech Preview:
 - `timeZone` (default is system default time zone or UTC)
   - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
 
-#### Composition
+#### Resolved Value
 
-When an _operand_ or an _option_ value uses a _variable_ annotated,
-directly or indirectly, by a `:datetime` _annotation_,
-its _resolved value_ contains an implementation-defined date/time value
+The _resolved value_ of an _expression_ with a `:datetime` _function_
+contains an implementation-defined date/time value
 of the _operand_ of the annotated _expression_,
 together with the resolved options values.
 
@@ -912,13 +1085,14 @@ it can include other option values.
 Any _operand_ option values matching the `:datetime` _style options_ or _field options_ are ignored,
 as is any `style` option.
 
-#### Composition
+#### Resolved Value
 
-When an _operand_ or an _option_ value uses a _variable_ annotated,
-directly or indirectly, by a `:date` _annotation_,
-its _resolved value_ is implementation-defined.
+The _resolved value_ of an _expression_ with a `:date` _function_
+is implementation-defined.
+
 An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate)
-when this happens.
+when a _variable_ annotated directly or indirectly by a `:date` _annotation_
+is used as an _operand_ or an _option_ value.
 
 ### The `:time` function
 
@@ -948,13 +1122,14 @@ it can include other option values.
 Any _operand_ option values matching the `:datetime` _style options_ or _field options_ are ignored,
 as is any `style` option.
 
-#### Composition
+#### Resolved Value
 
-When an _operand_ or an _option_ value uses a _variable_ annotated,
-directly or indirectly, by a `:time` _annotation_,
-its _resolved value_ is implementation-defined.
+The _resolved value_ of an _expression_ with a `:time` _function_
+is implementation-defined.
+
 An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate)
-when this happens.
+when a _variable_ annotated directly or indirectly by a `:time` _annotation_
+is used as an _operand_ or an _option_ value.
 
 ### Date and Time Operands
 

@@ -3,6 +3,7 @@
   "scenario": "Syntax",
   "description": "Test cases that do not depend on any registry definitions.",
   "defaultTestProperties": {
+    "bidiIsolation": "none",
     "locale": "en-US"
   },
   "tests": [
