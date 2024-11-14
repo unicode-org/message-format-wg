@@ -111,18 +111,12 @@ function identifiers and function option identifiers
 which satisfy either of the following two requirements:
 - Includes no namespace,
   and has a name consisting of characters in the ranges a-z, A-Z, and 0-9.
-- Uses the `u:` namespace.
+- Uses a namespace consisting of a single character in the range a-z.
 
 All other identifiers in these categories are reserved for the use of implementations or users.
 
-Updates to this specification will only reserve, define, or require
-function option values
-consisting of characters in the ranges a-z, A-Z, and 0-9,
-and the characters U+002D HYPHEN-MINUS `-` and U+002E FULL STOP `.`.
-All other option values are reserved for the use of implementations or users.
-
 > [!NOTE]
-> Users defining custom identifiers and values SHOULD include at least one character outside these ranges
+> Users defining custom identifiers SHOULD include at least one character outside these ranges
 > to ensure that they will be compatible with future versions of this specification.
 > They SHOULD also use the namespace feature to avoid collisions with other implementations.
 
