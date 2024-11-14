@@ -19,7 +19,7 @@ _Functions_ can define _options_.
 An _option_ can be **standard** or **optional**.
 
 Implementations MUST _accept_ each **standard** _function_ and
-MUST _accept_ all _options_ and _option_ values defined as **standard** for those _functions_.
+MUST _accept_ all _options_ defined as **standard** for those _functions_.
 
 Implementations SHOULD _accept_ each **optional** _function_. 
 For each such _function_, the implementation MUST accept all _options_ and _option_ values 
