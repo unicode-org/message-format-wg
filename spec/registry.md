@@ -79,12 +79,15 @@ All other values produce a _Bad Operand_ error.
 
 #### Options
 
-The function `:string` has no options.
+The function `:string` has no _options_.
 
 > [!NOTE]
-> Proposals for string transformation options or implementation
-> experience with user requirements is desired during the Tech Preview.
-
+> While `:string` has no built- in _options_,
+> _options_ in the `u:` _namespace_ can be used. 
+> For example: 
+>```
+> {$s :string u:dir=ltr u:locale=fr-CA}
+>```
 #### Resolved Value
 
 The _resolved value_ of an _expression_ with a `:string` _function_
