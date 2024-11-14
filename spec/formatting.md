@@ -377,7 +377,7 @@ For each _option_:
    1. Let `id` be the string value of the _identifier_ of the _option_.
    1. Let `rv` be the _resolved value_ of the _option_ value.
    1. If `rv` is a _fallback value_:
-      1. Emit a _Bad Option_ error.
+      1. If supported, emit a _Bad Option_ error.
    1. Else:
       1. Set `res[id]` to be `rv`.
 1. Return `res`.
