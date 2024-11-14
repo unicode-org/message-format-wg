@@ -25,7 +25,7 @@ Implementations SHOULD _accept_ each **optional** _function_.
 For each such _function_, the implementation MUST accept all _options_
 listed as **standard** for that _function_.
 
-Implementations SHOULD _accept_ _options_ and _option_ values that are marked as **optional**.
+Implementations SHOULD _accept_ _options_ that are marked as **optional**.
 
 Implementations MAY _accept_ _functions_ not defined in this specification.
 In addition, implementations SHOULD provide mechanisms for users to
