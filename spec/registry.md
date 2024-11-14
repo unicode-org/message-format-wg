@@ -452,7 +452,7 @@ and `keys` is a list of strings,
 numeric selectors perform as described below.
 
 1. Let `exact` be the serialized representation of the numeric value of `resolvedSelector`.
-   (See [Determining Exact Literal Match](#determining-exact-literal-match) for details)
+   (See [Exact Literal Match Serialization](#exact-literal-match-serialization) for details)
 1. Let `keyword` be a string which is the result of [rule selection](#rule-selection) on `resolvedSelector`.
 1. Let `resultExact` be a new empty list of strings.
 1. Let `resultKeyword` be a new empty list of strings.
@@ -528,19 +528,22 @@ for examples.
 > | 27 | `other` | 27 dní |
 > | 2.4 | `many` | 2,4 dne |
 
-#### Determining Exact Literal Match
+#### Exact Literal Match Serialization
 
-If the numeric value of `resolvedSelector` is a non-negative integer
+If the numeric value of `resolvedSelector` is an integer
 and none of the following options are set for `resolvedSelector`,
-the serialized form of the numeric value MUST match the ABNF for `digit-size-option`,
+the serialized form of the numeric value MUST match the ABNF defined below for `integer`,
 representing its decimal value:
-- `fractionDigits`
 - `minimumFractionDigits`
 - `minimumIntegerDigits`
 - `minimumSignificantDigits`
 - `maximumSignificantDigits`
 - `notation`
 - `style`
+
+```abnf
+integer = "0" / ["-"] ("1"-"9") *DIGIT
+```
 
 Otherwise, the serialized form of the numeric value is implementation-defined.
 
