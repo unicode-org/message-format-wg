@@ -542,17 +542,16 @@ Not all usages are compatible with the unit.
 Implementations will produce a _Bad Option_ error for units 
 or combinations of units and usages that are not supported.
 
+#### Resolved Value
+
+The _resolved value_ of an _expression_ with a `:unit` _function_
+consist of an implementation-defined unit value
+of the _operand_ of the annotated _expression_,
+together with the resolved options' values.
+
 #### Selection
 
 The _function_ `:unit` performs selection as described in [Number Selection](#number-selection) below.
-
-#### Composition
-
-When an _operand_ or an _option_ value uses a _variable_ annotated,
-directly or indirectly, by a `:unit` _annotation_,
-its _resolved value_ contains an implementation-defined unit value
-of the _operand_ of the annotated _expression_,
-together with the resolved options' values.
 
 ### Number Operands
 
