@@ -413,7 +413,8 @@ The resolution of _markup_ MUST always succeed.
 
 A **_<dfn>fallback value</dfn>_** is the _resolved value_ for
 an _expression_ or _variable_ when that _expression_ or _variable_ fails to resolve.
-It has a string representation that is used for its formatting.
+It contains a string representation that is used for its formatting,
+and no option values.
 
 The _resolved value_ of _text_, _literal_, and _markup_ MUST NOT be a _fallback value_.
 
@@ -439,8 +440,8 @@ The string representation of the _fallback value_ of an _expression_ depends on 
 
   > Examples:
   > In a context where `:func` fails to resolve,
-  > `{42 :func}` resolves to the _fallback value_ `|42|` and
-  > `{|C:\\| :func}` resolves to the _fallback value_ `|C:\\|`.
+  > `{42 :func}` resolves to a _fallback value_ with a string representation `|42|` and
+  > `{|C:\\| :func}` resolves to a _fallback value_ with a string representation `|C:\\|`.
 
 - _expression_ with _variable_ _operand_:
   the _fallback value_ representation of that _variable_,
@@ -448,12 +449,12 @@ The string representation of the _fallback value_ of an _expression_ depends on 
 
   > Examples:
   > In a context where `$var` fails to resolve, `{$var}` and `{$var :number}`
-  > both resolve to the _fallback value_ `$var`
+  > both resolve to a _fallback value_ with a string representation `$var`
   > (even if `:number` fails to resolve).
   >
   > In a context where `:func` fails to resolve,
   > the _placeholder_ in `.local $var = {|val| :func} {{{$var}}}`
-  > resolves to the _fallback value_ `$var`.
+  > resolves to a _fallback value_ with a string representation `$var`.
   >
   > In a context where either `:now` or `:pretty` fails to resolve,
   > the _placeholder_ in
@@ -461,14 +462,16 @@ The string representation of the _fallback value_ of an _expression_ depends on 
   > .local $time = {:now format=iso8601}
   > {{{$time :pretty}}}
   > ```
-  > resolves to the _fallback value_ `$time`.
+  > resolves to a _fallback value_ with a string representation `$time`.
 
 - _function_ _expression_ with no _operand_:
   U+003A COLON `:` followed by the _function_ _identifier_
 
   > Examples:
-  > In a context where `:func` fails to resolve, `{:func}` resolves to the _fallback value_ `:func`.
-  > In a context where `:ns:func` fails to resolve, `{:ns:func}` resolves to the _fallback value_ `:ns:func`.
+  > In a context where `:func` fails to resolve,
+  > `{:func}` resolves to a _fallback value_ with a string representation `:func`.
+  > In a context where `:ns:func` fails to resolve,
+  > `{:ns:func}` resolves to a _fallback value_ with a string representation `:ns:func`.
 
 - Otherwise: the U+FFFD REPLACEMENT CHARACTER `�`
 
