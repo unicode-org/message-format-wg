@@ -110,7 +110,8 @@ Updates to this specification will only reserve, define, or require
 function identifiers and function option identifiers
 which satisfy either of the following two requirements:
 - Includes no namespace,
-  and has a name consisting of characters in the ranges a-z, A-Z, and 0-9, and the characters '.', '-', and '_'.
+  and has a name consisting of characters in the ranges a-z, A-Z, and 0-9,
+  and the characters U+002E FULL STOP `.`, U+002D HYPHEN-MINUS `-`, and U+005F LOW LINE `_`.
 - Uses a namespace consisting of a single character in the ranges a-z and A-Z.
 
 All other identifiers in these categories are reserved for the use of implementations or users.
