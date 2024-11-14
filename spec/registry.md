@@ -534,9 +534,11 @@ If the numeric value of `resolvedSelector` is a non-negative integer
 and none of the following options are set for `resolvedSelector`,
 the serialized form of the numeric value MUST match the ABNF for `digit-size-option`,
 representing its decimal value:
+- `fractionDigits`
 - `minimumFractionDigits`
 - `minimumIntegerDigits`
 - `minimumSignificantDigits`
+- `maximumSignificantDigits`
 - `notation`
 - `style`
 
