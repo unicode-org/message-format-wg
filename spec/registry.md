@@ -1,20 +1,57 @@
 # MessageFormat 2.0 Default Function Registry
 
-This section describes the functions for which each implementation MUST provide
-a _function handler_ to be conformant with this specification.
+This section defines the **standard** _functions_ which are REQUIRED for conformance with this specification,
+along with **optional** _functions_ that SHOULD be implemented to support
+additional functionality.
 
-Implementations MAY implement additional _functions_ or additional _options_.
-In particular, implementations are encouraged to provide feedback on proposed
-_options_ and their values.
+To **_<dfn>accept</dfn>_** a function means that an implementation MUST NOT
+emit an _Unknown Function_ error for that _function_'s _identifier_.
+To _accept_ an _option_ means that a _function handler_ MUST NOT
+emit a _Bad Option_ error for that _option_'s _identifier_ when used with the _function_
+it is defined for
+and MUST NOT emit a _Bad Option_ error for any of the _option_ values
+defined for that _option_.
+Accepting a _function_ or its _options_ does not mean that a particular output is produced.
+Implementations MAY emit an _Unsupported Operation_ error for _options_
+or _option_ values that they cannot support.
 
-> [!NOTE]
-> The [Stability Policy](/spec#stability-policy) allows for updates to
-> Default Registry functions to add support for new options.
-> As implementations are permitted to ignore options that they do not support,
-> it is possible to write messages using options not defined below
-> which currently format with no error, but which could produce errors
-> when formatted with a later edition of the Default Registry.
-> Therefore, using options not explicitly defined here is NOT RECOMMENDED.
+_Functions_ can define _options_. 
+An _option_ can be **standard** or **optional**.
+
+Implementations MUST _accept_ each **standard** _function_ and
+MUST _accept_ all _options_ defined as **standard** for those _functions_.
+
+Implementations SHOULD _accept_ each **optional** _function_. 
+For each such _function_, the implementation MUST accept all _options_
+listed as **standard** for that _function_.
+
+Implementations SHOULD _accept_ _options_ that are marked as **optional**.
+
+Implementations MAY _accept_ _functions_ not defined in this specification.
+In addition, implementations SHOULD provide mechanisms for users to
+register and use user-defined _functions_ and their associated _functional handlers_.
+Functions not defined by any version of this specification SHOULD use 
+an implementation-defined or user-defined _namespace_.
+
+Implementations MAY implement additional _options_ not defined
+by any version of this specification
+for **standard** and **optional** functions.
+Such _options_ MUST use an implementation-specific _namespace_.
+
+Implementations MAY _accept_ additional _option_ values for _options_ defined here.
+However, such values might become defined with a different meaning in the future,
+including with a different, incompatible name
+or using an incompatible value space.
+Supporting implementation-specific _option_ values for **standard** or **optional** functions is NOT RECOMMENDED.
+
+Future versions of this specification MAY define additional _options_ and _option_ values,
+subject to the rules in the [Stability Policy](#stability-policy),
+for _functions_ found in this specification.
+As implementations are permitted to ignore _options_ that they do not support,
+it is possible to write _messages_ using _options_ not defined below
+which currently format with no error, but which could produce errors
+when formatted with a later edition of this specification.
+Therefore, using _options_ not explicitly defined here is NOT RECOMMENDED.
 
 ## String Value Selection and Formatting
 

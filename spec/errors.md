@@ -382,3 +382,9 @@ does not match the expected implementation-defined format.
 > horse {{The value is a horse.}}
 > *     {{The value is not one.}}
 > ```
+
+### Unsupported Operation
+
+A **_<dfn>Unsupported Operation</dfn>_** error is an implementation-specific error
+that occurs when a given _option_, _option_ value, _operand_ value, or some combination
+of these are incompatible or not supported by a given _function_ or its _function handler_.
