@@ -3,6 +3,7 @@
   "scenario": "Time function",
   "description": "The built-in formatter for times.",
   "defaultTestProperties": {
+    "bidiIsolation": "none",
     "locale": "en-US",
     "expErrors": false
   },

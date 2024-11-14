@@ -3,6 +3,7 @@
   "scenario": "Number function",
   "description": "The built-in formatter for numbers.",
   "defaultTestProperties": {
+    "bidiIsolation": "none",
     "locale": "en-US"
   },
   "tests": [

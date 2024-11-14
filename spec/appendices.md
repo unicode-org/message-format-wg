@@ -14,12 +14,10 @@ host environments, their serializations and resource formats,
 that might be sufficient to prevent most problems.
 However, MessageFormat itself does not supply such a restriction.
 
-MessageFormat _messages_ permit nearly all Unicode code points,
-with the exception of surrogates, 
+MessageFormat _messages_ permit nearly all Unicode code points
 to appear in _literals_, including the text portions of a _pattern_.
 This means that it can be possible for a _message_ to contain invisible characters
-(such as bidirectional controls, 
-ASCII control characters in the range U+0000 to U+001F,
+(such as bidirectional controls, ASCII control characters in the range U+0000 to U+001F,
 or characters that might be interpreted as escapes or syntax in the host format)
 that abnormally affect the display of the _message_
 when viewed as source code, or in resource formats or translation tools,

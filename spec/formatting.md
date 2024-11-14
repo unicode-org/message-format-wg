@@ -57,6 +57,26 @@ nor be made available to _function handlers_.
 > _declarations_ affecting _variables_ referenced by that _expression_
 > have already been evaluated in the order in which the relevant _declarations_
 > appear in the _message_.
+> An implementation MUST ensure that every _expression_ in a _message_
+> is evaluated at most once.
+
+> [!NOTE]
+>
+> Implementations with lazy evaluation MUST NOT use a
+> call-by-name evaluation strategy. Instead, they must evaluate expressions
+> at most once ("call-by-need").
+> This is to prevent _expressions_ from having different values
+> when used in different parts of a given _message_.
+> _Function handlers_ are not necessarily pure: they can access
+> external mutable state such as the current system clock time.
+> Thus, evaluating the same _expression_ more than once
+> could yield different results. That behavior violates this specification.
+
+> [!IMPORTANT]
+> Implementations and users SHOULD NOT create _function handlers_
+> that mutate external program state,
+> particularly since such a _function handler_ can present a remote execution hazard.
+>
 
 ## Formatting Context
 
@@ -260,9 +280,23 @@ the following steps are taken:
 
 3. Perform _option resolution_.
 
-4. Call the _function handler_ with the following arguments:
+4. Determine the _function context_ for calling the _function handler_.
 
-   - The current _locale_.
+   The **_<dfn>function context</dfn>_** contains the context necessary for
+   the _function handler_ to resolve the _expression_. This includes:
+
+   - The current _locale_,
+     potentially including a fallback chain of locales.
+   - The base directionality of the _expression_.
+     By default, this is undefined or empty.
+
+   If the resolved mapping of _options_ includes any _`u:` options_
+   supported by the implementation, process them as specified.
+   Such `u:` options MAY be removed from the resolved mapping of _options_.
+
+5. Call the function implementation with the following arguments:
+
+   - The _function context_.
    - The resolved mapping of _options_.
    - If the _expression_ includes an _operand_, its _resolved value_.
 
@@ -272,7 +306,7 @@ the following steps are taken:
    as long as reasonable precautions are taken to keep the function interface
    simple and minimal, and avoid introducing potential security vulnerabilities.
 
-5. If the call succeeds,
+6. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
 
    If the call fails or does not return a valid value,
@@ -320,7 +354,15 @@ Implementation-defined _functions_ SHOULD use an implementation-defined _namespa
 
 #### Option Resolution
 
-The result of resolving _option_ values is an unordered mapping of string identifiers to values.
+**_<dfn>Option resolution</dfn>_** is the process of computing the _options_
+for a given _expression_. 
+_Option resolution_ results in a mapping of string _identifiers_ to _values_.
+The order of _options_ MUST NOT be significant.
+
+> For example, the following _message_ treats both both placeholders identically:
+> ```
+> {$x :function option1=foo option2=bar} {$x :function option2=bar option1=foo}
+> ```
 
 For each _option_:
 
@@ -344,6 +386,10 @@ The _resolved value_ of _markup_ includes the following fields:
 - The type of the markup: open, standalone, or close
 - The _identifier_ of the _markup_
 - The resolved _options_ values after _option resolution_.
+
+If the resolved mapping of _options_ includes any _`u:` options_
+supported by the implementation, process them as specified.
+Such `u:` options MAY be removed from the resolved mapping of _options_.
 
 The resolution of _markup_ MUST always succeed.
 

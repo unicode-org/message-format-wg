@@ -48,6 +48,13 @@ The function `:string` has no options.
 > Proposals for string transformation options or implementation
 > experience with user requirements is desired during the Tech Preview.
 
+#### Resolved Value
+
+The _resolved value_ of an _expression_ with a `:string` _function_
+contains the string value of the _operand_ of the annotated _expression_,
+together with its resolved locale and directionality.
+None of the _options_ set on the _expression_ are part of the _resolved value_.
+
 #### Selection
 
 When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
@@ -227,17 +234,16 @@ MUST be multiplied by 100 for the purposes of formatting.
 > should format in a manner similar to:
 > > The total was 50%.
 
+#### Resolved Value
+
+The _resolved value_ of an _expression_ with a `:number` _function_
+contains an implementation-defined numerical value
+of the _operand_ of the annotated _expression_,
+together with the resolved options' values.
+
 #### Selection
 
 The _function_ `:number` performs selection as described in [Number Selection](#number-selection) below.
-
-#### Composition
-
-When an _operand_ or an _option_ value uses a _variable_ annotated,
-directly or indirectly, by a `:number` _annotation_,
-its _resolved value_ contains an implementation-defined numerical value
-of the _operand_ of the annotated _expression_,
-together with the resolved options' values.
 
 ### The `:integer` function
 
@@ -281,6 +287,7 @@ function `:integer`:
 - `useGrouping`
   - `auto` (default)
   - `always`
+  - `never`
   - `min2`
 - `minimumIntegerDigits`
   - ([digit size option](#digit-size-options), default: `1`)
@@ -363,17 +370,16 @@ MUST be multiplied by 100 for the purposes of formatting.
 > should format in a manner similar to:
 > > The total was 50%.
 
+#### Resolved Value
+
+The _resolved value_ of an _expression_ with an `:integer` _function_
+contains the implementation-defined integer value
+of the _operand_ of the annotated _expression_,
+together with the resolved options' values.
+
 #### Selection
 
 The _function_ `:integer` performs selection as described in [Number Selection](#number-selection) below.
-
-#### Composition
-
-When an _operand_ or an _option_ value uses a _variable_ annotated,
-directly or indirectly, by a `:integer` _annotation_,
-its _resolved value_ contains the implementation-defined integer value
-of the _operand_ of the annotated _expression_,
-together with the resolved options' values.
 
 ### Number Operands
 
@@ -681,11 +687,10 @@ The function `:datetime` has the following options:
   - `shortGeneric`
   - `longGeneric`
 
-#### Composition
+#### Resolved Value
 
-When an _operand_ or an _option_ value uses a _variable_ annotated,
-directly or indirectly, by a `:datetime` _annotation_,
-its _resolved value_ contains an implementation-defined date/time value
+The _resolved value_ of an _expression_ with a `:datetime` _function_
+contains an implementation-defined date/time value
 of the _operand_ of the annotated _expression_,
 together with the resolved options values.
 
@@ -718,13 +723,14 @@ it can include other option values.
 Any _operand_ option values matching the `:datetime` _style options_ or _field options_ are ignored,
 as is any `style` option.
 
-#### Composition
+#### Resolved Value
 
-When an _operand_ or an _option_ value uses a _variable_ annotated,
-directly or indirectly, by a `:date` _annotation_,
-its _resolved value_ is implementation-defined.
+The _resolved value_ of an _expression_ with a `:date` _function_
+is implementation-defined.
+
 An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate)
-when this happens.
+when a _variable_ annotated directly or indirectly by a `:date` _annotation_
+is used as an _operand_ or an _option_ value.
 
 ### The `:time` function
 
@@ -755,13 +761,14 @@ it can include other option values.
 Any _operand_ option values matching the `:datetime` _style options_ or _field options_ are ignored,
 as is any `style` option.
 
-#### Composition
+#### Resolved Value
 
-When an _operand_ or an _option_ value uses a _variable_ annotated,
-directly or indirectly, by a `:time` _annotation_,
-its _resolved value_ is implementation-defined.
+The _resolved value_ of an _expression_ with a `:time` _function_
+is implementation-defined.
+
 An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate)
-when this happens.
+when a _variable_ annotated directly or indirectly by a `:time` _annotation_
+is used as an _operand_ or an _option_ value.
 
 ### Date and Time Operands
 
