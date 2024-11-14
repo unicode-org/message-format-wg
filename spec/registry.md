@@ -79,11 +79,7 @@ All other values produce a _Bad Operand_ error.
 
 #### Options
 
-The function `:string` has no options.
-
-> [!NOTE]
-> Proposals for string transformation options or implementation
-> experience with user requirements is desired during the Tech Preview.
+The function `:string` has no _options_.
 
 #### Resolved Value
 
