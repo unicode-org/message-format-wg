@@ -549,7 +549,7 @@ Otherwise, the serialized form of the numeric value is implementation-defined.
 
 > [!IMPORTANT]
 > The exact behavior of exact literal match is only well defined
-> for non-zero-filled integer values.
+> for integer values without leading zeros.
 > Functions that use fraction digits or significant digits
 > might work in specific implementation-defined ways.
 > Users should avoid depending on these types of keys in message selection.
