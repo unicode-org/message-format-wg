@@ -393,9 +393,8 @@ or it can be a [Number Operand](#number-operands), as long as the option
 The option `currency` MUST NOT be used to override the currency of an implementation-defined type.
 Using this option in such a case results in a _Bad Option_ error.
 
-The value of the _operand_'s `currency` MUST be either a string containing a
-well-formed [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
-or an implementation-defined currency type.
+The value of the _operand_'s `currency` is a
+well-formed [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier).
 Although currency codes are expected to be uppercase,
 implementations SHOULD treat them in a case-insensitive manner.
 A well-formed Unicode Currency Identifier matches the production `currency_code` in this ABNF:
@@ -608,7 +607,6 @@ of a digit size option option consistent with that implementation's practical li
 
 In most cases, the value of a digit size option will be a string that
 encodes the value as a non-negative integer.
-Implementations MAY also accept implementation-defined types as the value.
 When provided as a string, the representation of a digit size option matches the following ABNF:
 >```abnf
 > digit-size-option = "0" / (("1"-"9") [DIGIT])
