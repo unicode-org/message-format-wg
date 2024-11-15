@@ -438,6 +438,13 @@ it can include option values.
 These are included in the resolved option values of the _expression_.
 The `:math` _options_ are not included in the resolved option values.
 
+> [!NOTE]
+> Implementations can encounter practical limits with `:math` _expressions_,
+> such as the result of adding two integers exceeding 
+> the storage or precision of some implementation-defined number type.
+> In such cases, implementations can emit an _Unsupported Operation_ error
+> or they might just silently overflow the underlying data value.
+
 #### Selection
 
 The _function_ `:math` performs selection as described in [Number Selection](#number-selection) below.
