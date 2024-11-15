@@ -84,10 +84,10 @@ Updates to this specification will not make any valid _message_ invalid.
 
 Updates to this specification will not remove any syntax provided in this version.
 
-Updates to this specification MUST NOT specify an error for any message
+Updates to this specification will not specify an error for any message
 that previously did not specify an error.
 
-Updates to this specification MUST NOT specify the use of a fallback value for any message
+Updates to this specification will not specify the use of a fallback value for any message
 that previously did not specify a fallback value.
 
 Updates to this specification will not change the syntactical meaning
@@ -107,12 +107,17 @@ defined in the default registry.
 > (such as due to the release of new CLDR versions).
 
 Updates to this specification will only reserve, define, or require
-function names or function option names
-consisting of characters in the ranges a-z, A-Z, and 0-9.
-All other names in these categories are reserved for the use of implementations or users.
+function identifiers and function option identifiers
+which satisfy either of the following two requirements:
+- Includes no namespace,
+  and has a name consisting of characters in the ranges a-z, A-Z, and 0-9,
+  and the characters U+002E FULL STOP `.`, U+002D HYPHEN-MINUS `-`, and U+005F LOW LINE `_`.
+- Uses a namespace consisting of a single character in the ranges a-z and A-Z.
+
+All other identifiers in these categories are reserved for the use of implementations or users.
 
 > [!NOTE]
-> Users defining custom names SHOULD include at least one character outside these ranges
+> Users defining custom identifiers SHOULD include at least one character outside these ranges
 > to ensure that they will be compatible with future versions of this specification.
 > They SHOULD also use the namespace feature to avoid collisions with other implementations.
 
