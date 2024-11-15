@@ -559,7 +559,7 @@ together with the resolved options' values.
 
 The _function_ `:currency` performs selection as described in [Number Selection](#number-selection) below.
 
-### `:unit` function
+### The `:unit` function
 
 The _function_ `:unit` is a selector and formatter for unitized values,
 that is, numeric values associated with a unit of measurement.
