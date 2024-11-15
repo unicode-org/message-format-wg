@@ -574,9 +574,9 @@ This is a specialized form of numeric selection and formatting.
 The _operand_ of the `:unit` function can be one of any number of
 implementation-defined types,
 each of which contains a numerical `value` plus a `unit`
-or it can be a [Number Operand](#number-operands), as long as the option
+or it can be a [Number Operand](#number-operands), as long as the _option_
 `unit` is provided.
-The option `unit` MAY be used to override the units of an implementation-defined type,
+The _option_ `unit` MAY be used to override the units of an implementation-defined type,
 provided the units are compatible and the implementation supports conversion.
 
 The value of the _operand_'s `unit` SHOULD be either a string containing a
@@ -679,9 +679,9 @@ The following options and their values are required to be available on the funct
 
 If the _operand_ of the _expression_ is an implementation-defined type,
 such as the _resolved value_ of an _expression_ with a `:unit` _annotation_,
-it can include option values.
-These are included in the resolved option values of the _expression_,
-with _options_ on the _expression_ taking priority over any option values of the _operand_.
+it can include _option_ values.
+These are included in the resolved _option_ values of the _expression_,
+with _options_ on the _expression_ taking priority over any _option_ values of the _operand_.
 
 > For example, the _placeholder_ in this _message_:
 > ```
@@ -693,9 +693,10 @@ with _options_ on the _expression_ taking priority over any option values of the
 
 Some implementations support conversion to the locale's preferred units via the `usage` _option_.
 Implementing this _option_ is optional.
-Attempting to convert units produces a _Bad Option_ error if such conversion is unsupported
-or if the specified units are incompatible.
-For example, trying to convert meters to a `volume` unit (such as "gallons") produces a _Bad Option_.
+Attempting to convert units produces an _Unsupported Operation_ error if such conversion is unsupported.
+It produces a _Bad Option_ error if the specified units are incompatible.
+> For example, trying to convert a `length` unit such as meters
+> to a `volume` unit (such as "gallons") produces a _Bad Option_.
 
 Implementations MUST NOT substitute the unit without performing the associated conversion.
 
@@ -712,7 +713,7 @@ Implementations MUST NOT substitute the unit without performing the associated c
 > ```
 > This can produce "You have 405 feet to go."
 
-Not all usages are compatible with the unit.
+Not all `usage` values are compatible with a given unit.
 Implementations will produce a _Bad Option_ error for units 
 or combinations of units and usages that are not supported.
 
@@ -721,7 +722,7 @@ or combinations of units and usages that are not supported.
 The _resolved value_ of an _expression_ with a `:unit` _function_
 consist of an implementation-defined unit value
 of the _operand_ of the annotated _expression_,
-together with the resolved options' values.
+together with the resolved _options_ and their resolved values.
 
 #### Selection
 
