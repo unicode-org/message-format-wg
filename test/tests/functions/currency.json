@@ -17,7 +17,7 @@
     },
     {
       "src": "{42 :currency}",
-      "expErrors": true
+      "expErrors": [{ "type": "bad-operand" }]
     },
     {
       "src": ".local $n = {42 :number} {{{$n :currency}}}",
