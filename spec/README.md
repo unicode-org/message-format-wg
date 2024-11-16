@@ -72,7 +72,11 @@ A **_term_** looks like this when it is defined in this specification.
 
 A reference to a _term_ looks like this.
 
+> [!NOTE]
 > Examples are non-normative and styled like this.
+
+> [!IMPORTANT]
+> Text marked "Important" like this are normative.
 
 ### Stability Policy
 
@@ -84,42 +88,42 @@ Updates to this specification will not make any valid _message_ invalid.
 
 Updates to this specification will not remove any syntax provided in this version.
 
-Updates to this specification will not specify an error for any message
-that previously did not specify an error.
+Updates to this specification will not specify an _error_ for any _message_
+that previously did not specify an _error_.
 
-Updates to this specification will not specify the use of a fallback value for any message
-that previously did not specify a fallback value.
+Updates to this specification will not specify the use of a _fallback value_ for any _message_
+that previously did not specify a _fallback value_.
 
 Updates to this specification will not change the syntactical meaning
 of any syntax defined in this specification.
 
-Updates to this specification will not remove any functions defined in the default registry.
+Updates to this specification will not remove any _functions_ defined in the default function registry.
 
-Updates to this specification will not remove any options or option values
-defined in the default registry.
+Updates to this specification will not remove any _options_ or _option_ values
+defined in the default function registry.
 
 > [!NOTE]
 > The foregoing policies are _not_ a guarantee that the results of formatting will never change.
 > Even when this specification or its implementation do not change,
-> the functions for date formatting, number formatting and so on
+> the _function handlers_ for date formatting, number formatting and so on
 > can change their results over time or behave differently due to local runtime
 > differences in implementation or changes to locale data
 > (such as due to the release of new CLDR versions).
 
 Updates to this specification will only reserve, define, or require
-function identifiers and function option identifiers
+_function_ _identifiers_ and _function_ _option_ _identifiers_
 which satisfy either of the following two requirements:
-- Includes no namespace,
-  and has a name consisting of characters in the ranges a-z, A-Z, and 0-9,
+- Includes no _namespace_,
+  and has a _name_ consisting of characters in the ranges a-z, A-Z, and 0-9,
   and the characters U+002E FULL STOP `.`, U+002D HYPHEN-MINUS `-`, and U+005F LOW LINE `_`.
-- Uses a namespace consisting of a single character in the ranges a-z and A-Z.
+- Uses a _namespace_ consisting of a single character in the ranges a-z and A-Z.
 
-All other identifiers in these categories are reserved for the use of implementations or users.
+All other _identifiers_ in these categories are reserved for the use of implementations or users.
 
 > [!NOTE]
-> Users defining custom identifiers SHOULD include at least one character outside these ranges
+> Users defining custom _identifiers_ SHOULD include at least one character outside these ranges
 > to ensure that they will be compatible with future versions of this specification.
-> They SHOULD also use the namespace feature to avoid collisions with other implementations.
+> They SHOULD also use the _namespace_ feature to avoid collisions with other implementations.
 
 Future versions of this specification will not introduce changes
 to the data model that would result in a data model representation
@@ -133,17 +137,17 @@ based on this version being invalid.
 > - Future versions may define new syntax and structures
 >   that would not be supported by this version of the specification.
 > - Future versions may add additional structure or meaning to existing syntax.
-> - Future versions may define new keywords.
-> - Future versions may make previously invalid messages valid.
-> - Future versions may define additional functions in the default registry
->   or may reserve the names of functions for the purposes of interoperability.
-> - Future versions may define additional options to existing functions.
-> - Future versions may define additional option values for existing options.
-> - Future versions may deprecate (but not remove) keywords, functions, options, or option values.
+> - Future versions may define new _keywords_.
+> - Future versions may make previously invalid _messages_ valid.
+> - Future versions may define additional _functions_ in the default registry
+>   or may reserve the names of _functions_ for the purposes of interoperability.
+> - Future versions may define additional _options_ to existing functions.
+> - Future versions may define additional _option_ values for existing _options_.
+> - Future versions may deprecate (but not remove) _keywords_, _functions_, _options_, or _option_ values.
 > - Future versions of this specification may introduce changes
 >   to the data model that would result in future data model representations
 >   not being valid for implementations of this version of the data model.
->   - For example, a future version could introduce a new keyword,
+>   - For example, a future version could introduce a new _keyword_,
 >     whose data model representation would be a new interface
 >     that is not recognized by this version's data model.
 
