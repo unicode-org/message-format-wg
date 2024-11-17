@@ -564,7 +564,7 @@ The following options and their values are required to be available on the funct
 - `numberingSystem`
    - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
      (default is locale-specific)
-- `currencySign`
+- `sign`
   - `accounting`
   - `standard` (default)
 - `currencyDisplay`
@@ -617,10 +617,10 @@ with _options_ on the _expression_ taking priority over any option values of the
 > For example, the _placeholder_ in this _message_:
 > ```
 > .input {$n :currency currency=USD trailingZeroDisplay=stripIfInteger}
-> {{{$n :currency currencySign=accounting}}}
+> {{{$n :currency sign=accounting}}}
 > ```
 > would be formatted with the resolved options
-> `{ currencySign: 'accounting', trailingZeroDisplay: 'stripIfInteger', currency: 'USD' }`.
+> `{ sign: 'accounting', trailingZeroDisplay: 'stripIfInteger', currency: 'USD' }`.
 
 #### Resolved Value
 
