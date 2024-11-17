@@ -72,11 +72,13 @@ A **_term_** looks like this when it is defined in this specification.
 
 A reference to a _term_ looks like this.
 
-> [!NOTE]
 > Examples are non-normative and styled like this.
 
 > [!IMPORTANT]
 > Text marked "Important" like this are normative.
+
+> [!NOTE]
+> Notes are non-normative.
 
 ### Stability Policy
 
