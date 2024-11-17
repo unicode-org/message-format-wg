@@ -84,8 +84,9 @@ or a _variable_ whose _resolved value_ is one of these _literals_:
 - `ltr`: left-to-right directionality
 - `rtl`: right-to-left directionality
 - `auto`: directionality determined from _expression_ contents
-- `inherit` (default): directionality inherited from the _message_,
-  without isolation of the _expression_ value
+- `inherit` (default): directionality inherited from the _message_
+   or from the _resolved value_ of the _operand_ without
+   requiring isolation of the _expression_ value.
 
 For other values, a _Bad Option_ error is emitted
 and the value of the `u:dir` option is ignored.
