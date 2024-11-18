@@ -1073,17 +1073,21 @@ override values set by the current locale,
 or provided by the _formatting context_ (such as the default time zone),
 or embedded in an implementation-defined date/time _operand_ value.
 
-The following options and their values are required to be available on
-the functions `:datetime`, `:date`, and `:time`:
+The following **standard** option and its values MUST be available on
+the functions `:datetime` and `:time`:
 
 - `hour12`
   - `true`
   - `false`
-- `calendar` \[OPTIONAL\]
+
+The following **optional** options and their values SHOULD be available on
+the functions `:datetime`, `:date`, and `:time`:
+
+- `calendar`
   - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
-- `numberingSystem` \[OPTIONAL\]
+- `numberingSystem`
   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
-- `timeZone` \[OPTIONAL\]
+- `timeZone`
   - valid identifier per [BCP175](https://www.rfc-editor.org/rfc/rfc6557)
 
 > [!NOTE]
