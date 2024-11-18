@@ -20,7 +20,7 @@ _What is this proposal trying to achieve?_
 
 Describe how to manage the registration of functions and options under the 
 auspices of MessageFormat 2.0.
-This includes the Standard Functions which are normatively required by MF2.0,
+This includes the REQUIRED Functions which are normatively required by MF2.0,
 functions or options in the Unicode `u:` namespace,
 and functions/options that are recommended for interoperability.
 
@@ -35,7 +35,7 @@ The terms "registry" and "default registry" suggest machine-readbility
 and various relationships between function sets that the working group decided
 was not appropriate.
 
-MessageFormat v2 includes a standard set of functions.
+MessageFormat v2 includes a REQUIRED set of functions.
 Implementations are required to implement all of the _selectors_ 
 and _formatters_ in this set,
 including _operands_, _options_, and option values.
@@ -45,7 +45,7 @@ runtimes in a wholly consistent manner.
 Because we want broad adoption in many different programming environments
 and because the capabilities 
 and functionality available in these environments vary widely,
-this standard set of functions must be conservative in its requirements
+this REQUIRED set of functions must be conservative in its requirements
 such that every implementation can reasonably implement it.
 
 Promoting message interoperability can and should go beyond this.
@@ -56,7 +56,7 @@ Another way to say this is that, ideally, there should be only one way to
 do a given formatting or selection operation in terms of the syntax of a message.
 
 This suggests that there exist a set of functions and options that
-extends the standard set of functions.
+extends the REQUIRED set of functions.
 Such a set contains the "templates" for functions that go beyond those every implementation 
 must provide or which contain additional, optional features (options, option values)
 that implementations can provide if they are motivated and capable of doing so.
@@ -64,7 +64,7 @@ These specifications are normative for the functionality that they provide,
 but are optional for implementaters.
 
 There also needs to be a mechanism and process by which functions in the default namespace
-can be incubated for future inclusion in either the standard set of functions
+can be incubated for future inclusion in either the REQUIRED set of functions
 or in this extended, optional set.
 
 ### Examples
@@ -183,14 +183,14 @@ a _selector_,
 or both.
 
 The specification will indicate if the _formatting function_,
-the _selector function_, or, where applicable, both are `Standard` or `Optional`.
+the _selector function_, or, where applicable, both are `REQUIRED` or `RECOMMENDED`.
 The specification must describe operands, including literal representations.
 
 The specification includes all defined _options_ for the function.
 Each _option_ must define which values it accepts.
-An _option_  is either `Standard` or `Optional`.
+An _option_  is either `REQUIRED` or `RECOMMENDED`.
 
-_Functions_ or _options_ that have an `Optional` status
+_Functions_ or _options_ that have an `RECOMMENDED` status
 must have a maturity level assigned.
 The maturity levels are:
 - **Proposed**
@@ -198,14 +198,14 @@ The maturity levels are:
 - **Released**
 - **Deprecated**
 
-_Functions_ and _options_ that have a `Standard` status have only the
+_Functions_ and _options_ that have a `REQUIRED` status have only the
 `Released` and `Deprecated` statuses.
 
-* An _option_ can be `Standard` for an `Optional` function.
+* An _option_ can be `REQUIRED` for an `RECOMMENDED` function.
   This means that the function is optional to implement, but that, when implemented, must include the option.
-* An _option_ can be `Optional` for a `Standard` function.
+* An _option_ can be `RECOMMENDED` for a `REQUIRED` function.
   This means that the function is required, but implementations are not required to implement the option.
-* An _option_ can be `Optional` for an `Optional` function.
+* An _option_ can be `RECOMMENDED` for an `RECOMMENDED` function.
   This means that the function is optional to implement and the option is optional when implementing the function.
 
 A function specification describes the functions _operand_ or _operands_,
@@ -215,19 +215,19 @@ its formatting behavior (if any),
 its selection behavior (if any),
 and its resolved value behavior.
 
-`Standard` functions are stable and subject to stability guarantees.
+`REQUIRED` functions are stable and subject to stability guarantees.
 Such entries will be limited in scope to functions that can reasonably be
 implemented in nearly any programming environment.
 > Examples: `:string`, `:number`, `:datetime`, `:date`, `:time`
 
 
-`Optional` functions are stable and subject to stability guarantees once they
+`RECOMMENDED` functions are stable and subject to stability guarantees once they
 reach the status of **Released**.
-Implmentations are not required to implement _functions_ or _options_ with an `Optional` status
+Implmentations are not required to implement _functions_ or _options_ with an `RECOMMENDED` status
 when claiming MF2 conformance.
-Implementations MUST NOT implement functions or options that conflict with `Optional` functions or options.
+Implementations MUST NOT implement functions or options that conflict with `RECOMMENDED` functions or options.
 
-`Optional` values may have their status changed to `Standard`,
+`RECOMMENDED` values may have their status changed to `REQUIRED`,
 but not vice-versa.
 
 > Option Examples `:datetime` might have a `timezone` option in LDML46.
@@ -251,7 +251,7 @@ In such cases, the `u:` namespace version is retained, but deprecated.
 > but it is not universally available and could represent a barrier to adoption
 > if normatively required.
 
-All `Standard`, `Optional`, and Unicode namespace function or option specifications goes through 
+All `REQUIRED`, `RECOMMENDED`, and Unicode namespace function or option specifications goes through 
 a development process that includes these levels of maturity:
 
 1. **Proposed** The _function_ or _option_, along with necessary documentation,
@@ -260,12 +260,12 @@ a development process that includes these levels of maturity:
    During this period, changes can still be made.
 3. **Released** The _function_ or _option_ is accepted as of a given LDML release that MUST be specified.
 4. **Deprecated** The _function_ or _option_ was previously _released_ but has been deprecated.
-   Implementations are still required to support `Standard` functions or options that are deprecated.
+   Implementations are still required to support `REQUIRED` functions or options that are deprecated.
 5. **Rejected** The _function_ or _option_ was considered and rejected by the MF2 WG and/or the CLDR-TC.
    Such items are not part of any standard, but might be maintained for historical reference.
 
 A proposal can seek to modify an existing function.
-For example, if a _function_ `:foo` were an `Optional` function in the LDMLxx release,
+For example, if a _function_ `:foo` were an `RECOMMENDED` function in the LDMLxx release,
 a proposal to add an _option_ `bar` to this function would take the form
 of a proposal to alter the existing specification of `:foo`.
 Multiple proposals can exist for a given _function_ or _option_.
