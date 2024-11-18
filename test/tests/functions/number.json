@@ -137,18 +137,9 @@
     },
     {
       "src": ".local $foo = {$bar :number} {{bar {$foo}}}",
-      "params": [
-        {
-          "name": "bar",
-          "value": "foo"
-        }
-      ],
-      "exp": "bar {$bar}",
-      "expErrors": [
-        {
-          "type": "bad-operand"
-        }
-      ]
+      "params": [{ "name": "bar", "value": "foo" }],
+      "exp": "bar {$foo}",
+      "expErrors": [{ "type": "bad-operand" }]
     },
     {
       "src": ".input {$foo :number} {{bar {$foo}}}",
