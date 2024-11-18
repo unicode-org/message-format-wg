@@ -857,8 +857,10 @@ All other _operand_ values produce a _Bad Operand_ error.
 The `:datetime` function can use either the appropriate _style options_ 
 or can use a collection of _field options_ (but not both) to control the formatted 
 output.
+_Date/time override options_ can be combined with either _style options_ or _field options_.
 
-If both are specified, a _Bad Option_ error MUST be emitted
+If both _style options_ and _field options_ are specified,
+a _Bad Option_ error is emitted
 and a _fallback value_ used as the _resolved value_ of the _expression_.
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
@@ -897,7 +899,7 @@ and what format to use for that field.
 The _field options_ are defined as follows:
 
 > [!IMPORTANT]
-> The value `2-digit` for some _field options_ **must** be quoted
+> The value `2-digit` for some _field options_ MUST be quoted
 > in the MessageFormat syntax because it starts with a digit
 > but does not match the `number-literal` production in the ABNF.
 > ```
@@ -939,11 +941,6 @@ The function `:datetime` has the following options:
   - `1`
   - `2`
   - `3`
-- `hourCycle` (default is locale-specific)
-  - `h11`
-  - `h12`
-  - `h23`
-  - `h24`
 - `timeZoneName`
   - `long`
   - `short`
@@ -995,6 +992,7 @@ The function `:date` has these _options_:
   - `long`
   - `medium` (default)
   - `short`
+- _Date/time override options_
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
@@ -1032,6 +1030,7 @@ The function `:time` has these _options_:
   - `long`
   - `medium`
   - `short` (default)
+- _Date/time override options_
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
@@ -1095,3 +1094,21 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 > The form of these serializations is known and is a de facto standard.
 > Support for these extensions is expected to be required in the post-tech preview.
 > See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
+
+### Date and Time Override Options
+
+**_<dfn>Date/time override options</dfn>_** are _options_ that allow an _expression_ to
+override values set by the current locale,
+or provided by the _formatting context_ (such as the default time zone),
+or embedded in an implementation-defined date/time _operand_ value.
+
+The following REQUIRED option and its values MUST be available on
+the functions `:datetime` and `:time`:
+
+- `hour12`
+  - `true`
+  - `false`
+
+> [!NOTE]
+> These options do not have default values because they are only to be used
+> as overrides for locale-and-value dependent implementation-defined defaults.
