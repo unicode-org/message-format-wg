@@ -38,11 +38,26 @@ by any version of this specification
 for **standard** and **optional** functions.
 Such _options_ MUST use an implementation-specific _namespace_.
 
-Implementations MAY _accept_ additional _option_ values for _options_ defined here.
+Implementations MAY _accept_, for _options_ defined in this specification,
+_option_ values which are not defined in this specification.
 However, such values might become defined with a different meaning in the future,
 including with a different, incompatible name
 or using an incompatible value space.
 Supporting implementation-specific _option_ values for **standard** or **optional** functions is NOT RECOMMENDED.
+
+Implementations MAY _accept_, for _operands_ or _options_ defined in this specification,
+values with implementation-defined types.
+Such values can be useful to users in cases where local usage and support exists
+(including cases in which details vary from those defined by Unicode and CLDR).
+
+> For example:
+> - Implementations are encouraged to _accept_ some native representation
+>   for currency amounts as the _operand_ in the _function_ `:currency`.
+> - A Java implementation might _accept_ a `java.time.chrono.Chronology` object
+>   as a value for the _date/time override option_ `calendar`
+> - ICU4J's implementation might _accept_ a `com.ibm.icu.text.NumberingSystem` object
+>   instead of using a [Unicode Numbering System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+>   for the option `numberingSystem` in _functions_ such as `:number` or `:integer`.
 
 Future versions of this specification MAY define additional _options_ and _option_ values,
 subject to the rules in the [Stability Policy](#stability-policy),
