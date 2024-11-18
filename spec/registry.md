@@ -50,13 +50,14 @@ values with implementation-defined types.
 Such values can be useful to users in cases where local usage and support exists
 (including cases in which details vary from those defined by Unicode and CLDR).
 
-> For example, implementations are encouraged to _accept_ a native representation
-> for currency amounts as the _operand_ in the _function_ `:currency`.
-> Or a Java implementation might _accept_ a `java.time.chrono.Chronology` object
-> as a value for the date/time option `calendar`
-> or ICU4J's implementation might _accept_ a `com.ibm.icu.text.NumberingSystem` object
-> instead of using a [Unicode Numbering System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
-> for the option `numberingSystem` in _functions_ such as `:number` or `:integer`.
+> For example:
+> - Implementations are encouraged to _accept_ some native representation
+>   for currency amounts as the _operand_ in the _function_ `:currency`.
+> - A Java implementation might _accept_ a `java.time.chrono.Chronology` object
+>   as a value for the _date/time override option_ `calendar`
+> - ICU4J's implementation might _accept_ a `com.ibm.icu.text.NumberingSystem` object
+>   instead of using a [Unicode Numbering System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+>   for the option `numberingSystem` in _functions_ such as `:number` or `:integer`.
 
 Future versions of this specification MAY define additional _options_ and _option_ values,
 subject to the rules in the [Stability Policy](#stability-policy),
