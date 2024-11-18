@@ -45,7 +45,7 @@ including with a different, incompatible name
 or using an incompatible value space.
 Supporting implementation-specific _option_ values for **standard** or **optional** functions is NOT RECOMMENDED.
 
-Implementations MAY _accept_, for _operands_ and _option_ values defined in this specification,
+Implementations MAY _accept_, for _operands_ or _option_ values defined in this specification,
 implementation-defined types.
 Such values can be useful to users in cases where local usage and support exists
 (including cases in which details vary from those defined by Unicode and CLDR).
