@@ -390,10 +390,10 @@ numeric values to which a mathematical operation has been applied.
 > .input {$like_count :integer}
 > .local $others_count = {$like_count :math subtract=1}
 > .match $like_count $others_count
-> 0 * {{Your post has no likes.}}
-> 1 * {{{$name} liked your post.}}
-> * 1 {{{$name} and one other person liked your post.}}
-> * * {{{$name} and {$others_count} other people liked your post.}}
+> 0 *   {{Your post has no likes.}}
+> 1 *   {{{$name} liked your post.}}
+> * one {{{$name} and {$others_count} other user liked your post.}}
+> * *   {{{$name} and {$others_count} other users liked your post.}}
 > ```
 
 #### Operands
