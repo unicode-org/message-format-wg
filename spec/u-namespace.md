@@ -68,7 +68,8 @@ not valid, or some other reason.
 ### `u:dir`
 
 Replaces the base directionality defined in
-the _function context_ for this _expression_.
+the _function context_ for this _expression_
+and applies bidirectional isolation to it.
 
 If this option is set on _markup_, a _Bad Option_ error is emitted
 and the value of the `u:dir` option is ignored.
@@ -76,12 +77,16 @@ and the value of the `u:dir` option is ignored.
 During processing, the `u:dir` option
 MUST be removed from the resolved mapping of _options_
 before calling the _function handler_.
+Its value is retained in the _resolved value_ of the _expression_.
 
 The value of the `u:dir` _option_ MUST be one of the following _literal_ values
 or a _variable_ whose _resolved value_ is one of these _literals_:
 - `ltr`: left-to-right directionality
 - `rtl`: right-to-left directionality
 - `auto`: directionality determined from _expression_ contents
+- `inherit` (default): directionality inherited from the _message_
+   or from the _resolved value_ of the _operand_ without
+   requiring isolation of the _expression_ value.
 
 For other values, a _Bad Option_ error is emitted
 and the value of the `u:dir` option is ignored.

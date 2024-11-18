@@ -56,19 +56,22 @@
     },
     {
       "src": "hello {world :string u:dir=ltr u:id=foo}",
-      "exp": "hello world",
+      "exp": "hello \u2066world\u2069",
       "expParts": [
         {
           "type": "literal",
           "value": "hello "
         },
+        { "type": "bidiIsolation", "value": "\u2066" },
         {
           "type": "string",
           "source": "|world|",
           "dir": "ltr",
           "id": "foo",
           "value": "world"
-        }
+        },
+        { "type": "bidiIsolation", "value": "\u2069" }
+
       ]
     },
     {
@@ -97,6 +100,25 @@
           "type": "string",
           "source": "|world|",
           "locale": "en-US",
+          "value": "world"
+        },
+        { "type": "bidiIsolation", "value": "\u2069" }
+      ]
+    },
+    {
+      "src": ".local $world = {world :string u:dir=ltr u:id=foo} {{hello {$world}}}",
+      "exp": "hello \u2066world\u2069",
+      "expParts": [
+        {
+          "type": "literal",
+          "value": "hello "
+        },
+        { "type": "bidiIsolation", "value": "\u2066" },
+        {
+          "type": "string",
+          "source": "|world|",
+          "dir": "ltr",
+          "id": "foo",
           "value": "world"
         },
         { "type": "bidiIsolation", "value": "\u2069" }

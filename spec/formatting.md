@@ -938,9 +938,13 @@ The _Default Bidi Strategy_ is defined as follows:
    1. Let `fmt` be the formatted string representation of the _resolved value_ of `exp`.
    1. Let `dir` be the directionality of `fmt`,
       one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
+   1. Let the boolean value `isolate` be
+      True if the `u:dir` _option_ of the _resolved value_ of `exp` has a value other than `'inherit'`,
+      or False otherwise.
    1. If `dir` is `'LTR'`:
-      1. If `msgdir` is `'LTR'`
-         in the formatted output, let `fmt` be itself
+      1. If `msgdir` is `'LTR'` in the formatted output
+         and `isolate` is False,
+         let `fmt` be itself
       1. Else, in the formatted output,
          prefix `fmt` with U+2066 LEFT-TO-RIGHT ISOLATE
          and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
