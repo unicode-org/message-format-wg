@@ -60,7 +60,7 @@ nor be made available to _function handlers_.
 > An implementation MUST ensure that every _expression_ in a _message_
 > is evaluated at most once.
 
-> [!NOTE]
+> [!IMPORTANT]
 >
 > Implementations with lazy evaluation MUST NOT use a
 > call-by-name evaluation strategy. Instead, they must evaluate expressions
