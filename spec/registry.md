@@ -1113,7 +1113,7 @@ The following _option_ and its values will be REQUIRED to be available on
 the functions `:datetime`, `:date`, and `:time`.
 This option currently has a Maturity Level of **Proposed**.
 
-- `timezone`
+- `timeZone`
   - A valid time zone identifier
     (see [BCP175](https://www.rfc-editor.org/bpc/bpc175))
   - `local`
