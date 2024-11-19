@@ -1095,6 +1095,7 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 > Support for these extensions is expected to be required in the post-tech preview.
 > See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
 
+
 ### Date and Time Override Options
 
 **_<dfn>Date/time override options</dfn>_** are _options_ that allow an _expression_ to
@@ -1102,13 +1103,22 @@ override values set by the current locale,
 or provided by the _formatting context_ (such as the default time zone),
 or embedded in an implementation-defined date/time _operand_ value.
 
-The following REQUIRED option and its values MUST be available on
+The following _option_ and its values are REQUIRED to be available on
 the functions `:datetime` and `:time`:
 
 - `hour12`
   - `true`
   - `false`
 
+The following _options_ and their values are RECOMMENDED to be available on
+the functions `:datetime`, `:date`, and `:time`.
+
+- `calendar`
+  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
+- `numberingSystem`
+  - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+
 > [!NOTE]
-> These options do not have default values because they are only to be used
+> These _options_ do not have default values because they are only to be used
 > as overrides for locale-and-value dependent implementation-defined defaults.
+
