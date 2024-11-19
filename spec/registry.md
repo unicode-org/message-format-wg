@@ -1109,6 +1109,31 @@ the functions `:datetime` and `:time`:
   - `true`
   - `false`
 
+The following _option_ and its values will be REQUIRED to be available on
+the functions `:datetime`, `:date`, and `:time`.
+This option currently has a Maturity Level of **Proposed**.
+
+- `timezone`
+  - A valid time zone identifier
+    (see [BCP175](https://www.rfc-editor.org/bpc/bpc175))
+  - `local`
+  - `UTC`
+  
+A time zone identifier is well-formed if it matches `tzId` in the following ABNF:
+```abnf
+tzId   = tzPath / tzEtc
+tzPath = tzPart 1*("/" tzPart)
+tzPart = tzWord *("_" tzWord)
+tzWord = (%x41-5A) *(%x61-7A) ; Uppercase ASCII letter followed by lowercase letters
+tzEtc  = ("Etc/" ("UTC" / "GMT" (("+" / "-") 1*2DIGIT))
+```
+  
+> [!NOTE]
+> The value `local` permits a _message_ to convert a date/time value
+> into a [floating](https://www.w3.org/TR/timezone/#floating) time value
+> (sometimes called a _plain_ or _local_ time value) by removing
+> the association with a specific time zone.
+
 > [!NOTE]
 > These options do not have default values because they are only to be used
 > as overrides for locale-and-value dependent implementation-defined defaults.
