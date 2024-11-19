@@ -1125,7 +1125,7 @@ tzId   = tzPath / tzEtc
 tzPath = tzPart 1*("/" tzPart)
 tzPart = tzWord *("_" tzWord)
 tzWord = (%x41-5A) *(%x61-7A) ; Uppercase ASCII letter followed by lowercase letters
-tzEtc  = ("Etc/" ("UTC" / "GMT" (("+" / "-") 1*2DIGIT))
+tzEtc  = "Etc/GMT" ("+" / "-") 1*2DIGIT
 ```
   
 > [!NOTE]
