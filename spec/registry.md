@@ -1095,3 +1095,17 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 > The form of these serializations is known and is a de facto standard.
 > Support for these extensions is expected to be required in the post-tech preview.
 > See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
+
+**_<dfn>Date/time override options</dfn>_** are _options_ that allow an _expression_ to
+override values set by the current locale,
+or provided by the _formatting context_ (such as the default time zone),
+or embedded in an implementation-defined date/time _operand_ value.
+
+The following **RECOMMENDED** options and their values SHOULD be available on
+the functions `:datetime`, `:date`, and `:time`.
+The maturity level for each is **Proposed**.
+
+- `calendar`
+  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
+- `numberingSystem`
+  - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
