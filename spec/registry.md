@@ -1112,7 +1112,6 @@ the functions `:datetime` and `:time`:
 
 The following _options_ and their values are RECOMMENDED to be available on
 the functions `:datetime`, `:date`, and `:time`.
-The maturity level for each is **Proposed**.
 
 - `calendar`
   - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
