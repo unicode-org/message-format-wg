@@ -1,7 +1,7 @@
 # MessageFormat 2.0 Default Function Registry
 
-This section defines the **standard** _functions_ which are REQUIRED for conformance with this specification,
-along with **optional** _functions_ that SHOULD be implemented to support
+This section defines the **REQUIRED** _functions_ which are REQUIRED for conformance with this specification,
+along with **RECOMMENDED** _functions_ that SHOULD be implemented to support
 additional functionality.
 
 To **_<dfn>accept</dfn>_** a function means that an implementation MUST NOT
@@ -16,16 +16,16 @@ Implementations MAY emit an _Unsupported Operation_ error for _options_
 or _option_ values that they cannot support.
 
 _Functions_ can define _options_. 
-An _option_ can be **standard** or **optional**.
+An _option_ can be **REQUIRED** or **RECOMMENDED**.
 
-Implementations MUST _accept_ each **standard** _function_ and
-MUST _accept_ all _options_ defined as **standard** for those _functions_.
+Implementations MUST _accept_ each **REQUIRED** _function_ and
+MUST _accept_ all _options_ defined as **REQUIRED** for those _functions_.
 
-Implementations SHOULD _accept_ each **optional** _function_. 
+Implementations SHOULD _accept_ each **RECOMMENDED** _function_. 
 For each such _function_, the implementation MUST accept all _options_
-listed as **standard** for that _function_.
+listed as **REQUIRED** for that _function_.
 
-Implementations SHOULD _accept_ _options_ that are marked as **optional**.
+Implementations SHOULD _accept_ _options_ that are marked as **RECOMMENDED**.
 
 Implementations MAY _accept_ _functions_ not defined in this specification.
 In addition, implementations SHOULD provide mechanisms for users to
@@ -35,7 +35,7 @@ an implementation-defined or user-defined _namespace_.
 
 Implementations MAY implement additional _options_ not defined
 by any version of this specification
-for **standard** and **optional** functions.
+for **REQUIRED** and **RECOMMENDED** functions.
 Such _options_ MUST use an implementation-specific _namespace_.
 
 Implementations MAY _accept_, for _options_ defined in this specification,
@@ -43,7 +43,7 @@ _option_ values which are not defined in this specification.
 However, such values might become defined with a different meaning in the future,
 including with a different, incompatible name
 or using an incompatible value space.
-Supporting implementation-specific _option_ values for **standard** or **optional** functions is NOT RECOMMENDED.
+Supporting implementation-specific _option_ values for **REQUIRED** or **RECOMMENDED** functions is NOT RECOMMENDED.
 
 Implementations MAY _accept_, for _operands_ or _options_ defined in this specification,
 values with implementation-defined types.
@@ -857,8 +857,10 @@ All other _operand_ values produce a _Bad Operand_ error.
 The `:datetime` function can use either the appropriate _style options_ 
 or can use a collection of _field options_ (but not both) to control the formatted 
 output.
+_Date/time override options_ can be combined with either _style options_ or _field options_.
 
-If both are specified, a _Bad Option_ error MUST be emitted
+If both _style options_ and _field options_ are specified,
+a _Bad Option_ error is emitted
 and a _fallback value_ used as the _resolved value_ of the _expression_.
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
@@ -897,7 +899,7 @@ and what format to use for that field.
 The _field options_ are defined as follows:
 
 > [!IMPORTANT]
-> The value `2-digit` for some _field options_ **must** be quoted
+> The value `2-digit` for some _field options_ MUST be quoted
 > in the MessageFormat syntax because it starts with a digit
 > but does not match the `number-literal` production in the ABNF.
 > ```
@@ -939,11 +941,6 @@ The function `:datetime` has the following options:
   - `1`
   - `2`
   - `3`
-- `hourCycle` (default is locale-specific)
-  - `h11`
-  - `h12`
-  - `h23`
-  - `h24`
 - `timeZoneName`
   - `long`
   - `short`
@@ -995,6 +992,7 @@ The function `:date` has these _options_:
   - `long`
   - `medium` (default)
   - `short`
+- _Date/time override options_
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
@@ -1032,6 +1030,7 @@ The function `:time` has these _options_:
   - `long`
   - `medium`
   - `short` (default)
+- _Date/time override options_
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
@@ -1096,12 +1095,22 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 > Support for these extensions is expected to be required in the post-tech preview.
 > See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
 
+
+### Date and Time Override Options
+
 **_<dfn>Date/time override options</dfn>_** are _options_ that allow an _expression_ to
 override values set by the current locale,
 or provided by the _formatting context_ (such as the default time zone),
 or embedded in an implementation-defined date/time _operand_ value.
 
-The following **RECOMMENDED** options and their values SHOULD be available on
+The following _option_ and its values are REQUIRED to be available on
+the functions `:datetime` and `:time`:
+
+- `hour12`
+  - `true`
+  - `false`
+
+The following _options_ and their values are RECOMMENDED to be available on
 the functions `:datetime`, `:date`, and `:time`.
 The maturity level for each is **Proposed**.
 
@@ -1109,3 +1118,8 @@ The maturity level for each is **Proposed**.
   - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
 - `numberingSystem`
   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+
+> [!NOTE]
+> These _options_ do not have default values because they are only to be used
+> as overrides for locale-and-value dependent implementation-defined defaults.
+
