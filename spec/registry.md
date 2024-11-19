@@ -1115,18 +1115,11 @@ This option currently has a Maturity Level of **Proposed**.
 
 - `timeZone`
   - A valid time zone identifier
-    (see [BCP175](https://www.rfc-editor.org/bpc/bpc175))
+    (see [TZDB](https://www.iana.org/time-zones)
+    and [LDML](https://www.unicode.org/reports/tr35/tr35-dates.html#Time_Zone_Names)
+    for information on identifiers)
   - `local`
   - `UTC`
-  
-A time zone identifier is well-formed if it matches `tzId` in the following ABNF:
-```abnf
-tzId   = tzPath / tzEtc
-tzPath = tzPart 1*("/" tzPart)
-tzPart = tzWord *("_" tzWord)
-tzWord = (%x41-5A) *(%x61-7A) ; Uppercase ASCII letter followed by lowercase letters
-tzEtc  = "Etc/GMT" ("+" / "-") 1*2DIGIT
-```
   
 > [!NOTE]
 > The value `local` permits a _message_ to convert a date/time value
