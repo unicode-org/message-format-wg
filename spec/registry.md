@@ -1114,9 +1114,19 @@ the functions `:datetime` and `:time`:
   - `true`
   - `false`
 
-The following _option_ and its values will be REQUIRED to be available on
+The following _options_ and their values are RECOMMENDED to be available on
 the functions `:datetime`, `:date`, and `:time`.
-This option currently has a Maturity Level of **Proposed**.
+
+- `calendar`
+  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
+- `numberingSystem`
+  - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+
+The following _option_ and its values are **Proposed** for
+inclusion in the next release of this specification but have not yet been
+finalized.
+If accepted, implementations could be REQUIRED to make this _option_
+available in the functions `:datetime`, `:date`, and `:time`.
 
 - `timeZone`
   - A valid time zone identifier
@@ -1131,13 +1141,3 @@ This option currently has a Maturity Level of **Proposed**.
 > into a [floating](https://www.w3.org/TR/timezone/#floating) time value
 > (sometimes called a _plain_ or _local_ time value) by removing
 > the association with a specific time zone.
-
-The following _options_ and their values are RECOMMENDED to be available on
-the functions `:datetime`, `:date`, and `:time`.
-
-- `calendar`
-  - valid [Unicode Calendar Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier)
-- `numberingSystem`
-  - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
-
-
