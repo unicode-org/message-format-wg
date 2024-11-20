@@ -704,10 +704,11 @@ The _function_ `:unit` performs selection as described in [Number Selection](#nu
 Implementations MAY support conversion to the locale's preferred units via the `usage` _option_.
 Implementing this _option_ is optional.
 Not all `usage` values are compatible with a given unit.
-Implementations SHOULD emit an _Unsupported Operation_ error if the requestion conversion is not supported.
+Implementations SHOULD emit an _Unsupported Operation_ error if the requested conversion is not supported.
 
-> For example, trying to convert a `length` unit such as meters
-> to a `volume` unit (such as "gallons") could produce an _Unsupported Operation_ error.
+> For example, trying to convert a `length` unit (such as "meters")
+> to a `volume` usage (which might be a unit akin to "liters" or "gallons", depending on the locale)
+> could produce an _Unsupported Operation_ error.
 
 Implementations MUST NOT substitute the unit without performing the associated conversion.
 
