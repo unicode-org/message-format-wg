@@ -561,13 +561,10 @@ The _function_ `:currency` performs selection as described in [Number Selection]
 
 ### The `:unit` function
 
-The _function_ `:unit` is a selector and formatter for unitized values,
-that is, numeric values associated with a unit of measurement.
+The _function_ `:unit` is **Proposed** for inclusion in the next release of this specification but has not yet been finalized.
+The _function_ `:unit` is proposed to be a **RECOMMENDED** selector and formatter for unitized values,
+that is, for numeric values associated with a unit of measurement.
 This is a specialized form of numeric selection and formatting.
-
-> [!IMPORTANT]
-> Implementation of this function is **_OPTIONAL_**.
-> Any implementation of this function is strongly encouraged to follow this specification.
 
 #### Operands
 
@@ -622,10 +619,10 @@ The following options and their values are required to be available on the funct
    -  `exact`
 - `unit`
    - valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
-     (no default)
-- `usage` \[OPTIONAL\]
-    - Well-formed and valid usage identifiers are defined in [Unicode Preferences](https://www.unicode.org/reports/tr35/tr35-info.html#unit-preferences).
-    - (no default)
+     (no default, see [Unit Conversion](#unit-conversion) below)
+- `usage` \[RECOMMENDED\]
+    - valid [Unicode Unit Preference](https://www.unicode.org/reports/tr35/tr35-info.html#unit-preferences)
+      (no default)
 - `unitDisplay`
   - `short` (default)
   - `narrow`
@@ -691,12 +688,26 @@ with _options_ on the _expression_ taking priority over any _option_ values of t
 > would have the resolved options:
 > `{ unit: 'furlong', minimumFractionDigits: '2', minimumIntegerDigits: '1' }`.
 
-Some implementations support conversion to the locale's preferred units via the `usage` _option_.
+#### Resolved Value
+
+The _resolved value_ of an _expression_ with a `:unit` _function_
+consist of an implementation-defined unit value
+of the _operand_ of the annotated _expression_,
+together with the resolved _options_ and their resolved values.
+
+#### Selection
+
+The _function_ `:unit` performs selection as described in [Number Selection](#number-selection) below.
+
+#### Unit Conversion
+
+Implementations MAY support conversion to the locale's preferred units via the `usage` _option_.
 Implementing this _option_ is optional.
-Attempting to convert units produces an _Unsupported Operation_ error if such conversion is unsupported.
-It produces a _Bad Option_ error if the specified units are incompatible.
+Not all `usage` values are compatible with a given unit.
+Implementations SHOULD emit an _Unsupported Operation_ error if the requestion conversion is not supported.
+
 > For example, trying to convert a `length` unit such as meters
-> to a `volume` unit (such as "gallons") produces a _Bad Option_.
+> to a `volume` unit (such as "gallons") could produce an _Unsupported Operation_ error.
 
 Implementations MUST NOT substitute the unit without performing the associated conversion.
 
@@ -713,20 +724,7 @@ Implementations MUST NOT substitute the unit without performing the associated c
 > ```
 > This can produce "You have 405 feet to go."
 
-Not all `usage` values are compatible with a given unit.
-Implementations will produce a _Bad Option_ error for units 
-or combinations of units and usages that are not supported.
 
-#### Resolved Value
-
-The _resolved value_ of an _expression_ with a `:unit` _function_
-consist of an implementation-defined unit value
-of the _operand_ of the annotated _expression_,
-together with the resolved _options_ and their resolved values.
-
-#### Selection
-
-The _function_ `:unit` performs selection as described in [Number Selection](#number-selection) below.
 
 ### Number Operands
 
