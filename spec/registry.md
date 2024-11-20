@@ -1089,6 +1089,10 @@ override values set by the current locale,
 or provided by the _formatting context_ (such as the default time zone),
 or embedded in an implementation-defined date/time _operand_ value.
 
+> [!NOTE]
+> These _options_ do not have default values because they are only to be used
+> as overrides for locale-and-value dependent implementation-defined defaults.
+
 The following _option_ and its values are REQUIRED to be available on
 the functions `:datetime` and `:time`:
 
@@ -1104,7 +1108,22 @@ the functions `:datetime`, `:date`, and `:time`.
 - `numberingSystem`
   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
 
-> [!NOTE]
-> These _options_ do not have default values because they are only to be used
-> as overrides for locale-and-value dependent implementation-defined defaults.
+The following _option_ and its values are **Proposed** for
+inclusion in the next release of this specification but have not yet been
+finalized.
+If accepted, implementations could be REQUIRED to make this _option_
+available in the functions `:datetime`, `:date`, and `:time`.
 
+- `timeZone`
+  - A valid time zone identifier
+    (see [TZDB](https://www.iana.org/time-zones)
+    and [LDML](https://www.unicode.org/reports/tr35/tr35-dates.html#Time_Zone_Names)
+    for information on identifiers)
+  - `local`
+  - `UTC`
+  
+> [!NOTE]
+> The value `local` permits a _message_ to convert a date/time value
+> into a [floating](https://www.w3.org/TR/timezone/#floating) time value
+> (sometimes called a _plain_ or _local_ time value) by removing
+> the association with a specific time zone.
