@@ -8,7 +8,7 @@ rather than function-specific.
 It might also be used to define _functions_ in a future release.
 
 The CLDR Technical Committee of the Unicode Consortium
-manages the specification for this namespace, hence the name `u:`.
+manages the specification for this namespace, hence the _namespace_ `u:`.
 
 ## Options
 
@@ -38,10 +38,10 @@ well-formed [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt)
 language tags,
 or an implementation-defined list of such tags.
 
-If this option is set on _markup_, a _Bad Option_ error is emitted
-and the value of the `u:locale` option is ignored.
+If this _option_ is set on _markup_, a _Bad Option_ error is emitted
+and the value of the `u:locale` _option_ is ignored.
 
-During processing, the `u:locale` option
+During processing, the `u:locale` _option_
 MUST be removed from the resolved mapping of _options_
 before calling the _function handler_.
 

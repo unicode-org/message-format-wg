@@ -2,8 +2,8 @@
 
 ## Introduction
 
-This document defines the behaviour of a MessageFormat 2.0 implementation
-when formatting a message for display in a user interface, or for some later processing.
+This section defines the behavior of a MessageFormat 2.0 implementation
+when formatting a _message_ for display in a user interface, or for some later processing.
 
 To start, we presume that a _message_ has either been parsed from its syntax
 or created from a data model description.
@@ -80,12 +80,12 @@ nor be made available to _function handlers_.
 
 ## Formatting Context
 
-A message's **_<dfn>formatting context</dfn>_** represents the data and procedures that are required
-for the message's _expression resolution_, _pattern selection_ and _formatting_.
+A _message_'s **_<dfn>formatting context</dfn>_** represents the data and procedures that are required
+for the _message_'s _expression resolution_, _pattern selection_ and _formatting_.
 
 At a minimum, it includes:
 
-- Information on the current **_locale_**,
+- Information on the current **_[locale](https://www.w3.org/TR/i18n-glossary/#dfn-locale)_**,
   potentially including a fallback chain of locales.
   This will be passed on to formatting functions.
 
@@ -98,9 +98,9 @@ At a minimum, it includes:
   This is often determined by a user-provided argument of a formatting function call.
 
 - The _function registry_,
-  providing the _function handlers_ of the functions referred to by message _functions_.
+  providing the _function handlers_ of the functions referred to by _message_ _functions_.
 
-- Optionally, a fallback string to use for the message if it is not _valid_.
+- Optionally, a fallback string to use for the _message_ if it is not _valid_.
 
 Implementations MAY include additional fields in their _formatting context_.
 
