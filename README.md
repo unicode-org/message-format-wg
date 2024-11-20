@@ -26,12 +26,10 @@ or anything that would be helpful in stabilizing the specification and
 promoting widespread adoption.
 
 The MFWG specifically requests feedback on the following issues:
-- How best to define value resolution [#678](https://github.com/unicode-org/message-format-wg/issues/678)
 - How to perform non-integer exact number selection [#675](https://github.com/unicode-org/message-format-wg/issues/675)
-- Whether `markup` should support additional spaces [#650](https://github.com/unicode-org/message-format-wg/issues/650)
-- Whether "attribute-like" behavior is needed and what form it should take [#642](https://github.com/unicode-org/message-format-wg/issues/642)
-- Whether to relax constraints on complex message start [#610](https://github.com/unicode-org/message-format-wg/issues/610)
 - Whether omitting the `*` variant key should be permitted [#603](https://github.com/unicode-org/message-format-wg/issues/603)
+- Whether there should be normative requirements for markup handling [#586](https://github.com/unicode-org/message-format-wg/issues/586)
+- Whether the delimiters used for literals and patterns were chosen correctly [#602](https://github.com/unicode-org/message-format-wg/issues/602)
 
 ## What is MessageFormat 2?
 
@@ -54,7 +52,7 @@ user interfaces that can appear in any language and support the needs of diverse
 
 The current specification starts [here](spec/README.md) and may have changed since the publication
 of the Tech Preview version.
-The Tech Preview specification is [here](https://www.unicode.org/reports/tr35/tr35-72/tr35-messageFormat.html)
+The Tech Preview specification is [here](https://www.unicode.org/reports/tr35/tr35-73/tr35-messageFormat.html)
 
 The current draft syntax for defining messages can be found in [spec/syntax.md](./spec/syntax.md).
 The syntax is formally described in [ABNF](spec/message.abnf).
@@ -110,42 +108,17 @@ The Working Group continues to address feedback
 and develop portions of the specification not completed for the LDML45 Tech Preview release.
 The `main` branch of this repository contains changes implemented since the technical preview.
 
-Implementers should be aware of the following normative changes during the tech preview period.
+Implementers should be aware of the following normative changes during the v46.1 tech preview period.
 See the [commit history](https://github.com/unicode-org/message-format-wg/commits) 
-after 2024-04-13 for a list of all commits (including non-normative changes).
-- [#885](https://github.com/unicode-org/message-format-wg/issues/885) Address equality of `name` and `literal` values, including requiring keys to use NFC
-- [#884](https://github.com/unicode-org/message-format-wg/issues/884) Add support for bidirectional isolates and strong marks in syntax and address UAX31/UTS55 requirements
-- [#883](https://github.com/unicode-org/message-format-wg/issues/883) Remove forward-compatibility promise and all reserved/private syntax.
-- [#882](https://github.com/unicode-org/message-format-wg/issues/882) Specify `bad-option` error for bad digit size options in `:number` and `:integer` functions
-- [#878](https://github.com/unicode-org/message-format-wg/issues/878) Clarify "rule" selection in `:number` and `:integer` functions
-- [#877](https://github.com/unicode-org/message-format-wg/issues/877) Match on variables instead of expressions. 
-- [#854](https://github.com/unicode-org/message-format-wg/issues/854) Allow whitespace at complex message start
-- [#853](https://github.com/unicode-org/message-format-wg/issues/853) Add a "duplicate-variant" error
-- [#845](https://github.com/unicode-org/message-format-wg/issues/845) Define "attributes" feature
-- [#834](https://github.com/unicode-org/message-format-wg/issues/834) Modify the stability policy (not currently in effect due to Tech Preview)
-- [#816](https://github.com/unicode-org/message-format-wg/issues/816) Refine error handling
-- [#815](https://github.com/unicode-org/message-format-wg/issues/815) Removed machine-readable function registry as a deliverable
-- [#813](https://github.com/unicode-org/message-format-wg/issues/813) Change default of `:date` and `:datetime` date formatting from `short` to `medium`
-- [#812](https://github.com/unicode-org/message-format-wg/issues/812) Allow trailing whitespace for complex messages
-- [#793](https://github.com/unicode-org/message-format-wg/issues/793) Recommend the use of escapes only when necessary
-- [#775](https://github.com/unicode-org/message-format-wg/issues/775) Add formal definitions for variable, external variable, and local variable
-- [#774](https://github.com/unicode-org/message-format-wg/issues/774) Refactor errors, adding Message Function Errors
-- [#771](https://github.com/unicode-org/message-format-wg/issues/771) Remove inappropriate normative statement from errors.md
-- [#767](https://github.com/unicode-org/message-format-wg/issues/767) Add a test schema and
-  [#778](https://github.com/unicode-org/message-format-wg/issues/778) validate tests against it
-- [#775](https://github.com/unicode-org/message-format-wg/issues/775) Add a definition for `variable`
-- [#774](https://github.com/unicode-org/message-format-wg/issues/774) Refactor error types, adding a _Message Function Error_ type (and subtypes)
-- [#769](https://github.com/unicode-org/message-format-wg/issues/769) Add `:test:function`,
-  `:test:select` and `:test:format` functions for implementation testing
-- [#743](https://github.com/unicode-org/message-format-wg/issues/743) Collapse all escape sequence rules into one (affects the ABNF)
+after 2024-11-20 for a list of all commits (including non-normative changes).
 
 In addition to the above, the test suite is significantly modified and updated.
 
 
 ## Implementations
 
-- Java: [`com.ibm.icu.message2`](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/index.html?com/ibm/icu/message2/package-summary.html), part of ICU 75, is a _tech preview_ implementation of the MessageFormat 2 syntax, together with a formatting API. See the [ICU User Guide](https://unicode-org.github.io/icu/userguide/format_parse/messages/mf2.html) for examples and a quickstart guide.
-- C/C++: [`icu::message2::MessageFormatter`](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1message2_1_1MessageFormatter.html), part of ICU 75, is a _tech preview_ implementation of MessageFormat 2.
+- Java: [`com.ibm.icu.message2`](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/index.html?com/ibm/icu/message2/package-summary.html), part of ICU 76, is a _tech preview_ implementation of the MessageFormat 2 syntax, together with a formatting API. See the [ICU User Guide](https://unicode-org.github.io/icu/userguide/format_parse/messages/mf2.html) for examples and a quickstart guide.
+- C/C++: [`icu::message2::MessageFormatter`](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1message2_1_1MessageFormatter.html), part of ICU 76, is a _tech preview_ implementation of MessageFormat 2.
 - JavaScript: [`messageformat`](https://github.com/messageformat/messageformat/tree/master/packages/mf2-messageformat) 4.0 implements the MessageFormat 2 syntax, together with a polyfill of the runtime API proposed for ECMA-402.
 
 The working group is also aware of these implementations in progress or released, but has not evaluated them:
