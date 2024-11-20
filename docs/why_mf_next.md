@@ -1,7 +1,7 @@
 # Why `MessageFormat` needs a successor ([issue #49](https://github.com/unicode-org/message-format-wg/issues/49))
 
-Check out the [YouTube video](https://www.youtube.com/watch?v=-DlS6KNopoU)
-of the Unicode Technical Workshop (UTW)
+Check out the [YouTube video](https://www.youtube.com/watch?v=4jucYXE42_s)
+of the Unicode Technical Workshop 2024 (UTW)
 presentation about MessageFormat 2.0 which includes a discussion of
 why MessageFormat is important and why MessageFormat 2.0 is needed.
 
