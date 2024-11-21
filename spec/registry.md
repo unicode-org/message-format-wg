@@ -573,8 +573,6 @@ implementation-defined types,
 each of which contains a numerical `value` plus a `unit`
 or it can be a [Number Operand](#number-operands), as long as the _option_
 `unit` is provided.
-The _option_ `unit` MAY be used to override the units of an implementation-defined type,
-provided the units are compatible and the implementation supports conversion.
 
 The value of the _operand_'s `unit` SHOULD be either a string containing a
 valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
@@ -719,9 +717,10 @@ Implementations MUST NOT substitute the unit without performing the associated c
 >    "unit": "meter"
 > }
 > ```
-> The following _message_ might convert the formatted result to U.S. customary units:
+> The following _message_ might convert the formatted result to U.S. customary units
+> in the `en-US` locale:
 > ```
-> You have {$v :unit unit=foot maximumFractionDigits=0} to go.
+> You have {$v :unit usage=road maximumFractionDigits=0} to go.
 > ```
 > This can produce "You have 405 feet to go."
 
