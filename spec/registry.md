@@ -617,10 +617,10 @@ The following options and their values are required to be available on the funct
    -  `exact`
 - `unit`
    - valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
-     (no default, see [Unit Conversion](#unit-conversion) below)
+     (no default)
 - `usage` \[RECOMMENDED\]
     - valid [Unicode Unit Preference](https://www.unicode.org/reports/tr35/tr35-info.html#unit-preferences)
-      (no default)
+      (no default, see [Unit Conversion](#unit-conversion) below)
 - `unitDisplay`
   - `short` (default)
   - `narrow`
