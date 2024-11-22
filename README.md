@@ -119,7 +119,7 @@ In addition to the above, the test suite is significantly modified and updated.
 
 - Java: [`com.ibm.icu.message2`](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/index.html?com/ibm/icu/message2/package-summary.html), part of ICU 76, is a _tech preview_ implementation of the MessageFormat 2 syntax, together with a formatting API. See the [ICU User Guide](https://unicode-org.github.io/icu/userguide/format_parse/messages/mf2.html) for examples and a quickstart guide.
 - C/C++: [`icu::message2::MessageFormatter`](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1message2_1_1MessageFormatter.html), part of ICU 76, is a _tech preview_ implementation of MessageFormat 2.
-- JavaScript: [`messageformat`](https://github.com/messageformat/messageformat/tree/master/packages/mf2-messageformat) 4.0 implements the MessageFormat 2 syntax, together with a polyfill of the runtime API proposed for ECMA-402.
+- JavaScript: [`messageformat`](https://github.com/messageformat/messageformat/tree/main/mf2/messageformat) 4.0 implements the MessageFormat 2 syntax, together with a polyfill of the runtime API proposed for ECMA-402.
 
 The working group is also aware of these implementations in progress or released, but has not evaluated them:
 - [i18next](https://www.npmjs.com/package/i18next-mf2) i18nFormat plugin to use mf2 format with i18next, version 0.1.1
