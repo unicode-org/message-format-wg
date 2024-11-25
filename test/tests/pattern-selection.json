@@ -61,7 +61,7 @@
       "src": [".input {$x :test:select decimalPlaces=9}",
               ".local $y = {$x :test:select decimalPlaces=1}",
               ".match $y\n",
-              "1.0 {{1.0}}\n"
+              "1.0 {{1.0}}\n",
               "1 {{1}} * {{bad-option-value}}"],
       "params": [{ "name": "x", "value": 1 }],
       "exp": "bad-option-value",
