@@ -648,6 +648,173 @@ together with the resolved options' values.
 
 The _function_ `:currency` performs selection as described in [Number Selection](#number-selection) below.
 
+### The `:unit` function
+
+The _function_ `:unit` is **Proposed** for inclusion in the next release of this specification but has not yet been finalized.
+The _function_ `:unit` is proposed to be a **RECOMMENDED** selector and formatter for unitized values,
+that is, for numeric values associated with a unit of measurement.
+This is a specialized form of numeric selection and formatting.
+
+#### Operands
+
+The _operand_ of the `:unit` function can be one of any number of
+implementation-defined types,
+each of which contains a numerical `value` plus a `unit`
+or it can be a [Number Operand](#number-operands), as long as the _option_
+`unit` is provided.
+
+The value of the _operand_'s `unit` SHOULD be either a string containing a
+valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
+or an implementation-defined unit type.
+
+A [Number Operand](#number-operands) without a `unit` _option_ results in a _Bad Operand_ error.
+
+> [!NOTE]
+> For example, in ICU4J, the type `com.ibm.icu.util.Measure` might be used
+> as an _operand_ for `:unit` because it contains the `value` and `unit`.
+
+> [!NOTE]
+> For runtime environments that do not provide a ready-made data structure,
+> class, or type for unit values, the implementation ought to provide
+> a data structure, convenience function, or documentation on how to encode
+> the value and unit for formatting.
+> For example, such an implementation might define a "unit operand"
+> to include a key-value structure with specific keys to be the
+> local unit operand, which might look like the following:
+> ```
+> {
+>    "value": 123.45,
+>    "unit": "kilometer-per-hour"
+> }
+> ```
+
+#### Options
+
+Some _options_ do not have default values defined in this specification.
+The defaults for these _options_ are implementation-dependent.
+In general, the default values for such _options_ depend on the locale, 
+the unit,
+the value of other _options_, or all of these.
+
+> [!NOTE]
+> The option `select` does not accept the value `ordinal` because selecting
+> unit values using ordinal rules makes no sense.
+
+The following options and their values are required to be available on the function `:unit`:
+- `select`
+   -  `plural` (default)
+   -  `exact`
+- `unit`
+   - valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
+     (no default)
+- `usage` \[RECOMMENDED\]
+    - valid [Unicode Unit Preference](https://www.unicode.org/reports/tr35/tr35-info.html#unit-preferences)
+      (no default, see [Unit Conversion](#unit-conversion) below)
+- `unitDisplay`
+  - `short` (default)
+  - `narrow`
+  - `long`
+- `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
+   - `short` (default)
+   - `long`
+- `notation`
+   - `standard` (default)
+   - `compact`
+- `numberingSystem`
+   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+     (default is locale-specific)
+- `signDisplay`
+   -  `auto` (default)
+   -  `always`
+   -  `exceptZero`
+   -  `negative`
+   -  `never`
+- `useGrouping`
+  - `auto` (default)
+  - `always`
+  - `never`
+  - `min2`
+- `minimumIntegerDigits`
+  - ([digit size option](#digit-size-options), default: `1`)
+- `minimumFractionDigits`
+  - ([digit size option](#digit-size-options))
+- `maximumFractionDigits`
+  - ([digit size option](#digit-size-options))
+- `minimumSignificantDigits`
+  - ([digit size option](#digit-size-options))
+- `maximumSignificantDigits`
+  - ([digit size option](#digit-size-options))
+- `roundingPriority`
+  - `auto` (default)
+  - `morePrecision`
+  - `lessPrecision`
+- `roundingIncrement`
+  - 1 (default), 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000, 2500, and 5000
+- `roundingMode`
+  - `ceil`
+  - `floor`
+  - `expand`
+  - `trunc`
+  - `halfCeil`
+  - `halfFloor`
+  - `halfExpand` (default)
+  - `halfTrunc`
+  - `halfEven`
+
+If the _operand_ of the _expression_ is an implementation-defined type,
+such as the _resolved value_ of an _expression_ with a `:unit` _annotation_,
+it can include _option_ values.
+These are included in the resolved _option_ values of the _expression_,
+with _options_ on the _expression_ taking priority over any _option_ values of the _operand_.
+
+> For example, the _placeholder_ in this _message_:
+> ```
+> .input {$n :unit unit=furlong minimumFractionDigits=2}
+> {{{$n :unit minimumIntegerDigits=1}}}
+> ```
+> would have the resolved options:
+> `{ unit: 'furlong', minimumFractionDigits: '2', minimumIntegerDigits: '1' }`.
+
+#### Resolved Value
+
+The _resolved value_ of an _expression_ with a `:unit` _function_
+consist of an implementation-defined unit value
+of the _operand_ of the annotated _expression_,
+together with the resolved _options_ and their resolved values.
+
+#### Selection
+
+The _function_ `:unit` performs selection as described in [Number Selection](#number-selection) below.
+
+#### Unit Conversion
+
+Implementations MAY support conversion to the locale's preferred units via the `usage` _option_.
+Implementing this _option_ is optional.
+Not all `usage` values are compatible with a given unit.
+Implementations SHOULD emit an _Unsupported Operation_ error if the requested conversion is not supported.
+
+> For example, trying to convert a `length` unit (such as "meters")
+> to a `volume` usage (which might be a unit akin to "liters" or "gallons", depending on the locale)
+> could produce an _Unsupported Operation_ error.
+
+Implementations MUST NOT substitute the unit without performing the associated conversion.
+
+> For example, consider the value:
+> ```
+> {
+>    "value": 123.5,
+>    "unit": "meter"
+> }
+> ```
+> The following _message_ might convert the formatted result to U.S. customary units
+> in the `en-US` locale:
+> ```
+> You have {$v :unit usage=road maximumFractionDigits=0} to go.
+> ```
+> This can produce "You have 405 feet to go."
+
+
+
 ### Number Operands
 
 The _operand_ of a number function is either an implementation-defined type or
