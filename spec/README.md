@@ -7,19 +7,15 @@
    1. [Terminology and Conventions](intro.md#terminology-and-conventions)
    1. [Stability Policy](intro.md#stability-policy)
 1. [Syntax](syntax.md)
-   1. [Productions](syntax.md#productions)
-   1. [Tokens](syntax.md#tokens)
    1. [`message.abnf`](message.abnf)
+1. [Formatting](formatting.md)
 1. [Errors](errors.md)
-   1. [Error Handling](errors.md#error-handling)
-   1. [Syntax Errors](errors.md#syntax-errors)
-   1. [Data Model Errors](errors.md#data-model-errors)
-   1. [Resolution Errors](errors.md#resolution-errors)
-   1. [Message Function Errors](errors.md#message-function-errors)
 1. [Default Function Registry](registry.md)
 1. [`u:` Namespace](u-namespace.md)
-1. [Formatting](formatting.md)
 1. [Interchange data model](data-model/README.md)
+1. [Appendices](appendices.md)
+   1. [Security Considerations](appendices.md#security-considerations)
+   1. [Acknowledgements](appendices.md#acknowledgements)
 
 ## What is MessageFormat 2?
 
