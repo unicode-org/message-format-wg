@@ -1,21 +1,7 @@
 # MessageFormat 2.0 Specification
 
-## Table of Contents
-
-1. [Introduction](intro.md)
-   1. [Conformance](intro.md#conformance)
-   1. [Terminology and Conventions](intro.md#terminology-and-conventions)
-   1. [Stability Policy](intro.md#stability-policy)
-1. [Syntax](syntax.md)
-   1. [`message.abnf`](message.abnf)
-1. [Formatting](formatting.md)
-1. [Errors](errors.md)
-1. [Default Function Registry](registry.md)
-1. [`u:` Namespace](u-namespace.md)
-1. [Interchange data model](data-model/README.md)
-1. [Appendices](appendices.md)
-   1. [Security Considerations](appendices.md#security-considerations)
-   1. [Acknowledgements](appendices.md#acknowledgements)
+> [!IMPORTANT]
+> This page is not a part of the specification and is not normative.
 
 ## What is MessageFormat 2?
 
@@ -34,14 +20,15 @@ thus enabling gradual adoption by users of older formatting systems.
 The goal is to allow developers and translators to create natural-sounding, grammatically-correct,
 user interfaces that can appear in any language and support the needs of diverse cultures.
 
-## MessageFormat 2 Specification and Syntax
+## Status of the documents in this repo
 
-The current specification starts [here](#table-of-contents) and may have changed since the publication
-of the Tech Preview version.
-The Tech Preview specification is [here](https://www.unicode.org/reports/tr35/tr35-73/tr35-messageFormat.html)
+The editor's copy of the specification is found in this directory of this repo and starts [here](intro.md).
+The editor's copy may have changed since the publication of the most recent LDML version.
 
-The current draft syntax for defining messages can be found in [spec/syntax.md](./syntax.md).
-The syntax is formally described in [ABNF](./message.abnf).
+The Final Candidate specification is in [LDML 46.1](https://www.unicode.org/reports/tr35/tr35-73/tr35-messageFormat.html)
+which is identical to the materials in the LDML 46.1 release in this repo.
+
+## About
 
 Messages can be simple strings:
 
