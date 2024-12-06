@@ -1,4 +1,4 @@
-# Formatting Messages
+# Formatting
 
 ## Introduction
 
