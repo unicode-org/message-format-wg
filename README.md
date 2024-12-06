@@ -4,24 +4,37 @@ Welcome to the home page for the MessageFormat Working Group, a subgroup of the 
 
 ## Charter
 
-The Message Format Working Group (MFWG) is tasked with developing an industry standard for the representation of localizable message strings to be a successor to [ICU MessageFormat](https://unicode-org.github.io/icu/userguide/format_parse/messages/). MFWG will recommend how to remove redundancies, make the syntax more usable, and support more complex features, such as gender, inflections, and speech. MFWG will also consider the integration of the new standard with programming environments, including, but not limited to, ICU, DOM, and ECMAScript, and with localization platform interchange. The output of MFWG will be a specification for the new syntax.
+The MessageFormat Working Group (MFWG) is tasked with developing an industry standard
+for the representation of localizable message strings to be a successor to 
+[ICU MessageFormat](https://unicode-org.github.io/icu/userguide/format_parse/messages/). 
+MFWG will recommend how to remove redundancies, 
+make the syntax more usable, 
+and support more complex features, such as gender, inflections, and speech. 
+MFWG will also consider the integration of the new standard with programming environments, 
+including, but not limited to, ICU, DOM, and ECMAScript, and with localization platform interchange. 
+The output of MFWG will be a specification for the new syntax.
 
 - [Why ICU MessageFormat Needs a Successor](docs/why_mf_next.md)
 - [Goals and Non-Goals](docs/goals.md)
 
-## MessageFormat 2 Technical Preview
+## MessageFormat 2 Final Candidate
 
 The [MessageFormat 2 specification](./spec/) is a new part of
 the [LDML](https://www.unicode.org/reports/tr35/) specification.
-This specification is initially released as a "Tech Preview", 
-which means that the stability policy is not in effect and feedback from
+MessageFormat 2 has been approved by the CLDR Technical Committee 
+to be issued as a "Final Candidate".
+This means that the stability policy is not in effect and feedback from
 users and implementers might result in changes to the syntax, data model,
 functions, or other normative aspects of MessageFormat 2.
 Such changes are expected to be minor and, to the extent possible,
-to be compatible with what is defined in the Tech Preview.
+to be compatible with what is defined in the Final Candidate specification.
 
-The MFWG welcomes any and all feedback, including bugs reports, implementation
-reports, success stories, feature requests, requests for clarification, 
+The MessageFormat Working Group and CLDR Technical Committee welcome any and all feedback, 
+including bugs reports, 
+implementation reports, 
+success stories, 
+feature requests, 
+requests for clarification, 
 or anything that would be helpful in stabilizing the specification and
 promoting widespread adoption.
 
@@ -31,21 +44,21 @@ The MFWG specifically requests feedback on the following issues:
 - Whether there should be normative requirements for markup handling [#586](https://github.com/unicode-org/message-format-wg/issues/586)
 - Whether the delimiters used for literals and patterns were chosen correctly [#602](https://github.com/unicode-org/message-format-wg/issues/602)
 
-## Normative Changes during Tech Preview
+## Normative Changes during the Final Candidate period
 
-The Working Group continues to address feedback
-and develop portions of the specification not completed for the LDML45 Tech Preview release.
-The `main` branch of this repository contains changes implemented since the technical preview.
+The MessageFormat Working Group continues to address feedback
+and develop portions of the specification not completed for the LDML 46.1 Final Candidate release.
+The `main` branch of this repository contains changes implemented since the specification was released.
 
-Implementers should be aware of the following normative changes during the v46.1 tech preview period.
+Implementers should be aware of the following normative changes during the v46.1 final candidate review period.
 See the [commit history](https://github.com/unicode-org/message-format-wg/commits) 
 after 2024-11-20 for a list of all commits (including non-normative changes).
 
-In addition to the above, the test suite is significantly modified and updated.
+In addition to the above, the test suite has been modified and updated.
 
 ## Sharing Feedback
 
-Technical Preview Feedback: [file an issue here](https://github.com/unicode-org/message-format-wg/issues/new?labels=Preview-Feedback&projects=&template=tech-preview-feedback.md&title=%5BFEEDBACK%5D+)
+Final Candidate Feedback: [file an issue here](https://github.com/unicode-org/message-format-wg/issues/new?labels=Preview-Feedback&projects=&template=tech-preview-feedback.md&title=%5BFEEDBACK%5D+)
 
 We invite feedback about the current syntax draft, as well as the real-life use-cases, requirements, tooling, runtime APIs, localization workflows, and other topics.
 
