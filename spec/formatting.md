@@ -1,4 +1,4 @@
-# DRAFT MessageFormat 2.0 Formatting
+# MessageFormat 2.0 Formatting
 
 ## Introduction
 
@@ -534,7 +534,7 @@ according to their _key_ values and selecting the first one.
 > > *    {{Only used by fractions in Polish.}}
 > > ```
 >
-> In the Tech Preview, feedback from users and implementers is desired about
+> During the Final Candidate review period, feedback from users and implementers is desired about
 > whether to relax the requirement that such a "fallback _variant_" appear in
 > every message, versus the potential for a _message_ to fail at runtime
 > because no matching _variant_ is available.
