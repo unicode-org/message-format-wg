@@ -2,154 +2,101 @@
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
-   1. [Conformance](#conformance)
-   1. [Terminology and Conventions](#terminology-and-conventions)
-   1. [Stability Policy](#stability-policy)
+1. [Introduction](intro.md)
+   1. [Conformance](intro.md#conformance)
+   1. [Terminology and Conventions](intro.md#terminology-and-conventions)
+   1. [Stability Policy](intro.md#stability-policy)
 1. [Syntax](syntax.md)
-   1. [Productions](syntax.md#productions)
-   1. [Tokens](syntax.md#tokens)
    1. [`message.abnf`](message.abnf)
+1. [Formatting](formatting.md)
 1. [Errors](errors.md)
-   1. [Error Handling](errors.md#error-handling)
-   1. [Syntax Errors](errors.md#syntax-errors)
-   1. [Data Model Errors](errors.md#data-model-errors)
-   1. [Resolution Errors](errors.md#resolution-errors)
-   1. [Message Function Errors](errors.md#message-function-errors)
 1. [Default Function Registry](registry.md)
 1. [`u:` Namespace](u-namespace.md)
-1. [Formatting](formatting.md)
 1. [Interchange data model](data-model/README.md)
+1. [Appendices](appendices.md)
+   1. [Security Considerations](appendices.md#security-considerations)
+   1. [Acknowledgements](appendices.md#acknowledgements)
 
-## Introduction
+## What is MessageFormat 2?
 
-One of the challenges in adapting software to work for
-users with different languages and cultures is the need for **_<dfn>dynamic messages</dfn>_**.
-Whenever a user interface needs to present data as part of a larger string,
-that data needs to be formatted (and the message may need to be altered)
-to make it culturally accepted and grammatically correct.
+Software needs to construct messages that incorporate various pieces of information.
+The complexities of the world's languages make this challenging.
+MessageFormat 2 defines the data model, syntax, processing, and conformance requirements
+for the next generation of dynamic messages.
+It is intended for adoption by programming languages, software libraries, and software localization tooling.
+It enables the integration of internationalization APIs (such as date or number formats),
+and grammatical matching (such as plurals or genders).
+It is extensible, allowing software developers to create formatting
+or message selection logic that add on to the core capabilities.
+Its data model provides a means of representing existing syntaxes,
+thus enabling gradual adoption by users of older formatting systems.
 
-> For example, if your US English (`en-US`) interface has a message like:
->
-> > Your item had 1,023 views on April 3, 2023
->
-> You want the translated message to be appropriately formatted into French:
->
-> > Votre article a eu 1 023 vues le 3 avril 2023
->
-> Or Japanese:
->
-> > あなたのアイテムは 2023 年 4 月 3 日に 1,023 回閲覧されました。
+The goal is to allow developers and translators to create natural-sounding, grammatically-correct,
+user interfaces that can appear in any language and support the needs of diverse cultures.
 
-This specification defines the
-data model, syntax, processing, and conformance requirements
-for the next generation of _dynamic messages_.
-It is intended for adoption by programming languages and APIs.
-This will enable the integration of
-existing internationalization APIs (such as the date and number formats shown above),
-grammatical matching (such as plurals or genders),
-as well as user-defined formats and message selectors.
+## MessageFormat 2 Specification and Syntax
 
-The document is the successor to ICU MessageFormat,
-henceforth called ICU MessageFormat 1.0.
+The current specification starts [here](#table-of-contents) and may have changed since the publication
+of the Tech Preview version.
+The Tech Preview specification is [here](https://www.unicode.org/reports/tr35/tr35-73/tr35-messageFormat.html)
 
-### Conformance
+The current draft syntax for defining messages can be found in [spec/syntax.md](./syntax.md).
+The syntax is formally described in [ABNF](./message.abnf).
 
-Everything in this specification is normative except for:
-sections marked as non-normative,
-all authoring guidelines, diagrams, examples, and notes.
+Messages can be simple strings:
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
-"MAY", and "OPTIONAL" in this document are to be interpreted as
-described in BCP 14 \[[RFC2119](https://www.rfc-editor.org/rfc/rfc2119)\]
-\[[RFC8174](https://www.rfc-editor.org/rfc/rfc8174)\] when, and only when, they
-appear in all capitals, as shown here.
+    Hello, world!
 
-### Terminology and Conventions
+Messages can interpolate arguments:
 
-A **_term_** looks like this when it is defined in this specification.
+    Hello {$user}!
 
-A reference to a _term_ looks like this.
+Messages can transform those arguments using _formatting functions_.
+Functions can optionally take _options_:
 
-> Examples are non-normative and styled like this.
+    Today is {$date :datetime}
+    Today is {$date :datetime weekday=long}.
 
-> [!IMPORTANT]
-> Text marked "Important" like this are normative.
+Messages can use a _selector_ to choose between different _variants_,
+which correspond to the grammatical (or other) requirements of the language:
 
-> [!NOTE]
-> Notes are non-normative.
+    .input {$count :integer}
+    .match $count
+    0   {{You have no notifications.}}
+    one {{You have {$count} notification.}}
+    *   {{You have {$count} notifications.}}
 
-### Stability Policy
+Messages can annotate arguments with formatting instructions
+or assign local values for use in the formatted message:
 
-> [!IMPORTANT]
-> The provisions of the stability policy are not in effect until
-> the conclusion of the technical preview and adoption of this specification.
+    .input {$date :datetime weekday=long month=medium day=short}
+    .local $numPigs = {$pigs :integer}
+    {{On {$date} you had this many pigs: {$numPigs}}}
 
-Updates to this specification will not make any valid _message_ invalid.
+The message syntax supports using multiple _selectors_ and other features
+to build complex messages.
+It is designed so that implementations can extend the set of functions or their options
+using the same syntax.
+Implementations may even support users creating their own functions.
 
-Updates to this specification will not remove any syntax provided in this version.
+See more examples and the formal definition of the grammar in [spec/syntax.md](./syntax.md).
 
-Updates to this specification will not specify an _error_ for any _message_
-that previously did not specify an _error_.
+## Developer Documentation
 
-Updates to this specification will not specify the use of a _fallback value_ for any _message_
-that previously did not specify a _fallback value_.
+Unofficial documentation for developers on MessageFormat 2 syntax and on using it with
+various programming languages can be found at [messageformat.dev](https://messageformat.dev/),
+which also includes an interactive [playground](https://messageformat.dev/playground/)
+for experimenting with message syntax.
 
-Updates to this specification will not change the syntactical meaning
-of any syntax defined in this specification.
+## Implementations
 
-Updates to this specification will not remove any _functions_ defined in the default function registry.
+- Java: [`com.ibm.icu.message2`](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/index.html?com/ibm/icu/message2/package-summary.html), part of ICU 76, is a _tech preview_ implementation of the MessageFormat 2 syntax, together with a formatting API. See the [ICU User Guide](https://unicode-org.github.io/icu/userguide/format_parse/messages/mf2.html) for examples and a quickstart guide.
+- C/C++: [`icu::message2::MessageFormatter`](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1message2_1_1MessageFormatter.html), part of ICU 76, is a _tech preview_ implementation of MessageFormat 2.
+- JavaScript: [`messageformat`](https://github.com/messageformat/messageformat/tree/main/mf2/messageformat) 4.0 implements the MessageFormat 2 syntax, together with a polyfill of the runtime API proposed for ECMA-402.
 
-Updates to this specification will not remove any _options_ or _option_ values
-defined in the default function registry.
-
-> [!NOTE]
-> The foregoing policies are _not_ a guarantee that the results of formatting will never change.
-> Even when this specification or its implementation do not change,
-> the _function handlers_ for date formatting, number formatting and so on
-> can change their results over time or behave differently due to local runtime
-> differences in implementation or changes to locale data
-> (such as due to the release of new CLDR versions).
-
-Updates to this specification will only reserve, define, or require
-_function_ _identifiers_ and _function_ _option_ _identifiers_
-which satisfy either of the following two requirements:
-- Includes no _namespace_,
-  and has a _name_ consisting of characters in the ranges a-z, A-Z, and 0-9,
-  and the characters U+002E FULL STOP `.`, U+002D HYPHEN-MINUS `-`, and U+005F LOW LINE `_`.
-- Uses a _namespace_ consisting of a single character in the ranges a-z and A-Z.
-
-All other _identifiers_ in these categories are reserved for the use of implementations or users.
+The working group is also aware of these implementations in progress or released, but has not evaluated them:
+- [i18next](https://www.npmjs.com/package/i18next-mf2) i18nFormat plugin to use mf2 format with i18next, version 0.1.1
 
 > [!NOTE]
-> Users defining custom _identifiers_ SHOULD include at least one character outside these ranges
-> to ensure that they will be compatible with future versions of this specification.
-> They SHOULD also use the _namespace_ feature to avoid collisions with other implementations.
-
-Future versions of this specification will not introduce changes
-to the data model that would result in a data model representation
-based on this version being invalid.
-
-> For example, existing interfaces or fields will not be removed.
-
-> [!IMPORTANT]
-> This stability policy allows any of the following, non-exhaustive list, of changes
-> in future versions of this specification:
-> - Future versions may define new syntax and structures
->   that would not be supported by this version of the specification.
-> - Future versions may add additional structure or meaning to existing syntax.
-> - Future versions may define new _keywords_.
-> - Future versions may make previously invalid _messages_ valid.
-> - Future versions may define additional _functions_ in the default registry
->   or may reserve the names of _functions_ for the purposes of interoperability.
-> - Future versions may define additional _options_ to existing functions.
-> - Future versions may define additional _option_ values for existing _options_.
-> - Future versions may deprecate (but not remove) _keywords_, _functions_, _options_, or _option_ values.
-> - Future versions of this specification may introduce changes
->   to the data model that would result in future data model representations
->   not being valid for implementations of this version of the data model.
->   - For example, a future version could introduce a new _keyword_,
->     whose data model representation would be a new interface
->     that is not recognized by this version's data model.
-
+> Tell us about your MessageFormat 2 implementation!
+> Submit a [PR on this page](https://github.com/unicode-org/message-format-wg/edit/main/spec/README.md), file an issue, or send email to have your implementation appear here.
