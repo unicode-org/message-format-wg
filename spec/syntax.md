@@ -1,4 +1,4 @@
-# MessageFormat 2.0 Syntax
+# Syntax
 
 ### Introduction
 
