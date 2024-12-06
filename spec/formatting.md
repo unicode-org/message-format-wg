@@ -936,7 +936,7 @@ The _Default Bidi Strategy_ is defined as follows:
    right-to-left directionality, and to the message's directionality not being known.
 1. For each _expression_ `exp` in _pattern_:
    1. Let `fmt` be the formatted string representation of the _resolved value_ of `exp`.
-   1. Let `dir` be the directionality of `fmt`,
+   1. Let `dir` be the directionality of the _resolved value_ of `exp`,
       one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
    1. Let the boolean value `isolate` be
       True if the `u:dir` _option_ of the _resolved value_ of `exp` has a value other than `'inherit'`,
