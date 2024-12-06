@@ -1,8 +1,4 @@
-# DRAFT MessageFormat 2.0 Syntax
-
-## Table of Contents
-
-\[TBD\]
+# MessageFormat 2.0 Syntax
 
 ### Introduction
 
