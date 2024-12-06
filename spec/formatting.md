@@ -944,7 +944,7 @@ The _Default Bidi Strategy_ is defined as follows:
    1. If `dir` is `'LTR'`:
       1. If `msgdir` is `'LTR'`
          and `isolate` is False,
-         let the formatted output be `fmt` itself.
+         append `fmt` to the formatted output.
       1. Else, in the formatted output,
          prefix `fmt` with U+2066 LEFT-TO-RIGHT ISOLATE
          and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
