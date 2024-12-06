@@ -1,4 +1,4 @@
-# MessageFormat 2.0 Errors
+# Errors
 
 Errors can occur during the processing of a _message_.
 Some errors can be detected statically, 
