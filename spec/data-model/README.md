@@ -1,4 +1,4 @@
-# DRAFT MessageFormat 2.0 Data Model
+# MessageFormat 2.0 Data Model
 
 This section defines a data model representation of MessageFormat 2 _messages_.
 

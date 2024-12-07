@@ -1,5 +1,22 @@
 # MessageFormat 2.0 Specification
 
+## Table of Contents
+
+1. [Introduction](intro.md)
+   1. [Conformance](intro.md#conformance)
+   1. [Terminology and Conventions](intro.md#terminology-and-conventions)
+   1. [Stability Policy](intro.md#stability-policy)
+1. [Syntax](syntax.md)
+   1. [`message.abnf`](message.abnf)
+1. [Formatting](formatting.md)
+1. [Errors](errors.md)
+1. [Default Function Registry](registry.md)
+1. [`u:` Namespace](u-namespace.md)
+1. [Interchange data model](data-model/README.md)
+1. [Appendices](appendices.md)
+   1. [Security Considerations](appendices.md#security-considerations)
+   1. [Acknowledgements](appendices.md#acknowledgements)
+
 ## Introduction
 
 One of the challenges in adapting software to work for

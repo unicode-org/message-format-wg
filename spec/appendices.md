@@ -1,4 +1,4 @@
-# DRAFT Appendices
+# Appendices
 
 ## Security Considerations
 
