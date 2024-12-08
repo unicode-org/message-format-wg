@@ -213,7 +213,7 @@ Its _resolved value_ is defined by _literal resolution_.
 > ```
 > .local $aNumber = {1234 :number}
 > .local $aDate = {|2023-08-30| :datetime}
-> .local $aFoo = {|some foo| :foo}
+> .local $aFoo = {|some foo| :ns:foo}
 > {{You have {42 :number}}}
 > ```
 
@@ -367,7 +367,7 @@ The order of _options_ MUST NOT be significant.
 
 > For example, the following _message_ treats both both placeholders identically:
 > ```
-> {$x :function option1=foo option2=bar} {$x :function option2=bar option1=foo}
+> {$x :ns:func option1=foo option2=bar} {$x :ns:func option2=bar option1=foo}
 > ```
 
 For each _option_:
@@ -439,9 +439,9 @@ The string representation of the _fallback value_ of an _expression_ depends on 
   and then by U+007C VERTICAL LINE `|`.
 
   > Examples:
-  > In a context where `:func` fails to resolve,
-  > `{42 :func}` resolves to a _fallback value_ with a string representation `|42|` and
-  > `{|C:\\| :func}` resolves to a _fallback value_ with a string representation `|C:\\|`.
+  > In a context where `:ns:func` fails to resolve,
+  > `{42 :ns:func}` resolves to a _fallback value_ with a string representation `|42|` and
+  > `{|C:\\| :ns:func}` resolves to a _fallback value_ with a string representation `|C:\\|`.
 
 - _expression_ with _variable_ _operand_:
   the _fallback value_ representation of that _variable_,
@@ -452,24 +452,22 @@ The string representation of the _fallback value_ of an _expression_ depends on 
   > both resolve to a _fallback value_ with a string representation `$var`
   > (even if `:number` fails to resolve).
   >
-  > In a context where `:func` fails to resolve,
-  > the _placeholder_ in `.local $var = {|val| :func} {{{$var}}}`
+  > In a context where `:ns:func` fails to resolve,
+  > the _placeholder_ in `.local $var = {|val| :ns:func} {{{$var}}}`
   > resolves to a _fallback value_ with a string representation `$var`.
   >
-  > In a context where either `:now` or `:pretty` fails to resolve,
+  > In a context where either `:ns:now` or `:ns:pretty` fails to resolve,
   > the _placeholder_ in
   > ```
-  > .local $time = {:now format=iso8601}
-  > {{{$time :pretty}}}
+  > .local $time = {:ns:now format=iso8601}
+  > {{{$time :ns:pretty}}}
   > ```
   > resolves to a _fallback value_ with a string representation `$time`.
 
 - _function_ _expression_ with no _operand_:
   U+003A COLON `:` followed by the _function_ _identifier_
 
-  > Examples:
-  > In a context where `:func` fails to resolve,
-  > `{:func}` resolves to a _fallback value_ with a string representation `:func`.
+  > Example:
   > In a context where `:ns:func` fails to resolve,
   > `{:ns:func}` resolves to a _fallback value_ with a string representation `:ns:func`.
 

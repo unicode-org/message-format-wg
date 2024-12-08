@@ -406,14 +406,14 @@ There MUST be at least one _selector_ in a _matcher_.
 There MAY be any number of additional _selectors_.
 
 > A _message_ with a single _selector_ that uses a custom _function_
-> `:hasCase` which is a _selector_ that allows the _message_ to choose a _pattern_
+> `:ns:hasCase` which is a _selector_ that allows the _message_ to choose a _pattern_
 > based on grammatical case:
 >
 > ```
-> .local $hasCase = {$userName :hasCase}
+> .local $hasCase = {$userName :ns:hasCase}
 > .match $hasCase
-> vocative {{Hello, {$userName :person case=vocative}!}}
-> accusative {{Please welcome {$userName :person case=accusative}!}}
+> vocative {{Hello, {$userName :ns:person case=vocative}!}}
+> accusative {{Please welcome {$userName :ns:person case=accusative}!}}
 > * {{Hello!}}
 > ```
 
@@ -505,7 +505,7 @@ Additionally, an _input-declaration_ can contain a _variable-expression_.
 > Declarations:
 >
 > ```
-> .input {$x :function option=value}
+> .input {$x :ns:func option=value}
 > .local $y = {|This is an expression|}
 > ```
 >
@@ -514,8 +514,8 @@ Additionally, an _input-declaration_ can contain a _variable-expression_.
 > ```
 > This placeholder contains a literal expression: {|literal|}
 > This placeholder contains a variable expression: {$variable}
-> This placeholder references a function on a variable: {$variable :function with=options}
-> This placeholder contains a function expression with a variable-valued option: {:function option=$variable}
+> This placeholder references a function on a variable: {$variable :ns:func with=options}
+> This placeholder contains a function expression with a variable-valued option: {:ns:func option=$variable}
 > ```
 
 ### Operand
@@ -808,17 +808,20 @@ Examples:
 >```
 > This has a {$variable}
 >```
-> A function:
+>
+> A default function:
 > ```
-> This has a {:function}
+> This has an {42 :integer}
 > ```
-> An add-on function from the `icu` namespace:
+>
+> A function from the `icu` namespace:
 > ```
 > This has a {:icu:function}
 > ```
-> An option and an add-on option:
+>
+> Options with and without a namespace:
 > ```
-> This has {:options option=value icu:option=add_on}
+> This has {:icu:function option=value ns:option=add_on}
 > ```
 
 Support for _namespaces_ and their interpretation is implementation-defined

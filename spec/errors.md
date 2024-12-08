@@ -86,15 +86,15 @@ does not equal the number of _selectors_.
 > Example invalid messages resulting in a _Variant Key Mismatch_ error:
 >
 > ```
-> .input {$one :func}
+> .input {$one :ns:func}
 > .match $one
 > 1 2 {{Too many}}
 > * {{Otherwise}}
 > ```
 >
 > ```
-> .input {$one :func}
-> .input {$two :func}
+> .input {$one :ns:func}
+> .input {$two :ns:func}
 > .match $one $two
 > 1 2 {{Two keys}}
 > * {{Missing a key}}
@@ -109,15 +109,15 @@ does not include a _variant_ with only catch-all keys.
 > Example invalid messages resulting in a _Missing Fallback Variant_ error:
 >
 > ```
-> .input {$one :func}
+> .input {$one :ns:func}
 > .match $one
 > 1 {{Value is one}}
 > 2 {{Value is two}}
 > ```
 >
 > ```
-> .input {$one :func}
-> .input {$two :func}
+> .input {$one :ns:func}
+> .input {$two :ns:func}
 > .match $one $two
 > 1 * {{First is one}}
 > * 1 {{Second is one}}
@@ -176,9 +176,9 @@ so explicitly declaring it after such use is also an error.
 > .input {$var2 :number}
 > {{Redeclaration of the implicit input variable $var2}}
 >
-> .local $var = {$ext :someFunction}
+> .local $var = {$ext :ns:func}
 > .local $var = {$error}
-> .local $var2 = {$var2 :error}
+> .local $var2 = {$var2 :ns:error}
 > {{{$var} cannot be redefined. {$var2} cannot refer to itself}}
 > ```
 
@@ -194,7 +194,7 @@ appears on the left-hand side of more than one _option_ in the same _expression_
 > ```
 >
 > ```
-> .local $foo = {horse :func one=1 two=2 one=1}
+> .local $foo = {horse :ns:func one=1 two=2 one=1}
 > {{This is {$foo}}}
 > ```
 
@@ -240,7 +240,7 @@ An **_<dfn>Unresolved Variable</dfn>_** error occurs when a variable reference c
 > ```
 >
 > ```
-> .input {$var :func}
+> .input {$var :ns:func}
 > .match $var
 > 1 {{The value is one.}}
 > * {{The value is not one.}}
@@ -253,14 +253,14 @@ a reference to a function which cannot be resolved.
 
 > For example, attempting to format either of the following messages
 > would result in an _Unknown Function_ error if done within a context that
-> does not provide for the function `:func` to be successfully resolved:
+> does not provide for the function `:ns:func` to be successfully resolved:
 >
 > ```
-> The value is {horse :func}.
+> The value is {horse :ns:func}.
 > ```
 >
 > ```
-> .local $horse = {|horse| :func}
+> .local $horse = {|horse| :ns:func}
 > .match $horse
 > 1 {{The value is one.}}
 > * {{The value is not one.}}
@@ -297,26 +297,26 @@ Implementations MAY also provide implementation-defined _Message Function Error_
 >    an object `{ name: 'Kat', id: 1234 }`,
 > 2. Provides for the variable reference `$field` to resolve to
 >    a string `'address'`, and
-> 3. Uses a `:get` message function which requires its argument to be an object and
+> 3. Uses a `:ns:get` message function which requires its argument to be an object and
 >    an option `field` to be provided with a string value.
 >
 > The exact type of _Message Function Error_ is determined by the _function handler_.
 >
 > ```
-> Hello, {horse :get field=name}!
+> Hello, {horse :ns:get field=name}!
 > ```
 >
 > ```
-> Hello, {$user :get}!
+> Hello, {$user :ns:get}!
 > ```
 >
 > ```
-> .local $id = {$user :get field=id}
-> {{Hello, {$id :get field=name}!}}
+> .local $id = {$user :ns:get field=id}
+> {{Hello, {$id :ns:get field=name}!}}
 > ```
 >
 > ```
-> Your {$field} is {$id :get field=$field}
+> Your {$field} is {$id :ns:get field=$field}
 > ```
 
 ### Bad Operand
