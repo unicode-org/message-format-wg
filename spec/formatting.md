@@ -943,6 +943,16 @@ The _Default Bidi Strategy_ is defined as follows:
       1. Let `fmt` be the formatted string representation of the _resolved value_ of `part`.
       1. Let `dir` be the directionality of `fmt`,
          one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
+         > [!NOTE]
+         > _Resolved values_ need to track two different pieces of metadata about directionality:
+         > the "isolate" flag (see the next step for how that is used), which determines
+         > whether the formatted result needs to be isolated; and the directionality itself.
+         > Each _function handler_ can have its own means for determining the directionality
+         > of the _resolved value_ it returns.
+         > Alternately, an implementation could elide this tracking and instead determine
+         > the directionality from the locale.
+         > The directionality SHOULD NOT be determined by introspecting
+         > the character sequence in `fmt`.
       1. Let the boolean value `isolate` be
          True if the `u:dir` _option_ of the _resolved value_ of `part` has a value other than `'inherit'`,
           or False otherwise.
