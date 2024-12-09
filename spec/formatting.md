@@ -941,7 +941,7 @@ The _Default Bidi Strategy_ is defined as follows:
       1. Append `fmt` to `out`.
    1. Else:
       1. Let `fmt` be the formatted string representation of the _resolved value_ of `part`.
-      1. Let `dir` be the directionality of `fmt`,
+      1. Let `dir` be `DIR(part)`,
          one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
          > [!NOTE]
          > _Resolved values_ need to track two different pieces of metadata about directionality:
@@ -972,5 +972,21 @@ The _Default Bidi Strategy_ is defined as follows:
          1. Append `fmt` to `out`.
          1. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
 1. Emit `out` as the formatted output of the message.
+
+The auxiliary function `DIR`, which maps an _expression_ to one of
+« `'LTR'`, `'RTL'`, `'unknown'` », is expected to be defined using the
+_resolved value_ of the _expression_. An implementation can use
+a representation of _resolved values_ that tracks two different
+pieces of metadata about directionality: the `isolate` flag used in step 2(iii),
+and the directionality itself. Each _function handler_ can have its own means
+for determining the directionality annotation on the _resolved value_ it returns.
+Alternately, an implementation could simply compute `DIR(exp)` based on the
+locale.
+
+> [!NOTE]
+> `DIR(exp)` SHOULD NOT be determined by introspecting
+> the character sequence in the formatted string representation
+> of the resolved value of `exp`.
+
 
 
