@@ -814,14 +814,14 @@ Examples:
 > This has an {42 :integer}
 > ```
 >
-> A function from the `icu` namespace:
+> A function from the `ns` namespace:
 > ```
-> This has a {:icu:function}
+> This has a {:ns:function}
 > ```
 >
 > Options with and without a namespace:
 > ```
-> This has {:icu:function option=value ns:option=add_on}
+> This has {:ns:function option=value ns:option=value}
 > ```
 
 Support for _namespaces_ and their interpretation is implementation-defined
