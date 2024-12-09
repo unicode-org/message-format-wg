@@ -926,7 +926,8 @@ Implementations MAY provide other _bidirectional isolation strategies_.
 
 Implementations MAY supply a _bidirectional isolation strategy_ that performs no processing.
 
-The _Default Bidi Strategy_ is defined as follows:
+The _Default Bidi Strategy_ is defined as a function `B` from expressions
+to formatted strings, as follows.
 
 1. Let `msgdir` be the directionality of the whole message,
    one of « `'LTR'`, `'RTL'`, `'unknown'` ».
@@ -940,19 +941,19 @@ The _Default Bidi Strategy_ is defined as follows:
       True if the `u:dir` _option_ of the _resolved value_ of `exp` has a value other than `'inherit'`,
       or False otherwise.
    1. If `dir` is `'LTR'`:
-      1. If `msgdir` is `'LTR'` in the formatted output
+      1. If `msgdir` is `'LTR'`
          and `isolate` is False,
-         let `fmt` be itself
-      1. Else, in the formatted output,
-         prefix `fmt` with U+2066 LEFT-TO-RIGHT ISOLATE
-         and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
+         `B(exp)` is `fmt`.
+      1. Else, `B(exp)` is
+         `fmt` prefixed with U+2066 LEFT-TO-RIGHT ISOLATE
+         and postfixed with U+2069 POP DIRECTIONAL ISOLATE.
    1. Else, if `dir` is `'RTL'`:
-      1. In the formatted output,
-         prefix `fmt` with U+2067 RIGHT-TO-LEFT ISOLATE
-         and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
+      1. `B(exp)` is
+         `fmt` prefixed with U+2067 RIGHT-TO-LEFT ISOLATE
+         and postfixed with U+2069 POP DIRECTIONAL ISOLATE.
    1. Else:
-      1. In the formatted output,
-         prefix `fmt` with U+2068 FIRST STRONG ISOLATE
-         and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
+      1. `B(exp)` is
+         `fmt` prefixed with U+2068 FIRST STRONG ISOLATE
+         and postfixed with U+2069 POP DIRECTIONAL ISOLATE.
 
 
