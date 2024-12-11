@@ -962,5 +962,6 @@ The _Default Bidi Strategy_ is defined as follows:
        1. Append U+2068 FIRST STRONG ISOLATE to `out`.
        1. Append `fmt` to `out`.
        1. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
+1. Emit `out` as the formatted output of the message.
 
 
