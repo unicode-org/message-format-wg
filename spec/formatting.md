@@ -939,8 +939,10 @@ The _Default Bidi Strategy_ is defined as follows:
    1. If `part` is a plain literal (text) part, append `part` to `out`.
    1. Else:
        1. Assert `part` is a _placeholder_.
-       1. Let `exp` be `part`.
-       1. Let `fmt` be the formatted string representation of the _resolved value_ of `exp`.
+       1. If `part` is _markup_, append the _resolved value_ of `part` to `out`.
+          Note that this is normally the empty string.
+       1. Else:
+          1. Let `fmt` be the formatted string representation of the _resolved value_ of `part`.
        1. Let `dir` be the directionality of `fmt`,
           one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
        1. Let the boolean value `isolate` be
