@@ -943,27 +943,27 @@ The _Default Bidi Strategy_ is defined as follows:
           Note that this is normally the empty string.
        1. Else:
           1. Let `fmt` be the formatted string representation of the _resolved value_ of `part`.
-       1. Let `dir` be the directionality of `fmt`,
-          one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
-       1. Let the boolean value `isolate` be
-          True if the `u:dir` _option_ of the _resolved value_ of `exp` has a value other than `'inherit'`,
+          1. Let `dir` be the directionality of `fmt`,
+             one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
+          1. Let the boolean value `isolate` be
+             True if the `u:dir` _option_ of the _resolved value_ of `exp` has a value other than `'inherit'`,
           or False otherwise.
-       1. If `dir` is `'LTR'`:
-           1. If `msgdir` is `'LTR'`
-              and `isolate` is False,
-               append `fmt` to `out`.
-           1. Else:
-               1. Append U+2066 LEFT-TO-RIGHT ISOLATE to `out`.
-               1. Append `fmt` to `out`.
-               1. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
-       1. Else, if `dir` is `'RTL'`:
-           1. Append U+2067 RIGHT-TO-LEFT ISOLATE to `out.`
-           1. Append `fmt` to `out`.
-           1. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
-       1. Else:
-           1. Append U+2068 FIRST STRONG ISOLATE to `out`.
-           1. Append `fmt` to `out`.
-           1. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
+          1. If `dir` is `'LTR'`:
+              1. If `msgdir` is `'LTR'`
+                 and `isolate` is False,
+                 append `fmt` to `out`.
+              1. Else:
+                  1. Append U+2066 LEFT-TO-RIGHT ISOLATE to `out`.
+                  1. Append `fmt` to `out`.
+                  1. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
+          1. Else, if `dir` is `'RTL'`:
+              1. Append U+2067 RIGHT-TO-LEFT ISOLATE to `out.`
+              1. Append `fmt` to `out`.
+              1. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
+          1. Else:
+              1. Append U+2068 FIRST STRONG ISOLATE to `out`.
+              1. Append `fmt` to `out`.
+              1. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
 1. Emit `out` as the formatted output of the message.
 
 
