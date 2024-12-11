@@ -928,34 +928,39 @@ Implementations MAY provide other _bidirectional isolation strategies_.
 
 Implementations MAY supply a _bidirectional isolation strategy_ that performs no processing.
 
-The _Default Bidi Strategy_ is defined as a function `B` from expressions
-to formatted strings, as follows.
+The _Default Bidi Strategy_ is defined as follows:
 
+1. Let `out` be the empty string.
 1. Let `msgdir` be the directionality of the whole message,
    one of « `'LTR'`, `'RTL'`, `'unknown'` ».
    These correspond to the message having left-to-right directionality,
    right-to-left directionality, and to the message's directionality not being known.
-1. For each _expression_ `exp` in _pattern_:
-   1. Let `fmt` be the formatted string representation of the _resolved value_ of `exp`.
-   1. Let `dir` be the directionality of `fmt`,
+1. For each part `part` in _pattern_:
+   1. If `part` is a plain literal (text) part, append `part` to `out`.
+   1. Else:
+     i. Assert `part` is a _placeholder_.
+     i. Let `exp` be `part`.
+     i. Let `fmt` be the formatted string representation of the _resolved value_ of `exp`.
+     ii. Let `dir` be the directionality of `fmt`,
       one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
-   1. Let the boolean value `isolate` be
+     iii. Let the boolean value `isolate` be
       True if the `u:dir` _option_ of the _resolved value_ of `exp` has a value other than `'inherit'`,
       or False otherwise.
-   1. If `dir` is `'LTR'`:
+     iv. If `dir` is `'LTR'`:
       1. If `msgdir` is `'LTR'`
          and `isolate` is False,
-         `B(exp)` is `fmt`.
-      1. Else, `B(exp)` is
-         `fmt` prefixed with U+2066 LEFT-TO-RIGHT ISOLATE
-         and postfixed with U+2069 POP DIRECTIONAL ISOLATE.
-   1. Else, if `dir` is `'RTL'`:
-      1. `B(exp)` is
-         `fmt` prefixed with U+2067 RIGHT-TO-LEFT ISOLATE
-         and postfixed with U+2069 POP DIRECTIONAL ISOLATE.
-   1. Else:
-      1. `B(exp)` is
-         `fmt` prefixed with U+2068 FIRST STRONG ISOLATE
-         and postfixed with U+2069 POP DIRECTIONAL ISOLATE.
+         append `fmt` to `out`.
+      1. Else:
+          i. Append U+2066 LEFT-TO-RIGHT ISOLATE to `out`.
+          i. Append `fmt` to `out`.
+          i. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
+     v. Else, if `dir` is `'RTL'`:
+      1. Append U+2067 RIGHT-TO-LEFT ISOLATE to `out.`
+      1. Append `fmt` to `out`.
+      1. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
+     vi. Else:
+       1. Append U+2068 FIRST STRONG ISOLATE to `out`.
+       1. Append `fmt` to `out`.
+       1. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
 
 
