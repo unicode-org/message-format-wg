@@ -1,0 +1,1048 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>formatting.html</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+
+</head>
+
+<body>
+
+<h1 id="draft-messageformat-2.0-formatting">DRAFT MessageFormat 2.0
+Formatting</h1>
+<h2 id="introduction">Introduction</h2>
+<p>This section defines the behavior of a MessageFormat 2.0
+implementation when formatting a <em>message</em> for display in a user
+interface, or for some later processing.</p>
+<p>To start, we presume that a <em>message</em> has either been parsed
+from its syntax or created from a data model description. If the
+resulting <em>message</em> is not <em>well-formed</em>, a <em>Syntax
+Error</em> is emitted. If the resulting <em>message</em> is
+<em>well-formed</em> but is not <em>valid</em>, a <em>Data Model
+Error</em> is emitted.</p>
+<p>The formatting of a <em>message</em> is defined by the following
+operations:</p>
+<ul>
+<li><p><strong><em><dfn>Pattern Selection</dfn></em></strong> determines
+which of a message’s <em>patterns</em> is formatted. For a message with
+no <em>selectors</em>, this is simple as there is only one
+<em>pattern</em>. With <em>selectors</em>, this will depend on their
+resolution.</p></li>
+<li><p><strong><em><dfn>Formatting</dfn></em></strong> takes the
+<em>resolved values</em> of the <em>text</em> and <em>placeholder</em>
+parts of the selected <em>pattern</em>, and produces the formatted
+result for the <em>message</em>. Depending on the implementation, this
+result could be a single concatenated string, an array of objects, an
+attributed string, or some other locally appropriate data type.</p></li>
+<li><p><strong><em><dfn>Expression and Markup
+Resolution</dfn></em></strong> determines the value of an
+<em>expression</em> or <em>markup</em>, with reference to the current
+<em>formatting context</em>. This can include multiple steps, such as
+looking up the value of a variable and calling formatting functions. The
+form of the <em>resolved value</em> is implementation defined and the
+value might not be evaluated or formatted yet. However, it needs to be
+“formattable”, i.e. it contains everything required by the eventual
+formatting.</p>
+<p>The resolution of <em>text</em> is rather straightforward, and is
+detailed under <em>literal resolution</em>.</p></li>
+</ul>
+<p>Implementations are not required to expose the <em>expression
+resolution</em> and <em>pattern selection</em> operations to their
+users, or even use them in their internal processing, as long as the
+final <em>formatting</em> result is made available to users and the
+observable behavior of the <em>formatting</em> matches that described
+here.</p>
+<p><em>Attributes</em> MUST NOT have any effect on the formatted output
+of a <em>message</em>, nor be made available to <em>function
+handlers</em>.</p>
+<blockquote>
+<p>[!IMPORTANT]</p>
+<p><strong>This specification does not require either eager or lazy
+<em>expression resolution</em> of <em>message</em> parts; do not
+construe any requirement in this document as requiring
+either.</strong></p>
+<p>Implementations are not required to evaluate all parts of a
+<em>message</em> when parsing, processing, or formatting. In particular,
+an implementation MAY choose not to evaluate or resolve the value of a
+given <em>expression</em> until it is actually used by a selection or
+formatting process. However, when an <em>expression</em> is resolved, it
+MUST behave as if all preceding <em>declarations</em> affecting
+<em>variables</em> referenced by that <em>expression</em> have already
+been evaluated in the order in which the relevant <em>declarations</em>
+appear in the <em>message</em>. An implementation MUST ensure that every
+<em>expression</em> in a <em>message</em> is evaluated at most once.</p>
+</blockquote>
+<blockquote>
+<p>[!IMPORTANT]</p>
+<p>Implementations with lazy evaluation MUST NOT use a call-by-name
+evaluation strategy. Instead, they must evaluate expressions at most
+once (“call-by-need”). This is to prevent <em>expressions</em> from
+having different values when used in different parts of a given
+<em>message</em>. <em>Function handlers</em> are not necessarily pure:
+they can access external mutable state such as the current system clock
+time. Thus, evaluating the same <em>expression</em> more than once could
+yield different results. That behavior violates this specification.</p>
+</blockquote>
+<blockquote>
+<p>[!IMPORTANT] Implementations and users SHOULD NOT create <em>function
+handlers</em> that mutate external program state, particularly since
+such a <em>function handler</em> can present a remote execution
+hazard.</p>
+</blockquote>
+<h2 id="formatting-context">Formatting Context</h2>
+<p>A <em>message</em>’s <strong><em><dfn>formatting
+context</dfn></em></strong> represents the data and procedures that are
+required for the <em>message</em>’s <em>expression resolution</em>,
+<em>pattern selection</em> and <em>formatting</em>.</p>
+<p>At a minimum, it includes:</p>
+<ul>
+<li><p>Information on the current <strong><em><a
+href="https://www.w3.org/TR/i18n-glossary/#dfn-locale">locale</a></em></strong>,
+potentially including a fallback chain of locales. This will be passed
+on to formatting functions.</p></li>
+<li><p>Information on the base directionality of the <em>message</em>
+and its <em>text</em> tokens. This will be used by strategies for
+bidirectional isolation, and can be used to set the base direction of
+the <em>message</em> upon display.</p></li>
+<li><p>An <strong><em><dfn>input mapping</dfn></em></strong> of string
+identifiers to values, defining variable values that are available
+during <em>variable resolution</em>. This is often determined by a
+user-provided argument of a formatting function call.</p></li>
+<li><p>The <em>function registry</em>, providing the <em>function
+handlers</em> of the functions referred to by <em>message</em>
+<em>functions</em>.</p></li>
+<li><p>Optionally, a fallback string to use for the <em>message</em> if
+it is not <em>valid</em>.</p></li>
+</ul>
+<p>Implementations MAY include additional fields in their <em>formatting
+context</em>.</p>
+<h2 id="resolved-values">Resolved Values</h2>
+<p>A <strong><em><dfn>resolved value</dfn></em></strong> is the result
+of resolving a <em>text</em>, <em>literal</em>, <em>variable</em>,
+<em>expression</em>, or <em>markup</em>. The <em>resolved value</em> is
+determined using the <em>formatting context</em>. The form of the
+<em>resolved value</em> is implementation-defined.</p>
+<p>In a <em>declaration</em>, the <em>resolved value</em> of an
+<em>expression</em> is bound to a <em>variable</em>, which makes it
+available for use in later <em>expressions</em> and <em>markup</em>
+<em>options</em>.</p>
+<blockquote>
+<p>For example, in</p>
+<pre><code>.input {$a :number minimumFractionDigits=3}
+.local $b = {$a :integer notation=compact}
+.match $a
+0 {{The value is zero.}}
+* {{In compact form, the value {$a} is rendered as {$b}.}}</code></pre>
+<p>the <em>resolved value</em> bound to <code>$a</code> is used as the
+<em>operand</em> of the <code>:integer</code> <em>function</em> when
+resolving the value of the <em>variable</em> <code>$b</code>, as a
+<em>selector</em> in the <code>.match</code> statement, as well as for
+formatting the <em>placeholder</em> <code>{$a}</code>.</p>
+</blockquote>
+<p>In an <em>input-declaration</em>, the <em>variable</em> operand of
+the <em>variable-expression</em> identifies not only the name of the
+external input value, but also the <em>variable</em> to which the
+<em>resolved value</em> of the <em>variable-expression</em> is
+bound.</p>
+<p>In a <em>pattern</em>, the <em>resolved value</em> of an
+<em>expression</em> or <em>markup</em> is used in its
+<em>formatting</em>.</p>
+<p>The form that <em>resolved values</em> take is
+implementation-dependent, and different implementations MAY choose to
+perform different levels of resolution.</p>
+<blockquote>
+<p>While this specification does not require it, a <em>resolved
+value</em> could be implemented by requiring each <em>function
+handler</em> to return a value matching the following interface:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">interface</span> MessageValue {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">formatToString</span>()<span class="op">:</span> <span class="dt">string</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">formatToX</span>()<span class="op">:</span> X <span class="co">// where X is an implementation-defined type</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">getValue</span>()<span class="op">:</span> <span class="dt">unknown</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resolvedOptions</span>()<span class="op">:</span> { [key<span class="op">:</span> <span class="dt">string</span>]<span class="op">:</span> MessageValue }</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">selectKeys</span>(keys<span class="op">:</span> <span class="dt">string</span>[])<span class="op">:</span> <span class="dt">string</span>[]</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>With this approach: - An <em>expression</em> could be used as a
+<em>placeholder</em> if calling the <code>formatToString()</code> or
+<code>formatToX()</code> method of its <em>resolved value</em> did not
+emit an error. - A <em>variable</em> could be used as a
+<em>selector</em> if calling the <code>selectKeys(keys)</code> method of
+its <em>resolved value</em> did not emit an error. - Using a
+<em>variable</em>, the <em>resolved value</em> of an <em>expression</em>
+could be used as an <em>operand</em> or <em>option</em> value if calling
+the <code>getValue()</code> method of its <em>resolved value</em> did
+not emit an error. In this use case, the <code>resolvedOptions()</code>
+method could also provide a set of option values that could be taken
+into account by the called function.</p>
+<p>Extensions of the base <code>MessageValue</code> interface could be
+provided for different data types, such as numbers or strings, for which
+the <code>unknown</code> return type of <code>getValue()</code> and the
+generic <code>MessageValue</code> type used in
+<code>resolvedOptions()</code> could be narrowed appropriately. An
+implementation could also allow <code>MessageValue</code> values to be
+passed in as input variables, or automatically wrap each variable as a
+<code>MessageValue</code> to provide a uniform interface for custom
+functions.</p>
+</blockquote>
+<h2 id="expression-and-markup-resolution">Expression and Markup
+Resolution</h2>
+<p><em>Expressions</em> are used in <em>declarations</em> and
+<em>patterns</em>. <em>Markup</em> is only used in
+<em>patterns</em>.</p>
+<p>Depending on the presence or absence of a <em>variable</em> or
+<em>literal</em> operand and a <em>function</em>, the <em>resolved
+value</em> of the <em>expression</em> is determined as follows:</p>
+<p>If the <em>expression</em> contains a <em>function</em>, its
+<em>resolved value</em> is defined by <em>function resolution</em>.</p>
+<p>Else, if the <em>expression</em> consists of a <em>variable</em>, its
+<em>resolved value</em> is defined by <em>variable resolution</em>. An
+implementation MAY perform additional processing when resolving the
+value of an <em>expression</em> that consists only of a
+<em>variable</em>.</p>
+<blockquote>
+<p>For example, it could apply <em>function resolution</em> using a
+<em>function</em> and a set of <em>options</em> chosen based on the
+value or type of the <em>variable</em>. So, given a <em>message</em>
+like this:</p>
+<pre><code>Today is {$date}</code></pre>
+<p>If the value passed in the <em>variable</em> were a date object, such
+as a JavaScript <code>Date</code> or a Java <code>java.util.Date</code>
+or <code>java.time.Temporal</code>, the implementation could interpret
+the <em>placeholder</em> <code>{$date}</code> as if the pattern included
+the function <code>:datetime</code> with some set of default
+options.</p>
+</blockquote>
+<p>Else, the <em>expression</em> consists of a <em>literal</em>. Its
+<em>resolved value</em> is defined by <em>literal resolution</em>.</p>
+<blockquote>
+<p>[!NOTE] This means that a <em>literal</em> value with no
+<em>function</em> is always treated as a string. To represent values
+that are not strings as a <em>literal</em>, a <em>function</em> needs to
+be provided:</p>
+<pre><code>.local $aNumber = {1234 :number}
+.local $aDate = {|2023-08-30| :datetime}
+.local $aFoo = {|some foo| :foo}
+{{You have {42 :number}}}</code></pre>
+</blockquote>
+<h3 id="literal-resolution">Literal Resolution</h3>
+<p>The <em>resolved value</em> of a <em>text</em> or a <em>literal</em>
+contains the character sequence of the <em>text</em> or <em>literal</em>
+after any character escape has been converted to the escaped
+character.</p>
+<p>When a <em>literal</em> is used as an <em>operand</em> or on the
+right-hand side of an <em>option</em>, the formatting function MUST
+treat its <em>resolved value</em> the same whether its value was
+originally a <em>quoted literal</em> or an <em>unquoted
+literal</em>.</p>
+<blockquote>
+<p>For example, the <em>option</em> <code>foo=42</code> and the
+<em>option</em> <code>foo=|42|</code> are treated as identical.</p>
+</blockquote>
+<blockquote>
+<p>For example, in a JavaScript formatter, the <em>resolved value</em>
+of a <em>text</em> or a <em>literal</em> could have the following
+implementation:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MessageLiteral <span class="kw">implements</span> MessageValue {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">constructor</span>(value<span class="op">:</span> <span class="dt">string</span>) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">formatToString</span> <span class="op">=</span> () <span class="kw">=&gt;</span> value<span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">getValue</span> <span class="op">=</span> () <span class="kw">=&gt;</span> value<span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  resolvedOptions<span class="op">:</span> () <span class="kw">=&gt;</span> ({})<span class="op">;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">selectKeys</span>(_keys<span class="op">:</span> <span class="dt">string</span>[]) {</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="bu">Error</span>(<span class="st">&quot;Selection on unannotated literals is not supported&quot;</span>)<span class="op">;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</blockquote>
+<h3 id="variable-resolution">Variable Resolution</h3>
+<p>To resolve the value of a <em>variable</em>, its <em>name</em> is
+used to identify either a local variable or an input variable. If a
+<em>declaration</em> exists for the <em>variable</em>, its <em>resolved
+value</em> is used. Otherwise, the <em>variable</em> is an implicit
+reference to an input value, and its value is looked up from the
+<em>formatting context</em> <em>input mapping</em>.</p>
+<p>The resolution of a <em>variable</em> fails if no value is identified
+for its <em>name</em>. If this happens, an <em>Unresolved Variable</em>
+error is emitted and a <em>fallback value</em> is used as the
+<em>resolved value</em> of the <em>variable</em>.</p>
+<p>If the <em>resolved value</em> identified for the <em>variable</em>
+<em>name</em> is a <em>fallback value</em>, a <em>fallback value</em> is
+used as the <em>resolved value</em> of the <em>variable</em>.</p>
+<p>The <em>fallback value</em> representation of a <em>variable</em> has
+a string representation consisting of the U+0024 DOLLAR SIGN
+<code>$</code> followed by the <em>name</em> of the
+<em>variable</em>.</p>
+<h3 id="function-resolution">Function Resolution</h3>
+<p>To resolve an <em>expression</em> with a <em>function</em>, the
+following steps are taken:</p>
+<ol type="1">
+<li><p>If the <em>expression</em> includes an <em>operand</em>, resolve
+its value. If this is a <em>fallback value</em>, return a <em>fallback
+value</em> as the <em>resolved value</em> of the
+<em>expression</em>.</p></li>
+<li><p>Resolve the <em>identifier</em> of the <em>function</em> and find
+the appropriate <em>function handler</em> to call. If the implementation
+cannot find the <em>function handler</em>, or if the <em>identifier</em>
+includes a <em>namespace</em> that the implementation does not support,
+emit an <em>Unknown Function</em> error and return a <em>fallback
+value</em> as the <em>resolved value</em> of the
+<em>expression</em>.</p>
+<p>Implementations are not required to implement <em>namespaces</em> or
+installable <em>function registries</em>.</p></li>
+<li><p>Perform <em>option resolution</em>.</p></li>
+<li><p>Determine the <em>function context</em> for calling the
+<em>function handler</em>.</p>
+<p>The <strong><em><dfn>function context</dfn></em></strong> contains
+the context necessary for the <em>function handler</em> to resolve the
+<em>expression</em>. This includes:</p>
+<ul>
+<li>The current <em>locale</em>, potentially including a fallback chain
+of locales.</li>
+<li>The base directionality of the <em>expression</em>. By default, this
+is undefined or empty.</li>
+</ul>
+<p>If the resolved mapping of <em>options</em> includes any
+<em><code>u:</code> options</em> supported by the implementation,
+process them as specified. Such <code>u:</code> options MAY be removed
+from the resolved mapping of <em>options</em>.</p></li>
+<li><p>Call the <em>function handler</em> with the following
+arguments:</p>
+<ul>
+<li>The <em>function context</em>.</li>
+<li>The resolved mapping of <em>options</em>.</li>
+<li>If the <em>expression</em> includes an <em>operand</em>, its
+<em>resolved value</em>.</li>
+</ul>
+<p>The form that resolved <em>operand</em> and <em>option</em> values
+take is implementation-defined.</p>
+<p>An implementation MAY pass additional arguments to the <em>function
+handler</em>, as long as reasonable precautions are taken to keep the
+function interface simple and minimal, and avoid introducing potential
+security vulnerabilities.</p></li>
+<li><p>If the call succeeds, resolve the value of the
+<em>expression</em> as the result of that function call.</p>
+<p>If the call fails or does not return a valid value, emit the
+appropriate <em>Message Function Error</em> for the failure.</p>
+<p>Implementations MAY provide a mechanism for the <em>function
+handler</em> to provide additional detail about internal failures.
+Specifically, if the cause of the failure was that the datatype, value,
+or format of the <em>operand</em> did not match that expected by the
+<em>function</em>, the <em>function</em> SHOULD cause a <em>Bad
+Operand</em> error to be emitted.</p>
+<p>In all failure cases, return a <em>fallback value</em> as the
+<em>resolved value</em> of the <em>expression</em>.</p></li>
+</ol>
+<h4 id="function-handler">Function Handler</h4>
+<p>A <strong><em><dfn>function handler</dfn></em></strong> is an
+implementation-defined process such as a function or method which
+accepts a set of arguments and returns a <em>resolved value</em>. A
+<em>function handler</em> is required to resolve a
+<em>function</em>.</p>
+<p>An implementation MAY define its own functions and their handlers. An
+implementation MAY allow custom functions to be defined by users.</p>
+<p>Implementations that provide a means for defining custom functions
+MUST provide a means for <em>function handlers</em> to return
+<em>resolved values</em> that contain enough information to be used as
+<em>operands</em> or <em>option</em> values in subsequent
+<em>expressions</em>.</p>
+<p>The <em>resolved value</em> returned by a <em>function handler</em>
+MAY be different from the value of the <em>operand</em> of the
+<em>function</em>. It MAY be an implementation specified type. It is not
+required to be the same type as the <em>operand</em>.</p>
+<p>A <em>function handler</em> MAY include resolved options in its
+<em>resolved value</em>. The resolved options MAY be different from the
+<em>options</em> of the function.</p>
+<p>A <em>function handler</em> SHOULD emit a <em>Bad Operand</em> error
+for <em>operands</em> whose <em>resolved value</em> or type is not
+supported.</p>
+<p><em>Function handler</em> access to the <em>formatting context</em>
+MUST be minimal and read-only, and execution time SHOULD be limited.</p>
+<p>Implementation-defined <em>functions</em> SHOULD use an
+implementation-defined <em>namespace</em>.</p>
+<h4 id="option-resolution">Option Resolution</h4>
+<p><strong><em><dfn>Option resolution</dfn></em></strong> is the process
+of computing the <em>options</em> for a given <em>expression</em>.
+<em>Option resolution</em> results in a mapping of string
+<em>identifiers</em> to <em>values</em>. The order of <em>options</em>
+MUST NOT be significant.</p>
+<blockquote>
+<p>For example, the following <em>message</em> treats both both
+placeholders identically:</p>
+<pre><code>{$x :function option1=foo option2=bar} {$x :function option2=bar option1=foo}</code></pre>
+</blockquote>
+<p>For each <em>option</em>:</p>
+<ol type="1">
+<li>Let <code>res</code> be a new empty mapping.</li>
+<li>For each <em>option</em>:
+<ol type="1">
+<li>Let <code>id</code> be the string value of the <em>identifier</em>
+of the <em>option</em>.</li>
+<li>Let <code>rv</code> be the <em>resolved value</em> of the
+<em>option</em> value.</li>
+<li>If <code>rv</code> is a <em>fallback value</em>:
+<ol type="1">
+<li>If supported, emit a <em>Bad Option</em> error.</li>
+</ol></li>
+<li>Else:
+<ol type="1">
+<li>Set <code>res[id]</code> to be <code>rv</code>.</li>
+</ol></li>
+</ol></li>
+<li>Return <code>res</code>.</li>
+</ol>
+<p>The result of <em>option resolution</em> MUST be a (possibly empty)
+mapping of string identifiers to values; that is, errors MAY be emitted,
+but such errors MUST NOT be fatal. This mapping can be empty.</p>
+<blockquote>
+<p>[!NOTE] The <em>resolved value</em> of a <em>function</em>
+<em>operand</em> can also include resolved option values. These are not
+included in the <em>option resolution</em> result, and need to be
+processed separately by a <em>function handler</em>.</p>
+</blockquote>
+<h3 id="markup-resolution">Markup Resolution</h3>
+<p>Unlike <em>functions</em>, the resolution of <em>markup</em> is not
+customizable.</p>
+<p>The <em>resolved value</em> of <em>markup</em> includes the following
+fields:</p>
+<ul>
+<li>The type of the markup: open, standalone, or close</li>
+<li>The <em>identifier</em> of the <em>markup</em></li>
+<li>The resolved <em>options</em> values after <em>option
+resolution</em>.</li>
+</ul>
+<p>If the resolved mapping of <em>options</em> includes any
+<em><code>u:</code> options</em> supported by the implementation,
+process them as specified. Such <code>u:</code> options MAY be removed
+from the resolved mapping of <em>options</em>.</p>
+<p>The resolution of <em>markup</em> MUST always succeed.</p>
+<h3 id="fallback-resolution">Fallback Resolution</h3>
+<p>A <strong><em><dfn>fallback value</dfn></em></strong> is the
+<em>resolved value</em> for an <em>expression</em> or <em>variable</em>
+when that <em>expression</em> or <em>variable</em> fails to resolve. It
+contains a string representation that is used for its formatting, and no
+option values.</p>
+<p>The <em>resolved value</em> of <em>text</em>, <em>literal</em>, and
+<em>markup</em> MUST NOT be a <em>fallback value</em>.</p>
+<p>A <em>variable</em> fails to resolve when no value is identified for
+its <em>name</em>. The string representation of its <em>fallback
+value</em> is U+0024 DOLLAR SIGN <code>$</code> followed by the
+<em>name</em> of the <em>variable</em>.</p>
+<p>An <em>expression</em> fails to resolve when:</p>
+<ul>
+<li>A <em>variable</em> used as its <em>operand</em> resolves to a
+<em>fallback value</em>. Note that an <em>expression</em> does not
+necessarily fail to resolve if an <em>option</em> resolves with a
+<em>fallback value</em>.</li>
+<li>No <em>function handler</em> is found for a <em>function</em>
+<em>identifier</em>.</li>
+<li>Calling a <em>function handler</em> fails or does not return a valid
+value.</li>
+</ul>
+<p>The string representation of the <em>fallback value</em> of an
+<em>expression</em> depends on its contents:</p>
+<ul>
+<li><p><em>expression</em> with a <em>literal</em> <em>operand</em>
+(either quoted or unquoted): U+007C VERTICAL LINE <code>|</code>
+followed by the value of the <em>literal</em> with escaping applied to
+U+005C REVERSE SOLIDUS <code>\</code> and U+007C VERTICAL LINE
+<code>|</code>, and then by U+007C VERTICAL LINE <code>|</code>.</p>
+<blockquote>
+<p>Examples: In a context where <code>:func</code> fails to resolve,
+<code>{42 :func}</code> resolves to a <em>fallback value</em> with a
+string representation <code>|42|</code> and <code>{|C:\\| :func}</code>
+resolves to a <em>fallback value</em> with a string representation
+<code>|C:\\|</code>.</p>
+</blockquote></li>
+<li><p><em>expression</em> with <em>variable</em> <em>operand</em>: the
+<em>fallback value</em> representation of that <em>variable</em>, U+0024
+DOLLAR SIGN <code>$</code> followed by the <em>name</em> of the
+<em>variable</em></p>
+<blockquote>
+<p>Examples: In a context where <code>$var</code> fails to resolve,
+<code>{$var}</code> and <code>{$var :number}</code> both resolve to a
+<em>fallback value</em> with a string representation <code>$var</code>
+(even if <code>:number</code> fails to resolve).</p>
+<p>In a context where <code>:func</code> fails to resolve, the
+<em>placeholder</em> in
+<code>.local $var = {|val| :func} {{{$var}}}</code> resolves to a
+<em>fallback value</em> with a string representation
+<code>$var</code>.</p>
+<p>In a context where either <code>:now</code> or <code>:pretty</code>
+fails to resolve, the <em>placeholder</em> in</p>
+<pre><code>.local $time = {:now format=iso8601}
+{{{$time :pretty}}}</code></pre>
+<p>resolves to a <em>fallback value</em> with a string representation
+<code>$time</code>.</p>
+</blockquote></li>
+<li><p><em>function</em> <em>expression</em> with no <em>operand</em>:
+U+003A COLON <code>:</code> followed by the <em>function</em>
+<em>identifier</em></p>
+<blockquote>
+<p>Examples: In a context where <code>:func</code> fails to resolve,
+<code>{:func}</code> resolves to a <em>fallback value</em> with a string
+representation <code>:func</code>. In a context where
+<code>:ns:func</code> fails to resolve, <code>{:ns:func}</code> resolves
+to a <em>fallback value</em> with a string representation
+<code>:ns:func</code>.</p>
+</blockquote></li>
+<li><p>Otherwise: the U+FFFD REPLACEMENT CHARACTER <code>�</code></p>
+<p>This is not currently used by any expression, but may apply in future
+revisions.</p></li>
+</ul>
+<p><em>Options</em> and <em>attributes</em> are not included in the
+<em>fallback value</em>.</p>
+<p><em>Pattern selection</em> is not supported for <em>fallback
+values</em>.</p>
+<blockquote>
+<p>For example, in a JavaScript formatter the <em>fallback value</em>
+could have the following implementation, where <code>source</code> is
+one of the above-defined strings:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MessageFallback <span class="kw">implements</span> MessageValue {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">constructor</span>(source<span class="op">:</span> <span class="dt">string</span>) {</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">formatToString</span> <span class="op">=</span> () <span class="kw">=&gt;</span> <span class="vs">`{</span><span class="sc">${</span>source<span class="sc">}</span><span class="vs">}`</span><span class="op">;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">getValue</span> <span class="op">=</span> () <span class="kw">=&gt;</span> <span class="kw">undefined</span><span class="op">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  resolvedOptions<span class="op">:</span> () <span class="kw">=&gt;</span> ({})<span class="op">;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">selectKeys</span>(_keys<span class="op">:</span> <span class="dt">string</span>[]) {</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="bu">Error</span>(<span class="st">&quot;Selection on fallback values is not supported&quot;</span>)<span class="op">;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</blockquote>
+<h2 id="pattern-selection">Pattern Selection</h2>
+<p>If the <em>message</em> being formatted is not <em>well-formed</em>
+and <em>valid</em>, the result of pattern selection is a
+<em>pattern</em> consisting of a single <em>fallback value</em> using
+the <em>message</em>’s fallback string defined in the <em>formatting
+context</em> or if this is not available or empty, the U+FFFD
+REPLACEMENT CHARACTER <code>�</code>.</p>
+<p>If the <em>message</em> being formatted does not contain a
+<em>matcher</em>, the result of pattern selection is its
+<em>pattern</em> value.</p>
+<p>When a <em>message</em> contains a <em>matcher</em> with one or more
+<em>selectors</em>, the implementation needs to determine which
+<em>variant</em> will be used to provide the <em>pattern</em> for the
+formatting operation. This is done by ordering and filtering the
+available <em>variant</em> statements according to their <em>key</em>
+values and selecting the first one.</p>
+<blockquote>
+<p>[!NOTE] At least one <em>variant</em> is required to have all of its
+<em>keys</em> consist of the fallback value <code>*</code>. Some
+<em>selectors</em> might be implemented in a way that the key value
+<code>*</code> cannot be selected in a <em>valid</em> <em>message</em>.
+In other cases, this key value might be unreachable only in certain
+locales. This could result in the need in some locales to create one or
+more <em>variants</em> that do not make sense grammatically for that
+language. &gt; For example, in the <code>pl</code> (Polish) locale, this
+<em>message</em> cannot reach &gt; the <code>*</code> <em>variant</em>:
+&gt;
+<code>&gt; .input {$num :integer} &gt; .match $num &gt; 0    {{ }} &gt; one  {{ }} &gt; few  {{ }} &gt; many {{ }} &gt; *    {{Only used by fractions in Polish.}} &gt;</code></p>
+<p>In the Tech Preview, feedback from users and implementers is desired
+about whether to relax the requirement that such a “fallback
+<em>variant</em>” appear in every message, versus the potential for a
+<em>message</em> to fail at runtime because no matching <em>variant</em>
+is available.</p>
+</blockquote>
+<p>The number of <em>keys</em> in each <em>variant</em> MUST equal the
+number of <em>selectors</em>.</p>
+<p>Each <em>key</em> corresponds to a <em>selector</em> by its position
+in the <em>variant</em>.</p>
+<blockquote>
+<p>For example, in this message:</p>
+<pre><code>.input {$one :number}
+.input {$two :number}
+.input {$three :number}
+.match $one $two $three
+1 2 3 {{ ... }}</code></pre>
+<p>The first <em>key</em> <code>1</code> corresponds to the first
+<em>selector</em> (<code>$one</code>), the second <em>key</em>
+<code>2</code> to the second <em>selector</em> (<code>$two</code>), and
+the third <em>key</em> <code>3</code> to the third <em>selector</em>
+(<code>$three</code>).</p>
+</blockquote>
+<p>To determine which <em>variant</em> best matches a given set of
+inputs, each <em>selector</em> is used in turn to order and filter the
+list of <em>variants</em>.</p>
+<p>Each <em>variant</em> with a <em>key</em> that does not match its
+corresponding <em>selector</em> is omitted from the list of
+<em>variants</em>. The remaining <em>variants</em> are sorted according
+to the <em>selector</em>’s <em>key</em>-ordering preference. Earlier
+<em>selectors</em> in the <em>matcher</em>’s list of <em>selectors</em>
+have a higher priority than later ones.</p>
+<p>When all of the <em>selectors</em> have been processed, the
+earliest-sorted <em>variant</em> in the remaining list of
+<em>variants</em> is selected.</p>
+<p>This selection method is defined in more detail below. An
+implementation MAY use any pattern selection method, as long as its
+observable behavior matches the results of the method defined here.</p>
+<h3 id="resolve-selectors">Resolve Selectors</h3>
+<p>First, resolve the values of each <em>selector</em>:</p>
+<ol type="1">
+<li>Let <code>res</code> be a new empty list of <em>resolved values</em>
+that support selection.</li>
+<li>For each <em>selector</em> <code>sel</code>, in source order,
+<ol type="1">
+<li>Let <code>rv</code> be the <em>resolved value</em> of
+<code>sel</code>.</li>
+<li>If selection is supported for <code>rv</code>:
+<ol type="1">
+<li>Append <code>rv</code> as the last element of the list
+<code>res</code>.</li>
+</ol></li>
+<li>Else:
+<ol type="1">
+<li>Let <code>nomatch</code> be a <em>resolved value</em> for which
+selection always fails.</li>
+<li>Append <code>nomatch</code> as the last element of the list
+<code>res</code>.</li>
+<li>Emit a <em>Bad Selector</em> error.</li>
+</ol></li>
+</ol></li>
+</ol>
+<p>The form of the <em>resolved values</em> is determined by each
+implementation, along with the manner of determining their support for
+selection.</p>
+<h3 id="resolve-preferences">Resolve Preferences</h3>
+<p>Next, using <code>res</code>, resolve the preferential order for all
+message keys:</p>
+<ol type="1">
+<li>Let <code>pref</code> be a new empty list of lists of strings.</li>
+<li>For each index <code>i</code> in <code>res</code>:
+<ol type="1">
+<li>Let <code>keys</code> be a new empty list of strings.</li>
+<li>For each <em>variant</em> <code>var</code> of the message:
+<ol type="1">
+<li>Let <code>key</code> be the <code>var</code> key at position
+<code>i</code>.</li>
+<li>If <code>key</code> is not the catch-all key <code>'*'</code>:
+<ol type="1">
+<li>Assert that <code>key</code> is a <em>literal</em>.</li>
+<li>Let <code>ks</code> be the <em>resolved value</em> of
+<code>key</code> in Unicode Normalization Form C.</li>
+<li>Append <code>ks</code> as the last element of the list
+<code>keys</code>.</li>
+</ol></li>
+</ol></li>
+<li>Let <code>rv</code> be the <em>resolved value</em> at index
+<code>i</code> of <code>res</code>.</li>
+<li>Let <code>matches</code> be the result of calling the method
+MatchSelectorKeys(<code>rv</code>, <code>keys</code>)</li>
+<li>Append <code>matches</code> as the last element of the list
+<code>pref</code>.</li>
+</ol></li>
+</ol>
+<p>The method MatchSelectorKeys is determined by the implementation. It
+takes as arguments a resolved <em>selector</em> value <code>rv</code>
+and a list of string keys <code>keys</code>, and returns a list of
+string keys in preferential order. The returned list MUST contain only
+unique elements of the input list <code>keys</code>. The returned list
+MAY be empty. The most-preferred key is first, with each successive key
+appearing in order by decreasing preference.</p>
+<p>The resolved value of each <em>key</em> MUST be in Unicode
+Normalization Form C (“NFC”), even if the <em>literal</em> for the
+<em>key</em> is not.</p>
+<p>If calling MatchSelectorKeys encounters any error, a <em>Bad
+Selector</em> error is emitted and an empty list is returned.</p>
+<h3 id="filter-variants">Filter Variants</h3>
+<p>Then, using the preferential key orders <code>pref</code>, filter the
+list of <em>variants</em> to the ones that match with some
+preference:</p>
+<ol type="1">
+<li>Let <code>vars</code> be a new empty list of <em>variants</em>.</li>
+<li>For each <em>variant</em> <code>var</code> of the message:
+<ol type="1">
+<li>For each index <code>i</code> in <code>pref</code>:
+<ol type="1">
+<li>Let <code>key</code> be the <code>var</code> key at position
+<code>i</code>.</li>
+<li>If <code>key</code> is the catch-all key <code>'*'</code>:
+<ol type="1">
+<li>Continue the inner loop on <code>pref</code>.</li>
+</ol></li>
+<li>Assert that <code>key</code> is a <em>literal</em>.</li>
+<li>Let <code>ks</code> be the <em>resolved value</em> of
+<code>key</code>.</li>
+<li>Let <code>matches</code> be the list of strings at index
+<code>i</code> of <code>pref</code>.</li>
+<li>If <code>matches</code> includes <code>ks</code>:
+<ol type="1">
+<li>Continue the inner loop on <code>pref</code>.</li>
+</ol></li>
+<li>Else:
+<ol type="1">
+<li>Continue the outer loop on message <em>variants</em>.</li>
+</ol></li>
+</ol></li>
+<li>Append <code>var</code> as the last element of the list
+<code>vars</code>.</li>
+</ol></li>
+</ol>
+<h3 id="sort-variants">Sort Variants</h3>
+<p>Finally, sort the list of variants <code>vars</code> and select the
+<em>pattern</em>:</p>
+<ol type="1">
+<li>Let <code>sortable</code> be a new empty list of (integer,
+<em>variant</em>) tuples.</li>
+<li>For each <em>variant</em> <code>var</code> of <code>vars</code>:
+<ol type="1">
+<li>Let <code>tuple</code> be a new tuple (-1, <code>var</code>).</li>
+<li>Append <code>tuple</code> as the last element of the list
+<code>sortable</code>.</li>
+</ol></li>
+<li>Let <code>len</code> be the integer count of items in
+<code>pref</code>.</li>
+<li>Let <code>i</code> be <code>len</code> - 1.</li>
+<li>While <code>i</code> &gt;= 0:
+<ol type="1">
+<li>Let <code>matches</code> be the list of strings at index
+<code>i</code> of <code>pref</code>.</li>
+<li>Let <code>minpref</code> be the integer count of items in
+<code>matches</code>.</li>
+<li>For each tuple <code>tuple</code> of <code>sortable</code>:
+<ol type="1">
+<li>Let <code>matchpref</code> be an integer with the value
+<code>minpref</code>.</li>
+<li>Let <code>key</code> be the <code>tuple</code> <em>variant</em> key
+at position <code>i</code>.</li>
+<li>If <code>key</code> is not the catch-all key <code>'*'</code>:
+<ol type="1">
+<li>Assert that <code>key</code> is a <em>literal</em>.</li>
+<li>Let <code>ks</code> be the <em>resolved value</em> of
+<code>key</code>.</li>
+<li>Let <code>matchpref</code> be the integer position of
+<code>ks</code> in <code>matches</code>.</li>
+</ol></li>
+<li>Set the <code>tuple</code> integer value as
+<code>matchpref</code>.</li>
+</ol></li>
+<li>Set <code>sortable</code> to be the result of calling the method
+<code>SortVariants(sortable)</code>.</li>
+<li>Set <code>i</code> to be <code>i</code> - 1.</li>
+</ol></li>
+<li>Let <code>var</code> be the <em>variant</em> element of the first
+element of <code>sortable</code>.</li>
+<li>Select the <em>pattern</em> of <code>var</code>.</li>
+</ol>
+<p><code>SortVariants</code> is a method whose single argument is a list
+of (integer, <em>variant</em>) tuples. It returns a list of (integer,
+<em>variant</em>) tuples. Any implementation of
+<code>SortVariants</code> is acceptable as long as it satisfies the
+following requirements:</p>
+<ol type="1">
+<li>Let <code>sortable</code> be an arbitrary list of (integer,
+<em>variant</em>) tuples.</li>
+<li>Let <code>sorted</code> be <code>SortVariants(sortable)</code>.</li>
+<li><code>sorted</code> is the result of sorting <code>sortable</code>
+using the following comparator:
+<ol type="1">
+<li><code>(i1, v1)</code> &lt;= <code>(i2, v2)</code> if and only if
+<code>i1 &lt;= i2</code>.</li>
+</ol></li>
+<li>The sort is stable (pairs of tuples from <code>sortable</code> that
+are equal in their first element have the same relative order in
+<code>sorted</code>).</li>
+</ol>
+<h3 id="examples">Examples</h3>
+<p><em>This section is non-normative.</em></p>
+<h4 id="example-1">Example 1</h4>
+<p>Presuming a minimal implementation which only supports
+<code>:string</code> <em>function</em> which matches keys by using
+string comparison, and a formatting context in which the variable
+reference <code>$foo</code> resolves to the string <code>'foo'</code>
+and the variable reference <code>$bar</code> resolves to the string
+<code>'bar'</code>, pattern selection proceeds as follows for this
+message:</p>
+<pre><code>.input {$foo :string}
+.input {$bar :string}
+.match $foo $bar
+bar bar {{All bar}}
+foo foo {{All foo}}
+* * {{Otherwise}}</code></pre>
+<ol type="1">
+<li><p>For the first selector:<br> The value of the selector is resolved
+to be <code>'foo'</code>.<br> The available keys « <code>'bar'</code>,
+<code>'foo'</code> » are compared to <code>'foo'</code>,<br> resulting
+in a list « <code>'foo'</code> » of matching keys.</p></li>
+<li><p>For the second selector:<br> The value of the selector is
+resolved to be <code>'bar'</code>.<br> The available keys «
+<code>'bar'</code>, <code>'foo'</code> » are compared to
+<code>'bar'</code>,<br> resulting in a list « <code>'bar'</code> » of
+matching keys.</p></li>
+<li><p>Creating the list <code>vars</code> of variants matching all
+keys:<br> The first variant <code>bar bar</code> is discarded as its
+first key does not match the first selector.<br> The second variant
+<code>foo foo</code> is discarded as its second key does not match the
+second selector.<br> The catch-all keys of the third variant
+<code>* *</code> always match, and this is added to
+<code>vars</code>,<br> resulting in a list « <code>* *</code> » of
+variants.</p></li>
+<li><p>As the list <code>vars</code> only has one entry, it does not
+need to be sorted.<br> The pattern <code>Otherwise</code> of the third
+variant is selected.</p></li>
+</ol>
+<h4 id="example-2">Example 2</h4>
+<p>Alternatively, with the same implementation and formatting context as
+in Example 1, pattern selection would proceed as follows for this
+message:</p>
+<pre><code>.input {$foo :string}
+.input {$bar :string}
+.match $foo $bar
+* bar {{Any and bar}}
+foo * {{Foo and any}}
+foo bar {{Foo and bar}}
+* * {{Otherwise}}</code></pre>
+<ol type="1">
+<li><p>For the first selector:<br> The value of the selector is resolved
+to be <code>'foo'</code>.<br> The available keys « <code>'foo'</code> »
+are compared to <code>'foo'</code>,<br> resulting in a list «
+<code>'foo'</code> » of matching keys.</p></li>
+<li><p>For the second selector:<br> The value of the selector is
+resolved to be <code>'bar'</code>.<br> The available keys «
+<code>'bar'</code> » are compared to <code>'bar'</code>,<br> resulting
+in a list « <code>'bar'</code> » of matching keys.</p></li>
+<li><p>Creating the list <code>vars</code> of variants matching all
+keys:<br> The keys of all variants either match each selector exactly,
+or via the catch-all key,<br> resulting in a list « <code>* bar</code>,
+<code>foo *</code>, <code>foo bar</code>, <code>* *</code> » of
+variants.</p></li>
+<li><p>Sorting the variants:<br> The list <code>sortable</code> is first
+set with the variants in their source order and scores determined by the
+second selector:<br> « ( 0, <code>* bar</code> ), ( 1,
+<code>foo *</code> ), ( 0, <code>foo bar</code> ), ( 1, <code>* *</code>
+) »<br> This is then sorted as:<br> « ( 0, <code>* bar</code> ), ( 0,
+<code>foo bar</code> ), ( 1, <code>foo *</code> ), ( 1, <code>* *</code>
+) ».<br> To sort according to the first selector, the scores are updated
+to:<br> « ( 1, <code>* bar</code> ), ( 0, <code>foo bar</code> ), ( 0,
+<code>foo *</code> ), ( 1, <code>* *</code> ) ».<br> This is then sorted
+as:<br> « ( 0, <code>foo bar</code> ), ( 0, <code>foo *</code> ), ( 1,
+<code>* bar</code> ), ( 1, <code>* *</code> ) ».<br></p></li>
+<li><p>The pattern <code>Foo and bar</code> of the most preferred
+<code>foo bar</code> variant is selected.</p></li>
+</ol>
+<h4 id="example-3">Example 3</h4>
+<p>A more-complex example is the matching found in selection APIs such
+as ICU’s <code>PluralFormat</code>. Suppose that this API is represented
+here by the function <code>:number</code>. This <code>:number</code>
+function can match a given numeric value to a specific number
+<em>literal</em> and <strong><em>also</em></strong> to a plural category
+(<code>zero</code>, <code>one</code>, <code>two</code>,
+<code>few</code>, <code>many</code>, <code>other</code>) according to
+locale rules defined in CLDR.</p>
+<p>Given a variable reference <code>$count</code> whose value resolves
+to the number <code>1</code> and an <code>en</code> (English) locale,
+the pattern selection proceeds as follows for this message:</p>
+<pre><code>.input {$count :number}
+.match $count
+one {{Category match for {$count}}}
+1   {{Exact match for {$count}}}
+*   {{Other match for {$count}}}</code></pre>
+<ol type="1">
+<li><p>For the selector:<br> The value of the selector is resolved to an
+implementation-defined value that is capable of performing English
+plural category selection on the value <code>1</code>.<br> The available
+keys « <code>'one'</code>, <code>'1'</code> » are passed to the
+implementation’s MatchSelectorKeys method,<br> resulting in a list «
+<code>'1'</code>, <code>'one'</code> » of matching keys.</p></li>
+<li><p>Creating the list <code>vars</code> of variants matching all
+keys:<br> The keys of all variants are included in the list of matching
+keys, or use the catch-all key,<br> resulting in a list «
+<code>one</code>, <code>1</code>, <code>*</code> » of variants.</p></li>
+<li><p>Sorting the variants:<br> The list <code>sortable</code> is first
+set with the variants in their source order and scores determined by the
+selector key order:<br> « ( 1, <code>one</code> ), ( 0, <code>1</code>
+), ( 2, <code>*</code> ) »<br> This is then sorted as:<br> « ( 0,
+<code>1</code> ), ( 1, <code>one</code> ), ( 2, <code>*</code> )
+»<br></p></li>
+<li><p>The pattern <code>Exact match for {$count}</code> of the most
+preferred <code>1</code> variant is selected.</p></li>
+</ol>
+<h2 id="formatting">Formatting</h2>
+<p>After <em>pattern selection</em>, each <em>text</em> and
+<em>placeholder</em> part of the selected <em>pattern</em> is resolved
+and formatted.</p>
+<p><em>Resolved values</em> cannot always be formatted by a given
+implementation. When such an error occurs during <em>formatting</em>, an
+appropriate <em>Message Function Error</em> is emitted and a
+<em>fallback value</em> is used for the <em>placeholder</em> with the
+error.</p>
+<p>Implementations MAY represent the result of <em>formatting</em> using
+the most appropriate data type or structure. Some examples of these
+include:</p>
+<ul>
+<li>A single string concatenated from the parts of the resolved
+<em>pattern</em>.</li>
+<li>A string with associated attributes for portions of its text.</li>
+<li>A flat sequence of objects corresponding to each <em>resolved
+value</em>.</li>
+<li>A hierarchical structure of objects that group spans of <em>resolved
+values</em>, such as sequences delimited by <em>markup-open</em> and
+<em>markup-close</em> <em>placeholders</em>.</li>
+</ul>
+<p>Implementations SHOULD provide <em>formatting</em> result types that
+match user needs, including situations that require further processing
+of formatted messages. Implementations SHOULD encourage users to
+consider a formatted localised string as an opaque data structure,
+suitable only for presentation.</p>
+<p>When formatting to a string, the default representation of all
+<em>markup</em> MUST be an empty string. Implementations MAY offer
+functionality for customizing this, such as by emitting XML-ish tags for
+each <em>markup</em>.</p>
+<h3 id="examples-1">Examples</h3>
+<p><em>This section is non-normative.</em></p>
+<ol type="1">
+<li><p>An implementation might choose to return an interstitial object
+so that the caller can “decorate” portions of the formatted value. In
+ICU4J, the <code>NumberFormatter</code> class returns a
+<code>FormattedNumber</code> object, so a <em>pattern</em> such as
+<code>This is my number {42 :number}</code> might return the character
+sequence <code>This is my number</code> followed by a
+<code>FormattedNumber</code> object representing the value
+<code>42</code> in the current locale.</p></li>
+<li><p>A formatter in a web browser could format a message as a DOM
+fragment rather than as a representation of its HTML source.</p></li>
+</ol>
+<h3 id="formatting-fallback-values">Formatting Fallback Values</h3>
+<p>If the resolved <em>pattern</em> includes any <em>fallback
+values</em> and the formatting result is a concatenated string or a
+sequence of strings, the string representation of each <em>fallback
+value</em> MUST be the concatenation of a U+007B LEFT CURLY BRACKET
+<code>{</code>, the <em>fallback value</em> as a string, and a U+007D
+RIGHT CURLY BRACKET <code>}</code>.</p>
+<blockquote>
+<p>For example, a <em>message</em> that is not <em>well-formed</em>
+would format to a string as <code>{�}</code>, unless a fallback string
+is defined in the <em>formatting context</em>, in which case that string
+would be used instead.</p>
+</blockquote>
+<h3 id="handling-bidirectional-text">Handling Bidirectional Text</h3>
+<p><em>Messages</em> contain text. Any text can be <a
+href="https://www.w3.org/TR/i18n-glossary/#dfn-bidirectional-text">bidirectional
+text</a>. That is, the text can can consist of a mixture of
+left-to-right and right-to-left spans of text. The display of
+bidirectional text is defined by the <a
+href="http://www.unicode.org/reports/tr9/">Unicode Bidirectional
+Algorithm</a> [UAX9].</p>
+<p>The directionality of the formatted <em>message</em> as a whole is
+provided by the <em>formatting context</em>.</p>
+<blockquote>
+<p>[!NOTE] Keep in mind the difference between the formatted output of a
+<em>message</em>, which is the topic of this section, and the syntax of
+<em>message</em> prior to formatting. The processing of a
+<em>message</em> depends on the logical sequence of Unicode code points,
+not on the presentation of the <em>message</em>. Affordances to allow
+users appropriate control over the appearance of the <em>message</em>’s
+syntax have been provided.</p>
+</blockquote>
+<p>When a <em>message</em> is formatted, <em>placeholders</em> are
+replaced with their formatted representation. Applying the Unicode
+Bidirectional Algorithm to the text of a formatted <em>message</em>
+(including its formatted parts) can result in unexpected or undesirable
+<a
+href="https://www.w3.org/TR/i18n-glossary/#dfn-spillover-effects">spillover
+effects</a>. Applying <a
+href="https://www.w3.org/TR/i18n-glossary/#dfn-bidi-isolation">bidi
+isolation</a> to each affected formatted value helps avoid this
+spillover in a formatted <em>message</em>.</p>
+<p>Note that both the <em>message</em> and, separately, each
+<em>placeholder</em> need to have direction metadata for this to work.
+If an implementation supports formatting to something other than a
+string (such as a sequence of parts), the directionality of each
+formatted <em>placeholder</em> needs to be available to the caller.</p>
+<p>If a formatted <em>expression</em> itself contains spans with
+differing directionality, its formatter SHOULD perform any necessary
+processing, such as inserting controls or isolating such parts to ensure
+that the formatted value displays correctly in a plain text context.</p>
+<blockquote>
+<p>For example, an implementation could provide a <code>:currency</code>
+formatting function which inserts strongly directional characters, such
+as U+200F RIGHT-TO-LEFT MARK (RLM), U+200E LEFT-TO-RIGHT MARK (LRM), or
+U+061C ARABIC LETTER MARKER (ALM), to coerce proper display of the sign
+and currency symbol next to a formatted number. An example of this is
+formatting the value <code>-1234.56</code> as the currency
+<code>AED</code> in the <code>ar-AE</code> locale. The formatted value
+appears like this:</p>
+<pre><code>‎-1,234.56 د.إ.‏</code></pre>
+<p>The code point sequence for this string, as produced by the ICU4J
+<code>NumberFormat</code> function, includes <strong>U+200F
+U+200E</strong> at the start and <strong>U+200F</strong> at the end of
+the string. If it did not do this, the same string would appear like
+this instead:</p>
+<figure>
+<img
+src="https://github.com/unicode-org/message-format-wg/assets/69082/6cc7f16f-8d9b-400b-a333-ae2ddb316edb"
+alt="image" />
+<figcaption aria-hidden="true">image</figcaption>
+</figure>
+</blockquote>
+<p>A <strong><em><dfn>bidirectional isolation
+strategy<dfn></em></strong> is functionality in the formatter’s
+processing of a <em>message</em> that produces bidirectional output text
+that is ready for display.</p>
+<p>The <strong><em><dfn>Default Bidi Strategy<dfn></em></strong> is a
+<em>bidirectional isolation strategy</em> that uses isolating Unicode
+control characters around <em>placeholder</em>’s formatted values. It is
+primarily intended for use in plain-text strings, where markup or other
+mechanisms are not available. Implementations MUST provide the
+<em>Default Bidi Strategy</em> as one of the <em>bidirectional isolation
+strategies</em>.</p>
+<p>Implementations MAY provide other <em>bidirectional isolation
+strategies</em>.</p>
+<p>Implementations MAY supply a <em>bidirectional isolation
+strategy</em> that performs no processing.</p>
+<p>The <em>Default Bidi Strategy</em> is defined as follows:</p>
+<ol type="1">
+<li>Let <code>out</code> be the empty string.</li>
+<li>Let <code>msgdir</code> be the directionality of the whole message,
+one of « <code>'LTR'</code>, <code>'RTL'</code>, <code>'unknown'</code>
+». These correspond to the message having left-to-right directionality,
+right-to-left directionality, and to the message’s directionality not
+being known.</li>
+<li>For each part <code>part</code> in <em>pattern</em>:
+<ol type="1">
+<li>If <code>part</code> is a plain literal (text) part, append
+<code>part</code> to <code>out</code>.</li>
+<li>Else:
+<ol type="1">
+<li>Assert <code>part</code> is a <em>placeholder</em>.</li>
+<li>Let <code>exp</code> be <code>part</code>.</li>
+<li>Let <code>fmt</code> be the formatted string representation of the
+<em>resolved value</em> of <code>exp</code>.</li>
+<li>Let <code>dir</code> be the directionality of <code>fmt</code>, one
+of « <code>'LTR'</code>, <code>'RTL'</code>, <code>'unknown'</code> »,
+with the same meanings as for <code>msgdir</code>.</li>
+<li>Let the boolean value <code>isolate</code> be True if the
+<code>u:dir</code> <em>option</em> of the <em>resolved value</em> of
+<code>exp</code> has a value other than <code>'inherit'</code>, or False
+otherwise.</li>
+<li>If <code>dir</code> is <code>'LTR'</code>:
+<ol type="1">
+<li>If <code>msgdir</code> is <code>'LTR'</code> and
+<code>isolate</code> is False, append <code>fmt</code> to
+<code>out</code>.</li>
+<li>Else:
+<ol type="i">
+<li>Append U+2066 LEFT-TO-RIGHT ISOLATE to <code>out</code>.</li>
+<li>Append <code>fmt</code> to <code>out</code>.</li>
+<li>Append U+2069 POP DIRECTIONAL ISOLATE to <code>out</code>.</li>
+</ol></li>
+</ol></li>
+<li>Else, if <code>dir</code> is <code>'RTL'</code>:
+<ol type="1">
+<li>Append U+2067 RIGHT-TO-LEFT ISOLATE to <code>out.</code></li>
+<li>Append <code>fmt</code> to <code>out</code>.</li>
+<li>Append U+2069 POP DIRECTIONAL ISOLATE to <code>out</code>.</li>
+</ol></li>
+<li>Else:
+<ol type="1">
+<li>Append U+2068 FIRST STRONG ISOLATE to <code>out</code>.</li>
+<li>Append <code>fmt</code> to <code>out</code>.</li>
+<li>Append U+2069 POP DIRECTIONAL ISOLATE to <code>out</code>.</li>
+</ol></li>
+</ol></li>
+</ol></li>
+<li>Emit <code>out</code> as the formatted output of the message.</li>
+</ol>
+
+</body>
+</html>
