@@ -951,9 +951,9 @@ The _Default Bidi Strategy_ is defined as follows:
               and `isolate` is False,
                append `fmt` to `out`.
            1. Else:
-               i. Append U+2066 LEFT-TO-RIGHT ISOLATE to `out`.
-               i. Append `fmt` to `out`.
-               i. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
+               1. Append U+2066 LEFT-TO-RIGHT ISOLATE to `out`.
+               1. Append `fmt` to `out`.
+               1. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
        1. Else, if `dir` is `'RTL'`:
            1. Append U+2067 RIGHT-TO-LEFT ISOLATE to `out.`
            1. Append `fmt` to `out`.
