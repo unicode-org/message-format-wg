@@ -47,7 +47,7 @@ The design goals are listed below.
 5.  A conformance test suite for parsing and formatting messages sufficient to
     ensure implementations can validate conformance to the specification(s) provided.
 
-7.  A determination that there are at least two interoperable independent implementations
+6.  A determination that there are at least two interoperable independent implementations
     compliant with the conformance test suite in order to demonstrate that the
     specification(s) are practical and meet requirements.
 
