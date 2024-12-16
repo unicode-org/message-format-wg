@@ -39,7 +39,7 @@ The design goals are listed below.
     escape sequences, whitespace, markup, as well as parsing errors.
 
 3.  A specification for a one-to-one mapping between the data model and XLIFF.
-    _Note: not part of the LDML45 release._
+    _Note: This deliverable is not included in the LDML46.1 Final Candidate release._ 
 
 4.  A specification for resolving messages at runtime, including
     runtime errors.
