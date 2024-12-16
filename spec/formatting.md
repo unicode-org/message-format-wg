@@ -945,7 +945,7 @@ The _Default Bidi Strategy_ is defined as follows:
       1. Let `dir` be `DIR(resval)`,
          one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
       1. Let the boolean value `isolate` be
-         True if the `u:dir` _option_ of the _resolved value_ of `part` has a value other than `'inherit'`,
+         True if the `u:dir` _option_ of `resval` has a value other than `'inherit'`,
           or False otherwise.
       1. If `dir` is `'LTR'`:
          1. If `msgdir` is `'LTR'` and `isolate` is False:
