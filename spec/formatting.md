@@ -940,19 +940,10 @@ The _Default Bidi Strategy_ is defined as follows:
          Note that this is normally the empty string.
       1. Append `fmt` to `out`.
    1. Else:
-      1. Let `fmt` be the formatted string representation of the _resolved value_ of `part`.
-      1. Let `dir` be `DIR(part)`,
+      1. Let `resval` be the _resolved value_ of `part`.
+      1. Let `fmt` be the formatted string representation of `resval`.
+      1. Let `dir` be `DIR(resval)`,
          one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
-         > [!NOTE]
-         > _Resolved values_ need to track two different pieces of metadata about directionality:
-         > the "isolate" flag (see the next step for how that is used), which determines
-         > whether the formatted result needs to be isolated; and the directionality itself.
-         > Each _function handler_ can have its own means for determining the directionality
-         > of the _resolved value_ it returns.
-         > Alternately, an implementation could elide this tracking and instead determine
-         > the directionality from the locale.
-         > The directionality SHOULD NOT be determined by introspecting
-         > the character sequence in `fmt`.
       1. Let the boolean value `isolate` be
          True if the `u:dir` _option_ of the _resolved value_ of `part` has a value other than `'inherit'`,
           or False otherwise.
@@ -973,20 +964,23 @@ The _Default Bidi Strategy_ is defined as follows:
          1. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
 1. Emit `out` as the formatted output of the message.
 
-The auxiliary function `DIR`, which maps an _expression_ to one of
-« `'LTR'`, `'RTL'`, `'unknown'` », is expected to be defined using the
-_resolved value_ of the _expression_. An implementation can use
+The auxiliary function `DIR` maps a _resolved value_to one of
+« `'LTR'`, `'RTL'`, `'unknown'` ». (A _resolved value_ in turn
+is derived from an _expression_ together with a _formatting context_.)
+An implementation can use
 a representation of _resolved values_ that tracks two different
-pieces of metadata about directionality: the `isolate` flag used in step 2(iii),
-and the directionality itself. Each _function handler_ can have its own means
+pieces of metadata about directionality:
+the `isolate` flag used in step 2(iii),
+and the directionality itself.
+Each _function handler_ can have its own means
 for determining the directionality annotation on the _resolved value_ it returns.
-Alternately, an implementation could simply compute `DIR(exp)` based on the
-locale.
+Alternately, an implementation could simply compute `DIR(part)`
+based on the locale.
 
 > [!NOTE]
-> `DIR(exp)` SHOULD NOT be determined by introspecting
+> `DIR(part)` SHOULD NOT be determined by introspecting
 > the character sequence in the formatted string representation
-> of the resolved value of `exp`.
+> of the resolved value of `part`.
 
 
 
