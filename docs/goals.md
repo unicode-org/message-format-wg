@@ -39,15 +39,15 @@ The design goals are listed below.
     escape sequences, whitespace, markup, as well as parsing errors.
 
 3.  A specification for a one-to-one mapping between the data model and XLIFF.
-    _Note: not part of the LDML45 release._
+    _Note: This deliverable is not included in the LDML46.1 Final Candidate release._ 
 
-4.  A specification for resolving messages at runtime, including
+5.  A specification for resolving messages at runtime, including
     runtime errors.
 
-5.  A conformance test suite for parsing and formatting messages sufficient to
+6.  A conformance test suite for parsing and formatting messages sufficient to
     ensure implementations can validate conformance to the specification(s) provided.
 
-6.  A determination that there are at least two interoperable independent implementations
+7.  A determination that there are at least two interoperable independent implementations
     compliant with the conformance test suite in order to demonstrate that the
     specification(s) are practical and meet requirements.
 
