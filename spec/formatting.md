@@ -131,6 +131,13 @@ identifies not only the name of the external input value,
 but also the _variable_ to which the _resolved value_ of the _variable-expression_ is bound.
 
 In a _pattern_, the _resolved value_ of an _expression_ or _markup_ is used in its _formatting_.
+To support the _Default Bidi Strategy_,
+the _resolved value_ of each _expression_ _placeholder_
+SHOULD include information about the directionality
+of its formatted string representation,
+as well as a flag to indicate whether
+its formatted representation requires isolation
+from the surrounding text.
 
 The form that _resolved values_ take is implementation-dependent,
 and different implementations MAY choose to perform different levels of resolution.
@@ -965,18 +972,12 @@ The _Default Bidi Strategy_ is defined as follows:
 1. Emit `out` as the formatted output of the message.
 
 > [!NOTE]
-> A _resolved value_ is derived from an _expression_
-> together with a _formatting context_.)
-> An implementation can use
-> a representation of _resolved values_ that tracks
-> everything needed to determine the directionality
+> As mentioned in the "Resolved Values" section,
+> the representation of a _resolved value_
+> can track everything needed
+> to determine the directionality
 > of the formatted string representation
 > of a _resolved value_.
-> This can be accomplished by incorporating
-> the `isolate` flag used in step 2(iii),
-> as well as the separate directionality annotation
-> (one of « `'LTR'`, `'RTL'`, `'unknown'` »),
-> into the representation of _resolved values_.
 > Each _function handler_ can have its own means
 > for determining the directionality annotation
 > on the _resolved value_ it returns.
@@ -984,7 +985,7 @@ The _Default Bidi Strategy_ is defined as follows:
 > determine directionality
 > based on the locale.
 
-> [!NOTE]
+> [!IMPORTANT]
 > Directionality SHOULD NOT be determined by introspecting
 > the character sequence in the formatted string representation
 > of `resval`.
