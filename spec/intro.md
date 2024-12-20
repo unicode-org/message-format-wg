@@ -10,7 +10,7 @@
    1. [`message.abnf`](message.abnf)
 1. [Formatting](formatting.md)
 1. [Errors](errors.md)
-1. [Default Function Registry](registry.md)
+1. [Default Function Registry](functions/README.md)
 1. [`u:` Namespace](u-namespace.md)
 1. [Interchange data model](data-model/README.md)
 1. [Appendices](appendices.md)
