@@ -132,7 +132,7 @@ but also the _variable_ to which the _resolved value_ of the _variable-expressio
 
 In a _pattern_, the _resolved value_ of an _expression_ or _markup_ is used in its _formatting_.
 To support the _Default Bidi Strategy_,
-the _resolved value_ of each _expression_ _placeholder_
+the _resolved value_ of each _expression_
 SHOULD include information about the directionality
 of its formatted string representation,
 as well as a flag to indicate whether
