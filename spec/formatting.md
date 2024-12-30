@@ -153,7 +153,7 @@ and different implementations MAY choose to perform different levels of resoluti
 >   getValue(): unknown
 >   resolvedOptions(): { [key: string]: MessageValue }
 >   selectKeys(keys: string[]): string[]
->   directionality() : Dir // where Dir is an enum type, one of « `'LTR'`, `'RTL'`, `'unknown'` »
+>   directionality(): 'LTR' | 'RTL' | 'unknown'
 >   isolate(): boolean
 > }
 > ```
