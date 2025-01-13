@@ -131,6 +131,13 @@ identifies not only the name of the external input value,
 but also the _variable_ to which the _resolved value_ of the _variable-expression_ is bound.
 
 In a _pattern_, the _resolved value_ of an _expression_ or _markup_ is used in its _formatting_.
+To support the _Default Bidi Strategy_,
+the _resolved value_ of each _expression_
+SHOULD include information about the directionality
+of its formatted string representation,
+as well as a flag to indicate whether
+its formatted representation requires isolation
+from the surrounding text.
 
 The form that _resolved values_ take is implementation-dependent,
 and different implementations MAY choose to perform different levels of resolution.
@@ -146,6 +153,8 @@ and different implementations MAY choose to perform different levels of resoluti
 >   getValue(): unknown
 >   resolvedOptions(): { [key: string]: MessageValue }
 >   selectKeys(keys: string[]): string[]
+>   directionality(): 'LTR' | 'RTL' | 'unknown'
+>   isolate(): boolean
 > }
 > ```
 >
@@ -940,11 +949,12 @@ The _Default Bidi Strategy_ is defined as follows:
          Note that this is normally the empty string.
       1. Append `fmt` to `out`.
    1. Else:
-      1. Let `fmt` be the formatted string representation of the _resolved value_ of `part`.
-      1. Let `dir` be the directionality of `fmt`,
+      1. Let `resval` be the _resolved value_ of `part`.
+      1. Let `fmt` be the formatted string representation of `resval`.
+      1. Let `dir` be the directionality of `resval`,
          one of « `'LTR'`, `'RTL'`, `'unknown'` », with the same meanings as for `msgdir`.
       1. Let the boolean value `isolate` be
-         True if the `u:dir` _option_ of the _resolved value_ of `part` has a value other than `'inherit'`,
+         True if the `u:dir` _option_ of `resval` has a value other than `'inherit'`,
           or False otherwise.
       1. If `dir` is `'LTR'`:
          1. If `msgdir` is `'LTR'` and `isolate` is False:
@@ -962,5 +972,25 @@ The _Default Bidi Strategy_ is defined as follows:
          1. Append `fmt` to `out`.
          1. Append U+2069 POP DIRECTIONAL ISOLATE to `out`.
 1. Emit `out` as the formatted output of the message.
+
+> [!NOTE]
+> As mentioned in the "Resolved Values" section,
+> the representation of a _resolved value_
+> can track everything needed
+> to determine the directionality
+> of the formatted string representation
+> of a _resolved value_.
+> Each _function handler_ can have its own means
+> for determining the directionality annotation
+> on the _resolved value_ it returns.
+> Alternately, an implementation could simply
+> determine directionality
+> based on the locale.
+
+> [!IMPORTANT]
+> Directionality SHOULD NOT be determined by introspecting
+> the character sequence in the formatted string representation
+> of `resval`.
+
 
 
