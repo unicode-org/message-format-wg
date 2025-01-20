@@ -532,14 +532,11 @@ values during formatting.
 A _function_ can appear in an _expression_ by itself or following a single _operand_.
 When following an _operand_, the _operand_ serves as input to the _function_.
 
-Each _function_ is defined by the runtime's _function registry_.
-A _function_'s entry in the _function registry_ will define
-whether the _function_ is a _selector_ or formatter (or both),
-whether an _operand_ is required,
-what form the values of an _operand_ can take,
-what _options_ and _option_ values are acceptable,
-and what outputs might result.
-See [function registry](./functions/README.md) for more information.
+The resolution of a _function_ relies on an implementation-defined _function handler_.
+Some _functions_ can be used both as a _selector_ as well as in a _placeholder_;
+others are only valid in one of these positions.
+_Functions_ also differ in their requirements on the _operand_ and _options_ that they accept.
+See _Function Resolution_ and _default functions_ for more information.
 
 A _function_ starts with a prefix sigil `:` followed by an _identifier_.
 The _identifier_ MAY be followed by one or more _options_.

@@ -20,7 +20,7 @@ the value of other options, or both.
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
 > in JavaScript's `Intl.NumberFormat`.
 
-The following options and their values are required to be available on the function `:number`:
+The following options and their values are REQUIRED to be available on the function `:number`:
 
 - `select`
   - `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
@@ -167,8 +167,7 @@ the value of other options, or both.
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
 > in JavaScript's `Intl.NumberFormat`.
 
-The following options and their values are required in the default registry to be available on the
-function `:integer`:
+The following options and their values are REQUIRED to be available on the function `:integer`:
 
 - `select`
   - `plural` (default)
@@ -287,8 +286,7 @@ The options on `:math` are exclusive with each other,
 and exactly one option is always required.
 The options do not have default values.
 
-The following options and their values are
-required in the default registry to be available on the function `:math`:
+The following options and their values are REQUIRED to be available on the function `:math`:
 
 - `add`
   - ([digit size option](#digit-size-options))
@@ -438,7 +436,7 @@ Some implementations might not be able to produce all of these formats for every
 > The option `select` does not accept the value `ordinal` because selecting
 > currency values using ordinal rules makes no sense.
 
-The following options and their values are required to be available on the function `:currency`:
+The following options and their values are REQUIRED to be available on the function `:currency`:
 
 - `select`
   - `plural` (default)
@@ -529,7 +527,7 @@ The _function_ `:currency` performs selection as described in [Number Selection]
 ### The `:unit` function
 
 The _function_ `:unit` is **Proposed** for inclusion in the next release of this specification but has not yet been finalized.
-The _function_ `:unit` is proposed to be a **RECOMMENDED** selector and formatter for unitized values,
+The _function_ `:unit` is proposed to be a RECOMMENDED selector and formatter for unitized values,
 that is, for numeric values associated with a unit of measurement.
 This is a specialized form of numeric selection and formatting.
 
@@ -579,7 +577,8 @@ the value of other _options_, or all of these.
 > The option `select` does not accept the value `ordinal` because selecting
 > unit values using ordinal rules makes no sense.
 
-The following options and their values are required to be available on the function `:unit`:
+The following options and their values are REQUIRED to be available on the function `:unit`,
+unless otherwise indicated:
 
 - `select`
   - `plural` (default)

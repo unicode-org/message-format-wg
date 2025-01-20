@@ -1,4 +1,4 @@
-# MessageFormat 2.0 Default Function Registry
+# MessageFormat 2.0 Default Functions
 
 ## Table of Contents
 
@@ -18,8 +18,9 @@
 
 ## Introduction
 
-This section defines the **REQUIRED** _functions_ which are REQUIRED for conformance with this specification,
-along with **RECOMMENDED** _functions_ that SHOULD be implemented to support
+This section defines the **_<dfn>default functions</dfn>_**
+which are REQUIRED for conformance with this specification,
+along with _default functions_ that SHOULD be implemented to support
 additional functionality.
 
 To **_<dfn>accept</dfn>_** a function means that an implementation MUST NOT
@@ -34,26 +35,25 @@ Implementations MAY emit an _Unsupported Operation_ error for _options_
 or _option_ values that they cannot support.
 
 _Functions_ can define _options_. 
-An _option_ can be **REQUIRED** or **RECOMMENDED**.
+An _option_ can be REQUIRED or RECOMMENDED.
 
-Implementations MUST _accept_ each **REQUIRED** _function_ and
-MUST _accept_ all _options_ defined as **REQUIRED** for those _functions_.
+Implementations MUST _accept_ each REQUIRED _default function_ and
+MUST _accept_ all _options_ defined as REQUIRED for those _functions_.
 
-Implementations SHOULD _accept_ each **RECOMMENDED** _function_. 
+Implementations SHOULD _accept_ each RECOMMENDED _default function_. 
 For each such _function_, the implementation MUST accept all _options_
-listed as **REQUIRED** for that _function_.
+listed as REQUIRED for that _function_.
 
-Implementations SHOULD _accept_ _options_ that are marked as **RECOMMENDED**.
+Implementations SHOULD _accept_ _options_ that are marked as RECOMMENDED.
 
 Implementations MAY _accept_ _functions_ not defined in this specification.
 In addition, implementations SHOULD provide mechanisms for users to
-register and use user-defined _functions_ and their associated _functional handlers_.
+register and use user-defined _functions_ and their associated _function handlers_.
 Functions not defined by any version of this specification SHOULD use 
 an implementation-defined or user-defined _namespace_.
 
 Implementations MAY implement additional _options_ not defined
-by any version of this specification
-for **REQUIRED** and **RECOMMENDED** functions.
+by any version of this specification for _default functions_.
 Such _options_ MUST use an implementation-specific _namespace_.
 
 Implementations MAY _accept_, for _options_ defined in this specification,
@@ -61,7 +61,7 @@ _option_ values which are not defined in this specification.
 However, such values might become defined with a different meaning in the future,
 including with a different, incompatible name
 or using an incompatible value space.
-Supporting implementation-specific _option_ values for **REQUIRED** or **RECOMMENDED** functions is NOT RECOMMENDED.
+Supporting implementation-specific _option_ values for _default functions_ is NOT RECOMMENDED.
 
 Implementations MAY _accept_, for _operands_ or _options_ defined in this specification,
 values with implementation-defined types.

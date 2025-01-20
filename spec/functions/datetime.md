@@ -1,7 +1,7 @@
 ## Date and Time Value Formatting
 
 This subsection describes the functions and options for date/time formatting.
-Selection based on date and time values is not required in this release.
+Selection based on date and time values is NOT REQUIRED in this release.
 
 > [!NOTE]
 > Selection based on date/time types is not required by MF2.

@@ -97,8 +97,8 @@ At a minimum, it includes:
   defining variable values that are available during _variable resolution_.
   This is often determined by a user-provided argument of a formatting function call.
 
-- The _function registry_,
-  providing the _function handlers_ of the functions referred to by _message_ _functions_.
+- A mapping of string identifiers to the _function handlers_
+  that are available during _function resolution_.
 
 - Optionally, a fallback string to use for the _message_ if it is not _valid_.
 
@@ -290,8 +290,8 @@ the following steps are taken:
    emit an _Unknown Function_ error
    and return a _fallback value_ as the _resolved value_ of the _expression_.
 
-   Implementations are not required to implement _namespaces_ or installable
-   _function registries_.
+   Implementations are not required to implement _namespaces_ or
+   support _functions_ other than the _default functions_.
 
 3. Perform _option resolution_.
 
