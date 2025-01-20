@@ -53,7 +53,7 @@
         "function": { "$ref": "#/$defs/function" },
         "attributes": { "$ref": "#/$defs/attributes" }
       },
-      "oneOf": [
+      "anyOf": [
         { "required": ["type", "arg"] },
         { "required": ["type", "function"] }
       ]
@@ -63,7 +63,7 @@
       "type": "object",
       "properties": {
         "type": { "const": "markup" },
-        "kind": { "oneOf": ["open", "standalone", "close"] },
+        "kind": { "enum": ["open", "standalone", "close"] },
         "name": { "type": "string" },
         "options": { "$ref": "#/$defs/options" },
         "attributes": { "$ref": "#/$defs/attributes" }
@@ -87,7 +87,17 @@
       "properties": {
         "type": { "const": "input" },
         "name": { "type": "string" },
-        "value": { "$ref": "#/$defs/variable-expression" }
+        "value": {
+          "allOf": [
+            { "$ref": "#/$defs/expression" },
+            {
+              "properties": {
+                "arg": { "$ref": "#/$defs/variable" }
+              },
+              "required": ["arg"]
+            }
+          ]
+        }
       },
       "required": ["type", "name", "value"]
     },
