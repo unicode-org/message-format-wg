@@ -97,29 +97,6 @@ with _options_ on the _expression_ taking priority over any option values of the
 > would be formatted with the resolved options
 > `{ notation: 'scientific', minimumFractionDigits: '1' }`.
 
-##### Default Value of `select` Option
-
-The value `plural` is the default for the option `select`
-because it is the most common use case for numeric selection.
-It can be used for exact value matches but also allows for the grammatical needs of
-languages using CLDR's plural rules.
-This might not be noticeable in the source language (particularly English),
-but can cause problems in target locales that the original developer is not considering.
-
-> For example, a naive developer might use a special message for the value `1` without
-> considering a locale's need for a `one` plural:
->
-> ```
-> .input {$var :number}
-> .match $var
-> 1   {{You have one last chance}}
-> one {{You have {$var} chance remaining}}
-> *   {{You have {$var} chances remaining}}
-> ```
->
-> The `one` variant is needed by languages such as Polish or Russian.
-> Such locales typically also require other keywords such as `two`, `few`, and `many`.
-
 ##### Percent Style
 
 When implementing `style=percent`, the numeric value of the _operand_
@@ -171,7 +148,7 @@ The following options and their values are required in the default registry to b
 function `:integer`:
 
 - `select`
-  - `plural` (default)
+  - `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
   - `ordinal`
   - `exact`
 - `numberingSystem`
@@ -208,29 +185,6 @@ Option values with the following names are however discarded if included in the 
 - `minimumFractionDigits`
 - `maximumFractionDigits`
 - `minimumSignificantDigits`
-
-##### Default Value of `select` Option
-
-The value `plural` is the default for the option `select`
-because it is the most common use case for numeric selection.
-It can be used for exact value matches but also allows for the grammatical needs of
-languages using CLDR's plural rules.
-This might not be noticeable in the source language (particularly English),
-but can cause problems in target locales that the original developer is not considering.
-
-> For example, a naive developer might use a special message for the value `1` without
-> considering a locale's need for a `one` plural:
->
-> ```
-> .input {$var :integer}
-> .match $var
-> 1   {{You have one last chance}}
-> one {{You have {$var} chance remaining}}
-> *   {{You have {$var} chances remaining}}
-> ```
->
-> The `one` variant is needed by languages such as Polish or Russian.
-> Such locales typically also require other keywords such as `two`, `few`, and `many`.
 
 ##### Percent Style
 
@@ -441,7 +395,7 @@ Some implementations might not be able to produce all of these formats for every
 The following options and their values are required to be available on the function `:currency`:
 
 - `select`
-  - `plural` (default)
+  - `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
   - `exact`
 - `currency`
   - well-formed [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
@@ -582,7 +536,7 @@ the value of other _options_, or all of these.
 The following options and their values are required to be available on the function `:unit`:
 
 - `select`
-  - `plural` (default)
+  - `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
   - `exact`
 - `unit`
   - valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
@@ -790,6 +744,29 @@ numeric selectors perform as described below.
 > [!NOTE]
 > Implementations are not required to implement this exactly as written.
 > However, the observed behavior must be consistent with what is described here.
+
+#### Default Value of `select` Option
+
+The value `plural` is the default for the option `select`
+because it is the most common use case for numeric selection.
+It can be used for exact value matches but also allows for the grammatical needs of
+languages using CLDR's plural rules.
+This might not be noticeable in the source language (particularly English),
+but can cause problems in target locales that the original developer is not considering.
+
+> For example, a naive developer might use a special message for the value `1` without
+> considering a locale's need for a `one` plural:
+>
+> ```
+> .input {$var :number}
+> .match $var
+> 1   {{You have one last chance}}
+> one {{You have {$var} chance remaining}}
+> *   {{You have {$var} chances remaining}}
+> ```
+>
+> The `one` variant is needed by languages such as Polish or Russian.
+> Such locales typically also require other keywords such as `two`, `few`, and `many`.
 
 #### Rule Selection
 
