@@ -463,7 +463,6 @@ The following options and their values are required to be available on the funct
   - `symbol` (default)
   - `name`
   - `code`
-  - `formalSymbol`
   - `never` (this is called `hidden` in ICU)
 - `useGrouping`
   - `auto` (default)
