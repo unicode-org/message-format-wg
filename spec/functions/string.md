@@ -76,7 +76,7 @@ the `:string` selector function performs as described below.
 
 The `:string` function returns the string value of the _resolved value_ of the _operand_.
 
-> [!NOTE]
+> [!IMPORTANT]
 > The function `:string` does not perform Unicode Normalization of its formatted output.
 > Users SHOULD encode _messages_ and their parts in Unicode Normalization Form C (NFC)
 > unless there is a very good reason not to.
