@@ -536,7 +536,8 @@ The resolution of a _function_ relies on an implementation-defined _function han
 Some _functions_ can be used both as a _selector_ as well as in a _placeholder_;
 others are only valid in one of these positions.
 _Functions_ also differ in their requirements on the _operand_ and _options_ that they accept.
-See _Function Resolution_ and _default functions_ for more information.
+See [Function Resolution](./spec/formatting.md#function-resolution)
+and [Default Functions](./spec/functions/README.md) for more information.
 
 A _function_ starts with a prefix sigil `:` followed by an _identifier_.
 The _identifier_ MAY be followed by one or more _options_.
