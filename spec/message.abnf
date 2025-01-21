@@ -65,18 +65,22 @@ name-char  = name-start / DIGIT / "-" / "."
            / %xB7 / %x300-36F / %x203F-2040
 
 ; Restrictions on characters in various contexts
-simple-start-char = content-char / "@" / "|"
-text-char         = content-char / ws / "." / "@" / "|"
-quoted-char       = content-char / ws / "." / "@" / "{" / "}"
-content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
+simple-start-char = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %x0B-0C        ; omit CR (%x0D)
                   / %x0E-1F        ; omit SP (%x20)
                   / %x21-2D        ; omit . (%x2E)
-                  / %x2F-3F        ; omit @ (%x40)
-                  / %x41-5B        ; omit \ (%x5C)
-                  / %x5D-7A        ; omit { | } (%x7B-7D)
+                  / %x2F-5B        ; omit \ (%x5C)
+                  / %x5D-7A        ; omit { (%x7B)
+                  / %x7C           ; omit } (%x7D)
                   / %x7E-2FFF      ; omit IDEOGRAPHIC SPACE (%x3000)
-                  / %x3001-10FFFF  ; allowing surrogates is intentional
+                  / %x3001-10FFFF
+text-char         = %x01-5B        ; omit NULL (%x00) and \ (%x5C)
+                  / %x5D-7A        ; omit { (%x7B)
+                  / %x7C           ; omit } (%x7D)
+                  / %x7E-10FFFF
+quoted-char       = %x01-5B        ; omit NULL (%x00) and \ (%x5C)
+                  / %x5D-7B        ; omit | (%x7C)
+                  / %x7D-10FFFF
 
 ; Character escapes
 escaped-char = backslash ( backslash / "{" / "|" / "}" )
