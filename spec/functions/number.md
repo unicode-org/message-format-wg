@@ -655,8 +655,12 @@ Implementations MUST NOT substitute the unit without performing the associated c
 ### Number Operands
 
 The _operand_ of a number function is either an implementation-defined type or
-a literal whose contents match the `number-literal` production in the [ABNF](/spec/message.abnf).
+a literal whose contents match the following `number-literal` production.
 All other values produce a _Bad Operand_ error.
+
+```abnf
+number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT]
+```
 
 > For example, in Java, any subclass of `java.lang.Number` plus the primitive
 > types (`byte`, `short`, `int`, `long`, `float`, `double`, etc.)
@@ -667,7 +671,7 @@ All other values produce a _Bad Operand_ error.
 > [!NOTE]
 > String values passed as variables in the _formatting context_'s
 > _input mapping_ can be formatted as numeric values as long as their
-> contents match the `number-literal` production in the [ABNF](/spec/message.abnf).
+> contents match the `number-literal` production.
 >
 > For example, if the value of the variable `num` were the string
 > `-1234.567`, it would behave identically to the local

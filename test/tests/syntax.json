@@ -421,72 +421,72 @@
       ]
     },
     {
-      "description": "... literal -> quoted-literal -> \"|\" \"|\" ...",
+      "description": "... quoted-literal",
       "src": "{||}",
       "exp": ""
     },
     {
-      "description": "... quoted-literal -> \"|\" quoted-char \"|\"",
+      "description": "... quoted-literal",
       "src": "{|a|}",
       "exp": "a"
     },
     {
-      "description": "... quoted-literal -> \"|\" escaped-char \"|\"",
+      "description": "... quoted-literal",
       "src": "{|\\\\|}",
       "exp": "\\"
     },
     {
-      "description": "... quoted-literal -> \"|\" quoted-char 1*escaped-char \"|\"",
+      "description": "... quoted-literal",
       "src": "{|a\\\\\\{\\|\\}|}",
       "exp": "a\\{|}"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> %x30",
+      "description": "... unquoted-literal",
       "src": "{0}",
       "exp": "0"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> \"-\" %x30",
+      "description": "... unquoted-literal",
       "src": "{-0}",
       "exp": "-0"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> (%x31-39 *DIGIT) -> %x31",
+      "description": "... unquoted-literal",
       "src": "{1}",
       "exp": "1"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> (%x31-39 *DIGIT) -> %x31 DIGIT -> 11",
+      "description": "... unquoted-literal",
       "src": "{11}",
       "exp": "11"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> %x30 \".\" 1*DIGIT -> 0 \".\" 1",
+      "description": "... unquoted-literal",
       "src": "{0.1}",
       "exp": "0.1"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> %x30 \".\" 1*DIGIT -> %x30 \".\" DIGIT DIGIT -> 0 \".\" 1 2",
+      "description": "... unquoted-literal",
       "src": "{0.12}",
       "exp": "0.12"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> %x30 %i\"e\" 1*DIGIT -> %x30 \"e\" DIGIT",
+      "description": "... unquoted-literal",
       "src": "{0e1}",
       "exp": "0e1"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> %x30 %i\"e\" 1*DIGIT -> %x30 \"E\" DIGIT",
+      "description": "... unquoted-literal",
       "src": "{0E1}",
       "exp": "0E1"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> %x30 %i\"e\" \"-\" 1*DIGIT ...",
+      "description": "... unquoted-literal",
       "src": "{0E-1}",
       "exp": "0E-1"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> %x30 %i\"e\" \"+\" 1*DIGIT ...",
+      "description": "... unquoted-literal",
       "src": "{0E-1}",
       "exp": "0E-1"
     },

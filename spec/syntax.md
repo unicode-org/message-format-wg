@@ -735,19 +735,17 @@ escaped as `\\` and `\|`.
 An **_<dfn>unquoted literal</dfn>_** is a _literal_ that does not require the `|`
 quotes around it to be distinct from the rest of the _message_ syntax.
 An _unquoted literal_ MAY be used when the content of the _literal_
-contains no whitespace and otherwise matches the `unquoted` production.
+contains no whitespace and otherwise matches the `unquoted-literal` production.
 Implementations MUST NOT distinguish between _quoted literals_ and _unquoted literals_
 that have the same sequence of code points.
 
-_Unquoted literals_ can contain a _name_ or consist of a _number-literal_.
-A _number-literal_ uses the same syntax as JSON and is intended for the encoding 
-of number values in _operands_ or _options_, or as _keys_ for _variants_.
+_Unquoted literals_ can contain any characters also valid in _name_,
+but with none of its additional restrictions on its first character.
 
 ```abnf
 literal          = quoted-literal / unquoted-literal
 quoted-literal   = "|" *(quoted-char / escaped-char) "|"
-unquoted-literal = name / number-literal
-number-literal   = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
+unquoted-literal = 1*name-char
 ```
 
 ### Names and Identifiers

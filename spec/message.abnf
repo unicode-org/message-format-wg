@@ -41,9 +41,7 @@ variable       = "$" name
 
 literal          = quoted-literal / unquoted-literal
 quoted-literal   = "|" *(quoted-char / escaped-char) "|"
-unquoted-literal = name / number-literal
-; number-literal matches JSON number (https://www.rfc-editor.org/rfc/rfc8259#section-6)
-number-literal   = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
+unquoted-literal = 1*name-char
 
 ; Keywords; Note that these are case-sensitive
 input = %s".input"
