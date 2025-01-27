@@ -287,8 +287,8 @@ The _function_ `:math` performs selection as described in [Number Selection](#nu
 
 ### The `:currency` function
 
-The function `:currency` is a selector and formatter for currency values,
-which are a specialized form of numeric selection and formatting.
+The function `:currency` is a formatter for currency values,
+which are a specialized form of numeric formatting.
 
 #### Operands
 
@@ -388,15 +388,8 @@ Some implementations might not be able to produce all of these formats for every
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
 > in JavaScript's `Intl.NumberFormat`.
 
-> [!NOTE]
-> The option `select` does not accept the value `ordinal` because selecting
-> currency values using ordinal rules makes no sense.
-
 The following options and their values are required to be available on the function `:currency`:
 
-- `select`
-  - `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
-  - `exact`
 - `currency`
   - well-formed [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
     (no default)
@@ -475,16 +468,12 @@ contains an implementation-defined currency value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
-#### Selection
-
-The _function_ `:currency` performs selection as described in [Number Selection](#number-selection) below.
-
 ### The `:unit` function
 
 The _function_ `:unit` is **Proposed** for inclusion in the next release of this specification but has not yet been finalized.
-The _function_ `:unit` is proposed to be a **RECOMMENDED** selector and formatter for unitized values,
+The _function_ `:unit` is proposed to be a **RECOMMENDED** formatter for unitized values,
 that is, for numeric values associated with a unit of measurement.
-This is a specialized form of numeric selection and formatting.
+This is a specialized form of numeric formatting.
 
 #### Operands
 
@@ -528,15 +517,8 @@ In general, the default values for such _options_ depend on the locale,
 the unit,
 the value of other _options_, or all of these.
 
-> [!NOTE]
-> The option `select` does not accept the value `ordinal` because selecting
-> unit values using ordinal rules makes no sense.
-
 The following options and their values are required to be available on the function `:unit`:
 
-- `select`
-  - `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
-  - `exact`
 - `unit`
   - valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
     (no default)
@@ -616,10 +598,6 @@ The _resolved value_ of an _expression_ with a `:unit` _function_
 consist of an implementation-defined unit value
 of the _operand_ of the annotated _expression_,
 together with the resolved _options_ and their resolved values.
-
-#### Selection
-
-The _function_ `:unit` performs selection as described in [Number Selection](#number-selection) below.
 
 #### Unit Conversion
 
