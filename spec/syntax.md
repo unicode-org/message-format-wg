@@ -458,9 +458,9 @@ A _key_ can be either a _literal_ value or the "catch-all" key `*`.
 The **_<dfn>catch-all key</dfn>_** is a special key, represented by `*`,
 that matches all values for a given _selector_.
 
-The value of each _key_ MUST be treated as if it were in
+The value of each _literal_ _key_ MUST be treated as if it were in
 [Unicode Normalization Form C](https://unicode.org/reports/tr15/) ("NFC").
-Two _keys_ are considered equal if they are canonically equivalent strings,
+Two _literal_ _keys_ are considered equal if they are canonically equivalent strings,
 that is, if they consist of the same sequence of Unicode code points after
 Unicode Normalization Form C has been applied to both.
 
