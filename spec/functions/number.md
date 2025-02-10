@@ -43,9 +43,6 @@ The following options and their values are required to be available on the funct
   - `exceptZero`
   - `negative`
   - `never`
-- `style`
-  - `decimal` (default)
-  - `percent` (see [Percent Style](#percent-style) below)
 - `useGrouping`
   - `auto` (default)
   - `always`
@@ -97,21 +94,6 @@ with _options_ on the _expression_ taking priority over any option values of the
 > would be formatted with the resolved options
 > `{ notation: 'scientific', minimumFractionDigits: '1' }`.
 
-##### Percent Style
-
-When implementing `style=percent`, the numeric value of the _operand_
-MUST be multiplied by 100 for the purposes of formatting.
-
-> For example,
->
-> ```
-> The total was {0.5 :number style=percent}.
-> ```
->
-> should format in a manner similar to:
->
-> > The total was 50%.
-
 #### Resolved Value
 
 The _resolved value_ of an _expression_ with a `:number` _function_
@@ -160,9 +142,6 @@ function `:integer`:
   - `exceptZero`
   - `negative`
   - `never`
-- `style`
-  - `decimal` (default)
-  - `percent` (see [Percent Style](#percent-style) below)
 - `useGrouping`
   - `auto` (default)
   - `always`
@@ -185,21 +164,6 @@ Option values with the following names are however discarded if included in the 
 - `minimumFractionDigits`
 - `maximumFractionDigits`
 - `minimumSignificantDigits`
-
-##### Percent Style
-
-When implementing `style=percent`, the numeric value of the _operand_
-MUST be multiplied by 100 for the purposes of formatting.
-
-> For example,
->
-> ```
-> The total was {0.5 :number style=percent}.
-> ```
->
-> should format in a manner similar to:
->
-> > The total was 50%.
 
 #### Resolved Value
 
@@ -817,7 +781,6 @@ representing its decimal value:
 - `minimumSignificantDigits`
 - `maximumSignificantDigits`
 - `notation`
-- `style`
 
 ```abnf
 integer = "0" / ["-"] ("1"-"9") *DIGIT
