@@ -35,7 +35,7 @@ The following options and their values are required to be available on the funct
   - `engineering`
   - `compact`
 - `numberingSystem`
-  - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
     (default is locale-specific)
 - `signDisplay`
   - `auto` (default)
@@ -152,7 +152,7 @@ function `:integer`:
   - `ordinal`
   - `exact`
 - `numberingSystem`
-  - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
     (default is locale-specific)
 - `signDisplay`
   - `auto` (default)
@@ -301,7 +301,7 @@ The option `currency` MUST NOT be used to override the currency of an implementa
 Using this option in such a case results in a _Bad Option_ error.
 
 The value of the _operand_'s `currency` MUST be either a string containing a
-well-formed [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+well-formed [Unicode Currency Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCurrencyIdentifier)
 or an implementation-defined currency type.
 Although currency codes are expected to be uppercase,
 implementations SHOULD treat them in a case-insensitive manner.
@@ -391,7 +391,7 @@ Some implementations might not be able to produce all of these formats for every
 The following options and their values are required to be available on the function `:currency`:
 
 - `currency`
-  - well-formed [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+  - well-formed [Unicode Currency Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCurrencyIdentifier)
     (no default)
 - `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
   - `short` (default)
@@ -400,7 +400,7 @@ The following options and their values are required to be available on the funct
   - `standard` (default)
   - `compact`
 - `numberingSystem`
-  - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
     (default is locale-specific)
 - `currencySign`
   - `accounting`
@@ -536,7 +536,7 @@ The following options and their values are required to be available on the funct
   - `standard` (default)
   - `compact`
 - `numberingSystem`
-  - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
     (default is locale-specific)
 - `signDisplay`
   - `auto` (default)

@@ -50,7 +50,7 @@ Values matching the following ABNF are always accepted:
 u-locale-option = unicode_bcp47_locale_id *(o "," o unicode_bcp47_locale_id)
 ```
 using `unicode_bcp47_locale_id` as defined for
-[Unicode Locale Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#unicode_bcp47_locale_id).
+[Unicode Locale Identifier](https://unicode.org/reports/tr35/tr35.html#unicode_bcp47_locale_id).
 
 Implementations MAY support additional language tags,
 such as private-use or grandfathered tags,

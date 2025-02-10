@@ -240,7 +240,7 @@ function `:number`:
    - `engineering`
    - `compact`
 - `numberingSystem`
-   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+   - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
      (default is locale-specific)
 - `signDisplay`
    -  `auto` (default)
@@ -280,7 +280,7 @@ function `:integer`:
    -  `ordinal`
    -  `exact`
 - `numberingSystem`
-   - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+   - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
      (default is locale-specific)
 - `signDisplay`
    -  `auto` (default)
@@ -322,7 +322,7 @@ The following options are _not_ part of the default registry.
 Implementations SHOULD avoid creating options that conflict with these, but
 are encouraged to track development of these options during Tech Preview:
 - `currency`
-   - valid [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+   - valid [Unicode Currency Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCurrencyIdentifier)
      (no default)
 - `currencyDisplay`
    - `symbol` (default)
