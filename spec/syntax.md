@@ -461,6 +461,15 @@ A _key_ can be either a _literal_ value or the "catch-all" key `*`.
 The **_<dfn>catch-all key</dfn>_** is a special key, represented by `*`,
 that matches all values for a given _selector_.
 
+> [!NOTE]
+> To represent a key_ consisting of the character `*` U+002A ASTERISK,
+> use a quoted literal:
+> ```
+> .match $value
+> |*| {{Matches the string *}}
+> *   {{Matches any other string}}
+> ```
+
 The value of each _literal_ _key_ MUST be treated as if it were in
 [Unicode Normalization Form C](https://unicode.org/reports/tr15/) ("NFC").
 Two _literal_ _keys_ are considered equal if they are canonically equivalent strings,
