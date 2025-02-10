@@ -462,8 +462,8 @@ The **_<dfn>catch-all key</dfn>_** is a special key, represented by `*`,
 that matches all values for a given _selector_.
 
 > [!NOTE]
-> To represent a key_ consisting of the character `*` U+002A ASTERISK,
-> use a quoted literal:
+> To represent a _key_ consisting of the character `*` U+002A ASTERISK,
+> use a _quoted literal_:
 > ```
 > .match $value
 > |*| {{Matches the string *}}
