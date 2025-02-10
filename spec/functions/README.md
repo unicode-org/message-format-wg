@@ -40,7 +40,7 @@ An _option_ can be REQUIRED or RECOMMENDED.
 Implementations MUST _accept_ each REQUIRED _default function_ and
 MUST _accept_ all _options_ defined as REQUIRED for those _functions_.
 
-Implementations SHOULD _accept_ each RECOMMENDED _default function_. 
+Implementations SHOULD _accept_ each RECOMMENDED _default function_.
 For each such _function_, the implementation MUST accept all _options_
 listed as REQUIRED for that _function_.
 
@@ -74,7 +74,7 @@ Such values can be useful to users in cases where local usage and support exists
 > - A Java implementation might _accept_ a `java.time.chrono.Chronology` object
 >   as a value for the _date/time override option_ `calendar`
 > - ICU4J's implementation might _accept_ a `com.ibm.icu.text.NumberingSystem` object
->   instead of using a [Unicode Numbering System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+>   instead of using a [Unicode Numbering System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
 >   for the option `numberingSystem` in _functions_ such as `:number` or `:integer`.
 
 Future versions of this specification MAY define additional _options_ and _option_ values,

@@ -35,7 +35,7 @@ The following options and their values are REQUIRED to be available on the funct
   - `engineering`
   - `compact`
 - `numberingSystem`
-  - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
     (default is locale-specific)
 - `signDisplay`
   - `auto` (default)
@@ -43,9 +43,6 @@ The following options and their values are REQUIRED to be available on the funct
   - `exceptZero`
   - `negative`
   - `never`
-- `style`
-  - `decimal` (default)
-  - `percent` (see [Percent Style](#percent-style) below)
 - `useGrouping`
   - `auto` (default)
   - `always`
@@ -97,44 +94,6 @@ with _options_ on the _expression_ taking priority over any option values of the
 > would be formatted with the resolved options
 > `{ notation: 'scientific', minimumFractionDigits: '1' }`.
 
-##### Default Value of `select` Option
-
-The value `plural` is the default for the option `select`
-because it is the most common use case for numeric selection.
-It can be used for exact value matches but also allows for the grammatical needs of
-languages using CLDR's plural rules.
-This might not be noticeable in the source language (particularly English),
-but can cause problems in target locales that the original developer is not considering.
-
-> For example, a naive developer might use a special message for the value `1` without
-> considering a locale's need for a `one` plural:
->
-> ```
-> .input {$var :number}
-> .match $var
-> 1   {{You have one last chance}}
-> one {{You have {$var} chance remaining}}
-> *   {{You have {$var} chances remaining}}
-> ```
->
-> The `one` variant is needed by languages such as Polish or Russian.
-> Such locales typically also require other keywords such as `two`, `few`, and `many`.
-
-##### Percent Style
-
-When implementing `style=percent`, the numeric value of the _operand_
-MUST be multiplied by 100 for the purposes of formatting.
-
-> For example,
->
-> ```
-> The total was {0.5 :number style=percent}.
-> ```
->
-> should format in a manner similar to:
->
-> > The total was 50%.
-
 #### Resolved Value
 
 The _resolved value_ of an _expression_ with a `:number` _function_
@@ -170,11 +129,11 @@ the value of other options, or both.
 The following options and their values are REQUIRED to be available on the function `:integer`:
 
 - `select`
-  - `plural` (default)
+  - `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
   - `ordinal`
   - `exact`
 - `numberingSystem`
-  - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
     (default is locale-specific)
 - `signDisplay`
   - `auto` (default)
@@ -182,9 +141,6 @@ The following options and their values are REQUIRED to be available on the funct
   - `exceptZero`
   - `negative`
   - `never`
-- `style`
-  - `decimal` (default)
-  - `percent` (see [Percent Style](#percent-style) below)
 - `useGrouping`
   - `auto` (default)
   - `always`
@@ -207,44 +163,6 @@ Option values with the following names are however discarded if included in the 
 - `minimumFractionDigits`
 - `maximumFractionDigits`
 - `minimumSignificantDigits`
-
-##### Default Value of `select` Option
-
-The value `plural` is the default for the option `select`
-because it is the most common use case for numeric selection.
-It can be used for exact value matches but also allows for the grammatical needs of
-languages using CLDR's plural rules.
-This might not be noticeable in the source language (particularly English),
-but can cause problems in target locales that the original developer is not considering.
-
-> For example, a naive developer might use a special message for the value `1` without
-> considering a locale's need for a `one` plural:
->
-> ```
-> .input {$var :integer}
-> .match $var
-> 1   {{You have one last chance}}
-> one {{You have {$var} chance remaining}}
-> *   {{You have {$var} chances remaining}}
-> ```
->
-> The `one` variant is needed by languages such as Polish or Russian.
-> Such locales typically also require other keywords such as `two`, `few`, and `many`.
-
-##### Percent Style
-
-When implementing `style=percent`, the numeric value of the _operand_
-MUST be multiplied by 100 for the purposes of formatting.
-
-> For example,
->
-> ```
-> The total was {0.5 :number style=percent}.
-> ```
->
-> should format in a manner similar to:
->
-> > The total was 50%.
 
 #### Resolved Value
 
@@ -331,8 +249,8 @@ The _function_ `:math` performs selection as described in [Number Selection](#nu
 
 ### The `:currency` function
 
-The function `:currency` is a selector and formatter for currency values,
-which are a specialized form of numeric selection and formatting.
+The function `:currency` is a formatter for currency values,
+which are a specialized form of numeric formatting.
 
 #### Operands
 
@@ -345,7 +263,7 @@ The option `currency` MUST NOT be used to override the currency of an implementa
 Using this option in such a case results in a _Bad Option_ error.
 
 The value of the _operand_'s `currency` MUST be either a string containing a
-well-formed [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+well-formed [Unicode Currency Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCurrencyIdentifier)
 or an implementation-defined currency type.
 Although currency codes are expected to be uppercase,
 implementations SHOULD treat them in a case-insensitive manner.
@@ -432,17 +350,10 @@ Some implementations might not be able to produce all of these formats for every
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
 > in JavaScript's `Intl.NumberFormat`.
 
-> [!NOTE]
-> The option `select` does not accept the value `ordinal` because selecting
-> currency values using ordinal rules makes no sense.
-
 The following options and their values are REQUIRED to be available on the function `:currency`:
 
-- `select`
-  - `plural` (default)
-  - `exact`
 - `currency`
-  - well-formed [Unicode Currency Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCurrencyIdentifier)
+  - well-formed [Unicode Currency Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCurrencyIdentifier)
     (no default)
 - `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
   - `short` (default)
@@ -451,7 +362,7 @@ The following options and their values are REQUIRED to be available on the funct
   - `standard` (default)
   - `compact`
 - `numberingSystem`
-  - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
     (default is locale-specific)
 - `currencySign`
   - `accounting`
@@ -461,7 +372,6 @@ The following options and their values are REQUIRED to be available on the funct
   - `symbol` (default)
   - `name`
   - `code`
-  - `formalSymbol`
   - `never` (this is called `hidden` in ICU)
 - `useGrouping`
   - `auto` (default)
@@ -520,16 +430,12 @@ contains an implementation-defined currency value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
-#### Selection
-
-The _function_ `:currency` performs selection as described in [Number Selection](#number-selection) below.
-
 ### The `:unit` function
 
 The _function_ `:unit` is **Proposed** for inclusion in the next release of this specification but has not yet been finalized.
-The _function_ `:unit` is proposed to be a RECOMMENDED selector and formatter for unitized values,
+The _function_ `:unit` is proposed to be a RECOMMENDED formatter for unitized values,
 that is, for numeric values associated with a unit of measurement.
-This is a specialized form of numeric selection and formatting.
+This is a specialized form of numeric formatting.
 
 #### Operands
 
@@ -573,16 +479,9 @@ In general, the default values for such _options_ depend on the locale,
 the unit,
 the value of other _options_, or all of these.
 
-> [!NOTE]
-> The option `select` does not accept the value `ordinal` because selecting
-> unit values using ordinal rules makes no sense.
-
 The following options and their values are REQUIRED to be available on the function `:unit`,
 unless otherwise indicated:
 
-- `select`
-  - `plural` (default)
-  - `exact`
 - `unit`
   - valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
     (no default)
@@ -600,7 +499,7 @@ unless otherwise indicated:
   - `standard` (default)
   - `compact`
 - `numberingSystem`
-  - valid [Unicode Number System Identifier](https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeNumberSystemIdentifier)
+  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
     (default is locale-specific)
 - `signDisplay`
   - `auto` (default)
@@ -662,10 +561,6 @@ The _resolved value_ of an _expression_ with a `:unit` _function_
 consist of an implementation-defined unit value
 of the _operand_ of the annotated _expression_,
 together with the resolved _options_ and their resolved values.
-
-#### Selection
-
-The _function_ `:unit` performs selection as described in [Number Selection](#number-selection) below.
 
 #### Unit Conversion
 
@@ -790,6 +685,29 @@ numeric selectors perform as described below.
 > Implementations are not required to implement this exactly as written.
 > However, the observed behavior must be consistent with what is described here.
 
+#### Default Value of `select` Option
+
+The value `plural` is the default for the option `select`
+because it is the most common use case for numeric selection.
+It can be used for exact value matches but also allows for the grammatical needs of
+languages using CLDR's plural rules.
+This might not be noticeable in the source language (particularly English),
+but can cause problems in target locales that the original developer is not considering.
+
+> For example, a naive developer might use a special message for the value `1` without
+> considering a locale's need for a `one` plural:
+>
+> ```
+> .input {$var :number}
+> .match $var
+> 1   {{You have one last chance}}
+> one {{You have {$var} chance remaining}}
+> *   {{You have {$var} chances remaining}}
+> ```
+>
+> The `one` variant is needed by languages such as Polish or Russian.
+> Such locales typically also require other keywords such as `two`, `few`, and `many`.
+
 #### Rule Selection
 
 Rule selection is intended to support the grammatical matching needs of different
@@ -862,7 +780,6 @@ representing its decimal value:
 - `minimumSignificantDigits`
 - `maximumSignificantDigits`
 - `notation`
-- `style`
 
 ```abnf
 integer = "0" / ["-"] ("1"-"9") *DIGIT

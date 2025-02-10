@@ -294,24 +294,27 @@ In the ABNF, _text_ is represented by non-empty sequences of
 `simple-start-char`, `text-char`, `escaped-char`, and `s`.
 The production `simple-start-char` represents the first non-whitespace in a _simple message_
 and matches `text-char` except for not allowing U+002E FULL STOP `.`.
-The ABNF uses `content-char` as a shared base for _text_ and _quoted literal_ characters.
 
 Whitespace in _text_, including tabs, spaces, and newlines is significant and MUST
 be preserved during formatting.
 
 ```abnf
-simple-start-char = content-char / "@" / "|"
-text-char         = content-char / ws / "." / "@" / "|"
-quoted-char       = content-char / ws / "." / "@" / "{" / "}"
-content-char      = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
+simple-start-char = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
                   / %x0B-0C        ; omit CR (%x0D)
                   / %x0E-1F        ; omit SP (%x20)
                   / %x21-2D        ; omit . (%x2E)
-                  / %x2F-3F        ; omit @ (%x40)
-                  / %x41-5B        ; omit \ (%x5C)
-                  / %x5D-7A        ; omit { | } (%x7B-7D)
+                  / %x2F-5B        ; omit \ (%x5C)
+                  / %x5D-7A        ; omit { (%x7B)
+                  / %x7C           ; omit } (%x7D)
                   / %x7E-2FFF      ; omit IDEOGRAPHIC SPACE (%x3000)
-                  / %x3001-10FFFF  ; allowing surrogates is intentional
+                  / %x3001-10FFFF
+text-char         = %x01-5B        ; omit NULL (%x00) and \ (%x5C)
+                  / %x5D-7A        ; omit { (%x7B)
+                  / %x7C           ; omit } (%x7D)
+                  / %x7E-10FFFF
+quoted-char       = %x01-5B        ; omit NULL (%x00) and \ (%x5C)
+                  / %x5D-7B        ; omit | (%x7C)
+                  / %x7D-10FFFF
 ```
 
 > [!NOTE]
@@ -458,9 +461,9 @@ A _key_ can be either a _literal_ value or the "catch-all" key `*`.
 The **_<dfn>catch-all key</dfn>_** is a special key, represented by `*`,
 that matches all values for a given _selector_.
 
-The value of each _key_ MUST be treated as if it were in
+The value of each _literal_ _key_ MUST be treated as if it were in
 [Unicode Normalization Form C](https://unicode.org/reports/tr15/) ("NFC").
-Two _keys_ are considered equal if they are canonically equivalent strings,
+Two _literal_ _keys_ are considered equal if they are canonically equivalent strings,
 that is, if they consist of the same sequence of Unicode code points after
 Unicode Normalization Form C has been applied to both.
 
