@@ -465,6 +465,7 @@ that matches all values for a given _selector_.
 > To represent a _key_ consisting of the character `*` U+002A ASTERISK,
 > use a _quoted literal_:
 > ```
+> .input {$value :string}
 > .match $value
 > |*| {{Matches the string *}}
 > *   {{Matches any other string}}
