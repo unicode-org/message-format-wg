@@ -740,7 +740,7 @@ Implementations MUST NOT distinguish between _quoted literals_ and _unquoted lit
 that have the same sequence of code points.
 
 _Unquoted literals_ can contain any characters also valid in _name_,
-but with none of its additional restrictions on its first character.
+less _name_'s additional restrictions on the first character.
 
 ```abnf
 literal          = quoted-literal / unquoted-literal
