@@ -74,19 +74,7 @@ and what format to use for that field.
 > [!NOTE] > _Field options_ do not have default values because they are only to be used
 > to compose the formatter.
 
-The _field options_ are defined as follows:
-
-> [!IMPORTANT]
-> The value `2-digit` for some _field options_ MUST be quoted
-> in the MessageFormat syntax because it starts with a digit
-> but does not match the `number-literal` production in the ABNF.
->
-> ```
-> .local $correct = {$someDate :datetime year=|2-digit|}
-> .local $syntaxError = {$someDate :datetime year=2-digit}
-> ```
-
-The function `:datetime` has the following options:
+The function `:datetime` has the following _field options_:
 
 - `weekday`
   - `long`

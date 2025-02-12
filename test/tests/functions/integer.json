@@ -16,7 +16,11 @@
       "exp": "hello -4"
     },
     {
-      "src": "hello {0.42e+1 :integer}",
+      "src": "hello {0.42 :integer}",
+      "exp": "hello 0"
+    },
+    {
+      "src": "hello {|0.42e+1| :integer}",
       "exp": "hello 4"
     },
     {
