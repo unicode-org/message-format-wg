@@ -659,7 +659,7 @@ a literal whose contents match the following `number-literal` production.
 All other values produce a _Bad Operand_ error.
 
 ```abnf
-number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT]
+number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
 ```
 
 > For example, in Java, any subclass of `java.lang.Number` plus the primitive

@@ -20,6 +20,10 @@
       "exp": "hello 0.42"
     },
     {
+      "src": "hello {|0.42e+1| :number}",
+      "exp": "hello 4.2"
+    },
+    {
       "src": "hello {foo :number}",
       "exp": "hello {|foo|}",
       "expErrors": [
