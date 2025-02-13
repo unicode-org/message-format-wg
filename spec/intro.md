@@ -10,7 +10,7 @@
    1. [`message.abnf`](message.abnf)
 1. [Formatting](formatting.md)
 1. [Errors](errors.md)
-1. [Default Function Registry](functions/README.md)
+1. [Default Functions](functions/README.md)
 1. [`u:` Namespace](u-namespace.md)
 1. [Interchange data model](data-model/README.md)
 1. [Appendices](appendices.md)
@@ -95,10 +95,10 @@ that previously did not specify a _fallback value_.
 Updates to this specification will not change the syntactical meaning
 of any syntax defined in this specification.
 
-Updates to this specification will not remove any _functions_ defined in the default function registry.
+Updates to this specification will not remove any _default functions_.
 
 Updates to this specification will not remove any _options_ or _option_ values
-defined in the default function registry.
+defined for _default functions_.
 
 > [!NOTE]
 > The foregoing policies are _not_ a guarantee that the results of formatting will never change.
@@ -137,7 +137,7 @@ based on this version being invalid.
 > - Future versions may add additional structure or meaning to existing syntax.
 > - Future versions may define new _keywords_.
 > - Future versions may make previously invalid _messages_ valid.
-> - Future versions may define additional _functions_ in the default registry
+> - Future versions may define additional _default functions_.
 >   or may reserve the names of _functions_ for the purposes of interoperability.
 > - Future versions may define additional _options_ to existing functions.
 > - Future versions may define additional _option_ values for existing _options_.
