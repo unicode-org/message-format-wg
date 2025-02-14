@@ -1,4 +1,4 @@
-# MessageFormat 2.0 Data Model
+# Interchange Data Model
 
 This section defines a data model representation of MessageFormat 2 _messages_.
 
@@ -33,25 +33,13 @@ This data model might also be used to:
 
 To ensure compatibility across all platforms,
 this interchange data model is defined here using TypeScript notation.
-Two equivalent definitions of the data model are also provided:
-
-- [`message.json`](./message.json) is a JSON Schema definition,
-  for use with message data encoded as JSON or compatible formats, such as YAML.
-- [`message.dtd`](./message.dtd) is a document type definition (DTD),
-  for use with message data encoded as XML.
+An equivalent JSON Schema definition [`message.json`](./message.json) is also provided,
+for use with message data encoded as JSON or compatible formats, such as YAML.
 
 Note that while the data model description below is the canonical one,
-the JSON and DTD definitions are intended for interchange between systems and processors.
-To that end, they relax some aspects of the data model, such as allowing
+the JSON Schema definition is intended for interchange between systems and processors.
+To that end, it relaxes some aspects of the data model, such as allowing
 declarations, options, and attributes to be optional rather than required properties.
-
-> [!NOTE]
-> Users relying on XML representations of messages should note that
-> XML 1.0 does not allow for the representation of all C0 control characters (U+0000-U+001F).
-> Except for U+0000 NULL , these characters are allowed in MessageFormat 2 messages,
-> so systems and users relying on this XML representation for interchange
-> might need to supply an alternate escape mechanism to support messages
-> that contain these characters.
 
 > [!IMPORTANT]
 > The data model uses the field name `name` to denote various interface identifiers.
