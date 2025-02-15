@@ -1,8 +1,7 @@
-# MessageFormat 2.0 Default Functions
+## MessageFormat 2.0 Default Functions
 
-## Table of Contents
+### Table of Contents
 
-1. [Introduction](#introduction)
 1. [String Value Selection and Formatting](string.md)
    1. [`:string`](string.md#the-string-function)
 1. [Numeric Value Selection and Formatting](number.md)
@@ -15,8 +14,6 @@
    1. [`:datetime`](datetime.md#the-datetime-function)
    1. [`:date`](datetime.md#the-date-function)
    1. [`:time`](datetime.md#the-time-function)
-
-## Introduction
 
 This section defines the **_<dfn>default functions</dfn>_**
 which are REQUIRED for conformance with this specification,
