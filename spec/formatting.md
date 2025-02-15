@@ -809,7 +809,7 @@ one {{Category match for {$count}}}
 
 4. The pattern `Exact match for {$count}` of the most preferred `1` variant is selected.
 
-### Message Formatting
+### Formatting of the Selected Pattern
 
 After _pattern selection_,
 each _text_ and _placeholder_ part of the selected _pattern_ is resolved and formatted.
