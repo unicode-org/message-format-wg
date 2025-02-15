@@ -26,7 +26,7 @@ additional functionality.
 >
 > _Functions_ and _options_ marked as **Draft** are not stable.
 > Their name, _operands_, and _options_/_values_, and other requirements
-> might change before being declared **Stable** in a future release.
+> might change or be removed before being declared **Stable** in a future release.
 >
 > Some **Draft** _functions_ or _options_ are also marked as **Proposed**.
 > These are additions to the specification that have not yet reached Technical Preview.
