@@ -1,7 +1,5 @@
 ## Formatting
 
-### Introduction
-
 This section defines the behavior of a MessageFormat 2.0 implementation
 when formatting a _message_ for display in a user interface, or for some later processing.
 
