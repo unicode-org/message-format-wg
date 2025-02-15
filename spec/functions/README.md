@@ -21,7 +21,7 @@ along with _default functions_ that SHOULD be implemented to support
 additional functionality.
 
 > [!IMPORTANT]
-> > _Functions_ that are not marked **Draft** are **Stable** and subject to
+> _Functions_ that are not marked **Draft** are **Stable** and subject to
 > the provisions of the [stability policy](../intro.md#stability-policy).
 >
 > _Functions_ and _options_ marked as **Draft** are not stable.
