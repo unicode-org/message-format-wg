@@ -887,14 +887,17 @@ name-char  = name-start / DIGIT
 > * Bidirectional controls (`Bidi_C`)
 > * Control characters (`GC=Cc`, but not Format characters: `GC=Cf`)
 > * Whitespace characters (`WSpace`)
-> * Isolated Surrogate characters (`GC=Cs`)
+> * Surrogate code points (`GC=Cs`)
 > * Private use characters (`GC=Co`)
 > * Non-Characters (`NChar`)
 >
-> Although syntactically a wide range of characters are included,
-> when function and implementations and message authors are creating new identifiers (for functions, options, variables, …),
-> it is strongly recommended that they conform to the following to minimize confusion.
-> These are also recommended for Message Format linter implementations.
+This syntax allows a wide range of characters in _names_ and _identifiers_.
+Implementers and authors of _functions_ and _messages_,
+including _functions_, _options_, and _operands_ (variable names),
+SHOULD avoid creating _names_ that could produce confusion or harm usability
+by choosing names consistent with the following guidelines.
+MessageFormat tools, such as linters, SHOULD warn when _names_ chosen by users
+violate these constraints.
 >
 > 1. [Unicode Default Identifier Syntax](https://www.unicode.org/reports/tr31/#Default_Identifier_Syntax)
 > 2. [Unicode General Security Profile for Identifiers](https://www.unicode.org/reports/tr39/#General_Security_Profile)
