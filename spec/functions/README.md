@@ -1,4 +1,4 @@
-## MessageFormat 2.0 Default Functions
+## Default Functions
 
 ### Table of Contents
 
