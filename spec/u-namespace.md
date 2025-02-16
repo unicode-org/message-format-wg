@@ -1,4 +1,4 @@
-## MessageFormat 2.0 Unicode Namespace
+## Unicode Namespace
 
 The `u:` _namespace_ is reserved for the definition of _options_
 which affect the _function context_ of the specific _expressions_
