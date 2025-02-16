@@ -49,8 +49,6 @@ local = %s".local"
 match = %s".match"
 
 ; Names and identifiers
-; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName
-; name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName but excludes U+FFFD and U+061C
 identifier = [namespace ":"] name
 namespace  = name
 name       = [bidi] name-start *name-char [bidi]
