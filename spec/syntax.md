@@ -870,8 +870,9 @@ name-start = ALPHA
                   / %xB0000-BFFFD ;          omit NChar %xAFFFE-AFFFF
                   / %xC0000-CFFFD ;          omit NChar %xBFFFE-BFFFF
                   / %xD0000-DFFFD ;          omit NChar %xCFFFE-CFFFF
-                  / %xE0000-EFFFD ;          omit NChar %xDFFFE-DFFFF
-                                  ;          omit Co %xF0000-FFFFD %x100000-10FFFD, NChar %xEFFFE-EFFFF %xFFFFE-FFFFF %x10FFFE-10FFFF
+                  / %xE0000-EFFFD ;          omit NChar %xDFFFE-DFFFF,
+                                  ;          omit NChar %xEFFFE-EFFFF %xFFFFE-FFFFF %x10FFFE-10FFFF,
+                                  ;          omit Co %xF0000-FFFFD %x100000-10FFFD
 name-char  = name-start / DIGIT
                   / %x2D-2E       ; 【-.】    omit Cc %x0-1F, Whitespace 【 】, Ascii 【!"#$%&'()*+,】
 ```
