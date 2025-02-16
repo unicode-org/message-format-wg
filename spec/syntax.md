@@ -880,7 +880,7 @@ name-char  = name-start / DIGIT
 > [!NOTE]
 > Syntactically, the definitions of `identifier` and `name-char` provide backwards compatibility over time by allowing a stable,
 > wide range of characters.
-> So when there is a new character in a version of Unicode, it can be used in any conformant implementation of Message Format.
+> So when there is a new character in a version of Unicode, it can be used in any conformant implementation of MessageFormat.
 > The definition currently excludes:
 > * Most ASCII except for letters and characters used for numbers
 >    * This avoids conflicts with syntax characters, and reserves some characters for future syntax.
