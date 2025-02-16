@@ -47,7 +47,7 @@ declarations, options, and attributes to be optional rather than required proper
 > sometimes uses the production `identifier`.
 > This happens when the named item, such as a _function_, supports namespacing.
 
-### Messages Model
+### Message Model
 
 A `SelectMessage` corresponds to a syntax message that includes _selectors_.
 A message without _selectors_ and with a single _pattern_ is represented by a `PatternMessage`.
