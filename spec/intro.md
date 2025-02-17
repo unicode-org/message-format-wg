@@ -94,6 +94,14 @@ Updates to this specification will not remove any _default functions_.
 Updates to this specification will not remove any _options_ or _option_ values
 defined for _default functions_.
 
+> [!IMPORTANT]
+> _Functions_ that are not marked **Draft** are **Stable** and subject to
+> the provisions of this stability policy.
+>
+> _Functions_ or _options_ marked as **Draft** are not stable.
+> Their name, _operands_, and _options_/_values_, and other requirements
+> might change or be removed before being declared **Stable** in a future release.
+
 > [!NOTE]
 > The foregoing policies are _not_ a guarantee that the results of formatting will never change.
 > Even when this specification or its implementation do not change,

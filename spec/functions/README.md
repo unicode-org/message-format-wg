@@ -20,14 +20,6 @@ which are REQUIRED for conformance with this specification,
 along with _default functions_ that SHOULD be implemented to support
 additional functionality.
 
-> [!IMPORTANT]
-> _Functions_ that are not marked **Draft** are **Stable** and subject to
-> the provisions of the [stability policy](../intro.md#stability-policy).
->
-> _Functions_ or _options_ marked as **Draft** are not stable.
-> Their name, _operands_, and _options_/_values_, and other requirements
-> might change or be removed before being declared **Stable** in a future release.
-
 To **_<dfn>accept</dfn>_** a function means that an implementation MUST NOT
 emit an _Unknown Function_ error for that _function_'s _identifier_.
 To _accept_ an _option_ means that a _function handler_ MUST NOT
