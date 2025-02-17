@@ -22,21 +22,10 @@ the value of other options, or both.
 
 The following options and their values are REQUIRED to be available on the function `:number`:
 
-- `select`
-  - `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
+- `select` (see [Number Selection](#number-selection) below)
+  - `plural` (default)
   - `ordinal`
   - `exact`
-- `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
-  - `short` (default)
-  - `long`
-- `notation`
-  - `standard` (default)
-  - `scientific`
-  - `engineering`
-  - `compact`
-- `numberingSystem`
-  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
-    (default is locale-specific)
 - `signDisplay`
   - `auto` (default)
   - `always`
@@ -87,12 +76,12 @@ with _options_ on the _expression_ taking priority over any option values of the
 > For example, the _placeholder_ in this _message_:
 >
 > ```
-> .input {$n :number notation=scientific minimumFractionDigits=2}
+> .input {$n :number minimumFractionDigits=2 signDisplay=always}
 > {{{$n :number minimumFractionDigits=1}}}
 > ```
 >
 > would be formatted with the resolved options
-> `{ notation: 'scientific', minimumFractionDigits: '1' }`.
+> `{ minimumFractionDigits: '1', signDisplay: 'always' }`.
 
 #### Resolved Value
 
@@ -128,13 +117,10 @@ the value of other options, or both.
 
 The following options and their values are REQUIRED to be available on the function `:integer`:
 
-- `select`
-  - `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
+- `select` (see [Number Selection](#number-selection) below)
+  - `plural` (default)
   - `ordinal`
   - `exact`
-- `numberingSystem`
-  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
-    (default is locale-specific)
 - `signDisplay`
   - `auto` (default)
   - `always`
@@ -158,8 +144,6 @@ In general, these are included in the resolved option values of the _expression_
 with _options_ on the _expression_ taking priority over any option values of the _operand_.
 Option values with the following names are however discarded if included in the _operand_:
 
-- `compactDisplay`
-- `notation`
 - `minimumFractionDigits`
 - `maximumFractionDigits`
 - `minimumSignificantDigits`
@@ -363,15 +347,6 @@ The following options and their values are REQUIRED to be available on the funct
 - `currency`
   - well-formed [Unicode Currency Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCurrencyIdentifier)
     (no default)
-- `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
-  - `short` (default)
-  - `long`
-- `notation`
-  - `standard` (default)
-  - `compact`
-- `numberingSystem`
-  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
-    (default is locale-specific)
 - `currencySign`
   - `accounting`
   - `standard` (default)
@@ -503,15 +478,6 @@ unless otherwise indicated:
   - `short` (default)
   - `narrow`
   - `long`
-- `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
-  - `short` (default)
-  - `long`
-- `notation`
-  - `standard` (default)
-  - `compact`
-- `numberingSystem`
-  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
-    (default is locale-specific)
 - `signDisplay`
   - `auto` (default)
   - `always`
@@ -668,6 +634,14 @@ or any option-specific lower limit, a _Bad Option Error_ is emitted.
 
 ### Number Selection
 
+The value of the `select` _option_ MUST be set by a _literal_,
+as otherwise the _message_ might not be translatable.
+If this value is set by a _variable_ or
+the option value of an implementation-defined type used as an _operand_,
+a _Bad Option Error_ is emitted and
+the _resolved value_ of the expression MUST NOT support selection.
+The formatting of the _resolved value_ is not affected by the `select` _option_.
+
 Number selection has three modes:
 
 - `exact` selection matches the operand to explicit numeric keys exactly
@@ -794,7 +768,6 @@ representing its decimal value:
 - `minimumIntegerDigits`
 - `minimumSignificantDigits`
 - `maximumSignificantDigits`
-- `notation`
 
 ```abnf
 integer = "0" / ["-"] ("1"-"9") *DIGIT

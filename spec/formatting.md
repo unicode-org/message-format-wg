@@ -114,10 +114,10 @@ which makes it available for use in later _expressions_ and _markup_ _options_.
 > For example, in
 > ```
 > .input {$a :number minimumFractionDigits=3}
-> .local $b = {$a :integer notation=compact}
+> .local $b = {$a :integer useGrouping=never}
 > .match $a
 > 0 {{The value is zero.}}
-> * {{In compact form, the value {$a} is rendered as {$b}.}}
+> * {{Without grouping separators, the value {$a} is rendered as {$b}.}}
 > ```
 > the _resolved value_ bound to `$a` is used as the _operand_
 > of the `:integer` _function_ when resolving the value of the _variable_ `$b`,
@@ -989,6 +989,4 @@ The _Default Bidi Strategy_ is defined as follows:
 > Directionality SHOULD NOT be determined by introspecting
 > the character sequence in the formatted string representation
 > of `resval`.
-
-
 

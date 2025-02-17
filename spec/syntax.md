@@ -115,7 +115,6 @@ A **_<dfn>local variable</dfn>_** is a _variable_ created as the result of a _lo
 > that use the UTF-16 encoding 
 > and do not check for unpaired surrogates.
 > (Strings in Java or JavaScript are examples of this.)
-> These code points SHOULD NOT be used in a _message_.
 > Unpaired surrogate code points are likely an indication of mistakes
 > or errors in the creation, serialization, or processing of the _message_.
 > Many processes will convert them to 
@@ -775,6 +774,8 @@ that is, if they consist of the same sequence of Unicode code points after
 [Unicode Normalization Form C](https://unicode.org/reports/tr15/) ("NFC")
 has been applied to both.
 
+The _names_ are [immutable identifiers](https://www.unicode.org/reports/tr31/#Immutable_Identifier_Syntax).
+
 > [!NOTE]
 > Implementations are not required to normalize all _names_.
 > Comparisons of _name_ values only need be done "as-if" normalization
@@ -783,12 +784,6 @@ has been applied to both.
 > and since checking for NFC is fast and efficient,
 > implementations can often substitute checking for actually applying normalization
 > to _name_ values.
-
-Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
-[NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
-This is different from XML's [Name](https://www.w3.org/TR/xml/#NT-Name)
-in that it MUST NOT contain a U+003A COLON `:`.
-Otherwise, the set of characters allowed in a _name_ is large.
 
 > [!NOTE]
 > _External variables_ can be passed in that are not valid _names_.
@@ -841,16 +836,65 @@ option     = identifier o "=" o (literal / variable)
 identifier = [namespace ":"] name
 namespace  = name
 name       = [bidi] name-start *name-char [bidi]
-name-start = ALPHA / "_"
-           / %xC0-D6 / %xD8-F6 / %xF8-2FF
-           / %x370-37D / %x37F-61B / %x61D-1FFF / %x200C-200D
-           / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
-           / %xF900-FDCF / %xFDF0-FFFC / %x10000-EFFFF
+name-start = ALPHA
+                                    ;          omit Cc: %x0-1F, Whitespace: « », Ascii: «!"#$%&'()*»
+                  / %x2B            ; «+»      omit Ascii: «,-./0123456789:;<=>?@» «[\]^»
+                  / %x5F            ; «_»      omit Cc: %x7F-9F, Whitespace: %xA0, Ascii: «`» «{|}~»
+                  / %xA1-61B        ;          omit BidiControl: %x61C
+                  / %x61D-167F      ;          omit Whitespace: %x1680
+                  / %x1681-1FFF     ;          omit Whitespace: %x2000-200A
+                  / %x200B-200D     ;          omit BidiControl: %x200E-200F
+                  / %x2010-2027     ;          omit Whitespace: %x2028-2029 %x202F, BidiControl: %x202A-202E
+                  / %x2030-205E     ;          omit Whitespace: %x205F
+                  / %x2060-2065     ;          omit BidiControl: %x2066-2069
+                  / %x206A-2FFF     ;          omit Whitespace: %x3000
+                  / %x3001-D7FF     ;          omit Cs: %xD800-DFFF
+                  / %xE000-FDCF     ;          omit NChar: %xFDD0-FDEF
+                  / %xFDF0-FFFD     ;          omit NChar: %xFFFE-FFFF
+                  / %x10000-1FFFD   ;          omit NChar: %x1FFFE-1FFFF
+                  / %x20000-2FFFD   ;          omit NChar: %x2FFFE-2FFFF
+                  / %x30000-3FFFD   ;          omit NChar: %x3FFFE-3FFFF
+                  / %x40000-4FFFD   ;          omit NChar: %x4FFFE-4FFFF
+                  / %x50000-5FFFD   ;          omit NChar: %x5FFFE-5FFFF
+                  / %x60000-6FFFD   ;          omit NChar: %x6FFFE-6FFFF
+                  / %x70000-7FFFD   ;          omit NChar: %x7FFFE-7FFFF
+                  / %x80000-8FFFD   ;          omit NChar: %x8FFFE-8FFFF
+                  / %x90000-9FFFD   ;          omit NChar: %x9FFFE-9FFFF
+                  / %xA0000-AFFFD   ;          omit NChar: %xAFFFE-AFFFF
+                  / %xB0000-BFFFD   ;          omit NChar: %xBFFFE-BFFFF
+                  / %xC0000-CFFFD   ;          omit NChar: %xCFFFE-CFFFF
+                  / %xD0000-DFFFD   ;          omit NChar: %xDFFFE-DFFFF
+                  / %xE0000-EFFFD   ;          omit NChar: %xEFFFE-EFFFF
+                  / %xF0000-FFFFD   ;          omit NChar: %xFFFFE-FFFFF
+                  / %x100000-10FFFD ;          omit NChar: %x10FFFE-10FFFF
 name-char  = name-start / DIGIT / "-" / "."
-           / %xB7 / %x300-36F / %x203F-2040
 ```
 
-#### Escape Sequences
+> [!NOTE]
+> Syntactically, the definitions of `identifier` and `name-char` provide backwards compatibility over time by allowing a stable,
+> wide range of characters.
+> So when there is a new character in a version of Unicode, it can be used in any conformant implementation of MessageFormat.
+> The definition currently excludes:
+> * Most ASCII except for letters and characters used for numbers
+>    * This avoids conflicts with syntax characters, and reserves some characters for future syntax.
+> * Bidirectional controls (`Bidi_C`)
+> * Control characters (`GC=Cc`, but not Format characters: `GC=Cf`)
+> * Whitespace characters (`WSpace`)
+> * Surrogate code points (`GC=Cs`)
+> * Non-Characters (`NChar`)
+
+This syntax allows a wide range of characters in _names_ and _identifiers_.
+Implementers and authors of _functions_ and _messages_,
+including _functions_, _options_, and _operands_ (variable names),
+SHOULD avoid creating _names_ that could produce confusion or harm usability
+by choosing names consistent with the following guidelines.
+MessageFormat tools, such as linters, SHOULD warn when _names_ chosen by users
+violate these constraints.
+>
+> 1. [Unicode Default Identifier Syntax](https://www.unicode.org/reports/tr31/#Default_Identifier_Syntax)
+> 2. [Unicode General Security Profile for Identifiers](https://www.unicode.org/reports/tr39/#General_Security_Profile)
+
+### Escape Sequences
 
 An **_<dfn>escape sequence</dfn>_** is a two-character sequence starting with
 U+005C REVERSE SOLIDUS `\`.
