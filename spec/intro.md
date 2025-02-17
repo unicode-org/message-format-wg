@@ -118,10 +118,10 @@ which satisfy either of the following two requirements:
 
 All other _identifiers_ in these categories are reserved for the use of implementations or users.
 
-> [!NOTE]
-> Users defining custom _identifiers_ SHOULD include at least one character outside these ranges
-> to ensure that they will be compatible with future versions of this specification.
-> They SHOULD also use the _namespace_ feature to avoid collisions with other implementations.
+> [!IMPORTANT]
+> Implementation-defined or user-defined _functions_ and _function_ _options_
+> SHOULD use a _namespace_ as part of their _identifiers_
+> to help avoid collisions with other implementations.
 
 Future versions of this specification will not introduce changes
 to the data model that would result in a data model representation
