@@ -12,10 +12,13 @@ manages the specification for this namespace, hence the _namespace_ `u:`.
 
 ## Options
 
-This section describes common **_<dfn>`u:` options</dfn>_** which each implementation SHOULD support
+This section describes common **_<dfn>`u:` options</dfn>_** that apply
 for all _functions_ and _markup_.
 
 ### `u:id`
+
+Implementations providing a formatting target other than a concatenated string
+SHOULD support this option.
 
 A string value that is included as an `id` or other suitable value
 in the formatted parts for the _placeholder_,
@@ -30,6 +33,8 @@ For other values, a _Bad Option_ error is emitted
 and the `u:id` option is ignored.
 
 ### `u:locale`
+
+Implementations MAY support this option.
 
 Replaces the _locale_ defined in the _function context_ for this _expression_.
 
@@ -66,6 +71,8 @@ or because the language tag is not well-formed,
 not valid, or some other reason.
 
 ### `u:dir`
+
+Implementations SHOULD support this option.
 
 Replaces the base directionality defined in
 the _function context_ for this _expression_
