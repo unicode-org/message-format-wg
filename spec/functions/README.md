@@ -24,7 +24,7 @@ additional functionality.
 > _Functions_ that are not marked **Draft** are **Stable** and subject to
 > the provisions of the [stability policy](../intro.md#stability-policy).
 >
-> _Functions_ and _options_ marked as **Draft** are not stable.
+> _Functions_ or _options_ marked as **Draft** are not stable.
 > Their name, _operands_, and _options_/_values_, and other requirements
 > might change or be removed before being declared **Stable** in a future release.
 
