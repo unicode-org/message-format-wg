@@ -1,4 +1,4 @@
-# MessageFormat 2.0 Unicode Namespace
+# MessageFormat Unicode Namespace
 
 The `u:` _namespace_ is reserved for the definition of _options_
 which affect the _function context_ of the specific _expressions_
@@ -12,14 +12,25 @@ manages the specification for this namespace, hence the _namespace_ `u:`.
 
 ## Options
 
-This section describes common **_<dfn>`u:` options</dfn>_** which each implementation SHOULD support
-for all _functions_ and _markup_.
+This section describes **_<dfn>`u:` options</dfn>_**.
+When implemented, they apply to all _functions_ and _markup_,
+including user-defined _functions_ in that implementation.
 
 ### `u:id`
+
+Implementations providing a formatting target other than a concatenated string
+SHOULD support this option.
 
 A string value that is included as an `id` or other suitable value
 in the formatted parts for the _placeholder_,
 or any other structured formatted results.
+
+> For example, `u:id` could be used to distinguish
+> two otherwise matching placeholders from each other:
+>
+> ```
+> The first number was {$a :number u:id=first} and the second {$b :number u:id=second}.
+> ```
 
 Ignored when formatting a message to a string.
 
@@ -30,6 +41,12 @@ For other values, a _Bad Option_ error is emitted
 and the `u:id` option is ignored.
 
 ### `u:locale`
+
+> [!IMPORTANT]
+> This _option_ has a status of **Draft**.
+> It is proposed for inclusion in a future release and is not Stable.
+
+Implementations MAY support this option.
 
 Replaces the _locale_ defined in the _function context_ for this _expression_.
 
@@ -66,6 +83,8 @@ or because the language tag is not well-formed,
 not valid, or some other reason.
 
 ### `u:dir`
+
+Implementations SHOULD support this option.
 
 Replaces the base directionality defined in
 the _function context_ for this _expression_
