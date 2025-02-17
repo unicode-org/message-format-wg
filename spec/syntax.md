@@ -777,6 +777,8 @@ that is, if they consist of the same sequence of Unicode code points after
 [Unicode Normalization Form C](https://unicode.org/reports/tr15/) ("NFC")
 has been applied to both.
 
+The _names_ are [immutable identifiers](https://www.unicode.org/reports/tr31/#Immutable_Identifier_Syntax).
+
 > [!NOTE]
 > Implementations are not required to normalize all _names_.
 > Comparisons of _name_ values only need be done "as-if" normalization
@@ -785,10 +787,6 @@ has been applied to both.
 > and since checking for NFC is fast and efficient,
 > implementations can often substitute checking for actually applying normalization
 > to _name_ values.
-
-The _names_ are [immutable identifiers](https://www.unicode.org/reports/tr31/#Immutable_Identifier_Syntax).
-They are similar to <cite>Namespaces in XML 1.0</cite>'s [NCName](https://www.w3.org/TR/xml-names/#NT-NCName),
-but have been updated to be more consistent.
 
 > [!NOTE]
 > _External variables_ can be passed in that are not valid _names_.
