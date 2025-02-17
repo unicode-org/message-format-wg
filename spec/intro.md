@@ -121,7 +121,7 @@ All other _identifiers_ in these categories are reserved for the use of implemen
 > [!IMPORTANT]
 > Implementation-defined or user-defined _functions_ and _function_ _options_
 > SHOULD use a _namespace_ as part of their _identifiers_
-> to avoid collisions with other implementations.
+> to help avoid collisions with other implementations.
 
 Future versions of this specification will not introduce changes
 to the data model that would result in a data model representation
