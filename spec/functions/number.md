@@ -22,8 +22,8 @@ the value of other options, or both.
 
 The following options and their values are REQUIRED to be available on the function `:number`:
 
-- `select`
-  - `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
+- `select` (see [Number Selection](#number-selection) below)
+  - `plural` (default)
   - `ordinal`
   - `exact`
 - `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
@@ -128,8 +128,8 @@ the value of other options, or both.
 
 The following options and their values are REQUIRED to be available on the function `:integer`:
 
-- `select`
-  - `plural` (default; see [Default Value of `select` Option](#default-value-of-select-option) below)
+- `select` (see [Number Selection](#number-selection) below)
+  - `plural` (default)
   - `ordinal`
   - `exact`
 - `numberingSystem`
@@ -656,6 +656,14 @@ or if the value exceeds any implementation-defined upper limit
 or any option-specific lower limit, a _Bad Option Error_ is emitted.
 
 ### Number Selection
+
+The value of the `select` _option_ MUST be set by a _literal_,
+as otherwise the _message_ might not be translatable.
+If this value is set by a _variable_ or
+the option value of an implementation-defined type used as an _operand_,
+a _Bad Option Error_ is emitted and
+the _resolved value_ of the expression MUST NOT support selection.
+The formatting of the _resolved value_ is not affected by the `select` _option_.
 
 Number selection has three modes:
 
