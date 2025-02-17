@@ -25,6 +25,13 @@ A string value that is included as an `id` or other suitable value
 in the formatted parts for the _placeholder_,
 or any other structured formatted results.
 
+> For example, `u:id` could be used to distinguish
+> two otherwise matching placeholders from each other:
+>
+> ```
+> The first number was {$a :number u:id=first} and the second {$b :number u:id=second}.
+> ```
+
 Ignored when formatting a message to a string.
 
 The value of the `u:id` _option_ MUST be a _literal_ or a
