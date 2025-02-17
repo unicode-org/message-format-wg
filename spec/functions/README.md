@@ -73,9 +73,6 @@ Such values can be useful to users in cases where local usage and support exists
 >   for currency amounts as the _operand_ in the _function_ `:currency`.
 > - A Java implementation might _accept_ a `java.time.chrono.Chronology` object
 >   as a value for the _date/time override option_ `calendar`
-> - ICU4J's implementation might _accept_ a `com.ibm.icu.text.NumberingSystem` object
->   instead of using a [Unicode Numbering System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
->   for the option `numberingSystem` in _functions_ such as `:number` or `:integer`.
 
 Future versions of this specification MAY define additional _options_ and _option_ values,
 subject to the rules in the [Stability Policy](#stability-policy),
