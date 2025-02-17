@@ -283,12 +283,8 @@ the functions `:datetime`, `:date`, and `:time`.
 - `numberingSystem`
   - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
 
-> [!IMPORTANT]
-> The following _option_ and its values are **Draft** and proposed for
-> inclusion in a future release of this specification but have not yet been
-> finalized.
-> If accepted, implementations could be REQUIRED to make this _option_
-> available in the functions `:datetime`, `:date`, and `:time`.
+The following _option_ and its values are REQUIRED to be available on
+the functions `:datetime`, `:date`, and `:time`.
 
 - `timeZone`
   - A valid time zone identifier
