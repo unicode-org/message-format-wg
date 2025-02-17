@@ -119,7 +119,8 @@ which satisfy either of the following two requirements:
 All other _identifiers_ in these categories are reserved for the use of implementations or users.
 
 > [!IMPORTANT]
-> Users defining custom _identifiers_ SHOULD use a _namespace_
+> Implementation-defined or user-defined _functions_ and _function_ _options_
+> SHOULD use a _namespace_ as part of their _identifiers_
 > to avoid collisions with other implementations.
 
 Future versions of this specification will not introduce changes
