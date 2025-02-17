@@ -55,6 +55,22 @@
       "exp": "hello 4,2"
     },
     {
+      "src": "hello {4.2 :number u:locale=$bad}",
+      "params": [{"name": "bad", "value": "fr"}],
+      "expErrors": [{ "type": "bad-option" }],
+      "exp": "hello 4.2"
+    },
+    {
+      "src": ".local $good = {4.2 :number u:locale=fr} {{hello {$good}}}",
+      "exp": "hello 4,2"
+    },
+    {
+      "src": ".local $bad = {4.2 :number u:locale=fr} {{hello {$bad :number}}}",
+      "params": [{"name": "bad", "value": "fr"}],
+      "expErrors": [{ "type": "bad-option" }],
+      "exp": "hello 4.2"
+    },
+    {
       "src": "hello {world :string u:dir=ltr u:id=foo}",
       "exp": "hello \u2066world\u2069",
       "expParts": [

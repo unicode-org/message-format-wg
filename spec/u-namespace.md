@@ -38,6 +38,11 @@ well-formed [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt)
 language tags,
 or an implementation-defined list of such tags.
 
+The value of this _option_ MUST be set by a _literal_.
+If this value is set by a _variable_ or
+the option value of an implementation-defined type used as an _operand_,
+a _Bad Option Error_ is emitted and the value is ignored.
+
 If this _option_ is set on _markup_, a _Bad Option_ error is emitted
 and the value of the `u:locale` _option_ is ignored.
 
