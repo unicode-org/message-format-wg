@@ -2,7 +2,7 @@
 
 ### Security Considerations
 
-MessageFormat 2.0 _patterns_ are meant to allow a _message_ to include any string value
+MessageFormat _patterns_ are meant to allow a _message_ to include any string value
 which users might normally wish to use in their environment.
 Programming languages and other environments vary in what characters are permitted
 to appear in a valid string.
@@ -25,7 +25,7 @@ but do not generate errors from MessageFormat parsers or processing APIs.
 
 Bidirectional text containing right-to-left characters (such as used for Arabic or Hebrew) 
 also poses a potential source of confusion for users. 
-Since MessageFormat 2.0's syntax makes use of 
+Since MessageFormat's syntax makes use of 
 keywords and symbols that are left-to-right or consist of neutral characters 
 (including characters subject to mirroring under the Unicode Bidirectional Algorithm), 
 it is possible to create messages that,
@@ -35,7 +35,7 @@ have a misleading appearance or are difficult to parse visually.
 For more information, see \[[UTS#55](https://unicode.org/reports/tr55/)\] 
 <cite>Unicode Source Code Handling</cite>.
 
-MessageFormat 2.0 implementations might allow end-users to install
+MessageFormat implementations might allow end-users to install
 _selectors_, _functions_, or _markup_ from third-party sources.
 Such functionality can be a vector for various exploits,
 including buffer overflow, code injection, user tracking,
@@ -45,7 +45,7 @@ In addition, end-users need to be aware of the risks involved.
 
 ### Acknowledgements
 
-Special thanks to the following people for their contributions to making MessageFormat v2.
+Special thanks to the following people for their contributions to making MessageFormat 2.0.
 The following people contributed to our github repo and are listed in order by contribution size:
 
 Addison Phillips, 
