@@ -80,8 +80,6 @@ A reference to a _term_ looks like this.
 
 Updates to this specification will not make any valid _message_ invalid.
 
-Updates to this specification will not remove any syntax provided in this version.
-
 Updates to this specification will not specify an _error_ for any _message_
 that previously did not specify an _error_.
 
