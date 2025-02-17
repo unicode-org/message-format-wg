@@ -117,7 +117,6 @@ A **_<dfn>local variable</dfn>_** is a _variable_ created as the result of a _lo
 > that use the UTF-16 encoding 
 > and do not check for unpaired surrogates.
 > (Strings in Java or JavaScript are examples of this.)
-> These code points SHOULD NOT be used in a _message_.
 > Unpaired surrogate code points are likely an indication of mistakes
 > or errors in the creation, serialization, or processing of the _message_.
 > Many processes will convert them to 
