@@ -640,7 +640,8 @@ such as the number of fraction, integer, or significant digits.
 A "digit size option" is an _option_ value that the _function_ interprets
 as a small integer value greater than or equal to zero.
 Implementations MAY define an upper limit on the _resolved value_
-of a digit size option option consistent with that implementation's practical limits.
+of a digit size option option consistent with that implementation's practical limits,
+as long as all integer values from 0 to 99 (inclusive) are supported.
 
 In most cases, the value of a digit size option will be a string that
 encodes the value as a non-negative integer.
