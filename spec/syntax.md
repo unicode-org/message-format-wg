@@ -842,39 +842,39 @@ identifier = [namespace ":"] name
 namespace  = name
 name       = [bidi] name-start *name-char [bidi]
 name-start = ALPHA
-                  / %x2B            ; «+»      omit Cc: %x0-1F, Whitespace: « », Ascii: «!"#$%&'()*»
-                  / %x5F            ; «_»      omit Ascii: «,-./0123456789:;<=>?@» «[\]^»
-                  / %xA1-61B        ;          omit Cc: %x7F-9F, Whitespace: %xA0, Ascii: «`» «{|}~»
-                  / %x61D-167F      ;          omit BidiControl: %x61C
-                  / %x1681-1FFF     ;          omit Whitespace: %x1680
-                  / %x200B-200D     ;          omit Whitespace: %x2000-200A
-                  / %x2010-2027     ;          omit BidiControl: %x200E-200F
-                  / %x2030-205E     ;          omit Whitespace: %x2028-2029 %x202F, BidiControl: %x202A-202E
-                  / %x2060-2065     ;          omit Whitespace: %x205F
-                  / %x206A-2FFF     ;          omit BidiControl: %x2066-2069
-                  / %x3001-D7FF     ;          omit Whitespace: %x3000
-                  / %xE000-FDCF     ;          omit Cs: %xD800-DFFF
-                  / %xFDF0-FFFD     ;          omit NChar: %xFDD0-FDEF
-                  / %x10000-1FFFD   ;          omit NChar: %xFFFE-FFFF
-                  / %x20000-2FFFD   ;          omit NChar: %x1FFFE-1FFFF
-                  / %x30000-3FFFD   ;          omit NChar: %x2FFFE-2FFFF
-                  / %x40000-4FFFD   ;          omit NChar: %x3FFFE-3FFFF
-                  / %x50000-5FFFD   ;          omit NChar: %x4FFFE-4FFFF
-                  / %x60000-6FFFD   ;          omit NChar: %x5FFFE-5FFFF
-                  / %x70000-7FFFD   ;          omit NChar: %x6FFFE-6FFFF
-                  / %x80000-8FFFD   ;          omit NChar: %x7FFFE-7FFFF
-                  / %x90000-9FFFD   ;          omit NChar: %x8FFFE-8FFFF
-                  / %xA0000-AFFFD   ;          omit NChar: %x9FFFE-9FFFF
-                  / %xB0000-BFFFD   ;          omit NChar: %xAFFFE-AFFFF
-                  / %xC0000-CFFFD   ;          omit NChar: %xBFFFE-BFFFF
-                  / %xD0000-DFFFD   ;          omit NChar: %xCFFFE-CFFFF
-                  / %xE0000-EFFFD   ;          omit NChar: %xDFFFE-DFFFF
-                  / %xF0000-FFFFD   ;          omit NChar: %xEFFFE-EFFFF
-                  / %x100000-10FFFD ;          omit NChar: %xFFFFE-FFFFF
-                                    ;          omit NChar: %x10FFFE-10FFFF
+                                    ;          omit Cc: %x0-1F, Whitespace: « », Ascii: «!"#$%&'()*»
+                  / %x2B            ; «+»      omit Ascii: «,-./0123456789:;<=>?@» «[\]^»
+                  / %x5F            ; «_»      omit Cc: %x7F-9F, Whitespace: %xA0, Ascii: «`» «{|}~»
+                  / %xA1-61B        ;          omit BidiControl: %x61C
+                  / %x61D-167F      ;          omit Whitespace: %x1680
+                  / %x1681-1FFF     ;          omit Whitespace: %x2000-200A
+                  / %x200B-200D     ;          omit BidiControl: %x200E-200F
+                  / %x2010-2027     ;          omit Whitespace: %x2028-2029 %x202F, BidiControl: %x202A-202E
+                  / %x2030-205E     ;          omit Whitespace: %x205F
+                  / %x2060-2065     ;          omit BidiControl: %x2066-2069
+                  / %x206A-2FFF     ;          omit Whitespace: %x3000
+                  / %x3001-D7FF     ;          omit Cs: %xD800-DFFF
+                  / %xE000-FDCF     ;          omit NChar: %xFDD0-FDEF
+                  / %xFDF0-FFFD     ;          omit NChar: %xFFFE-FFFF
+                  / %x10000-1FFFD   ;          omit NChar: %x1FFFE-1FFFF
+                  / %x20000-2FFFD   ;          omit NChar: %x2FFFE-2FFFF
+                  / %x30000-3FFFD   ;          omit NChar: %x3FFFE-3FFFF
+                  / %x40000-4FFFD   ;          omit NChar: %x4FFFE-4FFFF
+                  / %x50000-5FFFD   ;          omit NChar: %x5FFFE-5FFFF
+                  / %x60000-6FFFD   ;          omit NChar: %x6FFFE-6FFFF
+                  / %x70000-7FFFD   ;          omit NChar: %x7FFFE-7FFFF
+                  / %x80000-8FFFD   ;          omit NChar: %x8FFFE-8FFFF
+                  / %x90000-9FFFD   ;          omit NChar: %x9FFFE-9FFFF
+                  / %xA0000-AFFFD   ;          omit NChar: %xAFFFE-AFFFF
+                  / %xB0000-BFFFD   ;          omit NChar: %xBFFFE-BFFFF
+                  / %xC0000-CFFFD   ;          omit NChar: %xCFFFE-CFFFF
+                  / %xD0000-DFFFD   ;          omit NChar: %xDFFFE-DFFFF
+                  / %xE0000-EFFFD   ;          omit NChar: %xEFFFE-EFFFF
+                  / %xF0000-FFFFD   ;          omit NChar: %xFFFFE-FFFFF
+                  / %x100000-10FFFD ;          omit NChar: %x10FFFE-10FFFF
 
 name-char  = name-start / DIGIT
-                  / %x2D-2E         ; «-.»     omit Cc: %x0-1F, Whitespace: « », Ascii: «!"#$%&'()*+,»
+                  / %x2D-2E         ; «-.»
 ```
 
 > [!NOTE]
