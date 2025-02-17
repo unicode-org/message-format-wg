@@ -658,7 +658,7 @@ or any option-specific lower limit, a _Bad Option Error_ is emitted.
 ### Number Selection
 
 The value of the `select` _option_ MUST be set by a _literal_,
-as otherwise the message might not be translatable.
+as otherwise the _message_ might not be translatable.
 If this value is set by a _variable_ or
 the option value of an implementation-defined type used as an _operand_,
 a _Bad Option Error_ is emitted and
