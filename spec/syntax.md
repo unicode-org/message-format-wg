@@ -786,11 +786,9 @@ has been applied to both.
 > implementations can often substitute checking for actually applying normalization
 > to _name_ values.
 
-Valid content for _names_ is based on <cite>Namespaces in XML 1.0</cite>'s 
-[NCName](https://www.w3.org/TR/xml-names/#NT-NCName).
-This is different from XML's [Name](https://www.w3.org/TR/xml/#NT-Name)
-in that it MUST NOT contain a U+003A COLON `:`.
-Otherwise, the set of characters allowed in a _name_ is large.
+The _names_ are [immutable identifiers](https://www.unicode.org/reports/tr31/#Immutable_Identifier_Syntax).
+They are similar to <cite>Namespaces in XML 1.0</cite>'s [NCName](https://www.w3.org/TR/xml-names/#NT-NCName),
+but have been updated to be more consistent.
 
 > [!NOTE]
 > _External variables_ can be passed in that are not valid _names_.
