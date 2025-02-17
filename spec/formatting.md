@@ -1,6 +1,6 @@
 ## Formatting
 
-This section defines the behavior of a MessageFormat 2.0 implementation
+This section defines the behavior of a MessageFormat implementation
 when formatting a _message_ for display in a user interface, or for some later processing.
 
 To start, we presume that a _message_ has either been parsed from its syntax
