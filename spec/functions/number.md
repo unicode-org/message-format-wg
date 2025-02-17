@@ -26,17 +26,6 @@ The following options and their values are REQUIRED to be available on the funct
   - `plural` (default)
   - `ordinal`
   - `exact`
-- `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
-  - `short` (default)
-  - `long`
-- `notation`
-  - `standard` (default)
-  - `scientific`
-  - `engineering`
-  - `compact`
-- `numberingSystem`
-  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
-    (default is locale-specific)
 - `signDisplay`
   - `auto` (default)
   - `always`
@@ -87,12 +76,12 @@ with _options_ on the _expression_ taking priority over any option values of the
 > For example, the _placeholder_ in this _message_:
 >
 > ```
-> .input {$n :number notation=scientific minimumFractionDigits=2}
+> .input {$n :number minimumFractionDigits=2 signDisplay=always}
 > {{{$n :number minimumFractionDigits=1}}}
 > ```
 >
 > would be formatted with the resolved options
-> `{ notation: 'scientific', minimumFractionDigits: '1' }`.
+> `{ minimumFractionDigits: '1', signDisplay: 'always' }`.
 
 #### Resolved Value
 
@@ -132,9 +121,6 @@ The following options and their values are REQUIRED to be available on the funct
   - `plural` (default)
   - `ordinal`
   - `exact`
-- `numberingSystem`
-  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
-    (default is locale-specific)
 - `signDisplay`
   - `auto` (default)
   - `always`
@@ -158,8 +144,6 @@ In general, these are included in the resolved option values of the _expression_
 with _options_ on the _expression_ taking priority over any option values of the _operand_.
 Option values with the following names are however discarded if included in the _operand_:
 
-- `compactDisplay`
-- `notation`
 - `minimumFractionDigits`
 - `maximumFractionDigits`
 - `minimumSignificantDigits`
@@ -355,15 +339,6 @@ The following options and their values are REQUIRED to be available on the funct
 - `currency`
   - well-formed [Unicode Currency Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCurrencyIdentifier)
     (no default)
-- `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
-  - `short` (default)
-  - `long`
-- `notation`
-  - `standard` (default)
-  - `compact`
-- `numberingSystem`
-  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
-    (default is locale-specific)
 - `currencySign`
   - `accounting`
   - `standard` (default)
@@ -492,15 +467,6 @@ unless otherwise indicated:
   - `short` (default)
   - `narrow`
   - `long`
-- `compactDisplay` (this option only has meaning when combined with the option `notation=compact`)
-  - `short` (default)
-  - `long`
-- `notation`
-  - `standard` (default)
-  - `compact`
-- `numberingSystem`
-  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
-    (default is locale-specific)
 - `signDisplay`
   - `auto` (default)
   - `always`
@@ -791,7 +757,6 @@ representing its decimal value:
 - `minimumIntegerDigits`
 - `minimumSignificantDigits`
 - `maximumSignificantDigits`
-- `notation`
 
 ```abnf
 integer = "0" / ["-"] ("1"-"9") *DIGIT

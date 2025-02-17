@@ -272,13 +272,11 @@ the functions `:datetime` and `:time`:
   - `true`
   - `false`
 
-The following _options_ and their values are RECOMMENDED to be available on
+The following _option_ and its values are RECOMMENDED to be available on
 the functions `:datetime`, `:date`, and `:time`.
 
 - `calendar`
   - valid [Unicode Calendar Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCalendarIdentifier)
-- `numberingSystem`
-  - valid [Unicode Number System Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeNumberSystemIdentifier)
 
 The following _option_ and its values are **Proposed** for
 inclusion in the next release of this specification but have not yet been
