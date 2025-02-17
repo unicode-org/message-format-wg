@@ -1,4 +1,4 @@
-# MessageFormat 2.0 Unicode Namespace
+# MessageFormat Unicode Namespace
 
 The `u:` _namespace_ is reserved for the definition of _options_
 which affect the _function context_ of the specific _expressions_
@@ -41,6 +41,10 @@ For other values, a _Bad Option_ error is emitted
 and the `u:id` option is ignored.
 
 ### `u:locale`
+
+> [!IMPORTANT]
+> This _option_ has a status of **Draft**.
+> It is proposed for inclusion in a future release and is not Stable.
 
 Implementations MAY support this option.
 
