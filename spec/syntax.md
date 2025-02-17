@@ -870,9 +870,7 @@ name-start = ALPHA
                   / %xE0000-EFFFD   ;          omit NChar: %xEFFFE-EFFFF
                   / %xF0000-FFFFD   ;          omit NChar: %xFFFFE-FFFFF
                   / %x100000-10FFFD ;          omit NChar: %x10FFFE-10FFFF
-
-name-char  = name-start / DIGIT
-                  / %x2D-2E         ; «-.»
+name-char  = name-start / DIGIT / "-" / "."
 ```
 
 > [!NOTE]

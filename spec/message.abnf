@@ -53,7 +53,7 @@ identifier = [namespace ":"] name
 namespace  = name
 name       = [bidi] name-start *name-char [bidi]
 name-start = ALPHA
-                                    ;          omit Cc: %x0-1F, Whitespace: « », Ascii: «!"#$%&'()*»
+                                    ;          omit Cc: %x0-1F, Whitespace: SPACE, Ascii: «!"#$%&'()*»
                   / %x2B            ; «+»      omit Ascii: «,-./0123456789:;<=>?@» «[\]^»
                   / %x5F            ; «_»      omit Cc: %x7F-9F, Whitespace: %xA0, Ascii: «`» «{|}~»
                   / %xA1-61B        ;          omit BidiControl: %x61C
@@ -83,9 +83,7 @@ name-start = ALPHA
                   / %xE0000-EFFFD   ;          omit NChar: %xEFFFE-EFFFF
                   / %xF0000-FFFFD   ;          omit NChar: %xFFFFE-FFFFF
                   / %x100000-10FFFD ;          omit NChar: %x10FFFE-10FFFF
-
-name-char  = name-start / DIGIT
-                  / %x2D-2E         ; «-.»
+name-char  = name-start / DIGIT / "-" / "."
 
 ; Restrictions on characters in various contexts
 simple-start-char = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
