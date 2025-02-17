@@ -21,7 +21,7 @@ The design goals of the syntax specification are as follows:
    as well as making the selection logic predictable and easy to reason about.
 
    - _Non-Goal_: Make the syntax intuitive enough for non-technical translators to hand-edit.
-     Instead, we assume that most translators will work with MessageFormat 2
+     Instead, we assume that most translators will work with MessageFormat
      by means of GUI tooling, CAT workbenches etc.
 
 1. The syntax surrounding translatable content should be easy to write and edit
@@ -144,7 +144,7 @@ A **_<dfn>local variable</dfn>_** is a _variable_ created as the result of a _lo
 > > An exception to this is: whitespace inside a _pattern_ is **always** significant.
 
 > [!NOTE]
-> The MessageFormat 2 syntax assumes that each _message_ will be displayed
+> The MessageFormat syntax assumes that each _message_ will be displayed
 > with a left-to-right display order
 > and be processed in the logical character order.
 > The syntax permits the use of right-to-left characters in _identifiers_,
@@ -981,7 +981,7 @@ following mechanisms to make messages display intelligibly in plain-text editors
 > marks in _messages_, since the characters are invisible and can be difficult
 > to manage.
 > Tools (such as resource editors or translation editors)
-> and other implementations of MessageFormat 2 serialization are strongly
+> and other implementations of MessageFormat serialization are strongly
 > encouraged to provide paired isolates around any right-to-left
 > syntax as described above so that _messages_ display appropriately as plain text.
 
