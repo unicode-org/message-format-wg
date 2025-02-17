@@ -1,4 +1,4 @@
-# MessageFormat Unicode Namespace
+## Unicode Namespace
 
 The `u:` _namespace_ is reserved for the definition of _options_
 which affect the _function context_ of the specific _expressions_
@@ -10,13 +10,13 @@ It might also be used to define _functions_ in a future release.
 The CLDR Technical Committee of the Unicode Consortium
 manages the specification for this namespace, hence the _namespace_ `u:`.
 
-## Options
+### Unicode Namespace Options
 
 This section describes **_<dfn>`u:` options</dfn>_**.
 When implemented, they apply to all _functions_ and _markup_,
 including user-defined _functions_ in that implementation.
 
-### `u:id`
+#### `u:id`
 
 Implementations providing a formatting target other than a concatenated string
 SHOULD support this option.
@@ -40,7 +40,7 @@ or can be resolved to a string without error.
 For other values, a _Bad Option_ error is emitted
 and the `u:id` option is ignored.
 
-### `u:locale`
+#### `u:locale`
 
 > [!IMPORTANT]
 > This _option_ has a status of **Draft**.
@@ -82,7 +82,7 @@ This might be because the locale specified is not supported
 or because the language tag is not well-formed,
 not valid, or some other reason.
 
-### `u:dir`
+#### `u:dir`
 
 Implementations SHOULD support this option.
 

@@ -161,7 +161,11 @@ The _function_ `:integer` performs selection as described in [Number Selection](
 
 ### The `:math` function
 
-The function `:math` is a selector and formatter for matching or formatting
+> [!IMPORTANT]
+> The _function_ `:math` has a status of **Draft**.
+> It is proposed for inclusion in a future release of this specification and is not Stable. 
+
+The _function_ `:math` is proposed as a _selector_ and _formatter_ for matching or formatting
 numeric values to which a mathematical operation has been applied.
 
 > This function is useful for selection and formatting of values that
@@ -233,7 +237,11 @@ The _function_ `:math` performs selection as described in [Number Selection](#nu
 
 ### The `:currency` function
 
-The function `:currency` is a formatter for currency values,
+> [!IMPORTANT]
+> The _function_ `:currency` has a status of **Draft**.
+> It is proposed for inclusion in a future release of this specification and is not Stable.
+
+The _function_ `:currency` is a _formatter_ for currency values,
 which are a specialized form of numeric formatting.
 
 #### Operands
@@ -407,7 +415,10 @@ together with the resolved options' values.
 
 ### The `:unit` function
 
-The _function_ `:unit` is **Proposed** for inclusion in the next release of this specification but has not yet been finalized.
+> [!IMPORTANT]
+> The _function_ `:unit` has a status of **Draft**.
+> It is proposed for inclusion in a future release of this specification and is not Stable.
+
 The _function_ `:unit` is proposed to be a RECOMMENDED formatter for unitized values,
 that is, for numeric values associated with a unit of measurement.
 This is a specialized form of numeric formatting.
@@ -606,7 +617,7 @@ such as the number of fraction, integer, or significant digits.
 A "digit size option" is an _option_ value that the _function_ interprets
 as a small integer value greater than or equal to zero.
 Implementations MAY define an upper limit on the _resolved value_
-of a digit size option option consistent with that implementation's practical limits.
+of a digit size option consistent with that implementation's practical limits.
 
 In most cases, the value of a digit size option will be a string that
 encodes the value as a non-negative integer.

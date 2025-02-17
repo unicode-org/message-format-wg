@@ -1,6 +1,4 @@
-# Syntax
-
-### Introduction
+## Syntax
 
 This section defines the formal grammar describing the syntax of a single message.
 
@@ -23,7 +21,7 @@ The design goals of the syntax specification are as follows:
    as well as making the selection logic predictable and easy to reason about.
 
    - _Non-Goal_: Make the syntax intuitive enough for non-technical translators to hand-edit.
-     Instead, we assume that most translators will work with MessageFormat 2
+     Instead, we assume that most translators will work with MessageFormat
      by means of GUI tooling, CAT workbenches etc.
 
 1. The syntax surrounding translatable content should be easy to write and edit
@@ -59,7 +57,7 @@ The syntax specification takes into account the following design restrictions:
    U+100000 through U+10FFFD), unassigned code points, unpaired surrogates (U+D800 through U+DFFF),
    and other potentially confusing content.
 
-## Messages and their Syntax
+### Messages and their Syntax
 
 The purpose of MessageFormat is to allow content to vary at runtime.
 This variation might be due to placing a value into the content
@@ -79,7 +77,7 @@ during the [formatting](./formatting.md) of a _message_ at runtime.
 
 The complete formal syntax of a _message_ is described by the [ABNF](./message.abnf).
 
-### Well-formed vs. Valid Messages
+#### Well-formed vs. Valid Messages
 
 A _message_ is **_<dfn>well-formed</dfn>_** if it satisfies all the rules of the grammar.
 Attempting to parse a _message_ that is not _well-formed_ will result in a _Syntax Error_.
@@ -90,7 +88,7 @@ and semantic requirements about its structure defined below for
 _declarations_, _matcher_, and _options_.
 Attempting to parse a _message_ that is not _valid_ will result in a _Data Model Error_.
 
-## The Message
+### The Message
 
 A **_<dfn>message</dfn>_** is the complete template for a specific message formatting request.
 
@@ -146,7 +144,7 @@ A **_<dfn>local variable</dfn>_** is a _variable_ created as the result of a _lo
 > > An exception to this is: whitespace inside a _pattern_ is **always** significant.
 
 > [!NOTE]
-> The MessageFormat 2 syntax assumes that each _message_ will be displayed
+> The MessageFormat syntax assumes that each _message_ will be displayed
 > with a left-to-right display order
 > and be processed in the logical character order.
 > The syntax permits the use of right-to-left characters in _identifiers_,
@@ -194,7 +192,7 @@ and does not affect the processing of the _message_.
 complex-message = o *(declaration o) complex-body o
 ```
 
-### Declarations
+#### Declarations
 
 A **_<dfn>declaration</dfn>_** binds a _variable_ identifier to a value within the scope of a _message_.
 This _variable_ can then be used in other _expressions_ within the same _message_.
@@ -238,7 +236,7 @@ external input value does not appear in a previous _declaration_.
 > ```
 > (See the [Errors](./errors.md) section for examples of invalid messages)
 
-### Complex Body
+#### Complex Body
 
 The **_<dfn>complex body</dfn>_** of a _complex message_ is the part that will be formatted.
 The _complex body_ consists of either a _quoted pattern_ or a _matcher_.
@@ -247,7 +245,7 @@ The _complex body_ consists of either a _quoted pattern_ or a _matcher_.
 complex-body = quoted-pattern / matcher
 ```
 
-## Pattern
+### Pattern
 
 A **_<dfn>pattern</dfn>_** contains a sequence of _text_ and _placeholders_ to be formatted as a unit.
 Unless there is an error, resolving a _message_ always results in the formatting
@@ -261,7 +259,7 @@ A _pattern_ MAY be empty.
 A _pattern_ MAY contain an arbitrary number of _placeholders_ to be evaluated
 during the formatting process.
 
-### Quoted Pattern
+#### Quoted Pattern
 
 A **_<dfn>quoted pattern</dfn>_** is a _pattern_ that is "quoted" to prevent 
 interference with other parts of the _message_. 
@@ -280,7 +278,7 @@ A _quoted pattern_ MAY be empty.
 > {{}}
 > ```
 
-### Text
+#### Text
 
 **_<dfn>text</dfn>_** is the translateable content of a _pattern_.
 Any Unicode code point is allowed, except for U+0000 NULL.
@@ -336,7 +334,7 @@ Otherwise, care must be taken to ensure that pattern-significant whitespace is p
 > hello2=\   Hello  \ 
 > ```
 
-### Placeholder
+#### Placeholder
 
 A **_<dfn>placeholder</dfn>_** is an _expression_ or _markup_ that appears inside of a _pattern_
 and which will be replaced during the formatting of a _message_.
@@ -345,7 +343,7 @@ and which will be replaced during the formatting of a _message_.
 placeholder = expression / markup
 ```
 
-## Matcher
+### Matcher
 
 A **_<dfn>matcher</dfn>_** is the _complex body_ of a _message_ that allows runtime selection
 of the _pattern_ to use for formatting.
@@ -393,7 +391,7 @@ match-statement = match 1*(s selector)
 > .local $os = {:platform} .match $os windows {{Settings}} * {{Preferences}}
 > ```
 
-### Selector
+#### Selector
 
 A **_<dfn>selector</dfn>_** is a _variable_ whose _resolved value_ ranks or excludes the
 _variants_ based on the value of the corresponding _key_ in each _variant_.
@@ -436,7 +434,7 @@ There MAY be any number of additional _selectors_.
 > *   *   {{Your item has {$numLikes} likes and has been shared {$numShares} times.}}
 > ```
 
-### Variant
+#### Variant
 
 A **_<dfn>variant</dfn>_** is a _quoted pattern_ associated with a list of _keys_ in a _matcher_.
 Each _variant_ MUST begin with a sequence of _keys_,
@@ -451,7 +449,7 @@ variant = key *(s key) o quoted-pattern
 key     = literal / "*"
 ```
 
-#### Key
+##### Key
 
 A **_<dfn>key</dfn>_** is a value in a _variant_ for use by a _selector_ when ranking
 or excluding _variants_ during the _matcher_ process.
@@ -476,7 +474,7 @@ Two _literal_ _keys_ are considered equal if they are canonically equivalent str
 that is, if they consist of the same sequence of Unicode code points after
 Unicode Normalization Form C has been applied to both.
 
-## Expressions
+### Expressions
 
 An **_<dfn>expression</dfn>_** is a part of a _message_ that will be determined
 during the _message_'s formatting.
@@ -530,12 +528,12 @@ Additionally, an _input-declaration_ can contain a _variable-expression_.
 > This placeholder contains a function expression with a variable-valued option: {:ns:func option=$variable}
 > ```
 
-### Operand
+#### Operand
 
 An **_<dfn>operand</dfn>_** is the _literal_ of a _literal-expression_ or
 the _variable_ of a _variable-expression_.
 
-#### Function
+##### Function
 
 A **_<dfn>function</dfn>_** is named functionality in an _expression_.
 _Functions_ are used to evaluate, format, select, or otherwise process data
@@ -565,7 +563,7 @@ function = ":" identifier *(s option)
 > It is now {$now :datetime}.
 > ```
 
-##### Options
+###### Options
 
 An **_<dfn>option</dfn>_** is a key-value pair
 containing a named argument that is passed to a _function_.
@@ -604,7 +602,7 @@ option = identifier o "=" o (literal / variable)
 > Today is {$date :datetime weekday=$dateStyle}!
 > ```
 
-## Markup
+### Markup
 
 **_<dfn>Markup</dfn>_** _placeholders_ are _pattern_ parts
 that can be used to represent non-language parts of a _message_,
@@ -653,7 +651,7 @@ _Markup_ _placeholders_ can appear in any order without making the _message_ inv
 However, specifications or implementations defining _markup_ might impose requirements
 on the pairing, ordering, or contents of _markup_ during _formatting_.
 
-## Attributes
+### Attributes
 
 An **_<dfn>attribute</dfn>_** is an _identifier_ with an optional value
 that appears in an _expression_ or in _markup_.
@@ -690,11 +688,11 @@ attribute = "@" identifier [o "=" o literal]
 > Have a {#span @can-copy}great and wonderful{/span @can-copy} birthday!
 > ```
 
-## Other Syntax Elements
+### Other Syntax Elements
 
 This section defines common elements used to construct _messages_.
 
-### Keywords
+#### Keywords
 
 A **_<dfn>keyword</dfn>_** is a reserved token that has a unique meaning in the _message_ syntax.
 
@@ -707,7 +705,7 @@ local = %s".local"
 match = %s".match"
 ```
 
-### Literals
+#### Literals
 
 A **_<dfn>literal</dfn>_** is a character sequence that appears outside
 of _text_ in various parts of a _message_.
@@ -758,7 +756,7 @@ quoted-literal   = "|" *(quoted-char / escaped-char) "|"
 unquoted-literal = 1*name-char
 ```
 
-### Names and Identifiers
+#### Names and Identifiers
 
 A **_<dfn>name</dfn>_** is a character sequence used in an _identifier_ 
 or as the name for a _variable_
@@ -920,7 +918,7 @@ unless required by the syntax.
 That is, inside _literals_ only escape `|` 
 and inside _patterns_ only escape `{` and `}`.
 
-### Whitespace
+#### Whitespace
 
 The syntax limits whitespace characters outside of a _pattern_ to the following:
 `U+0009 CHARACTER TABULATION` (tab), 
@@ -983,7 +981,7 @@ following mechanisms to make messages display intelligibly in plain-text editors
 > marks in _messages_, since the characters are invisible and can be difficult
 > to manage.
 > Tools (such as resource editors or translation editors)
-> and other implementations of MessageFormat 2 serialization are strongly
+> and other implementations of MessageFormat serialization are strongly
 > encouraged to provide paired isolates around any right-to-left
 > syntax as described above so that _messages_ display appropriately as plain text.
 
@@ -1030,7 +1028,7 @@ bidi = %x061C / %x200E / %x200F / %x2066-2069
 ws = SP / HTAB / CR / LF / %x3000
 ```
 
-## Complete ABNF
+### Complete ABNF
 
 The grammar is formally defined in [`message.abnf`](./message.abnf)
 using the ABNF notation [[STD68](https://www.rfc-editor.org/info/std68)],
