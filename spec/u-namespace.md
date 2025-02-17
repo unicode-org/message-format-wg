@@ -12,8 +12,9 @@ manages the specification for this namespace, hence the _namespace_ `u:`.
 
 ## Options
 
-This section describes common **_<dfn>`u:` options</dfn>_** that apply
-for all _functions_ and _markup_.
+This section describes **_<dfn>`u:` options</dfn>_**.
+When implemented, they apply to all _functions_ and _markup_,
+including user-defined _functions_ in that implementation.
 
 ### `u:id`
 
