@@ -138,8 +138,8 @@ its formatted representation requires isolation
 from the surrounding text.
 
 To allow for _function handlers_ to ensure that certain _option_ values are set by _literals_,
-the _resolved value_ of each _option_ value MUST include information about its source
-as either a _literal_ or _variable_.
+the _resolved value_ of each _option_ value MUST include information about 
+whether the _option_ value is a _literal_ or a _variable_.
 
 The form that _resolved values_ take is implementation-dependent,
 and different implementations MAY choose to perform different levels of resolution.
