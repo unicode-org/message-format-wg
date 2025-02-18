@@ -506,6 +506,11 @@
       "exp": "🥔"
     },
     {
+      "description": "emoji above U+FFFF as unquoted-literal, ",
+      "src": "{🀄️}",
+      "exp": "🀄️"
+    },
+    {
       "description": "multi-code-point emoji as unquoted-literal",
       "src": "{🏳️‍🌈}",
       "exp": "🏳️‍🌈"
