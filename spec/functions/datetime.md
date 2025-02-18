@@ -1,4 +1,4 @@
-## Date and Time Value Formatting
+### Date and Time Value Formatting
 
 This subsection describes the _functions_ and _options_ for date/time formatting.
 
@@ -12,7 +12,7 @@ This subsection describes the _functions_ and _options_ for date/time formatting
 > The types of queries found in implementations such as `java.time.TemporalAccessor`
 > are complex and user expectations might be inconsistent with good I18N practices.
 
-### The `:datetime` function
+#### The `:datetime` function
 
 The function `:datetime` is used to format date/time values, including
 the ability to compose user-specified combinations of fields.
@@ -26,14 +26,14 @@ If no options are specified, this function defaults to the following:
 > in JavaScript and with `{d,date}` in ICU MessageFormat 1.0.
 > This is because, unlike those implementations, `:datetime` is distinct from `:date` and `:time`.
 
-#### Operands
+##### Operands
 
 The _operand_ of the `:datetime` function is either
 an implementation-defined date/time type
 or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
 All other _operand_ values produce a _Bad Operand_ error.
 
-#### Options
+##### Options
 
 The `:datetime` function can use either the appropriate _style options_
 or can use a collection of _field options_ (but not both) to control the formatted
@@ -54,7 +54,7 @@ with _options_ on the _expression_ taking priority over any option values of the
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/resolvedOptions#description)
 > in JavaScript's `Intl.DateTimeFormat`.
 
-##### Style Options
+###### Style Options
 
 The function `:datetime` has these _style options_.
 
@@ -69,12 +69,13 @@ The function `:datetime` has these _style options_.
   - `medium`
   - `short`
 
-##### Field Options
+###### Field Options
 
 _Field options_ describe which fields to include in the formatted output
 and what format to use for that field.
 
-> [!NOTE] > _Field options_ do not have default values because they are only to be used
+> [!NOTE]
+> _Field options_ do not have default values because they are only to be used
 > to compose the formatter.
 
 The function `:datetime` has the following _field options_:
@@ -120,14 +121,14 @@ The function `:datetime` has the following _field options_:
   - `shortGeneric`
   - `longGeneric`
 
-#### Resolved Value
+##### Resolved Value
 
 The _resolved value_ of an _expression_ with a `:datetime` _function_
 contains an implementation-defined date/time value
 of the _operand_ of the annotated _expression_,
 together with the resolved options values.
 
-### The `:date` function
+#### The `:date` function
 
 The function `:date` is used to format the date portion of date/time values.
 
@@ -135,14 +136,14 @@ If no options are specified, this function defaults to the following:
 
 - `{$d :date}` is the same as `{$d :date style=medium}`
 
-#### Operands
+##### Operands
 
 The _operand_ of the `:date` function is either
 an implementation-defined date/time type
 or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
 All other _operand_ values produce a _Bad Operand_ error.
 
-#### Options
+##### Options
 
 The function `:date` has these _options_:
 
@@ -158,7 +159,7 @@ it can include other option values.
 Any _operand_ option values matching the `:datetime` _style options_ or _field options_ are ignored,
 as is any `style` option.
 
-#### Resolved Value
+##### Resolved Value
 
 The _resolved value_ of an _expression_ with a `:date` _function_
 is implementation-defined.
@@ -167,7 +168,7 @@ An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate
 when a _variable_ annotated directly or indirectly by a `:date` _annotation_
 is used as an _operand_ or an _option_ value.
 
-### The `:time` function
+#### The `:time` function
 
 The function `:time` is used to format the time portion of date/time values.
 
@@ -175,14 +176,14 @@ If no options are specified, this function defaults to the following:
 
 - `{$t :time}` is the same as `{$t :time style=short}`
 
-#### Operands
+##### Operands
 
 The _operand_ of the `:time` function is either
 an implementation-defined date/time type
 or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
 All other _operand_ values produce a _Bad Operand_ error.
 
-#### Options
+##### Options
 
 The function `:time` has these _options_:
 
@@ -198,7 +199,7 @@ it can include other option values.
 Any _operand_ option values matching the `:datetime` _style options_ or _field options_ are ignored,
 as is any `style` option.
 
-#### Resolved Value
+##### Resolved Value
 
 The _resolved value_ of an _expression_ with a `:time` _function_
 is implementation-defined.
@@ -207,7 +208,7 @@ An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate
 when a _variable_ annotated directly or indirectly by a `:time` _annotation_
 is used as an _operand_ or an _option_ value.
 
-### Date and Time Operands
+#### Date and Time Operands
 
 The _operand_ of a date/time function is either
 an implementation-defined date/time type
@@ -257,7 +258,7 @@ For more information, see [Working with Timezones](https://w3c.github.io/timezon
 > Support for these extensions is expected to be required in the post-tech preview.
 > See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
 
-### Date and Time Override Options
+#### Date and Time Override Options
 
 **_<dfn>Date/time override options</dfn>_** are _options_ that allow an _expression_ to
 override values set by the current locale,
