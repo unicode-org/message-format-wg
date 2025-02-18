@@ -56,6 +56,8 @@ with _options_ on the _expression_ taking priority over any option values of the
 
 ###### Style Options
 
+**_<dfn>Style options</dfn>_** pertain to the overall styling or appearance of the formatted output.
+
 The function `:datetime` has these _style options_.
 
 - `dateStyle`
@@ -71,7 +73,7 @@ The function `:datetime` has these _style options_.
 
 ###### Field Options
 
-_Field options_ describe which fields to include in the formatted output
+**_<dfn>Field options</dfn>_** describe which fields to include in the formatted output
 and what format to use for that field.
 
 > [!NOTE]
