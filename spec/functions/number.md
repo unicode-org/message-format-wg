@@ -1,14 +1,14 @@
-## Numeric Value Selection and Formatting
+### Numeric Value Selection and Formatting
 
-### The `:number` function
+#### The `:number` function
 
 The function `:number` is a selector and formatter for numeric values.
 
-#### Operands
+##### Operands
 
 The function `:number` requires a [Number Operand](#number-operands) as its _operand_.
 
-#### Options
+##### Options
 
 Some options do not have default values defined in this specification.
 The defaults for these options are implementation-dependent.
@@ -83,27 +83,27 @@ with _options_ on the _expression_ taking priority over any option values of the
 > would be formatted with the resolved options
 > `{ minimumFractionDigits: '1', signDisplay: 'always' }`.
 
-#### Resolved Value
+##### Resolved Value
 
 The _resolved value_ of an _expression_ with a `:number` _function_
 contains an implementation-defined numerical value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
-#### Selection
+##### Selection
 
 The _function_ `:number` performs selection as described in [Number Selection](#number-selection) below.
 
-### The `:integer` function
+#### The `:integer` function
 
 The function `:integer` is a selector and formatter for matching or formatting numeric
 values as integers.
 
-#### Operands
+##### Operands
 
 The function `:integer` requires a [Number Operand](#number-operands) as its _operand_.
 
-#### Options
+##### Options
 
 Some options do not have default values defined in this specification.
 The defaults for these options are implementation-dependent.
@@ -148,18 +148,18 @@ Option values with the following names are however discarded if included in the 
 - `maximumFractionDigits`
 - `minimumSignificantDigits`
 
-#### Resolved Value
+##### Resolved Value
 
 The _resolved value_ of an _expression_ with an `:integer` _function_
 contains the implementation-defined integer value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
-#### Selection
+##### Selection
 
 The _function_ `:integer` performs selection as described in [Number Selection](#number-selection) below.
 
-### The `:math` function
+#### The `:math` function
 
 > [!IMPORTANT]
 > The _function_ `:math` has a status of **Draft**.
@@ -182,11 +182,11 @@ numeric values to which a mathematical operation has been applied.
 > * *   {{{$name} and {$others_count} other users liked your post.}}
 > ```
 
-#### Operands
+##### Operands
 
 The function `:math` requires a [Number Operand](#number-operands) as its _operand_.
 
-#### Options
+##### Options
 
 The options on `:math` are exclusive with each other,
 and exactly one option is always required.
@@ -204,7 +204,7 @@ or if an _option_ value is not a [digit size option](#digit-size-options),
 a _Bad Option_ error is emitted
 and a _fallback value_ used as the _resolved value_ of the _expression_.
 
-#### Resolved Value
+##### Resolved Value
 
 The _resolved value_ of an _expression_ with a `:math` _function_
 contains the implementation-defined numeric value
@@ -231,11 +231,11 @@ The `:math` _options_ are not included in the resolved option values.
 > In such cases, implementations can emit an _Unsupported Operation_ error
 > or they might just silently overflow the underlying data value.
 
-#### Selection
+##### Selection
 
 The _function_ `:math` performs selection as described in [Number Selection](#number-selection) below.
 
-### The `:currency` function
+#### The `:currency` function
 
 > [!IMPORTANT]
 > The _function_ `:currency` has a status of **Draft**.
@@ -244,7 +244,7 @@ The _function_ `:math` performs selection as described in [Number Selection](#nu
 The _function_ `:currency` is a _formatter_ for currency values,
 which are a specialized form of numeric formatting.
 
-#### Operands
+##### Operands
 
 The _operand_ of the `:currency` function can be one of any number of
 implementation-defined types,
@@ -294,7 +294,7 @@ A [Number Operand](#number-operands) without a `currency` _option_ results in a 
 > }
 > ```
 
-#### Options
+##### Options
 
 Some options do not have default values defined in this specification.
 The defaults for these options are implementation-dependent.
@@ -406,14 +406,14 @@ with _options_ on the _expression_ taking priority over any option values of the
 > would be formatted with the resolved options
 > `{ currencySign: 'accounting', trailingZeroDisplay: 'stripIfInteger', currency: 'USD' }`.
 
-#### Resolved Value
+##### Resolved Value
 
 The _resolved value_ of an _expression_ with a `:currency` _function_
 contains an implementation-defined currency value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
-### The `:unit` function
+#### The `:unit` function
 
 > [!IMPORTANT]
 > The _function_ `:unit` has a status of **Draft**.
@@ -423,7 +423,7 @@ The _function_ `:unit` is proposed to be a RECOMMENDED formatter for unitized va
 that is, for numeric values associated with a unit of measurement.
 This is a specialized form of numeric formatting.
 
-#### Operands
+##### Operands
 
 The _operand_ of the `:unit` function can be one of any number of
 implementation-defined types,
@@ -457,7 +457,7 @@ A [Number Operand](#number-operands) without a `unit` _option_ results in a _Bad
 > }
 > ```
 
-#### Options
+##### Options
 
 Some _options_ do not have default values defined in this specification.
 The defaults for these _options_ are implementation-dependent.
@@ -532,14 +532,14 @@ with _options_ on the _expression_ taking priority over any _option_ values of t
 > would have the resolved options:
 > `{ unit: 'furlong', minimumFractionDigits: '2', minimumIntegerDigits: '1' }`.
 
-#### Resolved Value
+##### Resolved Value
 
 The _resolved value_ of an _expression_ with a `:unit` _function_
 consist of an implementation-defined unit value
 of the _operand_ of the annotated _expression_,
 together with the resolved _options_ and their resolved values.
 
-#### Unit Conversion
+##### Unit Conversion
 
 Implementations MAY support conversion to the locale's preferred units via the `usage` _option_.
 Implementing this _option_ is optional.
@@ -570,7 +570,7 @@ Implementations MUST NOT substitute the unit without performing the associated c
 >
 > This can produce "You have 405 feet to go."
 
-### Number Operands
+#### Number Operands
 
 The _operand_ of a number function is either an implementation-defined type or
 a literal whose contents match the following `number-literal` production.
@@ -608,7 +608,7 @@ number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"
 > or the type `com.ibm.icu.util.CurrencyAmount` can be used to set the currency and related
 > options (such as the number of fraction digits).
 
-### Digit Size Options
+#### Digit Size Options
 
 Some _options_ of number _functions_ are defined to take a "digit size option".
 The _function handlers_ for number _functions_ use these _options_ to control aspects of numeric display
@@ -632,7 +632,7 @@ If the value of a digit size option does not evaluate as a non-negative integer,
 or if the value exceeds any implementation-defined upper limit
 or any option-specific lower limit, a _Bad Option Error_ is emitted.
 
-### Number Selection
+#### Number Selection
 
 The value of the `select` _option_ MUST be set by a _literal_,
 as otherwise the _message_ might not be translatable.
@@ -674,7 +674,7 @@ numeric selectors perform as described below.
 > Implementations are not required to implement this exactly as written.
 > However, the observed behavior must be consistent with what is described here.
 
-#### Default Value of `select` Option
+##### Default Value of `select` Option
 
 The value `plural` is the default for the option `select`
 because it is the most common use case for numeric selection.
@@ -697,7 +697,7 @@ but can cause problems in target locales that the original developer is not cons
 > The `one` variant is needed by languages such as Polish or Russian.
 > Such locales typically also require other keywords such as `two`, `few`, and `many`.
 
-#### Rule Selection
+##### Rule Selection
 
 Rule selection is intended to support the grammatical matching needs of different
 languages/locales in order to support plural or ordinal numeric values.
@@ -757,7 +757,7 @@ for examples.
 > | 27 | `other` | 27 dní |
 > | 2.4 | `many` | 2,4 dne |
 
-#### Exact Literal Match Serialization
+##### Exact Literal Match Serialization
 
 If the numeric value of `resolvedSelector` is an integer
 and none of the following options are set for `resolvedSelector`,
