@@ -24,6 +24,9 @@ Being a compendium of tasks needed to get a clean pour over of the spec.
 - generate the toc (I used https://bitdowntoc.derlin.ch/) and check for errors
 
 - git add/git commit/git push
+- use the tools/scripts/tr-archive tools to generate the HTML
+  instructions in that location in the CLDR repo
+  use `npm run serve` to view the HTML output locally
 
 > [!IMPORTANT]
 > Be sure to make all commits in the CLDR style:
