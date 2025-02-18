@@ -20,7 +20,7 @@ The formatting of a _message_ is defined by the following operations:
   Depending on the implementation, this result could be a single concatenated string,
   an array of objects, an attributed string, or some other locally appropriate data type.
 
-- **_<dfn>Expression and Markup Resolution</dfn>_** determines the value of an _expression_ or _markup_,
+- **_<dfn>Expression Resolution</dfn>_** determines the value of an _expression_ or _markup_,
   with reference to the current _formatting context_.
   This can include multiple steps,
   such as looking up the value of a variable and calling formatting functions.
@@ -231,7 +231,7 @@ Its _resolved value_ is defined by _literal resolution_.
 
 #### Literal Resolution
 
-The _resolved value_ of a _text_ or a _literal_ contains
+**_<dfn>Literal resolution</dfn>_** : The _resolved value_ of a _text_ or a _literal_ contains
 the character sequence of the _text_ or _literal_
 after any character escape has been converted to the escaped character.
 
@@ -261,7 +261,7 @@ whether its value was originally a _quoted literal_ or an _unquoted literal_.
 
 #### Variable Resolution
 
-To resolve the value of a _variable_,
+**_<dfn>Variable resolution</dfn>_** : To resolve the value of a _variable_,
 its _name_ is used to identify either a local variable or an input variable.
 If a _declaration_ exists for the _variable_, its _resolved value_ is used.
 Otherwise, the _variable_ is an implicit reference to an input value,
@@ -279,7 +279,7 @@ consisting of the U+0024 DOLLAR SIGN `$` followed by the _name_ of the _variable
 
 #### Function Resolution
 
-To resolve an _expression_ with a _function_,
+**_<dfn>Function resolution</dfn>_** : To resolve an _expression_ with a _function_,
 the following steps are taken:
 
 1. If the _expression_ includes an _operand_, resolve its value.
