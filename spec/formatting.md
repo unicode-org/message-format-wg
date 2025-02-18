@@ -137,6 +137,10 @@ as well as a flag to indicate whether
 its formatted representation requires isolation
 from the surrounding text.
 
+To allow for _function handlers_ to ensure that certain _option_ values are set by _literals_,
+the _resolved value_ of each _option_ value MUST include information about 
+whether the _option_ value is a _literal_ or a _variable_.
+
 The form that _resolved values_ take is implementation-dependent,
 and different implementations MAY choose to perform different levels of resolution.
 
@@ -153,6 +157,7 @@ and different implementations MAY choose to perform different levels of resoluti
 >   selectKeys(keys: string[]): string[]
 >   directionality(): 'LTR' | 'RTL' | 'unknown'
 >   isolate(): boolean
+>   isLiteralOptionValue(): boolean
 > }
 > ```
 >
@@ -369,7 +374,7 @@ Implementation-defined _functions_ SHOULD use an implementation-defined _namespa
 
 **_<dfn>Option resolution</dfn>_** is the process of computing the _options_
 for a given _expression_. 
-_Option resolution_ results in a mapping of string _identifiers_ to _values_.
+_Option resolution_ results in a mapping of string _identifiers_ to _resolved values_.
 The order of _options_ MUST NOT be significant.
 
 > For example, the following _message_ treats both both placeholders identically:
@@ -386,6 +391,8 @@ For each _option_:
    1. If `rv` is a _fallback value_:
       1. If supported, emit a _Bad Option_ error.
    1. Else:
+      1. If the _option_ value was set by a _literal_:
+         1. Include that information in `rv`.
       1. Set `res[id]` to be `rv`.
 1. Return `res`.
 
