@@ -547,7 +547,7 @@ Some _functions_ can be used both as a _selector_ as well as in a _placeholder_;
 others are only valid in one of these positions.
 _Functions_ also differ in their requirements on the _operand_ and _options_ that they accept.
 See [Function Resolution](./spec/formatting.md#function-resolution)
-and [Default Functions](./spec/functions/README.md) for more information.
+and [Default Functions](./spec/functions/README.md#default-functions) for more information.
 
 A _function_ starts with a prefix sigil `:` followed by an _identifier_.
 The _identifier_ MAY be followed by one or more _options_.
