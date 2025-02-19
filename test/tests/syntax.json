@@ -491,6 +491,36 @@
       "exp": "0E-1"
     },
     {
+      "description": "- as unquoted-literal",
+      "src": "{-}",
+      "exp": "-"
+    },
+    {
+      "description": ". as unquoted-literal",
+      "src": "{·}",
+      "exp": "·"
+    },
+    {
+      "description": "emoji as unquoted-literal",
+      "src": "{🥔}",
+      "exp": "🥔"
+    },
+    {
+      "description": "emoji above U+FFFF as unquoted-literal, ",
+      "src": "{🀄️}",
+      "exp": "🀄️"
+    },
+    {
+      "description": "multi-code-point emoji as unquoted-literal",
+      "src": "{🏳️‍🌈}",
+      "exp": "🏳️‍🌈"
+    },
+    {
+      "description": "various characters as unquoted-literal",
+      "src": "{\u00a1\u061d\u1681\u200b\u2010\u2030\u2060\u206a\u3001\ue000\ufdf0}",
+      "exp": "\u00a1\u061d\u1681\u200b\u2010\u2030\u2060\u206a\u3001\ue000\ufdf0"
+    },
+    {
       "src": "hello { world\t\n}",
       "exp": "hello world"
     },
