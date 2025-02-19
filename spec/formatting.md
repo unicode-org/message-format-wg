@@ -391,7 +391,7 @@ For each _option_:
    1. If `rv` is a _fallback value_:
       1. If supported, emit a _Bad Option_ error.
    1. Else:
-      1. If the _option_ value was set by a _literal_:
+      1. If the _option_ value consists of a _literal_:
          1. Include that information in `rv`.
       1. Set `res[id]` to be `rv`.
 1. Return `res`.
