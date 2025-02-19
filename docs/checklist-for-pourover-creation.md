@@ -11,6 +11,7 @@ Being a compendium of tasks needed to get a clean pour over of the spec.
 - pull message-format-wg
 - pull cldr
 - make a branch on cldr for the pour over (e.g. CLDR-18323-message-format-v47-pour) and check out the branch
+- check that the header (see below) is in place
 - insert the spec parts over the contents of part 9 (tr35-messageFormat.md under docs/ldml)
    - remove subsidiary TOCs (from the README.md files in subdirectory parts and in intro.md)
    - as you go, change all cross-document links to local
@@ -22,6 +23,7 @@ Being a compendium of tasks needed to get a clean pour over of the spec.
    - make a ### section of message.json and insert with json backticks
    - altogether remove the why_mf_next link
 - generate the toc (I used https://bitdowntoc.derlin.ch/) and check for errors
+  the tr-archive tool also generates a TOC, so use that preferably
 
 - git add/git commit/git push
 - use the tools/scripts/tr-archive tools to generate the HTML
@@ -35,3 +37,21 @@ Being a compendium of tasks needed to get a clean pour over of the spec.
 
 
 - Create a release in the message-format-wg repo
+
+
+---
+
+> [!NOTE]
+> Below is the markdown for the header
+
+## Unicode Technical Standard \#35
+
+# Unicode Locale Data Markup Language (LDML)<br/>Part 9: MessageFormat
+
+|Version|47 (draft)              |
+|-------|------------------------|
+|Editors|Addison Phillips and [other CLDR committee members](tr35.md#Acknowledgments)|
+
+For the full header, summary, and status, see [Part 1: Core](tr35.md).
+
+### _Summary_
