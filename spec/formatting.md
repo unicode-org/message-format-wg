@@ -20,7 +20,7 @@ The formatting of a _message_ is defined by the following operations:
   Depending on the implementation, this result could be a single concatenated string,
   an array of objects, an attributed string, or some other locally appropriate data type.
 
-- **_<dfn>Expression Resolution</dfn>_** determines the value of an _expression_ or _markup_,
+- **_<dfn>Expression and Markup Resolution</dfn>_** determines the value of an _expression_ or _markup_,
   with reference to the current _formatting context_.
   This can include multiple steps,
   such as looking up the value of a variable and calling formatting functions.
