@@ -44,6 +44,7 @@ Being a compendium of tasks needed to get a clean pour over of the spec.
 > [!NOTE]
 > Below is the markdown for the header
 
+```
 ## Unicode Technical Standard \#35
 
 # Unicode Locale Data Markup Language (LDML)<br/>Part 9: MessageFormat
@@ -55,3 +56,15 @@ Being a compendium of tasks needed to get a clean pour over of the spec.
 For the full header, summary, and status, see [Part 1: Core](tr35.md).
 
 ### _Summary_
+```
+
+---
+
+> [!NOTE]
+> Below is the markdown for the footer
+
+```
+* * *
+© 2001–2025 Unicode, Inc.
+This publication is protected by copyright, and permission must be obtained from Unicode, Inc.
+```
