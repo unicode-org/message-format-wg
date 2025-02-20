@@ -78,17 +78,8 @@ A reference to a _term_ looks like this.
 
 ### Stability Policy
 
-Updates to this specification will not make any valid _message_ invalid,
-with the exception that such updates can introduce new _default functions_
-or add new _options_ or additional values to the existing _options_ of existing _default functions_.
-
-> [!NOTE]
-> The exception in the above policy would only make an existing valid _message_ invalid
-> if the existing _message_ has used an implementation or user-defined _function_,
-> _option_, or _option_ value that conflicts or whose values conflict with the new
-> _default function_ assignment.
-> Implementers and users are strongly cautioned to namespace all custom _functions_
-> or the addition of _options_ to _default functions_.
+Updates to this specification will not result in a _valid_ _message_ emitting a _Syntax Error_
+or _Data Model Error_.
 
 Updates to this specification will not specify an _error_ for any _message_
 that previously did not specify an _error_.
