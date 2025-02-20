@@ -188,6 +188,9 @@ and different implementations MAY choose to perform different levels of resoluti
 _Expressions_ are used in _declarations_ and _patterns_.
 _Markup_ is only used in _patterns_.
 
+#### Expression Resolution
+
+**_<dfn>Expression resolution</dfn>_** determines the value of an _expression_.
 Depending on the presence or absence of a _variable_ or _literal_ operand and a _function_,
 the _resolved value_ of the _expression_ is determined as follows:
 
@@ -229,9 +232,9 @@ Its _resolved value_ is defined by _literal resolution_.
 > {{You have {42 :number}}}
 > ```
 
-#### Literal Resolution
+##### Literal Resolution
 
-The _resolved value_ of a _text_ or a _literal_ contains
+**_<dfn>Literal resolution</dfn>_** : The _resolved value_ of a _text_ or a _literal_ contains
 the character sequence of the _text_ or _literal_
 after any character escape has been converted to the escaped character.
 
@@ -259,9 +262,9 @@ whether its value was originally a _quoted literal_ or an _unquoted literal_.
 > }
 > ```
 
-#### Variable Resolution
+##### Variable Resolution
 
-To resolve the value of a _variable_,
+**_<dfn>Variable resolution</dfn>_** : To resolve the value of a _variable_,
 its _name_ is used to identify either a local variable or an input variable.
 If a _declaration_ exists for the _variable_, its _resolved value_ is used.
 Otherwise, the _variable_ is an implicit reference to an input value,
@@ -277,9 +280,9 @@ a _fallback value_ is used as the _resolved value_ of the _variable_.
 The _fallback value_ representation of a _variable_ has a string representation
 consisting of the U+0024 DOLLAR SIGN `$` followed by the _name_ of the _variable_.
 
-#### Function Resolution
+##### Function Resolution
 
-To resolve an _expression_ with a _function_,
+**_<dfn>Function resolution</dfn>_** : To resolve an _expression_ with a _function_,
 the following steps are taken:
 
 1. If the _expression_ includes an _operand_, resolve its value.
@@ -338,7 +341,7 @@ the following steps are taken:
   
    In all failure cases, return a _fallback value_ as the _resolved value_ of the _expression_.
 
-##### Function Handler
+###### Function Handler
 
 A **_<dfn>function handler</dfn>_** is an implementation-defined process
 such as a function or method
@@ -370,7 +373,7 @@ and execution time SHOULD be limited.
 
 Implementation-defined _functions_ SHOULD use an implementation-defined _namespace_.
 
-##### Option Resolution
+###### Option Resolution
 
 **_<dfn>Option resolution</dfn>_** is the process of computing the _options_
 for a given _expression_. 
@@ -409,6 +412,7 @@ This mapping can be empty.
 
 #### Markup Resolution
 
+**_<dfn>Markup resolution</dfn>_** determines the value of _markup_.
 Unlike _functions_, the resolution of _markup_ is not customizable.
 
 The _resolved value_ of _markup_ includes the following fields:

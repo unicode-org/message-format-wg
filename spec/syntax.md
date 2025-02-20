@@ -793,7 +793,7 @@ The _names_ are [immutable identifiers](https://www.unicode.org/reports/tr31/#Im
 An **_<dfn>identifier</dfn>_** is a character sequence that
 identifies a _function_, _markup_, or _option_.
 Each _identifier_ consists of a _name_ optionally preceeded by
-a _namespace_. 
+a **_<dfn>namespace</dfn>_**. 
 When present, the _namespace_ is separated from the _name_ by a
 U+003A COLON `:`.
 Built-in _functions_ and their _options_ do not have a _namespace_ identifier.
