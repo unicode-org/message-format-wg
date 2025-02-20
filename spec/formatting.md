@@ -144,7 +144,7 @@ This is to allow _functions handlers_ to require specific _options_ to be set us
 > For example, the _default functions_ `:number` and `:integer` require that the _option_
 > `select` be set with a _literal_ (`plural`, `ordinal`, or `exact`). 
 > Allowing a _variable_ in this _option_ would produce a _message_ that 
-> is difficult to translate because the set of _keys_ is tied to the _selector_ chosen.
+> is impossible to translate because the set of _keys_ is tied to the _selector_ chosen.
 
 > [!NOTE]
 > Such information is irrelevant for _resolved values_ not used as the value of an _option_.
