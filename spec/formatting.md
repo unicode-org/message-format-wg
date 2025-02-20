@@ -140,6 +140,7 @@ from the surrounding text.
 To allow for _function handlers_ to ensure that certain _option_ values are set by _literals_,
 the _resolved value_ of each _option_ value MUST include information about 
 whether the _option_ value is a _literal_ or a _variable_.
+Note that this information is irrelevant for a _resolved value_ that is not used as the value of an _option_.
 
 The form that _resolved values_ take is implementation-dependent,
 and different implementations MAY choose to perform different levels of resolution.
@@ -329,6 +330,7 @@ the following steps are taken:
 
 6. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
+   The value MUST NOT be marked as a literal option value.
 
    If the call fails or does not return a valid value,
    emit the appropriate _Message Function Error_ for the failure.
@@ -395,7 +397,7 @@ For each _option_:
       1. If supported, emit a _Bad Option_ error.
    1. Else:
       1. If the _option_ value consists of a _literal_:
-         1. Include that information in `rv`.
+         1. Mark `rv` as a literal option value.
       1. Set `res[id]` to be `rv`.
 1. Return `res`.
 
