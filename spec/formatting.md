@@ -558,11 +558,6 @@ according to their _key_ values and selecting the first one.
 > > many {{ }}
 > > *    {{Only used by fractions in Polish.}}
 > > ```
->
-> During the Final Candidate review period, feedback from users and implementers is desired about
-> whether to relax the requirement that such a "fallback _variant_" appear in
-> every message, versus the potential for a _message_ to fail at runtime
-> because no matching _variant_ is available.
 
 The number of _keys_ in each _variant_ MUST equal the number of _selectors_.
 
