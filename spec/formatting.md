@@ -434,8 +434,8 @@ The resolution of _markup_ MUST always succeed.
 
 A **_<dfn>fallback value</dfn>_** is the _resolved value_ for
 an _expression_ or _variable_ when that _expression_ or _variable_ fails to resolve.
-It contains a string representation that is used for its formatting,
-and no resolved option values.
+It contains a string representation that is used for its formatting.
+All _options_ are removed.
 
 The _resolved value_ of _text_, _literal_, and _markup_ MUST NOT be a _fallback value_.
 
