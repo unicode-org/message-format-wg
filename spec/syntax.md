@@ -920,7 +920,7 @@ and inside _patterns_ only escape `{` and `}`.
 
 #### Whitespace
 
-Outside of the text parts of _patterns_ and outside of _quoted literals_
+Outside of the _text_ parts of _patterns_ and outside of _quoted literals_
 the syntax limits whitespace characters to the following:
 `U+0009 CHARACTER TABULATION` (tab), 
 `U+000A LINE FEED` (new line),
