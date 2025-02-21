@@ -760,7 +760,6 @@ The **_<dfn>string value</dfn>_** of a _literal_
 for _unquoted literals_ is the text content of that _literal_;
 or for _quoted literals_, the text content of that _literal_ 
 after removing the enclosing `|` characters
-and unescaping any escaped characters
 then unescaping any escaped characters.
 
 #### Names and Identifiers
