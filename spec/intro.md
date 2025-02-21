@@ -110,20 +110,19 @@ defined for _default functions_.
 > differences in implementation or changes to locale data
 > (such as due to the release of new CLDR versions).
 
-Updates to this specification will only reserve, define, or require
-_function_ _identifiers_ and _function_ _option_ _identifiers_
-which satisfy either of the following two requirements:
+**_<dfn>Reserved identifiers</dfn>_** are those that satisfy at least one of the following conditions:
+
 - Includes no _namespace_,
   and has a _name_ consisting of characters in the ranges a-z, A-Z, and 0-9,
   and the characters U+002E FULL STOP `.`, U+002D HYPHEN-MINUS `-`, and U+005F LOW LINE `_`.
 - Uses a _namespace_ consisting of a single character in the ranges a-z and A-Z.
 
-All other _identifiers_ in these categories are reserved for the use of implementations or users.
+Updates to this specification will only reserve, define, or require _reserved identifiers_.
+All _identifiers_ other than _reserved identifiers_ are available for the use of implementations or users.
 
-> [!IMPORTANT]
-> Implementation-defined or user-defined _functions_ and _function_ _options_
-> SHOULD use a _namespace_ as part of their _identifiers_
-> to help avoid collisions with other implementations.
+> [!NOTE]
+> Implementers and users are strongly advised to namespace all _identifiers_ used in custom _functions_,
+> _options_ to _default functions_, _attributes_, and _markup_.
 
 Future versions of this specification will not introduce changes
 to the data model that would result in a data model representation
