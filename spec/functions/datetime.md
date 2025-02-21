@@ -45,12 +45,12 @@ a _Bad Option_ error is emitted
 and a _fallback value_ used as the _resolved value_ of the _expression_.
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
-it can include _style options_, _field options_, or other option values.
+it can include _style options_, _field options_, or other _options_.
 These are included in the resolved option values of the _expression_,
-with _options_ on the _expression_ taking priority over any option values of the _operand_.
+with _options_ on the _expression_ taking priority over any options of the _operand_.
 
 > [!NOTE]
-> The names of _options_ and their _values_ were derived from the
+> The names of _options_ and their _option values_ were derived from the
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/resolvedOptions#description)
 > in JavaScript's `Intl.DateTimeFormat`.
 
@@ -58,7 +58,7 @@ with _options_ on the _expression_ taking priority over any option values of the
 
 **_<dfn>Style options</dfn>_** pertain to the overall styling or appearance of the formatted output.
 
-The function `:datetime` has these _style options_.
+The following _style options_ are REQUIRED to be available on the function `:datetime`:
 
 - `dateStyle`
   - `full`
@@ -80,7 +80,7 @@ and what format to use for that field.
 > _Field options_ do not have default values because they are only to be used
 > to compose the formatter.
 
-The function `:datetime` has the following _field options_:
+The following _field options_ are REQUIRED to be available on the function `:datetime`:
 
 - `weekday`
   - `long`
@@ -149,7 +149,7 @@ All other _operand_ values produce a _Bad Operand_ error.
 
 The function `:date` has these _options_:
 
-- `style`
+- `style` \[REQUIRED\]
   - `full`
   - `long`
   - `medium` (default)
@@ -158,7 +158,7 @@ The function `:date` has these _options_:
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
-Any _operand_ option values matching the `:datetime` _style options_ or _field options_ are ignored,
+Any _operand_ options matching the `:datetime` _style options_ or _field options_ are ignored,
 as is any `style` option.
 
 ##### Resolved Value
@@ -168,7 +168,7 @@ is implementation-defined.
 
 An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate)
 when a _variable_ annotated directly or indirectly by a `:date` _annotation_
-is used as an _operand_ or an _option_ value.
+is used as an _operand_ or an _option value_.
 
 #### The `:time` function
 
@@ -189,7 +189,7 @@ All other _operand_ values produce a _Bad Operand_ error.
 
 The function `:time` has these _options_:
 
-- `style`
+- `style` \[REQUIRED\]
   - `full`
   - `long`
   - `medium`
@@ -198,7 +198,7 @@ The function `:time` has these _options_:
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
-Any _operand_ option values matching the `:datetime` _style options_ or _field options_ are ignored,
+Any _operand_ options matching the `:datetime` _style options_ or _field options_ are ignored,
 as is any `style` option.
 
 ##### Resolved Value
@@ -208,7 +208,7 @@ is implementation-defined.
 
 An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate)
 when a _variable_ annotated directly or indirectly by a `:time` _annotation_
-is used as an _operand_ or an _option_ value.
+is used as an _operand_ or an _option value_.
 
 #### Date and Time Operands
 
@@ -271,20 +271,7 @@ or embedded in an implementation-defined date/time _operand_ value.
 > These _options_ do not have default values because they are only to be used
 > as overrides for locale-and-value dependent implementation-defined defaults.
 
-The following _option_ and its values are REQUIRED to be available on
-the functions `:datetime` and `:time`:
-
-- `hour12`
-  - `true`
-  - `false`
-
-The following _option_ and its values are RECOMMENDED to be available on
-the functions `:datetime`, `:date`, and `:time`.
-
-- `calendar`
-  - valid [Unicode Calendar Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCalendarIdentifier)
-
-The following _option_ and its values are REQUIRED to be available on
+The following _option_ is REQUIRED to be available on
 the functions `:datetime`, `:date`, and `:time`.
 
 - `timeZone`
@@ -300,3 +287,16 @@ the functions `:datetime`, `:date`, and `:time`.
 > into a [floating](https://www.w3.org/TR/timezone/#floating) time value
 > (sometimes called a _plain_ or _local_ time value) by removing
 > the association with a specific time zone.
+
+The following _option_ is REQUIRED to be available on
+the functions `:datetime` and `:time`:
+
+- `hour12`
+  - `true`
+  - `false`
+
+The following _option_ is RECOMMENDED to be available on
+the functions `:datetime`, `:date`, and `:time`.
+
+- `calendar`
+  - valid [Unicode Calendar Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCalendarIdentifier)

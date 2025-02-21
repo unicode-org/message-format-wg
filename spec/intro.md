@@ -91,7 +91,7 @@ of any syntax defined in this specification.
 
 Updates to this specification will not remove any _default functions_.
 
-Updates to this specification will not remove any _options_ or _option_ values
+Updates to this specification will not remove any _options_ or _option values_
 defined for _default functions_.
 
 > [!IMPORTANT]
@@ -99,7 +99,7 @@ defined for _default functions_.
 > the provisions of this stability policy.
 >
 > _Functions_ or _options_ marked as **Draft** are not stable.
-> Their name, _operands_, and _options_/_values_, and other requirements
+> Their name, _operands_, and _options_/_option values_, and other requirements
 > might change or be removed before being declared **Stable** in a future release.
 
 > [!NOTE]
@@ -142,8 +142,8 @@ based on this version being invalid.
 > - Future versions may define additional _default functions_.
 >   or may reserve the names of _functions_ for the purposes of interoperability.
 > - Future versions may define additional _options_ to existing functions.
-> - Future versions may define additional _option_ values for existing _options_.
-> - Future versions may deprecate (but not remove) _keywords_, _functions_, _options_, or _option_ values.
+> - Future versions may define additional _option values_ for existing _options_.
+> - Future versions may deprecate (but not remove) _keywords_, _functions_, _options_, or _option values_.
 > - Future versions of this specification may introduce changes
 >   to the data model that would result in future data model representations
 >   not being valid for implementations of this version of the data model.

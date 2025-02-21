@@ -34,11 +34,11 @@ or any other structured formatted results.
 
 Ignored when formatting a message to a string.
 
-The value of the `u:id` _option_ MUST be a _literal_ or a
+The `u:id` _option value_ MUST be a _literal_ or a
 _variable_ whose _resolved value_ is either a string
 or can be resolved to a string without error.
 For other values, a _Bad Option_ error is emitted
-and the `u:id` option is ignored.
+and the `u:id` _option_ and its _option value_ are ignored.
 
 #### `u:locale`
 
@@ -56,7 +56,7 @@ language tags,
 or an implementation-defined list of such tags.
 
 If this _option_ is set on _markup_, a _Bad Option_ error is emitted
-and the value of the `u:locale` _option_ is ignored.
+and the `u:locale` _option_ and its _option value_ are ignored.
 
 During processing, the `u:locale` _option_
 MUST be removed from the resolved mapping of _options_
@@ -76,7 +76,7 @@ When the value of `u:locale` is set by a _variable_,
 implementations MAY support non-string values otherwise representing locales.
 
 Implementations MAY emit a _Bad Option_ error
-and MAY ignore the value of the `u:locale` _option_ as a whole
+and MAY ignore the `u:locale` _option_ and _option value_ as a whole
 or any of the entries in the list of language tags.
 This might be because the locale specified is not supported
 or because the language tag is not well-formed,
@@ -90,16 +90,16 @@ Replaces the base directionality defined in
 the _function context_ for this _expression_
 and applies bidirectional isolation to it.
 
-If this option is set on _markup_, a _Bad Option_ error is emitted
-and the value of the `u:dir` option is ignored.
+If this _option_ is set on _markup_, a _Bad Option_ error is emitted
+and the `u:dir` _option_ and its _option value_ are ignored.
 
-During processing, the `u:dir` option
+During processing, the `u:dir` _option_
 MUST be removed from the resolved mapping of _options_
 before calling the _function handler_.
 Its value is retained in the _resolved value_ of the _expression_.
 
-The value of the `u:dir` _option_ MUST be one of the following _literal_ values
-or a _variable_ whose _resolved value_ is one of these _literals_:
+The `u:dir` _option value_ MUST be one of the following _literal_ values
+or a _variable_ whose _resolved value_ is one of the following strings:
 - `ltr`: left-to-right directionality
 - `rtl`: right-to-left directionality
 - `auto`: directionality determined from _expression_ contents
@@ -108,4 +108,4 @@ or a _variable_ whose _resolved value_ is one of these _literals_:
    requiring isolation of the _expression_ value.
 
 For other values, a _Bad Option_ error is emitted
-and the value of the `u:dir` option is ignored.
+and the `u:dir` _option_ and its _option value_ are ignored.
