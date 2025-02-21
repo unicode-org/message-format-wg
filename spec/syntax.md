@@ -898,7 +898,7 @@ A **_<dfn>custom identifier</dfn>_** is any _identifier_ that is not a _reserved
 > or when defining a custom _option_ for a _default function_.
 > Choose a _custom identifier_ for any _functions_, _markup_, or _attributes_ not defined by this specification.
 >
-> _Operand_ (variable) _names_ and _option_ _names_ for custom _functions_ are encouraged to use _reserved identifiers_.
+> _Variable_ _names_ and _option_ _names_ for custom _functions_ are encouraged to use _reserved identifiers_.
 
 The syntax allows a wide range of characters in _names_ and _identifiers_.
 Implementers and authors of _functions_ and _messages_,
