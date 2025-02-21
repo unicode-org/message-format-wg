@@ -894,11 +894,12 @@ reserved-identifier = ALPHA *[ALPHA / DIGIT / "." / "-" / "_"]
 A **_<dfn>custom identifier</dfn>_** is any _identifier_ that is not a _reserved identifier_.
 
 > [!NOTE]
-> Always use a _namespace_ to identify a _function_ that is not a _default function_
-> or when defining a custom _option_ for a _default function_.
 > Choose a _custom identifier_ for any _functions_, _markup_, or _attributes_ not defined by this specification.
+> Use a _namespace_ in a _custom identifier_ to identify a _function_ that is not a _default function_
+> or when defining a custom _option_ for a _default function_.
 >
-> _Variable_ _names_ and _option_ _names_ for custom _functions_ are encouraged to use _reserved identifiers_.
+> _Variable_ _names_ are encouraged to use _reserved identifiers_.
+> _Option_ _names_ for custom _functions_ are encouraged to use _reserved identifiers_.
 
 The syntax allows a wide range of characters in _names_ and _identifiers_.
 Implementers and authors of _functions_ and _messages_,
