@@ -113,11 +113,6 @@ defined for _default functions_.
 Updates to this specification will only reserve, define, or require
 _identifiers_ which are _reserved identifiers_.
 
-> [!NOTE]
-> _Custom identifiers_ are available for the use of implementations or users.
-> In addition, the use of a _namespace_ as part of _custom identifiers_
-> is recommended to help avoid collisions with other implementations.
-
 Future versions of this specification will not introduce changes
 to the data model that would result in a data model representation
 based on this version being invalid.
