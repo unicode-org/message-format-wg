@@ -928,7 +928,7 @@ the syntax limits whitespace characters to the following:
 `U+3000 IDEOGRAPHIC SPACE`, 
 or `U+0020 SPACE`.
 
-Inside of the text parts of _patterns_ and inside of _quoted literals_,
+In the _text_ parts of _patterns_ and in _quoted literals_,
 whitespace is part of the content and is recorded and stored verbatim.
 Whitespace is not significant outside translatable text, except where required by the syntax.
 
