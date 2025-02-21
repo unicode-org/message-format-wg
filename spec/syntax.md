@@ -889,11 +889,29 @@ name-char  = name-start / DIGIT / "-" / "."
 > * Surrogate code points (`GC=Cs`)
 > * Non-Characters (`NChar`)
 
-This syntax allows a wide range of characters in _names_ and _identifiers_.
+A **_<dfn>reserved identifier</dfn>_** is one that satisfies the following conditions:
+- Includes no _namespace_ or uses a _namespace_ consisting of a single letter
+  in the ranges a-z and A-Z.
+- Has a _name_ that matches the following ABNF:
+```abnf
+reserved-identifier = ALPHA *[ALPHA / DIGIT / "." / "-" / "_"]
+```
+
+A **_<dfn>custom identifier</dfn>_** is any _identifier_ that is not a _reserved identifier_.
+
+> [!NOTE]
+> Choose a _custom identifier_ for any _functions_, _markup_, or _attributes_ not defined by this specification.
+> Use a _namespace_ in a _custom identifier_ to identify a _function_ that is not a _default function_
+> or when defining a custom _option_ for a _default function_.
+>
+> _Variable_ _names_ are encouraged to use _reserved identifiers_.
+> _Option_ _names_ for custom _functions_ are encouraged to use _reserved identifiers_.
+
+The syntax allows a wide range of characters in _names_ and _identifiers_.
 Implementers and authors of _functions_ and _messages_,
-including _functions_, _options_, and _operands_ (variable names),
+including _functions_, _options_, and _variables_,
 SHOULD avoid creating _names_ that could produce confusion or harm usability
-by choosing names consistent with the following guidelines.
+by choosing _names_ consistent with the following guidelines.
 MessageFormat tools, such as linters, SHOULD warn when _names_ chosen by users
 violate these constraints.
 >
