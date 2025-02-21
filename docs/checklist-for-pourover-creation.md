@@ -22,19 +22,23 @@ Being a compendium of tasks needed to get a clean pour over of the spec.
    - make a ## section for the message.abnf and insert with abnf backticks
    - make a ### section of message.json and insert with json backticks
    - altogether remove the why_mf_next link
-- generate the toc (I used https://bitdowntoc.derlin.ch/) and check for errors
-  the tr-archive tool also generates a TOC, so use that preferably
+- check the toc. The tool does a good job, but you might need to make `messageabnf` and `messagejson`
+  into `message-abnf` and `message-json` respectively. If you need to generate a TOC
+  try https://bitdowntoc.derlin.ch/
+  but the tr-archive tool generates a TOC under dist, so use that preferably
 
-- git add/git commit/git push
+- use `base make-tr-archive.sh` to generate
+
 - use the tools/scripts/tr-archive tools to generate the HTML
   instructions in that location in the CLDR repo
-  use `npm run serve` to view the HTML output locally
+
+- use `npm run serve` to view the HTML output locally
+
+- git add/git commit/git push
 
 > [!IMPORTANT]
 > Be sure to make all commits in the CLDR style:
 > `CLDR-jiranum <SPACE> description`
-
-
 
 - Create a release in the message-format-wg repo
 
