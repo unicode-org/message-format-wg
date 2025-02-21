@@ -920,14 +920,15 @@ and inside _patterns_ only escape `{` and `}`.
 
 #### Whitespace
 
-The syntax limits whitespace characters outside of a _pattern_ to the following:
+Outside of the _text_ parts of _patterns_ and outside of _quoted literals_
+the syntax limits whitespace characters to the following:
 `U+0009 CHARACTER TABULATION` (tab), 
 `U+000A LINE FEED` (new line),
 `U+000D CARRIAGE RETURN`, 
 `U+3000 IDEOGRAPHIC SPACE`, 
 or `U+0020 SPACE`.
 
-Inside _patterns_ and _quoted literals_,
+In the _text_ parts of _patterns_ and in _quoted literals_,
 whitespace is part of the content and is recorded and stored verbatim.
 Whitespace is not significant outside translatable text, except where required by the syntax.
 
