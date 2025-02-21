@@ -111,12 +111,7 @@ defined for _default functions_.
 > (such as due to the release of new CLDR versions).
 
 Updates to this specification will only reserve, define, or require
-_function_ _identifiers_ and _function_ _option_ _identifiers_
-which satisfy either of the following two requirements:
-- Includes no _namespace_,
-  and has a _name_ consisting of characters in the ranges a-z, A-Z, and 0-9,
-  and the characters U+002E FULL STOP `.`, U+002D HYPHEN-MINUS `-`, and U+005F LOW LINE `_`.
-- Uses a _namespace_ consisting of a single character in the ranges a-z and A-Z.
+_identifiers_ which are _reserved identifiers_.
 
 All other _identifiers_ in these categories are reserved for the use of implementations or users.
 
