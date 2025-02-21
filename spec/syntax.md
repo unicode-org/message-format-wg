@@ -369,7 +369,7 @@ otherwise, a corresponding _Data Model Error_ will be produced during processing
 - _Duplicate Variant_:
   Each _variant_ MUST use a list of _keys_ that is unique from that
   of all other _variants_ in the _message_.
-  _Literal_ _keys_ are compared by their values, not their syntactical appearance.
+  _Literal_ _keys_ are compared by their _string values_, not their syntactical appearance.
 
 ```abnf
 matcher         = match-statement s variant *(o variant)
@@ -470,7 +470,7 @@ that matches all values for a given _selector_.
 
 The value of each _literal_ _key_ MUST be treated as if it were in
 [Unicode Normalization Form C](https://unicode.org/reports/tr15/) ("NFC").
-Two _literal_ _keys_ are considered equal if their values are canonically equivalent strings,
+Two _literal_ _keys_ are considered equal if their _string values_ are canonically equivalent strings,
 that is, if they consist of the same sequence of Unicode code points after
 Unicode Normalization Form C has been applied to both.
 
@@ -742,7 +742,7 @@ escaped as `\\` and `\|`.
 
 An **_<dfn>unquoted literal</dfn>_** is a _literal_ that does not require the `|`
 quotes around it to be distinct from the rest of the _message_ syntax.
-An _unquoted literal_ MAY be used when the value of the _literal_
+An _unquoted literal_ MAY be used when the _string value_ of the _literal_
 matches the `unquoted-literal` production.
 It will thus contain no whitespace (nor certain other characters).
 Implementations MUST NOT distinguish between _quoted literals_ and _unquoted literals_
@@ -756,7 +756,11 @@ literal          = quoted-literal / unquoted-literal
 quoted-literal   = "|" *(quoted-char / escaped-char) "|"
 unquoted-literal = 1*name-char
 ```
-The **_<dfn>value of a literal</dfn>_** is the text after removing the terminating | characters if the literal is quoted,
+The **_<dfn>string value</dfn>_** of a _literal_ 
+for _unquoted literals_ is the text content of that _literal_;
+or for _quoted literals_, the text content of that _literal_ 
+after removing the enclosing `|` characters
+and unescaping any escaped characters
 then unescaping any escaped characters.
 
 #### Names and Identifiers
