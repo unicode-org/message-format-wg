@@ -78,8 +78,7 @@ A reference to a _term_ looks like this.
 
 ### Stability Policy
 
-Updates to this specification will not result in a _valid_ _message_ emitting a _Syntax Error_
-or _Data Model Error_.
+Updates to this specification will not make any _valid_ _message_ become not _valid_.
 
 Updates to this specification will not specify an _error_ for any _message_
 that previously did not specify an _error_.
