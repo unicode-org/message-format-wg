@@ -886,16 +886,19 @@ name-char  = name-start / DIGIT / "-" / "."
 A **_<dfn>reserved identifier</dfn>_** is one that satisfies the following conditions:
 - Includes no _namespace_ or uses a _namespace_ consisting of a single letter
   in the ranges a-z and A-Z.
-- Has a _name_ consisting only of characters in the ranges a-z, A-Z, and 0-9,
-  and the characters U+002E FULL STOP `.`, U+002D HYPHEN-MINUS `-`, and U+005F LOW LINE `_`.
+- Has a _name_ that matches the following ABNF:
+```abnf
+reserved-identifier = ALPHA *[ALPHA / DIGIT / "." / "-" / "_"]
+```
 
 A **_<dfn>custom identifier</dfn>_** is any _identifier_ that is not a _reserved identifier_.
 
-Always use a _namespace_ to identify a _function_ that is not a _default function_
-or when defining a custom _option_ for a _default function_.
-Choose a _custom identifier_ for any _functions_, _markup_, or _attributes_ not defined by this specification.
-
-_Operand_ (variable) _names_ and _option_ _names_ for custom _functions_ are encouraged to use _reserved identifiers_.
+> [!NOTE]
+> Always use a _namespace_ to identify a _function_ that is not a _default function_
+> or when defining a custom _option_ for a _default function_.
+> Choose a _custom identifier_ for any _functions_, _markup_, or _attributes_ not defined by this specification.
+>
+> _Operand_ (variable) _names_ and _option_ _names_ for custom _functions_ are encouraged to use _reserved identifiers_.
 
 The syntax allows a wide range of characters in _names_ and _identifiers_.
 Implementers and authors of _functions_ and _messages_,
