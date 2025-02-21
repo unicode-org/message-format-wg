@@ -883,11 +883,20 @@ name-char  = name-start / DIGIT / "-" / "."
 > * Surrogate code points (`GC=Cs`)
 > * Non-Characters (`NChar`)
 
+A **_<dfn>reserved identifier</dfn>_** is one that satisfies the following conditions:
+- Includes no _namespace_ or uses a _namespace_ consisting of a single letter
+  in the ranges a-z and A-Z.
+- Has a _name_ consisting only of characters in the ranges a-z, A-Z, and 0-9,
+  and the characters U+002E FULL STOP `.`, U+002D HYPHEN-MINUS `-`, and U+005F LOW LINE `_`.
+
+A **_<dfn>custom identifier</dfn>_** is any _identifier_ that is not a _reserved identifier_.
+
 This syntax allows a wide range of characters in _names_ and _identifiers_.
 Implementers and authors of _functions_ and _messages_,
-including _functions_, _options_, and _operands_ (variable names),
+including _functions_, _options_, and _operands_ (variable names) 
+SHOULD choose _custom identifiers_ when selecting _names_ and
 SHOULD avoid creating _names_ that could produce confusion or harm usability
-by choosing names consistent with the following guidelines.
+by choosing _names_ consistent with the following guidelines.
 MessageFormat tools, such as linters, SHOULD warn when _names_ chosen by users
 violate these constraints.
 >
