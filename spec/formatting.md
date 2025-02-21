@@ -137,17 +137,12 @@ as well as a flag to indicate whether
 its formatted representation requires isolation
 from the surrounding text.
 
-For each _option_ value, the _resolved value_ MUST indicate if the value
+For each _option value_, the _resolved value_ MUST indicate if the value
 was directly set with a _literal_, as opposed to being resolved from a _variable_.
 This is to allow _functions handlers_ to require specific _options_ to be set using _literals_.
 
 > For example, the _default functions_ `:number` and `:integer` require that the _option_
-> `select` be set with a _literal_ (`plural`, `ordinal`, or `exact`). 
-> Allowing a _variable_ in this _option_ would produce a _message_ that 
-> is impossible to translate because the set of _keys_ is tied to the _selector_ chosen.
-
-> [!NOTE]
-> Such information is irrelevant for _resolved values_ not used as the value of an _option_.
+> `select` be set with a _literal_ _option value_ (`plural`, `ordinal`, or `exact`). 
 
 The form that _resolved values_ take is implementation-dependent,
 and different implementations MAY choose to perform different levels of resolution.
@@ -177,7 +172,7 @@ and different implementations MAY choose to perform different levels of resoluti
 >   calling the `selectKeys(keys)` method of its _resolved value_
 >   did not emit an error.
 > - Using a _variable_, the _resolved value_ of an _expression_
->   could be used as an _operand_ or _option_ value if
+>   could be used as an _operand_ or _option value_ if
 >   calling the `getValue()` method of its _resolved value_ did not emit an error.
 >   In this use case, the `resolvedOptions()` method could also
 >   provide a set of option values that could be taken into account by the called function.
@@ -246,8 +241,7 @@ Its _resolved value_ is defined by _literal resolution_.
 the character sequence of the _text_ or _literal_
 after any character escape has been converted to the escaped character.
 
-When a _literal_ is used as an _operand_
-or on the right-hand side of an _option_,
+When a _literal_ is used as an _operand_ or as an _option value_,
 the formatting function MUST treat its _resolved value_ the same
 whether its value was originally a _quoted literal_ or an _unquoted literal_.
 
@@ -329,7 +323,7 @@ the following steps are taken:
    - The resolved mapping of _options_.
    - If the _expression_ includes an _operand_, its _resolved value_.
 
-   The form that resolved _operand_ and _option_ values take is implementation-defined.
+   The form that resolved _operand_ and _option values_ take is implementation-defined.
 
    An implementation MAY pass additional arguments to the _function handler_,
    as long as reasonable precautions are taken to keep the function interface
@@ -337,7 +331,7 @@ the following steps are taken:
 
 6. If the call succeeds,
    resolve the value of the _expression_ as the result of that function call.
-   The value MUST NOT be marked as a literal option value.
+   The value MUST NOT be marked as a _literal_ _option value_.
 
    If the call fails or does not return a valid value,
    emit the appropriate _Message Function Error_ for the failure.
@@ -363,7 +357,7 @@ An implementation MAY allow custom functions to be defined by users.
 Implementations that provide a means for defining custom functions
 MUST provide a means for _function handlers_
 to return _resolved values_ that contain enough information
-to be used as _operands_ or _option_ values in subsequent _expressions_.
+to be used as _operands_ or _option values_ in subsequent _expressions_.
 
 The _resolved value_ returned by a _function handler_
 MAY be different from the value of the _operand_ of the _function_.
@@ -399,12 +393,12 @@ For each _option_:
 1. Let `res` be a new empty mapping.
 1. For each _option_:
    1. Let `id` be the string value of the _identifier_ of the _option_.
-   1. Let `rv` be the _resolved value_ of the _option_ value.
+   1. Let `rv` be the _resolved value_ of the _option value_.
    1. If `rv` is a _fallback value_:
       1. If supported, emit a _Bad Option_ error.
    1. Else:
-      1. If the _option_ value consists of a _literal_:
-         1. Mark `rv` as a literal option value.
+      1. If the _option value_ consists of a _literal_:
+         1. Mark `rv` as a _literal_ _option value_.
       1. Set `res[id]` to be `rv`.
 1. Return `res`.
 
@@ -428,7 +422,7 @@ The _resolved value_ of _markup_ includes the following fields:
 
 - The type of the markup: open, standalone, or close
 - The _identifier_ of the _markup_
-- The resolved _options_ values after _option resolution_.
+- The resolved mapping of _options_ after _option resolution_.
 
 If the resolved mapping of _options_ includes any _`u:` options_
 supported by the implementation, process them as specified.
@@ -441,7 +435,7 @@ The resolution of _markup_ MUST always succeed.
 A **_<dfn>fallback value</dfn>_** is the _resolved value_ for
 an _expression_ or _variable_ when that _expression_ or _variable_ fails to resolve.
 It contains a string representation that is used for its formatting,
-and no option values.
+and no resolved option values.
 
 The _resolved value_ of _text_, _literal_, and _markup_ MUST NOT be a _fallback value_.
 
@@ -453,7 +447,7 @@ An _expression_ fails to resolve when:
 
 - A _variable_ used as its _operand_ resolves to a _fallback value_.
   Note that an _expression_ does not necessarily fail to resolve
-  if an _option_ resolves with a _fallback value_.
+  if an _option value_ resolves with a _fallback value_.
 - No _function handler_ is found for a _function_ _identifier_.
 - Calling a _function handler_ fails or does not return a valid value.
 

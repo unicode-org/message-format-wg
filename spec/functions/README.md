@@ -25,11 +25,11 @@ emit an _Unknown Function_ error for that _function_'s _identifier_.
 To _accept_ an _option_ means that a _function handler_ MUST NOT
 emit a _Bad Option_ error for that _option_'s _identifier_ when used with the _function_
 it is defined for
-and MUST NOT emit a _Bad Option_ error for any of the _option_ values
+and MUST NOT emit a _Bad Option_ error for any of the _option values_
 defined for that _option_.
 Accepting a _function_ or its _options_ does not mean that a particular output is produced.
 Implementations MAY emit an _Unsupported Operation_ error for _options_
-or _option_ values that they cannot support.
+or _option values_ that they cannot support.
 
 _Functions_ can define _options_. 
 An _option_ can be REQUIRED or RECOMMENDED.
@@ -54,11 +54,11 @@ by any version of this specification for _default functions_.
 Such _options_ MUST use an implementation-specific _namespace_.
 
 Implementations MAY _accept_, for _options_ defined in this specification,
-_option_ values which are not defined in this specification.
+_option values_ which are not defined in this specification.
 However, such values might become defined with a different meaning in the future,
 including with a different, incompatible name
 or using an incompatible value space.
-Supporting implementation-specific _option_ values for _default functions_ is NOT RECOMMENDED.
+Supporting implementation-specific _option values_ for _default functions_ is NOT RECOMMENDED.
 
 Implementations MAY _accept_, for _operands_ or _options_ defined in this specification,
 values with implementation-defined types.
@@ -71,11 +71,11 @@ Such values can be useful to users in cases where local usage and support exists
 > - A Java implementation might _accept_ a `java.time.chrono.Chronology` object
 >   as a value for the _date/time override option_ `calendar`
 
-Future versions of this specification MAY define additional _options_ and _option_ values,
+Future versions of this specification MAY define additional _options_ and _option values_,
 subject to the rules in the [Stability Policy](#stability-policy),
 for _functions_ found in this specification.
 As implementations are permitted to ignore _options_ that they do not support,
-it is possible to write _messages_ using _options_ not defined below
+it is possible to write _messages_ using _options_ not defined here
 which currently format with no error, but which could produce errors
 when formatted with a later edition of this specification.
 Therefore, using _options_ not explicitly defined here is NOT RECOMMENDED.

@@ -16,11 +16,11 @@ In general, the default values for such options depend on the locale,
 the value of other options, or both.
 
 > [!NOTE]
-> The names of _options_ and their _values_ were derived from the
+> The names of _options_ and their _option values_ were derived from the
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
 > in JavaScript's `Intl.NumberFormat`.
 
-The following options and their values are REQUIRED to be available on the function `:number`:
+The following _options_ are REQUIRED to be available on the function `:number`:
 
 - `select` (see [Number Selection](#number-selection) below)
   - `plural` (default)
@@ -38,15 +38,15 @@ The following options and their values are REQUIRED to be available on the funct
   - `never`
   - `min2`
 - `minimumIntegerDigits`
-  - ([digit size option](#digit-size-options), default: `1`)
+  - _digit size option_, default: `1`
 - `minimumFractionDigits`
-  - ([digit size option](#digit-size-options))
+  - _digit size option_
 - `maximumFractionDigits`
-  - ([digit size option](#digit-size-options))
+  - _digit size option_
 - `minimumSignificantDigits`
-  - ([digit size option](#digit-size-options))
+  - _digit size option_
 - `maximumSignificantDigits`
-  - ([digit size option](#digit-size-options))
+  - _digit size option_
 - `trailingZeroDisplay`
   - `auto` (default)
   - `stripIfInteger`
@@ -71,7 +71,7 @@ If the _operand_ of the _expression_ is an implementation-defined type,
 such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
 it can include option values.
 These are included in the resolved option values of the _expression_,
-with _options_ on the _expression_ taking priority over any option values of the _operand_.
+with _options_ on the _expression_ taking priority over any options of the _operand_.
 
 > For example, the _placeholder_ in this _message_:
 >
@@ -111,11 +111,11 @@ In general, the default values for such options depend on the locale,
 the value of other options, or both.
 
 > [!NOTE]
-> The names of _options_ and their _values_ were derived from the
+> The names of _options_ and their _option values_ were derived from the
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
 > in JavaScript's `Intl.NumberFormat`.
 
-The following options and their values are REQUIRED to be available on the function `:integer`:
+The following _options_ are REQUIRED to be available on the function `:integer`:
 
 - `select` (see [Number Selection](#number-selection) below)
   - `plural` (default)
@@ -133,16 +133,16 @@ The following options and their values are REQUIRED to be available on the funct
   - `never`
   - `min2`
 - `minimumIntegerDigits`
-  - ([digit size option](#digit-size-options), default: `1`)
+  - _digit size option_, default: `1`
 - `maximumSignificantDigits`
-  - ([digit size option](#digit-size-options))
+  - _digit size option_
 
 If the _operand_ of the _expression_ is an implementation-defined type,
 such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
 it can include option values.
 In general, these are included in the resolved option values of the _expression_,
-with _options_ on the _expression_ taking priority over any option values of the _operand_.
-Option values with the following names are however discarded if included in the _operand_:
+with _options_ on the _expression_ taking priority over any options of the _operand_.
+Options with the following names are however discarded if included in the _operand_:
 
 - `minimumFractionDigits`
 - `maximumFractionDigits`
@@ -188,19 +188,19 @@ The function `:math` requires a [Number Operand](#number-operands) as its _opera
 
 ##### Options
 
-The options on `:math` are exclusive with each other,
-and exactly one option is always required.
-The options do not have default values.
+The _options_ on `:math` are exclusive with each other,
+and exactly one _option_ is always required.
+The _options_ do not have default values.
 
-The following options and their values are REQUIRED to be available on the function `:math`:
+The following _options_ are REQUIRED to be available on the function `:math`:
 
 - `add`
-  - ([digit size option](#digit-size-options))
+  - _digit size option_
 - `subtract`
-  - ([digit size option](#digit-size-options))
+  - _digit size option_
 
-If no options or more than one option is set,
-or if an _option_ value is not a [digit size option](#digit-size-options),
+If no _options_ or more than one _option_ is set,
+or if an _option value_ is not a _digit size option_,
 a _Bad Option_ error is emitted
 and a _fallback value_ used as the _resolved value_ of the _expression_.
 
@@ -210,13 +210,13 @@ The _resolved value_ of an _expression_ with a `:math` _function_
 contains the implementation-defined numeric value
 of the _operand_ of the annotated _expression_.
 
-If the `add` option is set,
+If the `add` _option_ is set,
 the numeric value of the _resolved value_ is formed by incrementing
-the numeric value of the _operand_ by the integer value of the digit size option value.
+the numeric value of the _operand_ by the integer value of the _digit size option_.
 
-If the `subtract` option is set,
+If the `subtract` _option_ is set,
 the numeric value of the _resolved value_ is formed by decrementing
-the numeric value of the _operand_ by the integer value of the digit size option value.
+the numeric value of the _operand_ by the integer value of the _digit size option_.
 
 If the _operand_ of the _expression_ is an implementation-defined numeric type,
 such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
@@ -249,10 +249,10 @@ which are a specialized form of numeric formatting.
 The _operand_ of the `:currency` function can be one of any number of
 implementation-defined types,
 each of which contains a numerical `value` and a `currency`;
-or it can be a [Number Operand](#number-operands), as long as the option
+or it can be a [Number Operand](#number-operands), as long as the _option_
 `currency` is provided.
-The option `currency` MUST NOT be used to override the currency of an implementation-defined type.
-Using this option in such a case results in a _Bad Option_ error.
+The _option_ `currency` MUST NOT be used to override the currency of an implementation-defined type.
+Using this _option_ in such a case results in a _Bad Option_ error.
 
 The value of the _operand_'s `currency` MUST be either a string containing a
 well-formed [Unicode Currency Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCurrencyIdentifier)
@@ -309,7 +309,7 @@ Setting some other number of `fractionDigits` allows greater precision display
 (such as when performing currency conversions or other specialized operations)
 or disabling fraction digits if set to `0`.
 
-The _option_ `trailingZeroDisplay` has a value `stripIfInteger` that is useful
+The _option_ `trailingZeroDisplay` has an _option value_ `stripIfInteger` that is useful
 for displaying currencies with their fraction digits removed when the fraction
 part of the _operand_ is zero.
 This is sometimes used in _messages_ to make the displayed value omit the fraction part
@@ -333,16 +333,16 @@ automatically.
 > The special price is $5.01.
 > ```
 
-Implementations MAY internally alias option values that they do not have data or a backing implementation for.
+Implementations MAY internally alias _option values_ that they do not have data or a backing implementation for.
 Notably, the `currencyDisplay` option has a rich set of values that mirrors developments in CLDR data.
 Some implementations might not be able to produce all of these formats for every currency.
 
 > [!NOTE]
-> Except where noted otherwise, the names of _options_ and their _values_ were derived from the
+> Except where noted otherwise, the names of _options_ and their _option values_ were derived from the
 > [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
 > in JavaScript's `Intl.NumberFormat`.
 
-The following options and their values are REQUIRED to be available on the function `:currency`:
+The following _options_ are REQUIRED to be available on the function `:currency`:
 
 - `currency`
   - well-formed [Unicode Currency Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCurrencyIdentifier)
@@ -362,14 +362,14 @@ The following options and their values are REQUIRED to be available on the funct
   - `never`
   - `min2`
 - `minimumIntegerDigits`
-  - ([digit size option](#digit-size-options), default: `1`)
+  - _digit size option_, default: `1`
 - `fractionDigits` (unlike number/integer formats, the fraction digits for currency formatting are fixed)
   - `auto` (default) (the number of digits used by the currency)
-  - ([digit size option](#digit-size-options))
+  - _digit size option_
 - `minimumSignificantDigits`
-  - ([digit size option](#digit-size-options))
+  - _digit size option_
 - `maximumSignificantDigits`
-  - ([digit size option](#digit-size-options))
+  - _digit size option_
 - `trailingZeroDisplay`
   - `auto` (default)
   - `stripIfInteger`
@@ -394,7 +394,7 @@ If the _operand_ of the _expression_ is an implementation-defined type,
 such as the _resolved value_ of an _expression_ with a `:currency` _annotation_,
 it can include option values.
 These are included in the resolved option values of the _expression_,
-with _options_ on the _expression_ taking priority over any option values of the _operand_.
+with _options_ on the _expression_ taking priority over any options of the _operand_.
 
 > For example, the _placeholder_ in this _message_:
 >
@@ -465,7 +465,7 @@ In general, the default values for such _options_ depend on the locale,
 the unit,
 the value of other _options_, or all of these.
 
-The following options and their values are REQUIRED to be available on the function `:unit`,
+The following _options_ are REQUIRED to be available on the function `:unit`,
 unless otherwise indicated:
 
 - `unit`
@@ -490,15 +490,15 @@ unless otherwise indicated:
   - `never`
   - `min2`
 - `minimumIntegerDigits`
-  - ([digit size option](#digit-size-options), default: `1`)
+  - _digit size option_, default: `1`
 - `minimumFractionDigits`
-  - ([digit size option](#digit-size-options))
+  - _digit size option_
 - `maximumFractionDigits`
-  - ([digit size option](#digit-size-options))
+  - _digit size option_
 - `minimumSignificantDigits`
-  - ([digit size option](#digit-size-options))
+  - _digit size option_
 - `maximumSignificantDigits`
-  - ([digit size option](#digit-size-options))
+  - _digit size option_
 - `roundingPriority`
   - `auto` (default)
   - `morePrecision`
@@ -518,9 +518,9 @@ unless otherwise indicated:
 
 If the _operand_ of the _expression_ is an implementation-defined type,
 such as the _resolved value_ of an _expression_ with a `:unit` _annotation_,
-it can include _option_ values.
-These are included in the resolved _option_ values of the _expression_,
-with _options_ on the _expression_ taking priority over any _option_ values of the _operand_.
+it can include option values.
+These are included in the resolved option values of the _expression_,
+with _options_ on the _expression_ taking priority over any options of the _operand_.
 
 > For example, the _placeholder_ in this _message_:
 >
@@ -537,13 +537,13 @@ with _options_ on the _expression_ taking priority over any _option_ values of t
 The _resolved value_ of an _expression_ with a `:unit` _function_
 consist of an implementation-defined unit value
 of the _operand_ of the annotated _expression_,
-together with the resolved _options_ and their resolved values.
+together with the resolved options and their resolved values.
 
 ##### Unit Conversion
 
 Implementations MAY support conversion to the locale's preferred units via the `usage` _option_.
 Implementing this _option_ is optional.
-Not all `usage` values are compatible with a given unit.
+Not all `usage` _option values_ are compatible with a given unit.
 Implementations SHOULD emit an _Unsupported Operation_ error if the requested conversion is not supported.
 
 > For example, trying to convert a `length` unit (such as "meters")
@@ -573,7 +573,7 @@ Implementations MUST NOT substitute the unit without performing the associated c
 #### Number Operands
 
 The _operand_ of a number function is either an implementation-defined type or
-a literal whose contents match the following `number-literal` production.
+a _literal_ whose contents match the following `number-literal` production.
 All other values produce a _Bad Operand_ error.
 
 ```abnf
@@ -610,34 +610,35 @@ number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"
 
 #### Digit Size Options
 
-Some _options_ of number _functions_ are defined to take a "digit size option".
+Some _options_ of number _functions_ are defined to take a _digit size option_.
 The _function handlers_ for number _functions_ use these _options_ to control aspects of numeric display
 such as the number of fraction, integer, or significant digits.
 
-A "digit size option" is an _option_ value that the _function_ interprets
+A **_<dfn>digit size option</dfn>_** has an _option value_ that the _function_ interprets
 as a small integer value greater than or equal to zero.
 Implementations MAY define an upper limit on the _resolved value_
-of a digit size option consistent with that implementation's practical limits.
+of a _digit size option_ consistent with that implementation's practical limits.
 
-In most cases, the value of a digit size option will be a string that
+In most cases, the value of a _digit size option_ will be a string that
 encodes the value as a non-negative integer.
-Implementations MAY also accept implementation-defined types as the value.
-When provided as a string, the representation of a digit size option matches the following ABNF:
+Implementations MAY also accept implementation-defined types as the _option value_.
+When provided as a string, the representation of a _digit size option_ matches the following ABNF:
 
 ```abnf
 digit-size-option = "0" / (("1"-"9") [DIGIT])
 ```
 
-If the value of a digit size option does not evaluate as a non-negative integer,
-or if the value exceeds any implementation-defined upper limit
-or any option-specific lower limit, a _Bad Option_ error is emitted.
+If the value of a _digit size option_ does not evaluate as a non-negative integer,
+or if the value exceeds any implementation-defined and option-specific upper or lower limit,
+a _Bad Option_ error is emitted.
 
 #### Number Selection
 
-The value of the `select` _option_ MUST be set by a _literal_,
-as otherwise the _message_ might not be translatable.
-If this value is set by a _variable_ or
-the option value of an implementation-defined type used as an _operand_,
+The _option value_ of the `select` _option_ MUST be set by a _literal_.
+Allowing a _variable_ _option value_ for `select` would produce a _message_ that
+is impossible to translate because the set of _keys_ is tied to the _selector_ chosen.
+If the _option value_ is a _variable_ or
+if the `select` option is set by an implementation-defined type used as an _operand_,
 a _Bad Option Error_ is emitted and
 the _resolved value_ of the expression MUST NOT support selection.
 The formatting of the _resolved value_ is not affected by the `select` _option_.
@@ -676,7 +677,7 @@ numeric selectors perform as described below.
 
 ##### Default Value of `select` Option
 
-The value `plural` is the default for the option `select`
+The _option value_ `plural` is the default for the _option_ `select`
 because it is the most common use case for numeric selection.
 It can be used for exact value matches but also allows for the grammatical needs of
 languages using CLDR's plural rules.
@@ -702,7 +703,7 @@ but can cause problems in target locales that the original developer is not cons
 Rule selection is intended to support the grammatical matching needs of different
 languages/locales in order to support plural or ordinal numeric values.
 
-If the _option_ `select` is set to `exact`, rule-based selection is not used.
+If the `select` _option value_ is `exact`, rule-based selection is not used.
 Otherwise rule selection matches the _operand_, as modified by function _options_, to exactly one of these keywords:
 `zero`, `one`, `two`, `few`, `many`, or `other`.
 The keyword `other` is the default.
@@ -722,12 +723,12 @@ Apply the rules to the _resolved value_ of the _operand_ and the relevant functi
 and return the resulting keyword.
 If no rules match, return `other`.
 
-If the option `select` is set to `plural`, the rules applied to selection SHOULD be
+If the `select` _option value_ is `plural`, the rules applied to selection SHOULD be
 the CLDR plural rule data of type `cardinal`.
 See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
 for examples.
 
-If the option `select` is set to `ordinal`, the rules applied to selection SHOULD be
+If the `select` _option value_ is `ordinal`, the rules applied to selection SHOULD be
 the CLDR plural rule data of type `ordinal`.
 See [charts](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
 for examples.

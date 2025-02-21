@@ -568,10 +568,10 @@ function = ":" identifier *(s option)
 An **_<dfn>option</dfn>_** is a key-value pair
 containing a named argument that is passed to a _function_.
 
-An _option_ has an _identifier_ and a _value_.
-The _identifier_ is separated from the _value_ by an U+003D EQUALS SIGN `=` along with
+An _option_ has an _identifier_ and an _option value_.
+The _identifier_ is separated from the _option value_ by an U+003D EQUALS SIGN `=` along with
 optional whitespace.
-The value of an _option_ can be either a _literal_ or a _variable_.
+The **_<dfn>option value</dfn>_** can be either a _literal_ or a _variable_.
 
 Multiple _options_ are permitted in a _function_.
 _Options_ are separated from the preceding _function_ _identifier_
@@ -660,7 +660,7 @@ and they can be treated as code comments.
 
 _Attributes_ are prefixed by a U+0040 COMMERCIAL AT `@` sign,
 followed by an _identifier_.
-An _attribute_ MAY have a _literal_ _value_ which is separated from the _identifier_
+An _attribute_ MAY have a _literal_ value which is separated from the _identifier_
 by an U+003D EQUALS SIGN `=` along with optional whitespace.
 
 Multiple _attributes_ are permitted in an _expression_ or _markup_.
@@ -712,7 +712,7 @@ of _text_ in various parts of a _message_.
 A _literal_ can appear
 as a _key_ value,
 as the _operand_ of a _literal-expression_,
-or in the value of an _option_.
+or as an _option value_.
 A _literal_ MAY include any Unicode code point except for U+0000 NULL.
 
 All code points are preserved.
@@ -955,7 +955,7 @@ following mechanisms to make messages display intelligibly in plain-text editors
 2. Use the 'local-effect' bidi marks
    `U+061C ARABIC LETTER MARK`, `U+200E LEFT-TO-RIGHT MARK` or
    `U+200F RIGHT-TO-LEFT MARK` as permitted by the ABNF before or after _identifiers_,
-   _names_, unquoted _literals_, or _option_ values,
+   _names_, unquoted _literals_, or _option values_,
    especially when the values contain a mix of neutral, weakly directional, and
    strongly directional characters.
 

@@ -347,13 +347,13 @@ for that specific _function_.
 #### Bad Option
 
 A **_<dfn>Bad Option</dfn>_** error is an error that occurs when there is
-an implementation-defined error with an _option_ or its value.
+an implementation-defined error with an _option_ or an _option value_.
 These might include:
 - A required _option_ is missing.
 - Mutually exclusive _options_ are supplied.
-- An _option_ value provided to a _function_ during _function resolution_
+- An _option value_ provided to a _function_ during _function resolution_
    does not match one of the implementation-defined types or values for that _function_;
-   or in which the literal _option_ value does not have the required format
+   or in which the _literal_ _option value_ does not have the required format
    and thus cannot be processed into one of the expected
    implementation-defined types for that specific _function_.
 
@@ -386,5 +386,5 @@ does not match the expected implementation-defined format.
 #### Unsupported Operation
 
 A **_<dfn>Unsupported Operation</dfn>_** error is an implementation-specific error
-that occurs when a given _option_, _option_ value, _operand_ value, or some combination
+that occurs when a given _option_, _option value_, _operand_, or some combination
 of these are incompatible or not supported by a given _function_ or its _function handler_.

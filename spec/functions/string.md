@@ -27,7 +27,7 @@ All other values produce a _Bad Operand_ error.
 The function `:string` has no _options_.
 
 > [!NOTE]
-> While `:string` has no built- in _options_,
+> While `:string` has no built-in _options_,
 > _options_ in the `u:` _namespace_ can be used.
 > For example:
 >
