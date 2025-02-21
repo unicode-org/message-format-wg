@@ -353,7 +353,7 @@ These might include:
 - Mutually exclusive _options_ are supplied.
 - An _option value_ provided to a _function_ during _function resolution_
    does not match one of the implementation-defined types or values for that _function_;
-   or in which the _literal_ _option value_ does not have the required format
+   or in which the _string value_ of an _option_ does not have the required format
    and thus cannot be processed into one of the expected
    implementation-defined types for that specific _function_.
 

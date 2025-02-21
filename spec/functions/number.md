@@ -614,8 +614,9 @@ Some _options_ of number _functions_ are defined to take a _digit size option_.
 The _function handlers_ for number _functions_ use these _options_ to control aspects of numeric display
 such as the number of fraction, integer, or significant digits.
 
-A **_<dfn>digit size option</dfn>_** has an _option value_ that the _function_ interprets
-as a small integer value greater than or equal to zero.
+A **_<dfn>digit size option</dfn>_** is an _option_ 
+whose _option value_ is interpreted by the _function_
+as a small integer greater than or equal to zero.
 Implementations MAY define an upper limit on the _resolved value_
 of a _digit size option_ consistent with that implementation's practical limits.
 
