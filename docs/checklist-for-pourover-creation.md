@@ -45,6 +45,9 @@ Being a compendium of tasks needed to get a clean pour over of the spec.
 > Below is the markdown for the header
 
 ```
+---
+linkify: true
+---
 ## Unicode Technical Standard \#35
 
 # Unicode Locale Data Markup Language (LDML)<br/>Part 9: MessageFormat
