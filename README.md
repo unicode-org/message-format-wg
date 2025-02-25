@@ -6,9 +6,9 @@ Welcome to the home page for the MessageFormat Working Group, a subgroup of the 
 
 The MessageFormat Working Group (MFWG) is tasked with developing and supporting an industry standard
 for the representation of localizable message strings. 
-MessageFormat is design to support software developers, translators, and end users with fluent messages
-and locally-adapted presentation of data values
-while developing support for increasingly complex features, such as gender, inflections, and speech. 
+MessageFormat is designed to support software developers, translators, and end users with fluent messages
+and locally-adapted presentation for data values
+while providing a framework for increasingly complex features, such as gender, inflections, and speech. 
 Our goal is to provide an interoperable syntax and associated processing that is
 capable of being adopted by any presentation framework or programming environement.
 
