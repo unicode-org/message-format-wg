@@ -18,12 +18,12 @@ A partial list might include:
 - XLIFF round trip mappings for MF2 messages
 - a machine-readable function description format
 
-## MessageFormat 2 Stable Release
+## MessageFormat 2
 
-The [MessageFormat 2 specification](./spec/) is a now a stable part of
+The [MessageFormat 2 specification](./spec/) has been approved by the CLDR Technical Committee
+and is now a stable part of
 the [LDML](https://www.unicode.org/reports/tr35/) specification.
-MessageFormat 2 has been approved by the CLDR Technical Committee
-and is stable for adoption.
+It is now recommended for implementation and adoption.
 
 Some _default functions_ and items in the `u:` namespace are still in Draft status.
 Feedback from users and implementers might result in changes to these capabilities.
