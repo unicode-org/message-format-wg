@@ -7,10 +7,9 @@ Being a compendium of tasks needed to get a clean pour over of the spec.
 > If you are reading this, you're probably in the wrong place.
 
 - get a JIRA ticket for the pour over
-- update forks of cldr, message-format-wg
-- pull message-format-wg
-- pull cldr
-- make a branch on cldr for the pour over (e.g. CLDR-18323-message-format-v47-pour) and check out the branch
+- update forkmessage-format-wg
+- cldr works on branches of main, not in forks, so pull cldr and checkout a new branch to work in
+  for the pour over (e.g. CLDR-18323-message-format-v47-pour)
 - check that the header (see below) is in place
 - insert the spec parts over the contents of part 9 (tr35-messageFormat.md under docs/ldml)
    - remove subsidiary TOCs (from the README.md files in subdirectory parts and in intro.md)
