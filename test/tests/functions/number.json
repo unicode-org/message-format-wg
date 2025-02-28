@@ -24,6 +24,105 @@
       "exp": "hello 4.2"
     },
     {
+      "src": "hello {00 :number}",
+      "exp": "hello {|00|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {042 :number}",
+      "exp": "hello {|042|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1. :number}",
+      "exp": "hello {|1.|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1e :number}",
+      "exp": "hello {|1e|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1E :number}",
+      "exp": "hello {|1E|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1.e :number}",
+      "exp": "hello {|1.e|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1.2e :number}",
+      "exp": "hello {|1.2e|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1.e3 :number}",
+      "exp": "hello {|1.e3|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1e+ :number}",
+      "exp": "hello {|1e+|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1e- :number}",
+      "exp": "hello {|1e-|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1.0e2.0 :number}",
+      "exp": "hello {|1.0e2.0|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
       "src": "hello {foo :number}",
       "exp": "hello {|foo|}",
       "expErrors": [
