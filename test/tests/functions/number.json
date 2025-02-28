@@ -202,7 +202,7 @@
     },
     {
       "src": ".local $sel = {1 :number select=exact} .match $sel 1 {{literal select {$sel}}} * {{OTHER}}",
-      "exp": "literal select {1}"
+      "exp": "literal select 1"
     },
     {
       "src": ".local $sel = {1 :number select=exact} .local $bad = {$sel :number} .match $bad 1 {{ONE}} * {{operand select {$bad}}}",
