@@ -39,7 +39,7 @@
     },
     {
       "src": "literal select {1 :integer select=exact}",
-      "exp": "literal select {1}"
+      "exp": "literal select 1"
     },
     {
       "src": ".local $bad = {exact} {{variable select {1 :integer select=$bad}}}",
