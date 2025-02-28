@@ -9,6 +9,16 @@
   },
   "tests": [
     {
+      "description": "function with unquoted literal operand",
+      "src": "{42 :test:function fails=format}",
+      "exp": "{|42|}"
+    },
+    {
+      "description": "function with quoted literal operand",
+      "src": "{|C:\\\\| :test:function fails=format}",
+      "exp": "{|C:\\\\|}"
+    },
+    {
       "description": "unannotated implicit input variable",
       "src": "{$var}",
       "exp": "{$var}"
