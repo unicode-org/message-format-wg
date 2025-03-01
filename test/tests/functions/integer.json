@@ -64,7 +64,7 @@
     {
       "src": ".local $sel = {1 :integer select=$bad} .match $sel 1 {{ONE}} * {{variable select {$sel}}}",
       "params": [{ "name": "bad", "value": "exact" }],
-      "exp": "variable select {|1|}",
+      "exp": "variable select {$sel}",
       "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
     }
   ]
