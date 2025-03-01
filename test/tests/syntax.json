@@ -491,6 +491,11 @@
       "exp": "0E-1"
     },
     {
+      "description": "+ as unquoted-literal",
+      "src": "{+}",
+      "exp": "+"
+    },
+    {
       "description": "- as unquoted-literal",
       "src": "{-}",
       "exp": "-"
