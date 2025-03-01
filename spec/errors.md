@@ -44,7 +44,7 @@ or separately by more than one such method.
 When a message contains more than one error,
 or contains some error which leads to further errors,
 an implementation which does not emit all of the errors
-SHOULD prioritise _Syntax Errors_ and _Data Model Errors_ over others.
+MUST prioritise _Syntax Errors_ and _Data Model Errors_ over others.
 
 When an error occurs while resolving a _selector_
 or calling MatchSelectorKeys with its resolved value,
