@@ -58,7 +58,7 @@
     },
     {
       "src": ".local $sel = {1 :integer select=exact} .local $bad = {$sel :integer} .match $bad 1 {{ONE}} * {{operand select {$bad}}}",
-      "exp": "operand select {|1|}",
+      "exp": "operand select {$sel}",
       "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
     },
     {
