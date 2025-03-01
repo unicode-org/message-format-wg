@@ -191,13 +191,13 @@
     },
     {
       "src": ".local $bad = {exact} {{variable select {1 :number select=$bad}}}",
-      "exp": "variable select {1}",
+      "exp": "variable select {|1|}",
       "expErrors": [{ "type": "bad-option" }]
     },
     {
       "src": "variable select {1 :number select=$bad}",
       "params": [{ "name": "bad", "value": "exact" }],
-      "exp": "variable select {1}",
+      "exp": "variable select {|1|}",
       "expErrors": [{ "type": "bad-option" }]
     },
     {
@@ -206,13 +206,13 @@
     },
     {
       "src": ".local $sel = {1 :number select=exact} .local $bad = {$sel :number} .match $bad 1 {{ONE}} * {{operand select {$bad}}}",
-      "exp": "operand select {1}",
+      "exp": "operand select {|1|}",
       "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
     },
     {
       "src": ".local $sel = {1 :number select=$bad} .match $sel 1 {{ONE}} * {{variable select {$sel}}}",
       "params": [{ "name": "bad", "value": "exact" }],
-      "exp": "variable select {1}",
+      "exp": "variable select {|1|}",
       "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
     },
     {
