@@ -39,32 +39,32 @@
     },
     {
       "src": "literal select {1 :integer select=exact}",
-      "exp": "literal select {1}"
+      "exp": "literal select 1"
     },
     {
       "src": ".local $bad = {exact} {{variable select {1 :integer select=$bad}}}",
-      "exp": "variable select {1}",
+      "exp": "variable select {|1|}",
       "expErrors": [{ "type": "bad-option" }]
     },
     {
       "src": "variable select {1 :integer select=$bad}",
       "params": [{ "name": "bad", "value": "exact" }],
-      "exp": "variable select {1}",
+      "exp": "variable select {|1|}",
       "expErrors": [{ "type": "bad-option" }]
     },
     {
       "src": ".local $sel = {1 :integer select=exact} .match $sel 1 {{literal select {$sel}}} * {{OTHER}}",
-      "exp": "literal select {1}"
+      "exp": "literal select 1"
     },
     {
       "src": ".local $sel = {1 :integer select=exact} .local $bad = {$sel :integer} .match $bad 1 {{ONE}} * {{operand select {$bad}}}",
-      "exp": "operand select {1}",
+      "exp": "operand select {$sel}",
       "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
     },
     {
       "src": ".local $sel = {1 :integer select=$bad} .match $sel 1 {{ONE}} * {{variable select {$sel}}}",
       "params": [{ "name": "bad", "value": "exact" }],
-      "exp": "variable select {1}",
+      "exp": "variable select {$sel}",
       "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
     }
   ]
