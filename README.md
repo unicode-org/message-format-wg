@@ -12,12 +12,6 @@ while providing a framework for increasingly complex features, such as gender, i
 Our goal is to provide an interoperable syntax, message data model, and associated processing that is
 capable of being adopted by any presentation framework or programming environement.
 
-The working group is currently developing a charter for additional, post-release goals,
-including support for some deliverables not included in LDML47.
-A partial list might include:
-- XLIFF round trip mappings for MF2 messages
-- a machine-readable function description format
-
 ## MessageFormat 2
 
 The [MessageFormat 2 specification](./spec/) has been approved by the CLDR Technical Committee
