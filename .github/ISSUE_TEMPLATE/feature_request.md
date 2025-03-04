@@ -2,7 +2,7 @@
 name: Feature request
 about: Suggest an idea or feature for Message Format
 title: ''
-labels: ''
+labels: Preview-Feedback
 assignees: ''
 
 ---
