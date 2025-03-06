@@ -399,7 +399,7 @@ For each _option_:
    1. Else:
       1. If the _option value_ consists of a _literal_:
          1. Mark `rv` as a _literal_ _option value_.
-      1. Set `res[id]` to be `rv`.
+   1. Set `res[id]` to be `rv`.
 1. Return `res`.
 
 The result of _option resolution_ MUST be a (possibly empty) mapping
