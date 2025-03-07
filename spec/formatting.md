@@ -395,12 +395,16 @@ For each _option_:
    1. Let `id` be the string value of the _identifier_ of the _option_.
    1. Let `rv` be the _resolved value_ of the _option value_.
    1. If `rv` is a _fallback value_:
-      1. If supported, emit a _Bad Option_ error.
+      1. Emit a _Bad Option_ error, if supported.
    1. Else:
       1. If the _option value_ consists of a _literal_:
          1. Mark `rv` as a _literal_ _option value_.
-   1. Set `res[id]` to be `rv`.
+      1. Set `res[id]` to be `rv`.
 1. Return `res`.
+
+> [!NOTE]
+> If the _resolved value_ of an _option value_ contains a _fallback value_,
+> the _option_ is intentionally omitted from the list of _options_.
 
 The result of _option resolution_ MUST be a (possibly empty) mapping
 of string identifiers to values;
@@ -409,7 +413,7 @@ This mapping can be empty.
 
 > [!NOTE]
 > The _resolved value_ of a _function_ _operand_
-> can also include resolved option values.
+> can also include resolved _option values_.
 > These are not included in the _option resolution_ result,
 > and need to be processed separately by a _function handler_.
 
