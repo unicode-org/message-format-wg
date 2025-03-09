@@ -403,8 +403,8 @@ For each _option_:
 1. Return `res`.
 
 > [!NOTE]
-> If the _resolved value_ of an _option value_ contains a _fallback value_,
-> the _option_ is intentionally omitted from the list of _options_.
+> If the _resolved value_ of an _option value_ is a _fallback value_,
+> the _option_ is intentionally omitted from the mapping of resolved options.
 
 The result of _option resolution_ MUST be a (possibly empty) mapping
 of string identifiers to values;
