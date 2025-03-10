@@ -682,7 +682,7 @@ attribute = "@" identifier [o "=" o literal]
 > In French, "{|bonjour| @translate=no}" is a greeting
 > ```
 >
-> A _message_ with _markup_ that should not be copied:
+> A _message_ with _markup_ that can be copied:
 >
 > ```
 > Have a {#span @can-copy}great and wonderful{/span @can-copy} birthday!
