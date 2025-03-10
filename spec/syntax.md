@@ -635,14 +635,14 @@ markup = "{" o "#" identifier *(s option) *(s attribute) o ["/"] "}"  ; open and
 > A _message_ with one `button` markup span and a standalone `img` markup element:
 >
 > ```
-> {#button}Submit{/button} or {#img alt=|Cancel| /}.
+> {#button}Submit{/button} or {#img alt=Cancel src=|../cancel.jpg| /}.
 > ```
 
 > A _message_ containing _markup_ that uses _options_ to pair 
 > two closing markup _placeholders_ to the one open markup _placeholder_:
 >
 > ```
-> {#ansi attr=|bold,italic|}Bold and italic{/ansi attr=|bold|} italic only {/ansi attr=|italic|} no formatting.}
+> {#ansi attr=|bold,italic|}Bold and italic{/ansi attr=bold} italic only {/ansi attr=italic} no formatting.}
 > ```
 
 A _markup-open_ can appear without a corresponding _markup-close_.
