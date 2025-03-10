@@ -413,7 +413,7 @@ This mapping can be empty.
 
 > [!NOTE]
 > The _resolved value_ of a _function_ _operand_
-> can also include resolved _option values_.
+> can also include resolved option values.
 > These are not included in the _option resolution_ result,
 > and need to be processed separately by a _function handler_.
 
