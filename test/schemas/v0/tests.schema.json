@@ -132,6 +132,12 @@
         },
         "expErrors": {
           "$ref": "#/$defs/expErrors"
+        },
+        "reqLevel": {
+          "$ref": "#/$defs/reqLevel"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
         }
       }
     },
@@ -167,6 +173,12 @@
         "only": {
           "type": "boolean",
           "description": "Normally not set. A flag to use during development to only run one or more specific tests."
+        },
+        "reqLevel": {
+          "$ref": "#/$defs/reqLevel"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
         }
       }
     },
@@ -383,6 +395,14 @@
           }
         }
       }
+    },
+    "reqLevel": {
+      "description": "The required level of support.",
+      "enum": ["required", "recommended", "optional"]
+    },
+    "status": {
+      "description": "The current stability level.",
+      "enum": ["stable", "draft"]
     },
     "anyExp": {
       "anyOf": [
