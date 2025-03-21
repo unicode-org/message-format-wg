@@ -237,7 +237,7 @@
       "items": {
         "oneOf": [
           {
-            "description": "Message literal part.",
+            "description": "Message text part.",
             "type": "object",
             "additionalProperties": false,
             "required": [
@@ -246,7 +246,7 @@
             ],
             "properties": {
               "type": {
-                "const": "literal"
+                "const": "text"
               },
               "value": {
                 "type": "string"
