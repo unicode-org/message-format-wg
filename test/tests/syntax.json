@@ -644,7 +644,7 @@
           "name": "tag"
         },
         {
-          "type": "literal",
+          "type": "text",
           "value": "content"
         }
       ]
@@ -659,7 +659,7 @@
           "name": "ns:tag"
         },
         {
-          "type": "literal",
+          "type": "text",
           "value": "content"
         },
         {
@@ -679,7 +679,7 @@
           "name": "tag"
         },
         {
-          "type": "literal",
+          "type": "text",
           "value": "content"
         }
       ]

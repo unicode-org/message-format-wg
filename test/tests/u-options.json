@@ -17,10 +17,7 @@
           "id": "x",
           "name": "tag"
         },
-        {
-          "type": "literal",
-          "value": "content"
-        },
+        { "type": "text", "value": "content" },
         {
           "type": "markup",
           "kind": "close",
@@ -39,10 +36,7 @@
           "kind": "open",
           "name": "tag"
         },
-        {
-          "type": "literal",
-          "value": "content"
-        },
+        { "type": "text", "value": "content" },
         {
           "type": "markup",
           "kind": "close",
@@ -58,10 +52,7 @@
       "src": "hello {world :string u:dir=ltr u:id=foo}",
       "exp": "hello \u2066world\u2069",
       "expParts": [
-        {
-          "type": "literal",
-          "value": "hello "
-        },
+        { "type": "text", "value": "hello " },
         { "type": "bidiIsolation", "value": "\u2066" },
         {
           "type": "string",
@@ -78,7 +69,7 @@
       "src": "hello {world :string u:dir=rtl}",
       "exp": "hello \u2067world\u2069",
       "expParts": [
-        { "type": "literal", "value": "hello " },
+        { "type": "text", "value": "hello " },
         { "type": "bidiIsolation", "value": "\u2067" },
         {
           "type": "string",
@@ -94,7 +85,7 @@
       "src": "hello {world :string u:dir=auto}",
       "exp": "hello \u2068world\u2069",
       "expParts": [
-        { "type": "literal", "value": "hello " },
+        { "type": "text", "value": "hello " },
         { "type": "bidiIsolation", "value": "\u2068" },
         {
           "type": "string",
@@ -109,10 +100,7 @@
       "src": ".local $world = {world :string u:dir=ltr u:id=foo} {{hello {$world}}}",
       "exp": "hello \u2066world\u2069",
       "expParts": [
-        {
-          "type": "literal",
-          "value": "hello "
-        },
+        { "type": "text", "value": "hello " },
         { "type": "bidiIsolation", "value": "\u2066" },
         {
           "type": "string",
