@@ -54,13 +54,7 @@
       "expParts": [
         { "type": "text", "value": "hello " },
         { "type": "bidiIsolation", "value": "\u2066" },
-        {
-          "type": "string",
-          "source": "|world|",
-          "dir": "ltr",
-          "id": "foo",
-          "value": "world"
-        },
+        { "type": "string", "dir": "ltr", "id": "foo", "value": "world" },
         { "type": "bidiIsolation", "value": "\u2069" }
 
       ]
@@ -71,13 +65,7 @@
       "expParts": [
         { "type": "text", "value": "hello " },
         { "type": "bidiIsolation", "value": "\u2067" },
-        {
-          "type": "string",
-          "source": "|world|",
-          "dir": "rtl",
-          "locale": "en-US",
-          "value": "world"
-        },
+        { "type": "string", "dir": "rtl", "locale": "en-US", "value": "world" },
         { "type": "bidiIsolation", "value": "\u2069" }
       ]
     },
@@ -89,7 +77,6 @@
         { "type": "bidiIsolation", "value": "\u2068" },
         {
           "type": "string",
-          "source": "|world|",
           "locale": "en-US",
           "value": "world"
         },
@@ -102,13 +89,7 @@
       "expParts": [
         { "type": "text", "value": "hello " },
         { "type": "bidiIsolation", "value": "\u2066" },
-        {
-          "type": "string",
-          "source": "|world|",
-          "dir": "ltr",
-          "id": "foo",
-          "value": "world"
-        },
+        { "type": "string", "dir": "ltr", "id": "foo", "value": "world" },
         { "type": "bidiIsolation", "value": "\u2069" }
       ]
     },

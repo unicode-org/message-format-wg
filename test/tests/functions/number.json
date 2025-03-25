@@ -326,13 +326,7 @@
       "expParts": [
         {
           "type": "number",
-          "source": "|42|",
-          "parts": [
-            {
-              "type": "integer",
-              "value": "42"
-            }
-          ]
+          "parts": [{ "type": "integer", "value": "42" }]
         }
       ]
     }

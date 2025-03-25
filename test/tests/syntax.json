@@ -412,13 +412,7 @@
       "description": "... attribute -> \"@\" identifier s \"=\" s quoted-literal ...",
       "src": "{42 @foo=|bar|}",
       "exp": "42",
-      "expParts": [
-        {
-          "type": "string",
-          "source": "|42|",
-          "value": "42"
-        }
-      ]
+      "expParts": [{ "type": "string", "value": "42" }]
     },
     {
       "description": "... quoted-literal",
@@ -722,13 +716,7 @@
     {
       "src": "{42 @foo @bar=13}",
       "exp": "42",
-      "expParts": [
-        {
-          "type": "string",
-          "source": "|42|",
-          "value": "42"
-        }
-      ]
+      "expParts": [{ "type": "string", "value": "42" }]
     },
     {
       "src": "{{trailing whitespace}} \n",

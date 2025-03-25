@@ -290,9 +290,6 @@
                   "close"
                 ]
               },
-              "source": {
-                "type": "string"
-              },
               "name": {
                 "type": "string"
               },
@@ -308,8 +305,7 @@
             "description": "Message expression part.",
             "type": "object",
             "required": [
-              "type",
-              "source"
+              "type"
             ],
             "not": {
               "required": [
@@ -319,9 +315,6 @@
             },
             "properties": {
               "type": {
-                "type": "string"
-              },
-              "source": {
                 "type": "string"
               },
               "locale": {
@@ -334,11 +327,7 @@
                   "properties": {
                     "type": {
                       "type": "string"
-                    },
-                    "source": {
-                      "type": "string"
-                    },
-                    "value": {}
+                    }
                   },
                   "required": [
                     "type"
@@ -346,6 +335,23 @@
                 }
               },
               "value": {}
+            }
+          },
+          {
+            "description": "Fallback part.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "source"
+            ],
+            "properties": {
+              "type": {
+                "const": "fallback"
+              },
+              "source": {
+                "type": "string"
+              }
             }
           }
         ]
