@@ -39,6 +39,7 @@
         {
           "properties": {
             "defaultTestProperties": {
+              "type": "object",
               "required": [
                 "locale"
               ]
@@ -50,6 +51,7 @@
             "tests": {
               "type": "array",
               "items": {
+                "type": "object",
                 "required": [
                   "locale"
                 ]
@@ -64,6 +66,7 @@
         {
           "properties": {
             "defaultTestProperties": {
+              "type": "object",
               "required": [
                 "src"
               ]
@@ -75,6 +78,7 @@
             "tests": {
               "type": "array",
               "items": {
+                "type": "object",
                 "required": [
                   "src"
                 ]
@@ -307,17 +311,19 @@
             "required": [
               "type"
             ],
-            "not": {
-              "required": [
-                "parts",
-                "value"
-              ]
-            },
             "properties": {
               "type": {
-                "type": "string"
+                "enum": [
+                  "datetime",
+                  "number",
+                  "string",
+                  "test"
+                ]
               },
               "locale": {
+                "type": "string"
+              },
+              "id": {
                 "type": "string"
               },
               "parts": {
@@ -391,6 +397,7 @@
       }
     },
     "anyExp": {
+      "type": "object",
       "anyOf": [
         {
           "required": [

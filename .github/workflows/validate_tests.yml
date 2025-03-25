@@ -7,7 +7,6 @@ on:
     paths:
       - test/**
   pull_request:
-    branches: '**'
     paths:
       - test/** 
 
@@ -22,7 +21,7 @@ jobs:
         run: npm install --global ajv-cli
       - name: Validate tests using the latest schema version
         run: >
-            ajv validate --spec=draft2020
+            ajv validate --spec=draft2020 --allow-union-types
             -s $(ls -1v schemas/*/*schema.json | tail -1)
             -d 'tests/**/*.json'
         working-directory: ./test
