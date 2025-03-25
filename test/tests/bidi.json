@@ -1,4 +1,5 @@
 {
+  "$schema": "../schemas/v0/tests.schema.json",
   "scenario": "Bidi support",
   "description": "Tests for correct parsing of messages with bidirectional marks and isolates",
   "defaultTestProperties": {
