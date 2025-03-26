@@ -124,6 +124,9 @@
         "params": {
           "$ref": "#/$defs/params"
         },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        },
         "exp": {
           "$ref": "#/$defs/exp"
         },
@@ -154,6 +157,9 @@
         },
         "params": {
           "$ref": "#/$defs/params"
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
         },
         "exp": {
           "$ref": "#/$defs/exp"
@@ -187,6 +193,17 @@
       "type": "array",
       "items": {
         "$ref": "#/$defs/var"
+      }
+    },
+    "tags": {
+      "description": "List of features that the test relies on.",
+      "type": "array",
+      "items": {
+        "enum": [
+          "u:dir",
+          "u:id",
+          "u:locale"
+        ]
       }
     },
     "var": {
