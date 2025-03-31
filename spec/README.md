@@ -1,4 +1,4 @@
-# The Unicode MessageFormat Standard Specification
+# The Unicode MessageFormat Standard
 
 > [!IMPORTANT]
 > This page is not a part of the specification and is not normative.
@@ -18,8 +18,8 @@ Its data model provides a means of representing existing syntaxes,
 thus enabling gradual adoption by users of older formatting systems.
 
 During its development, _Unicode MessageFormat_ was known as "MessageFormat 2.0",
-since the specification was intended to replace earlier message formatting capabilities
-developed in the [ICU](https://icu.unicode.org) project.
+since the specification supersedes earlier message formatting capabilities
+such as those developed in the [ICU](https://icu.unicode.org) project.
 
 The goal is to allow developers and translators to create natural-sounding, grammatically-correct,
 user interfaces that can appear in any language and support the needs of diverse cultures.
