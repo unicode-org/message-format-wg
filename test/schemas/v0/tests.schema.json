@@ -39,6 +39,7 @@
         {
           "properties": {
             "defaultTestProperties": {
+              "type": "object",
               "required": [
                 "locale"
               ]
@@ -50,6 +51,7 @@
             "tests": {
               "type": "array",
               "items": {
+                "type": "object",
                 "required": [
                   "locale"
                 ]
@@ -64,6 +66,7 @@
         {
           "properties": {
             "defaultTestProperties": {
+              "type": "object",
               "required": [
                 "src"
               ]
@@ -75,6 +78,7 @@
             "tests": {
               "type": "array",
               "items": {
+                "type": "object",
                 "required": [
                   "src"
                 ]
@@ -290,9 +294,6 @@
                   "close"
                 ]
               },
-              "source": {
-                "type": "string"
-              },
               "name": {
                 "type": "string"
               },
@@ -308,23 +309,21 @@
             "description": "Message expression part.",
             "type": "object",
             "required": [
-              "type",
-              "source"
+              "type"
             ],
-            "not": {
-              "required": [
-                "parts",
-                "value"
-              ]
-            },
             "properties": {
               "type": {
-                "type": "string"
-              },
-              "source": {
-                "type": "string"
+                "enum": [
+                  "datetime",
+                  "number",
+                  "string",
+                  "test"
+                ]
               },
               "locale": {
+                "type": "string"
+              },
+              "id": {
                 "type": "string"
               },
               "parts": {
@@ -334,11 +333,7 @@
                   "properties": {
                     "type": {
                       "type": "string"
-                    },
-                    "source": {
-                      "type": "string"
-                    },
-                    "value": {}
+                    }
                   },
                   "required": [
                     "type"
@@ -346,6 +341,23 @@
                 }
               },
               "value": {}
+            }
+          },
+          {
+            "description": "Fallback part.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "source"
+            ],
+            "properties": {
+              "type": {
+                "const": "fallback"
+              },
+              "source": {
+                "type": "string"
+              }
             }
           }
         ]
@@ -385,6 +397,7 @@
       }
     },
     "anyExp": {
+      "type": "object",
       "anyOf": [
         {
           "required": [
