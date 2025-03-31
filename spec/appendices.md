@@ -2,7 +2,7 @@
 
 ### Security Considerations
 
-MessageFormat _patterns_ are meant to allow a _message_ to include any string value
+Unicode MessageFormat _patterns_ are meant to allow a _message_ to include any string value
 which users might normally wish to use in their environment.
 Programming languages and other environments vary in what characters are permitted
 to appear in a valid string.
@@ -45,7 +45,7 @@ In addition, end-users need to be aware of the risks involved.
 
 ### Acknowledgements
 
-Special thanks to the following people for their contributions to making MessageFormat 2.0.
+Special thanks to the following people for their contributions to making the Unicode MessageFormat Standard.
 The following people contributed to our github repo and are listed in order by contribution size:
 
 Addison Phillips, 
