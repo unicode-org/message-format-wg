@@ -14,10 +14,11 @@ capable of being adopted by any presentation framework or programming environeme
 
 ## The Unicode MessageFormat Standard
 
-The [Unicode MessageFormat Standard](./spec/) has been approved by the CLDR Technical Committee.
-It is now a stable part of CLDR.
-The normative version of the specification is a part of [TR35](https://www.unicode.org/reports/tr35/).
-It is now recommended for implementation and adoption.
+The [Unicode MessageFormat Standard](./spec/) is a stable part of CLDR.
+It was approved by the CLDR Technical Committee
+and is recommended for implementation and adoption.
+The normative version of the specification is published as a part of [TR35](https://www.unicode.org/reports/tr35/).
+This repository contains the editor's copy.
 
 **Unicode MessageFormat** is sometimes referred to as _MessageFormat 2.0_,
 since it replaces earlier message formatting capabilities built into ICU.
