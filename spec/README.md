@@ -1,13 +1,13 @@
-# MessageFormat 2.0 Specification
+# The Unicode MessageFormat Standard Specification
 
 > [!IMPORTANT]
 > This page is not a part of the specification and is not normative.
 
-## What is MessageFormat 2?
+## What is Unicode MessageFormat?
 
 Software needs to construct messages that incorporate various pieces of information.
 The complexities of the world's languages make this challenging.
-MessageFormat 2 defines the data model, syntax, processing, and conformance requirements
+_Unicode MessageFormat_ defines the data model, syntax, processing, and conformance requirements
 for the next generation of dynamic messages.
 It is intended for adoption by programming languages, software libraries, and software localization tooling.
 It enables the integration of internationalization APIs (such as date or number formats),
@@ -16,6 +16,10 @@ It is extensible, allowing software developers to create formatting
 or message selection logic that add on to the core capabilities.
 Its data model provides a means of representing existing syntaxes,
 thus enabling gradual adoption by users of older formatting systems.
+
+During its development, _Unicode MessageFormat_ was known as "MessageFormat 2.0",
+since the specification was intended to replace earlier message formatting capabilities
+developed in the [ICU](https://icu.unicode.org) project.
 
 The goal is to allow developers and translators to create natural-sounding, grammatically-correct,
 user interfaces that can appear in any language and support the needs of diverse cultures.
