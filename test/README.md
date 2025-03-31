@@ -50,6 +50,20 @@ is not included in the schema,
 as it is intended to be an umbrella category
 for implementation-specific errors.
 
+## Test Tags
+
+Some of the tests are for functionality that is not stable,
+i.e. is marked RECOMMENDED, OPTIONAL, or DRAFT.
+Tests for such features have a `tags` array attached to them
+to mark the features that they rely on.
+This may include one or more of the following:
+
+| Tag        | Feature                                               |
+| ---------- | ----------------------------------------------------- |
+| `u:dir`    | The [u:dir](../spec/u-namespace.md#udir) option       |
+| `u:id`     | The [u:id](../spec/u-namespace.md#uid) option         |
+| `u:locale` | The [u:locale](../spec/u-namespace.md#ulocale) option |
+
 ## Test Functions
 
 As the behaviour of some of the default registry _functions_
@@ -68,6 +82,7 @@ The function `:test:function` requires a [Number Operand](/spec/registry.md#numb
 #### Options
 
 The following _options_ are available on `:test:function`:
+
 - `decimalPlaces`, a _digit size option_ for which only `0` and `1` are valid values.
   - `0`
   - `1`
