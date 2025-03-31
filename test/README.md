@@ -52,7 +52,7 @@ for implementation-specific errors.
 
 ## Test Tags
 
-Some of the tests are for functionality that is optional or which might not be stable.
+Some of the tests are for functionality that is optional or for functionality that is not yet stable.
 That is, the specification uses RFC2119 keywords such as SHOULD, SHOULD NOT, MAY, RECOMMENDED, or OPTIONAL,
 or the specification says that given functionality is DRAFT and not yet stable.
 Tests for such features have a `tags` array attached to them
