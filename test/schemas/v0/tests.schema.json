@@ -185,7 +185,7 @@
       "type": "string"
     },
     "src": {
-      "description": "The MF2 syntax source.",
+      "description": "The message source in the Unicode MessageFormat syntax.",
       "type": "string"
     },
     "bidiIsolation": {
