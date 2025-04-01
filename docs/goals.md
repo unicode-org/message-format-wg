@@ -21,10 +21,17 @@ The MessageFormat Working Group is a working group of the CLDR-TC.
 
 ## Goals
 
-- Encourage adoption of Unicode MessageFormat as measured by developing [messageformat.unicode.org]
-  and other appropriate materials to include a user guide, MF1 migration guide,
-  implementation support, and usage materials while maintaining a high bar 
-  as a model for other Unicode websites.
+- Maintain and develop the [messageformat.unicode.org] site,
+  maintaining a high bar (as a model for other Unicode documentation),
+  including at least 
+  a user guide,
+  and a migration guide from other formats (including ICU MessageFormat).
+- Encourage adoption of Unicode MessageFormat by:
+  providing implementation support materials;
+  creating tests;
+  linking to success stories, tools, and implementations;
+  supporting or hosting workshops or supporting presentations by members;
+  and supporting adoption by encapsulating standards (such as ECMA-402, MessageResource, etc.)
 - Support a determination there are at least ### additional interoperable implementations.
 - Support migration and adoption by moving all functions and options necessary to match the features of
   ICU MessageFormat ("MF1") to Stable.
