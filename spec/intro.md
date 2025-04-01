@@ -1,4 +1,4 @@
-# MessageFormat 2.0 Specification
+# The Unicode MessageFormat Standard Specification
 
 ## Table of Contents
 
@@ -46,8 +46,7 @@ existing internationalization APIs (such as the date and number formats shown ab
 grammatical matching (such as plurals or genders),
 as well as user-defined formats and message selectors.
 
-The document is the successor to ICU MessageFormat,
-henceforth called ICU MessageFormat 1.0.
+The document is the successor to ICU MessageFormat.
 
 ### Conformance
 

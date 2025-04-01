@@ -12,12 +12,16 @@ while providing a framework for increasingly complex features, such as gender, i
 Our goal is to provide an interoperable syntax, message data model, and associated processing that is
 capable of being adopted by any presentation framework or programming environement.
 
-## MessageFormat 2
+## The Unicode MessageFormat Standard
 
-The [MessageFormat 2 specification](./spec/) has been approved by the CLDR Technical Committee
-and is now a stable part of
-the [LDML](https://www.unicode.org/reports/tr35/) specification.
-It is now recommended for implementation and adoption.
+The [Unicode MessageFormat Standard](./spec/) is a stable part of CLDR.
+It was approved by the CLDR Technical Committee
+and is recommended for implementation and adoption.
+The normative version of the specification is published as a part of [TR35](https://www.unicode.org/reports/tr35/).
+This repository contains the editor's copy.
+
+**Unicode MessageFormat** is sometimes referred to as _MessageFormat 2.0_,
+since it replaces earlier message formatting capabilities built into ICU.
 
 Some _default functions_ and items in the `u:` namespace are still in Draft status.
 Feedback from users and implementers might result in changes to these capabilities.
