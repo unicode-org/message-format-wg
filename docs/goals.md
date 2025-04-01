@@ -33,7 +33,7 @@ The MessageFormat Working Group is a working group of the CLDR-TC.
 - Develop a machine-readable function description format or syntax to support the needs of
   implementations, including localization tools.
 
-## Deliverables (v49, v50)
+## Deliverables (v48, v49, v50)
 
 - Deliver as Stable all remaining functions needed to support migration from MF1
   - `:datetime` and all date/time functions
