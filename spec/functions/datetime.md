@@ -234,7 +234,7 @@ When the offset is not present, implementations SHOULD use a floating time type
 For more information, see [Working with Timezones](https://w3c.github.io/timezone).
 
 > [!IMPORTANT]
-> The [ABNF](/spec/message.abnf) and [syntax](/spec/syntax.md) of MF2
+> The [ABNF](/spec/message.abnf) and [syntax](/spec/syntax.md) of Unicode MessageFormat
 > do not formally define date/time literals.
 > This means that a _message_ can be syntactically valid but produce
 > a _Bad Operand_ error at runtime.
