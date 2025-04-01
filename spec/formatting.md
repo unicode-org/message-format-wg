@@ -939,8 +939,8 @@ The **_<dfn>Default Bidi Strategy<dfn>_** is a _bidirectional isolation strategy
 isolating Unicode control characters around _placeholder_'s formatted values.
 It is primarily intended for use in plain-text strings, where markup or other mechanisms
 are not available.
-Implementations MUST provide the _Default Bidi Strategy_ as one of the 
-_bidirectional isolation strategies_.
+The _Default Bidi Strategy_ MUST be the default _bidirectional isolation strategy_
+when formatting a _message_ as a single string.
 
 Implementations MAY provide other _bidirectional isolation strategies_.
 
