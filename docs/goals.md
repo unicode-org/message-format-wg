@@ -28,7 +28,7 @@ The MessageFormat Working Group is a working group of the CLDR-TC.
 - Support a determination there are at least ### additional interoperable implementations.
 - Support migration and adoption by moving all functions and options necessary to match the features of
   ICU MessageFormat ("MF1") to Stable.
-- Support migration and adoption by making significant additions to the default function set to support
+- Support migration and adoption by expanding the default function set to support
   additional use cases.
 - Develop a machine-readable function description format or syntax to support the needs of
   implementations, including localization tools.
