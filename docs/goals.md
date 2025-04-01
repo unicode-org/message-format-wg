@@ -17,7 +17,7 @@ encourages implementation, including the development of tools and best practices
 manages default and Unicode-defined function sets;
 and provides for interoperability with other standards.
 
-The MessageFormat Working Group is a working group the CLDR-TC.
+The MessageFormat Working Group is a working group of the CLDR-TC.
 
 ## Goals
 
