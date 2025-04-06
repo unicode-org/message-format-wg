@@ -29,11 +29,20 @@ Advantages of semantic skeletons over classical skeletons:
 - Allows for a more clear, ergonomic API
 - More future-proof since CLDR recently added them (??)
 
+Advantages of semantic skeletons over other mechanisms:
+
+- Unlike "picture strings" (`MMM dd, yyyy`), does not require translation
 
 
 ## Background
 
 _What context is helpful to understand this proposal?_
+
+Links:
+- [Semantic Skeletons Specification](https://unicode.org/reports/tr35/tr35-dates.html#Semantic_Skeletons)
+- [ICU4X Field Set Enum \(strongly typed\)](https://unicode-org.github.io/icu4x/rustdoc/icu/datetime/fieldsets/enums/enum.CompositeFieldSet.html)
+- [ICU4X Field Set Builder \(more JS-like\)](https://unicode-org.github.io/icu4x/rustdoc/icu/datetime/fieldsets/builder/struct.FieldSetBuilder.html)
+
 
 Semantic skeletons are not the first attempt to provide this functionality.
 Previous skeleton mechanisms used 
