@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
-  "title": "MessageFormat 2 data-driven tests",
-  "description": "The main schema for MessageFormat 2 test data.",
+  "title": "Unicode MessageFormat data-driven tests",
+  "description": "The main schema for Unicode MessageFormat test data.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -185,7 +185,7 @@
       "type": "string"
     },
     "src": {
-      "description": "The MF2 syntax source.",
+      "description": "The message source in the Unicode MessageFormat syntax.",
       "type": "string"
     },
     "bidiIsolation": {

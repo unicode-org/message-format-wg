@@ -1,6 +1,6 @@
 ## Interchange Data Model
 
-This section defines a data model representation of MessageFormat 2 _messages_.
+This section defines a data model representation of Unicode MessageFormat _messages_.
 
 Implementations are not required to use this data model for their internal representation of messages.
 Neither are they required to provide an interface that accepts or produces
@@ -8,8 +8,8 @@ representations of this data model.
 
 The major reason this specification provides a data model is to allow interchange of 
 the logical representation of a _message_ between different implementations.
-This includes mapping legacy formatting syntaxes (such as MessageFormat 1)
-to a MessageFormat 2 implementation.
+This includes mapping legacy formatting syntaxes (such as ICU MessageFormat)
+to a Unicode MessageFormat implementation.
 Another use would be in converting to or from translation formats without 
 the need to continually parse and serialize all or part of a message.
 
@@ -17,17 +17,17 @@ Implementations that expose APIs supporting the production, consumption, or tran
 _message_ as a data structure are encouraged to use this data model.
 
 This data model provides these capabilities:
-- any MessageFormat 2.0 message can be parsed into this representation
+- any Unicode MessageFormat _message_ can be parsed into this representation
 - this data model representation can be serialized as a well-formed
-MessageFormat 2.0 message
-- parsing a MessageFormat 2.0 message into a data model representation
+  Unicode MessageFormat _message_
+- parsing a Unicode MessageFormat _message_ into a data model representation
   and then serializing it results in an equivalently functional message
 
 This data model might also be used to:
-- parse a non-MessageFormat 2 message into a data model
-  (and therefore re-serialize it as MessageFormat 2).
+- parse non Unicode MessageFormat messages into a data model
+  (and therefore re-serialize it as Unicode MessageFormat).
   Note that this depends on compatibility between the two syntaxes.
-- re-serialize a MessageFormat 2 message into some other format
+- re-serialize a Unicode MessageFormat _message_ into some other format
   including (but not limited to) other formatting syntaxes
   or translation formats.
 
@@ -43,7 +43,7 @@ declarations, options, and attributes to be optional rather than required proper
 
 > [!IMPORTANT]
 > The data model uses the field name `name` to denote various interface identifiers.
-> In the MessageFormat 2 [syntax](/spec/syntax.md), the source for these `name` fields
+> In the Unicode MessageFormat [syntax](/spec/syntax.md), the source for these `name` fields
 > sometimes uses the production `identifier`.
 > This happens when the named item, such as a _function_, supports namespacing.
 
@@ -100,7 +100,7 @@ interface LocalDeclaration {
 In a `SelectMessage`,
 the `keys` and `value` of each _variant_ are represented as an array of `Variant`.
 For the `CatchallKey`, a string `value` may be provided to retain an identifier.
-This is always `'*'` in MessageFormat 2 syntax, but may vary in other formats.
+This is always `'*'` in the Unicode MessageFormat syntax, but may vary in other formats.
 
 ```ts
 interface Variant {
