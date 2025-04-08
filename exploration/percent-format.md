@@ -10,7 +10,7 @@ Status: **Proposed**
 		<dt>First proposed</dt>
 		<dd>2025-04-07</dd>
 		<dt>Pull Requests</dt>
-		<dd>#000</dd>
+		<dd>#1068</dd>
 	</dl>
 </details>
 
@@ -99,6 +99,15 @@ _What other solutions are available?_
 _How do they compare against the requirements?_
 _What other properties they have?_
 
+### Combinations of Functions and Scaling
+
+Any proposed design needs to choose one or more functions
+each of which has a scaling approach
+or a combination of both.
+It is possible to have separate functions, one that is scaling and one that is non-scaling.
+However, the working group suspects that this would represent a hazard,
+since users would be forced to look up which one what which behavior.
+
 ### Function Alternatives
 
 #### Use `:unit`
@@ -144,6 +153,10 @@ Use a new function `:percent` dedicated to percentages.
 You saved {$savings :percent} on your order today!
 ```
 
+> [!NOTE]
+> @sffc suggested that we should consider other names for `:percent`.
+> The name shown here could be considered a placeholder pending other suggestions.
+
 **Pros**
 - Least verbose placeholder
 - Clear what the placeholder does; self-documenting?
@@ -151,6 +164,28 @@ You saved {$savings :percent} on your order today!
 **Cons**
 - Adds to a (growing) list of functions
 - Not "special enough" to warrant its own formatter?
+
+#### Use a generic scaling function
+
+Use a new function with a more generic name so that it can be used to format other scaled values.
+For example, it might use an option `unit` to select `percent`/`permille`/etc.
+
+```
+You saved {$savings :dimensionless unit=percent} on your order today!
+You saved {$savings :scaled per=100} on your order today!
+```
+
+**Pros**
+- Could be used to support non-percent/non-permille scales that might exist in other cultures
+- Somewhat generic
+- Unlike currency or unit values, "per" units do not have to be stored with the value to prevent loss of fidelity,
+  since the scaling is done to a plain old number.
+  This would not apply if the values are not scaled.
+
+**Cons**
+- Only percent and permille are backed with CLDR data and symbols.
+  Other scales would impose an implementation burden.
+- More verbose. Might be harder for users to understand and use.
 
 ### Scaling Alternatives
 
