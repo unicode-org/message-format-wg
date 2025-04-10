@@ -197,7 +197,7 @@ You saved {$savings :scaled per=100} on your order today!
 #### No Scaling
 User has to scale the number. The value `0.5` formats as `0.5%`
 
-#### Scaling
+#### Always Scale
 Implementation always scales the number. The value `0.5` formats as `50%`
 
 #### Optional Scaling
