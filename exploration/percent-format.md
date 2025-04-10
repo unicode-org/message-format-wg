@@ -204,6 +204,26 @@ Implementation always scales the number. The value `0.5` formats as `50%`
 Implementation automatically does (or does not) scale.
 There is an option to switch to the other behavior.
 
-#### Use `:math` to scale
-Provide functionality to scale numbers arbitrarily using the `:math` function.
-This alternative can be used with scaling/no scaling to fix the passed value appropriately without altering userland code.
+#### Use `:math exp` to scale
+Provide functionality to scale numbers with integer powers of 10 using the `:math` function.
+
+Examples using `:unit`, each of which would format as "Completion: 50%.":
+```
+.local $n = {50}
+{{Completion: {$n :unit unit=percent}.}}
+
+.local $n = {0.5 :math exp=2}
+{{Completion: {$n :unit unit=percent}.}}
+```
+
+#### Use `:math multiply` to scale
+Provide arbitrary integer multiplication functionality using the `:math` function.
+
+Examples using `:unit`, each of which would format as "Completion: 50%.":
+```
+.local $n = {50}
+{{Completion: {$n :unit unit=percent}.}}
+
+.local $n = {0.5 :math multiply=100}
+{{Completion: {$n :unit unit=percent}.}}
+```
