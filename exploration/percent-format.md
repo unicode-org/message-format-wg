@@ -42,8 +42,13 @@ That is, does the value `0.5` format as `50%` or `0.5%`?
 Developers need to know which behavior will occur so that they can adjust the value passed appropriately.
 
 > [!NOTE]
-> MessageFormat (MF1) in ICU4J scales.
-> MeasureFormat in ICU4J does not scale.
+> In ICU4J:
+> - MessageFormat (MF1) scales.
+> - MeasureFormat does not scale.
+>
+> In JavaScript:
+> - `Intl.NumberFormat(locale, { style: 'percent' })` scales
+> - `Intl.NumberFormat(locale, { style: 'unit', unit: 'percent' })` does not scale
 
 It is also possible for Unicode MessageFormat to provide support for scaling in the message itself,
 perhaps by extending the `:math` function.
