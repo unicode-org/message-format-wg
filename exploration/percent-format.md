@@ -204,7 +204,28 @@ Implementation always scales the number. The value `0.5` formats as `50%`
 Implementation automatically does (or does not) scale.
 There is an option to switch to the other behavior.
 
-#### Use `:math exp` to scale
+#### Provide scaling via additions to `:math`
+Regardless of the scaling done by the percent formatting function, 
+there might need to be an in-message mechanism for scaling/descaling values.
+The (currently DRAFT) function `:math` was added to support offsets in number matching/formatting.
+Extension of `:math` to support other mathematical capabilities would allow for scaling.
+
+**Pros**
+- Users may find utility in performing math transforms in messages rather than in business logic.
+- Should be easy to implement, given that basic math functionality is common
+ 
+**Cons**
+- Implementation burden, especially when providing generic mathematical operations
+- Designs should be generic and extensible, not tied to short term needs of a given formatter.
+- Potential for abuse and misuse is higher.
+- "Real" math utilities or classes tend to have a long list of functions with many capabilities.
+  A complete implementation would require a lot of design work and effort or introduce
+  instability into the message regime as new options are introduced over time.
+  Compare with `java.lang.Math`
+
+Two proposals exist:
+
+##### Use `:math exp` to scale
 Provide functionality to scale numbers with integer powers of 10 using the `:math` function.
 
 Examples using `:unit`, each of which would format as "Completion: 50%.":
@@ -216,7 +237,7 @@ Examples using `:unit`, each of which would format as "Completion: 50%.":
 {{Completion: {$n :unit unit=percent}.}}
 ```
 
-#### Use `:math multiply` to scale
+##### Use `:math multiply` to scale
 Provide arbitrary integer multiplication functionality using the `:math` function.
 
 Examples using `:unit`, each of which would format as "Completion: 50%.":
