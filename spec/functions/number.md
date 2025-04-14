@@ -257,8 +257,7 @@ Using this _option_ in such a case results in a _Bad Option_ error.
 The value of the _operand_'s `currency` MUST be either a string containing a
 well-formed [Unicode Currency Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCurrencyIdentifier)
 or an implementation-defined currency type.
-Although currency codes are expected to be uppercase,
-implementations SHOULD treat them in a case-insensitive manner.
+Currency codes are case-insensitive.
 A well-formed Unicode Currency Identifier matches the production `currency_code` in this ABNF:
 
 ```abnf
@@ -431,7 +430,7 @@ each of which contains a numerical `value` plus a `unit`
 or it can be a [Number Operand](#number-operands), as long as the _option_
 `unit` is provided.
 
-The value of the _operand_'s `unit` SHOULD be either a string containing a
+The value of the _operand_'s `unit` MUST be either a string containing a
 valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
 or an implementation-defined unit type.
 
