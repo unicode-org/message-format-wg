@@ -632,6 +632,8 @@ digit-size-option = "0" / (("1"-"9") [DIGIT])
 If the value of a _digit size option_ does not evaluate as a non-negative integer,
 or if the value exceeds any implementation-defined and option-specific upper or lower limit,
 a _Bad Option_ error is emitted.
+If the value exceeds an implementation-defined upper or lower limit, 
+the implementation MAY replace the offending value with an implementation-defined value.
 
 #### Number Selection
 
