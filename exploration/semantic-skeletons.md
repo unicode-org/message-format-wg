@@ -31,7 +31,35 @@ Advantages of semantic skeletons over classical skeletons:
 
 Advantages of semantic skeletons over other mechanisms:
 
-- Unlike "picture strings" (`MMM dd, yyyy`), does not require translation
+- Unlike "picture strings" (`MMM dd, yyyy`), skeletons do not require translation.
+  Many date/time formatting regimes provide for "picture strings", which are patterns that
+  exactly match the expected format of the output.
+  In a picture string, separators, spaces, and other formatting are explicitly specified.
+  This provides a lot of power to the devleoper or user experience designer, in terms of specifying formatting.
+  However, this means that the translator has to modify the string to get localized output.
+  For example, here are some picture strings with their output vs. the skeleton `MMMddyyyy`:
+```
+en-US
+MMM dd, yyyy=Apr 21, 2025
+dd MMM, yyyy=21 Apr, 2025
+MM/dd/yyyy=04/21/2025
+dd-MM-yyyy=21-04-2025
+Apr 21, 2025
+---
+fr-FR
+MMM dd, yyyy=avr. 21, 2025
+dd MMM, yyyy=21 avr., 2025
+MM/dd/yyyy=04/21/2025
+dd-MM-yyyy=21-04-2025
+21 avr. 2025
+---
+ja-JP
+MMM dd, yyyy=4月 21, 2025
+dd MMM, yyyy=21 4月, 2025
+MM/dd/yyyy=04/21/2025
+dd-MM-yyyy=21-04-2025
+2025年4月21日
+```
 
 
 ## Background
