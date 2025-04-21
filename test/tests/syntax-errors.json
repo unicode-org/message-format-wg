@@ -192,11 +192,6 @@
     { "src": "{^.}" },
     { "src": "{^ .}" },
     { "src": "{&}" },
-//  { "src": "{\ud800}" }, Unpaired surrogate test.
-//                         This is not valid JSON and some JSON parsers will not parse this test.
-//                         Uncomment if your implementation supports unpaired surrogates
-//                         for text and wants to test invalid placeholders.
-//                         See: https://www.unicode.org/reports/tr35/dev/tr35-messageFormat.html#the-message
     { "src": "{\ufdd0}" },
     { "src": "{\ufffe}" },
     { "src": "{!.\\{}" },
