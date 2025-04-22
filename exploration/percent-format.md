@@ -142,15 +142,25 @@ although this does not have to be the default behavior of UMF's percent unit for
 You saved {$savings :unit unit=percent} on your order today!
 ```
 
-**Pros**
+The `:unit` alternative could also support other unit-like alternatives, such as
+_per-mille_ and _per-myriad_ formatting.
+It doesn't fit as cleanly with other notational variations left out of v47, such as
+compact notation (1000000 => 1M, 1000 => 1K),
+or scientific notation (1000000 => 1.0e6).
+
+_Pros_
 - Uses an existing set of functionality
+- Might provide a more consistent interface for formatting "number-like" values
 - Removes percentages from `:number` and `:integer`, making those functions more "pure"
 
-**Cons**
+_Cons_
 - `:unit` won't be REQUIRED, so percentage format will not be guaranteed across implementations.
   Requiring `:unit type=percent` would be complicated at best.
+- Implementation of `:unit` in its entirely requires significantly more data than implementation of
+  percentage formatting.
 - More verbose placeholder
-- Could require a separate scaling mechanism
+
+---
 
 #### Use `:number`/`:integer` with `type=percent`
 
@@ -161,11 +171,14 @@ Use the existing functions for number formatting with a separate `style` option 
 You saved {$savings :number style=percent} on your order today!
 ```
 
-**Pros**
+_Pros_
 - Consistent with ICU MessageFormat
 
-**Cons**
-- It's the only special case remaining in these functions. Why?
+_Cons_
+- It's the only special case remaining in these functions,
+  unless we also restore compact, scientific, and other notational variations.
+
+---
 
 #### Use a dedicated `:percent` function
 
@@ -179,13 +192,16 @@ You saved {$savings :percent} on your order today!
 > @sffc suggested that we should consider other names for `:percent`.
 > The name shown here could be considered a placeholder pending other suggestions.
 
-**Pros**
+_Pros_
 - Least verbose placeholder
-- Clear what the placeholder does; self-documenting?
+- Clear what the placeholder does; self-documenting
+- Consistent with separating `:currency`
 
-**Cons**
+_Cons_
 - Adds to a (growing) list of functions
 - Not "special enough" to warrant its own formatter?
+
+---
 
 #### Use a generic scaling function
 
@@ -197,14 +213,14 @@ You saved {$savings :dimensionless unit=percent} on your order today!
 You saved {$savings :scaled per=100} on your order today!
 ```
 
-**Pros**
+_Pros_
 - Could be used to support non-percent/non-permille scales that might exist in other cultures
 - Somewhat generic
 - Unlike currency or unit values, "per" units do not have to be stored with the value to prevent loss of fidelity,
   since the scaling is done to a plain old number.
   This would not apply if the values are not scaled.
 
-**Cons**
+_Cons_
 - Only percent and permille are backed with CLDR data and symbols.
   Other scales would impose an implementation burden.
 - More verbose. Might be harder for users to understand and use.
@@ -215,15 +231,29 @@ You saved {$savings :scaled per=100} on your order today!
 User has to scale the number. 
 The value `0.5` formats as `0.5%`
 
+> Example.
+> ```
+> .local $pctSaved = {50}
+> {$pctSaved :percent}
+> ```
+> Prints as `50%`.
+
 #### Always Scale
 Implementation always scales the number. 
 The value `0.5` formats as `50%`
+
+> Example.
+> ```
+> .local $pctSaved = {50}
+> {$pctSaved :percent}
+> ```
+> Prints as `5000%`.
 
 #### Optional Scaling
 Implementation automatically does (or does not) scale.
 There is an option to switch to the other behavior.
 
-> Example.
+> Example. Note that `scale=false` is only to demonstrate switching.
 >```
 > .local $pctSaved = {50}
 > {$pctSaved :percent} {$pctSaved :percent scale=false}
@@ -236,11 +266,19 @@ there might need to be an in-message mechanism for scaling/descaling values.
 The (currently DRAFT) function `:math` was added to support offsets in number matching/formatting.
 Extension of `:math` to support other mathematical capabilities would allow for scaling.
 
-**Pros**
+> Example. 
+>```
+> .local $pctSaved = {0.5}
+> .local $pctScaled = {$pctSaved :math exp=2}
+> {$pctSaved :percent} {$pctScaled :unit unit=percent}
+>```
+> Prints as `50% 50%` if `:percent` is autoscaling by default and `:unit` is not.
+
+_Pros_
 - Users may find utility in performing math transforms in messages rather than in business logic.
 - Should be easy to implement, given that basic math functionality is common
  
-**Cons**
+_Cons_
 - Implementation burden, especially when providing generic mathematical operations
 - Designs should be generic and extensible, not tied to short term needs of a given formatter.
 - Potential for abuse and misuse is higher.
@@ -263,6 +301,14 @@ Examples using `:unit`, each of which would format as "Completion: 50%.":
 {{Completion: {$n :unit unit=percent}.}}
 ```
 
+_Pros_
+- Avoids multiplication of random values
+- Useful for other scaling operations
+
+_Cons_
+- Might require changes to digit size options, since negative exponents are a Thing
+
+
 ##### Use `:math multiply` to scale
 Provide arbitrary integer multiplication functionality using the `:math` function.
 
@@ -274,3 +320,9 @@ Examples using `:unit`, each of which would format as "Completion: 50%.":
 .local $n = {0.5 :math multiply=100}
 {{Completion: {$n :unit unit=percent}.}}
 ```
+
+_Pros_
+- Can be used for other general purpose math
+
+_Cons_
+- Brings in multiplication
