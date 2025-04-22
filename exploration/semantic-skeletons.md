@@ -38,11 +38,10 @@ etc. to produce the desired output.
 
 Advantages of semantic skeletons over classical skeletons:
 
-- A smaller set of acceptable options focused on producing outputs that are sensical
-- Allows for a more efficient implementation
-- Allows for a more clear, ergonomic API
-- More future-proof since CLDR recently added them (??)
-
+- Provides all and only those combinations that make sense
+   - Allows for more efficient implementation, since there is no need to support "crazy" combinations like "month-hour"
+- Allows for a more clear, ergonomic placeholder syntax, since the number of options can be limited
+- Easier for user experience designers to specify, developers to implement, and translators to interpret
 
 ### Avoid 'picture strings'
 
@@ -102,7 +101,7 @@ such as `{ year: "numeric", month: "short", day: "numeric" }`
 in which the user specifies the field and its width.
 Only fields appearing in the options appear in the formatted date/time value.
 
-The ICU microsyntax uses strings supplied by the developers.
+The ICU MessageFormat "classical skeleton" microsyntax uses strings supplied by the developers.
 These strings specify the fields and field lengths that should appear in the formatted value.
 See [here](https://unicode-org.github.io/icu/userguide/format_parse/datetime/#date-field-symbol-table)
 The system then uses the string to perform date/time pattern generation,
@@ -130,12 +129,12 @@ I should trust that the placeholder will produce appropriate results for my lang
 
 _What properties does the solution have to manifest to enable the use-cases above?_
 
-1. It should be possible to format common incremental time types
-   (e.g. milliseconds since epoch times)
-2. It should be possible to format field-based time types
+1. It should be possible to format operands consisting of common incremental time types
+   (e.g. milliseconds since epoch times such as `java.util.Date`, `time_t`, JS `Date`, etc.)
+2. It should be possible to format operands consisting of field-based time types
    (e.g. those that contain seperate values per field type in a date/time, such as a year-month)
 3. It should be possible to format [floating time](https://www.w3.org/TR/timezone/#dfn-floating-time) values
-   (e.g. those that are not tied to a specific time zone)
+   (e.g. those that are not tied to a specific time zone, variously called local/plain/civil times)
 4. Date/time formatters should not permit users to format fields that don't exist in the value
    (e.g. the "month" of a time, the "hour" of a date)
 5. Date/time formatters should not permit users to format bad combinations of fields
