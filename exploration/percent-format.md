@@ -94,7 +94,7 @@ _Describe the proposed solution. Consider syntax, formatting, errors, registry, 
 - Use a dedicated function `:percent` that scales by default.
 - Provide an option `scaling` with values `true` and `false` and defaulting to `true`.
 - Provide all options identical to `:number` _except_ that `select` does not provide `ordinal` value.
-- Allow `unit=percent` in `:unit` that is identical to `:percent` in formatting performance,
+- Allow `unit=percent` in `:unit` that is identical to `:percent` in formatting capabilities,
   for compatibility with CLDR units,
   but document that this usage is not preferred.
 
