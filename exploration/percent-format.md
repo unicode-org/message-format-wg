@@ -81,7 +81,10 @@ Users need control over most formatting details, identical to general number for
 
 _What properties does the solution have to manifest to enable the use-cases above?_
 
-
+- **Be consistent** Any solution for scaling percentages should be a model for other, similar scaling operations,
+  such as _per-mille_ or _per-myriad_,
+  as well as other, non-percent or even non-unit scaling.
+  This does not mean that a scaling mechanism or any particular scaling mechanism itself is a requirement.
 
 ## Constraints
 
