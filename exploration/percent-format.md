@@ -58,6 +58,36 @@ use one of the existing number-formatting functions `:number` and `:integer` wit
 or use the proposed _optional_ function `:unit` with an option `unit=percent`.
 Combinations of these approached might also be used.
 
+### Unit Scaling
+
+There is a difference between _input_ scaling and _output_ scaling in `MeasureFormat`,
+which is the model for the `:unit` function in Unicode MessageFormat.
+
+For example, an input of <3.5, `meter`> with `meter` as the output unit doesn't scale.
+
+If one supplies <0.35 `percent`> as the input and the output unit were `percent`, 
+`MeasureFormat` would format as 0.35%. 
+Just like `meter` ==> `meter` doesn't scale.
+
+However, if one supplies a different input unit, then percent does scale 
+(just like `meter` ==> `foot`). 
+The base unit is for such dimensionless units is 'part'.
+In MF, a bare number literal, such as `.local $foo = {35}`
+or an implementation-specific number type (such as an `int` in Java)
+might be considered to use the input unit of `part`
+unless we specified that the `percent` unit value or `:percent` function overrode the `part` unit with `percent`.
+ 
+With <0.35 `part`> as the input and the output unit of `percent`, the format is "35%".
+
+| Amount | Input Unit | Formatted Value with... | Unit |
+|---|---|---|---|
+| 0.35 | part | 0.35 | part |
+| 0.35 | part | 35.0 | percent |
+| 0.35 | part | 350.0 | permille |
+| 0.35 | part | 3500.0 | permyriad |
+| 0.35 | part | 350000.0 | part-per-1e6 |
+| 0.35 | part | 3.5E8 | part-per-1e9 |
+
 ## Use-Cases
 
 _What use-cases do we see? Ideally, quote concrete examples._
