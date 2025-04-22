@@ -154,7 +154,7 @@ They should not have to coerce or convert normal date/time types in order to do 
    - incremental time types ("timestamps")
      (e.g. milliseconds since epoch times such as `java.util.Date`, `time_t`, JS `Date`, etc.),
    - field-based time types
-     (e.g. those that contain seperate values per field type in a date/time, such as a year-month),
+     (e.g. those that contain separate values per field type in a date/time, such as a year-month),
    - [floating time](https://www.w3.org/TR/timezone/#dfn-floating-time) values
      (e.g. those that are not tied to a specific time zone, variously called local/plain/civil times),
    -  or other local exotica (Java `Calendar`, C `tm` struct, etc.)
