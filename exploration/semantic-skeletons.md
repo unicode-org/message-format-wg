@@ -81,7 +81,9 @@ Unlike "picture strings", skeletons (classical or semantic) do not require the t
 developer to alter them for each locale or to know about the specifics, 
 such as spaces or separators in each locale.
   
-Here are some picture strings with their output vs. common skeletons:
+Here are some picture strings with their output vs. common skeletons,
+showing how picture strings produce poorly localized output
+while skeletons produce localized output:
 
 | Picture String | Locale | Output | Skeleton yMMMd | Skeleton yMMd |
 |---|---|---|---|---|
