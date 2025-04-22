@@ -37,31 +37,23 @@ Advantages of semantic skeletons over other mechanisms:
   In a picture string, separators, spaces, and other formatting are explicitly specified.
   This provides a lot of power to the devleoper or user experience designer, in terms of specifying formatting.
   However, this means that the translator has to modify the string to get localized output.
-  For example, here are some picture strings with their output vs. the skeleton `MMMddyyyy`:
-```
-en-US
-MMM dd, yyyy=Apr 21, 2025
-dd MMM, yyyy=21 Apr, 2025
-MM/dd/yyyy=04/21/2025
-dd-MM-yyyy=21-04-2025
-Apr 21, 2025
----
-fr-FR
-MMM dd, yyyy=avr. 21, 2025
-dd MMM, yyyy=21 avr., 2025
-MM/dd/yyyy=04/21/2025
-dd-MM-yyyy=21-04-2025
-21 avr. 2025
----
-ja-JP
-MMM dd, yyyy=4月 21, 2025
-dd MMM, yyyy=21 4月, 2025
-MM/dd/yyyy=04/21/2025
-dd-MM-yyyy=21-04-2025
-2025年4月21日
-```
+  For example, here are some picture strings with their output vs. common skeletons:
 
-
+| Picture String | Locale | Output | Skeleton yMMMd | Skeleton yMMd |
+|---|---|---|---|---|
+|MMM dd, yyyy| en-US | Apr 22, 2025| Apr 22, 2025| 04/22/2025|
+| | fr-FR | avr. 22, 2025| 22 avr. 2025| 22/04/2025|
+| | ja-JP | 4月 22, 2025| 2025年4月22日| 2025/04/22|
+|dd MMM, yyyy| en-US | 22 Apr, 2025| Apr 22, 2025| 04/22/2025|
+| | fr-FR | 22 avr., 2025| 22 avr. 2025| 22/04/2025|
+| | ja-JP | 22 4月, 2025| 2025年4月22日| 2025/04/22|
+|MM/dd/yyyy| en-US | 04/22/2025| Apr 22, 2025| 04/22/2025|
+| | fr-FR | 04/22/2025| 22 avr. 2025| 22/04/2025|
+| | ja-JP | 04/22/2025| 2025年4月22日| 2025/04/22|
+|dd-MM-yyyy| en-US | 22-04-2025| Apr 22, 2025| 04/22/2025|
+| | fr-FR | 22-04-2025| 22 avr. 2025| 22/04/2025|
+| | ja-JP | 22-04-2025| 2025年4月22日| 2025/04/22|
+  
 ## Background
 
 _What context is helpful to understand this proposal?_
