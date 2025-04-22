@@ -7,7 +7,7 @@ These test files are intended to be useful for testing multiple different _messa
 - `syntax-errors.json` — Strings that should produce a Syntax Error when parsed.
 
 > [!NOTE]
-> `syntax-errors.json` does not include tests for the disallowed uses of unpaired surrogate code points
+> Tests for the disallowed uses of unpaired surrogate code points are not included
 > because JSON does not permit unpaired surrogate code points.
 > If your implementation uses UTF-16 based strings (such as JavaScript `String` or Java `java.lang.String`)
 > or otherwise allows unpaired surrogates in text or literals, you will need to implement tests equivalent
