@@ -64,9 +64,11 @@ _What use-cases do we see? Ideally, quote concrete examples._
 
 Developers wish to write messages that format a numeric value as a percentage in a locale-sensitive manner.
 
-The numeric value is not scaled because it is the result of a computation, e.g. `var savings = discount / price`.
+The numeric value of the operand is not pre-scaled because it is the result of a computation, 
+e.g. `var savings = discount / price`.
 
-The numeric value is scaled, e.g. `var savingsPercent = 50`
+The numeric value of the operant is pre-scaled, 
+e.g. `var savingsPercent = 50`
 
 Users need control over most formatting details, identical to general number formatting:
 - negative number sign display
@@ -81,10 +83,17 @@ Users need control over most formatting details, identical to general number for
 
 _What properties does the solution have to manifest to enable the use-cases above?_
 
-- **Be consistent** Any solution for scaling percentages should be a model for other, similar scaling operations,
-  such as _per-mille_ or _per-myriad_,
-  as well as other, non-percent or even non-unit scaling.
-  This does not mean that a scaling mechanism or any particular scaling mechanism itself is a requirement.
+- **Be consistent**
+  - Any solution for scaling percentages should be a model for other, similar scaling operations,
+     such as _per-mille_ or _per-myriad_,
+     as well as other, non-percent or even non-unit scaling.
+     This does not mean that a scaling mechanism or any particular scaling mechanism itself is a requirement.
+  - Any solution for formatting percentages should be a model for solving related problems with:
+    - per-mille
+    - per-myriad
+    - compact notation
+    - scientific notation
+    - (others??)
 
 ## Constraints
 
@@ -113,8 +122,13 @@ Any proposed design needs to choose one or more functions
 each of which has a scaling approach
 or a combination of both.
 It is possible to have separate functions, one that is scaling and one that is non-scaling.
-However, the working group suspects that this would represent a hazard,
-since users would be forced to look up which one what which behavior.
+
+Some working group members suspect that having a function that scales and one that does not
+would represent a hazard,
+since users would be forced to look up which one has which behavior.
+
+Other working group members have expressed that the use cases for pre-scaled vs. non-pre-scaled are separate
+and that having separate functions for these is logically sensible.
 
 ### Function Alternatives
 
@@ -136,7 +150,7 @@ You saved {$savings :unit unit=percent} on your order today!
 - `:unit` won't be REQUIRED, so percentage format will not be guaranteed across implementations.
   Requiring `:unit type=percent` would be complicated at best.
 - More verbose placeholder
-- Could require a scaling mechanism
+- Could require a separate scaling mechanism
 
 #### Use `:number`/`:integer` with `type=percent`
 
@@ -198,14 +212,23 @@ You saved {$savings :scaled per=100} on your order today!
 ### Scaling Alternatives
 
 #### No Scaling
-User has to scale the number. The value `0.5` formats as `0.5%`
+User has to scale the number. 
+The value `0.5` formats as `0.5%`
 
 #### Always Scale
-Implementation always scales the number. The value `0.5` formats as `50%`
+Implementation always scales the number. 
+The value `0.5` formats as `50%`
 
 #### Optional Scaling
 Implementation automatically does (or does not) scale.
 There is an option to switch to the other behavior.
+
+> Example.
+>```
+> .local $pctSaved = {50}
+> {$pctSaved :percent} {$pctSaved :percent scale=false}
+>```
+> Prints as `5000% 50%` if `:percent` is autoscaling by default
 
 #### Provide scaling via additions to `:math`
 Regardless of the scaling done by the percent formatting function, 
@@ -226,7 +249,7 @@ Extension of `:math` to support other mathematical capabilities would allow for 
   instability into the message regime as new options are introduced over time.
   Compare with `java.lang.Math`
 
-Two proposals exist:
+Two proposals exist for using `:math`:
 
 ##### Use `:math exp` to scale
 Provide functionality to scale numbers with integer powers of 10 using the `:math` function.
