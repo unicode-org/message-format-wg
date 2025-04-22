@@ -19,8 +19,22 @@ Status: **Proposed**
 
 _What is this proposal trying to achieve?_
 
+### Provide support for formatting date/time values using semantic skeletons
+
 "Semantic skeletons" are a method introduced in CLDR 46 for programmatically selecting a datetime pattern for formatting. 
 There is a fixed set of acceptable semantic skeletons.
+
+Previously, ICU MessageFormat provided support for "classical skeletons",
+using a microsyntax derived from familiar picture strings (see below)
+combined with code in ICU (`DateTimePatternGenerator`) to produce the desired date/time value format.
+`Intl.DateTimeFormat` uses "option bags" to provide a similar capability.
+A classical skeleton allowed users to express the desired fields and field widths in a formatted date/time value.
+The runtime uses locale data to determine minutiae such as 
+field-order, 
+separators, 
+spacing, 
+field-length, 
+etc. to produce the desired output.
 
 Advantages of semantic skeletons over classical skeletons:
 
@@ -29,15 +43,29 @@ Advantages of semantic skeletons over classical skeletons:
 - Allows for a more clear, ergonomic API
 - More future-proof since CLDR recently added them (??)
 
-Advantages of semantic skeletons over other mechanisms:
 
-- Unlike "picture strings" (`MMM dd, yyyy`), skeletons do not require translation.
-  Many date/time formatting regimes provide for "picture strings", which are patterns that
-  exactly match the expected format of the output.
-  In a picture string, separators, spaces, and other formatting are explicitly specified.
-  This provides a lot of power to the devleoper or user experience designer, in terms of specifying formatting.
-  However, this means that the translator has to modify the string to get localized output.
-  For example, here are some picture strings with their output vs. common skeletons:
+### Avoid 'picture strings'
+
+The MFWG early on considered including support for "picture strings" in the formatting of date/time values.
+There is a Working Group consensus **_not_** to support picture strings in Unicode MessageFormat, if possible.
+Many date/time formatting regimes provide for "picture strings".
+A "picture string" is a pattern using a microsyntax in which the user (developer, translator, UX designer)
+exactly specifies the desired format of the date/time value.
+In a picture string, separators, spaces, and other formatting are explicitly specified.
+This provides a lot of power to the devleoper or user experience designer, in terms of specifying formatting.
+For example: `MMM dd, yyyy` or `yyyy-dd-MM'T'HH:mm:ss`
+  
+Picture strings require translators to interact with and "translate" the picture string
+which is embedded into the _placeholder_ in order to get appropriately localized output.
+For example, in MF1 you might see: `Today is {myDate,date,MMM dd, yyyy}`
+
+Translating picture strings can result in non-functional messages.
+The exotic microsyntax can be unfamiliar to translators, as it is designed for developers.
+Unlike "picture strings", skeletons (classical or semantic) do not require the translator or
+developer to alter them for each locale or to know about the specifics, 
+such as spaces or separators in each locale.
+  
+Here are some picture strings with their output vs. common skeletons:
 
 | Picture String | Locale | Output | Skeleton yMMMd | Skeleton yMMd |
 |---|---|---|---|---|
@@ -65,7 +93,7 @@ Links:
 
 
 Semantic skeletons are not the first attempt to provide this functionality.
-Previous skeleton mechanisms used 
+Previous skeleton mechanisms ("classical skeletons") used 
 collections of field options (as in `Intl.DateTimeFormat`)
 or a microsyntax (as in ICU4J).
 
