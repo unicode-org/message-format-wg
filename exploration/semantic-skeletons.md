@@ -11,7 +11,7 @@ Status: **Proposed**
 		<dt>First proposed</dt>
 		<dd>2024-04-06</dd>
 		<dt>Pull Requests</dt>
-		<dd>#000</dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/1067">#1067</a></dd>
 	</dl>
 </details>
 
