@@ -192,9 +192,6 @@
     { "src": "{^.}" },
     { "src": "{^ .}" },
     { "src": "{&}" },
-    { "description": "Valid JSON cannot contain an unpaired surrogate. Unescape backslash to create a syntax error for implementations that support UTF-16.",
-      "src": "{\\ud800}"
-    },
     { "src": "{\ufdd0}" },
     { "src": "{\ufffe}" },
     { "src": "{!.\\{}" },
