@@ -68,7 +68,7 @@ Many date/time formatting regimes provide for "picture strings".
 A "picture string" is a pattern using a microsyntax in which the user (developer, translator, UX designer)
 exactly specifies the desired format of the date/time value.
 In a picture string, separators, spaces, and other formatting are explicitly specified.
-This provides a lot of power to the devleoper or user experience designer, in terms of specifying formatting.
+This provides a lot of power to the developer or user experience designer, in terms of specifying formatting.
 For example: `MMM dd, yyyy` or `yyyy-dd-MM'T'HH:mm:ss`
   
 Picture strings require translators to interact with and "translate" the picture string
