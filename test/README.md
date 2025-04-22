@@ -13,7 +13,11 @@ These test files are intended to be useful for testing multiple different _messa
 > or otherwise allows unpaired surrogates in text or literals, you will need to implement tests equivalent
 > to the following for syntax errors:
 > ```json
-> { "src": "{\ud800}" }
+> {
+>   "locale": "en-US",
+>   "src": "{\ud800}",
+>   "expErrors": [{ "type": "syntax-error" }]
+> }
 > ```
 
 - `data-model-errors.json` - Strings that should produce a Data Model Error when processed.
