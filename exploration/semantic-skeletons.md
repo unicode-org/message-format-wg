@@ -24,11 +24,27 @@ _What is this proposal trying to achieve?_
 "Semantic skeletons" are a method introduced in CLDR 46 for programmatically selecting a datetime pattern for formatting. 
 There is a fixed set of acceptable semantic skeletons.
 
+#### Avoid 'classical skeletons'
+
 Previously, ICU MessageFormat provided support for "classical skeletons",
-using a microsyntax derived from familiar picture strings (see below)
+using a microsyntax derived from familiar 'picture strings' (see below)
 combined with code in ICU (`DateTimePatternGenerator`) to produce the desired date/time value format.
-`Intl.DateTimeFormat` uses "option bags" to provide a similar capability.
-A classical skeleton allowed users to express the desired fields and field widths in a formatted date/time value.
+
+`Intl.DateTimeFormat` provided options to provide a similar capability.
+For example:
+```javascript
+options = {
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric",
+  timeZone: "Australia/Sydney",
+  timeZoneName: "short",
+};
+console.log(new Intl.DateTimeFormat("en-AU", options).format(date));
+// "2:00:00 pm AEDT"
+```
+
+Classical skeleton solutions allow users to express the desired fields and field widths in a formatted date/time value.
 The runtime uses locale data to determine minutiae such as 
 field-order, 
 separators, 
@@ -39,11 +55,12 @@ etc. to produce the desired output.
 Advantages of semantic skeletons over classical skeletons:
 
 - Provides all and only those combinations that make sense
-   - Allows for more efficient implementation, since there is no need to support "crazy" combinations like "month-hour"
+   - Allows for more efficient implementation, since there is no need to support combinations like "month-hour"
+     that are not useful to users
 - Allows for a more clear, ergonomic placeholder syntax, since the number of options can be limited
 - Easier for user experience designers to specify, developers to implement, and translators to interpret
 
-### Avoid 'picture strings'
+#### Avoid 'picture strings'
 
 The MFWG early on considered including support for "picture strings" in the formatting of date/time values.
 There is a Working Group consensus **_not_** to support picture strings in Unicode MessageFormat, if possible.
@@ -129,6 +146,9 @@ I should trust that the placeholder will produce appropriate results for my lang
 
 _What properties does the solution have to manifest to enable the use-cases above?_
 
+Users want the most intuitive formats and outcomes to be the defaults.
+They should not have to coerce or convert normal date/time types in order to do simple operations.
+
 1. It should be possible to format operands consisting of locally-relevant date/time types, including:
    - Temporal values such as `java.time` or JS `Temporal` values,
    - incremental time types ("timestamps")
@@ -180,17 +200,17 @@ In this section, we use a scheme similar to `FieldSetBuilder` linked earlier.
 Options:
 
 ```
-{$date :datetime dateFields="YMD"}  
-{$date :datetime date="YMD"}  
-{$date :datetime fields="YMD"}
+{$date :datetime dateFields=YMD}  
+{$date :datetime date=YMD}  
+{$date :datetime fields=YMD}
 ```
 
 #### TimePrecision
 
 Options:
 ```
-{$date :datetime timePrecision="minute"}  
-{$date :datetime time="minute"}
+{$date :datetime timePrecision=minute}  
+{$date :datetime time=minute}
 ```
 (TODO: Add others)
 
@@ -198,12 +218,46 @@ Options:
 
 Some choices:
 
-1. A single :datetime function  
-   1. Pro: All in one place  
-   2. Con: More combinations of options that form invalid skeletons  
-2. :date, :time, and :datetime  
-   1. Pro: More tailored and type-safe  
-   2. Con: Not fully type-safe  
-3. :date, :time, :datetime, :zoneddatetime, *maybe* :zoneddate, :zonedtime, :timezone  
-   1. Pro: Most type-safe  
-   2. Con: Lots of functions
+#### A single `:datetime` function
+
+_Pros_
+- Everything is in one place
+
+_Cons_
+- More combinations of options that can form invalid skeletons
+- Can require verbose placeholders
+
+#### Use separate `:date`, `:time` and `:datetime` functions
+
+_Pros_
+- More tailored to specific user requirements
+- `:date` and `:time` are somewhat self-documenting about the message author's formatting intention
+
+_Cons_
+- Not fully type-safe.
+
+#### Use separate semantic functions
+
+`:date`, `:time`, `:datetime`, `:zoneddatetime`, *maybe* `:zoneddate`, `:zonedtime`, `:timezone`
+
+Problem: Most users are likely to prefer date/time/datetime to zoneddate/zonedtime/zoneddatetime
+as the default formatting functions.
+Most "classical" time types are timestamps.
+User intentions might not be met by these names.
+
+Problem: Different platforms cannot agree on what to call a Floating Time Value: HTML and Java use `LocalXXX`,
+JavaScript has adopted `PlainXXX`,
+some others use different terms, such as `CivilXXX`.
+
+_Pros_
+- Helps users get the right results
+- Could be less verbose
+- Better at documenting the message author's intention
+
+_Cons_
+- _Lots_ of functions
+
+---
+
+
+
