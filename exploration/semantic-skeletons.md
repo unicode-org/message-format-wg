@@ -205,6 +205,7 @@ Options:
 {$date :datetime fields=YMD}
 ```
 
+The names `dateFields`, `date`, and `fields` are candidate names for the option that specifies the semantic skeleton string to be used for formatting the date/time value.
 #### TimePrecision
 
 Options:
