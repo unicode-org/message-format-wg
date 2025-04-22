@@ -129,22 +129,32 @@ I should trust that the placeholder will produce appropriate results for my lang
 
 _What properties does the solution have to manifest to enable the use-cases above?_
 
-1. It should be possible to format operands consisting of common incremental time types
-   (e.g. milliseconds since epoch times such as `java.util.Date`, `time_t`, JS `Date`, etc.)
-2. It should be possible to format operands consisting of field-based time types
-   (e.g. those that contain seperate values per field type in a date/time, such as a year-month)
-3. It should be possible to format [floating time](https://www.w3.org/TR/timezone/#dfn-floating-time) values
-   (e.g. those that are not tied to a specific time zone, variously called local/plain/civil times)
-4. Date/time formatters should not permit users to format fields that don't exist in the value
+1. It should be possible to format operands consisting of locally-relevant date/time types, including:
+   - Temporal values such as `java.time` or JS `Temporal` values,
+   - incremental time types ("timestamps")
+     (e.g. milliseconds since epoch times such as `java.util.Date`, `time_t`, JS `Date`, etc.),
+   - field-based time types
+     (e.g. those that contain seperate values per field type in a date/time, such as a year-month),
+   - [floating time](https://www.w3.org/TR/timezone/#dfn-floating-time) values
+     (e.g. those that are not tied to a specific time zone, variously called local/plain/civil times),
+   -  or other local exotica (Java `Calendar`, C `tm` struct, etc.)
+1. Date/time formatters should not permit users to format fields that don't exist in the value
    (e.g. the "month" of a time, the "hour" of a date)
-5. Date/time formatters should not permit users to format bad combinations of fields
+1. Date/time formatters should not permit users to format bad combinations of fields
    (e.g. `MMMMmm` (month-minute), `yyyyjm` (year-hour-minute), etc.)
-6. Date/time formatters should permit users to control or influence the width of indvidual fields
-   in a manner similar to classical skeletons
-   (e.g. `yMMd` vs. `yMMMd` vs. `yMMMMd` => 04/06/2025 vs. Apr 6, 2025 vs. April 6, 2025)
-7. Developers, translators, and UI designers should only have to learn a single "microsyntax" or set of options for date formatting.
-   Such a syntax or option set should be easy to understand only from the placeholder.
-   Such a syntax or option set should not require translators to alter the values in most or all locales.
+1. Date/time formatters should permit users to specify the desired width of indvidual fields
+   in a manner similar to classical skeletons,
+   while relying on locale data to prevent undesirable results.
+   For example:
+   | Classical Skeleton | `en-US` Output | 
+   |---|---|
+   | `yMd` | 04/06/2025 |
+   | `yMMMd` | Apr 6, 2025 |
+   | `yMMMMd` | April 6, 2025 |
+1. Developers, translators, and UI designers should not have to learn
+   multiple new microsyntaxes or multiple different sets of options for date/time value formatting.
+1. Any microsyntax or option set specified should be easy to understand only from the placeholder.
+1. Any microsyntax or option set specified should not _require_ translators to alter the values in most or all locales.
 
 ## Constraints
 
