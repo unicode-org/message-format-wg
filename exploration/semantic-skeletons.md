@@ -34,7 +34,7 @@ combined with code in ICU (`DateTimePatternGenerator`) to produce the desired da
 These weren't "skeletons" from the point of view that they didn't use a dedicated microsyntax
 similar to 'picture strings',
 but the effect was the same:
-user's specified which fields they wanted with which display options (such as width).
+users specified which fields they wanted with which display options (such as width).
 For example:
 ```javascript
 options = {
