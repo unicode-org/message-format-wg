@@ -31,6 +31,10 @@ using a microsyntax derived from familiar 'picture strings' (see below)
 combined with code in ICU (`DateTimePatternGenerator`) to produce the desired date/time value format.
 
 `Intl.DateTimeFormat` provided options to provide a similar capability.
+These weren't "skeletons" from the point of view that they didn't use a dedicated microsyntax
+similar to 'picture strings',
+but the effect was the same:
+user's specified which fields they wanted with which display options (such as width).
 For example:
 ```javascript
 options = {
@@ -129,6 +133,47 @@ arranging the specified fields in the correct order,
 selecting locale-appropriate separators,
 and producing a "picture string" that can be consumed by date/time formatters
 such as `java.text.SimpleDateFormat`.
+
+### FAQ
+
+This section considers some potential arguments against the design
+or captures frequently asked questions about it.
+
+**What if semantic skeletons doesn't support the format I want?
+Unlike picture strings or classical skeletons, semantic skeletons do not allow unrestricted
+composition of date/time formats.**
+
+If there were an overlooked format, it could be added in a future release.
+However, the designers of semantic skeletons have considered the breadth of use cases.
+If a skeleton is not available, there is probably a good reason for avoiding it.
+
+**My UX designer wants to specify different separators/presentational details.
+I could do that with picture strings, but not with any kind of skeleton. Help!**
+
+Specialized formats might be constructed using individual fields or by using formatToParts.
+In general, such specialized designs rapidly become examples of poor internationalization,
+since examples of such adjustments do not consider the breadth of date/time representation.
+
+**Semantic skeletons are too new. 
+Implementation experience is limited.
+Shouldn't we wait to adopt them?**
+
+Unicode MessageFormat has a one-time opportunity to avoid "deprecated at birth" date/time formatting
+and to provide a robust, internally-consistent mechanism that guides users away from
+common date/time formatting pitfalls.
+
+This is already ample experience with classical skeletons.
+The difference with semantic skeletons is that it filters out "mistakes"
+such as "11 PM April" (`jjMMMM` or `HHaMMMM`) or "2 2025" (`dyyyy`).
+
+**What about specialized formats, such as ISO8601?**
+
+These should be provided via other means that requiring a specialized pattern 
+and the (optional) `@locale` attribute. Do you really want to support this,
+given that it can then be used for other things:
+```
+{$now :datetime pattern=|yyyy-MM-dd'T'HH:mm:ss.sssz| @locale=und timezone=UTC}
+```
 
 ## Use-Cases
 
