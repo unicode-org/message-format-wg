@@ -71,7 +71,7 @@ Just like `meter` ==> `meter` doesn't scale.
 
 However, if one supplies a different input unit, then percent does scale 
 (just like `meter` ==> `foot`). 
-The base unit is for such dimensionless units is 'part'.
+The base unit for such dimensionless units is called 'part'.
 In MF, a bare number literal, such as `.local $foo = {35}`
 or an implementation-specific number type (such as an `int` in Java)
 might be considered to use the input unit of `part`
