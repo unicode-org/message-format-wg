@@ -221,7 +221,7 @@ They should not have to coerce or convert normal date/time types in order to do 
    | `yMMMMd` | April 6, 2025 |
 1. Developers, translators, and UI designers should not have to learn
    multiple new microsyntaxes or multiple different sets of options for date/time value formatting.
-1. Any microsyntax or option set specified should be easy to understand only from the placeholder.
+1. Any microsyntax or option set specified should be easy to understand only from the expression.
 1. Any microsyntax or option set specified should not _require_ translators to alter the values in most or all locales.
 
 ## Constraints
