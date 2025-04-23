@@ -181,7 +181,7 @@ or scientific notation (1000000 => 1.0e6).
 _Pros_
 - Uses an existing set of functionality
 - Might provide a more consistent interface for formatting "number-like" values
-- Removes percentages from `:number` and `:integer`, making those functions more "pure"
+- Keeps percentage formatting out of `:number` and `:integer`, making those functions more "pure"
 
 _Cons_
 - `:unit` won't be REQUIRED, so percentage format will not be guaranteed across implementations.
@@ -277,7 +277,7 @@ The value `0.5` formats as `50%`
 > .local $pctSaved = {50}
 > {$pctSaved :percent}
 > ```
-> Prints as `5000%`.
+> Prints as `5,000%`.
 
 #### Optional Scaling
 Implementation automatically does (or does not) scale.
@@ -288,7 +288,7 @@ There is an option to switch to the other behavior.
 > .local $pctSaved = {50}
 > {$pctSaved :percent} {$pctSaved :percent scale=false}
 >```
-> Prints as `5000% 50%` if `:percent` is autoscaling by default
+> Prints as `5,000% 50%` if `:percent` is autoscaling by default
 
 #### Provide scaling via additions to `:math`
 Regardless of the scaling done by the percent formatting function, 
@@ -336,7 +336,7 @@ _Pros_
 - Useful for other scaling operations
 
 _Cons_
-- Might require changes to digit size options, since negative exponents are a Thing
+- Cannot use _digit size option_ as the `exp` option value type, since negative exponents are a Thing
 
 
 ##### Use `:math multiply` to scale
