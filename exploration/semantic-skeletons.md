@@ -62,14 +62,15 @@ Advantages of semantic skeletons over classical skeletons:
 
 #### Avoid 'picture strings'
 
-The MFWG early on considered including support for "picture strings" in the formatting of date/time values.
-There is a Working Group consensus **_not_** to support picture strings in Unicode MessageFormat, if possible.
 Many date/time formatting regimes provide for "picture strings".
 A "picture string" is a pattern using a microsyntax in which the user (developer, translator, UX designer)
 exactly specifies the desired format of the date/time value.
 In a picture string, separators, spaces, and other formatting are explicitly specified.
 This provides a lot of power to the developer or user experience designer, in terms of specifying formatting.
 For example: `MMM dd, yyyy` or `yyyy-dd-MM'T'HH:mm:ss`
+
+The MFWG early on considered including support for "picture strings" in the formatting of date/time values.
+There is a Working Group consensus **_not_** to support picture strings in Unicode MessageFormat, if possible.
   
 Picture strings require translators to interact with and "translate" the picture string
 which is embedded into the _placeholder_ in order to get appropriately localized output.
