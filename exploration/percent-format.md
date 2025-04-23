@@ -60,8 +60,9 @@ Combinations of these approached might also be used.
 
 ### Unit Scaling
 
-There is a difference between _input_ scaling and _output_ scaling in `MeasureFormat`,
-which is the model for the `:unit` function in Unicode MessageFormat.
+This section describes the scaling behavior of ICU's `NumberFormatter` class and its `unit()` method,
+which is one model for how Unicode MessageFormat might implement percents and units.
+There is a difference between _input_ scaling and _output_ scaling in ICU's `NumberFormatter`.
 
 For example, an input of <3.5, `meter`> with `meter` as the output unit doesn't scale.
 
@@ -225,11 +226,15 @@ You saved {$savings :percent} on your order today!
 _Pros_
 - Least verbose placeholder
 - Clear what the placeholder does; self-documenting
-- Consistent with separating `:currency`
+- Consistent with separating specialized formats from `:number`/`:integer`
+  as was done with `:currency`
 
 _Cons_
 - Adds to a (growing) list of functions
 - Not "special enough" to warrant its own formatter?
+- Unlike `:currency`, because currency formatting depends on currency codes,
+  which in turn impact default fraction digits, and other presentation details.
+  Nothing like that applies to percents. 
 
 ---
 
