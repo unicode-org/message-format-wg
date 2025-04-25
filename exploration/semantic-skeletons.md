@@ -175,6 +175,12 @@ given that it can then be used for other things:
 {$now :datetime pattern=|yyyy-MM-dd'T'HH:mm:ss.sssz| @locale=und timezone=UTC}
 ```
 
+**What do we call a [floating time value](https://www.w3.org/TR/timezone/#dfn-floating-time)?**
+Different platforms cannot agree on what to call a Floating Time Value: HTML and Java use `LocalXXX`,
+JavaScript has adopted `PlainXXX`,
+some others use different terms, such as `CivilXXX`.
+This could affect what functions or options are named when dealing with floating times.
+
 ## Use-Cases
 
 _What use-cases do we see? Ideally, quote concrete examples._
@@ -189,6 +195,90 @@ in my language.
 As a translator, I don't want to have to "translate" or modify a date/time placeholder to suit
 my language's needs.
 I should trust that the placeholder will produce appropriate results for my language.
+
+> [!NOTE]
+> In the subsections below, we only show the `:datetime` function.
+> Readers should assume that `:date` and `:time` also exist.
+
+### Incremental (timestamp) values
+As a developer, I want to format common incremental time values.
+Examples of these are `java.util.Date`, JS `Date`, `time_t`, etc.
+These are typically measured in millis or seconds in the UNIX epoch.
+The UNIX epoch is measured from January 1, 1970 and uses the UTC time zone.
+These values are "attached to the timeline", 
+that is, they are not floating times.
+These types are very common and are the only option for representing time in some programming languages.
+
+Incremental values usually do not include time zone.
+They occasionally include a _local time offset_ ("offset"), although most commonly they do not.
+
+To format a timestamp an offset or a timezone is required.
+Options for providing this are:
+- Assume UTC
+- Assume the runtime's current offset or time zone should be used
+- Require offset or time zone be provided (or error)
+- Assume the runtime's offset/time zone, but allow user to override
+
+For the table below
+- `$d` is the date value `0` (January 1, 1970 00:00:00 UTC);
+- the runtime's time zone is `America/Los_Angeles`;
+- the user has a time zone of `Europe/Helsinki`
+
+| Option | Syntax | Output |
+|---|---|---|
+| Assume UTC            | `{$d :datetime}` | `Jan 1, 1970, 12:00:00 AM UTC` |
+| Assume runtime zone   | `{$d :datetime}` | `Dec 31, 1969, 4:00:00 PM PST` |
+| Require offset        | `{$d :datetime offset=\|02:00\|` | `Jan 1, 1970, 2:00:00 AM GMT+2` |
+| Require zone...       | `{$d :datetime timezone=\|Europe/Helsinki\|}` |  `Jan 1, 1970, 2:00:00 AM EET` |
+| ... or error          | `{$d :datetime}` | `Bad Operand` |
+| Assume runtime...     | `{$d :datetime}` | `Dec 31, 1969, 4:00:00 PM PST` |
+| ...but allow override | `{$d :datetime timezone=\|Europe/Helsinki\|}` |  `Jan 1, 1970, 2:00:00 AM EET` |
+
+> [!NOTE]
+> Time zone and offset option values can be specified using variables.
+
+### Floating Time values
+As a developer, I want to format floating time values.
+I may need to force an incremental value to "float", since many platforms do not have a type for floating times,
+they only have incremental values.
+I may need to force a zoned value to "float" by removing the offset or zone.
+I may also need to attach a floating value to the timeline by specifying an offset or time zone.
+
+Floating/unfloating time values is a less-common requirement,
+so functions/options might not need to be optimized for these cases.
+
+For the table below:
+- `$f` is a floating time value equivalent to `1970-01-01T00:00:00.00`
+- `$d` is a timestamp equivalent to `1970-01-01T00:00:00.00Z`
+- `$zoned` is a non-floating value equivalent to `1970-01-01T00:00:00.000Z[America/Los_Angeles]`
+  (this value might also be represented as `1969-12-31T16:00:00.000-08:00[America/Los_Angeles]`)
+- the option `offset` is an example only; the function `:localdatetime` is an example only.
+  The function `:zoneddatetime` is one of the alternative designs for zoned values,
+  which might make `:datetime` the equivalent of `:localdatetime`??
+
+| Option | Syntax | Output |
+|---|---|---|
+| Format a floating time | `{$f :datetime}` | `Jan 1, 1970, 12:00:00 AM` |
+| Float a timestamp      | `{$d :datetime offset=none}` | `Jan 1, 1970, 12:00:00 AM` |
+| Float a zoned value    | `{$zoned :datetime offset=none}` | `Dec 31, 1969, 4:00:00 PM` |
+| ... using floating function | `{$zoned :localdatetime}`   |  `Dec 31, 1969, 4:00:00 PM` |
+| Attach a floating time to timeline | `{$f :datetime timezone=\|Europe/Helsinki\|}` | `Jan 1, 1970, 2:00:00 AM EET` |
+
+### Zoned or Offset Time values
+As a developer, I want to format time values that include an offset or time zone.
+
+In the preceding subsections, the possibility of allowing time zone or offset
+to be provided (in the case of timestamps)
+or overridden (in the case of floating times or zoned/offsetted times)
+was described.
+If such behavior is permitted, it introduces tension between the options for offset/time zone
+and the value itself.
+That is, given a value `1970-01-01T00:00:00.000Z[UTC]`
+and an expression `{$zoned :datetime timezone=\|Europe/Helsinki\|}`,
+what is the format?
+- `Jan 1, 1970, 12:00:00 AM UTC` (value wins; user cannot adjust)
+- `Jan 1, 1970, 2:00:00 AM EET` (option wins; inconsistent with some Temporal behaviors on Java and JS)
+
 
 ## Requirements
 
@@ -223,6 +313,11 @@ They should not have to coerce or convert normal date/time types in order to do 
    multiple new microsyntaxes or multiple different sets of options for date/time value formatting.
 1. Any microsyntax or option set specified should be easy to understand only from the expression.
 1. Any microsyntax or option set specified should not _require_ translators to alter the values in most or all locales.
+1. User's should be able to specify the time zone or local time offset used in formatting
+   an incremental or timestamp value
+   because many date/time formatting processes are
+   running in a different environment/offset/zone from where the value will be seen
+   or are formatting a value for a specific offset or zone.
 
 ## Constraints
 
@@ -293,10 +388,6 @@ Problem: Most users are likely to prefer date/time/datetime to zoneddate/zonedti
 as the default formatting functions.
 Most "classical" time types are timestamps.
 User intentions might not be met by these names.
-
-Problem: Different platforms cannot agree on what to call a Floating Time Value: HTML and Java use `LocalXXX`,
-JavaScript has adopted `PlainXXX`,
-some others use different terms, such as `CivilXXX`.
 
 _Pros_
 - Helps users get the right results
