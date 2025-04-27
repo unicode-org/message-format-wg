@@ -380,7 +380,7 @@ _Pros_
 _Cons_
 - Not fully type-safe.
 
-#### Use separate semantic functions
+#### Use separate typed functions
 
 `:date`, `:time`, `:datetime`, `:zoneddatetime`, *maybe* `:zoneddate`, `:zonedtime`, `:timezone`
 
@@ -395,7 +395,45 @@ _Pros_
 - Better at documenting the message author's intention
 
 _Cons_
-- _Lots_ of functions
+- More functions
+
+
+#### Use separate skeleton functions
+
+Define functions according to the available "field sets" or fields in the semantic skeletons spec.
+Use options to handle field widths.
+Such a list might look like:
+
+- Standalone fields
+  - `:day`, `:weekday`, `:month`, `:year`, `:hour`, `:minute`, `:second`, `:zone`, `:era`
+  - plus the common combo `:time` and `:date`
+- Date Field Sets
+  - `:day-weekday`, `:month-day`, `:month-day-weekday`, `:year-month-day`, `:year-month-day-weekday`
+- Composite field sets
+  - `:date-zone`, `:date-time-zone`, `:time-zone` (note: `time-zone` is two fields, not "timezone")
+
+Examples:
+```
+Your package arrived on {$d :date} at {$d :time}.
+    Your package arrived on Apr 27, 2025 at 10:50 AM.
+Your package arrived on {$d :month-day-weekday} at {$d :time-zone}.
+    Your package arrived on Sunday, April 27th at 10:50 AM PDT.
+Your package arrived on {$d :month-day-weekday month=medium weekday=full} at {$d :time-zone display=full zone=short}.
+    Your package arrive on Sunday, Apr 27th at 10:50 PDT.
+```
+
+
+_Pros_
+- Options focused on field widths
+- Self-documenting: obvious what fields are shown
+- Reserves options for field width
+
+_Cons_
+- _Nineteen_ (or so) functions
+- Names appear generative, but aren't actually
+- Options might be baroque. Some option values might not be compatible with one another.
+  - Expression-wide options (short/medium/long/full) and field-level options might both be needed together
+
 
 ---
 
