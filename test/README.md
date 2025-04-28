@@ -1,11 +1,24 @@
-The tests in the `./tests/` directory were originally copied from the [messageformat project](https://github.com/messageformat/messageformat/tree/11c95dab2b25db8454e49ff4daadb817e1d5b770/packages/mf2-messageformat/src/__fixtures)
-and are here relicensed by their original author (Eemeli Aro) under the Unicode License.
+# Unicode MessageFormat Test Suite
 
-These test files are intended to be useful for testing multiple different message processors in different ways:
+These test files are intended to be useful for testing multiple different _message_ processors in different ways:
 
 - `syntax.json` — Test cases that do not depend on any registry definitions.
 
 - `syntax-errors.json` — Strings that should produce a Syntax Error when parsed.
+
+> [!NOTE]
+> Tests for the disallowed uses of unpaired surrogate code points are not included
+> because JSON does not permit unpaired surrogate code points.
+> If your implementation uses UTF-16 based strings (such as JavaScript `String` or Java `java.lang.String`)
+> or otherwise allows unpaired surrogates in text or literals, you will need to implement tests equivalent
+> to the following for syntax errors:
+> ```json
+> {
+>   "locale": "en-US",
+>   "src": "{\ud800}",
+>   "expErrors": [{ "type": "syntax-error" }]
+> }
+> ```
 
 - `data-model-errors.json` - Strings that should produce a Data Model Error when processed.
   Error names are defined in ["MessageFormat 2.0 Errors"](../spec/errors.md) in the spec.
@@ -192,3 +205,8 @@ except that it cannot be used for selection.
 
 When `:test:format` is used as a _selector_,
 the steps under 2.iii. of [Resolve Selectors](/spec/formatting.md#resolve-selectors) are followed.
+
+## About
+
+The tests in the `./tests/` directory were originally copied from the [messageformat project](https://github.com/messageformat/messageformat/tree/11c95dab2b25db8454e49ff4daadb817e1d5b770/packages/mf2-messageformat/src/__fixtures)
+and are here relicensed by their original author (Eemeli Aro) under the Unicode License.
