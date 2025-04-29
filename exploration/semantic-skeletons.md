@@ -169,11 +169,12 @@ such as "11 PM April" (`jjMMMM` or `HHaMMMM`) or "2 2025" (`dyyyy`).
 
 **What about specialized formats, such as ISO8601?**
 
-These should be provided via other means that requiring a specialized pattern 
-and the (optional) `@locale` attribute. Do you really want to support this,
+These should be provided via other means than requiring a specialized pattern 
+and the (optional) `u:locale` option.
+Do you really want to support this,
 given that it can then be used for other things:
 ```
-{$now :datetime pattern=|yyyy-MM-dd'T'HH:mm:ss.sssz| @locale=und timezone=UTC}
+{$now :datetime pattern=|yyyy-MM-dd'T'HH:mm:ss.sssz| u:locale=und timezone=UTC}
 ```
 
 **What do we call a [floating time value](https://www.w3.org/TR/timezone/#dfn-floating-time)?**
