@@ -30,11 +30,10 @@ Previously, ICU MessageFormat provided support for "classical skeletons",
 using a microsyntax derived from familiar 'picture strings' (see below)
 combined with code in ICU (`DateTimePatternGenerator`) to produce the desired date/time value format.
 
-`Intl.DateTimeFormat` provided options to provide a similar capability.
-These weren't "skeletons" from the point of view that they didn't use a dedicated microsyntax
-similar to 'picture strings',
-but the effect was the same:
-users specified which fields they wanted with which display options (such as width).
+`Intl.DateTimeFormat` provides options that provide a similar capability.
+These aren't "skeletons" from the point of view that they don't use a dedicated microsyntax similar to 'picture strings',
+but the effect is the same:
+users specify which fields they want with which display options (such as width).
 For example:
 ```javascript
 options = {
