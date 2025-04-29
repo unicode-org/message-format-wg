@@ -139,9 +139,10 @@ such as `java.text.SimpleDateFormat`.
 This section considers some potential arguments against the design
 or captures frequently asked questions about it.
 
-**What if semantic skeletons doesn't support the format I want?
-Unlike picture strings or classical skeletons, semantic skeletons do not allow unrestricted
-composition of date/time formats.**
+**What if semantic skeletons don't support the format I want?**
+
+Unlike picture strings or classical skeletons,
+semantic skeletons do not allow unrestricted composition of date/time formats.
 
 If there were an overlooked format, it could be added in a future release.
 However, the designers of semantic skeletons have considered the breadth of use cases.
