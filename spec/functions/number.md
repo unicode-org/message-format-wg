@@ -617,7 +617,7 @@ such as the number of fraction, integer, or significant digits.
 A **_<dfn>digit size option</dfn>_** is an _option_ 
 whose _option value_ is interpreted by the _function_
 as a small integer greater than or equal to zero.
-Implementations MAY define an upper limit on the _resolved value_
+Implementations MAY define upper and lower limits on the _resolved value_
 of a _digit size option_ consistent with that implementation's practical limits.
 
 In most cases, the value of a _digit size option_ will be a string that
@@ -631,9 +631,8 @@ digit-size-option = "0" / (("1"-"9") [DIGIT])
 
 If the value of a _digit size option_ does not evaluate as a non-negative integer,
 or if the value exceeds any implementation-defined and option-specific upper or lower limit,
-a _Bad Option_ error is emitted.
-If the value exceeds an implementation-defined upper or lower limit, 
-the implementation MAY replace it with an implementation-defined value.
+the implementation will emit a _Bad Option Error_ and
+either ignore the option or replace it with an implementation-defined value.
 
 #### Number Selection
 
