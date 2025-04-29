@@ -296,8 +296,8 @@ They should not have to coerce or convert normal date/time types in order to do 
    - [floating time](https://www.w3.org/TR/timezone/#dfn-floating-time) values
      (e.g. those that are not tied to a specific time zone, variously called local/plain/civil times),
    -  or other local exotica (Java `Calendar`, C `tm` struct, etc.)
-1. Date/time formatters should not permit users to format fields that don't exist in the value
-   (e.g. the "month" of a time, the "hour" of a date)
+1. Date/time formatter options should be able to impose restrictions on acceptable values,
+   such as formatting a month requiring a date, and formatting an hour requiring a time.
 1. Date/time formatters should not permit users to format bad combinations of fields
    (e.g. `MMMMmm` (month-minute), `yyyyjm` (year-hour-minute), etc.)
 1. Date/time formatters should permit users to specify the desired width of indvidual fields
