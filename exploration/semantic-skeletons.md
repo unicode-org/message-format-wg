@@ -314,7 +314,7 @@ They should not have to coerce or convert normal date/time types in order to do 
    multiple new microsyntaxes or multiple different sets of options for date/time value formatting.
 1. Any microsyntax or option set specified should be easy to understand only from the expression.
 1. Any microsyntax or option set specified should not _require_ translators to alter the values in most or all locales.
-1. User's should be able to specify the time zone or local time offset used in formatting
+1. Users should be able to specify the time zone or local time offset used in formatting
    an incremental or timestamp value
    because many date/time formatting processes are
    running in a different environment/offset/zone from where the value will be seen
