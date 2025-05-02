@@ -280,6 +280,21 @@ what is the format?
 - `Jan 1, 1970, 12:00:00 AM UTC` (value wins; user cannot adjust)
 - `Jan 1, 1970, 2:00:00 AM EET` (option wins; inconsistent with some Temporal behaviors on Java and JS)
 
+### Inflection
+
+```
+new Intl.DateTimeFormat('fi', { month: 'long' }).format()
+// 'toukokuu'
+
+new Intl.DateTimeFormat('fi', { day: 'numeric', month: 'long' }).format()
+// '2. toukokuuta'
+```
+
+As a developer, I need the formatted values to inflect fields and formats correctly,
+depending on the combination chosen for display.
+For example, as shown above, 
+I want the month name to be inflected for standalone when used by itself,
+but properly inflected when used in a month-day combination.
 
 ## Requirements
 
@@ -407,7 +422,8 @@ Such a list might look like:
 
 - Standalone fields
   - `:day`, `:weekday`, `:month`, `:year`, `:hour`, `:minute`, `:second`, `:zone`, `:era`
-  - plus the common combo `:time` and `:date`
+- Common combinations
+  - `:time` and `:date`
 - Date Field Sets
   - `:day-weekday`, `:month-day`, `:month-day-weekday`, `:year-month-day`, `:year-month-day-weekday`
 - Composite field sets
