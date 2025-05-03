@@ -636,6 +636,17 @@ and ignore the _option_.
 An implementation MAY replace a _digit size option_
 that exceeds an implementation-defined or option-specific upper or lower limit
 with an implementation-defined value rather than ignoring the _option_.
+Any such replacement value becomes the _resolved value_ of that _option_.
+
+> For example, if an implementation imposed an upper limit of 20 on the _option_
+> `minimumIntegerDigits` for the function `:number`
+> then the _resolved value_ of the _option_ `minimumIntegerDigits`
+> for both `$x` and `$y` in the following _message_ would be 20:
+> ```
+> .input {$x :number minimumIntegerDigits=999}
+> .local $y = {$x}
+> {{{$y}}}
+> ```
 
 #### Number Selection
 
