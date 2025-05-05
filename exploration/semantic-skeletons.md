@@ -329,11 +329,11 @@ They should not have to coerce or convert normal date/time types in order to do 
    multiple new microsyntaxes or multiple different sets of options for date/time value formatting.
 1. Any microsyntax or option set specified should be easy to understand only from the expression.
 1. Any microsyntax or option set specified should not _require_ translators to alter the values in most or all locales.
-1. Users should be able to specify the time zone or local time offset used in formatting
-   an incremental or timestamp value
-   because many date/time formatting processes are
-   running in a different environment/offset/zone from where the value will be seen
-   or are formatting a value for a specific offset or zone.
+1. Message authors and developers should be able to manage 
+   the formatting of date/time values such that
+   processes running in an environment with a different time zone or local time offset
+   from that needed to express or format the value
+   can get the necessary results.
 
 ## Constraints
 
