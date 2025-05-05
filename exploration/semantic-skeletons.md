@@ -450,7 +450,15 @@ _Cons_
 - Names appear generative, but aren't actually
 - Options might be baroque. Some option values might not be compatible with one another.
   - Expression-wide options (short/medium/long/full) and field-level options might both be needed together
-
+- Providing easy-to-use standalone field functions 
+  could lead to localization failures similar to picture strings,
+  as naive users might use combinations of standalone functions to concatenate date/time values
+  that are inappropriate in various other locales and require translator intervention.
+  > For example, this message hard codes separators, field order, and
+  > uses standalone representation of the fields:
+  > ```
+  > Today is {$d :month} {$d :day}, {$d :year} and it is {$d :hour}:{$d :minute} o'clock.
+  >```
 
 ---
 
