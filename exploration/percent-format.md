@@ -181,7 +181,7 @@ _Pros_
 
 _Cons_
 - `:unit` won't be REQUIRED, so percentage format will not be guaranteed across implementations.
-  Requiring `:unit type=percent` would be complicated at best.
+  Requiring `:unit unit=percent` would be complicated at best.
 - Implementation of `:unit` in its entirely requires significantly more data than implementation of
   percentage formatting.
 - More verbose placeholder
@@ -275,18 +275,23 @@ The value `0.5` formats as `50%`
 > Example.
 > ```
 > .local $pctSaved = {50}
-> {$pctSaved :percent}
+> {{{$pctSaved :percent}}}
 > ```
 > Prints as `5,000%`.
 
 #### Optional Scaling
-Implementation automatically does (or does not) scale.
-There is an option to switch to the other behavior.
+Function automatically does (or does not) scale,
+but there is an option to switch to the non-default behavior.
+Such an option might be:
+- An option with a name like `scaling` with boolean-like values `true` and `false`
+- An option with a name like `scale` with 
+  digit size option values
+  limited to a small set of supported values (possibly only `1` and `100`)
 
 > Example. Note that `scale=false` is only to demonstrate switching.
 >```
 > .local $pctSaved = {50}
-> {$pctSaved :percent} {$pctSaved :percent scale=false}
+> {{{$pctSaved :percent} {$pctSaved :percent scale=false}}}
 >```
 > Prints as `5,000% 50%` if `:percent` is autoscaling by default
 
@@ -300,7 +305,7 @@ Extension of `:math` to support other mathematical capabilities would allow for 
 >```
 > .local $pctSaved = {0.5}
 > .local $pctScaled = {$pctSaved :math exp=2}
-> {$pctSaved :percent} {$pctScaled :unit unit=percent}
+> {{{$pctSaved :percent} {$pctScaled :unit unit=percent}}}
 >```
 > Prints as `50% 50%` if `:percent` is autoscaling by default and `:unit` is not.
 
