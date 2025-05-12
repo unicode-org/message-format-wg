@@ -39,6 +39,12 @@ The MessageFormat Working Group is a working group of the CLDR-TC.
   additional use cases.
 - Develop a machine-readable function description format or syntax to support the needs of
   implementations, including localization tools.
+- Define a standard vocabulary for expression attributes and message properties/metadata,
+  to enable better interoperation between translation tools and platforms.
+- Incubate and support working groups or interest groups
+  that promote adoption of Unicode MessageFormat,
+  such as the proposed working group to develop a standard message resource format,
+  i.e. a new file format for bundles or collections of messages.
 
 ## Deliverables (v48, v49, v50)
 
