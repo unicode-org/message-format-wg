@@ -264,7 +264,7 @@ The value `0.5` formats as `0.5%`
 > Example.
 > ```
 > .local $pctSaved = {50}
-> {$pctSaved :percent}
+> {{{$pctSaved :percent}}}
 > ```
 > Prints as `50%`.
 
