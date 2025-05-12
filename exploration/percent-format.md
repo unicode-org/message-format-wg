@@ -188,7 +188,7 @@ _Cons_
 
 ---
 
-#### Use `:number`/`:integer` with `type=percent`
+#### Use `:number`/`:integer` with `style=percent`
 
 Use the existing functions for number formatting with a separate `style` option for `percent`.
 (This was previously the design)
