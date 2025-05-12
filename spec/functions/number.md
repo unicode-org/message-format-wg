@@ -159,22 +159,19 @@ together with the resolved options' values.
 
 The _function_ `:integer` performs selection as described in [Number Selection](#number-selection) below.
 
-#### The `:math` function
+#### The `:offset` function
 
-> [!IMPORTANT]
-> The _function_ `:math` has a status of **Draft**.
-> It is proposed for inclusion in a future release of this specification and is not Stable. 
-
-The _function_ `:math` is proposed as a _selector_ and _formatter_ for matching or formatting
-numeric values to which a mathematical operation has been applied.
+The _function_ `:offset` is a _selector_ and _formatter_ for matching or formatting
+numeric values to which an offset has been applied.
+The "offset" is a small integer adjustment of the _operand_'s value.
 
 > This function is useful for selection and formatting of values that
 > differ from the input value by a specified amount.
-> For example, it can be used in a message such as this:
+> For example, it can be used in a _message_ such as this:
 >
 > ```
 > .input {$like_count :integer}
-> .local $others_count = {$like_count :math subtract=1}
+> .local $others_count = {$like_count :offset subtract=1}
 > .match $like_count $others_count
 > 0 *   {{Your post has no likes.}}
 > 1 *   {{{$name} liked your post.}}
@@ -182,17 +179,21 @@ numeric values to which a mathematical operation has been applied.
 > * *   {{{$name} and {$others_count} other users liked your post.}}
 > ```
 
-##### Operands
+> [!NOTE]
+> The purpose of this _function_ is to supply compatibility with
+> ICU's `PluralFormat` and its `offset` feature, also found in ICU MessageFormat.
 
-The function `:math` requires a [Number Operand](#number-operands) as its _operand_.
+##### `:offset` Operands
 
-##### Options
+The function `:offset` requires a [Number Operand](#number-operands) as its _operand_.
 
-The _options_ on `:math` are exclusive with each other,
+##### `:offset` Options
+
+The _options_ on `:offset` are exclusive with each other,
 and exactly one _option_ is always required.
 The _options_ do not have default values.
 
-The following _options_ are REQUIRED to be available on the function `:math`:
+The following _options_ are REQUIRED to be available on the function `:offset`:
 
 - `add`
   - _digit size option_
@@ -204,9 +205,9 @@ or if an _option value_ is not a _digit size option_,
 a _Bad Option_ error is emitted
 and a _fallback value_ used as the _resolved value_ of the _expression_.
 
-##### Resolved Value
+##### `:offset` Resolved Value
 
-The _resolved value_ of an _expression_ with a `:math` _function_
+The _resolved value_ of an _expression_ with a `:offset` _function_
 contains the implementation-defined numeric value
 of the _operand_ of the annotated _expression_.
 
@@ -222,18 +223,18 @@ If the _operand_ of the _expression_ is an implementation-defined numeric type,
 such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
 it can include option values.
 These are included in the resolved option values of the _expression_.
-The `:math` _options_ are not included in the resolved option values.
+The `:offset` _options_ are not included in the resolved option values.
 
 > [!NOTE]
-> Implementations can encounter practical limits with `:math` _expressions_,
+> Implementations can encounter practical limits with `:offset` _expressions_,
 > such as the result of adding two integers exceeding
 > the storage or precision of some implementation-defined number type.
 > In such cases, implementations can emit an _Unsupported Operation_ error
 > or they might just silently overflow the underlying data value.
 
-##### Selection
+##### `:offset` Selection
 
-The _function_ `:math` performs selection as described in [Number Selection](#number-selection) below.
+The _function_ `:offset` performs selection as described in [Number Selection](#number-selection) below.
 
 #### The `:currency` function
 
