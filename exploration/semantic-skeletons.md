@@ -7,7 +7,7 @@ Status: **Proposed**
 	<dl>
 		<dt>Contributors</dt>
 		<dd>@sffc</dd>
-    <dd>@aphillips</dd>
+		<dd>@aphillips</dd>
 		<dt>First proposed</dt>
 		<dd>2024-04-06</dd>
 		<dt>Pull Requests</dt>
@@ -296,6 +296,31 @@ For example, as shown above,
 I want the month name to be inflected for standalone when used by itself,
 but properly inflected when used in a month-day combination.
 
+### Error Conditions and Value Forcing
+One challenge with formatting date/time values is 
+deciding what effect the function has on the resolved value of the operand.
+For example, consider a _declaration_ that uses a function `:time`:
+>```
+>.local $myTime = {$d :time}
+>```
+
+Does the variable `$myTime` contain any date information, such as year or month?
+What if `$d` (the original value) is an incremental time? Or a datetime value?
+Does the declaration strip the visibility of the date fields, assuming that they _were_ previously present?
+
+On the other hand, many combinations of functions and semantic skeletons seem to imply an implicit conversion.
+Implementations that use, for example, `java.time` or JS `Temporal` types
+have very specific requirements for some of their types.
+Some operations on these types can produce error conditions in the function handler,
+even if the _message_ itself is well-formed and other, differently-typed, values do not produce errors.
+
+As noted elsewhere, many programming languages and operating environments do not have 
+more-modern temporal-like date/time types.
+Incremental values or field-based values in these environments 
+use calendar and time zone information to compute the displayed field.
+Users of these kinds of date/time values sometime can need access to calendar, time zone, and possibly offset controls
+in order to achieve effects similar to what temporal types provide.
+
 ## Requirements
 
 _What properties does the solution have to manifest to enable the use-cases above?_
@@ -352,11 +377,38 @@ _What other properties they have?_
 
 ### Design: Use Option Naming
 
-In this section, we use a scheme similar to `FieldSetBuilder` linked earlier.
+In this design, we use a capability similar to `FieldSetBuilder` (proposed for ICU4X). 
+These have the following built-in "fieldsets" (see [here](https://unicode-org.github.io/icu4x/rustdoc/icu/datetime/fieldsets/index.html)):
+
+|  Fieldset  | Description |
+|------------|-------------|
+| `Combo`    | Struct for combining date/time fields with zone fields. |
+| `D`        | “17” ⇒ day of month (standalone) |
+| `DE`       | “17 Friday” ⇒ day of month and weekday |
+| `DET`      | “17 Friday, 3:47:50 PM” ⇒ day of month and weekday with time |
+| `DT`       | “17, 3:47:50 PM” ⇒ day of month (standalone) with time |
+| `E`        | “Friday” ⇒ weekday (standalone) |
+| `ET`       | “Friday 3:47:50 PM” ⇒ weekday (standalone) with time |
+| `M`        | “May” ⇒ month (standalone) |
+| `MD`       | “May 17” ⇒ month and day |
+| `MDE`      | “Fri, May 17” ⇒ month, day, and weekday |
+| `MDET`     | “Fri, May 17, 3:47:50 PM” ⇒ month, day, and weekday with time |
+| `MDT`      | “May 17, 3:47:50 PM” ⇒ month and day with time |
+| `T`        | “3:47:50 PM” ⇒ time (locale-dependent hour cycle) |
+| `Y`        | “2024” ⇒ year (standalone) |
+| `YM`       | “May 2024” ⇒ year and month |
+| `YMD`      | “5/17/24” ⇒ year, month, and day |
+| `YMDE`     | “Fri, 5/17/24” ⇒ year, month, day, and weekday |
+| `YMDET`    | “Fri, 5/17/24, 3:47:50 PM” ⇒ year, month, day, and weekday with time |
+| `YMDT`     | “5/17/24, 3:47:50 PM” ⇒ year, month, and day with time |
+
 
 #### DateTime fields
+Use the function `:datetime` and use an _option_ to indicate the fieldset.
 
-Options:
+The _option_ might have a generic name, such as `fields`,
+or it might have sematic names such as `date`/`dateFields`/`time`/`timeFields`.
+Option values would be as shown in the table above.
 
 ```
 {$date :datetime dateFields=YMD}  
@@ -364,15 +416,21 @@ Options:
 {$date :datetime fields=YMD}
 ```
 
-The names `dateFields`, `date`, and `fields` are candidate names for the option that specifies the semantic skeleton string to be used for formatting the date/time value.
 #### TimePrecision
+Note that in the table above, there is only one fieldset of "time" values.
+Use a `timePrecision` option to indicate which subfields of a time are desired.
+Time formats within a locale don't generally have field lengths
+(although zero- versus non-zero filled hours is a variation)
+and thus it is sufficient to say what the "last field to show" would be.
 
-Options:
+The name `timePrecision` is a placeholder.
+This option might be shortened to just `time`.
+
+For example:
 ```
-{$date :datetime timePrecision=minute}  
-{$date :datetime time=minute}
+{$date :datetime timePrecision=minute}  ⇒  11:39 AM 
+{$date :datetime time=second}           ⇒  11:39:00 AM
 ```
-(TODO: Add others)
 
 ### Design: Use Separate Functions
 
@@ -395,6 +453,7 @@ _Pros_
 
 _Cons_
 - Not fully type-safe.
+- The `:datetime` function might duplicate functionality
 
 #### Use separate typed functions
 
