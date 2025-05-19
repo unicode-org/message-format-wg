@@ -50,8 +50,9 @@ Developers need to know which behavior will occur so that they can adjust the va
 > - `Intl.NumberFormat(locale, { style: 'percent' })` scales
 > - `Intl.NumberFormat(locale, { style: 'unit', unit: 'percent' })` does not scale
 
-It is also possible for Unicode MessageFormat to provide support for scaling in the message itself,
-perhaps by extending the `:math` function.
+It is also possible for Unicode MessageFormat to provide support for scaling in the message itself.
+Since we've removed the `:math` function (at least for now), this would have to be through either
+the re-introduction of `:math` or through a specialized scaling function.
 
 An addition concern is whether to add a dedicated `:percent` function,
 use one of the existing number-formatting functions `:number` and `:integer` with an option `type=percent`,
@@ -295,13 +296,15 @@ Such an option might be:
 >```
 > Prints as `5,000% 50%` if `:percent` is autoscaling by default
 
-#### Provide scaling via additions to `:math`
+#### Provide scaling via a function
 Regardless of the scaling done by the percent formatting function, 
 there might need to be an in-message mechanism for scaling/descaling values.
-The (currently DRAFT) function `:math` was added to support offsets in number matching/formatting.
-Extension of `:math` to support other mathematical capabilities would allow for scaling.
+The function `:math` was originally proposed to support offsets in number matching/formatting,
+although the WG removed this proposal and replaced with with an `:offset` function in May 2025.
+Reintroducing `:math` to support scaling
+or the proposal of a new function dedicated to scaling might address the need for value adjustment.
 
-> Example. 
+> Example using `:math` as a placeholder function name
 >```
 > .local $pctSaved = {0.5}
 > .local $pctScaled = {$pctSaved :math exp=2}
@@ -322,9 +325,9 @@ _Cons_
   instability into the message regime as new options are introduced over time.
   Compare with `java.lang.Math`
 
-Two proposals exist for using `:math`:
+Two proposals exist for `:math`-like scaling:
 
-##### Use `:math exp` to scale
+##### Use `:math exp` (`:exp`??) to scale
 Provide functionality to scale numbers with integer powers of 10 using the `:math` function.
 
 Examples using `:unit`, each of which would format as "Completion: 50%.":
@@ -344,7 +347,7 @@ _Cons_
 - Cannot use _digit size option_ as the `exp` option value type, since negative exponents are a Thing
 
 
-##### Use `:math multiply` to scale
+##### Use `:math multiply` (`:multiply`??) to scale
 Provide arbitrary integer multiplication functionality using the `:math` function.
 
 Examples using `:unit`, each of which would format as "Completion: 50%.":
