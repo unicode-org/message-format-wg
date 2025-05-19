@@ -32,7 +32,6 @@ The MessageFormat Working Group is a working group of the CLDR-TC.
   linking to success stories, tools, and implementations;
   supporting or hosting workshops or supporting presentations by members;
   and supporting adoption by encapsulating standards (such as ECMA-402, MessageResource, etc.)
-- Support a determination there are at least ### additional interoperable implementations.
 - Support migration and adoption by moving all functions and options necessary to match the features of
   ICU MessageFormat ("MF1") to Stable.
 - Support migration and adoption by expanding the default function set to support
