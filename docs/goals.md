@@ -35,10 +35,12 @@ The MessageFormat Working Group is a working group of the CLDR-TC.
 - Support migration and adoption by publishing as Stable in the default function set
   the functions and options needed to provide compatibility with ICU MessageFormat ("MF1").
   Note that certain features of MF1 have been deliberately excluded from this goal
-  because they are in conflict with the design goals of Unicode MessageFormat
-  or because they are specialized features unique to MF1 and which ICU is free to implement:
+  because they are in conflict with the design goals of Unicode MessageFormat,
+  because they are specialized features unique to MF1 (which ICU is free to implement),
+  or because they might be superseded by newer specifications:
   - ChoiceFormat (an anti-pattern)
   - Date/time picture strings (an anti-pattern)
+  - Date/time and number skeletons (specialized functionality, potentially superseded by semantic skeletons)
   - Nested selection or partial message selection (an anti-pattern)
   - `spellout` and `duration` formats (specialized functionality)
   - `ordinal` _formatting_ (specialized functionality, incompetely specified in CLDR)
