@@ -43,7 +43,7 @@ The MessageFormat Working Group is a working group of the CLDR-TC.
   - Date/time and number skeletons (specialized functionality, potentially superseded by semantic skeletons)
   - Nested selection or partial message selection (an anti-pattern)
   - `spellout` and `duration` formats (specialized functionality)
-  - `ordinal` _formatting_ (specialized functionality, incompetely specified in CLDR)
+  - `ordinal` _formatting_ (specialized functionality)
 - Support migration and adoption by expanding the default function set to support
   additional use cases.
 - Develop a machine-readable function description format or syntax to support the needs of
