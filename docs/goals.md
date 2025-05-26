@@ -40,7 +40,7 @@ The MessageFormat Working Group is a working group of the CLDR-TC.
   or because they might be superseded by newer specifications:
   - ChoiceFormat (an anti-pattern)
   - Date/time picture strings (an anti-pattern)
-  - Date/time and number skeletons (specialized functionality, potentially superseded by semantic skeletons)
+  - Date/time and number skeletons (potentially superseded by semantic skeletons)
   - Nested selection or partial message selection (an anti-pattern)
   - `spellout` and `duration` formats (specialized functionality)
   - `ordinal` _formatting_ (specialized functionality)
