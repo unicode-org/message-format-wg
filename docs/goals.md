@@ -1,16 +1,76 @@
 # Goals and Non-Goals
 
-This document defines the purpose of the Message Format Working Group (MFWG)
-and informs the decisions about the scope and the priorities of its efforts.
+This document contains the DRAFT charter for the MessageFormat Working Group (MFWG),
+which is subject to approval from the CLDR-TC,
+and informs decisions about the scope and priority of its efforts.
+
+## Charter
+
+A **_dynamic message string_** is a string whose content changes due to the value of or insertion
+of some data value or values.
+
+The _Unicode MessageFormat Standard_ is an industry standard for the representation
+of localizable _dynamic message strings_.
+
+The MessageFormat Working Group maintains and extends the Unicode MessageFormat Standard,
+provides documentation;
+encourages implementation, including the development of tools and best practices;
+manages default and Unicode-defined function sets;
+and provides for interoperability with other standards.
+
+The MessageFormat Working Group is a working group of the CLDR-TC.
 
 ## Goals
 
-The primary task of the MFWG is to develop an industry standard for the
-representation of localizable dynamic message strings. A **_dynamic message
-string_** is a string whose content changes due to the value of or insertion
-of some data value or values.
+- Maintain and develop the [messageformat.unicode.org] site,
+  maintaining a high bar (as a model for other Unicode documentation),
+  including at least 
+  a user guide,
+  and a migration guide from other formats (including ICU MessageFormat).
+- Encourage adoption of Unicode MessageFormat by:
+  providing implementation support materials;
+  creating tests;
+  linking to success stories, tools, and implementations;
+  supporting or hosting workshops or supporting presentations by members;
+  and supporting adoption by encapsulating standards (such as ECMA-402, MessageResource, etc.)
+- Support migration and adoption by publishing as Stable in the default function set
+  the functions and options needed to provide compatibility with ICU MessageFormat ("MF1").
+  Note that certain features of MF1 have been deliberately excluded from this goal
+  because they are in conflict with the design goals of Unicode MessageFormat,
+  because they are specialized features unique to MF1 (which ICU is free to implement),
+  or because they might be superseded by newer specifications:
+  - ChoiceFormat (an anti-pattern)
+  - Date/time picture strings (an anti-pattern)
+  - Date/time and number skeletons (potentially superseded by semantic skeletons)
+  - Nested selection or partial message selection (an anti-pattern)
+  - `spellout` and `duration` formats (specialized functionality)
+  - `ordinal` _formatting_ (specialized functionality)
+- Support migration and adoption by expanding the default function set to support
+  additional use cases.
+- Develop a machine-readable function description format or syntax to support the needs of
+  implementations, including localization tools.
+- Define a standard vocabulary for expression attributes and message properties/metadata,
+  to enable better interoperation between translation tools and platforms.
+- Incubate and support working groups or interest groups
+  that promote adoption of Unicode MessageFormat,
+  such as the proposed working group to develop a standard message resource format,
+  i.e. a new file format for bundles or collections of messages.
 
-The design goals are listed below.
+## Deliverables (v48, v49, v50)
+
+- Deliver as Stable all remaining functions needed to support migration from MF1
+  - `:datetime` and all date/time functions
+  - percent formatting
+- Deliver at least as Technical Preview (v49) and Stable (v50) all draft functions and options
+  - `:unit`
+  - the `u:locale` option
+- Deliver as Technical Preview additional functions to support significant additional functionality.
+  Such functions could include: lists, ranges, relative time, inflection.
+- Deliver as Technical Preview a machine-readable function description format or syntax.
+
+## Design Goals
+
+The original design goals are listed below.
 
 1. Allow users to write messages that are both grammatically
    correct and can be translated in a grammatically correct manner
@@ -31,6 +91,8 @@ The design goals are listed below.
 
 ## Deliverables
 
+The original deliverables were:
+
 1.  A formal definition of the canonical data model for representing
     localizable _dynamic message strings_.
 
@@ -39,7 +101,7 @@ The design goals are listed below.
     escape sequences, whitespace, markup, as well as parsing errors.
 
 3.  A specification for a one-to-one mapping between the data model and XLIFF.
-    _Note: This deliverable is not included in the LDML46.1 Final Candidate release._ 
+    _Note: This deliverable was not included in the LDMLv47 release._ 
 
 4.  A specification for resolving messages at runtime, including
     runtime errors.
