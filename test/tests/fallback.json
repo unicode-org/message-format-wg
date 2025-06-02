@@ -4,8 +4,7 @@
   "description": "Test cases for fallback behaviour.",
   "defaultTestProperties": {
     "bidiIsolation": "none",
-    "locale": "en-US",
-    "expErrors": true
+    "locale": "en-US"
   },
   "tests": [
     {
