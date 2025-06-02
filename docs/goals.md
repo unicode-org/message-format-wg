@@ -1,6 +1,7 @@
 # Goals and Non-Goals
 
-This document contains the charter for the MessageFormat Working Group (MFWG)
+This document contains the DRAFT charter for the MessageFormat Working Group (MFWG),
+which is subject to approval from the CLDR-TC,
 and informs decisions about the scope and priority of its efforts.
 
 ## Charter
