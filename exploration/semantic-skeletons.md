@@ -506,6 +506,27 @@ Cons:
 - Different mechanism from that used for the date portion.
   Greater learning curve/cognitive burden for users?
 
+#### Mixing the Above Solutions
+
+Use `dateFields`, `timePrecisions` and `zoneStyle` to separately control the date, time, and zone
+portions of a placeholder.
+
+> A date formatter
+>```
+> {$d :datetime dateFields=YMD}
+>```
+> A time formatter
+>```
+> {$d :datetime timePrecision=minute}
+>```
+> A datetime formatter
+>```
+> {$d :datetime dateFields=YMD timePrecision=minute}
+>```
+> A zoned datetime formatter
+>```
+> {$d :datetime dateFields=YMD timePrecision=minute zoneStyle=generic}
+>```
 
 ### Design: Use Separate Functions
 
