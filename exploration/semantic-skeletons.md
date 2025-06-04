@@ -321,6 +321,72 @@ use calendar and time zone information to compute the displayed field.
 Users of these kinds of date/time values sometime can need access to calendar, time zone, and possibly offset controls
 in order to achieve effects similar to what temporal types provide.
 
+### Dealing with Field Widths
+
+The current design of date/time functions includes "option bags" derived from `Intl.DateTimeFormat`.
+These option bags serve as both classical skeletons _and_ as a source for field width.
+The current options are specified as:
+
+- `weekday`
+  - `long`
+  - `short`
+  - `narrow`
+- `era`
+  - `long`
+  - `short`
+  - `narrow`
+- `year`
+  - `numeric`
+  - `2-digit`
+- `month`
+  - `numeric`
+  - `2-digit`
+  - `long`
+  - `short`
+  - `narrow`
+- `day`
+  - `numeric`
+  - `2-digit`
+- `hour`
+  - `numeric`
+  - `2-digit`
+- `minute`
+  - `numeric`
+  - `2-digit`
+- `second`
+  - `numeric`
+  - `2-digit`
+- `fractionalSecondDigits`
+  - `1`
+  - `2`
+  - `3`
+- `timeZoneName`
+  - `long`
+  - `short`
+  - `shortOffset`
+  - `longOffset`
+  - `shortGeneric`
+  - `longGeneric`
+
+Notice that each of these options is specifically about field width or presentation.
+The "skeleton" functionality in `Intl` is based on the idea that only the fields mentioned are formatted.
+If a separate option specifies which fields to use,
+then the above options could be used independently to control field presentation.
+
+> Examples.
+> ```
+> {{{$d :datetime fields=YMDE month=short} prints Wednesday, Jun 4, 2025}}
+> {{{$d :datetime fields=YMDE month=short weekday=short} prints Wed, Jun 4, 2025}}
+> {{{$d :datetime fields=T timePrecision=minutes} prints 9:53 AM}}
+> {{{$d :datetime fields=T timePrecision=seconds hour=2-digit} prints 09:53:00 AM}}
+> {{{$d :datetime fields=T timePrecision=fractionalSeconds hour=2-digit fractionalSecondDigits=2} prints 09:53:00.17 AM}}
+> ```
+
+In the above design, it would be an error to specify a field width for a field that is not in the skeleton:
+```
+{{{$d :datetime fields=T month=short} is an error.}}
+```
+
 ## Requirements
 
 _What properties does the solution have to manifest to enable the use-cases above?_
@@ -432,6 +498,15 @@ For example:
 {$date :datetime time=second}           ⇒  11:39:00 AM
 ```
 
+Pros:
+- Reduces the number of skeleton strings and associated alphabet soup
+  for message authors (developers, translators) to memorize
+
+Cons:
+- Different mechanism from that used for the date portion.
+  Greater learning curve/cognitive burden for users?
+
+
 ### Design: Use Separate Functions
 
 Some choices:
@@ -505,7 +580,7 @@ _Pros_
 - Reserves options for field width
 
 _Cons_
-- _Nineteen_ (or so) functions
+- _Eighteen_ (or so) functions
 - Names appear generative, but aren't actually
 - Options might be baroque. Some option values might not be compatible with one another.
   - Expression-wide options (short/medium/long/full) and field-level options might both be needed together
@@ -520,6 +595,5 @@ _Cons_
   >```
 
 ---
-
 
 
