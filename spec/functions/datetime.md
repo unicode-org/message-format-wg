@@ -2,10 +2,6 @@
 
 This subsection describes the _functions_ and _options_ for date/time formatting.
 
-> [!IMPORTANT]
-> The _functions_ in this section have a status of **Draft**.
-> They are proposed for inclusion in a future release and are not Stable.
-
 > [!NOTE]
 > Selection based on date/time types is not required by this release of MessageFormat.
 > Use care when defining implementation-specific _selectors_ based on date/time types.
@@ -14,15 +10,14 @@ This subsection describes the _functions_ and _options_ for date/time formatting
 
 #### The `:datetime` function
 
-The function `:datetime` is used to format date/time values, including
-the ability to compose user-specified combinations of fields.
+The function `:datetime` is used to format combined date/time values.
 
 If no options are specified, this function defaults to the following:
 
 - `{$d :datetime}` is the same as `{$d :datetime dateStyle=medium timeStyle=short}`
 
 > [!NOTE]
-> The default formatting behavior of `:datetime` is inconsistent with `Intl.DateTimeFormat`
+> The formatting behavior of `:datetime` is inconsistent with `Intl.DateTimeFormat`
 > in JavaScript and with `{d,date}` in ICU MessageFormat 1.0.
 > This is because, unlike those implementations, `:datetime` is distinct from `:date` and `:time`.
 
@@ -35,8 +30,40 @@ All other _operand_ values produce a _Bad Operand_ error.
 
 ##### Options
 
+The following _options_ are REQUIRED to be available on the function `:datetime`:
+
+- `dateStyle`
+  - `full`
+  - `long`
+  - `medium` (default)
+  - `short`
+- `timeStyle`
+  - `full`
+  - `long`
+  - `medium`
+  - `short` (default)
+- _Date/time override options_
+
+`dateStyle` and `timeStyle` are **_<dfn>style options</dfn>_**
+which pertain to the overall styling or appearance of the formatted output.
+
+If the _operand_ of the _expression_ is an implementation-defined date/time type,
+it can include other option values.
+Any _date/time override options_ of the operand are included in the resolved option values of the _expression_,
+with _options_ on the _expression_ taking priority over any options of the _operand_.
+Any _operand_ options not matching the _Date/time override options_ are ignored.
+
+###### Field Options
+
+> [!IMPORTANT]
+> The _field options_ in this section have a status of **Draft**.
+> They are proposed for inclusion in a future release and are not Stable.
+
+**_<dfn>Field options</dfn>_** describe which fields to include in the formatted output
+and what format to use for that field.
+
 The `:datetime` function can use either the appropriate _style options_
-or can use a collection of _field options_ (but not both) to control the formatted
+or a collection of _field options_ (but not both) to control the formatted
 output.
 _Date/time override options_ can be combined with either _style options_ or _field options_.
 
@@ -44,43 +71,11 @@ If both _style options_ and _field options_ are specified,
 a _Bad Option_ error is emitted
 and a _fallback value_ used as the _resolved value_ of the _expression_.
 
-If the _operand_ of the _expression_ is an implementation-defined date/time type,
-it can include _style options_, _field options_, or other _options_.
-These are included in the resolved option values of the _expression_,
-with _options_ on the _expression_ taking priority over any options of the _operand_.
-
-> [!NOTE]
-> The names of _options_ and their _option values_ were derived from the
-> [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/resolvedOptions#description)
-> in JavaScript's `Intl.DateTimeFormat`.
-
-###### Style Options
-
-**_<dfn>Style options</dfn>_** pertain to the overall styling or appearance of the formatted output.
-
-The following _style options_ are REQUIRED to be available on the function `:datetime`:
-
-- `dateStyle`
-  - `full`
-  - `long`
-  - `medium`
-  - `short`
-- `timeStyle`
-  - `full`
-  - `long`
-  - `medium`
-  - `short`
-
-###### Field Options
-
-**_<dfn>Field options</dfn>_** describe which fields to include in the formatted output
-and what format to use for that field.
-
 > [!NOTE]
 > _Field options_ do not have default values because they are only to be used
 > to compose the formatter.
 
-The following _field options_ are REQUIRED to be available on the function `:datetime`:
+The following _field options_ are available on the function `:datetime`:
 
 - `weekday`
   - `long`
@@ -147,9 +142,9 @@ All other _operand_ values produce a _Bad Operand_ error.
 
 ##### Options
 
-The function `:date` has these _options_:
+The following _options_ are REQUIRED to be available on the function `:date`:
 
-- `style` \[REQUIRED\]
+- `style`
   - `full`
   - `long`
   - `medium` (default)
@@ -158,8 +153,9 @@ The function `:date` has these _options_:
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
-Any _operand_ options matching the `:datetime` _style options_ or _field options_ are ignored,
-as is any `style` option.
+Any _date/time override options_ of the operand are included in the resolved option values of the _expression_,
+with _options_ on the _expression_ taking priority over any options of the _operand_.
+Any _operand_ options not matching the _Date/time override options_ are ignored.
 
 ##### Resolved Value
 
@@ -187,9 +183,9 @@ All other _operand_ values produce a _Bad Operand_ error.
 
 ##### Options
 
-The function `:time` has these _options_:
+The following _options_ are REQUIRED to be available on the function `:time`:
 
-- `style` \[REQUIRED\]
+- `style`
   - `full`
   - `long`
   - `medium`
@@ -198,8 +194,9 @@ The function `:time` has these _options_:
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
-Any _operand_ options matching the `:datetime` _style options_ or _field options_ are ignored,
-as is any `style` option.
+Any _date/time override options_ of the operand are included in the resolved option values of the _expression_,
+with _options_ on the _expression_ taking priority over any options of the _operand_.
+Any _operand_ options not matching the _Date/time override options_ are ignored.
 
 ##### Resolved Value
 
