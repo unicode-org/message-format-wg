@@ -185,7 +185,7 @@ rather than being concatenated into a single string.
 
 If `FailsFormat` is `true`,
 attempting to format the _placeholder_ to any formatting target will
-emit a _Message Function Error_ of type _Bad Operand_.
+emit a _Bad Operand_ error.
 
 ### `:test:select`
 
