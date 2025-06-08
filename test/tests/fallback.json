@@ -24,7 +24,7 @@
       "description": "unannotated implicit input variable",
       "src": "{$var}",
       "exp": "{$var}",
-      "expErrors": [{ "type": "bad-operand" }]
+      "expErrors": [{ "type": "unresolved-variable" }]
     },
     {
       "description": "annotated implicit input variable",
