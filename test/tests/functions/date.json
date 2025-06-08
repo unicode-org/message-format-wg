@@ -5,7 +5,7 @@
   "defaultTestProperties": {
     "bidiIsolation": "none",
     "locale": "en-US",
-    "expErrors": false
+    "expErrors": []
   },
   "tests": [
     {
