@@ -56,7 +56,7 @@
       "src": "{:test:undefined}",
       "exp": "{:test:undefined}",
       "expParts": [{ "type": "fallback", "source": ":test:undefined" }],
-      "expErrors": [{ "type": "bad-operand" }]
+      "expErrors": [{ "type": "unknown-function" }]
     }
   ]
 }
