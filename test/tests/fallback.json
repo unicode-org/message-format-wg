@@ -31,7 +31,7 @@
       "src": "{$var :number}",
       "exp": "{$var}",
       "expParts": [{ "type": "fallback", "source": "$var" }],
-      "expErrors": [{ "type": "bad-operand" }]
+      "expErrors": [{ "type": "unresolved-variable" }, { "type": "bad-operand" }]
     },
     {
       "description": "local variable with unknown function in declaration",
