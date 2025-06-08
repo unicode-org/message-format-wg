@@ -43,7 +43,7 @@
       "description": "function with local variable operand with unknown function in declaration",
       "src": ".local $var = {|val| :test:undefined} {{{$var :test:function}}}",
       "exp": "{$var}",
-      "expErrors": [{ "type": "unknown-function" }]
+      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-operand" }]
     },
     {
       "description": "local variable with unknown function in placeholder",
