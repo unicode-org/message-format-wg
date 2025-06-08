@@ -155,7 +155,7 @@ the behaviour of calling it as the `rv` value of MatchSelectorKeys(`rv`, `keys`)
 depends on its `Input`, `DecimalPlaces` and `FailsSelect` values.
 
 - If `FailsSelect` is `true`,
-  calling the method will emit a _Message Function Error_ of type _Bad Operand_
+  calling the method will emit a _Bad Operand_ error
   and not return any value.
 - If the `Input` is 1 and `DecimalPlaces` is 1,
   the method will return some slice of the list « `'1.0'`, `'1'` »,
