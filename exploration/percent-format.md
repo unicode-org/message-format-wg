@@ -327,7 +327,7 @@ although the WG removed this proposal and replaced with with an `:offset` functi
 Reintroducing `:math` to support scaling
 or the proposal of a new function dedicated to scaling might address the need for value adjustment.
 
-> Example using `:math` as a placeholder function name
+> Example using `:math` as a hypothetical function name
 >```
 > .local $pctSaved = {0.5}
 > .local $pctScaled = {$pctSaved :math exp=2}
