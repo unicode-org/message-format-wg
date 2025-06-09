@@ -10,7 +10,7 @@ This subsection describes the _functions_ and _options_ for date/time formatting
 
 #### The `:datetime` function
 
-The function `:datetime` is used to format combined date/time values.
+The function `:datetime` is used to format both the date and time of a date/time value.
 
 If no options are specified, this function defaults to the following:
 
@@ -51,7 +51,7 @@ If the _operand_ of the _expression_ is an implementation-defined date/time type
 it can include other option values.
 Any _date/time override options_ of the operand are included in the resolved option values of the _expression_,
 with _options_ on the _expression_ taking priority over any options of the _operand_.
-Any _operand_ options not matching the _Date/time override options_ are ignored.
+Any _operand_ options not matching the _date/time override options_ are ignored.
 
 ###### Field Options
 
@@ -155,7 +155,7 @@ If the _operand_ of the _expression_ is an implementation-defined date/time type
 it can include other option values.
 Any _date/time override options_ of the operand are included in the resolved option values of the _expression_,
 with _options_ on the _expression_ taking priority over any options of the _operand_.
-Any _operand_ options not matching the _Date/time override options_ are ignored.
+Any _operand_ options not matching the _date/time override options_ are ignored.
 
 ##### Resolved Value
 
@@ -196,7 +196,7 @@ If the _operand_ of the _expression_ is an implementation-defined date/time type
 it can include other option values.
 Any _date/time override options_ of the operand are included in the resolved option values of the _expression_,
 with _options_ on the _expression_ taking priority over any options of the _operand_.
-Any _operand_ options not matching the _Date/time override options_ are ignored.
+Any _operand_ options not matching the _date/time override options_ are ignored.
 
 ##### Resolved Value
 
