@@ -201,7 +201,7 @@ or scientific notation (1000000 => 1.0e6).
 _Pros_
 - Uses an existing set of functionality
 - Might provide a more consistent interface for formatting "number-like" values
-- Keeps percentage formatting out of `:number` and `:integer`, making those functions more "pure"
+- Keeps percentage formatting out of `:number` and `:integer`, limiting the scope of those functions
 
 _Cons_
 - `:unit` won't be REQUIRED, so percentage format will not be guaranteed across implementations.
