@@ -142,7 +142,7 @@ was directly set with a _literal_, as opposed to being resolved from a _variable
 This is to allow _functions handlers_ to require specific _options_ to be set using _literals_.
 
 > For example, the _default functions_ `:number` and `:integer` require that the _option_
-> `select` be set with a _literal_ _option value_ (`plural`, `ordinal`, or `exact`). 
+> `select` be set with a _literal_ _option value_ (`plural`, `ordinal`, or `exact`).
 
 The form that _resolved values_ take is implementation-dependent,
 and different implementations MAY choose to perform different levels of resolution.
@@ -157,7 +157,8 @@ and different implementations MAY choose to perform different levels of resoluti
 >   formatToX(): X // where X is an implementation-defined type
 >   getValue(): unknown
 >   resolvedOptions(): { [key: string]: MessageValue }
->   selectKeys(keys: string[]): string[]
+>   match(key: string): boolean
+>   compare(key1: string, key2: string): 'WORSE' | 'SAME' | 'BETTER'
 >   directionality(): 'LTR' | 'RTL' | 'unknown'
 >   isolate(): boolean
 >   isLiteralOptionValue(): boolean
@@ -534,8 +535,10 @@ the result of pattern selection is its _pattern_ value.
 When a _message_ contains a _matcher_ with one or more _selectors_,
 the implementation needs to determine which _variant_ will be used
 to provide the _pattern_ for the formatting operation.
-This is done by ordering and filtering the available _variant_ statements
-according to their _key_ values and selecting the first one.
+This is done by traversing the list of available _variant_ statements
+and maintaining a provisional "best variant". Each subsequent _variant_
+is compared to the previous best variant according to its _key_ values,
+yielding a single best variant.
 
 > [!NOTE]
 > At least one _variant_ is required to have all of its _keys_ consist of
@@ -575,20 +578,23 @@ Each _key_ corresponds to a _selector_ by its position in the _variant_.
 > the second _key_ `2` to the second _selector_ (`$two`),
 > and the third _key_ `3` to the third _selector_ (`$three`).
 
-To determine which _variant_ best matches a given set of inputs,
-each _selector_ is used in turn to order and filter the list of _variants_.
-
-Each _variant_ with a _key_ that does not match its corresponding _selector_
-is omitted from the list of _variants_.
-The remaining _variants_ are sorted according to the _selector_'s _key_-ordering preference.
-Earlier _selectors_ in the _matcher_'s list of _selectors_ have a higher priority than later ones.
-
-When all of the _selectors_ have been processed,
-the earliest-sorted _variant_ in the remaining list of _variants_ is selected.
-
 This selection method is defined in more detail below.
 An implementation MAY use any pattern selection method,
 as long as its observable behavior matches the results of the method defined here.
+
+##### Operations on resolved values
+
+The selection method is defined in terms of two auxiliary operations,
+`selectorsMatch` and `selectorsCompare`. These operations in turn assume
+that if `rv` is a resolved value,
+and if selection is supported for `rv`,
+then `rv.match(k)` returns a boolean for any key `k`,
+and `rv.compare(k1, k2)` returns (for any keys `k1` and `k2`)
+a value from the set `{WORSE, SAME, BETTER}`.
+
+Other than the `match()` and `compare()` operations on resolved values,
+the form of the _resolved values_ is determined by each implementation,
+along with the manner of determining their support for selection.
 
 #### Resolve Selectors
 
@@ -600,103 +606,79 @@ First, resolve the values of each _selector_:
    1. If selection is supported for `rv`:
       1. Append `rv` as the last element of the list `res`.
    1. Else:
-      1. Let `nomatch` be a _resolved value_ for which selection always fails.
+      1. Let `nomatch` be a _resolved value_ for which `match(k)` is false
+         for any key `k`.
       1. Append `nomatch` as the last element of the list `res`.
       1. Emit a _Bad Selector_ error.
 
-The form of the _resolved values_ is determined by each implementation,
-along with the manner of determining their support for selection.
+#### Compare Variants
 
-#### Resolve Preferences
+Next, using `res`:
 
-Next, using `res`, resolve the preferential order for all message keys:
+1. Set `bestVariant` to `UNSET`.
+1. For each _variant_ `var` of the message, in source order:
+   1. Let `keys` be the keys of `var`.
+   1. Let `match` be `selectorsMatch(res, keys)`
+   1. If `match` is false:
+      1. Continue the loop.
+   1. If `bestVariant` is `UNSET`.
+      1. Set `bestVariant` to `var`.
+   1. Else:
+      1. Let `bestVariantKeys` be the keys of `bestVariant`.
+      1. If `selectorsCompare(res, keys, bestVariantKeys)` is `BETTER`
+         1. Set `bestVariant` to `var`.
+1. Select the _pattern_ of `bestVariant`.
 
-1. Let `pref` be a new empty list of lists of strings.
-1. For each index `i` in `res`:
-   1. Let `keys` be a new empty list of strings.
-   1. For each _variant_ `var` of the message:
-      1. Let `key` be the `var` key at position `i`.
-      1. If `key` is not the catch-all key `'*'`:
-         1. Assert that `key` is a _literal_.
-         1. Let `ks` be the _resolved value_ of `key` in Unicode Normalization Form C.
-         1. Append `ks` as the last element of the list `keys`.
-   1. Let `rv` be the _resolved value_ at index `i` of `res`.
-   1. Let `matches` be the result of calling the method MatchSelectorKeys(`rv`, `keys`)
-   1. Append `matches` as the last element of the list `pref`.
+#### `selectorsMatch`
 
-The method MatchSelectorKeys is determined by the implementation.
-It takes as arguments a resolved _selector_ value `rv` and a list of string keys `keys`,
-and returns a list of string keys in preferential order.
-The returned list MUST contain only unique elements of the input list `keys`.
-The returned list MAY be empty.
-The most-preferred key is first,
-with each successive key appearing in order by decreasing preference.
+`selectorsMatch(selectors, keys)` is defined as follows, where
+`selectors` is a list of resolved values
+and `keys` is a list of keys:
 
-The resolved value of each _key_ MUST be in Unicode Normalization Form C ("NFC"),
-even if the _literal_ for the _key_ is not.
+1. Set `result` to true.
+1. Set `i` to 0.
+1. For each key `key` in `keys`:
+   1. If `key` is the catch-all key `'*'`
+      1. Set `i` to `i` + 1.
+      1. Continue the loop.
+   1. Let `k` be the _resolved value_ of `key` in Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15).
+   1. Let `sel` be the `i`th element of `selectors`.
+   1. If `sel.match(k)` is false:
+      1. Set `result` to false.
+      1. Exit the loop.
+   1. Set `i` to `i` + 1.
 
-If calling MatchSelectorKeys encounters any error,
-a _Bad Selector_ error is emitted
-and an empty list is returned.
+The result of `selectorsMatch(selectors, keys)` is `result`.
 
-#### Filter Variants
+#### `selectorsCompare`.
 
-Then, using the preferential key orders `pref`,
-filter the list of _variants_ to the ones that match with some preference:
+`selectorsCompare(selectors, keys1, keys2)` is defined as follows, where
+`selectors` is a list of resolved values
+and `keys1` and `keys2` are lists of keys.
 
-1. Let `vars` be a new empty list of _variants_.
-1. For each _variant_ `var` of the message:
-   1. For each index `i` in `pref`:
-      1. Let `key` be the `var` key at position `i`.
-      1. If `key` is the catch-all key `'*'`:
-         1. Continue the inner loop on `pref`.
-      1. Assert that `key` is a _literal_.
-      1. Let `ks` be the _resolved value_ of `key`.
-      1. Let `matches` be the list of strings at index `i` of `pref`.
-      1. If `matches` includes `ks`:
-         1. Continue the inner loop on `pref`.
-      1. Else:
-         1. Continue the outer loop on message _variants_.
-   1. Append `var` as the last element of the list `vars`.
+1. Set `result` to `SAME`.
+1. Set `i` to 0.
+1. For each key in `keys1`:
+   1. Let `key1` be the `i`th element of `keys1`.
+   1. Let `key2` be the `i`th element of `keys2`.
+   1. If `key1` is the catch-all key `'*'` and `key2` is not the catch-all key:
+      1. Return `WORSE`.
+   1. If `key1` is not the catch-all key `'*'` and `key2` is the catch-all key:
+      1. Return `BETTER`.
+   1. If `key1` and `key2` are both the catch-all key `'*'`
+      1. Set `i` to `i + 1`.
+      1. Continue the loop.
+   1. Let `k1` be the _resolved value_ of `key1` in Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15).
+   1. Let `k2` be the _resolved value_ of `key2` in Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15).
+   1. Let `sel` be the `i`th element of `selectors`.
+   1. Set `result` to `sel.compare(k1, k2)`.
+   1. If `result` is `SAME`:
+      1. Set `i` to `i + 1`.
+      1. Continue the loop.
+   1. Else:
+      1. Return `result`.
 
-#### Sort Variants
-
-Finally, sort the list of variants `vars` and select the _pattern_:
-
-1. Let `sortable` be a new empty list of (integer, _variant_) tuples.
-1. For each _variant_ `var` of `vars`:
-   1. Let `tuple` be a new tuple (-1, `var`).
-   1. Append `tuple` as the last element of the list `sortable`.
-1. Let `len` be the integer count of items in `pref`.
-1. Let `i` be `len` - 1.
-1. While `i` >= 0:
-   1. Let `matches` be the list of strings at index `i` of `pref`.
-   1. Let `minpref` be the integer count of items in `matches`.
-   1. For each tuple `tuple` of `sortable`:
-      1. Let `matchpref` be an integer with the value `minpref`.
-      1. Let `key` be the `tuple` _variant_ key at position `i`.
-      1. If `key` is not the catch-all key `'*'`:
-         1. Assert that `key` is a _literal_.
-         1. Let `ks` be the _resolved value_ of `key`.
-         1. Let `matchpref` be the integer position of `ks` in `matches`.
-      1. Set the `tuple` integer value as `matchpref`.
-   1. Set `sortable` to be the result of calling the method `SortVariants(sortable)`.
-   1. Set `i` to be `i` - 1.
-1. Let `var` be the _variant_ element of the first element of `sortable`.
-1. Select the _pattern_ of `var`.
-
-`SortVariants` is a method whose single argument is
-a list of (integer, _variant_) tuples.
-It returns a list of (integer, _variant_) tuples.
-Any implementation of `SortVariants` is acceptable
-as long as it satisfies the following requirements:
-
-1. Let `sortable` be an arbitrary list of (integer, _variant_) tuples.
-1. Let `sorted` be `SortVariants(sortable)`.
-1. `sorted` is the result of sorting `sortable` using the following comparator:
-   1. `(i1, v1)` <= `(i2, v2)` if and only if `i1 <= i2`.
-1. The sort is stable (pairs of tuples from `sortable` that are equal
-   in their first element have the same relative order in `sorted`).
+The result of `selectorsCompare(selectors, keys1, keys2)` is `result`.
 
 #### Pattern Selection Examples
 
@@ -720,24 +702,43 @@ foo foo {{All foo}}
 * * {{Otherwise}}
 ```
 
-1. For the first selector:<br>
-   The value of the selector is resolved to be `'foo'`.<br>
-   The available keys « `'bar'`, `'foo'` » are compared to `'foo'`,<br>
-   resulting in a list « `'foo'` » of matching keys.
-
-2. For the second selector:<br>
-   The value of the selector is resolved to be `'bar'`.<br>
-   The available keys « `'bar'`, `'foo'` » are compared to `'bar'`,<br>
-   resulting in a list « `'bar'` » of matching keys.
-
-3. Creating the list `vars` of variants matching all keys:<br>
-   The first variant `bar bar` is discarded as its first key does not match the first selector.<br>
-   The second variant `foo foo` is discarded as its second key does not match the second selector.<br>
-   The catch-all keys of the third variant `* *` always match, and this is added to `vars`,<br>
-   resulting in a list « `* *` » of variants.
-
-4. As the list `vars` only has one entry, it does not need to be sorted.<br>
-   The pattern `Otherwise` of the third variant is selected.
+1. Each selector is resolved, yielding the list `res` = `{foo, bar}`.
+2. `bestVariant` is set to `UNSET`.
+3. `keys` is set to `{bar, bar}`.
+4. `match` is set to `selectorsMatch({foo, bar}, {bar, bar})`.
+   The result of `selectorsMatch({foo, bar}, {bar, bar})` is
+   determined as follows:
+   1. `result` is set to true.
+   1. `i` is set to 0.
+   1. `k` is set to the string `bar`.
+   1. `sel` is set to a resolved value corresponding to the string `foo`.
+   1. `sel.match('bar')` is false.
+   1. The result of `selectorsMatch({foo, bar}, {bar, bar})` is false.
+   Thus, `match` is set to false.
+5. `keys` is set to `{foo, foo}`.
+6. `match` is set to `selectorsMatch({foo, bar}, {foo, foo})`.
+   The result of `selectorsMatch({foo, bar}, {foo, foo})` is
+   determined as follows:
+   1. `result` is set to true.
+   1. `i` is set to 0.
+   1. `k` is set to the string `foo`.
+   1. `sel` is set to a resolved value corresponding to the string `foo`.
+   1. `sel.match('foo')` is true.
+   1. `i` is set to 1.
+   1. `k` is set to the string `foo`.
+   1. `sel` is set to a resolved value corresponding to the string `bar`.
+   1. `sel.match('bar`)` is false.
+   1. The result of `selectorsMatch({foo, bar}, {foo, foo})` is false.
+7. `keys` is set to `* *`.
+8. The result of `selectorsMatch({foo, bar}, {*, *}` is
+   determined as follows:
+   1. `result` is set to true.
+   1. `i` is set to 0.
+   1. `i` is set to 1.
+   1. `i` is set to 2.
+   1. The result of `selectorsMatch({foo, bar}, {*, *}` is true.
+9. `bestVariant` is set to the variant `* * {{Otherwise}}`
+10. The pattern `Otherwise` is selected.
 
 ##### Selection Example 2
 
@@ -754,32 +755,69 @@ foo bar {{Foo and bar}}
 * * {{Otherwise}}
 ```
 
-1. For the first selector:<br>
-   The value of the selector is resolved to be `'foo'`.<br>
-   The available keys « `'foo'` » are compared to `'foo'`,<br>
-   resulting in a list « `'foo'` » of matching keys.
+1. Each selector is resolved, yielding the list `res` = `{foo, bar}`.
+2. `bestVariant` is set to `UNSET`.
+3. `keys` is set to `{*, bar}`.
+4. `match` is set to `selectorsMatch({foo, bar}, {*, bar})`
+   The result of `selectorsMatch({foo, bar}, {*, bar})` is
+   determined as follows:
+   1. `result` is set to true.
+   2. `i` is set to 0.
+   3. `i` is set to 1.
+   4. `k` is set to the string `bar`.
+   5. `sel` is set to a resolved value corresponding to the string `bar`.
+   6. `sel.match('bar')` is true.
+   7. `i` is set to 2.
+   1. The result of `selectorsMatch({foo, bar}, {*, bar})` is true.
+5. `bestVariant` is set to the variant `* bar {{Any and bar}}`.
+6. `keys` is set to `{foo, *}`.
+7. `match` is set to `selectorsMatch({foo, bar}, {foo, *})`
+   The result of `selectorsMatch({foo, bar}, {foo, *})` is
+   determined as follows:
+   1. `result` is set to true.
+   2. `i` is set to 0.
+   3. `k` is set to the string `foo`.
+   4. `sel` is set to a resolved value corresponding to the string `foo`.
+   5. `sel.match('foo')` is true.
+   6. `i` is set to 1.
+   7. `i` is set to 2.
+   8. The result of `selectorsMatch({foo, bar}, {foo, *})` is true.
+8. `bestVariantKeys` is set to `{*, bar}`.
+9. `selectorsCompare({foo, bar}, {foo, *}, {*, bar})` is
+   determined as follows:
+   1. `result` is set to `SAME`.
+   1. `i` is set to 0.
+   1. `key1` is set to `foo`.
+   1. `key2` is set to `'*'`
+   1. The result of `selectorsCompare({foo, bar}, {foo, *}, {*, bar})` is `BETTER`.
+10. `bestVariant` is set to `foo * {{Foo and any}}`.
+11. `keys` is set to `{foo, bar}`.
+12. `match` is set to `selectorsMatch({foo, bar}, {foo, bar})`.
+    1. `match` is true (details elided)
+13. `bestVariantKeys` is set to `{foo, *}`.
+14. `selectorsCompare({foo, bar}, {foo, bar}, {foo, *})` is
+    determined as follows:
+    1. `result` is set to `SAME`.
+    1. `i` is set to 0.
+    1. `key1` is set to `foo`.
+    1. `key2` is set to `foo`.
+    1. `k1` is set to `foo`.
+    1. `k2` is set to `foo`.
+    1. `sel` is set to a resolved value corresponding to `foo`.
+    1. `sel.compare(foo, foo)` is `SAME`.
+    1. `i` is set to 1.
+    1. `key1` is set to `bar`.
+    1. `key2` is set to `*`.
+    1. The result of `selectorsCompare({foo, bar}, {foo, bar}, {foo, *})`
+       is `BETTER`.
+15. `bestVariant` is set to `foo bar {{Foo and bar}}`.
+16. `keys` is set to `* *`.
+17. `match` is set to true (details elided).
+18. `bestVariantKeys` is set to `foo bar`.
+19. `selectorsCompare({foo, bar}, {*, *}, {foo, bar}}` is `WORSE`
+    (details elided).
 
-2. For the second selector:<br>
-   The value of the selector is resolved to be `'bar'`.<br>
-   The available keys « `'bar'` » are compared to `'bar'`,<br>
-   resulting in a list « `'bar'` » of matching keys.
-
-3. Creating the list `vars` of variants matching all keys:<br>
-   The keys of all variants either match each selector exactly, or via the catch-all key,<br>
-   resulting in a list « `* bar`, `foo *`, `foo bar`, `* *` » of variants.
-
-4. Sorting the variants:<br>
-   The list `sortable` is first set with the variants in their source order
-   and scores determined by the second selector:<br>
-   « ( 0, `* bar` ), ( 1, `foo *` ), ( 0, `foo bar` ), ( 1, `* *` ) »<br>
-   This is then sorted as:<br>
-   « ( 0, `* bar` ), ( 0, `foo bar` ), ( 1, `foo *` ), ( 1, `* *` ) ».<br>
-   To sort according to the first selector, the scores are updated to:<br>
-   « ( 1, `* bar` ), ( 0, `foo bar` ), ( 0, `foo *` ), ( 1, `* *` ) ».<br>
-   This is then sorted as:<br>
-   « ( 0, `foo bar` ), ( 0, `foo *` ), ( 1, `* bar` ), ( 1, `* *` ) ».<br>
-
-5. The pattern `Foo and bar` of the most preferred `foo bar` variant is selected.
+The pattern `{{Foo and bar}}` is selected.
 
 ##### Selection Example 3
 
@@ -802,25 +840,42 @@ one {{Category match for {$count}}}
 *   {{Other match for {$count}}}
 ```
 
-1. For the selector:<br>
-   The value of the selector is resolved to an implementation-defined value
-   that is capable of performing English plural category selection on the value `1`.<br>
-   The available keys « `'one'`, `'1'` » are passed to
-   the implementation's MatchSelectorKeys method,<br>
-   resulting in a list « `'1'`, `'one'` » of matching keys.
-
-2. Creating the list `vars` of variants matching all keys:<br>
-   The keys of all variants are included in the list of matching keys, or use the catch-all key,<br>
-   resulting in a list « `one`, `1`, `*` » of variants.
-
-3. Sorting the variants:<br>
-   The list `sortable` is first set with the variants in their source order
-   and scores determined by the selector key order:<br>
-   « ( 1, `one` ), ( 0, `1` ), ( 2, `*` ) »<br>
-   This is then sorted as:<br>
-   « ( 0, `1` ), ( 1, `one` ), ( 2, `*` ) »<br>
-
-4. The pattern `Exact match for {$count}` of the most preferred `1` variant is selected.
+1. Each selector is resolved, yielding the list `{1}`.
+1. `bestVariant` is set to `UNSET`.
+1. `keys` is set to `{one}`.
+1. `match` is set to `selectorsMatch({1}, {one})`.
+   The result of `selectorsMatch({1}, one)` is
+   determined as follows:
+   1. `result` is set to true.
+   1. `i` is set to 0.
+   1. `k` is set to `one`.
+   1. `sel` is set to `1`.
+   1. `sel.match(one)` is true.
+   1. `i` is set to 1.
+   1. The result of `selectorsMatch({1}, one)` is true.
+1. `bestVariant` is set to `one {{Category match for {$count}}}`.
+1. `keys` is set to `1`.
+1. `match` is set to `selectorsMatch({1}, {one})`.
+   1. The details are the same as the previous case,
+      as `sel.match(1)` is also true.
+1. `bestVariantKeys` is set to `{one}`.
+1. `selectorsCompare({1}, {1}, {one})` is determined as follows:
+   1. `result` is set to `SAME`.
+   1. `i` is set to 0.
+   1. `key1` is set to `1`.
+   1. `key2` is set to `one`.
+   1. `k1` is set to `1`.
+   1. `k2` is set to `one`.
+   1. `sel` is set to `1`.
+   1. `result` is set to `sel.compare(1, one)`, which is `BETTER`.
+      1. NOTE: The specification of the `:number` selector function
+         states that the exact match `1` is a better match than
+         the category match `one`.
+   1. `bestVariant` is set to `1 {{Exact match for {$count}}}`.
+1. `keys` is set to `*`
+   1. Details elided; since `*` is the catch-all key,
+      `selectorsCompare({1}, {1}, {*})` is `WORSE`.
+1. The pattern `{{Exact match for {$count}}}` is selected.
 
 ### Formatting of the Selected Pattern
 

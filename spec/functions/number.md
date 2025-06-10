@@ -667,25 +667,38 @@ Number selection has three modes:
 - `ordinal` selection matches the operand to explicit numeric keys exactly
   followed by an ordinal rule category if there is no explicit match
 
-When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
+When implementing [`resolvedSelector.match(key)`](/spec/formatting.md#operations-on-resolved-values)
 where `resolvedSelector` is the _resolved value_ of a _selector_
-and `keys` is a list of strings,
+and `key` is a string,
 numeric selectors perform as described below.
 
 1. Let `exact` be the serialized representation of the numeric value of `resolvedSelector`.
    (See [Exact Literal Match Serialization](#exact-literal-match-serialization) for details)
 1. Let `keyword` be a string which is the result of [rule selection](#rule-selection) on `resolvedSelector`.
-1. Let `resultExact` be a new empty list of strings.
-1. Let `resultKeyword` be a new empty list of strings.
-1. For each string `key` in `keys`:
-   1. If the value of `key` matches the production `number-literal`, then
+1. If the value of `key` matches the production `number-literal`, then
       1. If `key` and `exact` consist of the same sequence of Unicode code points, then
-         1. Append `key` as the last element of the list `resultExact`.
-   1. Else if `key` is one of the keywords `zero`, `one`, `two`, `few`, `many`, or `other`, then
+         1. Return true.
+      1. Return false.
+1. If `key` is one of the keywords `zero`, `one`, `two`, `few`, `many`, or `other`, then
       1. If `key` and `keyword` consist of the same sequence of Unicode code points, then
-         1. Append `key` as the last element of the list `resultKeyword`.
-   1. Else, emit a _Bad Variant Key_ error.
-1. Return a new list whose elements are the concatenation of the elements (in order) of `resultExact` followed by the elements (in order) of `resultKeyword`.
+         1. Return true.
+      1. Return false.
+1. Emit a _Bad Variant Key_ error.
+
+When implementing [`resolvedSelector.compare(key1, key2)`](/spec/formatting.md#operations-on-resolved-values)
+where `resolvedSelector` is the _resolved value_ of a _selector_
+and `key1` and `key2` are strings,
+numeric selectors perform as described below.
+
+1. ASSERT: `resolvedSelector.match(key1)`.
+1. ASSERT: `resolvedSelector.match(key2)`.
+1. If the value of `key1` matches the production `number-literal`, then
+   1. If the value of `key2` does not match the production `number-literal`, then
+      1. Return `BETTER`.
+   1. Return `SAME`.
+1. If the value of `key2` matches the production `number-literal`, then
+   1. Return `WORSE`.
+1. Return `SAME`.
 
 > [!NOTE]
 > Implementations are not required to implement this exactly as written.
