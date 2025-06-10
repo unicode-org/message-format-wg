@@ -44,18 +44,26 @@ None of the _options_ set on the _expression_ are part of the _resolved value_.
 
 ##### Selection
 
-When implementing [`MatchSelectorKeys(resolvedSelector, keys)`](/spec/formatting.md#resolve-preferences)
+When implementing [`resolvedSelector.match(key)`](/spec/formatting.md#operations-on-resolved-values)
 where `resolvedSelector` is the _resolved value_ of a _selector_
-and `keys` is a list of strings,
+and `key` is a string,
 the `:string` selector function performs as described below.
 
 1. Let `compare` be the string value of `resolvedSelector`
    in Unicode Normalization Form C (NFC) [\[UAX#15\]](https://www.unicode.org/reports/tr15)
-1. Let `result` be a new empty list of strings.
-1. For each string `key` in `keys`:
-   1. If `key` and `compare` consist of the same sequence of Unicode code points, then
-      1. Append `key` as the last element of the list `result`.
-1. Return `result`.
+1. If `key` and `compare` consist of the same sequence of Unicode code points, then
+   1. Return true.
+1. Return false.
+
+When implementing [`resolvedSelector.compare(key1, key2)`](/spec/formatting.md#operations-on-resolved-values)
+where `resolvedSelector` is the _resolved value_ of a _selector_
+and `key1` and `key2` are strings,
+the `:string` selector function performs as described below.
+
+1. ASSERT: `resolvedSelector.match(key1)`.
+1. ASSERT: `resolvedSelector.match(key2)`.
+1. Return `SAME`.
+
 
 > [!NOTE]
 > Unquoted string literals in a _variant_ do not include spaces.
