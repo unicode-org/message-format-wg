@@ -637,7 +637,6 @@ SelectorsMatch(selectors, keys) is defined as follows, where
 `selectors` is a list of resolved values
 and `keys` is a list of keys:
 
-1. Let `result` be true.
 1. Let `i` be 0.
 1. For each key `key` in `keys`:
    1. If `key` is the catch-all key `'*'`
@@ -646,11 +645,9 @@ and `keys` is a list of keys:
    1. Let `k` be the _resolved value_ of `key` in Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15).
    1. Let `sel` be the `i`th element of `selectors`.
    1. If Match(sel, k) is false:
-      1. Set `result` to false.
-      1. Exit the loop.
+      1. Return false.
    1. Set `i` to `i` + 1.
-
-The result of SelectorsMatch(selectors, keys) is `result`.
+1. Return true.
 
 #### SelectorsCompare
 
@@ -679,8 +676,7 @@ and `keys1` and `keys2` are lists of keys.
       1. Continue the loop.
    1. Else:
       1. Return `result`.
-
-The result of SelectorsCompare(selectors, keys1, keys2)` is `result`.
+1. Return `result`.
 
 #### Pattern Selection Examples
 
