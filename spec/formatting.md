@@ -182,7 +182,7 @@ and different implementations MAY choose to perform different levels of resoluti
 >     cases (such as in a function that extracts a field from a data structure),
 >     `getResult()` would return a different result than the _operand_.
 > - The `directionality()`, `isolate()`, and `isLiteralOptionValue()` methods
->   fulfill the requirements and recommendations mentioned earlier in this section.
+>   fulfill requirements and recommendations mentioned elsewhere in this specification.
 >
 > Extensions of the base `MessageValue` interface could be provided for different data types,
 > such as numbers or strings,
