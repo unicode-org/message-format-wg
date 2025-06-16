@@ -617,7 +617,7 @@ First, resolve the values of each _selector_:
 
 Next, using `res`:
 
-1. Set `bestVariant` to `UNSET`.
+1. Let `bestVariant` be `UNSET`.
 1. For each _variant_ `var` of the message, in source order:
    1. Let `keys` be the keys of `var`.
    1. Let `match` be SelectorsMatch(res, keys).
@@ -637,8 +637,8 @@ SelectorsMatch(selectors, keys) is defined as follows, where
 `selectors` is a list of resolved values
 and `keys` is a list of keys:
 
-1. Set `result` to true.
-1. Set `i` to 0.
+1. Let `result` be true.
+1. Let `i` be 0.
 1. For each key `key` in `keys`:
    1. If `key` is the catch-all key `'*'`
       1. Set `i` to `i` + 1.
@@ -658,8 +658,8 @@ SelectorsCompare(selectors, keys1, keys2) is defined as follows, where
 `selectors` is a list of resolved values
 and `keys1` and `keys2` are lists of keys.
 
-1. Set `result` to `SAME`.
-1. Set `i` to 0.
+1. Let `result` be `SAME`.
+1. Let `i` be 0.
 1. For each key in `keys1`:
    1. Let `key1` be the `i`th element of `keys1`.
    1. Let `key2` be the `i`th element of `keys2`.
