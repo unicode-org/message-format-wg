@@ -156,7 +156,7 @@ and different implementations MAY choose to perform different levels of resoluti
 > interface MessageValue {
 >   formatToString(): string
 >   formatToX(): X // where X is an implementation-defined type
->   getResult(): unknown
+>   unwrap(): unknown
 >   resolvedOptions(): { [key: string]: MessageValue }
 >   selectKeys(keys: string[]): string[]
 >   directionality(): 'LTR' | 'RTL' | 'unknown'
@@ -172,21 +172,23 @@ and different implementations MAY choose to perform different levels of resoluti
 > - A _variable_ could be used as a _selector_ if
 >   calling the `selectKeys(keys)` method of its _resolved value_
 >   did not emit an error.
-> - Using a _variable_, the _resolved value_ of an _expression_
+> - The _resolved value_ of an _expression_
 >   could be used as an _operand_ or _option value_ if
->   calling the `getResult()` method of its _resolved value_ did not emit an error.
+>   calling the `unwrap()` method of its _resolved value_ did not emit an error.
+>   (This requires an intermediate _variable_ _declaration_.)
 >   In this use case, the `resolvedOptions()` method could also
 >   provide a set of option values that could be taken into account by the called function.
->   - In some cases (such as in a number formatting function), `getResult()` would
->     return the _operand_ of the function that returned the `MessageValue`. In other
->     cases (such as in a function that extracts a field from a data structure),
->     `getResult()` would return a different result than the _operand_.
+>   - The relationship between the _operand_ and the result of the `unwrap()` method
+>     is specific to each function. For example, with the built-in function `:number`,
+>     the `unwrap()` method would return the numeric value of the _operand_.
+>     In other cases, such as in a function that extracts a field from a data structure,
+>     `unwrap()` would return a different result than the _operand_.
 > - The `directionality()`, `isolate()`, and `isLiteralOptionValue()` methods
 >   fulfill requirements and recommendations mentioned elsewhere in this specification.
 >
 > Extensions of the base `MessageValue` interface could be provided for different data types,
 > such as numbers or strings,
-> for which the `unknown` return type of `getResult()` and
+> for which the `unknown` return type of `unwrap()` and
 > the generic `MessageValue` type used in `resolvedOptions()`
 > could be narrowed appropriately.
 > An implementation could also allow `MessageValue` values to be passed in as input variables,
