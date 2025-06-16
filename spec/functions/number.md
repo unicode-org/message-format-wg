@@ -667,7 +667,7 @@ Number selection has three modes:
 - `ordinal` selection matches the operand to explicit numeric keys exactly
   followed by an ordinal rule category if there is no explicit match
 
-When implementing [`resolvedSelector.match(key)`](/spec/formatting.md#operations-on-resolved-values)
+When implementing [Match(resolvedSelector, key)](/spec/formatting.md#operations-on-resolved-values)
 where `resolvedSelector` is the _resolved value_ of a _selector_
 and `key` is a string,
 numeric selectors perform as described below.
@@ -685,13 +685,13 @@ numeric selectors perform as described below.
       1. Return false.
 1. Emit a _Bad Variant Key_ error.
 
-When implementing [`resolvedSelector.compare(key1, key2)`](/spec/formatting.md#operations-on-resolved-values)
+When implementing [Compare(resolvedSelector, key1, key2)](/spec/formatting.md#operations-on-resolved-values)
 where `resolvedSelector` is the _resolved value_ of a _selector_
 and `key1` and `key2` are strings,
 numeric selectors perform as described below.
 
-1. ASSERT: `resolvedSelector.match(key1)`.
-1. ASSERT: `resolvedSelector.match(key2)`.
+1. Assert that Match(resolvedSelector, key1) is true.
+1. Assert that Match(resolvedSelector, key2) is true.
 1. If the value of `key1` matches the production `number-literal`, then
    1. If the value of `key2` does not match the production `number-literal`, then
       1. Return `BETTER`.
