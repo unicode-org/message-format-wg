@@ -584,8 +584,9 @@ as long as its observable behavior matches the results of the method defined her
 
 ##### Operations on resolved values
 
-The selection method is defined in terms of two auxiliary operations,
-`selectorsMatch` and `selectorsCompare`. These operations in turn assume
+The selection method is defined in terms of two auxiliary methods,
+SelectorsMatch and SelectorsCompare.
+These methods in turn assume
 that if `rv` is a resolved value,
 and if selection is supported for `rv`,
 then `rv.match(k)` returns a boolean for any key `k`,
@@ -618,20 +619,20 @@ Next, using `res`:
 1. Set `bestVariant` to `UNSET`.
 1. For each _variant_ `var` of the message, in source order:
    1. Let `keys` be the keys of `var`.
-   1. Let `match` be `selectorsMatch(res, keys)`
+   1. Let `match` be SelectorsMatch(res, keys).
    1. If `match` is false:
       1. Continue the loop.
    1. If `bestVariant` is `UNSET`.
       1. Set `bestVariant` to `var`.
    1. Else:
       1. Let `bestVariantKeys` be the keys of `bestVariant`.
-      1. If `selectorsCompare(res, keys, bestVariantKeys)` is `BETTER`
+      1. If SelectorsCompare(res, keys, bestVariantKeys) is `BETTER`:
          1. Set `bestVariant` to `var`.
 1. Select the _pattern_ of `bestVariant`.
 
-#### `selectorsMatch`
+#### SelectorsMatch
 
-`selectorsMatch(selectors, keys)` is defined as follows, where
+SelectorsMatch(selectors, keys) is defined as follows, where
 `selectors` is a list of resolved values
 and `keys` is a list of keys:
 
@@ -648,11 +649,11 @@ and `keys` is a list of keys:
       1. Exit the loop.
    1. Set `i` to `i` + 1.
 
-The result of `selectorsMatch(selectors, keys)` is `result`.
+The result of SelectorsMatch(selectors, keys) is `result`.
 
-#### `selectorsCompare`.
+#### SelectorsCompare
 
-`selectorsCompare(selectors, keys1, keys2)` is defined as follows, where
+SelectorsCompare(selectors, keys1, keys2) is defined as follows, where
 `selectors` is a list of resolved values
 and `keys1` and `keys2` are lists of keys.
 
@@ -678,7 +679,7 @@ and `keys1` and `keys2` are lists of keys.
    1. Else:
       1. Return `result`.
 
-The result of `selectorsCompare(selectors, keys1, keys2)` is `result`.
+The result of SelectorsCompare(selectors, keys1, keys2)` is `result`.
 
 #### Pattern Selection Examples
 
