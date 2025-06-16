@@ -589,11 +589,12 @@ SelectorsMatch and SelectorsCompare.
 These methods in turn assume
 that if `rv` is a resolved value,
 and if selection is supported for `rv`,
-then `rv.match(k)` returns a boolean for any key `k`,
-and `rv.compare(k1, k2)` returns (for any keys `k1` and `k2`)
+then Match(rv, k) returns a boolean for any key `k`,
+and Compare(rv, k, k1) returns (for any keys `k1` and `k2`)
 a value from the set `{WORSE, SAME, BETTER}`.
 
-Other than the `match()` and `compare()` operations on resolved values,
+Other than the Match(rv, k) and Compare(rv, k, k1) operations
+on resolved values,
 the form of the _resolved values_ is determined by each implementation,
 along with the manner of determining their support for selection.
 
@@ -607,7 +608,7 @@ First, resolve the values of each _selector_:
    1. If selection is supported for `rv`:
       1. Append `rv` as the last element of the list `res`.
    1. Else:
-      1. Let `nomatch` be a _resolved value_ for which `match(k)` is false
+      1. Let `nomatch` be a _resolved value_ for which Match(rv, k) is false
          for any key `k`.
       1. Append `nomatch` as the last element of the list `res`.
       1. Emit a _Bad Selector_ error.
@@ -644,7 +645,7 @@ and `keys` is a list of keys:
       1. Continue the loop.
    1. Let `k` be the _resolved value_ of `key` in Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15).
    1. Let `sel` be the `i`th element of `selectors`.
-   1. If `sel.match(k)` is false:
+   1. If Match(sel, k) is false:
       1. Set `result` to false.
       1. Exit the loop.
    1. Set `i` to `i` + 1.
@@ -672,7 +673,7 @@ and `keys1` and `keys2` are lists of keys.
    1. Let `k1` be the _resolved value_ of `key1` in Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15).
    1. Let `k2` be the _resolved value_ of `key2` in Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15).
    1. Let `sel` be the `i`th element of `selectors`.
-   1. Set `result` to `sel.compare(k1, k2)`.
+   1. Set `result` to Compare(sel, k1, k2).
    1. If `result` is `SAME`:
       1. Set `i` to `i + 1`.
       1. Continue the loop.
