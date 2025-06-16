@@ -678,7 +678,7 @@ and `keys1` and `keys2` are lists of keys.
       1. Return `result`.
 1. Return `result`.
 
-For examples of how the algorithms work, see [the appendix](appendix-non-normative-examples).
+For examples of how the algorithms work, see [the appendix](#appendix-non-normative-examples).
 
 ### Formatting of the Selected Pattern
 
