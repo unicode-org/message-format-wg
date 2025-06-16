@@ -170,7 +170,7 @@ and different implementations MAY choose to perform different levels of resoluti
 >   calling the `formatToString()` or `formatToX()` method of its _resolved value_
 >   did not emit an error.
 > - A _variable_ could be used as a _selector_ if
->   calling the `selectKeys(keys)` method of its _resolved value_
+>   calling the `match(key)` and `compare(key1, key2)`  methods of its _resolved value_
 >   did not emit an error.
 > - Using a _variable_, the _resolved value_ of an _expression_
 >   could be used as an _operand_ or _option value_ if
@@ -259,7 +259,7 @@ whether its value was originally a _quoted literal_ or an _unquoted literal_.
 >     this.getValue = () => value;
 >   }
 >   resolvedOptions: () => ({});
->   selectKeys(_keys: string[]) {
+>   match(_key: string) {
 >     throw Error("Selection on unannotated literals is not supported");
 >   }
 > }
@@ -516,7 +516,7 @@ _Pattern selection_ is not supported for _fallback values_.
 >     this.getValue = () => undefined;
 >   }
 >   resolvedOptions: () => ({});
->   selectKeys(_keys: string[]) {
+>   match(_key: string) {
 >     throw Error("Selection on fallback values is not supported");
 >   }
 > }
