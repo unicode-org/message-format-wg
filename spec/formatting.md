@@ -886,38 +886,38 @@ foo foo {{All foo}}
 1. Each selector is resolved, yielding the list `res` = `{foo, bar}`.
 2. `bestVariant` is set to `UNSET`.
 3. `keys` is set to `{bar, bar}`.
-4. `match` is set to `selectorsMatch({foo, bar}, {bar, bar})`.
-   The result of `selectorsMatch({foo, bar}, {bar, bar})` is
+4. `match` is set to SelectorsMatch({foo, bar}, {bar, bar}).
+   The result of SelectorsMatch({foo, bar}, {bar, bar}) is
    determined as follows:
    1. `result` is set to true.
    1. `i` is set to 0.
    1. `k` is set to the string `bar`.
    1. `sel` is set to a resolved value corresponding to the string `foo`.
-   1. `sel.match('bar')` is false.
-   1. The result of `selectorsMatch({foo, bar}, {bar, bar})` is false.
+   1. Match(sel, 'bar') is false.
+   1. The result of SelectorsMatch({foo, bar}, {bar, bar}) is false.
    Thus, `match` is set to false.
 5. `keys` is set to `{foo, foo}`.
-6. `match` is set to `selectorsMatch({foo, bar}, {foo, foo})`.
-   The result of `selectorsMatch({foo, bar}, {foo, foo})` is
+6. `match` is set to SelectorsMatch({foo, bar}, {foo, foo}).
+   The result of SelectorsMatch({foo, bar}, {foo, foo}) is
    determined as follows:
    1. `result` is set to true.
    1. `i` is set to 0.
    1. `k` is set to the string `foo`.
    1. `sel` is set to a resolved value corresponding to the string `foo`.
-   1. `sel.match('foo')` is true.
+   1. Match(sel, 'foo') is true.
    1. `i` is set to 1.
    1. `k` is set to the string `foo`.
    1. `sel` is set to a resolved value corresponding to the string `bar`.
-   1. `sel.match('bar`)` is false.
-   1. The result of `selectorsMatch({foo, bar}, {foo, foo})` is false.
+   1. Match(sel, 'bar') is false.
+   1. The result of SelectorsMatch({foo, bar}, {foo, foo}) is false.
 7. `keys` is set to `* *`.
-8. The result of `selectorsMatch({foo, bar}, {*, *}` is
+8. The result of SelectorsMatch({foo, bar}, {*, *}) is
    determined as follows:
    1. `result` is set to true.
    1. `i` is set to 0.
    1. `i` is set to 1.
    1. `i` is set to 2.
-   1. The result of `selectorsMatch({foo, bar}, {*, *}` is true.
+   1. The result of SelectorsMatch({foo, bar}, {*, *}) is true.
 9. `bestVariant` is set to the variant `* * {{Otherwise}}`
 10. The pattern `Otherwise` is selected.
 
@@ -939,44 +939,44 @@ foo bar {{Foo and bar}}
 1. Each selector is resolved, yielding the list `res` = `{foo, bar}`.
 2. `bestVariant` is set to `UNSET`.
 3. `keys` is set to `{*, bar}`.
-4. `match` is set to `selectorsMatch({foo, bar}, {*, bar})`
-   The result of `selectorsMatch({foo, bar}, {*, bar})` is
+4. `match` is set to SelectorsMatch({foo, bar}, {*, bar})
+   The result of SelectorsMatch({foo, bar}, {*, bar}) is
    determined as follows:
    1. `result` is set to true.
    2. `i` is set to 0.
    3. `i` is set to 1.
    4. `k` is set to the string `bar`.
    5. `sel` is set to a resolved value corresponding to the string `bar`.
-   6. `sel.match('bar')` is true.
+   6. Match(sel, 'bar') is true.
    7. `i` is set to 2.
-   1. The result of `selectorsMatch({foo, bar}, {*, bar})` is true.
+   1. The result of SelectorsMatch({foo, bar}, {*, bar}) is true.
 5. `bestVariant` is set to the variant `* bar {{Any and bar}}`.
 6. `keys` is set to `{foo, *}`.
-7. `match` is set to `selectorsMatch({foo, bar}, {foo, *})`
-   The result of `selectorsMatch({foo, bar}, {foo, *})` is
+7. `match` is set to SelectorsMatch({foo, bar}, {foo, *}).
+   The result of SelectorsMatch({foo, bar}, {foo, *}) is
    determined as follows:
    1. `result` is set to true.
    2. `i` is set to 0.
    3. `k` is set to the string `foo`.
    4. `sel` is set to a resolved value corresponding to the string `foo`.
-   5. `sel.match('foo')` is true.
+   5. Match(sel, 'foo') is true.
    6. `i` is set to 1.
    7. `i` is set to 2.
-   8. The result of `selectorsMatch({foo, bar}, {foo, *})` is true.
+   8. The result of SelectorsMatch({foo, bar}, {foo, *}) is true.
 8. `bestVariantKeys` is set to `{*, bar}`.
-9. `selectorsCompare({foo, bar}, {foo, *}, {*, bar})` is
+9. SelectorsCompare({foo, bar}, {foo, *}, {*, bar}) is
    determined as follows:
    1. `result` is set to `SAME`.
    1. `i` is set to 0.
    1. `key1` is set to `foo`.
    1. `key2` is set to `'*'`
-   1. The result of `selectorsCompare({foo, bar}, {foo, *}, {*, bar})` is `BETTER`.
+   1. The result of SelectorsCompare({foo, bar}, {foo, *}, {*, bar}) is `BETTER`.
 10. `bestVariant` is set to `foo * {{Foo and any}}`.
 11. `keys` is set to `{foo, bar}`.
-12. `match` is set to `selectorsMatch({foo, bar}, {foo, bar})`.
+12. `match` is set to SelectorsMatch({foo, bar}, {foo, bar}).
     1. `match` is true (details elided)
 13. `bestVariantKeys` is set to `{foo, *}`.
-14. `selectorsCompare({foo, bar}, {foo, bar}, {foo, *})` is
+14. SelectorsCompare({foo, bar}, {foo, bar}, {foo, *}) is
     determined as follows:
     1. `result` is set to `SAME`.
     1. `i` is set to 0.
@@ -985,17 +985,17 @@ foo bar {{Foo and bar}}
     1. `k1` is set to `foo`.
     1. `k2` is set to `foo`.
     1. `sel` is set to a resolved value corresponding to `foo`.
-    1. `sel.compare(foo, foo)` is `SAME`.
+    1. Compare(sel, foo, foo) is `SAME`.
     1. `i` is set to 1.
     1. `key1` is set to `bar`.
     1. `key2` is set to `*`.
-    1. The result of `selectorsCompare({foo, bar}, {foo, bar}, {foo, *})`
+    1. The result of SelectorsCompare({foo, bar}, {foo, bar}, {foo, *})
        is `BETTER`.
 15. `bestVariant` is set to `foo bar {{Foo and bar}}`.
 16. `keys` is set to `* *`.
 17. `match` is set to true (details elided).
 18. `bestVariantKeys` is set to `foo bar`.
-19. `selectorsCompare({foo, bar}, {*, *}, {foo, bar}}` is `WORSE`
+19. SelectorsCompare({foo, bar}, {*, *}, {foo, bar}} is `WORSE`
     (details elided).
 
 The pattern `{{Foo and bar}}` is selected.
@@ -1024,23 +1024,23 @@ one {{Category match for {$count}}}
 1. Each selector is resolved, yielding the list `{1}`.
 1. `bestVariant` is set to `UNSET`.
 1. `keys` is set to `{one}`.
-1. `match` is set to `selectorsMatch({1}, {one})`.
-   The result of `selectorsMatch({1}, one)` is
+1. `match` is set to SelectorsMatch({1}, {one}).
+   The result of SelectorsMatch({1}, one) is
    determined as follows:
    1. `result` is set to true.
    1. `i` is set to 0.
    1. `k` is set to `one`.
    1. `sel` is set to `1`.
-   1. `sel.match(one)` is true.
+   1. Match(sel, one) is true.
    1. `i` is set to 1.
-   1. The result of `selectorsMatch({1}, one)` is true.
+   1. The result of SelectorsMatch({1}, one) is true.
 1. `bestVariant` is set to `one {{Category match for {$count}}}`.
 1. `keys` is set to `1`.
-1. `match` is set to `selectorsMatch({1}, {one})`.
+1. `match` is set to SelectorsMatch({1}, {one}).
    1. The details are the same as the previous case,
-      as `sel.match(1)` is also true.
+      as Match(sel, 1) is also true.
 1. `bestVariantKeys` is set to `{one}`.
-1. `selectorsCompare({1}, {1}, {one})` is determined as follows:
+1. SelectorsCompare({1}, {1}, {one}) is determined as follows:
    1. `result` is set to `SAME`.
    1. `i` is set to 0.
    1. `key1` is set to `1`.
@@ -1048,12 +1048,12 @@ one {{Category match for {$count}}}
    1. `k1` is set to `1`.
    1. `k2` is set to `one`.
    1. `sel` is set to `1`.
-   1. `result` is set to `sel.compare(1, one)`, which is `BETTER`.
+   1. `result` is set to Compare(sel, 1, one), which is `BETTER`.
       1. NOTE: The specification of the `:number` selector function
          states that the exact match `1` is a better match than
          the category match `one`.
    1. `bestVariant` is set to `1 {{Exact match for {$count}}}`.
 1. `keys` is set to `*`
    1. Details elided; since `*` is the catch-all key,
-      `selectorsCompare({1}, {1}, {*})` is `WORSE`.
+      SelectorsCompare({1}, {1}, {*}) is `WORSE`.
 1. The pattern `{{Exact match for {$count}}}` is selected.
