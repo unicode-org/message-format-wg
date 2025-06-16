@@ -182,7 +182,8 @@ and different implementations MAY choose to perform different levels of resoluti
 >     is specific to each function. For example, with the built-in function `:number`,
 >     the `unwrap()` method would return the numeric value of the _operand_.
 >     In other cases, such as in a function that extracts a field from a data structure,
->     `unwrap()` would return a different result than the _operand_.
+>     `unwrap()` would return the extracted value,
+>     not the _operand_ it was extracted from.
 > - The `directionality()`, `isolate()`, and `isLiteralOptionValue()` methods
 >   fulfill requirements and recommendations mentioned elsewhere in this specification.
 >
