@@ -667,8 +667,8 @@ and `keys1` and `keys2` are lists of keys.
    1. If `key1` and `key2` are both the catch-all key `'*'`
       1. Set `i` to `i + 1`.
       1. Continue the loop.
-   1. Let `k1` be the _resolved value_ of `key1` in Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15).
-   1. Let `k2` be the _resolved value_ of `key2` in Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15).
+   1. Let `k1` be the string value of the _resolved value_ of `key1` in Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15).
+   1. Let `k2` be the string value of the _resolved value_ of `key2` in Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15).
    1. Let `sel` be the `i`th element of `selectors`.
    1. Set `result` to Compare(sel, k1, k2).
    1. If `result` is `SAME`:
