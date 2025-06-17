@@ -58,10 +58,9 @@ the `:string` selector function performs as described below.
 When implementing [Compare(resolvedSelector, key1, key2](/spec/formatting.md#operations-on-resolved-values)
 where `resolvedSelector` is the _resolved value_ of a _selector_
 and `key1` and `key2` are strings,
-the `:string` selector function performs as described below.
+the `:string` selector function performs as described below,
+as the Compare operation should only be called on keys that match.
 
-1. Assert that Match(resolvedSelector, key1) is true.
-1. Assert that Match(resolvedSelector, key2) is true.
 1. Return `SAME`.
 
 
