@@ -44,7 +44,7 @@ None of the _options_ set on the _expression_ are part of the _resolved value_.
 
 ##### Selection
 
-When implementing [Match(resolvedSelector, key)](/spec/formatting.md#operations-on-resolved-values)
+When implementing [Match(`resolvedSelector`, `key`)](/spec/formatting.md#operations-on-resolved-values)
 where `resolvedSelector` is the _resolved value_ of a _selector_
 and `key` is a string,
 the `:string` selector function performs as described below.
@@ -55,7 +55,7 @@ the `:string` selector function performs as described below.
    1. Return true.
 1. Return false.
 
-When implementing [Compare(resolvedSelector, key1, key2](/spec/formatting.md#operations-on-resolved-values)
+When implementing [Compare(`resolvedSelector`, `key1`, `key2`](/spec/formatting.md#operations-on-resolved-values)
 where `resolvedSelector` is the _resolved value_ of a _selector_
 and `key1` and `key2` are strings,
 the `:string` selector function performs as described below,
