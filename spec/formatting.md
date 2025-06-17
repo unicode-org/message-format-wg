@@ -158,7 +158,7 @@ and different implementations MAY choose to perform different levels of resoluti
 >   getValue(): unknown
 >   resolvedOptions(): { [key: string]: MessageValue }
 >   match(key: string): boolean
->   compare(key1: string, key2: string): 'WORSE' | 'SAME' | 'BETTER'
+>   betterThan(key1: string, key2: string): boolean
 >   directionality(): 'LTR' | 'RTL' | 'unknown'
 >   isolate(): boolean
 >   isLiteralOptionValue(): boolean
@@ -170,7 +170,7 @@ and different implementations MAY choose to perform different levels of resoluti
 >   calling the `formatToString()` or `formatToX()` method of its _resolved value_
 >   did not emit an error.
 > - A _variable_ could be used as a _selector_ if
->   calling the `match(key)` and `compare(key1, key2)`  methods of its _resolved value_
+>   calling the `match(key)` and `betterThan(key1, key2)`  methods of its _resolved value_
 >   did not emit an error.
 > - Using a _variable_, the _resolved value_ of an _expression_
 >   could be used as an _operand_ or _option value_ if
@@ -585,16 +585,15 @@ as long as its observable behavior matches the results of the method defined her
 #### Operations on Resolved Values
 
 For a _resolved value_ to support selection,
-the operations Match and Compare need to be defined on it.
+the operations Match and BetterThan need to be defined on it.
 
 If `rv` is a resolved value that supports selection, then
 Match(`rv`, `k`) returns a boolean for any key `k`.
-and Compare(`rv`, `k1`, `k2`) returns a value from the set
-`{WORSE, SAME, BETTER}`
+and BetterThan(`rv`, `k1`, `k2`) returns a boolean
 for any keys `k1` and `k2` such that Match(`rv`, `k1`) is true
 and Match(`rv`, `k2`) is true.
 
-Other than the Match(`rv`, `k`) and Compare(`rv`, `k1`, `k2`) operations
+Other than the Match(`rv`, `k`) and BetterThan(`rv`, `k1`, `k2`) operations
 on resolved values,
 the form of the _resolved values_ is determined by each implementation,
 along with the manner of determining their support for selection.
@@ -656,27 +655,27 @@ SelectorsCompare(`selectors`, `keys1`, `keys2`) is defined as follows, where
 `selectors` is a list of _resolved values_
 and `keys1` and `keys2` are lists of _keys_.
 
-1. Let `result` be `SAME`.
+1. Let `result` be false.
 1. Let `i` be 0.
 1. For each _key_ in `keys1`:
    1. Let `key1` be the `i`th element of `keys1`.
    1. Let `key2` be the `i`th element of `keys2`.
    1. If `key1` is the catch-all _key_ `'*'` and `key2` is not the catch-all _key_:
-      1. Return `WORSE`.
+      1. Return false.
    1. If `key1` is not the catch-all _key_ `'*'` and `key2` is the catch-all _key_:
-      1. Return `BETTER`.
+      1. Return true.
    1. If `key1` and `key2` are both the catch-all _key_ `'*'`
       1. Set `i` to `i + 1`.
       1. Continue the loop.
    1. Let `k1` be NormalizeKey(`key1`).
    1. Let `k2` be NormalizeKey(`key2`).
    1. Let `sel` be the `i`th element of `selectors`.
-   1. Set `result` to Compare(`sel`, `k1`, `k2`).
-   1. If `result` is `SAME`:
+   1. Set `result` to BetterThan(`sel`, `k1`, `k2`).
+   1. If `result` is false:
       1. Set `i` to `i + 1`.
       1. Continue the loop.
    1. Else:
-      1. Return `result`.
+      1. Return true.
 1. Return `result`.
 
 #### NormalizeKey

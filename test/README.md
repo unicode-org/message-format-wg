@@ -166,7 +166,7 @@ depends on its `Input`, `DecimalPlaces` and `FailsSelect` values.
 - If the `Input` is any other value, the method will return false.
 
 When `:test:function` is used as a _selector_,
-the behaviour of calling it as the `rv` value of Compare(`rv`, `key1`, `key2`)
+the behaviour of calling it as the `rv` value of BetterThan(`rv`, `key1`, `key2`)
 (see [Pattern Selection](/spec/formatting.md#pattern-selection) for more information)
 
 - The method will return true if `key1` is `'1.0'`,

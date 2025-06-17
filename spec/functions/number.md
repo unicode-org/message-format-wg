@@ -685,7 +685,7 @@ numeric selectors perform as described below.
       1. Return false.
 1. Emit a _Bad Variant Key_ error.
 
-When implementing [Compare(`resolvedSelector`, `key1`, `key2`)](/spec/formatting.md#operations-on-resolved-values)
+When implementing [BetterThan(`resolvedSelector`, `key1`, `key2`)](/spec/formatting.md#operations-on-resolved-values)
 where `resolvedSelector` is the _resolved value_ of a _selector_
 and `key1` and `key2` are strings,
 numeric selectors perform as described below.
@@ -694,11 +694,8 @@ numeric selectors perform as described below.
 1. Assert that Match(`resolvedSelector`, `key2`) is true.
 1. If the value of `key1` matches the production `number-literal`, then
    1. If the value of `key2` does not match the production `number-literal`, then
-      1. Return `BETTER`.
-   1. Return `SAME`.
-1. If the value of `key2` matches the production `number-literal`, then
-   1. Return `WORSE`.
-1. Return `SAME`.
+      1. Return true.
+1. Return false.
 
 > [!NOTE]
 > Implementations are not required to implement this exactly as written.

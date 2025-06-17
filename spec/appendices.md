@@ -167,7 +167,7 @@ foo bar {{Foo and bar}}
     1. `k1` is set to `foo`.
     1. `k2` is set to `foo`.
     1. `sel` is set to a resolved value corresponding to `foo`.
-    1. Compare(`sel`, `foo`, `foo`) is `SAME`.
+    1. BetterThan(`sel`, `foo`, `foo`) is false.
     1. `i` is set to 1.
     1. `key1` is set to `bar`.
     1. `key2` is set to `*`.
@@ -230,14 +230,14 @@ one {{Category match for {$count}}}
    1. `k1` is set to `1`.
    1. `k2` is set to `one`.
    1. `sel` is set to `1`.
-   1. `result` is set to Compare(`sel`, `1`, `one`), which is `BETTER`.
+   1. `result` is set to BetterThan(`sel`, `1`, `one`), which is true.
       1. NOTE: The specification of the `:number` selector function
          states that the exact match `1` is a better match than
          the category match `one`.
    1. `bestVariant` is set to `1 {{Exact match for {$count}}}`.
 1. `keys` is set to `*`
    1. Details elided; since `*` is the catch-all key,
-      SelectorsCompare(`{1}`, `{1}`, `{*}`) is `WORSE`.
+      BetterThan(`{1}`, `{1}`, `{*}`) is false.
 1. The pattern `{{Exact match for {$count}}}` is selected.
 
 ### Acknowledgements

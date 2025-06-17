@@ -55,13 +55,13 @@ the `:string` selector function performs as described below.
    1. Return true.
 1. Return false.
 
-When implementing [Compare(`resolvedSelector`, `key1`, `key2`](/spec/formatting.md#operations-on-resolved-values)
+When implementing [BetterThan(`resolvedSelector`, `key1`, `key2`](/spec/formatting.md#operations-on-resolved-values)
 where `resolvedSelector` is the _resolved value_ of a _selector_
 and `key1` and `key2` are strings,
 the `:string` selector function performs as described below,
-as the Compare operation should only be called on keys that match.
+as the BetterThan operation should only be called on keys that match.
 
-1. Return `SAME`.
+1. Return false.
 
 
 > [!NOTE]
