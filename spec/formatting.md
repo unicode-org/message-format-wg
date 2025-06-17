@@ -584,14 +584,15 @@ as long as its observable behavior matches the results of the method defined her
 
 #### Operations on Resolved Values
 
-The selection method is defined in terms of two auxiliary methods,
-SelectorsMatch and SelectorsCompare.
-These methods in turn assume
-that if `rv` is a resolved value,
-and if selection is supported for `rv`,
-then Match(rv, k) returns a boolean for any key `k`,
-and Compare(rv, k, k1) returns (for any keys `k1` and `k2`)
-a value from the set `{WORSE, SAME, BETTER}`.
+For a _resolved value_ to support selection,
+the operations Match and Compare need to be defined on it.
+
+If `rv` is a resolved value that supports selection, then
+Match(rv, k) returns a boolean for any key `k`.
+and Compare(rv, k1, k2) returns a value from the set
+`{WORSE, SAME, BETTER}`
+for any keys `k1` and `k2` such that Match(rv, k1) is true
+and Match(rv, k2) is true.
 
 Other than the Match(rv, k) and Compare(rv, k, k1) operations
 on resolved values,
