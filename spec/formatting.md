@@ -582,7 +582,7 @@ This selection method is defined in more detail below.
 An implementation MAY use any pattern selection method,
 as long as its observable behavior matches the results of the method defined here.
 
-##### Operations on resolved values
+#### Operations on Resolved Values
 
 The selection method is defined in terms of two auxiliary methods,
 SelectorsMatch and SelectorsCompare.
