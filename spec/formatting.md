@@ -609,8 +609,8 @@ First, resolve the values of each _selector_:
    1. If selection is supported for `rv`:
       1. Append `rv` as the last element of the list `res`.
    1. Else:
-      1. Let `nomatch` be a _resolved value_ for which Match(rv, k) is false
-         for any key `k`.
+      1. Let `nomatch` be a _resolved value_ for which Match(`rv`, `k`) is false
+         for any _key_ `k`.
       1. Append `nomatch` as the last element of the list `res`.
       1. Emit a _Bad Selector_ error.
 
@@ -620,30 +620,30 @@ Next, using `res`:
 
 1. Let `bestVariant` be `UNSET`.
 1. For each _variant_ `var` of the message, in source order:
-   1. Let `keys` be the keys of `var`.
+   1. Let `keys` be the _keys_ of `var`.
    1. Let `match` be SelectorsMatch(res, keys).
    1. If `match` is false:
       1. Continue the loop.
    1. If `bestVariant` is `UNSET`.
       1. Set `bestVariant` to `var`.
    1. Else:
-      1. Let `bestVariantKeys` be the keys of `bestVariant`.
+      1. Let `bestVariantKeys` be the _keys_ of `bestVariant`.
       1. If SelectorsCompare(`res`, `keys`, `bestVariantKeys`) is `BETTER`:
          1. Set `bestVariant` to `var`.
 1. Select the _pattern_ of `bestVariant`.
 
 #### SelectorsMatch
 
-SelectorsMatch(selectors, keys) is defined as follows, where
-`selectors` is a list of resolved values
-and `keys` is a list of keys:
+SelectorsMatch(`selectors`, `keys`) is defined as follows, where
+`selectors` is a list of _resolved values_
+and `keys` is a list of _keys_:
 
 1. Let `i` be 0.
 1. For each key `key` in `keys`:
    1. If `key` is the catch-all key `'*'`
       1. Set `i` to `i` + 1.
       1. Continue the loop.
-   1. Let `k` be the _resolved value_ of `key` in Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15).
+   1. Let `k` be NormalizeKey(`key`).
    1. Let `sel` be the `i`th element of `selectors`.
    1. If Match(`sel`, `k`) is false:
       1. Return false.
@@ -653,23 +653,23 @@ and `keys` is a list of keys:
 #### SelectorsCompare
 
 SelectorsCompare(`selectors`, `keys1`, `keys2`) is defined as follows, where
-`selectors` is a list of resolved values
-and `keys1` and `keys2` are lists of keys.
+`selectors` is a list of _resolved values_
+and `keys1` and `keys2` are lists of _keys_.
 
 1. Let `result` be `SAME`.
 1. Let `i` be 0.
-1. For each key in `keys1`:
+1. For each _key_ in `keys1`:
    1. Let `key1` be the `i`th element of `keys1`.
    1. Let `key2` be the `i`th element of `keys2`.
-   1. If `key1` is the catch-all key `'*'` and `key2` is not the catch-all key:
+   1. If `key1` is the catch-all _key_ `'*'` and `key2` is not the catch-all _key_:
       1. Return `WORSE`.
-   1. If `key1` is not the catch-all key `'*'` and `key2` is the catch-all key:
+   1. If `key1` is not the catch-all _key_ `'*'` and `key2` is the catch-all _key_:
       1. Return `BETTER`.
-   1. If `key1` and `key2` are both the catch-all key `'*'`
+   1. If `key1` and `key2` are both the catch-all _key_ `'*'`
       1. Set `i` to `i + 1`.
       1. Continue the loop.
-   1. Let `k1` be the string value of the _resolved value_ of `key1` in Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15).
-   1. Let `k2` be the string value of the _resolved value_ of `key2` in Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15).
+   1. Let `k1` be NormalizeKey(`key1`).
+   1. Let `k2` be NormalizeKey(`key2`).
    1. Let `sel` be the `i`th element of `selectors`.
    1. Set `result` to Compare(`sel`, `k1`, `k2`).
    1. If `result` is `SAME`:
@@ -678,6 +678,16 @@ and `keys1` and `keys2` are lists of keys.
    1. Else:
       1. Return `result`.
 1. Return `result`.
+
+#### NormalizeKey
+
+NormalizeKey(`key`) is defined as follows, where
+`key` is a _key_.
+
+1. Let `rv` be the _resolved value_ of `key` (see [Literal Resolution](#literal-resolution).)
+1. Let `k` be the string value of `rv`.
+1. Let `k1` be the result of applying Unicode Normalization Form C [\[UAX#15\]](https://www.unicode.org/reports/tr15) to `k`.
+1. Return `k1`.
 
 For examples of how the algorithms work, see [the appendix](appendices.md#non-normative-examples).
 
