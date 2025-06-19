@@ -587,11 +587,14 @@ as long as its observable behavior matches the results of the method defined her
 For a _resolved value_ to support selection,
 the operations Match and BetterThan need to be defined on it.
 
-If `rv` is a resolved value that supports selection, then
-Match(`rv`, `k`) returns a boolean for any key `k`.
-and BetterThan(`rv`, `k1`, `k2`) returns a boolean
-for any keys `k1` and `k2` such that Match(`rv`, `k1`) is true
-and Match(`rv`, `k2`) is true.
+If `rv` is a resolved value that supports selection,
+then Match(`rv`, `k`) returns true for any key `k` that matches `rv`
+and returns false otherwise.
+BetterThan(`rv`, `k1`, `k2`) returns true
+for any keys `k1` and `k2` for which Match(`rv`, `k1`) is true,
+Match(`rv`, `k2`) is true, and `k1` is a better match than `k2`,
+and returns false otherwise.
+On any error, both operations return false.
 
 Other than the Match(`rv`, `k`) and BetterThan(`rv`, `k1`, `k2`) operations
 on resolved values,
