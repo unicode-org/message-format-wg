@@ -632,6 +632,7 @@ Next, using `res`:
       1. Let `bestVariantKeys` be the _keys_ of `bestVariant`.
       1. If SelectorsCompare(`res`, `keys`, `bestVariantKeys`) is true:
          1. Set `bestVariant` to `var`.
+1. Assert that `bestVariant` is not `UNSET`.
 1. Select the _pattern_ of `bestVariant`.
 
 #### SelectorsMatch
