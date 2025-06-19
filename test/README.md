@@ -150,19 +150,27 @@ its `Input`, `DecimalPlaces`, `FailsFormat`, and `FailsSelect` values are determ
       1. Emit "bad-option" _Resolution Error_.
 
 When `:test:function` is used as a _selector_,
-the behaviour of calling it as the `rv` value of MatchSelectorKeys(`rv`, `keys`)
-(see [Resolve Preferences](/spec/formatting.md#resolve-preferences) for more information)
+the behaviour of calling it as the `rv` value of Match(`rv`, `key`)
+(see [Pattern Selection](/spec/formatting.md#pattern-selection) for more information)
 depends on its `Input`, `DecimalPlaces` and `FailsSelect` values.
 
 - If `FailsSelect` is `true`,
   calling the method will emit a _Message Function Error_
   and not return any value.
 - If the `Input` is 1 and `DecimalPlaces` is 1,
-  the method will return some slice of the list « `'1.0'`, `'1'` »,
-  depending on whether those values are included in `keys`.
+  the method will return true for either `'1.0'` or `'1'`,
+  and false for any other key.
 - If the `Input` is 1 and `DecimalPlaces` is 0,
-  the method will return the list « `'1'` » if `keys` includes `'1'`, or an empty list otherwise.
-- If the `Input` is any other value, the method will return an empty list.
+  the method will return true for `'1'`
+  and false for any other key.
+- If the `Input` is any other value, the method will return false.
+
+When `:test:function` is used as a _selector_,
+the behaviour of calling it as the `rv` value of BetterThan(`rv`, `key1`, `key2`)
+(see [Pattern Selection](/spec/formatting.md#pattern-selection) for more information)
+
+- The method will return true if `key1` is `'1.0'`,
+  and false otherwise.
 
 When an _expression_ with a `:test:function` _annotation_ is assigned to a _variable_ by a _declaration_
 and that _variable_ is used as an _option_ value,
