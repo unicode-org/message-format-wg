@@ -670,13 +670,12 @@ and `keys1` and `keys2` are lists of _keys_.
       1. Continue the loop.
    1. Let `k1` be NormalizeKey(`key1`).
    1. Let `k2` be NormalizeKey(`key2`).
-   1. Let `sel` be the `i`th element of `selectors`.
-   1. Set `result` to BetterThan(`sel`, `k1`, `k2`).
-   1. If `result` is false:
+   1. If `k1` and `k2` consist of the same sequence of Unicode code points, then:
       1. Set `i` to `i + 1`.
       1. Continue the loop.
-   1. Else:
-      1. Return true.
+   1. Let `sel` be the `i`th element of `selectors`.
+   1. Set `result` to BetterThan(`sel`, `k1`, `k2`).
+   1. Return `result`.
 1. Return `result`.
 
 #### NormalizeKey
