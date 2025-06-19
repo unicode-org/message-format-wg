@@ -642,7 +642,7 @@ SelectorsMatch(`selectors`, `keys`) is defined as follows, where
 and `keys` is a list of _keys_:
 
 1. Let `i` be 0.
-1. For each key `key` in `keys`:
+1. For each _key_ `key` in `keys`:
    1. If `key` is not the catch-all key `'*'`
       1. Let `k` be NormalizeKey(`key`).
       1. Let `sel` be the `i`th element of `selectors`.
