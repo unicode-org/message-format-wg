@@ -643,13 +643,11 @@ and `keys` is a list of _keys_:
 
 1. Let `i` be 0.
 1. For each key `key` in `keys`:
-   1. If `key` is the catch-all key `'*'`
-      1. Set `i` to `i` + 1.
-      1. Continue the loop.
-   1. Let `k` be NormalizeKey(`key`).
-   1. Let `sel` be the `i`th element of `selectors`.
-   1. If Match(`sel`, `k`) is false:
-      1. Return false.
+   1. If `key` is not the catch-all key `'*'`
+      1. Let `k` be NormalizeKey(`key`).
+      1. Let `sel` be the `i`th element of `selectors`.
+      1. If Match(`sel`, `k`) is false:
+         1. Return false.
    1. Set `i` to `i` + 1.
 1. Return true.
 
