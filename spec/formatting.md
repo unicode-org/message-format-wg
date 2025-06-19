@@ -659,8 +659,7 @@ and `keys1` and `keys2` are lists of _keys_.
 
 1. Let `result` be false.
 1. Let `i` be 0.
-1. For each _key_ in `keys1`:
-   1. Let `key1` be the `i`th element of `keys1`.
+1. For each _key_ `key1` in `keys1`:
    1. Let `key2` be the `i`th element of `keys2`.
    1. If `key1` is the catch-all _key_ `'*'` and `key2` is not the catch-all _key_:
       1. Return false.
