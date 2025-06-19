@@ -148,11 +148,11 @@ foo bar {{Foo and bar}}
 8. `bestVariantKeys` is set to `{*, bar}`.
 9. SelectorsCompare(`{foo, bar}`, `{foo, *}`, `{*, bar}`) is
    determined as follows:
-   1. `result` is set to `SAME`.
+   1. `result` is set to false.
    1. `i` is set to 0.
    1. `key1` is set to `foo`.
    1. `key2` is set to `'*'`
-   1. The result of SelectorsCompare(`{foo, bar}`, `{foo, *}`, `{*, bar}`) is `BETTER`.
+   1. The result of SelectorsCompare(`{foo, bar}`, `{foo, *}`, `{*, bar}`) is true.
 10. `bestVariant` is set to `foo * {{Foo and any}}`.
 11. `keys` is set to `{foo, bar}`.
 12. `match` is set to SelectorsMatch(`{foo, bar}`, `{foo, bar}`).
@@ -160,24 +160,23 @@ foo bar {{Foo and bar}}
 13. `bestVariantKeys` is set to `{foo, *}`.
 14. SelectorsCompare(`{foo, bar}`, `{foo, bar}`, `{foo, *}`) is
     determined as follows:
-    1. `result` is set to `SAME`.
+    1. `result` is set to false.
     1. `i` is set to 0.
     1. `key1` is set to `foo`.
     1. `key2` is set to `foo`.
     1. `k1` is set to `foo`.
     1. `k2` is set to `foo`.
     1. `sel` is set to a resolved value corresponding to `foo`.
-    1. BetterThan(`sel`, `foo`, `foo`) is false.
     1. `i` is set to 1.
     1. `key1` is set to `bar`.
     1. `key2` is set to `*`.
     1. The result of SelectorsCompare(`{foo, bar}`, `{foo, bar}`, `{foo, *}`)
-       is `BETTER`.
+       is true.
 15. `bestVariant` is set to `foo bar {{Foo and bar}}`.
 16. `keys` is set to `* *`.
 17. `match` is set to true (details elided).
 18. `bestVariantKeys` is set to `foo bar`.
-19. SelectorsCompare(`{foo, bar}`, `{*, *}`, `{foo, bar}`} is `WORSE`
+19. SelectorsCompare(`{foo, bar}`, `{*, *}`, `{foo, bar}`} is false
     (details elided).
 
 The pattern `{{Foo and bar}}` is selected.
@@ -223,7 +222,7 @@ one {{Category match for {$count}}}
       as Match(`sel`, `1`) is also true.
 1. `bestVariantKeys` is set to `{one}`.
 1. SelectorsCompare(`{1}`, `{1}`, `{one}`) is determined as follows:
-   1. `result` is set to `SAME`.
+   1. `result` is set to false.
    1. `i` is set to 0.
    1. `key1` is set to `1`.
    1. `key2` is set to `one`.
