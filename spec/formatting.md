@@ -623,7 +623,7 @@ Next, using `res`:
 1. Let `bestVariant` be `UNSET`.
 1. For each _variant_ `var` of the message, in source order:
    1. Let `keys` be the _keys_ of `var`.
-   1. Let `match` be SelectorsMatch(res, keys).
+   1. Let `match` be SelectorsMatch(`res`, `keys`).
    1. If `match` is false:
       1. Continue the loop.
    1. If `bestVariant` is `UNSET`.
