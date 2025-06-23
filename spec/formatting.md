@@ -675,7 +675,7 @@ and `keys1` and `keys2` are lists of _keys_.
    1. Let `sel` be the `i`th element of `selectors`.
    1. Let `result` be BetterThan(`sel`, `k1`, `k2`).
    1. Return `result`.
-1. Return `result`.
+1. Return false.
 
 #### NormalizeKey
 
