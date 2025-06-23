@@ -657,7 +657,6 @@ SelectorsCompare(`selectors`, `keys1`, `keys2`) is defined as follows, where
 `selectors` is a list of _resolved values_
 and `keys1` and `keys2` are lists of _keys_.
 
-1. Let `result` be false.
 1. Let `i` be 0.
 1. For each _key_ `key1` in `keys1`:
    1. Let `key2` be the `i`th element of `keys2`.
