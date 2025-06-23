@@ -588,18 +588,18 @@ option = identifier o "=" o (literal / variable)
 
 > Examples of _functions_ with _options_
 >
-> A _message_ using the `:datetime` function.
-> The _option_ `weekday` has the literal `long` as its value:
+> A _message_ using the `:date` function.
+> The _option_ `length` has the literal `long` as its value:
 >
 > ```
-> Today is {$date :datetime weekday=long}!
+> Today is {$now :date length=long}!
 > ```
 
-> A _message_ using the `:datetime` function.
-> The _option_ `weekday` has a variable `$dateStyle` as its value:
+> A _message_ using the `:date` function.
+> The _option_ `length` has a variable `$dateLength` as its value:
 >
 > ```
-> Today is {$date :datetime weekday=$dateStyle}!
+> Today is {$now :date length=$dateLength}!
 > ```
 
 ### Markup
