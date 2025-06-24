@@ -136,10 +136,11 @@ of its formatted string representation,
 as well as a flag to indicate whether
 its formatted representation requires isolation
 from the surrounding text.
+(See ["Handling Bidirectional Text"](#handling-bidirectional-text).)
 
 For each _option value_, the _resolved value_ MUST indicate if the value
 was directly set with a _literal_, as opposed to being resolved from a _variable_.
-This is to allow _functions handlers_ to require specific _options_ to be set using _literals_.
+This is to allow _function handlers_ to require specific _options_ to be set using _literals_.
 
 > For example, the _default functions_ `:number` and `:integer` require that the _option_
 > `select` be set with a _literal_ _option value_ (`plural`, `ordinal`, or `exact`).
@@ -155,7 +156,7 @@ and different implementations MAY choose to perform different levels of resoluti
 > interface MessageValue {
 >   formatToString(): string
 >   formatToX(): X // where X is an implementation-defined type
->   getValue(): unknown
+>   unwrap(): unknown
 >   resolvedOptions(): { [key: string]: MessageValue }
 >   match(key: string): boolean
 >   betterThan(key1: string, key2: string): boolean
@@ -172,15 +173,34 @@ and different implementations MAY choose to perform different levels of resoluti
 > - A _variable_ could be used as a _selector_ if
 >   calling the `match(key)` and `betterThan(key1, key2)`  methods of its _resolved value_
 >   did not emit an error.
-> - Using a _variable_, the _resolved value_ of an _expression_
+> - The _resolved value_ of an _expression_
 >   could be used as an _operand_ or _option value_ if
->   calling the `getValue()` method of its _resolved value_ did not emit an error.
+>   calling the `unwrap()` method of its _resolved value_ did not emit an error.
+>   (This requires an intermediate _variable_ _declaration_.)
 >   In this use case, the `resolvedOptions()` method could also
 >   provide a set of option values that could be taken into account by the called function.
+>   - The `unwrap()` method returns the _function_-specific result
+>     of the _function_'s operation.
+>     For example, the handlers for the following _functions_ might
+>     behave as follows:
+>     - The handler for the _default function_ `:number` returns a value
+>       whose `unwrap()` method returns
+>       the implementation-defined numeric value of the _operand_.
+>     - The handler for a custom `:uppercase` _function_ might return a value
+>       whose `unwrap()` method returns
+>       an uppercase string in place of the original _operand_ value.
+>     - The handler for a custom _function_ that extracts a field from a data structure
+>       might return a value whose `unwrap()` method returns
+>       the extracted value.
+>     - Other _functions_' handlers might return a value
+>       whose `unwrap()` method returns
+>       the original _operand_ value.
+> - The `directionality()`, `isolate()`, and `isLiteralOptionValue()` methods
+>   fulfill requirements and recommendations mentioned elsewhere in this specification.
 >
 > Extensions of the base `MessageValue` interface could be provided for different data types,
 > such as numbers or strings,
-> for which the `unknown` return type of `getValue()` and
+> for which the `unknown` return type of `unwrap()` and
 > the generic `MessageValue` type used in `resolvedOptions()`
 > could be narrowed appropriately.
 > An implementation could also allow `MessageValue` values to be passed in as input variables,
