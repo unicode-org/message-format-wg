@@ -178,12 +178,21 @@ and different implementations MAY choose to perform different levels of resoluti
 >   (This requires an intermediate _variable_ _declaration_.)
 >   In this use case, the `resolvedOptions()` method could also
 >   provide a set of option values that could be taken into account by the called function.
->   - The relationship between the _operand_ and the result of the `unwrap()` method
->     is specific to each function. For example, with the built-in function `:number`,
->     the `unwrap()` method would return the numeric value of the _operand_.
->     In other cases, such as in a function that extracts a field from a data structure,
->     `unwrap()` would return the extracted value,
->     not the _operand_ it was extracted from.
+>   - The `unwrap()` method returns the _function_-specific result
+>     of the _function_'s operation.
+>     For example:
+>     - The _default function_ `:number` returns a value
+>       whose `unwrap()` method returns
+>       the implementation-defined numeric value of the _operand_.
+>     - A custom `:uppercase` function might return a value
+>       whose `unwrap()` method returns
+>       an uppercase string in place of the original _operand_ value.
+>     - A custom function that extracts a field from a data structure
+>       might return a value whose `unwrap()` method returns
+>       the extracted value.
+>     - Other functions might return a value
+>       whose `unwrap()` method returns
+>       the original _operand_ value.
 > - The `directionality()`, `isolate()`, and `isLiteralOptionValue()` methods
 >   fulfill requirements and recommendations mentioned elsewhere in this specification.
 >
