@@ -180,17 +180,18 @@ and different implementations MAY choose to perform different levels of resoluti
 >   provide a set of option values that could be taken into account by the called function.
 >   - The `unwrap()` method returns the _function_-specific result
 >     of the _function_'s operation.
->     For example:
->     - The _default function_ `:number` returns a value
+>     For example, the handlers for the following functions might
+>     behave as follows:
+>     - The handler for the _default function_ `:number` returns a value
 >       whose `unwrap()` method returns
 >       the implementation-defined numeric value of the _operand_.
->     - A custom `:uppercase` function might return a value
+>     - The handler for a custom `:uppercase` _function_ might return a value
 >       whose `unwrap()` method returns
 >       an uppercase string in place of the original _operand_ value.
->     - A custom function that extracts a field from a data structure
+>     - The handler for a custom _function_ that extracts a field from a data structure
 >       might return a value whose `unwrap()` method returns
 >       the extracted value.
->     - Other functions might return a value
+>     - Other _functions_' handlers might return a value
 >       whose `unwrap()` method returns
 >       the original _operand_ value.
 > - The `directionality()`, `isolate()`, and `isLiteralOptionValue()` methods
