@@ -180,7 +180,7 @@ and different implementations MAY choose to perform different levels of resoluti
 >   provide a set of option values that could be taken into account by the called function.
 >   - The `unwrap()` method returns the _function_-specific result
 >     of the _function_'s operation.
->     For example, the handlers for the following functions might
+>     For example, the handlers for the following _functions_ might
 >     behave as follows:
 >     - The handler for the _default function_ `:number` returns a value
 >       whose `unwrap()` method returns
