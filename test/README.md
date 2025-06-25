@@ -155,7 +155,7 @@ the behaviour of calling it as the `rv` value of Match(`rv`, `key`)
 depends on its `Input`, `DecimalPlaces` and `FailsSelect` values.
 
 - If `FailsSelect` is `true`,
-  calling the method will emit a _Message Function Error_
+  calling the method will emit a _Bad Operand_ error
   and not return any value.
 - If the `Input` is 1 and `DecimalPlaces` is 1,
   the method will return true for either `'1.0'` or `'1'`,
@@ -193,7 +193,7 @@ rather than being concatenated into a single string.
 
 If `FailsFormat` is `true`,
 attempting to format the _placeholder_ to any formatting target will
-emit a _Message Function Error_.
+emit a _Bad Operand_ error.
 
 ### `:test:select`
 
