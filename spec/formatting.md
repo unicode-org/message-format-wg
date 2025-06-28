@@ -433,8 +433,6 @@ If the resolved mapping of _options_ includes any _`u:` options_
 supported by the implementation, process them as specified.
 Such `u:` options MAY be removed from the resolved mapping of _options_.
 
-The resolution of _markup_ MUST always succeed.
-
 #### Fallback Resolution
 
 A **_<dfn>fallback value</dfn>_** is the _resolved value_ for
