@@ -155,7 +155,7 @@ the behaviour of calling it as the `rv` value of MatchSelectorKeys(`rv`, `keys`)
 depends on its `Input`, `DecimalPlaces` and `FailsSelect` values.
 
 - If `FailsSelect` is `true`,
-  calling the method will emit a _Bad Operand_ error
+  calling the method will emit a _Bad Option_ error
   and not return any value.
 - If the `Input` is 1 and `DecimalPlaces` is 1,
   the method will return some slice of the list « `'1.0'`, `'1'` »,
@@ -185,7 +185,7 @@ rather than being concatenated into a single string.
 
 If `FailsFormat` is `true`,
 attempting to format the _placeholder_ to any formatting target will
-emit a _Bad Operand_ error.
+emit a _Bad Option_ error.
 
 ### `:test:select`
 
