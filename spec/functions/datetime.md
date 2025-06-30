@@ -14,7 +14,8 @@ The function `:datetime` is used to format both the date and time of a date/time
 
 If no options are specified, this function defaults to the following:
 
-- `{$d :datetime}` is the same as `{$d :datetime dateFields=year-month-day timePrecision=minute}`
+- `{$d :datetime}` is the same as<br>
+  `{$d :datetime dateFields=year-month-day timePrecision=minute timeZoneStyle=never}`
 
 > [!NOTE]
 > The formatting behavior of `:datetime` is inconsistent with `Intl.DateTimeFormat`
