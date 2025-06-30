@@ -282,11 +282,14 @@ the functions `:datetime`, `:date`, and `:time`.
   - `local`
   - `UTC`
 
-> [!NOTE]
-> The value `local` permits a _message_ to convert a date/time value
-> into a [floating](https://www.w3.org/TR/timezone/#floating) time value
-> (sometimes called a _plain_ or _local_ time value) by removing
-> the association with a specific time zone.
+The value `local` corresponds to the default time zone.
+
+If the _operand_ value does not include a time zone,
+it is presumed to use the default time zone.
+If the _operand_ value does include a time zone and the `timeZone` _option_ is set,
+an implementation SHOULD convert the value to the time zone indicated by the _option_.
+If such conversion is not supported, an implementation MAY alternatively
+emit a _Bad Option_ error and use a _fallback value_ as the _resolved value_ of the _expression_.
 
 The following _option_ is REQUIRED to be available on
 the functions `:datetime` and `:time`:
