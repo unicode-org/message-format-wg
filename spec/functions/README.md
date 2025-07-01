@@ -7,7 +7,7 @@
 1. [Numeric Value Selection and Formatting](number.md)
    1. [`:number`](number.md#the-number-function)
    1. [`:integer`](number.md#the-integer-function)
-   1. [`:math`](number.md#the-math-function)
+   1. [`:offset`](number.md#the-offset-function)
    1. [`:currency`](number.md#the-currency-function)
    1. [`:unit`](number.md#the-unit-function)
 1. [Date and Time Value Formatting](datetime.md)
