@@ -454,6 +454,9 @@ supported by the implementation, process them as specified.
 Such `u:` options MAY be removed from the resolved mapping of _options_.
 
 The resolution of _markup_ MUST always succeed.
+As with _option resolution_ for _expressions_,
+_option resolution_ for _markup_ MAY emit errors,
+but such errors MUST NOT be fatal.
 
 #### Fallback Resolution
 
