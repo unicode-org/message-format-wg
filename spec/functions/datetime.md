@@ -34,7 +34,6 @@ All other _operand_ values produce a _Bad Operand_ error.
 The following _options_ are REQUIRED to be available on the function `:datetime`:
 
 - `dateFields`
-  - `day`
   - `weekday`
   - `day-weekday`
   - `month-day`
@@ -92,7 +91,6 @@ All other _operand_ values produce a _Bad Operand_ error.
 The following _options_ are REQUIRED to be available on the function `:date`:
 
 - `fields`
-  - `day`
   - `weekday`
   - `day-weekday`
   - `month-day`
