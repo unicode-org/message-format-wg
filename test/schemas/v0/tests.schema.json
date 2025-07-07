@@ -382,10 +382,7 @@
     },
     "expErrors": {
       "description": "The runtime errors expected to be emitted when formatting the message. If expErrors is either absent or empty, the message must be formatted without errors.",
-      "type": [
-        "array",
-        "boolean"
-      ],
+      "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
