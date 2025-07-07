@@ -12,13 +12,13 @@
       "src": "{42 :test:function fails=format}",
       "exp": "{|42|}",
       "expParts": [{ "type": "fallback", "source": "|42|" }],
-      "expErrors": [{ "type": "bad-operand" }]
+      "expErrors": [{ "type": "bad-option" }]
     },
     {
       "description": "function with quoted literal operand",
       "src": "{|C:\\\\| :test:function fails=format}",
       "exp": "{|C:\\\\|}",
-      "expErrors": [{ "type": "bad-operand" }]
+      "expErrors": [{ "type": "bad-option" }]
     },
     {
       "description": "unannotated implicit input variable",
