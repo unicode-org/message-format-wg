@@ -18,7 +18,7 @@
       "description": "function with quoted literal operand",
       "src": "{|C:\\\\| :test:function fails=format}",
       "exp": "{|C:\\\\|}",
-      "expErrors": [{ "type": "bad-option" }]
+      "expErrors": [{ "type": "bad-operand" }]
     },
     {
       "description": "unannotated implicit input variable",
