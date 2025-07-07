@@ -187,6 +187,12 @@ If `FailsFormat` is `true`,
 attempting to format the _placeholder_ to any formatting target will
 emit a _Bad Option_ error.
 
+> Note that emitting _Bad Option_ here does not indicate an incorrect option.
+> Actual functions in your implementation might emit
+> an implementation-defined or platform-specific runtime error or exception
+> when the function handler is called.
+> Your implementation might thus produce a _Message Function Error_ 
+> not provided with a label in the JSON Schema of this test suite.
 ### `:test:select`
 
 This _function_ accepts the same _operands_ and _options_,
