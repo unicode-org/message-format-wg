@@ -2,20 +2,31 @@
 
 This subsection describes the _functions_ and _options_ for date/time formatting.
 
+> [!IMPORTANT]
+> The _functions_ in this section have a status of **Draft**.
+> They are proposed for inclusion in a future release and are not Stable.
+> The _options_ and _option values_ used by `:datetime`, `:date`, and `:time`
+> are based on [Semantic Skeletons], which are in technical preview.
+> The set of _options_ and _option values_ will be extended by later versions of this specification.
+
 > [!NOTE]
 > Selection based on date/time types is not required by this release of MessageFormat.
 > Use care when defining implementation-specific _selectors_ based on date/time types.
 > The types of queries found in implementations such as `java.time.TemporalAccessor`
 > are complex and user expectations might be inconsistent with good I18N practices.
 
+[Semantic Skeletons]: https://www.unicode.org/reports/tr35/tr35-75/tr35-dates.html#Semantic_Skeletons
+
 #### The `:datetime` function
 
-The function `:datetime` is used to format both the date and time of a date/time value.
+The function `:datetime` is used to format a date/time value.
+Its formatted result will always include both the date and the time,
+and optionally a timezone.
 
 If no options are specified, this function defaults to the following:
 
 - `{$d :datetime}` is the same as<br>
-  `{$d :datetime dateFields=year-month-day timePrecision=minute timeZoneStyle=never}`
+  `{$d :datetime dateFields=year-month-day timePrecision=minute}`
 
 > [!NOTE]
 > The formatting behavior of `:datetime` is inconsistent with `Intl.DateTimeFormat`
@@ -49,14 +60,18 @@ The following _options_ are REQUIRED to be available on the function `:datetime`
   - `minute` (default)
   - `second`
 - `timeZoneStyle`
-  - `never` (default)
   - `long`
-  - `longGeneric`
-  - `longOffset`
   - `short`
-  - `shortGeneric`
-  - `shortOffset`
 - _Date/time override options_
+
+If the `timeZoneStyle` _option_ is not included in the _expression_,
+its formatted result will not include a timezone indicator.
+
+Except for _date/time override options_,
+each `:datetime` _option value_ MUST be set by a _literal_.
+If such an _option value_ is a _variable_,
+a _Bad Option Error_ is emitted and
+the _option_ is ignored when formatting the _expression_.
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
@@ -103,6 +118,11 @@ The following _options_ are REQUIRED to be available on the function `:date`:
   - `short`
 - _Date/time override options_
 
+The `fields` and `length` _option values_ MUST each be set by a _literal_.
+If such an _option value_ is a _variable_,
+a _Bad Option Error_ is emitted and
+the _option_ is ignored when formatting the _expression_.
+
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
 Any _date/time override options_ of the operand are included in the resolved option values of the _expression_,
@@ -121,10 +141,12 @@ is used as an _operand_ or an _option value_.
 #### The `:time` function
 
 The function `:time` is used to format the time portion of date/time values.
+Its formatted result will always include the time,
+and optionally a timezone.
 
 If no options are specified, this function defaults to the following:
 
-- `{$t :time}` is the same as `{$t :time precision=minute timeZoneStyle=never}`
+- `{$t :time}` is the same as `{$t :time precision=minute}`
 
 ##### Operands
 
@@ -142,14 +164,17 @@ The following _options_ are REQUIRED to be available on the function `:time`:
   - `minute` (default)
   - `second`
 - `timeZoneStyle`
-  - `never` (default)
   - `long`
-  - `longGeneric`
-  - `longOffset`
   - `short`
-  - `shortGeneric`
-  - `shortOffset`
 - _Date/time override options_
+
+If the `timeZoneStyle` _option_ is not included in the _expression_,
+its formatted result will not include a timezone indicator.
+
+The `precision` and `timeZoneStyle` _option values_ MUST each be set by a _literal_.
+If such an _option value_ is a _variable_,
+a _Bad Option Error_ is emitted and
+the _option_ is ignored when formatting the _expression_.
 
 If the _operand_ of the _expression_ is an implementation-defined date/time type,
 it can include other option values.
