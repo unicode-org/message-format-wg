@@ -7,6 +7,7 @@ Status: **Proposed**
 	<dl>
 		<dt>Contributors</dt>
 		<dd>@aphillips</dd>
+		<dd>@eemeli</dd>
 		<dt>First proposed</dt>
 		<dd>2025-04-07</dd>
 		<dt>Pull Requests</dt>
@@ -135,30 +136,7 @@ _What prior decisions and existing conditions limit the possible design?_
 
 _Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
 
-Support the formatting of percent values as follows:
-
-- REQUIRE the `:unit` function for all implementations
-  - Only specific `unit` option values are required, initially the unit `percent`.
-  - The function `:unit unit=percent` does not scale the operand, e.g. `{5 :unit unit=percent}` formats as `5%`.
-- REQUIRE the `:number` and `:integer` functions to support `style=percent` as an option
-  - The functions `:number` and `:integer` scale the operand, e.g. `{5 :integer style=percent}` formats as `500%`.
-    Note that the selector selects on the scaled value
-    (selectors currently cannot select fractional parts)
-
-> Examples. These are equivalent **except** that `:unit` does NOT scale.
->```
-> {{You have {$pct :number style=percent} remaining.}}
-> {{You have {$pct :unit unit=percent} remaining.}}
-> {{You have {$pct :integer style=percent} remaining.}}
->```
-> Selector example:
->```
-> .local $pct = {0.05 :number style=percent}
-> .match $pct
-> 5   {{This pattern is selected}}
-> one {{You have {$pct} left.}}
-> *   {{You have {$pct} left.}}
->``` 
+TBD
 
 ## Alternatives Considered
 
@@ -387,3 +365,32 @@ _Pros_
 
 _Cons_
 - Brings in multiplication
+
+---
+
+### Why not both?
+
+Rather than choosing only one option, choose multiple parallel solutions:
+
+- REQUIRE the `:unit` function for all implementations
+  - Only specific `unit` option values are required, initially the unit `percent`.
+  - The function `:unit unit=percent` does not scale the operand, e.g. `{5 :unit unit=percent}` formats as `5%`.
+- REQUIRE the `:number` and `:integer` functions to support `style=percent` as an option
+  - The functions `:number` and `:integer` scale the operand, e.g. `{5 :integer style=percent}` formats as `500%`.
+    Note that the selector selects on the scaled value
+    (selectors currently cannot select fractional parts)
+
+> Examples. These are equivalent **except** that `:unit` does NOT scale.
+>```
+> {{You have {$pct :number style=percent} remaining.}}
+> {{You have {$pct :unit unit=percent} remaining.}}
+> {{You have {$pct :integer style=percent} remaining.}}
+>```
+> Selector example:
+>```
+> .local $pct = {0.05 :number style=percent}
+> .match $pct
+> 5   {{This pattern is selected}}
+> one {{You have {$pct} left.}}
+> *   {{You have {$pct} left.}}
+>``` 
