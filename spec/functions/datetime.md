@@ -279,13 +279,15 @@ the functions `:datetime`, `:date`, and `:time`.
     (see [TZDB](https://www.iana.org/time-zones)
     and [LDML](https://www.unicode.org/reports/tr35/tr35-dates.html#Time_Zone_Names)
     for information on identifiers)
-  - `local`
+  - `input`
   - `UTC`
 
-The value `local` corresponds to the default time zone.
+The value `input` corresponds to the time zone of the _operand_.
+If it is used and _operand_ value does not include a time zone,
+a _Bad Operand_ error is emitted and the default time zone is used to format the _expression_.
 
 If the _operand_ value does not include a time zone,
-it is presumed to use the default time zone.
+it is presumed to use the default time zone provided by the _formatting context_.
 If the _operand_ value does include a time zone and the `timeZone` _option_ is set,
 an implementation SHOULD convert the value to the time zone indicated by the _option_.
 If such conversion is not supported, an implementation MAY alternatively
