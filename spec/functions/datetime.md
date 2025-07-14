@@ -283,12 +283,12 @@ the functions `:datetime`, `:date`, and `:time`.
   - `UTC`
 
 The value `input` corresponds to the time zone of the _operand_.
-If it is used and _operand_ value does not include a time zone,
+If it is used and the _resolved value_ of the _operand_ does not include a time zone,
 a _Bad Operand_ error is emitted and the default time zone is used to format the _expression_.
 
-If the _operand_ value does not include a time zone,
+If the _resolved value_ of the _operand_ does not include a time zone,
 it is presumed to use the default time zone provided by the _formatting context_.
-If the _operand_ value does include a time zone and the `timeZone` _option_ is set,
+If the _resolved value_ of the _operand_ does include a time zone and the `timeZone` _option_ is set,
 an implementation SHOULD convert the value to the time zone indicated by the _option_.
 If such conversion is not supported, an implementation MAY alternatively
 emit a _Bad Option_ error and use a _fallback value_ as the _resolved value_ of the _expression_.
