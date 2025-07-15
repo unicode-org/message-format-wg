@@ -225,13 +225,12 @@ _Pros_
 - Clear what the placeholder does; self-documenting
 - Consistent with separating specialized formats from `:number`/`:integer`
   as was done with `:currency`
+- Makes it possible to apply a `scaling` option to only percent formatting.
 
 _Cons_
 - Adds to a (growing) list of functions
 - Not "special enough" to warrant its own formatter?
-- Unlike `:currency`, because currency formatting depends on currency codes,
-  which in turn impact default fraction digits, and other presentation details.
-  Nothing like that applies to percents. 
+- Adds yet another numeric function, with its own subset of numeric function options.
 
 ---
 
@@ -364,7 +363,7 @@ _Pros_
 - Can be used for other general purpose math
 
 _Cons_
-- Brings in multiplication
+- Increases implementation burden: multiplication must be handled on arbitrary numeric input types
 
 ---
 
@@ -375,16 +374,15 @@ Rather than choosing only one option, choose multiple parallel solutions:
 - REQUIRE the `:unit` function for all implementations
   - Only specific `unit` option values are required, initially the unit `percent`.
   - The function `:unit unit=percent` does not scale the operand, e.g. `{5 :unit unit=percent}` formats as `5%`.
-- REQUIRE the `:number` and `:integer` functions to support `style=percent` as an option
-  - The functions `:number` and `:integer` scale the operand, e.g. `{5 :integer style=percent}` formats as `500%`.
+- REQUIRE the `:number` function to support `style=percent` as an option
+  - The function `:number`scales the operand, e.g. `{5 :number style=percent}` formats as `500%`.
     Note that the selector selects on the scaled value
     (selectors currently cannot select fractional parts)
 
 > Examples. These are equivalent **except** that `:unit` does NOT scale.
 >```
 > {{You have {$pct :number style=percent} remaining.}}
-> {{You have {$pct :unit unit=percent} remaining.}}
-> {{You have {$pct :integer style=percent} remaining.}}
+> {{You have {$scaledPct :unit unit=percent} remaining.}}
 >```
 > Selector example:
 >```
