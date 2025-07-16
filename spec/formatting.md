@@ -196,7 +196,7 @@ _Options_ are used in _expressions_ and _markup_.
 #### Option Resolution
 
 **_<dfn>Option resolution</dfn>_** is the process of computing the _options_
-for a given _expression_ or _markup_ _placeholder_. 
+for a given _expression_ or _markup_. 
 _Option resolution_ results in a mapping of string _identifiers_ to _resolved values_.
 The order of _options_ MUST NOT be significant.
 
