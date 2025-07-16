@@ -193,47 +193,6 @@ _Expressions_ are used in _declarations_ and _patterns_.
 _Markup_ is only used in _patterns_.
 _Options_ are used in _expressions_ and _markup_.
 
-#### Option Resolution
-
-**_<dfn>Option resolution</dfn>_** is the process of computing the _options_
-for a given _expression_ or _markup_. 
-_Option resolution_ results in a mapping of string _identifiers_ to _resolved values_.
-The order of _options_ MUST NOT be significant.
-
-> For example, the following _message_ treats both both placeholders identically:
-> ```
-> {$x :ns:func option1=foo option2=bar} {$x :ns:func option2=bar option1=foo}
-> ```
-
-For each _option_:
-
-1. Let `res` be a new empty mapping.
-1. For each _option_:
-   1. Let `id` be the string value of the _identifier_ of the _option_.
-   1. Let `rv` be the _resolved value_ of the _option value_.
-   1. If `rv` is a _fallback value_:
-      1. Emit a _Bad Option_ error, if supported.
-   1. Else:
-      1. If the _option value_ consists of a _literal_:
-         1. Mark `rv` as a _literal_ _option value_.
-      1. Set `res[id]` to be `rv`.
-1. Return `res`.
-
-> [!NOTE]
-> If the _resolved value_ of an _option value_ is a _fallback value_,
-> the _option_ is intentionally omitted from the mapping of resolved options.
-
-The result of _option resolution_ MUST be a (possibly empty) mapping
-of string identifiers to values;
-that is, errors MAY be emitted, but such errors MUST NOT be fatal.
-This mapping can be empty.
-
-> [!NOTE]
-> The _resolved value_ of a _function_ _operand_
-> can also include resolved option values.
-> These are not included in the _option resolution_ result,
-> and need to be processed separately by a _function handler_.
-
 #### Expression Resolution
 
 **_<dfn>Expression resolution</dfn>_** determines the value of an _expression_.
@@ -384,7 +343,7 @@ the following steps are taken:
    Specifically, if the cause of the failure was that the datatype, value, or format of the
    _operand_ did not match that expected by the _function_,
    the _function_ SHOULD cause a _Bad Operand_ error to be emitted.
-  
+
    In all failure cases, return a _fallback value_ as the _resolved value_ of the _expression_.
 
 ###### Function Handler
@@ -435,8 +394,49 @@ supported by the implementation, process them as specified.
 Such `u:` options MAY be removed from the resolved mapping of _options_.
 
 The resolution of _markup_ MUST always succeed.
-(Recall that any errors emitted by _option resolution_
+(Any errors emitted by _option resolution_
 are non-fatal.)
+
+#### Option Resolution
+
+**_<dfn>Option resolution</dfn>_** is the process of computing the _options_
+for a given _expression_ or _markup_.
+_Option resolution_ results in a mapping of string _identifiers_ to _resolved values_.
+The order of _options_ MUST NOT be significant.
+
+> For example, the following _message_ treats both both placeholders identically:
+> ```
+> {$x :ns:func option1=foo option2=bar} {$x :ns:func option2=bar option1=foo}
+> ```
+
+For each _option_:
+
+1. Let `res` be a new empty mapping.
+1. For each _option_:
+   1. Let `id` be the string value of the _identifier_ of the _option_.
+   1. Let `rv` be the _resolved value_ of the _option value_.
+   1. If `rv` is a _fallback value_:
+      1. Emit a _Bad Option_ error, if supported.
+   1. Else:
+      1. If the _option value_ consists of a _literal_:
+         1. Mark `rv` as a _literal_ _option value_.
+      1. Set `res[id]` to be `rv`.
+1. Return `res`.
+
+> [!NOTE]
+> If the _resolved value_ of an _option value_ is a _fallback value_,
+> the _option_ is intentionally omitted from the mapping of resolved options.
+
+The result of _option resolution_ MUST be a (possibly empty) mapping
+of string identifiers to values;
+that is, errors MAY be emitted, but such errors MUST NOT be fatal.
+This mapping can be empty.
+
+> [!NOTE]
+> The _resolved value_ of a _function_ _operand_
+> can also include resolved option values.
+> These are not included in the _option resolution_ result,
+> and need to be processed separately by a _function handler_.
 
 #### Fallback Resolution
 
