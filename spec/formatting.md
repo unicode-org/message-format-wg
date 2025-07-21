@@ -211,6 +211,7 @@ and different implementations MAY choose to perform different levels of resoluti
 
 _Expressions_ are used in _declarations_ and _patterns_.
 _Markup_ is only used in _patterns_.
+_Options_ are used in _expressions_ and _markup_.
 
 #### Expression Resolution
 
@@ -362,7 +363,7 @@ the following steps are taken:
    Specifically, if the cause of the failure was that the datatype, value, or format of the
    _operand_ did not match that expected by the _function_,
    the _function_ SHOULD cause a _Bad Operand_ error to be emitted.
-  
+
    In all failure cases, return a _fallback value_ as the _resolved value_ of the _expression_.
 
 ###### Function Handler
@@ -397,10 +398,29 @@ and execution time SHOULD be limited.
 
 Implementation-defined _functions_ SHOULD use an implementation-defined _namespace_.
 
-###### Option Resolution
+#### Markup Resolution
+
+**_<dfn>Markup resolution</dfn>_** determines the value of _markup_.
+Unlike _functions_, the resolution of _markup_ is not customizable.
+
+The _resolved value_ of _markup_ includes the following fields:
+
+- The type of the markup: open, standalone, or close
+- The _identifier_ of the _markup_
+- The resolved mapping of _options_ after _option resolution_.
+
+If the resolved mapping of _options_ includes any _`u:` options_
+supported by the implementation, process them as specified.
+Such `u:` options MAY be removed from the resolved mapping of _options_.
+
+The resolution of _markup_ MUST always succeed.
+(Any errors emitted by _option resolution_
+are non-fatal.)
+
+#### Option Resolution
 
 **_<dfn>Option resolution</dfn>_** is the process of computing the _options_
-for a given _expression_. 
+for a given _expression_ or _markup_.
 _Option resolution_ results in a mapping of string _identifiers_ to _resolved values_.
 The order of _options_ MUST NOT be significant.
 
@@ -437,23 +457,6 @@ This mapping can be empty.
 > can also include resolved option values.
 > These are not included in the _option resolution_ result,
 > and need to be processed separately by a _function handler_.
-
-#### Markup Resolution
-
-**_<dfn>Markup resolution</dfn>_** determines the value of _markup_.
-Unlike _functions_, the resolution of _markup_ is not customizable.
-
-The _resolved value_ of _markup_ includes the following fields:
-
-- The type of the markup: open, standalone, or close
-- The _identifier_ of the _markup_
-- The resolved mapping of _options_ after _option resolution_.
-
-If the resolved mapping of _options_ includes any _`u:` options_
-supported by the implementation, process them as specified.
-Such `u:` options MAY be removed from the resolved mapping of _options_.
-
-The resolution of _markup_ MUST always succeed.
 
 #### Fallback Resolution
 
