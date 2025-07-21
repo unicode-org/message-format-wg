@@ -285,10 +285,10 @@ the functions `:datetime`, `:date`, and `:time`.
 The default value for `timeZone` is the default time zone provided by the _formatting context_.
 
 The value `input` corresponds to the time zone of the _operand_.
-If it is used and the _resolved value_ of the _operand_ does not include a time zone,
+If it is used and the _resolved value_ of the _operand_ does not include a time zone or offset,
 a _Bad Operand_ error is emitted and the default time zone is used to format the _expression_.
 
-If the _resolved value_ of the _operand_ includes a time zone,
+If the _resolved value_ of the _operand_ includes a time zone or offset,
 and the _resolved value_ of the `timeZone` _option_ is different from that,
 an implementation SHOULD convert the _resolved value_ of the _operand_
 to the time zone indicated by the _resolved value_ of the `timeZone` _option_.
