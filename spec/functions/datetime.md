@@ -260,14 +260,21 @@ the functions `:datetime`, `:date`, and `:time`.
     (see [TZDB](https://www.iana.org/time-zones)
     and [LDML](https://www.unicode.org/reports/tr35/tr35-dates.html#Time_Zone_Names)
     for information on identifiers)
-  - `local`
+  - `input`
   - `UTC`
 
-> [!NOTE]
-> The value `local` permits a _message_ to convert a date/time value
-> into a [floating](https://www.w3.org/TR/timezone/#floating) time value
-> (sometimes called a _plain_ or _local_ time value) by removing
-> the association with a specific time zone.
+The default value for `timeZone` is the default time zone provided by the _formatting context_.
+
+The value `input` corresponds to the time zone of the _operand_.
+If it is used and the _resolved value_ of the _operand_ does not include a time zone or offset,
+a _Bad Operand_ error is emitted and the default time zone is used to format the _expression_.
+
+If the _resolved value_ of the _operand_ includes a time zone or offset,
+and the _resolved value_ of the `timeZone` _option_ is different from that,
+an implementation SHOULD convert the _resolved value_ of the _operand_
+to the time zone indicated by the _resolved value_ of the `timeZone` _option_.
+If such conversion is not supported, an implementation MAY alternatively
+emit a _Bad Option_ error and use a _fallback value_ as the _resolved value_ of the _expression_.
 
 The following _option_ is REQUIRED to be available on
 the functions `:datetime` and `:time`:
