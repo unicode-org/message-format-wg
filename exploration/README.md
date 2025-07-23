@@ -3,7 +3,7 @@
 
 This folder contains design documents used by the MessageFormat Working Group
 as part of the development process for MFv2.
-Designs can be "accepted", "proposed", or "rejected". 
+Designs can be "accepted", "proposed", "rejected", or "obsolete".
 These documents are not a normative part of the specification.
 They might be helpful to users seeking to understand specific design decisions
 taken by the working group,
