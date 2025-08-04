@@ -1,6 +1,6 @@
 # Formatting Percent Values
 
-Status: **Proposed**
+Status: **Accepted**
 
 <details>
 	<summary>Metadata</summary>
@@ -11,7 +11,8 @@ Status: **Proposed**
 		<dt>First proposed</dt>
 		<dd>2025-04-07</dd>
 		<dt>Pull Requests</dt>
-		<dd>#1068</dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/1068">#1068</a></dd>
+		<dd><a href="https://github.com/unicode-org/message-format-wg/pull/1094">#1094</a></dd>
 	</dl>
 </details>
 
@@ -134,9 +135,10 @@ _What prior decisions and existing conditions limit the possible design?_
 
 ## Proposed Design
 
-_Describe the proposed solution. Consider syntax, formatting, errors, registry, tooling, interchange._
+Add a new, dedicated `:percent` function,
+which scales the _resolved value_ of its _operand_ by 100.
 
-TBD
+Separately, allow `:unit unit=percent` formatting, without scaling.
 
 ## Alternatives Considered
 

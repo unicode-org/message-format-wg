@@ -413,6 +413,107 @@ contains an implementation-defined currency value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
+#### The `:percent` function
+
+> [!IMPORTANT]
+> The _function_ `:percent` has a status of **Draft**.
+> It is proposed for inclusion in a future release of this specification and is not Stable.
+
+The function `:percent` is a selector and formatter for percent values.
+
+##### Operands
+
+The function `:percent` requires a [Number Operand](#number-operands) as its _operand_.
+
+When either selecting or formatting the _expression_,
+the _resolved value_ of the _operand_ is multiplied by 100.
+
+##### Options
+
+Some options do not have default values defined in this specification.
+The defaults for these options are implementation-dependent.
+In general, the default values for such options depend on the locale,
+the value of other options, or both.
+
+> [!NOTE]
+> The names of _options_ and their _option values_ were derived from the
+> [options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options)
+> in JavaScript's `Intl.NumberFormat`.
+
+The following _options_ are REQUIRED to be available on the function `:percent`:
+
+- `signDisplay`
+  - `auto` (default)
+  - `always`
+  - `exceptZero`
+  - `negative`
+  - `never`
+- `useGrouping`
+  - `auto` (default)
+  - `always`
+  - `never`
+  - `min2`
+- `minimumFractionDigits`
+  - _digit size option_, default: `0`
+- `maximumFractionDigits`
+  - _digit size option_, default: `0`
+- `minimumSignificantDigits`
+  - _digit size option_
+- `maximumSignificantDigits`
+  - _digit size option_
+- `trailingZeroDisplay`
+  - `auto` (default)
+  - `stripIfInteger`
+- `roundingPriority`
+  - `auto` (default)
+  - `morePrecision`
+  - `lessPrecision`
+- `roundingMode`
+  - `ceil`
+  - `floor`
+  - `expand`
+  - `trunc`
+  - `halfCeil`
+  - `halfFloor`
+  - `halfExpand` (default)
+  - `halfTrunc`
+  - `halfEven`
+
+When formatting or selecting, each of the options is applied
+after the _resolved value_ of the _operand_ is multiplied by 100
+
+> For example, this _placeholder_:
+>
+> ```
+> {0.1234 :percent maximumFractionDigits=1}
+> ```
+>
+> would be formatted as "12.3%" in an English locale.
+
+If the _operand_ of the _expression_ is an implementation-defined type,
+such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
+it can include option values.
+In general, these are included in the resolved option values of the _expression_,
+with _options_ on the _expression_ taking priority over any options of the _operand_.
+Options with the following names are however discarded if included in the _operand_:
+
+- `minimumIntegerDigits`
+- `roundingIncrement`
+- `select`
+
+##### Resolved Value
+
+The _resolved value_ of an _expression_ with a `:percent` _function_
+contains an implementation-defined numerical value
+of the _operand_ of the annotated _expression_,
+together with the resolved options' values.
+
+##### Selection
+
+The _function_ `:percent` performs selection as described in [Number Selection](#number-selection) below,
+with selection always using `plural` selection mode,
+and with the _resolved value_ of the _operand_ multiplied by 100.
+
 #### The `:unit` function
 
 > [!IMPORTANT]
