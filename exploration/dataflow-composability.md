@@ -1,6 +1,6 @@
 # Data Flow for Composable Functions
 
-Status: **Proposed**
+Status: **Obsolete**
 
 <details>
 	<summary>Metadata</summary>
