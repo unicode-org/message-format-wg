@@ -138,7 +138,9 @@ _What prior decisions and existing conditions limit the possible design?_
 Add a new, dedicated `:percent` function,
 which scales the _resolved value_ of its _operand_ by 100.
 
-Separately, allow `:unit unit=percent` formatting, without scaling.
+This design could allow a function such as `:unit unit=percent` 
+for formatting values without scaling
+when the working group tackles units.
 
 ## Alternatives Considered
 
