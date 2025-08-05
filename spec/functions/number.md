@@ -508,14 +508,16 @@ Options with the following names are however discarded if included in the _opera
 The _resolved value_ of an _expression_ with a `:percent` _function_
 contains an implementation-defined numerical value
 of the _operand_ of the annotated _expression_
-(not multiplied by 100),
 together with the resolved options' values.
+The _resolved value_ is not altered by `:percent`,
+that is, it is not multiplied by 100.
 
 ##### Selection
 
-The _function_ `:percent` performs selection as described in [Number Selection](#number-selection) below,
-with selection always using `plural` selection mode,
-and with the _resolved value_ of the _operand_ multiplied by 100.
+The _function_ `:percent` performs selection as described in [Number Selection](#number-selection) below.
+This selection always uses the `plural` selection mode,
+and is performed on the _resolved value_ of the _operand_
+multiplied by 100.
 
 > For example, this _message_:
 > ```
