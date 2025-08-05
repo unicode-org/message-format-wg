@@ -479,8 +479,10 @@ The following _options_ are REQUIRED to be available on the function `:percent`:
   - `halfTrunc`
   - `halfEven`
 
-When formatting or selecting, each of the options is applied
-after the _resolved value_ of the _operand_ is multiplied by 100
+The _resolved value_ of the _operand_ is multiplied by 100
+at the start of formatting or selection.
+Each _option_ is applied to the formatted (or selected) value
+rather than the unaltered value of the _operand_.
 
 > For example, this _placeholder_:
 >
@@ -488,7 +490,7 @@ after the _resolved value_ of the _operand_ is multiplied by 100
 > {0.1234 :percent maximumFractionDigits=1}
 > ```
 >
-> would be formatted as "12.3%" in an English locale.
+> might be formatted as "12.3%" in an English locale.
 
 If the _operand_ of the _expression_ is an implementation-defined type,
 such as the _resolved value_ of an _expression_ with a `:number` or `:integer` _annotation_,
@@ -505,7 +507,8 @@ Options with the following names are however discarded if included in the _opera
 
 The _resolved value_ of an _expression_ with a `:percent` _function_
 contains an implementation-defined numerical value
-of the _operand_ of the annotated _expression_,
+of the _operand_ of the annotated _expression_
+(not multiplied by 100),
 together with the resolved options' values.
 
 ##### Selection
@@ -513,6 +516,17 @@ together with the resolved options' values.
 The _function_ `:percent` performs selection as described in [Number Selection](#number-selection) below,
 with selection always using `plural` selection mode,
 and with the _resolved value_ of the _operand_ multiplied by 100.
+
+> For example, this _message_:
+> ```
+> .local $pct = {1 :percent}
+> .match $pct
+> 1   {{Would match with 0.01 as the operand}}
+> 100 {{Matches 💯}}
+> *   {{Otherwise}}
+> ```
+>
+> would be formatted as "Matches 💯".
 
 #### The `:unit` function
 
