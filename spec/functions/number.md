@@ -426,7 +426,7 @@ The function `:percent` is a selector and formatter for percent values.
 The function `:percent` requires a [Number Operand](#number-operands) as its _operand_.
 
 When either selecting or formatting the _expression_,
-the _resolved value_ of the _operand_ is multiplied by 100.
+the numeric value of the _operand_ is multiplied by 100.
 
 ##### Options
 
@@ -479,7 +479,7 @@ The following _options_ are REQUIRED to be available on the function `:percent`:
   - `halfTrunc`
   - `halfEven`
 
-The _resolved value_ of the _operand_ is multiplied by 100
+The numeric value of the _operand_ is multiplied by 100
 at the start of formatting or selection.
 Each _option_ is applied to the formatted (or selected) value
 rather than the unaltered value of the _operand_.
@@ -510,13 +510,13 @@ contains an implementation-defined numerical value
 of the _operand_ of the annotated _expression_
 together with the resolved options' values.
 The _resolved value_ is not altered by `:percent`,
-that is, it is not multiplied by 100.
+that is, its numerical value is not multiplied by 100.
 
 ##### Selection
 
 The _function_ `:percent` performs selection as described in [Number Selection](#number-selection) below.
 This selection always uses the `plural` selection mode,
-and is performed on the _resolved value_ of the _operand_
+and is performed on the numerical value of the _operand_
 multiplied by 100.
 
 > For example, this _message_:
