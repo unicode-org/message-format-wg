@@ -509,8 +509,9 @@ The _resolved value_ of an _expression_ with a `:percent` _function_
 contains an implementation-defined numerical value
 of the _operand_ of the annotated _expression_
 together with the resolved options' values.
-The _resolved value_ is not altered by `:percent`,
-that is, its numerical value is not multiplied by 100.
+The numerical value of the _resolved value_ of the _expression_
+is the same as the numerical value of its _operand_;
+it is not multiplied by 100.
 
 ##### Selection
 
