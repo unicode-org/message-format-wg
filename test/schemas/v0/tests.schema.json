@@ -204,6 +204,7 @@
       "type": "array",
       "items": {
         "enum": [
+          ":percent",
           "u:dir",
           "u:id",
           "u:locale"

@@ -9,6 +9,7 @@
    1. [`:integer`](number.md#the-integer-function)
    1. [`:offset`](number.md#the-offset-function)
    1. [`:currency`](number.md#the-currency-function)
+   1. [`:percent`](number.md#the-percent-function)
    1. [`:unit`](number.md#the-unit-function)
 1. [Date and Time Value Formatting](datetime.md)
    1. [`:datetime`](datetime.md#the-datetime-function)

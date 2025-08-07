@@ -12,6 +12,7 @@ These test files are intended to be useful for testing multiple different _messa
 > If your implementation uses UTF-16 based strings (such as JavaScript `String` or Java `java.lang.String`)
 > or otherwise allows unpaired surrogates in text or literals, you will need to implement tests equivalent
 > to the following for syntax errors:
+>
 > ```json
 > {
 >   "locale": "en-US",
@@ -72,11 +73,12 @@ Tests for such features have a `tags` array attached to them
 to mark the features that they rely on.
 This may include one or more of the following:
 
-| Tag        | Feature                                               |
-| ---------- | ----------------------------------------------------- |
-| `u:dir`    | The [u:dir](../spec/u-namespace.md#udir) option       |
-| `u:id`     | The [u:id](../spec/u-namespace.md#uid) option         |
-| `u:locale` | The [u:locale](../spec/u-namespace.md#ulocale) option |
+| Tag        | Feature                                                                   |
+| ---------- | ------------------------------------------------------------------------- |
+| `:percent` | The [:percent](../spec/functions/number.md#the-percent-function) function |
+| `u:dir`    | The [u:dir](../spec/u-namespace.md#udir) option                           |
+| `u:id`     | The [u:id](../spec/u-namespace.md#uid) option                             |
+| `u:locale` | The [u:locale](../spec/u-namespace.md#ulocale) option                     |
 
 ## Test Functions
 
@@ -199,8 +201,9 @@ emit a _Bad Option_ error.
 > Actual functions in your implementation might emit
 > an implementation-defined or platform-specific runtime error or exception
 > when the function handler is called.
-> Your implementation might thus produce a _Message Function Error_ 
+> Your implementation might thus produce a _Message Function Error_
 > not provided with a label in the JSON Schema of this test suite.
+
 ### `:test:select`
 
 This _function_ accepts the same _operands_ and _options_,
