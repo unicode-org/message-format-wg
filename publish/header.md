@@ -7,7 +7,7 @@ linkify: true
 
 |Version|48 (draft)              |
 |-------|------------------------|
-|Editors|Addison Phillips and [other CLDR committee members](tr35-acknowledgments.md#acknowledgments)|
+|Editors|Eemeli Aro, Addison Phillips and [other CLDR committee members](tr35-acknowledgments.md#acknowledgments)|
 
 For the full header, summary, and status, see [Part 1: Core](tr35.md).
 
