@@ -421,14 +421,14 @@ together with the resolved options' values.
 
 The function `:percent` is a selector and formatter for percent values.
 
-##### Operands
+##### `:percent` Operands
 
 The function `:percent` requires a [Number Operand](#number-operands) as its _operand_.
 
 When either selecting or formatting the _expression_,
 the numeric value of the _operand_ is multiplied by 100.
 
-##### Options
+##### `:percent` Options
 
 Some options do not have default values defined in this specification.
 The defaults for these options are implementation-dependent.
@@ -503,7 +503,7 @@ Options with the following names are however discarded if included in the _opera
 - `roundingIncrement`
 - `select`
 
-##### Resolved Value
+##### `:percent` Resolved Value
 
 The _resolved value_ of an _expression_ with a `:percent` _function_
 contains an implementation-defined numerical value
@@ -513,7 +513,7 @@ The numerical value of the _resolved value_ of the _expression_
 is the same as the numerical value of its _operand_;
 it is not multiplied by 100.
 
-##### Selection
+##### Selection with `:percent`
 
 The _function_ `:percent` performs selection as described in [Number Selection](#number-selection) below.
 This selection always uses the `plural` selection mode,
