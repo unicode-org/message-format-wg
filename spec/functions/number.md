@@ -6,7 +6,7 @@ The function `:number` is a selector and formatter for numeric values.
 
 ##### Operands
 
-The function `:number` requires a [Number Operand](#number-operands) as its _operand_.
+The function `:number` requires a _numeric operand_ as its _operand_.
 
 ##### Options
 
@@ -101,7 +101,7 @@ values as integers.
 
 ##### Operands
 
-The function `:integer` requires a [Number Operand](#number-operands) as its _operand_.
+The function `:integer` requires a _numeric operand_ as its _operand_.
 
 ##### Options
 
@@ -185,7 +185,7 @@ The "offset" is a small integer adjustment of the _operand_'s value.
 
 ##### `:offset` Operands
 
-The function `:offset` requires a [Number Operand](#number-operands) as its _operand_.
+The function `:offset` requires a _numeric operand_ as its _operand_.
 
 ##### `:offset` Options
 
@@ -250,7 +250,7 @@ which are a specialized form of numeric formatting.
 The _operand_ of the `:currency` function can be one of any number of
 implementation-defined types,
 each of which contains a numerical `value` and a `currency`;
-or it can be a [Number Operand](#number-operands), as long as the _option_
+or it can be a _numeric operand_, as long as the _option_
 `currency` is provided.
 The _option_ `currency` MUST NOT be used to override the currency of an implementation-defined type.
 Using this _option_ in such a case results in a _Bad Option_ error.
@@ -265,7 +265,7 @@ A well-formed Unicode Currency Identifier matches the production `currency_code`
 currency_code = 3ALPHA
 ```
 
-A [Number Operand](#number-operands) without a `currency` _option_ results in a _Bad Operand_ error.
+A _numeric operand_ without a `currency` _option_ results in a _Bad Operand_ error.
 
 > [!NOTE]
 > For example, in ICU4J, the type `com.ibm.icu.util.CurrencyAmount` can be used
@@ -428,14 +428,14 @@ This is a specialized form of numeric formatting.
 The _operand_ of the `:unit` function can be one of any number of
 implementation-defined types,
 each of which contains a numerical `value` plus a `unit`
-or it can be a [Number Operand](#number-operands), as long as the _option_
+or it can be a _numeric operand_, as long as the _option_
 `unit` is provided.
 
 Valid values of the _operand_'s `unit` are either a string containing a
 valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
 or an implementation-defined unit type.
 
-A [Number Operand](#number-operands) without a `unit` _option_ results in a _Bad Operand_ error.
+A _numeric operand_ without a `unit` _option_ results in a _Bad Operand_ error.
 
 > [!NOTE]
 > For example, in ICU4J, the type `com.ibm.icu.util.Measure` might be used
@@ -570,9 +570,9 @@ Implementations MUST NOT substitute the unit without performing the associated c
 >
 > This can produce "You have 405 feet to go."
 
-#### Number Operands
+#### Numeric Operands
 
-The _operand_ of a number function is either an implementation-defined type or
+A **_<dfn>numeric operand<dfn>_** is either an implementation-defined type or
 a _literal_ whose contents match the following `number-literal` production.
 All other values produce a _Bad Operand_ error.
 
