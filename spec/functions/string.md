@@ -4,7 +4,7 @@
 
 The function `:string` provides string selection and formatting.
 
-##### Operands
+##### `:string` Operands
 
 The _operand_ of `:string` is either any implementation-defined type
 that is a string or for which conversion to a string is supported,
@@ -22,7 +22,7 @@ All other values produce a _Bad Operand_ error.
 > classes according to their local needs, including, where appropriate,
 > coercion to string.
 
-##### Options
+##### `:string` Options
 
 The function `:string` has no _options_.
 
@@ -35,14 +35,14 @@ The function `:string` has no _options_.
 > {$s :string u:dir=ltr u:locale=fr-CA}
 > ```
 
-##### Resolved Value
+##### `:string` Resolved Value
 
 The _resolved value_ of an _expression_ with a `:string` _function_
 contains the string value of the _operand_ of the annotated _expression_,
 together with its resolved locale and directionality.
 None of the _options_ set on the _expression_ are part of the _resolved value_.
 
-##### Selection
+##### Selection with `:string`
 
 When implementing [Match(`resolvedSelector`, `key`)](/spec/formatting.md#operations-on-resolved-values)
 where `resolvedSelector` is the _resolved value_ of a _selector_
@@ -79,7 +79,7 @@ as the BetterThan operation should only be called on keys that match.
 > *             {{Matches the string "space key"}}
 > ```
 
-##### Formatting
+##### `:string` Formatting
 
 The `:string` function returns the string value of the _resolved value_ of the _operand_.
 
