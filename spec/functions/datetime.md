@@ -15,7 +15,7 @@ This subsection describes the _functions_ and _options_ for date/time formatting
 > The types of queries found in implementations such as `java.time.TemporalAccessor`
 > are complex and user expectations might be inconsistent with good I18N practices.
 
-[Semantic Skeletons]: https://www.unicode.org/reports/tr35/tr35-75/tr35-dates.html#Semantic_Skeletons
+[Semantic Skeletons]: https://www.unicode.org/reports/tr35/tr35-dates.html#Semantic_Skeletons
 
 #### The `:datetime` function
 
