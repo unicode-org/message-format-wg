@@ -26,7 +26,7 @@ for (const [name, path] of Object.entries(parts)) {
 }
 
 parts.abnf = "## message.abnf\n\n```abnf\n" + parts.abnf + "\n```";
-parts.json = "## message.json\n\n```json\n" + parts.json + "\n```";
+parts.json = "### message.json\n\n```json\n" + parts.json + "\n```";
 
 // Strip title + table of contents
 const introStart = parts.intro.indexOf("## Introduction");
@@ -40,7 +40,7 @@ parts.functions = parts.functions.replace(
 
 const result = Object.values(parts)
   .join("\n\n")
-  .replace(/ +$/g, "")
+  .replace(/ +$/gm, "")
   .replace(/\n{3,}/g, "\n\n")
   .replace(/\[(.+?)\]\((.+?)\)/g, fixLink);
 console.log(result);
