@@ -239,39 +239,40 @@ one {{Category match for {$count}}}
       BetterThan(`{1}`, `{1}`, `{*}`) is false.
 1. The pattern `{{Exact match for {$count}}}` is selected.
 
-### Acknowledgements
+### Acknowledgments
 
 Special thanks to the following people for their contributions to making the Unicode MessageFormat Standard.
 The following people contributed to our github repo and are listed in order by contribution size:
 
-Addison Phillips, 
-Eemeli Aro, 
-Romulo Cintra, 
-Stanisław Małolepszy, 
-Tim Chevalier, 
-Elango Cheran, 
-Richard Gibson, 
-Mihai Niță, 
-Mark Davis, 
-Steven R. Loomis, 
-Shane F. Carr, 
-Matt Radbourne, 
-Caleb Maclennan, 
-David Filip, 
-Daniel Minor, 
+Addison Phillips,
+Eemeli Aro,
+Romulo Cintra,
+Tim Chevalier,
+Stanisław Małolepszy,
+Elango Cheran,
+Richard Gibson,
+Mark Davis,
+Mihai Niță,
+Steven R. Loomis,
+Shane F. Carr,
+Matt Radbourne,
+Caleb Maclennan,
+David Filip,
 Christopher Dieringer,
-Bruno Haible,
 Danny Gleckler,
-George Rhoten, 
-Ujjwal Sharma, 
-Daniel Ehrenberg, 
-Markus Scherer, 
-Zibi Braniecki, 
+Bruno Haible,
+Daniel Minor,
+George Rhoten,
+Ujjwal Sharma,
+Markus Scherer,
 Lionel Rowe,
 Luca Casonato,
+Daniel Ehrenberg,
+Zibi Braniecki,
 and Rafael Xavier de Souza.
 
-Addison Phillips was chair of the working group from January 2023.
+Eemeli Aro is the current chair of the working group.
+Addison Phillips was chair of the working group from January 2023 to July 2025.
 Prior to 2023, the group was governed by a chair group, consisting of
 Romulo Cintra,
 Elango Cheran,

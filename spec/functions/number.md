@@ -4,11 +4,11 @@
 
 The function `:number` is a selector and formatter for numeric values.
 
-##### Operands
+##### `:number` Operands
 
-The function `:number` requires a [Number Operand](#number-operands) as its _operand_.
+The function `:number` requires a _numeric operand_ as its _operand_.
 
-##### Options
+##### `:number` Options
 
 Some options do not have default values defined in this specification.
 The defaults for these options are implementation-dependent.
@@ -83,14 +83,14 @@ with _options_ on the _expression_ taking priority over any options of the _oper
 > would be formatted with the resolved options
 > `{ minimumFractionDigits: '1', signDisplay: 'always' }`.
 
-##### Resolved Value
+##### `:number` Resolved Value
 
 The _resolved value_ of an _expression_ with a `:number` _function_
 contains an implementation-defined numerical value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
-##### Selection
+##### Selection with `:number`
 
 The _function_ `:number` performs selection as described in [Number Selection](#number-selection) below.
 
@@ -99,11 +99,11 @@ The _function_ `:number` performs selection as described in [Number Selection](#
 The function `:integer` is a selector and formatter for matching or formatting numeric
 values as integers.
 
-##### Operands
+##### `:integer` Operands
 
-The function `:integer` requires a [Number Operand](#number-operands) as its _operand_.
+The function `:integer` requires a _numeric operand_ as its _operand_.
 
-##### Options
+##### `:integer` Options
 
 Some options do not have default values defined in this specification.
 The defaults for these options are implementation-dependent.
@@ -148,14 +148,14 @@ Options with the following names are however discarded if included in the _opera
 - `maximumFractionDigits`
 - `minimumSignificantDigits`
 
-##### Resolved Value
+##### `:integer` Resolved Value
 
 The _resolved value_ of an _expression_ with an `:integer` _function_
 contains the implementation-defined integer value
 of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
-##### Selection
+##### Selection with `:integer`
 
 The _function_ `:integer` performs selection as described in [Number Selection](#number-selection) below.
 
@@ -185,7 +185,7 @@ The "offset" is a small integer adjustment of the _operand_'s value.
 
 ##### `:offset` Operands
 
-The function `:offset` requires a [Number Operand](#number-operands) as its _operand_.
+The function `:offset` requires a _numeric operand_ as its _operand_.
 
 ##### `:offset` Options
 
@@ -232,7 +232,7 @@ The `:offset` _options_ are not included in the resolved option values.
 > In such cases, implementations can emit an _Unsupported Operation_ error
 > or they might just silently overflow the underlying data value.
 
-##### `:offset` Selection
+##### Selection with `:offset`
 
 The _function_ `:offset` performs selection as described in [Number Selection](#number-selection) below.
 
@@ -245,12 +245,12 @@ The _function_ `:offset` performs selection as described in [Number Selection](#
 The _function_ `:currency` is a _formatter_ for currency values,
 which are a specialized form of numeric formatting.
 
-##### Operands
+##### `:currency` Operands
 
 The _operand_ of the `:currency` function can be one of any number of
 implementation-defined types,
 each of which contains a numerical `value` and a `currency`;
-or it can be a [Number Operand](#number-operands), as long as the _option_
+or it can be a _numeric operand_, as long as the _option_
 `currency` is provided.
 The _option_ `currency` MUST NOT be used to override the currency of an implementation-defined type.
 Using this _option_ in such a case results in a _Bad Option_ error.
@@ -265,7 +265,7 @@ A well-formed Unicode Currency Identifier matches the production `currency_code`
 currency_code = 3ALPHA
 ```
 
-A [Number Operand](#number-operands) without a `currency` _option_ results in a _Bad Operand_ error.
+A _numeric operand_ without a `currency` _option_ results in a _Bad Operand_ error.
 
 > [!NOTE]
 > For example, in ICU4J, the type `com.ibm.icu.util.CurrencyAmount` can be used
@@ -294,7 +294,7 @@ A [Number Operand](#number-operands) without a `currency` _option_ results in a 
 > }
 > ```
 
-##### Options
+##### `:currency` Options
 
 Some options do not have default values defined in this specification.
 The defaults for these options are implementation-dependent.
@@ -406,7 +406,7 @@ with _options_ on the _expression_ taking priority over any options of the _oper
 > would be formatted with the resolved options
 > `{ currencySign: 'accounting', trailingZeroDisplay: 'stripIfInteger', currency: 'USD' }`.
 
-##### Resolved Value
+##### `:currency` Resolved Value
 
 The _resolved value_ of an _expression_ with a `:currency` _function_
 contains an implementation-defined currency value
@@ -423,19 +423,19 @@ The _function_ `:unit` is proposed to be a RECOMMENDED formatter for unitized va
 that is, for numeric values associated with a unit of measurement.
 This is a specialized form of numeric formatting.
 
-##### Operands
+##### `:unit` Operands
 
 The _operand_ of the `:unit` function can be one of any number of
 implementation-defined types,
 each of which contains a numerical `value` plus a `unit`
-or it can be a [Number Operand](#number-operands), as long as the _option_
+or it can be a _numeric operand_, as long as the _option_
 `unit` is provided.
 
 Valid values of the _operand_'s `unit` are either a string containing a
 valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
 or an implementation-defined unit type.
 
-A [Number Operand](#number-operands) without a `unit` _option_ results in a _Bad Operand_ error.
+A _numeric operand_ without a `unit` _option_ results in a _Bad Operand_ error.
 
 > [!NOTE]
 > For example, in ICU4J, the type `com.ibm.icu.util.Measure` might be used
@@ -457,7 +457,7 @@ A [Number Operand](#number-operands) without a `unit` _option_ results in a _Bad
 > }
 > ```
 
-##### Options
+##### `:unit` Options
 
 Some _options_ do not have default values defined in this specification.
 The defaults for these _options_ are implementation-dependent.
@@ -532,7 +532,7 @@ with _options_ on the _expression_ taking priority over any options of the _oper
 > would have the resolved options:
 > `{ unit: 'furlong', minimumFractionDigits: '2', minimumIntegerDigits: '1' }`.
 
-##### Resolved Value
+##### `:unit` Resolved Value
 
 The _resolved value_ of an _expression_ with a `:unit` _function_
 consist of an implementation-defined unit value
@@ -570,9 +570,9 @@ Implementations MUST NOT substitute the unit without performing the associated c
 >
 > This can produce "You have 405 feet to go."
 
-#### Number Operands
+#### Numeric Operands
 
-The _operand_ of a number function is either an implementation-defined type or
+A **_<dfn>numeric operand<dfn>_** is either an implementation-defined type or
 a _literal_ whose contents match the following `number-literal` production.
 All other values produce a _Bad Operand_ error.
 

@@ -1,0 +1,4 @@
+[submodule "publish/cldr"]
+	path = publish/cldr
+	url = git@github.com:unicode-org/cldr.git
+	branch = main

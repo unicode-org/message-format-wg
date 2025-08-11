@@ -15,7 +15,7 @@ This subsection describes the _functions_ and _options_ for date/time formatting
 > The types of queries found in implementations such as `java.time.TemporalAccessor`
 > are complex and user expectations might be inconsistent with good I18N practices.
 
-[Semantic Skeletons]: https://www.unicode.org/reports/tr35/tr35-75/tr35-dates.html#Semantic_Skeletons
+[Semantic Skeletons]: https://www.unicode.org/reports/tr35/tr35-dates.html#Semantic_Skeletons
 
 #### The `:datetime` function
 
@@ -33,14 +33,14 @@ If no options are specified, this function defaults to the following:
 > in JavaScript and with `{d,date}` in ICU MessageFormat 1.0.
 > This is because, unlike those implementations, `:datetime` is distinct from `:date` and `:time`.
 
-##### Operands
+##### `:datetime` Operands
 
 The _operand_ of the `:datetime` function is either
 an implementation-defined date/time type
 or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
 All other _operand_ values produce a _Bad Operand_ error.
 
-##### Options
+##### `:datetime` Options
 
 The following _options_ are REQUIRED to be available on the function `:datetime`:
 
@@ -79,7 +79,7 @@ Any _date/time override options_ of the operand are included in the resolved opt
 with _options_ on the _expression_ taking priority over any options of the _operand_.
 Any _operand_ options not matching the _date/time override options_ are ignored.
 
-##### Resolved Value
+##### `:datetime` Resolved Value
 
 The _resolved value_ of an _expression_ with a `:datetime` _function_
 contains an implementation-defined date/time value
@@ -94,14 +94,14 @@ If no options are specified, this function defaults to the following:
 
 - `{$d :date}` is the same as `{$d :date fields=year-month-day length=medium}`
 
-##### Operands
+##### `:date` Operands
 
 The _operand_ of the `:date` function is either
 an implementation-defined date/time type
 or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
 All other _operand_ values produce a _Bad Operand_ error.
 
-##### Options
+##### `:date` Options
 
 The following _options_ are REQUIRED to be available on the function `:date`:
 
@@ -129,7 +129,7 @@ Any _date/time override options_ of the operand are included in the resolved opt
 with _options_ on the _expression_ taking priority over any options of the _operand_.
 Any _operand_ options not matching the _date/time override options_ are ignored.
 
-##### Resolved Value
+##### `:date` Resolved Value
 
 The _resolved value_ of an _expression_ with a `:date` _function_
 is implementation-defined.
@@ -148,14 +148,14 @@ If no options are specified, this function defaults to the following:
 
 - `{$t :time}` is the same as `{$t :time precision=minute}`
 
-##### Operands
+##### `:time` Operands
 
 The _operand_ of the `:time` function is either
 an implementation-defined date/time type
 or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
 All other _operand_ values produce a _Bad Operand_ error.
 
-##### Options
+##### `:time` Options
 
 The following _options_ are REQUIRED to be available on the function `:time`:
 
@@ -182,7 +182,7 @@ Any _date/time override options_ of the operand are included in the resolved opt
 with _options_ on the _expression_ taking priority over any options of the _operand_.
 Any _operand_ options not matching the _date/time override options_ are ignored.
 
-##### Resolved Value
+##### `:time` Resolved Value
 
 The _resolved value_ of an _expression_ with a `:time` _function_
 is implementation-defined.
