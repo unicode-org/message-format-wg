@@ -1,0 +1,34 @@
+name: Deploy spec to GitHub Pages
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/configure-pages@v5
+      - run: make
+        working-directory: ./publish
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: publish/dist/
+      - uses: actions/deploy-pages@v4
+        id: deployment
