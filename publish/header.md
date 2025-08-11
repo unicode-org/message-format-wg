@@ -51,5 +51,3 @@ The LDML specification is divided into the following parts:
 *   Appendix B: [Acknowledgments](tr35-acknowledgments.md#acknowledgments)
 
 ## <a name="Contents">Contents of Part 9, MessageFormat</a>
-
-[TOC]
