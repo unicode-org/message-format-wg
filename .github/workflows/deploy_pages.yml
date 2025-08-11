@@ -8,6 +8,9 @@ permissions:
 on:
   push:
     branches: [main]
+    paths:
+      - 'publish/**'
+      - 'spec/**'
   workflow_dispatch:
 
 concurrency:
