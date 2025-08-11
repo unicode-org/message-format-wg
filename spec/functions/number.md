@@ -423,7 +423,7 @@ The function `:percent` is a selector and formatter for percent values.
 
 ##### `:percent` Operands
 
-The function `:percent` requires a [Number Operand](#number-operands) as its _operand_.
+The function `:percent` requires a _numeric operand_ as its _operand_.
 
 When either selecting or formatting the _expression_,
 the numeric value of the _operand_ is multiplied by 100.
