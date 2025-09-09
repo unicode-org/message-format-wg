@@ -6,9 +6,11 @@
 
 The Unicode MessageFormat syntax and data model allow for _attributes_
 to be defined on _expressions_ and _markup_.
-These are REQUIRED to have no impact on the formatting of a message,
-and are intended to be useful in informing translators and translator tooling
+These MUST NOT have any impact on the formatting of a message,
+and are intended to inform users, such as translators, and tools
 about the specific _expressions_ or _markup_ to which they are attached.
+_Attributes_ MAY be stripped from _expressions_ and _markup_
+with no effect on the message's formatting.
 
 While the specification does not define how an _attribute_ could be attached
 to the _message_ as a whole,
@@ -168,7 +170,6 @@ Should be accompanied by an explanatory `@comment`.
 
 _Value:_ A strictly positive integer, followed by a space, followed by one of the following:
 - `chars`
-- `bytes`
 - `lines`
 
 Limits the length of a _message_.
@@ -195,7 +196,7 @@ _Value_: **TBD**
 Documents a _variable_.
 
 > [!NOTE]
-> Having a well-defined structure for this tag is pretty important,
+> Having a well-defined structure for this attribute is pretty important,
 > at least to identify the variable its description is pertaining to.
 > In addition to describing the variable in words, it could include:
 > - The variable's type -- is it a string, a number, something else?
