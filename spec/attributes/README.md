@@ -18,7 +18,7 @@ this SHOULD be provided for by a resource container for Unicode MessageFormat me
 
 As all _attributes_ with _reserved identifiers_ are reserved,
 definitions are provided here for common _attribute_ use cases.
-Custom _attributes_ SHOULD use a _custom identifier_,
+Use a _custom identifier_ for other (custom) _attributes_,
 preferably one with an appropriate _namespace_.
 
 ### Attribute Values
