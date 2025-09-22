@@ -164,7 +164,7 @@ Explicitly mark a message with an empty _pattern_ as valid.
 Most empty messages are mistakes,
 so being able to mark ones that can be empty is useful.
 
-Should be accompanied by an explanatory `@comment`.
+Empty _messages_ SHOULD be accompanied by an explanatory `@comment`.
 
 #### @max-length
 
