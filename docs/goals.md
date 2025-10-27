@@ -63,7 +63,6 @@ The MessageFormat Working Group is a working group of the CLDR-TC.
   - percent formatting
 - Deliver at least as Technical Preview (v49) and Stable (v50) all draft functions and options
   - `:unit`
-  - the `u:locale` option
 - Deliver as Technical Preview additional functions to support significant additional functionality.
   Such functions could include: lists, ranges, relative time, inflection.
 - Deliver as Technical Preview a machine-readable function description format or syntax.

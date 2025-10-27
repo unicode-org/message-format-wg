@@ -32,7 +32,7 @@ The function `:string` has no _options_.
 > For example:
 >
 > ```
-> {$s :string u:dir=ltr u:locale=fr-CA}
+> {$s :string u:dir=ltr u:id=my-string}
 > ```
 
 ##### `:string` Resolved Value
