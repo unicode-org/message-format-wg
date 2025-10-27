@@ -73,12 +73,13 @@ Tests for such features have a `tags` array attached to them
 to mark the features that they rely on.
 This may include one or more of the following:
 
-| Tag        | Feature                                                                   |
-| ---------- | ------------------------------------------------------------------------- |
-| `:percent` | The [:percent](../spec/functions/number.md#the-percent-function) function |
-| `u:dir`    | The [u:dir](../spec/u-namespace.md#udir) option                           |
-| `u:id`     | The [u:id](../spec/u-namespace.md#uid) option                             |
-| `u:locale` | The [u:locale](../spec/u-namespace.md#ulocale) option                     |
+| Tag         | Feature                                                                     |
+| ----------- | --------------------------------------------------------------------------- |
+| `:currency` | The [:currency](../spec/functions/number.md#the-currency-function) function |
+| `:percent`  | The [:percent](../spec/functions/number.md#the-percent-function) function   |
+| `u:dir`     | The [u:dir](../spec/u-namespace.md#udir) option                             |
+| `u:id`      | The [u:id](../spec/u-namespace.md#uid) option                               |
+| `u:locale`  | The [u:locale](../spec/u-namespace.md#ulocale) option                       |
 
 ## Test Functions
 
