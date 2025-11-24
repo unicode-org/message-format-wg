@@ -415,10 +415,6 @@ together with the resolved options' values.
 
 #### The `:percent` function
 
-> [!IMPORTANT]
-> The _function_ `:percent` has a status of **Draft**.
-> It is proposed for inclusion in a future release of this specification and is not Stable.
-
 The function `:percent` is a selector and formatter for percent values.
 
 ##### `:percent` Operands
