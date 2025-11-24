@@ -29,22 +29,6 @@
       ]
     },
     {
-      "tags": ["u:locale"],
-      "src": "hello {4.2 :number u:locale=fr}",
-      "exp": "hello 4,2"
-    },
-    {
-      "tags": ["u:dir", "u:locale"],
-      "src": "{#tag u:dir=rtl u:locale=ar}content{/ns:tag}",
-      "exp": "content",
-      "expErrors": [{ "type": "bad-option" }],
-      "expParts": [
-        { "type": "markup", "kind": "open", "name": "tag" },
-        { "type": "text", "value": "content" },
-        { "type": "markup", "kind": "close", "name": "ns:tag" }
-      ]
-    },
-    {
       "tags": ["u:dir", "u:id"],
       "src": "hello {world :string u:dir=ltr u:id=foo}",
       "exp": "hello \u2066world\u2069",

@@ -79,7 +79,6 @@ This may include one or more of the following:
 | `:percent`  | The [:percent](../spec/functions/number.md#the-percent-function) function   |
 | `u:dir`     | The [u:dir](../spec/u-namespace.md#udir) option                             |
 | `u:id`      | The [u:id](../spec/u-namespace.md#uid) option                               |
-| `u:locale`  | The [u:locale](../spec/u-namespace.md#ulocale) option                       |
 
 ## Test Functions
 
