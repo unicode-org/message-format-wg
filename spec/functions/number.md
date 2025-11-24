@@ -238,12 +238,8 @@ The _function_ `:offset` performs selection as described in [Number Selection](#
 
 #### The `:currency` function
 
-> [!IMPORTANT]
-> The _function_ `:currency` has a status of **Draft**.
-> It is proposed for inclusion in a future release of this specification and is not Stable.
-
 The _function_ `:currency` is a _formatter_ for currency values,
-which are a specialized form of numeric formatting.
+which is a specialized form of numeric formatting.
 
 ##### `:currency` Operands
 
@@ -414,10 +410,6 @@ of the _operand_ of the annotated _expression_,
 together with the resolved options' values.
 
 #### The `:percent` function
-
-> [!IMPORTANT]
-> The _function_ `:percent` has a status of **Draft**.
-> It is proposed for inclusion in a future release of this specification and is not Stable.
 
 The function `:percent` is a selector and formatter for percent values.
 
