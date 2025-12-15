@@ -7,11 +7,11 @@
 
 The Unicode MessageFormat syntax and data model allow for _attributes_
 to be defined on _expressions_ and _markup_.
-These MUST NOT have any impact on the formatting of a message,
+These MUST NOT have any impact on the _formatting_ of a message,
 and are intended to inform users, such as translators, and tools
 about the specific _expressions_ or _markup_ to which they are attached.
 _Attributes_ MAY be stripped from _expressions_ and _markup_
-with no effect on the message's formatting.
+with no effect on the message's _formatting_.
 
 As all _attributes_ with _reserved identifiers_ are reserved,
 definitions are provided here for common _attribute_ use cases.
