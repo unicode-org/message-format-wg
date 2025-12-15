@@ -24,6 +24,9 @@ _Value:_ `yes` or `no`.
 
 Indicates whether or not the _expression_ or the _markup_ and its contents can be copied.
 
+This corresponds to
+the [XLIFF 2 `canCopy` attribute](https://docs.oasis-open.org/xliff/xliff-core/v2.2/xliff-core-v2.2-part1.html#cancopy).
+
 > For example:
 >
 > ```
@@ -36,6 +39,9 @@ _Value:_ `yes` or `no`.
 
 Indicates whether or not the _expression_ or the _markup_ and its contents can be deleted.
 
+This corresponds to
+the [XLIFF 2 `canDelete` attribute](https://docs.oasis-open.org/xliff/xliff-core/v2.2/xliff-core-v2.2-part1.html#candelete).
+
 ### @can-overlap (Markup only)
 
 _Value:_ `yes` or `no`.
@@ -45,17 +51,27 @@ can enclose partial _markup_
 (i.e. a _markup-open_ without its corresponding _markup-end_,
 or a _markup-end_ without its corresponding _markup-start_).
 
+This corresponds to
+the [XLIFF 2 `canOverlap` attribute](https://docs.oasis-open.org/xliff/xliff-core/v2.2/xliff-core-v2.2-part1.html#canoverlap).
+
 ### @can-reorder (Markup only)
 
 _Value:_ `yes` or `no`.
 
 Indicates whether or not the _markup_ and its contents can be re-ordered.
 
+This corresponds to
+the [XLIFF 2 `canReorder` attribute](https://docs.oasis-open.org/xliff/xliff-core/v2.2/xliff-core-v2.2-part1.html#canreorder).
+
 ### @comment
 
 _Value_: A non-empty string.
 
 Associates a freeform comment with an _expression_ or _markup_.
+
+This corresponds to
+the [ITS 2 Localization Note data category](https://www.w3.org/TR/its20/#locNote-datacat), and
+the [XLIFF 2 comment annotation](https://docs.oasis-open.org/xliff/xliff-core/v2.2/xliff-core-v2.2-part1.html#commentAnnotation).
 
 > For example:
 >
@@ -87,6 +103,10 @@ Identifies a well-defined term.
 The value may be a short definition of the term,
 or a URI pointing to such a definition.
 
+This corresponds to
+the [ITS 2 Terminology data category](https://www.w3.org/TR/its20/#terminology), and
+the [XLIFF 2 term annotation](https://docs.oasis-open.org/xliff/xliff-core/v2.2/xliff-core-v2.2-part1.html#termAnnotation).
+
 > For example:
 >
 > ```
@@ -102,6 +122,11 @@ or a URI pointing to such a definition.
 _Value:_ `yes` or `no`.
 
 Indicates whether the _expression_ or the _markup_ and its contents are translatable or not.
+
+This corresponds to
+the [HTML `translate` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/translate),
+the [ITS 2 Translate data category](https://www.w3.org/TR/its20/#trans-datacat), and
+the [XLIFF 2 translate annotation](https://docs.oasis-open.org/xliff/xliff-core/v2.2/xliff-core-v2.2-part1.html#translateAnnotation).
 
 > For example:
 >
