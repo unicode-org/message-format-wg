@@ -259,7 +259,7 @@ the functions `:datetime`, `:date`, and `:time`.
   - `input`
   - A well-formed time zone identifier matching the `time-zone-name` rule of
     [RFC 9557](https://www.rfc-editor.org/rfc/rfc9557#name-abnf).
-  - A well-formed UTC offset matching the `time-numoffset` rule of
+  - An offset from UTC matching the `time-numoffset` rule of
     [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339#section-5.6).
 
 The default value for `timeZone` is the default time zone provided by the _formatting context_.
