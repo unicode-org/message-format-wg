@@ -256,12 +256,11 @@ The following _option_ is REQUIRED to be available on
 the functions `:datetime`, `:date`, and `:time`.
 
 - `timeZone`
-  - A valid time zone identifier
-    (see [TZDB](https://www.iana.org/time-zones)
-    and [LDML](https://www.unicode.org/reports/tr35/tr35-dates.html#Time_Zone_Names)
-    for information on identifiers)
   - `input`
-  - `UTC`
+  - A well-formed time zone identifier matching the `time-zone-name` rule of
+    [RFC 9557](https://www.rfc-editor.org/rfc/rfc9557#name-abnf).
+  - A well-formed UTC offset matching the `time-numoffset` rule of
+    [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339#section-5.6).
 
 The default value for `timeZone` is the default time zone provided by the _formatting context_.
 
@@ -269,12 +268,18 @@ The value `input` corresponds to the time zone of the _operand_.
 If it is used and the _resolved value_ of the _operand_ does not include a time zone or offset,
 a _Bad Operand_ error is emitted and the default time zone is used to format the _expression_.
 
+If the _resolved value_ of the _operand_ does not include a time zone or offset,
+the _resolved value_ of the `timeZone` _option_ is used as its time zone.
+
 If the _resolved value_ of the _operand_ includes a time zone or offset,
 and the _resolved value_ of the `timeZone` _option_ is different from that,
 an implementation SHOULD convert the _resolved value_ of the _operand_
 to the time zone indicated by the _resolved value_ of the `timeZone` _option_.
 If such conversion is not supported, an implementation MAY alternatively
 emit a _Bad Option_ error and use a _fallback value_ as the _resolved value_ of the _expression_.
+
+> [!NOTE]
+> A date/time type encapsulating a Unix time is considered to include UTC as its time zone.
 
 The following _option_ is REQUIRED to be available on
 the functions `:datetime` and `:time`:
@@ -287,4 +292,5 @@ The following _option_ is RECOMMENDED to be available on
 the functions `:datetime`, `:date`, and `:time`.
 
 - `calendar`
-  - valid [Unicode Calendar Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCalendarIdentifier)
+  - A well-formed [Unicode Calendar Identifier](https://unicode.org/reports/tr35/tr35.html#UnicodeCalendarIdentifier),
+    i.e. a [uvalue](https://unicode.org/reports/tr35/tr35.html#uvalue).
