@@ -49,6 +49,8 @@ In addition, implementations SHOULD provide mechanisms for users to
 register and use user-defined _functions_ and their associated _function handlers_.
 Functions not defined by any version of this specification SHOULD use 
 an implementation-defined or user-defined _namespace_.
+Implementations SHOULD provide mechanisms for users to
+use user-defined _function handlers_ for _default functions_.
 
 Implementations MAY implement additional _options_ not defined
 by any version of this specification for _default functions_.
