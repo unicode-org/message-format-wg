@@ -36,9 +36,30 @@ If no options are specified, this function defaults to the following:
 ##### `:datetime` Operands
 
 The _operand_ of the `:datetime` function is either
-an implementation-defined date/time type
-or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
+an implementation-defined date/time type,
+or a string matching the `date-time-ext` rule of
+[RFC 9557](https://www.rfc-editor.org/rfc/rfc9557#name-abnf).
 All other _operand_ values produce a _Bad Operand_ error.
+
+If the _resolved value_ of the _operand_ does not include a time,
+`00:00:00` is used as the time.
+
+If the _resolved value_ of the _operand_ does not include a time zone or offset,
+the _resolved value_ of the `timeZone` _option_ is used as its time zone.
+
+> [!NOTE]
+> String values passed as variables in the _formatting context_'s
+> _input mapping_ can be formatted as datetime values as long as their
+> contents match the `date-time-ext` rule.
+>
+> For example, if the value of the variable `now` were the string
+> `2024-02-06T16:40:00Z`, it would behave identically to the local
+> variable in this example:
+>
+> ```
+> .local $example = {|2024-02-06T16:40:00Z| :datetime}
+> {{{$now :datetime} == {$example}}}
+> ```
 
 ##### `:datetime` Options
 
@@ -97,9 +118,32 @@ If no options are specified, this function defaults to the following:
 ##### `:date` Operands
 
 The _operand_ of the `:date` function is either
-an implementation-defined date/time type
-or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
+an implementation-defined date/time type,
+or a string matching the `date-time-ext` rule of
+[RFC 9557](https://www.rfc-editor.org/rfc/rfc9557#name-abnf),
+or a string matching the `full-date` rule of
+[RFC 3339](https://www.rfc-editor.org/rfc/rfc3339#section-5.6).
 All other _operand_ values produce a _Bad Operand_ error.
+
+If the _resolved value_ of the _operand_ does not include a time,
+`00:00:00` is used as the time.
+
+If the _resolved value_ of the _operand_ does not include a time zone or offset,
+the _resolved value_ of the `timeZone` _option_ is used as its time zone.
+
+> [!NOTE]
+> String values passed as variables in the _formatting context_'s
+> _input mapping_ can be formatted as date values as long as their
+> contents match the `full-date` rule.
+>
+> For example, if the value of the variable `now` were the string
+> `2024-02-06`, it would behave identically to the local
+> variable in this example:
+>
+> ```
+> .local $example = {|2024-02-06| :date}
+> {{{$now :date} == {$example}}}
+> ```
 
 ##### `:date` Options
 
@@ -151,9 +195,32 @@ If no options are specified, this function defaults to the following:
 ##### `:time` Operands
 
 The _operand_ of the `:time` function is either
-an implementation-defined date/time type
-or a _date/time literal value_, as defined in [Date and Time Operand](#date-and-time-operands).
+an implementation-defined date/time type,
+or a string matching the `date-time-ext` rule of
+[RFC 9557](https://www.rfc-editor.org/rfc/rfc9557#name-abnf),
+or a string matching the `time` rule of
+[RFC 3339](https://www.rfc-editor.org/rfc/rfc3339#section-5.6).
 All other _operand_ values produce a _Bad Operand_ error.
+
+If the _resolved value_ of the _operand_ does not include a time,
+a _Bad Operand_ error is produced.
+
+If the _resolved value_ of the _operand_ does not include a time zone or offset,
+the _resolved value_ of the `timeZone` _option_ is used as its time zone.
+
+> [!NOTE]
+> String values passed as variables in the _formatting context_'s
+> _input mapping_ can be formatted as time values as long as their
+> contents match the `time` rule.
+>
+> For example, if the value of the variable `now` were the string
+> `16:40:00`, it would behave identically to the local
+> variable in this example:
+>
+> ```
+> .local $example = {|16:40:00| :time}
+> {{{$now :time} == {$example}}}
+> ```
 
 ##### `:time` Options
 
@@ -190,56 +257,6 @@ is implementation-defined.
 An implementation MAY emit a _Bad Operand_ or _Bad Option_ error (as appropriate)
 when a _variable_ annotated directly or indirectly by a `:time` _annotation_
 is used as an _operand_ or an _option value_.
-
-#### Date and Time Operands
-
-The _operand_ of a date/time function is either
-an implementation-defined date/time type
-or a _date/time literal value_, as defined below.
-All other _operand_ values produce a _Bad Operand_ error.
-
-A **_<dfn>date/time literal value</dfn>_** is a non-empty string consisting of an ISO 8601 date,
-or an ISO 8601 datetime optionally followed by a timezone offset.
-As implementations differ slightly in their parsing of such strings,
-ISO 8601 date and datetime values not matching the following regular expression MAY also be supported.
-Furthermore, matching this regular expression does not guarantee validity,
-given the variable number of days in each month.
-
-```regexp
-(?!0000)[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]{1,3})?(Z|[+-]((0[0-9]|1[0-3]):[0-5][0-9]|14:00))?)?
-```
-
-When the time is not present, implementations SHOULD use `00:00:00` as the time.
-When the offset is not present, implementations SHOULD use a floating time type
-(such as Java's `java.time.LocalDateTime`) to represent the time value.
-For more information, see [Working with Timezones](https://w3c.github.io/timezone).
-
-> [!IMPORTANT]
-> The [ABNF](/spec/message.abnf) and [syntax](/spec/syntax.md) of Unicode MessageFormat
-> do not formally define date/time literals.
-> This means that a _message_ can be syntactically valid but produce
-> a _Bad Operand_ error at runtime.
-
-> [!NOTE]
-> String values passed as variables in the _formatting context_'s
-> _input mapping_ can be formatted as date/time values as long as their
-> contents are date/time literals.
->
-> For example, if the value of the variable `now` were the string
-> `2024-02-06T16:40:00Z`, it would behave identically to the local
-> variable in this example:
->
-> ```
-> .local $example = {|2024-02-06T16:40:00Z| :datetime}
-> {{{$now :datetime} == {$example}}}
-> ```
-
-> [!NOTE]
-> True time zone support in serializations is expected to coincide with the adoption
-> of Temporal in JavaScript.
-> The form of these serializations is known and is a de facto standard.
-> Support for these extensions is expected to be required in the post-tech preview.
-> See: https://datatracker.ietf.org/doc/draft-ietf-sedate-datetime-extended/
 
 #### Date and Time Override Options
 
