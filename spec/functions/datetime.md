@@ -257,6 +257,7 @@ the functions `:datetime`, `:date`, and `:time`.
 
 - `timeZone`
   - `input`
+  - `UTC`
   - A well-formed time zone identifier matching the `time-zone-name` rule of
     [RFC 9557](https://www.rfc-editor.org/rfc/rfc9557#name-abnf).
   - An offset from UTC matching the `time-numoffset` rule of
@@ -279,7 +280,7 @@ If such conversion is not supported, an implementation MAY alternatively
 emit a _Bad Option_ error and use a _fallback value_ as the _resolved value_ of the _expression_.
 
 > [!NOTE]
-> A date/time type encapsulating a Unix time is considered to include UTC as its time zone.
+> A date/time type that represents a numeric offset from some epoch (such as a "Unix timestamp") is considered to include UTC as its time zone.
 
 The following _option_ is REQUIRED to be available on
 the functions `:datetime` and `:time`:
