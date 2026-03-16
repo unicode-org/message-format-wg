@@ -542,7 +542,7 @@ or it can be a _numeric operand_, as long as the _option_
 `unit` is provided.
 
 Valid values of the _operand_'s `unit` are either a string containing a
-valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
+well-formed [Unicode Unit Identifier](https://unicode.org/reports/tr35/tr35-general.html#unit-syntax)
 or an implementation-defined unit type.
 
 A _numeric operand_ without a `unit` _option_ results in a _Bad Operand_ error.
@@ -579,10 +579,10 @@ The following _options_ are REQUIRED to be available on the function `:unit`,
 unless otherwise indicated:
 
 - `unit`
-  - valid [Unit Identifier](https://www.unicode.org/reports/tr35/tr35-general.html#unit-identifiers)
+  - A well-formed [Unicode Unit Identifier](https://unicode.org/reports/tr35/tr35-general.html#unit-syntax)
     (no default)
 - `usage` \[RECOMMENDED\]
-  - valid [Unicode Unit Preference](https://www.unicode.org/reports/tr35/tr35-info.html#unit-preferences)
+  - A well-formed [Unicode Unit Usage](https://www.unicode.org/reports/tr35/tr35-info.html#unit-preferences)
     (no default, see [Unit Conversion](#unit-conversion) below)
 - `unitDisplay`
   - `short` (default)
@@ -656,8 +656,8 @@ Implementing this _option_ is optional.
 Not all `usage` _option values_ are compatible with a given unit.
 Implementations SHOULD emit an _Unsupported Operation_ error if the requested conversion is not supported.
 
-> For example, trying to convert a `length` unit (such as "meters")
-> to a `volume` usage (which might be a unit akin to "liters" or "gallons", depending on the locale)
+> For example, trying to convert a `length` unit (such as "meter")
+> to a `volume` usage (which might be a unit akin to "liter" or "gallon", depending on the locale)
 > could produce an _Unsupported Operation_ error.
 
 Implementations MUST NOT substitute the unit without performing the associated conversion.
