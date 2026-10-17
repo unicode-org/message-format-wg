@@ -86,7 +86,7 @@ for experimenting with message syntax.
 - JavaScript: [`messageformat`](https://github.com/messageformat/messageformat/tree/main/mf2/messageformat) 4.0 implements the MessageFormat 2 syntax, together with a polyfill of the runtime API proposed for ECMA-402.
 
 The working group is also aware of these implementations in progress or released, but has not evaluated them:
-- [i18next](https://www.npmjs.com/package/i18next-mf2) i18nFormat plugin to use mf2 format with i18next, version 0.1.1
+- [i18next](https://www.npmjs.com/package/i18next-mf2) i18nFormat plugin to use mf2 format with i18next, version 2.0.0
 
 > [!NOTE]
 > Tell us about your MessageFormat 2 implementation!
